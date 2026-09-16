@@ -19,6 +19,7 @@ import urllib.request
 from dataclasses import dataclass
 from typing import Any, Callable, Sequence
 
+# Fetch limits, SSRF denylist, Wikipedia/DDG endpoints, and HTML scrapers.
 USER_AGENT = "ez-comfy-research/1.0"
 MAX_BODY = 256 * 1024
 DEFAULT_TIMEOUT_S = 8.0
@@ -77,10 +78,23 @@ class SearchHit:
 
 
 def _log(message: str) -> None:
+    """Write a pack status line to stderr.
+
+    Args:
+        message: Text after the ``[ez_research]`` prefix.
+    """
     print(f"[ez_research] {message}", file=sys.stderr)
 
 
 def _ip_blocked(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    """True when ``ip`` is loopback, private, link-local, or otherwise reserved.
+
+    Args:
+        ip: Resolved address.
+
+    Returns:
+        Whether the address must not be fetched.
+    """
     # Judge the inner IPv4. CPython 3.12 marks ::ffff:0:0/96 reserved; 3.13 does not.
     mapped = getattr(ip, "ipv4_mapped", None)
     if mapped is not None:
@@ -99,9 +113,10 @@ def is_blocked_url(
 ) -> str | None:
     """Return a reason string when ``url`` must not be fetched.
 
-    Arguments:
+    Args:
         url: Absolute URL.
         resolver: Optional ``getaddrinfo`` substitute.
+
     Returns:
         Block reason, or None when the URL may be fetched.
     """
@@ -147,7 +162,14 @@ def is_blocked_url(
 
 
 def decode_ddg_href(href: str) -> str:
-    """Unwrap DuckDuckGo ``/l/?uddg=`` redirect links to the target HTTPS URL."""
+    """Unwrap DuckDuckGo ``/l/?uddg=`` redirect links to the target HTTPS URL.
+
+    Args:
+        href: Raw result ``href``.
+
+    Returns:
+        Target URL, or the original href when it is already direct.
+    """
     raw = html_module.unescape((href or "").strip())
     if raw.startswith("//"):
         raw = "https:" + raw
@@ -162,13 +184,28 @@ def decode_ddg_href(href: str) -> str:
 
 
 def _strip_html(blob: str) -> str:
+    """Remove tags and collapse whitespace.
+
+    Args:
+        blob: HTML fragment.
+
+    Returns:
+        Plain text.
+    """
     text = _TAG_RE.sub(" ", blob or "")
     text = html_module.unescape(text)
     return _SPACE_RE.sub(" ", text).strip()
 
 
 def parse_wikipedia_opensearch(payload: object) -> list[SearchHit]:
-    """Parse MediaWiki opensearch JSON into hits."""
+    """Parse MediaWiki opensearch JSON into hits.
+
+    Args:
+        payload: Decoded opensearch JSON.
+
+    Returns:
+        Hits with blocked URLs dropped.
+    """
     if not isinstance(payload, list) or len(payload) < 4:
         return []
     titles = payload[1]
@@ -200,7 +237,14 @@ def parse_wikipedia_opensearch(payload: object) -> list[SearchHit]:
 
 
 def parse_duckduckgo_html(markup: str) -> list[SearchHit]:
-    """Parse DuckDuckGo HTML result titles, URLs, and snippets."""
+    """Parse DuckDuckGo HTML result titles, URLs, and snippets.
+
+    Args:
+        markup: HTML body from html.duckduckgo.com.
+
+    Returns:
+        Hits with blocked URLs dropped.
+    """
     hits: list[SearchHit] = []
     for match in _RESULT_A_RE.finditer(markup or ""):
         href = decode_ddg_href(match.group(1))
@@ -223,7 +267,16 @@ def http_get(
     data: bytes | None = None,
     timeout: float = DEFAULT_TIMEOUT_S,
 ) -> str:
-    """GET or POST ``url``. Empty string on block, timeout, or error."""
+    """GET or POST ``url``. Empty string on block, timeout, or error.
+
+    Args:
+        url: Absolute HTTPS URL.
+        data: Optional POST body.
+        timeout: Socket timeout in seconds.
+
+    Returns:
+        Response text, or empty string on failure.
+    """
     reason = is_blocked_url(url)
     if reason:
         _log(f"blocked fetch: {reason}")
@@ -259,6 +312,14 @@ def http_get(
 
 
 def _wiki_summary_body(title: str) -> str:
+    """Fetch a Wikipedia REST extract for ``title``.
+
+    Args:
+        title: Article title.
+
+    Returns:
+        Extract text, or empty string on failure.
+    """
     slug = urllib.parse.quote(title.replace(" ", "_"), safe="")
     blob = http_get(WIKI_SUMMARY + slug)
     if not blob:
@@ -276,7 +337,16 @@ def _wiki_summary_body(title: str) -> str:
 
 
 def wikipedia_search(query: str, *, limit: int = 3, fetch_bodies: bool = True) -> list[SearchHit]:
-    """OpenSearch Wikipedia, optionally filling REST summary bodies."""
+    """OpenSearch Wikipedia, optionally filling REST summary bodies.
+
+    Args:
+        query: Search string.
+        limit: Max hits (clamped 1–5).
+        fetch_bodies: When true, fill ``hit.body`` from REST summary.
+
+    Returns:
+        Search hits (possibly empty).
+    """
     q = (query or "").strip()
     if not q:
         return []
@@ -304,7 +374,16 @@ def wikipedia_search(query: str, *, limit: int = 3, fetch_bodies: bool = True) -
 
 
 def duckduckgo_search(query: str, *, limit: int = 3, fetch_bodies: bool = False) -> list[SearchHit]:
-    """DuckDuckGo HTML fallback. Bodies stay off unless asked (SSRF surface)."""
+    """DuckDuckGo HTML fallback. Bodies stay off unless asked (SSRF surface).
+
+    Args:
+        query: Search string.
+        limit: Max hits (clamped 1–5).
+        fetch_bodies: When true, GET each result URL (still SSRF-gated).
+
+    Returns:
+        Search hits (possibly empty).
+    """
     q = (query or "").strip()
     if not q:
         return []
@@ -330,7 +409,16 @@ def search_web(
     limit: int = 5,
     fetch_bodies: bool = True,
 ) -> list[SearchHit]:
-    """Wikipedia first, DuckDuckGo HTML to fill remaining slots."""
+    """Wikipedia first, DuckDuckGo HTML to fill remaining slots.
+
+    Args:
+        query: Search string.
+        limit: Max hits (clamped 1–8).
+        fetch_bodies: When true, fill Wikipedia summary bodies.
+
+    Returns:
+        Deduped hits (possibly empty).
+    """
     q = (query or "").strip()
     if not q:
         return []
@@ -354,7 +442,14 @@ def search_web(
 
 
 def format_sources(hits: Sequence[SearchHit]) -> str:
-    """Markdown source list for the App preview and MCP payload."""
+    """Markdown source list for the App preview and MCP payload.
+
+    Args:
+        hits: Search hits.
+
+    Returns:
+        Numbered title/URL/snippet lines, or empty string.
+    """
     lines: list[str] = []
     for i, hit in enumerate(hits, start=1):
         snippet = hit.snippet or hit.body[:MAX_SNIPPET]

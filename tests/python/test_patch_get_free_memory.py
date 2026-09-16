@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 import sys
 from pathlib import Path
+from typing import Any
 
 import patch_get_free_memory as patch_mod
 import pytest
@@ -163,7 +164,7 @@ def test_restore_from_git_success(
     )
     target.write_text(broken, encoding="utf-8")
 
-    def fake_run(cmd, **kwargs):  # type: ignore[no-untyped-def]
+    def fake_run(cmd: list[str], **kwargs: Any) -> Any:
         if cmd[:3] == ["git", "-C", str(tmp_path)] and "checkout" in cmd:
             target.write_text(clean, encoding="utf-8")
             return type("R", (), {"returncode": 0, "stdout": "", "stderr": ""})()
@@ -191,7 +192,7 @@ def test_restore_from_git_oserror(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_restore_from_git_timeout(monkeypatch: pytest.MonkeyPatch) -> None:
     """_restore_from_git returns False on timeout."""
 
-    def boom(*a, **k):  # type: ignore[no-untyped-def]
+    def boom(*a: Any, **k: Any) -> Any:
         raise patch_mod.subprocess.TimeoutExpired(cmd="git", timeout=1)
 
     monkeypatch.setattr(patch_mod.subprocess, "run", boom)
@@ -285,7 +286,7 @@ def test_already_applied_after_repair_with_write(
         encoding="utf-8",
     )
 
-    def repair(root, path, text):  # type: ignore[no-untyped-def]
+    def repair(root: Path, path: Path, text: str) -> str:
         return good
 
     monkeypatch.setattr(patch_mod, "repair_broken_patch", repair)

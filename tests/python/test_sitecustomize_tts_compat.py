@@ -266,7 +266,7 @@ def test_lora_shim_noop_without_torch(monkeypatch: pytest.MonkeyPatch) -> None:
 
     real_import = builtins.__import__
 
-    def _block_torch(name, *args, **kwargs):
+    def _block_torch(name: str, *args: Any, **kwargs: Any) -> Any:
         if name == "torch" or name.startswith("torch."):
             raise ImportError("blocked")
         return real_import(name, *args, **kwargs)

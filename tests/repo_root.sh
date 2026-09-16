@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
+#
+# ## repo_root
+#
 # Resolve the checkout root from bazel run, bazel test runfiles, or script path.
+#
+# Purpose:
+#   Shared helper sourced by hermetic test runners so Bazel run/test and
+#   local bash invoke the same source tree (not bazel-bin).
+#
+# Style:
+#   Google Shell Style Guide (project deviations in docs/project-conventions.md).
+#
 
 #######################################
 # Print the repository root (source tree, not bazel-bin).

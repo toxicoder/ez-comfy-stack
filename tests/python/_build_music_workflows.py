@@ -826,7 +826,7 @@ def _clear_legacy_artist_trees() -> None:
             print(f"removed {root.relative_to(ROOT)}")
 
 
-def _node(graph: dict, ntype: str):
+def _node(graph: dict, ntype: str) -> dict:
     return next(n for n in graph["nodes"] if n.get("type") == ntype)
 
 

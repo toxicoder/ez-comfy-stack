@@ -1,6 +1,7 @@
 """Hermetic tests for ez_dub (no Comfy, no network, no Whisper, no TTS)."""
 
 from __future__ import annotations
+import pytest
 
 import json
 import math
@@ -10,6 +11,7 @@ import struct
 import sys
 import types
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -67,7 +69,7 @@ EXAMPLE_SCRIPT = dub_turns.dumps_payload(
 )
 
 
-def _passthrough_ffmpeg(monkeypatch) -> None:
+def _passthrough_ffmpeg(monkeypatch: pytest.MonkeyPatch) -> None:
     """Copy ffmpeg -i SRC to DEST so ingest tests do not need a real ffmpeg."""
 
     def _run(cmd: list[str]) -> tuple[int, str]:
@@ -125,7 +127,7 @@ def test_pack_imports_without_whisper() -> None:
     assert stage[1]["default"] == "all"
 
 
-def test_ingest_source_is_input_combo(tmp_path: Path, monkeypatch) -> None:
+def test_ingest_source_is_input_combo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     spec = EZDubIngest.INPUT_TYPES()["required"]
     assert list(spec) == ["source", "have_rights", "job_slug", "source_url"]
@@ -183,7 +185,7 @@ def test_apply_spoken_disclosure_does_not_change_length() -> None:
     mix = [0.05] * (rate * 8)
     turns = [{"t0": 0.4, "t1": 2.0, "speaker": "spk00"}]
 
-    def _synth(text: str, language: str, ref_wav: str, engine: str):
+    def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
         return [0.2] * (rate * 6), rate, ""
 
@@ -207,7 +209,7 @@ def test_apply_spoken_disclosure_uses_target_language_and_ref() -> None:
     mix = [0.05] * (rate * 4)
     seen: list[tuple[str, str]] = []
 
-    def _synth(text: str, language: str, ref_wav: str, engine: str):
+    def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, engine
         seen.append((language, ref_wav))
         return [0.2] * (rate // 2), rate, ""
@@ -233,7 +235,7 @@ def test_apply_spoken_disclosure_crops_leading_bumper_hush() -> None:
     mix = [0.05] * (rate * 8)
     turns = [{"t0": 2.0, "t1": 4.0, "speaker": "spk00"}]
 
-    def _synth(text: str, language: str, ref_wav: str, engine: str):
+    def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
         hush = [0.012] * rate
         bumper = [0.35] * (rate * 2)
@@ -256,14 +258,14 @@ def test_apply_spoken_disclosure_crops_leading_bumper_hush() -> None:
 
 
 def test_apply_spoken_disclosure_does_not_call_fit_turn_three_seconds(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     from ez_dub import disclosure as dub_disclosure
 
     windows: list[float] = []
     real_fit = dub_disclosure.fit_turn
 
-    def _fit(pcm, rate, window, spill_s=0.0):
+    def _fit(pcm: list[float], rate: int, window: float, spill_s: float = 0.0) -> Any:
         windows.append(float(window))
         return real_fit(pcm, rate, window, spill_s=spill_s)
 
@@ -271,7 +273,7 @@ def test_apply_spoken_disclosure_does_not_call_fit_turn_three_seconds(
     rate = 24000
     mix = [0.05] * (rate * 8)
 
-    def _synth(text: str, language: str, ref_wav: str, engine: str):
+    def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
         return [0.2] * (rate * 6), rate, ""
 
@@ -301,7 +303,7 @@ def test_rights_refuse() -> None:
         assert "I have rights" in str(exc)
 
 
-def test_ingest_rights_false_does_not_write(tmp_path: Path, monkeypatch) -> None:
+def test_ingest_rights_false_does_not_write(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     wav = tmp_path / "in.wav"
     dub_audio.write_wav(wav, [0.1, -0.1] * 100, 24000)
@@ -315,7 +317,7 @@ def test_ingest_rights_false_does_not_write(tmp_path: Path, monkeypatch) -> None
 
 
 def test_resolve_media_source_basename_url_and_none(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     inp = tmp_path / "input"
@@ -343,7 +345,7 @@ def test_resolve_media_source_basename_url_and_none(
 
 
 def test_ingest_ignores_upload_kwarg_and_bool_slug(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -356,7 +358,7 @@ def test_ingest_ignores_upload_kwarg_and_bool_slug(
     assert not (tmp_path / "dubs" / "True").exists()
 
 
-def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
+def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     out = EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
     assert "empty source" in out["ui"]["passthrough"][0]
@@ -365,7 +367,7 @@ def test_ingest_none_source_fail_soft(tmp_path: Path, monkeypatch) -> None:
     assert "empty source" in jobstore.load_state(dest)["status"]
 
 
-def test_ingest_wav_and_script_pin(tmp_path: Path, monkeypatch) -> None:
+def test_ingest_wav_and_script_pin(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     tone = [0.4 * math.sin(2 * math.pi * 220 * i / 24000) for i in range(24000)]
@@ -646,7 +648,7 @@ def test_is_url_and_language_name() -> None:
     assert pipeline.language_code("") == "auto"
 
 
-def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
+def test_render_uses_tts_hook(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -656,7 +658,7 @@ def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
@@ -688,7 +690,7 @@ def test_render_uses_tts_hook(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_render_mix_yt_wav_equals_source_length(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -699,7 +701,7 @@ def test_render_mix_yt_wav_equals_source_length(
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
@@ -727,7 +729,7 @@ def test_render_mix_yt_wav_equals_source_length(
     assert "spoken disclosure" in status or "disclosure skipped" in status
 
 
-def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch) -> None:
+def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     seen: list[list[str]] = []
 
@@ -743,7 +745,7 @@ def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch) -> None:
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
@@ -772,7 +774,7 @@ def test_render_mix_optional_48k_mp3_argv(tmp_path: Path, monkeypatch) -> None:
     assert "cloned" in status
 
 
-def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch) -> None:
+def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -782,7 +784,7 @@ def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch) -> None:
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         quiet = [0.25 * x for x in _am_speech(rate, max(0.4, len(text) * 40 / float(rate)))]
         return quiet, rate
@@ -807,7 +809,7 @@ def test_mix_loudness_raises_quiet_render(tmp_path: Path, monkeypatch) -> None:
     assert "peak=" in status
 
 
-def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch) -> None:
+def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
     payload["stage"] = "analyze"
@@ -822,13 +824,13 @@ def test_render_analyze_stage_skips(tmp_path: Path, monkeypatch) -> None:
     assert out["ui"]["passthrough"][0].startswith("analyze only")
 
 
-def test_fetch_hook_ingest(tmp_path: Path, monkeypatch) -> None:
+def test_fetch_hook_ingest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     wav = tmp_path / "remote.wav"
     dub_audio.write_wav(wav, [0.2] * 4800, 24000)
 
-    def _fetch(url, dest_dir: Path) -> Path:
+    def _fetch(url: str, dest_dir: Path) -> Path:
         del url
         copied = dest_dir / "download.wav"
         copied.write_bytes(wav.read_bytes())
@@ -1036,7 +1038,7 @@ def _two_en_turns() -> list[dict]:
     ]
 
 
-def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
+def test_translate_turns_per_turn_fills_spanish(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[tuple[str, int | None, float | None, int | None]] = []
 
     def _complete(
@@ -1046,7 +1048,7 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
         max_tokens: int | None = None,
         temperature: float | None = None,
         timeout_s: int | None = None,
-    ):
+    ) -> tuple[str, str | None]:
         del system
         calls.append((user, max_tokens, temperature, timeout_s))
         source_line = ""
@@ -1078,11 +1080,17 @@ def test_translate_turns_per_turn_fills_spanish(monkeypatch) -> None:
 
 
 def test_translate_turns_llama_unavailable_leaves_targets_empty(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     calls = {"n": 0}
 
-    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         calls["n"] += 1
         return "", "llama.cpp unavailable"
@@ -1097,9 +1105,15 @@ def test_translate_turns_llama_unavailable_leaves_targets_empty(
 
 
 def test_translate_turns_gguf_load_failed_leaves_targets_empty(
-    monkeypatch,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         return "", "GGUF failed to load"
 
@@ -1111,8 +1125,14 @@ def test_translate_turns_gguf_load_failed_leaves_targets_empty(
     assert out[1]["text_target"] == ""
 
 
-def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> None:
-    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         return "", "timeout or empty model output"
 
@@ -1125,8 +1145,14 @@ def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch) -> 
     assert out[1]["text_target"] == "Today we stay on the match."
 
 
-def test_translate_turns_same_language_skips_llm(monkeypatch) -> None:
-    def _complete(system: str, user: str, *, max_tokens: int | None = None, **kwargs):
+def test_translate_turns_same_language_skips_llm(monkeypatch: pytest.MonkeyPatch) -> None:
+    def _complete(
+        system: str,
+        user: str,
+        *,
+        max_tokens: int | None = None,
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         raise AssertionError("LLM should not run when source == target")
 
@@ -1142,7 +1168,7 @@ def test_translate_turns_enhance_off_copies() -> None:
     assert out[0]["text_target"] == "Welcome back to the tape."
 
 
-def test_translate_turns_passes_previous_turn_context(monkeypatch) -> None:
+def test_translate_turns_passes_previous_turn_context(monkeypatch: pytest.MonkeyPatch) -> None:
     calls: list[str] = []
 
     def _complete(
@@ -1152,7 +1178,7 @@ def test_translate_turns_passes_previous_turn_context(monkeypatch) -> None:
         max_tokens: int | None = None,
         temperature: float | None = None,
         timeout_s: int | None = None,
-    ):
+    ) -> tuple[str, str | None]:
         del system, max_tokens, temperature, timeout_s
         calls.append(user)
         source_line = ""
@@ -1190,7 +1216,7 @@ GOLD_ES = (
 )
 
 
-def test_translate_turns_keeps_golden_spanish(monkeypatch) -> None:
+def test_translate_turns_keeps_golden_spanish(monkeypatch: pytest.MonkeyPatch) -> None:
     golds = list(GOLD_ES)
 
     def _complete(
@@ -1198,8 +1224,8 @@ def test_translate_turns_keeps_golden_spanish(monkeypatch) -> None:
         user: str,
         *,
         max_tokens: int | None = None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         return golds.pop(0), None
 
@@ -1223,7 +1249,7 @@ def test_translate_turns_keeps_golden_spanish(monkeypatch) -> None:
     assert [t["text_target"] for t in out] == list(GOLD_ES)
 
 
-def test_translate_turns_strips_voice_model_leak(monkeypatch) -> None:
+def test_translate_turns_strips_voice_model_leak(monkeypatch: pytest.MonkeyPatch) -> None:
     leak = (
         "La ciudad estaba llena de oportunidades y me agradecido por formar "
         "parte de ello experiencia de una manera que te ayude a desarrollar "
@@ -1235,8 +1261,8 @@ def test_translate_turns_strips_voice_model_leak(monkeypatch) -> None:
         user: str,
         *,
         max_tokens: int | None = None,
-        **kwargs,
-    ):
+        **kwargs: Any,
+    ) -> tuple[str, str | None]:
         del system, user, max_tokens, kwargs
         return leak, None
 
@@ -1264,7 +1290,7 @@ def test_translate_turns_strips_voice_model_leak(monkeypatch) -> None:
 def test_synthesize_turn_passes_iso_code() -> None:
     seen: list[str] = []
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, ref_wav, engine
         seen.append(language)
         return [0.1] * 80, 24000
@@ -1282,7 +1308,7 @@ def test_synthesize_turn_passes_iso_code() -> None:
     assert seen == ["es"]
 
 
-def test_render_missing_engine_status(tmp_path: Path, monkeypatch) -> None:
+def test_render_missing_engine_status(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
@@ -1317,7 +1343,7 @@ def test_wav_roundtrip(tmp_path: Path) -> None:
 
 
 def test_clone_ckpt_dir_requires_complete_snapshot(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
@@ -1334,7 +1360,7 @@ def test_clone_ckpt_dir_requires_complete_snapshot(
     assert "Cangjie5_TC.json" in pipeline.CLONE_REQUIRED_FILES
 
 
-def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
+def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
@@ -1353,7 +1379,7 @@ def test_whisper_dir_requires_config(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_whisper_transcribe_extra_kwargs_typeerror_fallback(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     wav = tmp_path / "clip.wav"
     dub_audio.write_wav(wav, [0.1] * 2400, 24000)
@@ -1367,7 +1393,7 @@ def test_whisper_transcribe_extra_kwargs_typeerror_fallback(
     class _Info:
         language = "en"
 
-    def _transcribe(_path: str, **kwargs):
+    def _transcribe(_path: str, **kwargs: Any) -> Any:
         calls.append(dict(kwargs))
         if "beam_size" in kwargs or "condition_on_previous_text" in kwargs:
             raise TypeError("unexpected kwargs")
@@ -1395,7 +1421,7 @@ def test_asr_wheel_status_includes_import_detail() -> None:
     assert "onnxruntime" in msg
 
 
-def test_preflight_asr_surfaces_importerror_detail(monkeypatch) -> None:
+def test_preflight_asr_surfaces_importerror_detail(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         pipeline,
         "_import_whisper_model",
@@ -1409,7 +1435,7 @@ def test_preflight_asr_surfaces_importerror_detail(monkeypatch) -> None:
     assert "faster-whisper not installed" in reason
 
 
-def test_get_whisper_import_error_is_detailed(monkeypatch) -> None:
+def test_get_whisper_import_error_is_detailed(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         pipeline,
         "_import_whisper_model",
@@ -1424,7 +1450,7 @@ def test_get_whisper_import_error_is_detailed(monkeypatch) -> None:
     assert "ctranslate2" in miss
 
 
-def test_load_whisper_model_cpu_int8_first(monkeypatch) -> None:
+def test_load_whisper_model_cpu_int8_first(monkeypatch: pytest.MonkeyPatch) -> None:
     seen: list[tuple[str, str]] = []
 
     class Fake:
@@ -1447,7 +1473,7 @@ def test_load_whisper_model_cpu_int8_first(monkeypatch) -> None:
 def test_from_local_passes_t3_v3() -> None:
     seen: dict[str, str] = {}
 
-    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2"):
+    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2") -> object:
         seen["ckpt"] = ckpt
         seen["device"] = device
         seen["t3_model"] = t3_model
@@ -1459,7 +1485,7 @@ def test_from_local_passes_t3_v3() -> None:
 
 
 def test_from_local_old_wheel_without_t3_model() -> None:
-    def loader(ckpt: str, device: str = "cpu"):
+    def loader(ckpt: str, device: str = "cpu") -> object:
         del ckpt, device
         return object()
 
@@ -1471,7 +1497,7 @@ def test_from_local_old_wheel_without_t3_model() -> None:
 
 
 def test_from_local_inner_typeerror_is_not_t3_status() -> None:
-    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2"):
+    def loader(ckpt: str, device: str = "cpu", t3_model: str = "v2") -> object:
         del ckpt, device, t3_model
         raise TypeError("'NoneType' object is not callable")
 
@@ -1483,7 +1509,7 @@ def test_from_local_inner_typeerror_is_not_t3_status() -> None:
 
 
 def test_load_chatterbox_inner_typeerror_is_not_t3_status(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     snap = tmp_path / "ResembleAI__chatterbox_clone"
     snap.mkdir()
@@ -1493,7 +1519,7 @@ def test_load_chatterbox_inner_typeerror_is_not_t3_status(
 
     class _Loader:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             raise TypeError("'NoneType' object is not callable")
 
@@ -1509,10 +1535,10 @@ def test_load_chatterbox_inner_typeerror_is_not_t3_status(
     assert "NoneType" in err
 
 
-def test_preflight_clone_names_perth_miss(monkeypatch) -> None:
+def test_preflight_clone_names_perth_miss(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Loader:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             return object()
 
@@ -1532,10 +1558,10 @@ def test_preflight_clone_names_perth_miss(monkeypatch) -> None:
     assert "docker exec" in reason
 
 
-def test_preflight_clone_names_missing_t3_model(monkeypatch) -> None:
+def test_preflight_clone_names_missing_t3_model(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Loader:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str):
+        def from_local(ckpt_dir: str, device: str) -> object:
             del ckpt_dir, device
             return object()
 
@@ -1559,7 +1585,7 @@ def test_translate_llama_status_names_pip_not_restart() -> None:
     assert "docker exec" in pipeline.TRANSLATE_LLAMA_STATUS
 
 
-def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
+def test_preflight_translate_names_llama_miss(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "ez_prompt_enhance.client._get_llama",
         lambda: (None, "llama.cpp unavailable"),
@@ -1571,7 +1597,7 @@ def test_preflight_translate_names_llama_miss(monkeypatch) -> None:
     assert "--force-reinstall" in reason
 
 
-def test_preflight_translate_swallows_runtimeerror(monkeypatch) -> None:
+def test_preflight_translate_swallows_runtimeerror(monkeypatch: pytest.MonkeyPatch) -> None:
     def _boom() -> tuple[object, str]:
         raise RuntimeError("Failed to load shared library 'libllama.so'")
 
@@ -1582,7 +1608,7 @@ def test_preflight_translate_swallows_runtimeerror(monkeypatch) -> None:
     assert "--force-reinstall" in reason
 
 
-def test_preflight_translate_names_gguf_miss(monkeypatch) -> None:
+def test_preflight_translate_names_gguf_miss(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "ez_prompt_enhance.client._get_llama",
         lambda: (None, "GGUF missing"),
@@ -1620,7 +1646,7 @@ def test_analyze_pcm_uses_asr_segments_as_turns(tmp_path: Path) -> None:
 
 
 def test_analyze_pcm_without_asr_is_empty_reason(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
@@ -1634,7 +1660,7 @@ def test_analyze_pcm_without_asr_is_empty_reason(
     assert "faster-whisper" in reason or "ASR pack" in reason
 
 
-def test_analyze_job_missing_asr_status(tmp_path: Path, monkeypatch) -> None:
+def test_analyze_job_missing_asr_status(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
@@ -1655,7 +1681,7 @@ def test_analyze_job_missing_asr_status(tmp_path: Path, monkeypatch) -> None:
     assert "faster-whisper" in reason or "ASR pack" in reason
 
 
-def test_render_no_turns_does_not_return_source(tmp_path: Path, monkeypatch) -> None:
+def test_render_no_turns_does_not_return_source(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
@@ -1675,7 +1701,7 @@ def test_render_no_turns_does_not_return_source(tmp_path: Path, monkeypatch) -> 
     assert not (dest / "ez_dub_yt.wav").is_file()
 
 
-def test_extract_audio_always_ffmpeg(tmp_path: Path, monkeypatch) -> None:
+def test_extract_audio_always_ffmpeg(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     src = tmp_path / "in.wav"
     dest = tmp_path / "out.wav"
     dub_audio.write_wav(src, [0.1] * 100, 24000)
@@ -1706,7 +1732,7 @@ def test_split_clone_text_chunks_at_limit() -> None:
     assert "palabra" in chunks[0]
 
 
-def test_dub_llm_timeout_env(monkeypatch) -> None:
+def test_dub_llm_timeout_env(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("EZ_DUB_LLM_TIMEOUT_S", raising=False)
     assert pipeline.dub_llm_timeout_s() == pipeline.TRANSLATE_TIMEOUT_S
     monkeypatch.setenv("EZ_DUB_LLM_TIMEOUT_S", "90")
@@ -1715,7 +1741,7 @@ def test_dub_llm_timeout_env(monkeypatch) -> None:
     assert pipeline.dub_llm_timeout_s() == pipeline.TRANSLATE_TIMEOUT_S
 
 
-def test_load_chatterbox_model_names_miss(tmp_path: Path, monkeypatch) -> None:
+def test_load_chatterbox_model_names_miss(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
@@ -1724,7 +1750,7 @@ def test_load_chatterbox_model_names_miss(tmp_path: Path, monkeypatch) -> None:
     assert err
 
 
-def test_preflight_asr_and_clone_name_the_miss(tmp_path: Path, monkeypatch) -> None:
+def test_preflight_asr_and_clone_name_the_miss(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
@@ -1740,7 +1766,7 @@ def test_preflight_asr_and_clone_name_the_miss(tmp_path: Path, monkeypatch) -> N
     )
 
 
-def test_conds_pt_required_for_clone_dir(tmp_path: Path, monkeypatch) -> None:
+def test_conds_pt_required_for_clone_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
@@ -1756,7 +1782,7 @@ def test_conds_pt_required_for_clone_dir(tmp_path: Path, monkeypatch) -> None:
     assert "conds.pt" in pipeline.CLONE_REQUIRED_FILES
 
 
-def test_get_chatterbox_caches_loader(monkeypatch) -> None:
+def test_get_chatterbox_caches_loader(monkeypatch: pytest.MonkeyPatch) -> None:
     loads: list[int] = []
 
     class _Model:
@@ -1778,7 +1804,7 @@ def test_get_chatterbox_caches_loader(monkeypatch) -> None:
     pipeline._close_chatterbox()
 
 
-def test_get_chatterbox_caches_load_error(monkeypatch) -> None:
+def test_get_chatterbox_caches_load_error(monkeypatch: pytest.MonkeyPatch) -> None:
     loads: list[int] = []
 
     def _load() -> tuple[object | None, str]:
@@ -1808,7 +1834,7 @@ def test_get_chatterbox_caches_load_error(monkeypatch) -> None:
 
 
 def test_speaker_embed_honors_hook() -> None:
-    def _hook(pcm, rate):
+    def _hook(pcm: list[float], rate: int) -> list[float]:
         del pcm, rate
         return [1.0, 0.0, 0.0]
 
@@ -1821,7 +1847,7 @@ def test_speaker_embed_honors_hook() -> None:
 
 
 def test_speaker_embed_energy_fallback_without_chatterbox(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(pipeline, "_get_voice_encoder", lambda: None)
     vec = pipeline.speaker_embed([0.2] * 800, 24000)
@@ -1829,7 +1855,7 @@ def test_speaker_embed_energy_fallback_without_chatterbox(
 
 
 def test_analyze_job_fails_before_asr_when_llama_missing(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -1866,7 +1892,7 @@ def test_analyze_job_fails_before_asr_when_llama_missing(
 
 
 def test_analyze_job_same_language_skips_translate_preflight(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -1898,7 +1924,7 @@ def test_analyze_job_same_language_skips_translate_preflight(
 
 
 def test_analyze_job_enhance_off_skips_translate_preflight(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -1929,7 +1955,7 @@ def test_analyze_job_enhance_off_skips_translate_preflight(
 
 
 def test_render_mix_refuses_untranslated_llama_miss(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -1975,7 +2001,7 @@ def test_render_mix_refuses_untranslated_llama_miss(
 
 
 def test_render_mix_skips_source_text_when_target_empty(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -1985,7 +2011,7 @@ def test_render_mix_skips_source_text_when_target_empty(
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     seen: list[str] = []
 
-    def _tts(text: str, language: str, ref_wav: str, engine: str):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         seen.append(text)
         return [0.1] * 80, rate
@@ -2027,7 +2053,7 @@ def test_render_mix_skips_source_text_when_target_empty(
     assert not (dest / "ez_dub_yt.wav").is_file()
 
 
-def test_analyze_job_render_empty_widget_is_no_turns(tmp_path: Path, monkeypatch) -> None:
+def test_analyze_job_render_empty_widget_is_no_turns(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
@@ -2045,7 +2071,7 @@ def test_analyze_job_render_empty_widget_is_no_turns(tmp_path: Path, monkeypatch
     assert reason == pipeline.NO_TURNS_STATUS
 
 
-def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
+def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     rate = 24000
@@ -2055,14 +2081,14 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
     ingested = EZDubIngest().run(str(wav), True, "ep")
     assert ingested["result"][0] == "ep"
 
-    def _asr(path, language):
+    def _asr(path: str, language: str) -> list[dict[str, Any]]:
         del path, language
         return [
             {"t0": 0.4, "t1": 2.8, "text": "Welcome back to the tape."},
             {"t0": 3.0, "t1": 6.2, "text": "Today we stay on the match."},
         ]
 
-    def _tr(turns, tgt, src):
+    def _tr(turns: list[dict[str, Any]], tgt: str, src: str) -> list[dict[str, Any]]:
         del tgt, src
         out = []
         for turn in turns:
@@ -2074,7 +2100,7 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
             out.append(item)
         return out
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
 
@@ -2111,7 +2137,7 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch) -> None:
 def test_synthesize_turn_splits_long_text() -> None:
     seen: list[str] = []
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         seen.append(text)
         return [0.1] * 20, 24000
@@ -2130,7 +2156,7 @@ def test_synthesize_turn_splits_long_text() -> None:
     assert all(len(chunk) <= pipeline.CLONE_TEXT_LIMIT for chunk in seen)
 
 
-def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch) -> None:
+def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     wav = tmp_path / "in.wav"
     dub_audio.write_wav(wav, [0.1] * 100, 24000)
@@ -2152,7 +2178,7 @@ def test_script_render_surface_rights_refuse(tmp_path: Path, monkeypatch) -> Non
     assert rendered["ui"]["passthrough"][0] == "rights refused"
 
 
-def test_script_surfaces_empty_source(tmp_path: Path, monkeypatch) -> None:
+def test_script_surfaces_empty_source(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     EZDubIngest().run(pipeline.SOURCE_NONE, True, "episode")
     scripted = EZDubScript().run(SEED_SCRIPT, True, "es", "auto", 0, "all", "episode")
@@ -2160,7 +2186,7 @@ def test_script_surfaces_empty_source(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_analyze_job_missing_wav_operator_status(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -2190,7 +2216,7 @@ def test_analyze_job_missing_wav_operator_status(
 
 
 def test_missing_source_status_prefers_error_when_status_generic(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -2208,14 +2234,14 @@ def test_missing_source_status_prefers_error_when_status_generic(
     assert pipeline.missing_source_status(dest) == "ffmpeg extract failed: boom"
 
 
-def test_output_root_prefers_folder_paths(monkeypatch) -> None:
+def test_output_root_prefers_folder_paths(monkeypatch: pytest.MonkeyPatch) -> None:
     fake = types.SimpleNamespace(get_output_directory=lambda: "/comfy/output")
     monkeypatch.setitem(sys.modules, "folder_paths", fake)
     assert jobstore.output_root() == Path("/comfy/output")
 
 
 def test_output_root_empty_folder_paths_falls_through(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     fake = types.SimpleNamespace(get_output_directory=lambda: "")
     monkeypatch.setitem(sys.modules, "folder_paths", fake)
@@ -2231,7 +2257,7 @@ def test_output_root_empty_folder_paths_falls_through(
     assert jobstore.output_root() == tmp_path
 
 
-def test_output_root_folder_paths_error(tmp_path: Path, monkeypatch) -> None:
+def test_output_root_folder_paths_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     def _boom() -> str:
         raise RuntimeError("no comfy")
 
@@ -2249,7 +2275,7 @@ def test_output_root_folder_paths_error(tmp_path: Path, monkeypatch) -> None:
     assert jobstore.output_root() == tmp_path
 
 
-def test_output_root_prefers_container_outputs(monkeypatch) -> None:
+def test_output_root_prefers_container_outputs(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", "/mnt/comfy-output")
     monkeypatch.delenv("COMFY_OUTPUT", raising=False)
     sys.modules.pop("folder_paths", None)
@@ -2264,7 +2290,7 @@ def test_output_root_prefers_container_outputs(monkeypatch) -> None:
     assert jobstore.output_root() == Path("/outputs")
 
 
-def test_output_root_host_default(monkeypatch) -> None:
+def test_output_root_host_default(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
     monkeypatch.delenv("COMFY_OUTPUT", raising=False)
     sys.modules.pop("folder_paths", None)
@@ -2279,7 +2305,7 @@ def test_output_root_host_default(monkeypatch) -> None:
     assert jobstore.output_root() == Path("/mnt/comfy-output")
 
 
-def test_record_ingest_failure_defaults_error(tmp_path: Path, monkeypatch) -> None:
+def test_record_ingest_failure_defaults_error(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = jobstore.dub_dir("ep")
     jobstore.record_ingest_failure(dest, "empty source")
@@ -2295,7 +2321,7 @@ def test_analyze_pcm_without_wav_path_is_missing_source() -> None:
     assert reason == pipeline.MISSING_SOURCE_STATUS
 
 
-def test_output_root_comfy_output_alias(tmp_path: Path, monkeypatch) -> None:
+def test_output_root_comfy_output_alias(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("COMFY_OUTPUT_DIR", raising=False)
     monkeypatch.setenv("COMFY_OUTPUT", str(tmp_path))
     sys.modules.pop("folder_paths", None)
@@ -2310,7 +2336,7 @@ def test_output_root_comfy_output_alias(tmp_path: Path, monkeypatch) -> None:
     assert jobstore.output_root() == tmp_path
 
 
-def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:
+def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         sys,
         "path",
@@ -2356,12 +2382,12 @@ def test_clone_cfg_weight_auto_and_override() -> None:
     assert pipeline.clone_cfg_weight("en", "es", "nope") == 0.0
 
 
-def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch) -> None:
+def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     class _T3:
         def __init__(self) -> None:
             self.seen: list[int | None] = []
 
-        def inference(self, **kwargs):
+        def inference(self, **kwargs: Any) -> Any:
             self.seen.append(kwargs.get("max_new_tokens"))
             return None
 
@@ -2372,7 +2398,7 @@ def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch) -> None
             self.t3 = _T3()
             self._infer = self.t3.inference
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text, kwargs
             self.t3.inference(max_new_tokens=1000)
             return [0.1] * 240
@@ -2396,13 +2422,13 @@ def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch) -> None
     assert fake.t3.inference == fake._infer
 
 
-def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> None:
+def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     seen: list[dict] = []
 
     class _Fake:
         sr = 24000
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text
             seen.append(dict(kwargs))
             return [0.1] * 240
@@ -2440,7 +2466,7 @@ def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch) -> No
     assert seen[1]["audio_prompt_path"] == str(ref)
 
 
-def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None:
+def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -2453,7 +2479,7 @@ def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch) -> None
     class _Fake:
         sr = 24000
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text
             seen.append(dict(kwargs))
             return _am_speech(24000, 0.5)
@@ -2808,7 +2834,7 @@ def test_is_speech_like_rejects_perth_drone() -> None:
 
 
 def test_render_mix_strips_leading_clone_hush(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -2836,7 +2862,7 @@ def test_render_mix_strips_leading_clone_hush(
         ],
     }
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         hush = [0.012] * (rate * 2)
         return hush + _am_speech(rate, 1.0), rate
@@ -2867,7 +2893,7 @@ def test_render_mix_strips_leading_clone_hush(
 
 
 def test_render_mix_strips_leading_silence_when_disclosure_off(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -2896,7 +2922,7 @@ def test_render_mix_strips_leading_silence_when_disclosure_off(
         ],
     }
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return _am_speech(rate, 4.0), rate
 
@@ -2929,7 +2955,7 @@ def test_render_mix_strips_leading_silence_when_disclosure_off(
     assert len(mix) == len(mixed)
 
 
-def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
+def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -2939,7 +2965,7 @@ def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return [0.3 if i % 2 == 0 else -0.3 for i in range(rate * 2)], rate
 
@@ -2965,7 +2991,7 @@ def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:
     assert "clone_unvoiced" in qc or "mix_not_speech" in qc
 
 
-def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None:
+def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -2975,7 +3001,7 @@ def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None
     dub_audio.write_wav(dest / "source.wav", samples, rate)
     payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return [
             math.sin(2 * math.pi * 440 * i / rate) for i in range(rate * 2)
@@ -3002,7 +3028,7 @@ def test_render_mix_skips_steady_tone_clone(tmp_path: Path, monkeypatch) -> None
 
 
 def test_render_mix_drone_is_blocking_empty_mix(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -3030,7 +3056,7 @@ def test_render_mix_drone_is_blocking_empty_mix(
         ],
     }
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return _perth_drone(rate, hush_s=0.5, tone_s=1.5, f0=90.0), rate
 
@@ -3057,7 +3083,7 @@ def test_render_mix_drone_is_blocking_empty_mix(
     assert "mix_not_speech" in qc["flags"] or "clone_unvoiced" in qc["flags"]
 
 
-def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch) -> None:
+def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
     dest = tmp_path / "dubs" / "ep"
@@ -3085,7 +3111,7 @@ def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch) -> None:
     }
     calls: list[int] = []
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         calls.append(1)
         if len(calls) == 1:
@@ -3116,7 +3142,7 @@ def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_render_mix_speed_widget_does_not_stack(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     _passthrough_ffmpeg(monkeypatch)
@@ -3136,7 +3162,7 @@ def test_render_mix_speed_widget_does_not_stack(
         spill_s: float = 0.0,
         max_speed: float = align.MAX_SPEED,
         min_stretch: float = align.MIN_STRETCH,
-    ):
+    ) -> Any:
         seen_cap.append(float(max_speed))
         return real_fit(
             pcm,
@@ -3149,7 +3175,7 @@ def test_render_mix_speed_widget_does_not_stack(
 
     monkeypatch.setattr(pipeline, "fit_turn", _fit)
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         n = max(rate, len(text) * 80)
         return _am_speech(rate, n / float(rate)), rate
@@ -3174,14 +3200,14 @@ def test_render_mix_speed_widget_does_not_stack(
     assert all(cap <= align.MAX_SPEED + 1e-9 for cap in seen_cap)
 
 
-def test_ffmpeg_atempo_mocked(monkeypatch) -> None:
+def test_ffmpeg_atempo_mocked(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Proc:
         returncode = 0
         stdout = struct.pack("<" + "f" * 100, *([0.1] * 100))
 
     seen: list[list[str]] = []
 
-    def _run(cmd: list[str], **kwargs):
+    def _run(cmd: list[str], **kwargs: Any) -> Any:
         del kwargs
         seen.append(list(cmd))
         return _Proc()
@@ -3228,14 +3254,14 @@ def test_clone_prep_helpers_edge_cases() -> None:
     assert len(stretched) == 2000
 
 
-def test_ffmpeg_atempo_fail_paths(monkeypatch) -> None:
+def test_ffmpeg_atempo_fail_paths(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(align.shutil, "which", lambda _name: "/usr/bin/ffmpeg")
     assert align._ffmpeg_atempo([], 10, 24000) is None
     assert align._ffmpeg_atempo([0.1] * 10, 0, 24000) is None
     assert align._ffmpeg_atempo([0.1] * 10, 10, 24000) is None
     assert align._ffmpeg_atempo([0.1] * 400, 100, 24000) is None
 
-    def _boom(*_args, **_kwargs):
+    def _boom(*_args: Any, **_kwargs: Any) -> Any:
         raise OSError("no ffmpeg")
 
     monkeypatch.setattr(align.subprocess, "run", _boom)
@@ -3273,17 +3299,17 @@ def test_qc_merges_extra_flags() -> None:
 
 
 def test_try_qwen3tts_passes_ref_audio_and_text(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     seen: list[dict] = []
     prompts: list[dict] = []
 
     class _Fake:
-        def create_voice_clone_prompt(self, **kwargs):
+        def create_voice_clone_prompt(self, **kwargs: Any) -> Any:
             prompts.append(dict(kwargs))
             return {"cached": True}
 
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             seen.append(dict(kwargs))
             return [[0.1] * 80], 24000
 
@@ -3339,13 +3365,13 @@ def _write_qwen3_tokenizer(folder: Path) -> None:
 
 class _FakeQwen3:
     @staticmethod
-    def from_pretrained(*args, local_files_only=False, **kwargs):
+    def from_pretrained(*args: Any, local_files_only: bool = False, **kwargs: Any) -> object:
         del args, kwargs
         loaded = types.SimpleNamespace(local_files_only=local_files_only)
         return loaded
 
 
-def test_preflight_qwen3_wheel_miss_names_no_deps(monkeypatch) -> None:
+def test_preflight_qwen3_wheel_miss_names_no_deps(monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline._close_qwen3()
     monkeypatch.setattr(
         pipeline,
@@ -3359,7 +3385,7 @@ def test_preflight_qwen3_wheel_miss_names_no_deps(monkeypatch) -> None:
     assert "download-podcast" not in reason
 
 
-def test_preflight_qwen3_weights_miss(tmp_path: Path, monkeypatch) -> None:
+def test_preflight_qwen3_weights_miss(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline._close_qwen3()
     monkeypatch.setattr(pipeline, "_model_roots", lambda: [str(tmp_path)])
     monkeypatch.setattr(pipeline, "_import_qwen3_model", lambda: (_FakeQwen3, ""))
@@ -3368,7 +3394,7 @@ def test_preflight_qwen3_weights_miss(tmp_path: Path, monkeypatch) -> None:
     assert "download-podcast --tier qwen3tts" in reason
 
 
-def test_preflight_qwen3_tokenizer_miss(tmp_path: Path, monkeypatch) -> None:
+def test_preflight_qwen3_tokenizer_miss(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline._close_qwen3()
     snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
     _write_qwen3_base(snap)
@@ -3380,7 +3406,7 @@ def test_preflight_qwen3_tokenizer_miss(tmp_path: Path, monkeypatch) -> None:
     assert pipeline.qwen3_base_dir() == snap
 
 
-def test_preflight_qwen3_ok(tmp_path: Path, monkeypatch) -> None:
+def test_preflight_qwen3_ok(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline._close_qwen3()
     snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
     _write_qwen3_base(snap)
@@ -3391,7 +3417,7 @@ def test_preflight_qwen3_ok(tmp_path: Path, monkeypatch) -> None:
     assert pipeline.qwen3_ckpt_dir() == snap
 
 
-def test_load_qwen3_passes_local_files_only(tmp_path: Path, monkeypatch) -> None:
+def test_load_qwen3_passes_local_files_only(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline._close_qwen3()
     snap = tmp_path / "Qwen__Qwen3-TTS-12Hz-0.6B-Base_qwen3tts"
     _write_qwen3_base(snap)
@@ -3400,7 +3426,7 @@ def test_load_qwen3_passes_local_files_only(tmp_path: Path, monkeypatch) -> None
 
     class _Loader:
         @staticmethod
-        def from_pretrained(path, local_files_only=False, **kwargs):
+        def from_pretrained(path: str, local_files_only: bool = False, **kwargs: Any) -> object:
             seen.append({"path": path, "local": local_files_only, **kwargs})
             return object()
 
@@ -3414,7 +3440,7 @@ def test_load_qwen3_passes_local_files_only(tmp_path: Path, monkeypatch) -> None
 
 
 def test_render_mix_qwen3tts_missing_extra_fail_fast(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
@@ -3427,7 +3453,7 @@ def test_render_mix_qwen3tts_missing_extra_fail_fast(
     synth_calls: list[str] = []
     monkeypatch.setattr(pipeline, "_log", lambda message: logs.append(message))
 
-    def _synth(*args, **kwargs):
+    def _synth(*args: Any, **kwargs: Any) -> tuple[list[float], int, str]:
         del args, kwargs
         synth_calls.append("synthesize_turn")
         return [0.1] * 80, rate, ""
@@ -3456,7 +3482,7 @@ def test_render_mix_qwen3tts_missing_extra_fail_fast(
 
 
 def test_chatterbox_local_only_does_not_call_hub(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     snap = tmp_path / "ResembleAI__chatterbox_clone"
     snap.mkdir()
@@ -3470,7 +3496,7 @@ def test_chatterbox_local_only_does_not_call_hub(
     monkeypatch.delenv("PKUSEG_HOME", raising=False)
     monkeypatch.delenv("HF_HUB_OFFLINE", raising=False)
 
-    def explode(*_args, **_kwargs):
+    def explode(*_args: Any, **_kwargs: Any) -> Any:
         raise AssertionError("hub download must not run")
 
     fake_hub = types.ModuleType("huggingface_hub")

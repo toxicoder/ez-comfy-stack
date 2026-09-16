@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
@@ -149,19 +150,19 @@ def test_duration_ok_and_probe(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     assert js.probe_duration_s(p) is None
     monkeypatch.setattr(js.shutil, "which", lambda n: "/usr/bin/ffprobe")
 
-    def fake_run(argv, **_k):
+    def fake_run(argv: list[str], **_k: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
 
     monkeypatch.setattr(js.subprocess, "run", fake_run)
     assert js.duration_ok(p) is True
 
-    def bad_run(argv, **_k):
+    def bad_run(argv: list[str], **_k: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=0, stdout="nope\n", stderr="")
 
     monkeypatch.setattr(js.subprocess, "run", bad_run)
     assert js.probe_duration_s(p) is None
 
-    def boom(*a, **k):
+    def boom(*a: Any, **k: Any) -> SimpleNamespace:
         raise OSError("x")
 
     monkeypatch.setattr(js.subprocess, "run", boom)

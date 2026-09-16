@@ -1,7 +1,18 @@
+/**
+ * EZFilmConcat frontend: overlay a downloadable 90s MP4 after Queue.
+ *
+ * Nodes 2.0: DOM overlay via document.createElement. Does not touch LiteGraph
+ * canvas drawing or require inputEl.
+ */
 import { app } from "../../scripts/app.js";
 
 const OVERLAY_ID = "ez-film-preview-overlay";
 
+/**
+ * First VHS gif payload with a filename, or null.
+ * @param {object} message
+ * @returns {object|null}
+ */
 function firstGif(message) {
   const gifs = message?.gifs;
   if (!Array.isArray(gifs) || !gifs.length) {
@@ -14,6 +25,11 @@ function firstGif(message) {
   return item;
 }
 
+/**
+ * Comfy /view URL for a saved gif/mp4 payload.
+ * @param {object} item
+ * @returns {string}
+ */
 function viewUrl(item) {
   const params = new URLSearchParams({
     filename: item.filename,
@@ -23,6 +39,10 @@ function viewUrl(item) {
   return `/view?${params.toString()}`;
 }
 
+/**
+ * Reuse or create the fixed film-ready overlay element.
+ * @returns {HTMLElement}
+ */
 function ensureOverlay() {
   let el = document.getElementById(OVERLAY_ID);
   if (el) {
@@ -49,6 +69,11 @@ function ensureOverlay() {
   return el;
 }
 
+/**
+ * Fill the overlay with a video player and download link.
+ * @param {object} item
+ * @returns {void}
+ */
 function renderOverlay(item) {
   const el = ensureOverlay();
   const src = viewUrl(item);
@@ -83,11 +108,22 @@ function renderOverlay(item) {
 
 app.registerExtension({
   name: "ez_film.preview",
+  /**
+   * Wrap EZFilmConcat so Queue shows a 90s film overlay.
+   * @param {object} nodeType
+   * @param {object} nodeData
+   * @returns {Promise<void>}
+   */
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (nodeData.name !== "EZFilmConcat") {
       return;
     }
     const onExecuted = nodeType.prototype.onExecuted;
+    /**
+     * Show the overlay when the concat node returns a gif payload.
+     * @param {object} message
+     * @returns {void}
+     */
     nodeType.prototype.onExecuted = function (message) {
       onExecuted?.apply(this, arguments);
       const item = firstGif(message);

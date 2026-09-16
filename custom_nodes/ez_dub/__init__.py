@@ -7,5 +7,6 @@ Chatterbox, Qwen3-TTS, and yt-dlp backends are lazy inside node ``run()``.
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
 WEB_DIRECTORY = "./js"
+"""Relative path to this pack's Comfy web extensions."""
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

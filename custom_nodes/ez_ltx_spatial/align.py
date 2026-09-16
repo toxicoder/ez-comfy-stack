@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+# LTX video VAE spatial alignment and Comfy widget floor.
 SPATIAL_MULTIPLE = 32
 WIDGET_MINIMUM = 64
 

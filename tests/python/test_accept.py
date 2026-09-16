@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
@@ -94,7 +95,7 @@ def test_accept_cli_and_probes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     assert acc.probe_wh(p) is None
     assert acc.probe_has_audio(p) is False
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(argv)
         if "format=duration" in joined:
             return SimpleNamespace(returncode=0, stdout="5.00\n", stderr="")
@@ -129,7 +130,7 @@ def test_accept_world_only_fails_talking_stem(
     monkeypatch.setattr(acc, "probe_duration_s", lambda *a, **k: 5.00)
     monkeypatch.setattr(acc, "probe_wh", lambda *a, **k: (1280, 704))
     monkeypatch.setattr(acc, "probe_has_audio", lambda *a, **k: True)
-    def _talking(_path, label, **_k):
+    def _talking(_path: Path, label: str, **_k: Any) -> list[str]:
         return [f"{label}: speech-band ratio 0.90 over 4.90s (world-only)"]
 
     monkeypatch.setattr(acc, "world_only_speech_defects", _talking)
@@ -139,7 +140,7 @@ def test_accept_world_only_fails_talking_stem(
     master = dest / "publish" / "master.mp4"
     master.write_bytes(b"x")
     monkeypatch.setattr(acc, "world_only_speech_defects", lambda *a, **k: [])
-    def _talking_master(*_a, **_k):
+    def _talking_master(*_a: Any, **_k: Any) -> list[str]:
         return ["master: speech-band ratio 0.90 over 80s (world-only)"]
 
     monkeypatch.setattr(acc, "accept_master", _talking_master)

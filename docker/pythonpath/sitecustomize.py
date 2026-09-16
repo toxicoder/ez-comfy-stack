@@ -35,6 +35,7 @@ from collections.abc import Callable, Iterator
 from contextlib import AbstractContextManager
 from typing import Any, cast
 
+# (sdp_kernel kwarg, SDPBackend enum name) pairs for the torch 2.14 mapping.
 _SDP_BACKEND_FLAGS: tuple[tuple[str, str], ...] = (
     ("enable_flash", "FLASH_ATTENTION"),
     ("enable_mem_efficient", "EFFICIENT_ATTENTION"),
@@ -99,6 +100,17 @@ def apply_lab_sdp_kernel_shim(cuda_mod: Any | None = None) -> None:
         enable_mem_efficient: bool,
         enable_cudnn: bool,
     ) -> list[Any]:
+        """Map enable_* flags to ``SDPBackend`` members that exist.
+
+        Args:
+            enable_flash: Include ``FLASH_ATTENTION`` when present.
+            enable_math: Include ``MATH`` when present.
+            enable_mem_efficient: Include ``EFFICIENT_ATTENTION`` when present.
+            enable_cudnn: Include ``CUDNN_ATTENTION`` when present.
+
+        Returns:
+            Backend enum values to pass to ``sdpa_kernel``.
+        """
         flags = {
             "enable_flash": enable_flash,
             "enable_math": enable_math,
@@ -121,6 +133,17 @@ def apply_lab_sdp_kernel_shim(cuda_mod: Any | None = None) -> None:
         enable_mem_efficient: bool = True,
         enable_cudnn: bool = True,
     ) -> Iterator[Any]:
+        """Context manager with the old ``sdp_kernel`` enable_* API.
+
+        Args:
+            enable_flash: Enable flash attention.
+            enable_math: Enable the math (eager) kernel.
+            enable_mem_efficient: Enable memory-efficient attention.
+            enable_cudnn: Enable cuDNN attention.
+
+        Returns:
+            An iterator that yields the inner ``sdpa_kernel`` context.
+        """
         backends = _backend_list(
             enable_flash,
             enable_math,
@@ -188,6 +211,7 @@ def _apply_if_already_imported() -> None:
 class _LabCompatFinder:
     """Wrap loaders for torch CUDA backends and diffusers LoRA modules."""
 
+    # Fully-qualified modules that receive a post-import shim.
     _TARGETS = frozenset({"torch.backends.cuda", "diffusers.models.lora"})
 
     def __init__(self) -> None:
@@ -231,13 +255,28 @@ class _LabCompatFinder:
             finder_self = self
 
             class _Loader:
+                """Delegating loader that runs a named shim after ``exec_module``."""
+
                 def create_module(self, load_spec: Any) -> Any:
+                    """Create the module via the original loader when it implements it.
+
+                    Args:
+                        load_spec: Importlib module spec.
+
+                    Returns:
+                        The created module, or ``None`` for default creation.
+                    """
                     create = getattr(orig_loader, "create_module", None)
                     if create is not None:
                         return create(load_spec)
                     return None
 
                 def exec_module(self, module: Any) -> None:
+                    """Execute the original loader, then apply the TTS shim.
+
+                    Args:
+                        module: Module object to populate.
+                    """
                     orig_loader.exec_module(module)
                     finder_self._armed.discard(fullname)
                     _apply_named_shim(fullname, module)
@@ -248,6 +287,7 @@ class _LabCompatFinder:
             self._finding = False
 
 
+# Singleton import finder installed on ``sys.meta_path`` (idempotent register).
 _LAB_COMPAT_FINDER: _LabCompatFinder | None = None
 
 

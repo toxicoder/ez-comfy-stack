@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .pack import output_directory
 
+# Heavy GPU modes that XOR with blender-desk / llm-desk / idle.
 HEAVY_MODES = ("klein", "trellis", "wan", "ltx")
 
 
@@ -15,7 +16,11 @@ class OccupancyError(RuntimeError):
 
 
 def occupancy_path() -> Path:
-    """``${COMFY_OUTPUT_DIR}/.occupancy.json`` (outputs tree, never MODELS_DIR)."""
+    """``${COMFY_OUTPUT_DIR}/.occupancy.json`` (outputs tree, never MODELS_DIR).
+
+    Returns:
+        Occupancy state file path (may not exist yet).
+    """
     return output_directory() / ".occupancy.json"
 
 

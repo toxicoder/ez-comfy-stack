@@ -7,14 +7,43 @@ import argparse
 import json
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TypedDict
 
 
-def load_manifest(path: Path) -> dict[str, Any]:
-    """Parse the restricted manifest schema (indent-2 YAML subset)."""
+class PackRecord(TypedDict):
+    """One pack row from the restricted model-manifest schema."""
+
+    default: bool
+    retired: bool
+    superseded_by: str
+    min_gb: int
+    tier_dir: str
+    files: list[str]
+    shares: list[str]
+    cmd: str
+    cleanup: str
+
+
+class Manifest(TypedDict):
+    """Parsed config/model-manifest.yaml."""
+
+    schema: int
+    refuse: list[str]
+    packs: dict[str, PackRecord]
+
+
+def load_manifest(path: Path) -> Manifest:
+    """Parse the restricted manifest schema (indent-2 YAML subset).
+
+    Args:
+        path: Path to ``config/model-manifest.yaml``.
+
+    Returns:
+        Mapping with schema, refuse tokens, and packs.
+    """
     text = path.read_text(encoding="utf-8")
     refuse: list[str] = []
-    packs: dict[str, dict[str, Any]] = {}
+    packs: dict[str, PackRecord] = {}
     section = ""
     pack = ""
     list_key = ""
@@ -61,7 +90,7 @@ def load_manifest(path: Path) -> dict[str, Any]:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            packs[pack][list_key].append(stripped[2:].strip())
+            packs[pack][list_key].append(stripped[2:].strip())  # type: ignore[literal-required]
             continue
         if ":" in stripped and not stripped.startswith("- "):
             list_key = ""
@@ -75,20 +104,34 @@ def load_manifest(path: Path) -> dict[str, Any]:
             elif key == "min_gb":
                 packs[pack]["min_gb"] = int(val or "0")
             elif key in packs[pack]:
-                packs[pack][key] = val
+                packs[pack][key] = val  # type: ignore[literal-required]
     return {"schema": schema, "refuse": refuse, "packs": packs}
 
 
-def keep_set(manifest: dict[str, Any]) -> set[str]:
-    """Union of all pack files (live + shares)."""
+def keep_set(manifest: Manifest) -> set[str]:
+    """Union of all pack files (live + shares).
+
+    Args:
+        manifest: Parsed manifest mapping.
+
+    Returns:
+        Basename set from every pack's ``files`` list.
+    """
     names: set[str] = set()
     for pack in manifest["packs"].values():
         names.update(pack.get("files") or [])
     return names
 
 
-def default_keep_set(manifest: dict[str, Any]) -> set[str]:
-    """Filenames from packs with default: true."""
+def default_keep_set(manifest: Manifest) -> set[str]:
+    """Filenames from packs with default: true.
+
+    Args:
+        manifest: Parsed manifest mapping.
+
+    Returns:
+        Basename set from default packs.
+    """
     names: set[str] = set()
     for pack in manifest["packs"].values():
         if pack.get("default"):
@@ -97,6 +140,14 @@ def default_keep_set(manifest: dict[str, Any]) -> set[str]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """CLI: keep-set | default-keep-set | refuse | json | pack.
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     parser = argparse.ArgumentParser(prog="model_manifest")
     parser.add_argument("--manifest", required=True)
     sub = parser.add_subparsers(dest="cmd", required=True)

@@ -1,6 +1,7 @@
 """Splice engine and Cinema Rack node tests."""
 
 from __future__ import annotations
+import pytest
 
 import sys
 from pathlib import Path
@@ -196,7 +197,7 @@ def test_recipe_fills_none_but_does_not_clobber() -> None:
     assert isinstance(notes, str)
 
 
-def test_catalog_error_paths(tmp_path: Path, monkeypatch) -> None:
+def test_catalog_error_paths(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     cinema.reset_cinema_caches_for_tests()
     bad_axes = tmp_path / "axes.json"
     bad_axes.write_text("[]", encoding="utf-8")
@@ -272,7 +273,7 @@ def test_as_bool_and_string_list_helpers() -> None:
     assert cinema._string_list({"conflicts": [" a ", ""]}, "conflicts") == ["a"]
 
 
-def test_catalog_list_and_entry_types(tmp_path: Path, monkeypatch) -> None:
+def test_catalog_list_and_entry_types(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     cinema.reset_cinema_caches_for_tests()
     not_list = tmp_path / "x.json"
     not_list.write_text("{}", encoding="utf-8")

@@ -21,6 +21,7 @@ from .jobstore import DURATION_S, DURATION_TOL
 from .ltx_timing import ltx_decoded_frames
 from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, film_slug
 
+# ffmpeg/x264 stitch: loudnorm, AAC, H.264, FPS, pad, and path suffixes.
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
 AAC_BITRATE = "192k"
 AAC_RATE = "48000"
@@ -45,7 +46,7 @@ IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 def log(message: str) -> None:
     """Write a pack line to stderr.
 
-    Arguments:
+    Args:
         message: Text after the ``[ez_film]`` prefix.
     Returns:
         None
@@ -109,22 +110,50 @@ def find_ffprobe() -> str | None:
 
 
 def _is_video_path(path: str) -> bool:
-    """True when ``path`` has a video suffix."""
+    """True when ``path`` has a video suffix.
+
+    Args:
+        path: Candidate file path.
+
+    Returns:
+        Whether the suffix is a video container.
+    """
     return Path(path).suffix.lower() in VIDEO_SUFFIXES
 
 
 def _is_image_path(path: str) -> bool:
-    """True when ``path`` has an image suffix (VHS metadata PNG)."""
+    """True when ``path`` has an image suffix (VHS metadata PNG).
+
+    Args:
+        path: Candidate file path.
+
+    Returns:
+        Whether the suffix is an image.
+    """
     return Path(path).suffix.lower() in IMAGE_SUFFIXES
 
 
 def _is_muxed_audio_path(path: str) -> bool:
-    """True when ``path`` is a VHS muxed ``*-audio.<videoext>`` file."""
+    """True when ``path`` is a VHS muxed ``*-audio.<videoext>`` file.
+
+    Args:
+        path: Candidate file path.
+
+    Returns:
+        Whether the stem ends with ``-audio`` and the suffix is video.
+    """
     return _is_video_path(path) and Path(path).stem.endswith("-audio")
 
 
 def _sibling_video(path: str) -> str | None:
-    """Muxed ``{stem}-audio.mp4`` then silent ``{stem}.mp4`` next to an image."""
+    """Muxed ``{stem}-audio.mp4`` then silent ``{stem}.mp4`` next to an image.
+
+    Args:
+        path: Image path from a VHS payload.
+
+    Returns:
+        Sibling MP4 path, or None.
+    """
     if not _is_image_path(path):
         return None
     image = Path(path)
@@ -140,7 +169,7 @@ def _sibling_video(path: str) -> str | None:
 def _path_strings(value: object) -> list[str]:
     """Flatten a VHS_FILENAMES payload into path strings.
 
-    Arguments:
+    Args:
         value: str path, ``(saved, [paths])`` tuple, list, dict, or Path.
     Returns:
         Path strings in payload order (empty when unusable).
@@ -178,7 +207,7 @@ def resolve_shot_path(value: object) -> str:
     most complete file. Prefer that muxed AV, then the last video suffix,
     then a sibling MP4 next to a PNG.
 
-    Arguments:
+    Args:
         value: str path, ``(saved, [paths])`` tuple, list, or dict.
     Returns:
         Path string.
@@ -210,7 +239,14 @@ def resolve_shot_path(value: object) -> str:
 
 
 def encoder_missing(stderr: str) -> bool:
-    """True when ffmpeg failed because libx264 is not in the build."""
+    """True when ffmpeg failed because libx264 is not in the build.
+
+    Args:
+        stderr: ffmpeg stderr text.
+
+    Returns:
+        Whether the failure is a missing libx264 encoder.
+    """
     text = (stderr or "").lower()
     if "unknown encoder" in text:
         return True
@@ -222,7 +258,7 @@ def encoder_missing(stderr: str) -> bool:
 def write_preview_html(out_mp4: str) -> Path:
     """Write a one-file HTML player next to the published MP4.
 
-    Arguments:
+    Args:
         out_mp4: Published MP4 path.
     Returns:
         HTML sidecar path.
@@ -265,7 +301,7 @@ def copy_publish_master(
 ) -> Path | None:
     """Copy the master into ``films/<slug>/publish/`` when that dir exists.
 
-    Arguments:
+    Args:
         out_mp4: Published MP4 path.
         film: Film id.
         output_dir: Override output directory.
@@ -288,7 +324,7 @@ def copy_publish_master(
 def write_disclosure_sidecar(out_mp4: str, text: str) -> Path | None:
     """Write LTX disclosure next to the published MP4. No-op when text is empty.
 
-    Arguments:
+    Args:
         out_mp4: Published MP4 path.
         text: Disclosure body (already run through EZFilmDisclosure).
     Returns:
@@ -306,7 +342,7 @@ def write_disclosure_sidecar(out_mp4: str, text: str) -> Path | None:
 def concat_list_line(path: str) -> str:
     """One concat-demuxer line with escaped single quotes.
 
-    Arguments:
+    Args:
         path: Absolute or relative MP4 path.
     Returns:
         ``file '…'`` line without newline.
@@ -316,7 +352,16 @@ def concat_list_line(path: str) -> str:
 
 
 def _concat_input_prefix(ffmpeg: str, list_path: str, cap_seconds: float) -> list[str]:
-    """Shared concat-demuxer input + duration cap."""
+    """Shared concat-demuxer input + duration cap.
+
+    Args:
+        ffmpeg: ffmpeg executable.
+        list_path: Concat demuxer list file.
+        cap_seconds: ffmpeg ``-t`` cap.
+
+    Returns:
+        Argument prefix including inputs.
+    """
     return [
         ffmpeg,
         "-y",
@@ -347,7 +392,7 @@ def ffmpeg_stitch_argv(
     ``xfade_cs``). If libx264 is missing, :func:`stitch_film` falls back to
     :func:`ffmpeg_stitch_copy_argv`.
 
-    Arguments:
+    Args:
         list_path: Concat demuxer list file.
         out_mp4: Destination MP4.
         cap_seconds: ffmpeg ``-t`` cap.
@@ -389,7 +434,17 @@ def ffmpeg_stitch_copy_argv(
     cap_seconds: float,
     ffmpeg: str,
 ) -> list[str]:
-    """Fallback stitch: video copy, AAC + loudnorm + faststart."""
+    """Fallback stitch: video copy, AAC + loudnorm + faststart.
+
+    Args:
+        list_path: Concat demuxer list file.
+        out_mp4: Destination MP4.
+        cap_seconds: ffmpeg ``-t`` cap.
+        ffmpeg: ffmpeg executable.
+
+    Returns:
+        Argument vector.
+    """
     return [
         *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
         "-c:v",
@@ -424,7 +479,7 @@ def audio_acrossfade_filter(
     shorten audio by ``(n-1)*d`` and miss the 50 ms A/V gate. The chain is
     then loudnormed and padded/trimmed to ``cap_seconds``.
 
-    Arguments:
+    Args:
         n_inputs: Number of audio inputs (``[0:a]`` …).
         duration_s: Acrossfade duration in seconds (e.g. 0.10).
         cap_seconds: Publish cap for the final atrim (default 90).
@@ -460,7 +515,17 @@ def audio_acrossfade_filter(
 def ffmpeg_video_copy_argv(
     list_path: str, out_mp4: str, cap_seconds: float, ffmpeg: str
 ) -> list[str]:
-    """Concat demuxer, H.264 video, drop audio (step 1 of xfade remux)."""
+    """Concat demuxer, H.264 video, drop audio (step 1 of xfade remux).
+
+    Args:
+        list_path: Concat demuxer list file.
+        out_mp4: Destination video-only MP4.
+        cap_seconds: ffmpeg ``-t`` cap.
+        ffmpeg: ffmpeg executable.
+
+    Returns:
+        Argument vector.
+    """
     return [
         *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
         "-r",
@@ -481,7 +546,17 @@ def ffmpeg_video_copy_argv(
 def ffmpeg_video_streamcopy_argv(
     list_path: str, out_mp4: str, cap_seconds: float, ffmpeg: str
 ) -> list[str]:
-    """Concat demuxer, video copy, drop audio (libx264 fallback)."""
+    """Concat demuxer, video copy, drop audio (libx264 fallback).
+
+    Args:
+        list_path: Concat demuxer list file.
+        out_mp4: Destination video-only MP4.
+        cap_seconds: ffmpeg ``-t`` cap.
+        ffmpeg: ffmpeg executable.
+
+    Returns:
+        Argument vector.
+    """
     return [
         *_concat_input_prefix(ffmpeg, list_path, cap_seconds),
         "-c:v",
@@ -498,7 +573,18 @@ def ffmpeg_audio_acrossfade_argv(
     duration_s: float,
     cap_seconds: float = DEFAULT_CAP_SECONDS,
 ) -> list[str]:
-    """N-input picture-aligned audio acrossfade + loudnorm to AAC 48 kHz stereo 192k."""
+    """N-input picture-aligned audio acrossfade + loudnorm to AAC 48 kHz stereo 192k.
+
+    Args:
+        shot_paths: Shot MP4 paths in beat/shot order.
+        out_m4a: Destination AAC file.
+        ffmpeg: ffmpeg executable.
+        duration_s: Acrossfade duration in seconds.
+        cap_seconds: Publish cap for the final atrim.
+
+    Returns:
+        Argument vector.
+    """
     argv: list[str] = [ffmpeg, "-y"]
     for path in shot_paths:
         argv.extend(["-i", path])
@@ -527,7 +613,18 @@ def ffmpeg_audio_acrossfade_argv(
 def ffmpeg_mux_copy_argv(
     video_mp4: str, audio_m4a: str, out_mp4: str, cap_seconds: float, ffmpeg: str
 ) -> list[str]:
-    """Mux copied video with acrossfaded AAC (step 3 of xfade remux)."""
+    """Mux copied video with acrossfaded AAC (step 3 of xfade remux).
+
+    Args:
+        video_mp4: Video-only concat.
+        audio_m4a: Acrossfaded AAC.
+        out_mp4: Destination master.
+        cap_seconds: ffmpeg ``-t`` cap.
+        ffmpeg: ffmpeg executable.
+
+    Returns:
+        Argument vector.
+    """
     return [
         ffmpeg,
         "-y",
@@ -553,7 +650,17 @@ def _ffprobe_csv(
     ffprobe: str | None = None,
     run: Any = None,
 ) -> str | None:
-    """Run ffprobe and return stripped stdout, or None on failure."""
+    """Run ffprobe and return stripped stdout, or None on failure.
+
+    Args:
+        path: Media file.
+        args: Extra ffprobe arguments before ``path``.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Stripped stdout, or None on failure.
+    """
     exe = ffprobe if ffprobe is not None else find_ffprobe()
     if not exe:
         return None
@@ -579,7 +686,7 @@ def probe_has_audio(
 ) -> bool:
     """True when ffprobe reports an audio stream.
 
-    Arguments:
+    Args:
         path: MP4 path.
         ffprobe: Optional ffprobe executable.
         run: Override ``subprocess.run``.
@@ -607,7 +714,16 @@ def probe_has_audio(
 def probe_audio_hz(
     path: str, ffprobe: str | None = None, run: Any = None
 ) -> int | None:
-    """Audio sample rate in Hz, or None if unavailable."""
+    """Audio sample rate in Hz, or None if unavailable.
+
+    Args:
+        path: MP4 path.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Sample rate in Hz, or None.
+    """
     text = _ffprobe_csv(
         path,
         [
@@ -632,7 +748,7 @@ def probe_audio_hz(
 def probe_seconds(path: str, ffprobe: str | None = None, run: Any = None) -> float | None:
     """Duration in seconds, or None if ffprobe is missing/fails.
 
-    Arguments:
+    Args:
         path: MP4 path.
         ffprobe: Optional ffprobe executable.
         run: Override ``subprocess.run``.
@@ -654,7 +770,14 @@ def probe_seconds(path: str, ffprobe: str | None = None, run: Any = None) -> flo
 
 
 def is_ltx_120_floor_duration(dur: float) -> bool:
-    """True when ``dur`` is the 113-frame VAE floor of an illegal 120 widget."""
+    """True when ``dur`` is the 113-frame VAE floor of an illegal 120 widget.
+
+    Args:
+        dur: Probed duration in seconds.
+
+    Returns:
+        Whether ``dur`` matches the 113-frame floor.
+    """
     expected = LTX_120_DECODED_FRAMES / float(FPS_INT)
     return abs(float(dur) - expected) <= (1.0 / float(FPS_INT))
 
@@ -665,7 +788,17 @@ def ffmpeg_pad_stem_argv(
     ffmpeg: str,
     extra_frames: int = PAD_HOLD_FRAMES,
 ) -> list[str]:
-    """Clone last video frame + pad audio to the 5.00s picture contract."""
+    """Clone last video frame + pad audio to the 5.00s picture contract.
+
+    Args:
+        src: Short LTX stem.
+        dest: Padded destination MP4.
+        ffmpeg: ffmpeg executable.
+        extra_frames: Cloned hold frames (default 7 for 113→120).
+
+    Returns:
+        Argument vector.
+    """
     pad_dur = extra_frames / float(FPS_INT)
     target = f"{DURATION_S:.2f}"
     vfilter = (
@@ -721,7 +854,7 @@ def normalize_stitch_stem(
 ) -> str:
     """Pad a 113-frame LTX neighbor to 5.00s; otherwise return ``path``.
 
-    Arguments:
+    Args:
         path: Candidate MP4.
         ffmpeg: ffmpeg executable (required to pad).
         ffprobe: Optional ffprobe executable.
@@ -759,7 +892,17 @@ def normalize_stitch_stems(
     ffprobe: str | None = None,
     run: Any = None,
 ) -> tuple[list[str], list[str]]:
-    """Pad 113-frame LTX neighbors; return ``(paths, temps_to_unlink)``."""
+    """Pad 113-frame LTX neighbors; return ``(paths, temps_to_unlink)``.
+
+    Args:
+        shot_paths: Candidate MP4 paths in beat/shot order.
+        ffmpeg: ffmpeg executable.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        ``(normalized paths, temp paths to unlink)``.
+    """
     temps: list[str] = []
     out = [
         normalize_stitch_stem(
@@ -773,7 +916,16 @@ def normalize_stitch_stems(
 def probe_wh(
     path: str, ffprobe: str | None = None, run: Any = None
 ) -> tuple[int, int] | None:
-    """First video stream width×height, or None."""
+    """First video stream width×height, or None.
+
+    Args:
+        path: MP4 path.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        ``(width, height)`` or None.
+    """
     text = _ffprobe_csv(
         path,
         [
@@ -799,7 +951,16 @@ def probe_wh(
 def probe_audio_seconds(
     path: str, ffprobe: str | None = None, run: Any = None
 ) -> float | None:
-    """Audio stream duration in seconds, or None."""
+    """Audio stream duration in seconds, or None.
+
+    Args:
+        path: MP4 path.
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Audio duration in seconds, or None.
+    """
     text = _ffprobe_csv(
         path,
         [
@@ -831,7 +992,7 @@ def validate_stitch_stems(
 ) -> None:
     """Refuse missing, unreadable, short, or silent stems before ffmpeg.
 
-    Arguments:
+    Args:
         shot_paths: Candidate MP4 paths in beat/shot order.
         ffprobe: Optional ffprobe executable.
         run: Override ``subprocess.run``.
@@ -874,7 +1035,11 @@ def validate_stitch_stems(
 
 
 def _unlink_master(out_mp4: str) -> None:
-    """Best-effort delete a failed master so 17-shot files never publish."""
+    """Best-effort delete a failed master so 17-shot files never publish.
+
+    Args:
+        out_mp4: Master path to delete.
+    """
     Path(out_mp4).unlink(missing_ok=True)
 
 
@@ -887,7 +1052,7 @@ def assert_master_duration(
 ) -> None:
     """Fail closed if the stitched master is not ``cap±0.10`` with synced audio.
 
-    Arguments:
+    Args:
         out_mp4: Stitched MP4 path.
         cap_seconds: Publish cap (90.00).
         ffprobe: Optional ffprobe executable.
@@ -929,7 +1094,12 @@ def assert_master_duration(
 
 
 def _run_ffmpeg(argv: list[str], runner: Any) -> None:
-    """Run one ffmpeg argv; raise RuntimeError on non-zero."""
+    """Run one ffmpeg argv; raise RuntimeError on non-zero.
+
+    Args:
+        argv: ffmpeg argument vector.
+        runner: ``subprocess.run`` or a test double.
+    """
     log(" ".join(argv))
     proc = runner(argv, check=False, capture_output=True, text=True)
     if getattr(proc, "returncode", 1) != 0:
@@ -940,7 +1110,13 @@ def _run_ffmpeg(argv: list[str], runner: Any) -> None:
 def _run_with_x264_fallback(
     playable: list[str], fallback: list[str], runner: Any
 ) -> None:
-    """Run playable argv; retry fallback when libx264 is missing."""
+    """Run playable argv; retry fallback when libx264 is missing.
+
+    Args:
+        playable: Preferred libx264 argv.
+        fallback: Stream-copy argv used when libx264 is missing.
+        runner: ``subprocess.run`` or a test double.
+    """
     try:
         _run_ffmpeg(playable, runner)
     except RuntimeError as exc:
@@ -975,7 +1151,7 @@ def stitch_film(
     master must be ``cap±0.10`` s with audio within 50 ms of picture. A
     failed master is deleted so a 17-shot file cannot publish.
 
-    Arguments:
+    Args:
         shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
         out_mp4: Destination path.
         cap_seconds: Publish cap (default 90).
@@ -1093,7 +1269,7 @@ def stitch_film(
 def publish_path(film: str, output_dir: Path | None = None) -> Path:
     """``ez_{slug}_90s.mp4`` under the output directory.
 
-    Arguments:
+    Args:
         film: Film id.
         output_dir: Override output directory.
     Returns:

@@ -18,6 +18,7 @@ from .diss_examples import (
     nill_tags,
 )
 
+# Catalog phase for this album.
 FEDERAL_PHASE = 5
 
 
@@ -30,6 +31,20 @@ def _ex(
     lyrics: str,
     *tag_parts: str,
 ) -> dict[str, Any]:
+    """Build one catalog row for this series.
+
+    Args:
+        slug: Kebab title used in the lab stem.
+        title: Operator-facing take name.
+        bpm: Tempo written into tags.
+        seed: Fixed ACE / sampler seed.
+        take: Short blurb for the lab description.
+        lyrics: Formatted lyric block.
+        tag_parts: Style tags joined with the locked vocal.
+
+    Returns:
+        Partial catalog row (album fields filled later).
+    """
     return {
         "stem": f"music-rap-nill-bye-{slug}-lab-example",
         "series": "federal",
@@ -45,6 +60,7 @@ def _ex(
     }
 
 
+# Track lyrics and catalog rows.
 THIRTY_FOUR_COUNTS_LYRICS = format_diss_lyrics(
     intro="yeah\nledger open\nNill Bye counting felonies",
     chorus=(

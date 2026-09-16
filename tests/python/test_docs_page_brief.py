@@ -4,6 +4,7 @@ Hermetic: stdlib + docs/page_brief.py and docs/hooks.py. No MkDocs.
 """
 
 from __future__ import annotations
+from types import ModuleType
 
 import html as html_lib
 import importlib.util
@@ -38,7 +39,7 @@ CANONICAL = (
 )
 
 
-def _load(path: Path, name: str):
+def _load(path: Path, name: str) -> ModuleType:
     """Load a docs/*.py module by path.
 
     Args:
@@ -57,13 +58,13 @@ def _load(path: Path, name: str):
 
 
 @pytest.fixture
-def brief():
+def brief() -> ModuleType:
     """Loaded page_brief module."""
     return _load(PAGE_BRIEF_PY, "ez_docs_page_brief")
 
 
 @pytest.fixture
-def hooks(monkeypatch: pytest.MonkeyPatch):
+def hooks(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
     """Loaded hooks module with no publish/version env.
 
     Args:
@@ -84,7 +85,7 @@ def hooks(monkeypatch: pytest.MonkeyPatch):
     return module
 
 
-def test_wraps_canonical_pair(brief) -> None:
+def test_wraps_canonical_pair(brief: ModuleType) -> None:
     """First labeled pair after h1 becomes one two-column region."""
     out = brief.wrap_page_brief(CANONICAL)
     assert out.count("ez-page-brief") >= 1
@@ -107,7 +108,7 @@ def test_wraps_canonical_pair(brief) -> None:
     assert "<h2" not in out[brief_at:who_at]
 
 
-def test_preserves_list_item_markup(brief) -> None:
+def test_preserves_list_item_markup(brief: ModuleType) -> None:
     """Links, code, emphasis, and strong inside bullets stay intact."""
     out = brief.wrap_page_brief(CANONICAL)
     assert "<code>manage.sh</code>" in out
@@ -123,7 +124,7 @@ def test_preserves_list_item_markup(brief) -> None:
     assert "Who this is for" not in enables.split("</div>", 1)[0]
 
 
-def test_nested_ul_stays_in_first_column(brief) -> None:
+def test_nested_ul_stays_in_first_column(brief: ModuleType) -> None:
     """Depth-safe ul scan does not clip an inner list."""
     src = (
         "<h1>T</h1>"
@@ -140,7 +141,7 @@ def test_nested_ul_stays_in_first_column(brief) -> None:
     assert "outcome" not in on_page
 
 
-def test_leaves_who_this_is_for_outside(brief) -> None:
+def test_leaves_who_this_is_for_outside(brief: ModuleType) -> None:
     """Trailing chrome after the second list is not swallowed."""
     out = brief.wrap_page_brief(CANONICAL)
     assert "<p><strong>Who this is for:</strong> operators.</p>" in out
@@ -149,7 +150,7 @@ def test_leaves_who_this_is_for_outside(brief) -> None:
     assert out.index("Who this is for") > out.index("</div>", card_end)
 
 
-def test_idempotent(brief) -> None:
+def test_idempotent(brief: ModuleType) -> None:
     """A second wrap does not nest another card."""
     once = brief.wrap_page_brief(CANONICAL)
     twice = brief.wrap_page_brief(once)
@@ -157,7 +158,7 @@ def test_idempotent(brief) -> None:
     assert once.count('class="ez-page-brief"') == 1
 
 
-def test_missing_enables_unchanged(brief) -> None:
+def test_missing_enables_unchanged(brief: ModuleType) -> None:
     """One labeled list is not a page brief."""
     src = (
         "<h1>T</h1>"
@@ -168,7 +169,7 @@ def test_missing_enables_unchanged(brief) -> None:
     assert brief.wrap_page_brief(src) == src
 
 
-def test_pair_before_h1_unchanged(brief) -> None:
+def test_pair_before_h1_unchanged(brief: ModuleType) -> None:
     """Chrome that is not after the first h1 is left alone."""
     src = (
         "<p><strong>What's on this page</strong></p>"
@@ -180,7 +181,7 @@ def test_pair_before_h1_unchanged(brief) -> None:
     assert brief.wrap_page_brief(src) == src
 
 
-def test_no_h1_unchanged(brief) -> None:
+def test_no_h1_unchanged(brief: ModuleType) -> None:
     """Pages without an h1 are not wrapped."""
     src = (
         "<p><strong>What's on this page</strong></p>"
@@ -191,8 +192,8 @@ def test_no_h1_unchanged(brief) -> None:
     assert brief.wrap_page_brief(src) == src
 
 
-def test_prose_mention_of_class_still_wraps(brief) -> None:
-    """Documenting .ez-page-brief later on the page must not skip the card."""
+def test_prose_mention_of_class_still_wraps(brief: ModuleType) -> None:
+    """Documenting .ez-page-brief: ModuleType later on the page must not skip the card."""
     src = (
         "<h1>T</h1>"
         "<p><strong>What's on this page</strong></p>"
@@ -207,7 +208,7 @@ def test_prose_mention_of_class_still_wraps(brief) -> None:
     assert out.count('class="ez-page-brief"') == 1
 
 
-def test_apos_entity_label(brief) -> None:
+def test_apos_entity_label(brief: ModuleType) -> None:
     """HTML entity apostrophe in What's still matches."""
     src = (
         "<h1>T</h1>"
@@ -221,7 +222,7 @@ def test_apos_entity_label(brief) -> None:
     assert "What's on this page" in out
 
 
-def test_titles_are_not_headings(brief) -> None:
+def test_titles_are_not_headings(brief: ModuleType) -> None:
     """Card titles must not become h2 (TOC pollution)."""
     out = brief.wrap_page_brief(CANONICAL)
     card = out[out.index("ez-page-brief") : out.index("Who this is for")]
@@ -265,7 +266,7 @@ def _chrome_lists(text: str) -> tuple[list[str], list[str]]:
     return on_items, en_items
 
 
-def test_every_docs_page_chrome_wraps(brief) -> None:
+def test_every_docs_page_chrome_wraps(brief: ModuleType) -> None:
     """Every docs markdown page's chrome pair wraps into one card."""
     pages = sorted(p for p in DOCS.rglob("*.md") if p.is_file())
     assert pages
@@ -299,7 +300,7 @@ def test_every_docs_page_chrome_wraps(brief) -> None:
     assert failures == [], "page-brief wrap gaps:\n" + "\n".join(failures)
 
 
-def test_hooks_on_post_page_wraps_brief(hooks) -> None:
+def test_hooks_on_post_page_wraps_brief(hooks: ModuleType) -> None:
     """on_post_page wraps the pair after h1 and still glossary-wraps list text."""
     html = (
         '<html><body><article class="md-content__inner md-typeset">'

@@ -18,6 +18,7 @@ from .diss_examples import (
     nill_output_prefix,
 )
 
+# Catalog phase, track lyrics, and catalog rows.
 LAB_PHASE = 0
 
 LAB_COAT_LYRICS = format_diss_lyrics(

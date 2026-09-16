@@ -11,8 +11,8 @@ import json
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
-from typing import Any
 
+# Sample catalog paths, combo sentinel, and node-type → family mapping.
 CUSTOM = "custom"
 SAMPLES_DIR = Path(__file__).resolve().parent / "js" / "samples"
 INDEX_NAME = "index.json"
@@ -66,6 +66,14 @@ class Sample:
 
 
 def _as_str(value: object) -> str:
+    """Coerce a widget value to a string.
+
+    Args:
+        value: Combo, textarea, or None.
+
+    Returns:
+        ``value`` when it is a ``str``, else ``str(value)`` or empty.
+    """
     if isinstance(value, str):
         return value
     if value is None:
@@ -74,6 +82,14 @@ def _as_str(value: object) -> str:
 
 
 def _norm_choice(value: object) -> str:
+    """Collapse whitespace on a combo choice.
+
+    Args:
+        value: Raw combo widget value.
+
+    Returns:
+        Stripped choice with internal runs of space folded to one.
+    """
     return " ".join(_as_str(value).strip().split())
 
 
@@ -99,7 +115,11 @@ def album_hides_sample(lab_rel: str) -> bool:
 
 @lru_cache(maxsize=1)
 def load_index() -> dict[str, str]:
-    """Return lab_rel → catalog id from ``index.json``."""
+    """Return lab_rel → catalog id from ``index.json``.
+
+    Returns:
+        Mapping of graph ids to catalog stems. Empty when the file is missing.
+    """
     path = SAMPLES_DIR / INDEX_NAME
     if not path.is_file():
         return {}
@@ -116,7 +136,14 @@ def load_index() -> dict[str, str]:
 
 
 def catalog_exists(catalog_id: str) -> bool:
-    """True when ``<catalog_id>.json`` is on disk."""
+    """True when ``<catalog_id>.json`` is on disk.
+
+    Args:
+        catalog_id: Catalog stem (not Custom).
+
+    Returns:
+        Whether the catalog JSON file exists.
+    """
     cid = _as_str(catalog_id).strip()
     if not cid or cid == CUSTOM:
         return False
@@ -199,7 +226,14 @@ def resolve_catalog(
 
 @lru_cache(maxsize=64)
 def load_catalog(catalog_id: str) -> tuple[Sample, ...]:
-    """Load one catalog. Missing or malformed files return empty."""
+    """Load one catalog. Missing or malformed files return empty.
+
+    Args:
+        catalog_id: Catalog stem.
+
+    Returns:
+        Frozen sample rows in file order, or an empty tuple.
+    """
     cid = _as_str(catalog_id).strip()
     if not cid or cid == CUSTOM:
         return ()
@@ -239,7 +273,11 @@ def load_catalog(catalog_id: str) -> tuple[Sample, ...]:
 
 
 def list_catalog_ids() -> tuple[str, ...]:
-    """Return catalog stems on disk (not ``index``)."""
+    """Return catalog stems on disk (not ``index``).
+
+    Returns:
+        Sorted JSON stems under ``js/samples/``, excluding ``index.json``.
+    """
     if not SAMPLES_DIR.is_dir():
         return ()
     names = []
@@ -269,11 +307,23 @@ def sample_labels(catalog_id: str) -> list[str]:
 
 @lru_cache(maxsize=32)
 def _sample_combo_labels_cached(preferred: str) -> tuple[str, ...]:
-    """Cached union of every catalog label, preferred family first."""
+    """Cached union of every catalog label, preferred family first.
+
+    Args:
+        preferred: Catalog stem whose labels are listed first.
+
+    Returns:
+        Unique labels then Custom, preferred catalog first.
+    """
     seen: set[str] = set()
     body: list[str] = []
 
     def add_label(label: str) -> None:
+        """Append a unique non-Custom label.
+
+        Args:
+            label: Combo value from a catalog row.
+        """
         key = label.lower()
         if not label or key == CUSTOM or key in seen:
             return
@@ -310,6 +360,15 @@ def sample_combo_labels(preferred: str = "") -> list[str]:
 
 
 def _lookup(catalog_id: str, sample: str) -> Sample | None:
+    """Find a sample by combo label or id.
+
+    Args:
+        catalog_id: Catalog stem already resolved.
+        sample: Combo value (label or id).
+
+    Returns:
+        Matching ``Sample``, or None for Custom / miss.
+    """
     choice = _norm_choice(sample)
     if not choice or choice.lower() == CUSTOM:
         return None
@@ -322,7 +381,14 @@ def _lookup(catalog_id: str, sample: str) -> Sample | None:
 
 
 def is_custom(sample: object) -> bool:
-    """True when the combo is Custom or empty."""
+    """True when the combo is Custom or empty.
+
+    Args:
+        sample: Combo widget value.
+
+    Returns:
+        Whether Queue should use the textarea instead of a catalog row.
+    """
     choice = _norm_choice(sample)
     return (not choice) or choice.lower() == CUSTOM
 
@@ -406,11 +472,18 @@ def resolve_ace_sample(
     return out_tags, out_lyrics
 
 
-def catalog_payload(catalog_id: str) -> list[dict[str, Any]]:
-    """JSON-shaped list for tests and the frontend dump."""
-    rows: list[dict[str, Any]] = []
+def catalog_payload(catalog_id: str) -> list[dict[str, str]]:
+    """JSON-shaped list for tests and the frontend dump.
+
+    Args:
+        catalog_id: Catalog stem.
+
+    Returns:
+        Sample dicts with id, label, prompt, and optional tags/lyrics.
+    """
+    rows: list[dict[str, str]] = []
     for item in load_catalog(catalog_id):
-        row: dict[str, Any] = {
+        row: dict[str, str] = {
             "id": item.id,
             "label": item.label,
             "prompt": item.prompt,

@@ -4,6 +4,7 @@ Hermetic: stdlib + the docs/glossary.py module. No MkDocs, network, or PyYAML.
 """
 
 from __future__ import annotations
+from types import ModuleType
 
 import importlib.util
 import json
@@ -24,7 +25,7 @@ HOOKS_PY = ROOT / "docs" / "hooks.py"
 DOCS = ROOT / "docs"
 
 
-def _load_glossary_mod():
+def _load_glossary_mod() -> ModuleType:
     """Load docs/glossary.py as a module.
 
     Returns:
@@ -39,12 +40,12 @@ def _load_glossary_mod():
 
 
 @pytest.fixture
-def gloss():
+def gloss() -> ModuleType:
     """Loaded glossary module."""
     return _load_glossary_mod()
 
 
-def _terms(gloss, rows: list[dict]) -> tuple:
+def _terms(gloss: ModuleType, rows: list[dict]) -> tuple:
     """Build Term tuples from dict rows.
 
     Args:
@@ -70,7 +71,7 @@ def _terms(gloss, rows: list[dict]) -> tuple:
     return tuple(terms)
 
 
-def _lab_terms(gloss) -> tuple:
+def _lab_terms(gloss: ModuleType) -> tuple:
     """Three lab terms with overlapping prefixes (LTX-2.5 vs LTX, Klein 4B vs Klein)."""
     return _terms(
         gloss,
@@ -101,7 +102,7 @@ def _lab_terms(gloss) -> tuple:
     )
 
 
-def test_relative_href_index_and_nested(gloss) -> None:
+def test_relative_href_index_and_nested(gloss: ModuleType) -> None:
     """mike-safe relative links from Home, a top page, and a nested Learn page."""
     assert gloss.relative_glossary_href("", "klein") == "glossary/#klein"
     assert gloss.relative_glossary_href("getting-started/", "klein") == (
@@ -113,7 +114,7 @@ def test_relative_href_index_and_nested(gloss) -> None:
     assert gloss.relative_glossary_href("learn/", "klein") == "../glossary/#klein"
 
 
-def test_wrap_longest_alias_wins(gloss) -> None:
+def test_wrap_longest_alias_wins(gloss: ModuleType) -> None:
     """LTX-2.5 is wrapped as one term, not an inner LTX plus leftover -2.5."""
     html = "<p>Queue LTX-2.5 after Klein 4B.</p>"
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="getting-started/")
@@ -124,7 +125,7 @@ def test_wrap_longest_alias_wins(gloss) -> None:
     assert "-2.5" not in re.sub(r"LTX-2.5", "", out)
 
 
-def test_wrap_word_boundary_skips_want(gloss) -> None:
+def test_wrap_word_boundary_skips_want(gloss: ModuleType) -> None:
     """Wan does not match inside Want."""
     html = "<p>Want a still? Use Wan next.</p>"
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="")
@@ -134,7 +135,7 @@ def test_wrap_word_boundary_skips_want(gloss) -> None:
     assert re.search(r"data-term=\"wan\"[^>]*>Want", out) is None
 
 
-def test_wrap_first_occurrence_only(gloss) -> None:
+def test_wrap_first_occurrence_only(gloss: ModuleType) -> None:
     """A second Klein on the same page stays plain text."""
     html = "<p>Klein 4B draft, then another Klein still.</p>"
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="")
@@ -142,7 +143,7 @@ def test_wrap_first_occurrence_only(gloss) -> None:
     assert "another Klein still" in out
 
 
-def test_wrap_skips_code_pre_heading_and_links(gloss) -> None:
+def test_wrap_skips_code_pre_heading_and_links(gloss: ModuleType) -> None:
     """code, pre, headings, links, and tab labels are not wrapped; a later paragraph is."""
     html = (
         "<h2>Klein</h2>"
@@ -160,7 +161,7 @@ def test_wrap_skips_code_pre_heading_and_links(gloss) -> None:
     assert ">Then " in out or "Then " in out
 
 
-def test_wrap_only_inside_article_not_nav(gloss) -> None:
+def test_wrap_only_inside_article_not_nav(gloss: ModuleType) -> None:
     """Material article is wrapped; a nav Klein is left alone."""
     html = (
         '<nav class="md-nav">Klein in nav</nav>'
@@ -174,14 +175,14 @@ def test_wrap_only_inside_article_not_nav(gloss) -> None:
     assert "data-term=" not in nav
 
 
-def test_wrap_preserves_original_casing(gloss) -> None:
+def test_wrap_preserves_original_casing(gloss: ModuleType) -> None:
     """Matched alias text is not rewritten to the canonical title."""
     html = "<p>Use klein 4B today.</p>"
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="")
     assert ">klein 4B</span>" in out
 
 
-def test_wrap_sets_relative_href_and_title(gloss) -> None:
+def test_wrap_sets_relative_href_and_title(gloss: ModuleType) -> None:
     """Span carries a relative glossary href and the short definition title."""
     html = "<p>Klein 4B is the still model.</p>"
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="learn/pipeline/")
@@ -193,7 +194,7 @@ def test_wrap_sets_relative_href_and_title(gloss) -> None:
     assert 'aria-haspopup="dialog"' in out
 
 
-def test_inject_dialog_once_when_terms_wrapped(gloss) -> None:
+def test_inject_dialog_once_when_terms_wrapped(gloss: ModuleType) -> None:
     """JSON payload + dialog appear once after wrap; skipped when nothing matched."""
     terms = _lab_terms(gloss)
     plain = "<html><body><p>No lab nouns here.</p></body></html>"
@@ -220,7 +221,7 @@ def test_inject_dialog_once_when_terms_wrapped(gloss) -> None:
     assert 'id="ez-glossary-category"' in out
 
 
-def test_skip_glossary_page(gloss) -> None:
+def test_skip_glossary_page(gloss: ModuleType) -> None:
     """glossary.md is not wrapped (the reader is already on the definitions)."""
 
     class _File:
@@ -236,7 +237,7 @@ def test_skip_glossary_page(gloss) -> None:
     assert "ez-glossary-data" not in out
 
 
-def test_render_placeholder_inserts_headings(gloss) -> None:
+def test_render_placeholder_inserts_headings(gloss: ModuleType) -> None:
     """Placeholder becomes markdown headings with explicit ids."""
     md = "Intro\n\n<!-- ez-glossary:render -->\n"
     out = gloss.render_placeholder(md, terms=_lab_terms(gloss))
@@ -246,7 +247,7 @@ def test_render_placeholder_inserts_headings(gloss) -> None:
     assert "## Models" in out
 
 
-def test_validate_rejects_duplicate_alias(gloss) -> None:
+def test_validate_rejects_duplicate_alias(gloss: ModuleType) -> None:
     """Two terms may not share a case-insensitive alias."""
     terms = _terms(
         gloss,
@@ -271,7 +272,7 @@ def test_validate_rejects_duplicate_alias(gloss) -> None:
         gloss.validate_glossary(terms)
 
 
-def test_validate_rejects_unknown_see_also(gloss) -> None:
+def test_validate_rejects_unknown_see_also(gloss: ModuleType) -> None:
     """see_also must point at ids that exist."""
     terms = _terms(
         gloss,
@@ -362,7 +363,7 @@ def test_extra_css_styles_modal_without_hiding_header() -> None:
     assert re.search(r"display\s*:\s*none", css) is None
 
 
-def test_category_order_includes_downloads(gloss) -> None:
+def test_category_order_includes_downloads(gloss: ModuleType) -> None:
     """Downloads is a first-class glossary group for pack/CLI terms."""
     assert "Downloads" in gloss.CATEGORY_ORDER
 
@@ -378,7 +379,7 @@ def test_enhance_long_does_not_claim_every_lab_graph() -> None:
     assert "90s" in long or "film" in long
 
 
-def test_wrap_new_operator_aliases(gloss) -> None:
+def test_wrap_new_operator_aliases(gloss: ModuleType) -> None:
     """IC-LoRA, NVFP4, Hugging Face, and Blender wrap as distinct terms."""
     terms = gloss.load_glossary(GLOSSARY_JSON)
     html = (

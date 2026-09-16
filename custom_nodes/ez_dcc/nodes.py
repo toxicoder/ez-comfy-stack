@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from . import pack as dcc_pack
 from .occupancy_gate import HEAVY_MODES, check_occupancy
@@ -27,6 +27,10 @@ from .qc import (
     validate_still_pack,
 )
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Comfy menu category for every node in this pack.
 CATEGORY = "ez-comfy/dcc"
 
 
@@ -34,7 +38,12 @@ class EZDCCLoadGuideStill:
     """Load one still layer from ``guides/<slug>/<shot_id>/``."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (slug, shot_id, layer).
+        """
         return {
             "required": {
                 "slug": ("STRING", {"default": "go-see"}),
@@ -43,6 +52,7 @@ class EZDCCLoadGuideStill:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("IMAGE", "MASK", "STRING")
     RETURN_NAMES = ("image", "mask", "metadata")
     FUNCTION = "run"
@@ -53,6 +63,16 @@ class EZDCCLoadGuideStill:
     )
 
     def run(self, slug: str, shot_id: str, layer: str) -> tuple[Any, Any, str]:
+        """Decode one guide-pack still after fail-closed QC.
+
+        Args:
+            slug: Film / project slug.
+            shot_id: Shot directory name.
+            layer: Still layer id (first/last/clay/depth/canny).
+
+        Returns:
+            IMAGE, MASK, and JSON shot metadata.
+        """
         pack = shot_dir(slug, shot_id)
         raise_defects(validate_pack(pack, require_full_seq=False))
         path = require_file(shot_still_path(pack, layer), label=f"{layer} still")
@@ -65,7 +85,12 @@ class EZDCCLoadGuideVideo:
     """Return the absolute mp4 path for a guide-pack video layer. No frame decode."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (slug, shot_id, layer).
+        """
         return {
             "required": {
                 "slug": ("STRING", {"default": "go-see"}),
@@ -74,6 +99,7 @@ class EZDCCLoadGuideVideo:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING", "INT")
     RETURN_NAMES = ("path", "fps")
     FUNCTION = "run"
@@ -84,6 +110,16 @@ class EZDCCLoadGuideVideo:
     )
 
     def run(self, slug: str, shot_id: str, layer: str) -> tuple[str, int]:
+        """Return the muxed video path after fail-closed QC.
+
+        Args:
+            slug: Film / project slug.
+            shot_id: Shot directory name.
+            layer: Video layer id (clay/depth/canny).
+
+        Returns:
+            Absolute mp4 path and 24 fps.
+        """
         pack = shot_dir(slug, shot_id)
         raise_defects(validate_pack(pack, require_full_seq=False))
         path = require_file(shot_video_path(pack, layer), label=f"{layer}.mp4")
@@ -94,7 +130,12 @@ class EZDCCLoadStillPack:
     """Load one layer from ``guides/<slug>/stills/<plate>/`` (ez.guide.still.v1)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (slug, plate, layer).
+        """
         return {
             "required": {
                 "slug": ("STRING", {"default": "go-see"}),
@@ -103,6 +144,7 @@ class EZDCCLoadStillPack:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("IMAGE", "MASK", "STRING")
     RETURN_NAMES = ("image", "mask", "metadata")
     FUNCTION = "run"
@@ -112,6 +154,16 @@ class EZDCCLoadStillPack:
     )
 
     def run(self, slug: str, plate: str, layer: str) -> tuple[Any, Any, str]:
+        """Decode one still-pack layer after fail-closed QC.
+
+        Args:
+            slug: Film / project slug.
+            plate: Still-pack plate id.
+            layer: Still layer id (first/rgb/depth/canny/normal).
+
+        Returns:
+            IMAGE, MASK, and JSON still metadata.
+        """
         pack = still_dir(slug, plate)
         raise_defects(validate_still_pack(pack))
         path = require_file(still_pack_path(pack, layer), label=f"{layer} still")
@@ -124,7 +176,12 @@ class EZDCCCameraJson:
     """Load ``camera.json`` as STRING. Empty string if missing. No CAMERA socket."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (slug, shot_id).
+        """
         return {
             "required": {
                 "slug": ("STRING", {"default": "go-see"}),
@@ -132,6 +189,7 @@ class EZDCCCameraJson:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("camera_json",)
     FUNCTION = "run"
@@ -139,6 +197,15 @@ class EZDCCCameraJson:
     DESCRIPTION = "Optional camera.json from the shot pack. Missing file → empty string."
 
     def run(self, slug: str, shot_id: str) -> tuple[str]:
+        """Read optional camera.json from the shot pack.
+
+        Args:
+            slug: Film / project slug.
+            shot_id: Shot directory name.
+
+        Returns:
+            File contents, or an empty string when missing.
+        """
         path = camera_json_path(slug, shot_id)
         if not path.is_file():
             return ("",)
@@ -149,7 +216,12 @@ class EZDCCPreviewGuideLayer:
     """Identity IMAGE pass-through with a label."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (image, label).
+        """
         return {
             "required": {
                 "image": ("IMAGE",),
@@ -157,6 +229,7 @@ class EZDCCPreviewGuideLayer:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "run"
@@ -164,6 +237,15 @@ class EZDCCPreviewGuideLayer:
     DESCRIPTION = "Identity pass-through so a guide layer can sit on the canvas."
 
     def run(self, image: object, label: str = "guide") -> tuple[object]:
+        """Return the input image unchanged.
+
+        Args:
+            image: Comfy IMAGE tensor (lazy-typed; no torch at import).
+            label: Unused canvas label.
+
+        Returns:
+            The same IMAGE.
+        """
         _ = label
         return (image,)
 
@@ -172,7 +254,12 @@ class EZDCCOccupancyGate:
     """Pass-through IMAGE that fail-closes on occupancy XOR."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict[str, Any]:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (image, required_mode).
+        """
         return {
             "required": {
                 "image": ("IMAGE",),
@@ -180,6 +267,7 @@ class EZDCCOccupancyGate:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "run"
@@ -190,10 +278,23 @@ class EZDCCOccupancyGate:
     )
 
     def run(self, image: object, required_mode: str) -> tuple[object]:
+        """Pass the image through after occupancy XOR.
+
+        Args:
+            image: Comfy IMAGE tensor (lazy-typed; no torch at import).
+            required_mode: Heavy mode this graph needs.
+
+        Returns:
+            The same IMAGE.
+
+        Raises:
+            OccupancyError: Occupancy XOR refused this Queue.
+        """
         check_occupancy(required_mode)
         return (image,)
 
 
+# Comfy custom-node registries.
 NODE_CLASS_MAPPINGS = {
     "EZDCCLoadGuideStill": EZDCCLoadGuideStill,
     "EZDCCLoadGuideVideo": EZDCCLoadGuideVideo,

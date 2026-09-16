@@ -30,7 +30,7 @@ def test_tools_are_typed_and_have_no_execute_code() -> None:
     assert "hunyuan" not in blob.lower()
 
 
-def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch) -> None:
+def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = {
         "version": 1,
@@ -47,7 +47,7 @@ def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch) -> None:
     assert result["occupancy"]["parked"] is True
 
 
-def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch) -> None:
+def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -64,7 +64,7 @@ def test_desk_allowed_parked_and_refuses_heavy(tmp_path: Path, monkeypatch) -> N
     assert "blender-desk" in blocked["error"]
 
 
-def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch) -> None:
+def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -74,7 +74,7 @@ def test_create_primitive_rejects_unknown_kind(tmp_path: Path, monkeypatch) -> N
     assert result["ok"] is False
 
 
-def test_export_glb_refuses_models_dir(tmp_path: Path, monkeypatch) -> None:
+def test_export_glb_refuses_models_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "idle", "parked": False, "compose": False}),
@@ -90,7 +90,7 @@ def test_occupancy_enter_requires_mode() -> None:
     assert result["ok"] is False
 
 
-def test_unknown_tool_and_rpc_call(tmp_path: Path, monkeypatch) -> None:
+def test_unknown_tool_and_rpc_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
@@ -127,7 +127,7 @@ def test_jsonrpc_initialize_and_tools_list() -> None:
     assert mcp.handle_rpc({"jsonrpc": "2.0", "method": "notifications/initialized"}) is None
 
 
-def test_main_list_tools_and_call(tmp_path: Path, monkeypatch, capsys) -> None:
+def test_main_list_tools_and_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True}),
@@ -143,7 +143,7 @@ def test_main_list_tools_and_call(tmp_path: Path, monkeypatch, capsys) -> None:
 
 
 def test_blender_bin_honors_blender_bin_and_well_known(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     empty = tmp_path / "empty"
     empty.mkdir()
@@ -170,7 +170,7 @@ def test_blender_bin_honors_blender_bin_and_well_known(
 
 
 def test_well_known_blender_paths_skip_system_when_hermetic(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
     monkeypatch.delenv("LAB_HERMETIC", raising=False)
@@ -183,7 +183,7 @@ def test_well_known_blender_paths_skip_system_when_hermetic(
     assert str(tmp_path / "home" / ".local" / "bin" / "blender") in hermetic
 
 
-def test_bpy_tools_fail_without_blender(tmp_path: Path, monkeypatch) -> None:
+def test_bpy_tools_fail_without_blender(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     monkeypatch.setenv("PATH", str(tmp_path / "bin"))
     monkeypatch.setenv("HOME", str(tmp_path / "home"))

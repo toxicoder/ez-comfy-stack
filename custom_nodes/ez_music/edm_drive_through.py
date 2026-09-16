@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from .edm_examples import EdmExample, _ex, format_edm_score
 
-
+# Track scores and catalog rows.
 NIGHT_WINDOW_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nhybrid trap 808 wreck\nformant grind"),
     ("inst", "trap hats roll\n808 slide"),

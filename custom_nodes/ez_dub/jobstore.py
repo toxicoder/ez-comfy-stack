@@ -6,16 +6,42 @@ import json
 import os
 import re
 from pathlib import Path
-from typing import Any
+from collections.abc import Mapping
+from typing import Any, NotRequired, TypedDict, cast
 
+# Job-dir stage names and slug sanitizer.
 STAGES = ("ingest", "analyze", "translate", "render", "export")
 SLUG_RE = re.compile(r"[^a-zA-Z0-9._-]+")
+
+
+class JobState(TypedDict):
+    """JSON ``state.json`` for one dub job.
+
+    Attributes:
+        slug: Sanitized job folder name.
+        stage: Pipeline stage name.
+        status: Operator-facing reason.
+        source_language: ISO source or ``auto``.
+        target_language: ISO target.
+        error: Longer error, or None.
+        flags: Render/QC notes.
+        source: Ingest path or URL.
+    """
+
+    slug: str
+    stage: str
+    status: str
+    error: str | None
+    source_language: NotRequired[str]
+    target_language: NotRequired[str]
+    flags: NotRequired[list[str]]
+    source: NotRequired[str]
 
 
 def sanitize_slug(slug: object, default: str = "episode") -> str:
     """Keep job folder names host-safe.
 
-    Arguments:
+    Args:
         slug: Operator widget text. Non-strings (bool, int, None) use
             ``default`` — never ``str(True)``.
         default: Fallback when empty after sanitizing.
@@ -63,7 +89,7 @@ def output_root() -> Path:
 def record_ingest_failure(dest: Path, status: str, error: str | None = None) -> None:
     """Persist an ingest miss without writing ``source.wav``.
 
-    Arguments:
+    Args:
         dest: Job directory (``dubs/<slug>``).
         status: Short operator-facing reason (Dub status).
         error: Optional longer error; defaults to ``status``.
@@ -81,18 +107,40 @@ def record_ingest_failure(dest: Path, status: str, error: str | None = None) -> 
 
 
 def dub_dir(slug: object, root: Path | None = None) -> Path:
-    """``${COMFY_OUTPUT_DIR}/dubs/<slug>``."""
+    """``${COMFY_OUTPUT_DIR}/dubs/<slug>``.
+
+    Args:
+        slug: Operator widget text (sanitized).
+        root: Override output root (tests).
+
+    Returns:
+        Job directory path (not necessarily created).
+    """
     base = root if root is not None else output_root()
     return Path(base) / "dubs" / sanitize_slug(slug)
 
 
 def state_path(dest: Path) -> Path:
-    """Path to state.json."""
+    """Path to state.json.
+
+    Args:
+        dest: Job directory.
+
+    Returns:
+        ``dest / state.json``.
+    """
     return dest / "state.json"
 
 
-def new_state(slug: str) -> dict[str, Any]:
-    """Fresh pending job."""
+def new_state(slug: str) -> JobState:
+    """Fresh pending job.
+
+    Args:
+        slug: Sanitized job folder name.
+
+    Returns:
+        Pending ingest state mapping.
+    """
     return {
         "slug": slug,
         "stage": "ingest",
@@ -104,19 +152,31 @@ def new_state(slug: str) -> dict[str, Any]:
     }
 
 
-def load_state(dest: Path) -> dict[str, Any]:
-    """Read state.json or return a new pending state."""
+def load_state(dest: Path) -> JobState:
+    """Read state.json or return a new pending state.
+
+    Args:
+        dest: Job directory.
+
+    Returns:
+        Parsed JSON object (job-state keys) or a fresh pending state.
+    """
     path = state_path(dest)
     if not path.is_file():
         return new_state(dest.name)
     data = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(data, dict):
         raise ValueError(f"invalid jobstore {path}")
-    return data
+    return cast(JobState, data)
 
 
-def save_state(dest: Path, state: dict[str, Any]) -> None:
-    """Write state.json atomically enough for a single operator."""
+def save_state(dest: Path, state: Mapping[str, Any]) -> None:
+    """Write state.json atomically enough for a single operator.
+
+    Args:
+        dest: Job directory.
+        state: JSON-able job-state mapping.
+    """
     dest.mkdir(parents=True, exist_ok=True)
     path = state_path(dest)
     tmp = path.with_suffix(".json.tmp")
@@ -125,13 +185,24 @@ def save_state(dest: Path, state: dict[str, Any]) -> None:
 
 
 def write_json(path: Path, payload: object) -> None:
-    """Write UTF-8 JSON with a trailing newline."""
+    """Write UTF-8 JSON with a trailing newline.
+
+    Args:
+        path: Destination path.
+        payload: JSON-serializable value.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def read_json(path: Path) -> Any:
     """Load JSON from path.
+
+    Args:
+        path: Existing JSON file.
+
+    Returns:
+        Parsed JSON value (shape is file-dependent).
 
     Raises:
         FileNotFoundError: missing file.

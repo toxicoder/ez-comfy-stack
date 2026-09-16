@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 
+# Leak tails, English leftovers, and fence/prefix regexes.
 LEAK_PATTERNS: tuple[str, ...] = (
     "voice model",
     "modelo de voz",
@@ -58,7 +59,14 @@ _TAIL_CONNECTOR_RE = re.compile(
 
 
 def strip_model_fences(text: str) -> str:
-    """Remove <think>…</think>, wrapping quotes, 'Translation:' / 'Traducción:' prefixes."""
+    """Remove <think>…</think>, wrapping quotes, 'Translation:' / 'Traducción:' prefixes.
+
+    Args:
+        text: Raw GGUF output.
+
+    Returns:
+        Stripped translation body.
+    """
     out = _THINK_RE.sub("", text or "")
     out = out.strip()
     if len(out) >= 2 and out[0] == out[-1] and out[0] in {'"', "'"}:
@@ -74,12 +82,27 @@ def strip_model_fences(text: str) -> str:
 
 
 def _split_sentences(text: str) -> list[str]:
+    """Split on ``.!?`` followed by whitespace.
+
+    Args:
+        text: One or more sentences.
+
+    Returns:
+        Non-empty sentence strings.
+    """
     parts = re.split(r"(?<=[.!?])\s+", text.strip())
     return [p.strip() for p in parts if p.strip()]
 
 
 def strip_leak_tails(text: str) -> str:
-    """Drop a final sentence that matches LEAK_PATTERNS. Keep the rest."""
+    """Drop a final sentence that matches LEAK_PATTERNS. Keep the rest.
+
+    Args:
+        text: Translation body.
+
+    Returns:
+        Text with a leak tail removed, or empty when the whole line leaked.
+    """
     raw = (text or "").strip()
     if not raw:
         return ""
@@ -106,7 +129,15 @@ def strip_leak_tails(text: str) -> str:
 
 
 def looks_like_target(text: str, language: str) -> bool:
-    """Heuristic. False if empty, or leftover English on a non-English job."""
+    """Heuristic. False if empty, or leftover English on a non-English job.
+
+    Args:
+        text: Candidate ``text_target``.
+        language: ISO target.
+
+    Returns:
+        Whether the line looks like the target language.
+    """
     raw = (text or "").strip()
     if not raw:
         return False
@@ -127,7 +158,16 @@ def looks_like_target(text: str, language: str) -> bool:
 
 
 def sanitize_target(text: str, *, source_text: str, language: str) -> str:
-    """strip fences → strip leak tails → strip()."""
+    """strip fences → strip leak tails → strip().
+
+    Args:
+        text: Raw GGUF output.
+        source_text: Unused (call-site compatibility).
+        language: Unused (call-site compatibility).
+
+    Returns:
+        Cleaned target line.
+    """
     del source_text, language
     out = strip_model_fences(text)
     out = strip_leak_tails(out)

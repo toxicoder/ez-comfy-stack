@@ -14,6 +14,7 @@ from typing import Any
 from .prompt_enums import shot_card
 from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml, print_template
 
+# Jobstore statuses, 5.00 s shot contract, take strip, and pin file.
 STATUSES = ("pending", "running", "ok", "failed", "skipped")
 DURATION_S = 5.00
 DURATION_TOL = 0.05
@@ -22,7 +23,15 @@ PINS_REL = Path("comfy") / ".lab-model-pins.json"
 
 
 def shot_id(beat: int, shot: int) -> str:
-    """Map YAML beat/shot (1-based) to ``01``…``18``."""
+    """Map YAML beat/shot (1-based) to ``01``…``18``.
+
+    Args:
+        beat: 1-based beat index.
+        shot: 1-based shot within the beat.
+
+    Returns:
+        Two-digit shot id.
+    """
     n = (beat - 1) * 3 + shot
     if n < 1 or n > SHOT_COUNT:
         raise ValueError(f"shot index {n} out of range")
@@ -30,17 +39,39 @@ def shot_id(beat: int, shot: int) -> str:
 
 
 def film_dir(output_dir: Path, slug: str) -> Path:
-    """``${COMFY_OUTPUT_DIR}/films/<slug>``."""
+    """``${COMFY_OUTPUT_DIR}/films/<slug>``.
+
+    Args:
+        output_dir: Comfy output root.
+        slug: Film slug (gosee, stillhere, switchyard).
+
+    Returns:
+        Jobstore directory path.
+    """
     return Path(output_dir) / "films" / slug
 
 
 def state_path(dest: Path) -> Path:
-    """Path to state.json."""
+    """Path to state.json.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+
+    Returns:
+        ``state.json`` path.
+    """
     return dest / "state.json"
 
 
 def empty_shot(sid: str) -> dict[str, Any]:
-    """One pending shot row."""
+    """One pending shot row.
+
+    Args:
+        sid: Shot id ``01``…``18``.
+
+    Returns:
+        Pending shot dict.
+    """
     return {
         "id": sid,
         "status": "pending",
@@ -61,7 +92,17 @@ def new_state(
     audio_policy: str = "world-only",
     score: str = "none",
 ) -> dict[str, Any]:
-    """Fresh 18-shot pending state."""
+    """Fresh 18-shot pending state.
+
+    Args:
+        film: Film id.
+        slug: Output slug.
+        audio_policy: ``world-only``, ``stems``, or ``a2v-lock``.
+        score: Score mode (``none`` or ``acestep-instrumental``).
+
+    Returns:
+        New state dict.
+    """
     shots = [empty_shot(f"{i:02d}") for i in range(1, SHOT_COUNT + 1)]
     return {
         "film": film,
@@ -73,7 +114,14 @@ def new_state(
 
 
 def load_state(dest: Path) -> dict[str, Any]:
-    """Read state.json."""
+    """Read state.json.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+
+    Returns:
+        Parsed state dict.
+    """
     path = state_path(dest)
     if not path.is_file():
         raise FileNotFoundError(f"missing jobstore {path}")
@@ -84,7 +132,12 @@ def load_state(dest: Path) -> dict[str, Any]:
 
 
 def save_state(dest: Path, state: dict[str, Any]) -> None:
-    """Write state.json atomically enough for a single operator."""
+    """Write state.json atomically enough for a single operator.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        state: State dict to serialize.
+    """
     dest.mkdir(parents=True, exist_ok=True)
     path = state_path(dest)
     tmp = path.with_suffix(".json.tmp")
@@ -93,7 +146,15 @@ def save_state(dest: Path, state: dict[str, Any]) -> None:
 
 
 def get_shot(state: dict[str, Any], sid: str) -> dict[str, Any]:
-    """Return the shot row or raise."""
+    """Return the shot row or raise.
+
+    Args:
+        state: Loaded jobstore state.
+        sid: Shot id ``01``…``18``.
+
+    Returns:
+        Shot row dict.
+    """
     for row in state["shots"]:
         if row.get("id") == sid:
             return row
@@ -101,7 +162,14 @@ def get_shot(state: dict[str, Any], sid: str) -> dict[str, Any]:
 
 
 def probe_duration_s(path: Path) -> float | None:
-    """ffprobe format duration, or None."""
+    """ffprobe format duration, or None.
+
+    Args:
+        path: Media file.
+
+    Returns:
+        Duration in seconds, or None.
+    """
     exe = shutil.which("ffprobe")
     if not exe or not path.is_file():
         return None
@@ -133,7 +201,16 @@ def probe_duration_s(path: Path) -> float | None:
 
 
 def duration_ok(path: Path, expected: float = DURATION_S, tol: float = DURATION_TOL) -> bool:
-    """True when the MP4 exists and duration is expected ± tol."""
+    """True when the MP4 exists and duration is expected ± tol.
+
+    Args:
+        path: MP4 path.
+        expected: Target duration in seconds.
+        tol: Allowed absolute error.
+
+    Returns:
+        Whether duration is in band.
+    """
     dur = probe_duration_s(path)
     if dur is None:
         return False
@@ -141,22 +218,54 @@ def duration_ok(path: Path, expected: float = DURATION_S, tol: float = DURATION_
 
 
 def shot_mp4(dest: Path, sid: str) -> Path:
-    """``shots/NN.mp4`` under the film dir."""
+    """``shots/NN.mp4`` under the film dir.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+
+    Returns:
+        Canonical shot MP4 path.
+    """
     return dest / "shots" / f"{sid}.mp4"
 
 
 def take_dir(dest: Path, sid: str) -> Path:
-    """``takes/<id>/`` under the film dir."""
+    """``takes/<id>/`` under the film dir.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+
+    Returns:
+        Take-strip directory.
+    """
     return dest / "takes" / sid
 
 
 def take_path(dest: Path, sid: str, take: int) -> Path:
-    """``takes/<id>/tNNN.mp4``."""
+    """``takes/<id>/tNNN.mp4``.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+        take: 1-based take number.
+
+    Returns:
+        Take MP4 path.
+    """
     return take_dir(dest, sid) / f"t{int(take):03d}.mp4"
 
 
 def file_sha(path: Path) -> str:
-    """Short sha256 of a file (empty if missing)."""
+    """Short sha256 of a file (empty if missing).
+
+    Args:
+        path: File to hash.
+
+    Returns:
+        First 16 hex chars, or empty.
+    """
     if not path.is_file():
         return ""
     digest = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -164,7 +273,15 @@ def file_sha(path: Path) -> str:
 
 
 def list_takes(dest: Path, sid: str) -> list[int]:
-    """Take numbers present on disk, newest last."""
+    """Take numbers present on disk, newest last.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+
+    Returns:
+        Sorted take numbers.
+    """
     folder = take_dir(dest, sid)
     if not folder.is_dir():
         return []
@@ -177,7 +294,13 @@ def list_takes(dest: Path, sid: str) -> list[int]:
 
 
 def prune_takes(dest: Path, sid: str, keep: int = TAKE_KEEP) -> None:
-    """Keep the last ``keep`` takes."""
+    """Keep the last ``keep`` takes.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+        keep: Number of newest takes to retain.
+    """
     nums = list_takes(dest, sid)
     extra = nums[:-keep] if keep >= 0 else nums
     for num in extra:
@@ -185,7 +308,17 @@ def prune_takes(dest: Path, sid: str, keep: int = TAKE_KEEP) -> None:
 
 
 def record_take(dest: Path, state: dict[str, Any], sid: str, src: Path) -> Path:
-    """Copy ``src`` into the take strip for this shot (current take number)."""
+    """Copy ``src`` into the take strip for this shot (current take number).
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        state: Loaded jobstore state (mutated).
+        sid: Shot id.
+        src: Source MP4.
+
+    Returns:
+        Copied take path.
+    """
     if not src.is_file():
         raise FileNotFoundError(f"missing take source {src}")
     row = get_shot(state, sid)
@@ -199,7 +332,16 @@ def record_take(dest: Path, state: dict[str, Any], sid: str, src: Path) -> Path:
 
 
 def promote_take(dest: Path, sid: str, take: int) -> Path:
-    """Copy take N to ``shots/NN.mp4`` and mark the shot ok."""
+    """Copy take N to ``shots/NN.mp4`` and mark the shot ok.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id.
+        take: Take number to promote.
+
+    Returns:
+        Canonical ``shots/NN.mp4`` path.
+    """
     src = take_path(dest, sid, take)
     if not src.is_file():
         raise FileNotFoundError(f"missing take {sid}/t{int(take):03d}")
@@ -220,7 +362,16 @@ def promote_take(dest: Path, sid: str, take: int) -> Path:
 
 
 def should_skip_shot(dest: Path, state: dict[str, Any], sid: str) -> bool:
-    """Idempotent skip: status ok and duration 5.00±0.05."""
+    """Idempotent skip: status ok and duration 5.00±0.05.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        state: Loaded jobstore state.
+        sid: Shot id.
+
+    Returns:
+        True when the shot can be skipped.
+    """
     row = get_shot(state, sid)
     mp4 = dest / row["mp4"] if row.get("mp4") else shot_mp4(dest, sid)
     if row.get("status") != "ok":
@@ -229,7 +380,15 @@ def should_skip_shot(dest: Path, state: dict[str, Any], sid: str) -> bool:
 
 
 def resume_ids(dest: Path, state: dict[str, Any]) -> list[str]:
-    """Shot ids that still need a print (not ok-with-valid-mp4)."""
+    """Shot ids that still need a print (not ok-with-valid-mp4).
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        state: Loaded jobstore state.
+
+    Returns:
+        Shot ids still needing a print.
+    """
     needed: list[str] = []
     for row in state["shots"]:
         sid = str(row["id"])
@@ -251,7 +410,20 @@ def mark_shot(
     backend: str | None = None,
     take: int | None = None,
 ) -> dict[str, Any]:
-    """Update one shot row. Increments take when status becomes running."""
+    """Update one shot row. Increments take when status becomes running.
+
+    Args:
+        state: Loaded jobstore state (mutated).
+        sid: Shot id.
+        status: New status (must be in ``STATUSES``).
+        mp4: Optional relative MP4 path.
+        error: Optional error string.
+        backend: Optional printer id (``ltx``, ``wan``).
+        take: Optional take number when not transitioning to running.
+
+    Returns:
+        Updated shot row.
+    """
     if status not in STATUSES:
         raise ValueError(f"bad status {status}")
     row = get_shot(state, sid)
@@ -271,7 +443,14 @@ def mark_shot(
 
 
 def load_pins(models_dir: Path) -> dict[str, str] | None:
-    """Load optional pin file. None if missing."""
+    """Load optional pin file. None if missing.
+
+    Args:
+        models_dir: Host models root.
+
+    Returns:
+        Pin map, or None when the file is missing.
+    """
     path = Path(models_dir) / PINS_REL
     if not path.is_file():
         return None
@@ -285,6 +464,9 @@ def require_pins(models_dir: Path) -> None:
     """Fail if a pins file lists basenames that are not under comfy/.
 
     Missing pins file is OK (Wave 0). Empty object is OK.
+
+    Args:
+        models_dir: Host models root.
     """
     pins = load_pins(models_dir)
     if not pins:
@@ -309,7 +491,16 @@ def compile_film(
     *,
     template: str | None = None,
 ) -> dict[str, Any]:
-    """Write film.yaml, per-shot JSON stubs, and state.json (pending)."""
+    """Write film.yaml, per-shot JSON stubs, and state.json (pending).
+
+    Args:
+        yaml_text: Film bible YAML contents.
+        dest: ``films/<slug>`` jobstore directory.
+        template: Override print template path.
+
+    Returns:
+        New pending state dict.
+    """
     parsed = parse_shots_yaml(yaml_text)
     meta = parsed["meta"]
     film = str(meta["film"])
@@ -363,7 +554,14 @@ def compile_film(
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """Jobstore CLI used by compile-film.sh / print-shot.sh."""
+    """Jobstore CLI used by compile-film.sh / print-shot.sh.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.jobstore")
     sub = parser.add_subparsers(dest="cmd", required=True)
 

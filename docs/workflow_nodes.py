@@ -208,7 +208,17 @@ _CROP: list[tuple[str, str]] = [
 
 
 def _s(name: str, typ: str, direction: str, desc: str) -> dict[str, str]:
-    """Build a socket spec."""
+    """Build a socket spec.
+
+    Args:
+        name: Socket label as shown in ComfyUI.
+        typ: Comfy type string (``IMAGE``, ``LATENT``, …).
+        direction: ``in`` or ``out``.
+        desc: Operator-facing description.
+
+    Returns:
+        Encyclopedia socket mapping.
+    """
     return {"name": name, "type": typ, "dir": direction, "description": desc}
 
 
@@ -224,7 +234,22 @@ def _w(
     choices: list[tuple[str, str]] | None = None,
     choices_from: str | None = None,
 ) -> dict[str, Any]:
-    """Build a widget spec."""
+    """Build a widget spec.
+
+    Args:
+        name: Widget label as shown in ComfyUI.
+        index: List-storage index when widgets live in ``inputs`` lists.
+        key: Dict-storage key when widgets live in ``inputs`` mappings.
+        typ: Comfy widget type (``STRING``, ``INT``, …).
+        rng: Human-readable range, when applicable.
+        desc: Operator-facing description.
+        gen: How the value is produced (seed, file, …).
+        choices: Optional ``(id, description)`` pairs.
+        choices_from: Optional named choice catalog.
+
+    Returns:
+        Encyclopedia widget mapping.
+    """
     item: dict[str, Any] = {
         "name": name,
         "type": typ,
@@ -256,7 +281,20 @@ def _n(
     origin: str = "comfy-core",
     variants: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    """Build a node spec."""
+    """Build a node spec.
+
+    Args:
+        display: Comfy display name.
+        summary: One-line encyclopedia summary.
+        lab: Lab-specific notes (empty when none).
+        sockets: Socket specs from :func:`_s`.
+        widgets: Widget specs from :func:`_w`.
+        origin: Pack or core origin id.
+        variants: Optional alternate class_type rows.
+
+    Returns:
+        Encyclopedia node mapping.
+    """
     spec: dict[str, Any] = {
         "display_name": display,
         "origin": origin,

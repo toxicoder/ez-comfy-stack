@@ -16,6 +16,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
 
+# Prompt files, slug rules, banned strings, widget indexes, and template heuristics.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 _SLUG_CLEAN_RE = re.compile(r"[^a-z0-9]+")
@@ -178,37 +179,81 @@ class ForgeResult:
 
 
 def _repo_root() -> Path:
+    """Repository root (custom_nodes/ez_studio_forge → parents[2]).
+
+    Returns:
+        Absolute repo root.
+    """
     return Path(__file__).resolve().parents[2]
 
 
 def _output_dir() -> Path:
+    """Operator output directory from env, defaulting to the host bind.
+
+    Returns:
+        ``COMFY_OUTPUT_DIR`` or ``/mnt/comfy-output``.
+    """
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
 def _lab_root() -> Path:
+    """Shipped lab graph directory.
+
+    Returns:
+        ``workflows/_lab``.
+    """
     return _repo_root() / "workflows" / "_lab"
 
 
 def _blocks_root() -> Path:
+    """Studio subgraph blueprint directory.
+
+    Returns:
+        ``custom_nodes/ez_studio_blocks/subgraphs``.
+    """
     return _repo_root() / "custom_nodes" / "ez_studio_blocks" / "subgraphs"
 
 
 def user_workflows_dir() -> Path:
-    """Live operator graphs (never `_lab/`)."""
+    """Live operator graphs (never `_lab/`).
+
+    Returns:
+        ``_user`` workflows directory under the Comfy user tree.
+    """
     return _output_dir() / "comfy-user" / "default" / "workflows" / "_user"
 
 
 def load_prompt(name: str) -> str:
-    """Load ``prompts/<name>.txt``."""
+    """Load ``prompts/<name>.txt``.
+
+    Args:
+        name: Stem without ``.txt``.
+
+    Returns:
+        File contents stripped of trailing whitespace.
+    """
     path = PROMPTS_DIR / f"{name}.txt"
     return path.read_text(encoding="utf-8").strip()
 
 
 def _log(message: str) -> None:
+    """Write a pack status line to stderr.
+
+    Args:
+        message: Text after the ``[ez_studio_forge]`` prefix.
+    """
     print(f"[ez_studio_forge] {message}", file=sys.stderr)
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a Comfy widget value to bool.
+
+    Args:
+        value: BOOLEAN widget or loose truthy token.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -219,7 +264,14 @@ def _as_bool(value: object) -> bool:
 
 
 def normalize_stem(stem: str) -> str:
-    """Normalize a lab_rel / file stem to `_lab`-relative id."""
+    """Normalize a lab_rel / file stem to `_lab`-relative id.
+
+    Args:
+        stem: File stem, lab_rel, or path-like token.
+
+    Returns:
+        `_lab`-relative id without ``.json`` / ``.app.json``.
+    """
     text = str(stem or "").replace("\\", "/").strip().lstrip("./")
     text = text.removeprefix("_lab/")
     if text.endswith(".app.json"):
@@ -230,6 +282,14 @@ def normalize_stem(stem: str) -> str:
 
 
 def _banned_hit(blob: str) -> str | None:
+    """Return the first banned needle found in ``blob``.
+
+    Args:
+        blob: JSON or text to scan.
+
+    Returns:
+        Matching needle, or None.
+    """
     for needle in BANNED:
         if needle in blob:
             return needle
@@ -237,7 +297,15 @@ def _banned_hit(blob: str) -> str | None:
 
 
 def slugify(text: str, fallback: str = "app") -> str:
-    """Filesystem slug from a brief."""
+    """Filesystem slug from a brief.
+
+    Args:
+        text: Brief or title.
+        fallback: Used when ``text`` sanitizes empty.
+
+    Returns:
+        Lowercase hyphenated slug, at most ``MAX_SLUG`` characters.
+    """
     raw = (text or fallback).lower()
     slug = _SLUG_CLEAN_RE.sub("-", raw).strip("-")
     if not slug:
@@ -246,7 +314,17 @@ def slugify(text: str, fallback: str = "app") -> str:
 
 
 def validate_slug(slug: str) -> str:
-    """Return a legal slug or raise ForgeError."""
+    """Return a legal slug or raise ForgeError.
+
+    Args:
+        slug: Candidate filesystem stem.
+
+    Returns:
+        Lowercased slug truncated to ``MAX_SLUG``.
+
+    Raises:
+        ForgeError: Empty, path-like, or illegal characters.
+    """
     text = str(slug or "").strip().lower()
     if not text:
         raise ForgeError("missing slug")
@@ -258,7 +336,14 @@ def validate_slug(slug: str) -> str:
 
 
 def load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
-    """Load one shipped lab graph. None when missing or ambiguous."""
+    """Load one shipped lab graph. None when missing or ambiguous.
+
+    Args:
+        stem: `_lab`-relative id or file stem.
+
+    Returns:
+        ``(path, graph)`` or None when missing, ambiguous, or invalid JSON.
+    """
     text = normalize_stem(stem)
     if not text:
         return None
@@ -286,6 +371,14 @@ def load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
 
 
 def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
+    """Collect App-mode widget labels from ``extra.linearData``.
+
+    Args:
+        extra: Graph ``extra`` mapping.
+
+    Returns:
+        Label strings in linear order.
+    """
     linear = extra.get("linearData") or {}
     labels: list[str] = []
     inputs = linear.get("inputs") if isinstance(linear, dict) else None
@@ -301,6 +394,14 @@ def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
 
 
 def _occupancy_of(graph: Mapping[str, Any]) -> str:
+    """Read occupancy from ``extra.lab_app_mode``.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        Occupancy id, or empty string.
+    """
     extra = graph.get("extra") or {}
     if not isinstance(extra, dict):
         return ""
@@ -311,6 +412,14 @@ def _occupancy_of(graph: Mapping[str, Any]) -> str:
 
 
 def _default_view(graph: Mapping[str, Any]) -> str:
+    """Read App/graph default view from ``extra.lab_app_mode``.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        ``app`` or ``graph``.
+    """
     extra = graph.get("extra") or {}
     if not isinstance(extra, dict):
         return "graph"
@@ -327,7 +436,16 @@ def list_templates(
     occupancy: str = "",
     lane: str = "",
 ) -> list[dict[str, Any]]:
-    """Shipped `_lab` graphs plus studio-block ids."""
+    """Shipped `_lab` graphs plus studio-block ids.
+
+    Args:
+        query: Optional substring filter across id/lane/occupancy/description.
+        occupancy: Optional occupancy id filter.
+        lane: Optional lane filter.
+
+    Returns:
+        Template row dicts (lab graphs and block blueprints).
+    """
     q = query.strip().lower()
     occ = occupancy.strip().lower()
     lane_f = lane.strip().lower()
@@ -396,13 +514,24 @@ def list_templates(
 
 
 def template_combo_labels() -> list[str]:
-    """App combo: auto plus every lab_rel."""
+    """App combo: auto plus every lab_rel.
+
+    Returns:
+        ``auto`` followed by shipped lab ids.
+    """
     ids = [row["id"] for row in list_templates() if row.get("kind") == "lab"]
     return [AUTO, *ids]
 
 
 def describe_template(stem: str) -> dict[str, Any]:
-    """One lab App, or a studio-block id."""
+    """One lab App, or a studio-block id.
+
+    Args:
+        stem: `_lab`-relative id or block stem.
+
+    Returns:
+        Description mapping with ``ok`` True, or ``{"ok": False, "error": ...}``.
+    """
     text = normalize_stem(stem)
     loaded = load_lab_graph(text)
     if loaded is not None:
@@ -453,7 +582,15 @@ def describe_template(stem: str) -> dict[str, Any]:
 
 
 def _brief_has(brief: str, token: str) -> bool:
-    """True when token appears in the brief without matching inside words."""
+    """True when token appears in the brief without matching inside words.
+
+    Args:
+        brief: Operator brief.
+        token: Heuristic token (may include spaces, colons, or hyphens).
+
+    Returns:
+        Whether the token matches as a whole word (or substring for punctuated tokens).
+    """
     text = (brief or "").lower()
     needle = token.lower()
     if not needle:
@@ -464,7 +601,18 @@ def _brief_has(brief: str, token: str) -> bool:
 
 
 def pick_template(brief: str, template: str = AUTO) -> str:
-    """Resolve auto/heuristic or an explicit lab_rel."""
+    """Resolve auto/heuristic or an explicit lab_rel.
+
+    Args:
+        brief: Operator brief used for keyword matching.
+        template: Explicit lab_rel, or ``auto``.
+
+    Returns:
+        `_lab`-relative id.
+
+    Raises:
+        ForgeError: Explicit template is unknown.
+    """
     requested = (template or AUTO).strip()
     if requested and requested.lower() not in {AUTO, "custom", ""}:
         rel = normalize_stem(requested)
@@ -478,6 +626,15 @@ def pick_template(brief: str, template: str = AUTO) -> str:
 
 
 def _widget_index(node: Mapping[str, Any], name: str) -> int | None:
+    """Resolve a widget index from EZ order or core Comfy maps.
+
+    Args:
+        node: Serialized node.
+        name: Widget name.
+
+    Returns:
+        Index into ``widgets_values``, or None.
+    """
     ntype = str(node.get("type") or "")
     order = EZ_WIDGET_ORDER.get(ntype)
     if order and name in order:
@@ -489,6 +646,14 @@ def _widget_index(node: Mapping[str, Any], name: str) -> int | None:
 
 
 def _nodes_by_id(graph: Mapping[str, Any]) -> dict[int, dict[str, Any]]:
+    """Index graph nodes by integer id.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        ``id → node`` mapping; invalid ids are skipped.
+    """
     out: dict[int, dict[str, Any]] = {}
     for node in graph.get("nodes") or []:
         if not isinstance(node, dict):
@@ -502,6 +667,13 @@ def _nodes_by_id(graph: Mapping[str, Any]) -> dict[int, dict[str, Any]]:
 
 
 def _set_widget_value(node: dict[str, Any], index: int, value: Any) -> None:
+    """Write one ``widgets_values`` slot, preserving the current Python type.
+
+    Args:
+        node: Serialized node (mutated).
+        index: Widget index.
+        value: New value (coerced to the current type when possible).
+    """
     values = node.get("widgets_values")
     if isinstance(values, dict):
         return
@@ -531,6 +703,16 @@ def apply_slots(graph: dict[str, Any], slots: Mapping[str, Any] | None) -> dict[
     """Patch widgets_values for linearData names/labels and core Comfy widgets.
 
     Unknown keys raise ForgeError (no silent drop).
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        slots: Widget name/label → value.
+
+    Returns:
+        The same graph dict.
+
+    Raises:
+        ForgeError: Empty or unknown slot name.
     """
     if not slots:
         return graph
@@ -583,7 +765,16 @@ def apply_slots(graph: dict[str, Any], slots: Mapping[str, Any] | None) -> dict[
 
 
 def restamp_identity(graph: dict[str, Any], *, origin: str, slug: str) -> dict[str, Any]:
-    """Mark a clone as a generated `_user` graph. Keep source occupancy."""
+    """Mark a clone as a generated `_user` graph. Keep source occupancy.
+
+    Args:
+        graph: Serialized Comfy graph (mutated).
+        origin: Source lab_rel.
+        slug: Destination stem.
+
+    Returns:
+        The same graph dict.
+    """
     extra = graph.setdefault("extra", {})
     if not isinstance(extra, dict):
         extra = {}
@@ -603,7 +794,16 @@ def validate_workflow(
     dest: Path | None = None,
     slug: str = "",
 ) -> list[str]:
-    """Return error strings. Empty means the graph may be written."""
+    """Return error strings. Empty means the graph may be written.
+
+    Args:
+        graph: Serialized Comfy graph.
+        dest: Planned write path (refuses `_lab` and non-`_user`).
+        slug: Optional slug to validate.
+
+    Returns:
+        Error messages; empty when the graph may be written.
+    """
     errors: list[str] = []
     blob = json.dumps(graph, default=str)
     hit = _banned_hit(blob)
@@ -651,11 +851,29 @@ def validate_workflow(
 
 
 def _dest_for(slug: str, as_app: bool) -> Path:
+    """Destination path under live `_user/`.
+
+    Args:
+        slug: Validated stem.
+        as_app: Write ``.app.json`` when true.
+
+    Returns:
+        Target file path.
+    """
     suffix = ".app.json" if as_app else ".json"
     return user_workflows_dir() / f"{slug}{suffix}"
 
 
 def _sibling_dest(slug: str, as_app: bool) -> Path:
+    """The other suffix (``.json`` vs ``.app.json``) for the same slug.
+
+    Args:
+        slug: Validated stem.
+        as_app: Current as_app flag.
+
+    Returns:
+        Sibling path with the opposite suffix.
+    """
     return _dest_for(slug, not as_app)
 
 
@@ -666,7 +884,20 @@ def save_workflow(
     as_app: bool = True,
     overwrite: bool = False,
 ) -> Path:
-    """Write `_user/<slug>.app.json` or `.json`. Never `_lab/`."""
+    """Write `_user/<slug>.app.json` or `.json`. Never `_lab/`.
+
+    Args:
+        graph: Serialized Comfy graph.
+        slug: Destination stem.
+        as_app: Write ``.app.json`` when true.
+        overwrite: Replace an existing file.
+
+    Returns:
+        Written path.
+
+    Raises:
+        ForgeError: Illegal slug, existing dest, or validation errors.
+    """
     clean = validate_slug(slug)
     dest = _dest_for(clean, as_app)
     other = _sibling_dest(clean, as_app)
@@ -685,7 +916,14 @@ def save_workflow(
 
 
 def parse_plan(text: str) -> dict[str, Any] | None:
-    """Parse planner JSON ``{template, slug, as_app, slots, reason}``."""
+    """Parse planner JSON ``{template, slug, as_app, slots, reason}``.
+
+    Args:
+        text: Planner LLM output.
+
+    Returns:
+        Parsed object, or None when JSON is missing or not a dict.
+    """
     blob = (text or "").strip()
     start = blob.find("{")
     end = blob.rfind("}")
@@ -700,7 +938,15 @@ def parse_plan(text: str) -> dict[str, Any] | None:
 
 
 def _complete(system: str, user: str) -> tuple[str, str]:
-    """GPU sidecar / occupancy-aware 4B via prompt-enhance. Fail-soft."""
+    """GPU sidecar / occupancy-aware 4B via prompt-enhance. Fail-soft.
+
+    Args:
+        system: System prompt.
+        user: User message.
+
+    Returns:
+        ``(text, reason)``; empty text when llama.cpp is unavailable.
+    """
     try:
         custom = str(_repo_root() / "custom_nodes")
         if custom not in sys.path:
@@ -715,6 +961,14 @@ def _complete(system: str, user: str) -> tuple[str, str]:
 
 
 def _plan_from_llm(brief: str) -> tuple[dict[str, Any] | None, str]:
+    """Ask the planner GGUF for template/slug/slots.
+
+    Args:
+        brief: Operator brief.
+
+    Returns:
+        ``(plan, status)``; plan is None on passthrough.
+    """
     catalog = [
         {"id": row["id"], "occupancy": row["occupancy"], "description": row["description"]}
         for row in list_templates()
@@ -731,7 +985,17 @@ def _plan_from_llm(brief: str) -> tuple[dict[str, Any] | None, str]:
 
 
 def clone_template(stem: str) -> tuple[str, dict[str, Any]]:
-    """Deep-copy a shipped lab graph. Blocks are refused."""
+    """Deep-copy a shipped lab graph. Blocks are refused.
+
+    Args:
+        stem: `_lab`-relative id.
+
+    Returns:
+        ``(origin_id, graph_copy)``.
+
+    Raises:
+        ForgeError: Unknown template or subgraph blueprint.
+    """
     described = describe_template(stem)
     if not described.get("ok"):
         raise ForgeError(str(described.get("error") or f"unknown template {stem}"))
@@ -755,7 +1019,20 @@ def generate_app(
     slots: Mapping[str, Any] | None = None,
     use_llm: bool = True,
 ) -> ForgeResult:
-    """Pick a lab template, clone, apply slots, write `_user/`."""
+    """Pick a lab template, clone, apply slots, write `_user/`.
+
+    Args:
+        brief: Operator brief.
+        template: Explicit lab_rel or ``auto``.
+        slug: Destination stem; empty uses planner or slugify.
+        as_app: Write ``.app.json`` when true; None uses planner/default_view.
+        overwrite: Replace an existing `_user` graph.
+        slots: Extra widget patches applied after the planner slots.
+        use_llm: When false, skip the planner GGUF.
+
+    Returns:
+        ``ForgeResult`` with path on success or ``error`` on refusal.
+    """
     text = (brief or "").strip()
     status = "heuristic"
     reason = "keyword heuristic"

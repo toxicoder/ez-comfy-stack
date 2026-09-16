@@ -10,6 +10,7 @@ from typing import Any, Literal, Mapping, Sequence, TypedDict
 from .albums import album_rel, nill_album_for_series
 from .naming import music_output_prefix
 
+# ACE-Step tag beds, duration, and locked Nill Bye vocal.
 BOOM_BAP_TAGS_88 = (
     "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano "
     "stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm"
@@ -41,6 +42,32 @@ DissSeries = Literal[
 
 
 class DissExample(TypedDict):
+    """One Nill Bye catalog take (lyrics, tags, album fields).
+
+    Attributes:
+        stem: Lab filename stem (``NN-slug``).
+        slug: Kebab title without the track prefix.
+        rel: Lab-relative id under ``audio/albums``.
+        series: Catalog series key.
+        title: Operator-facing song title.
+        tags: ACE-Step tags line.
+        bpm: Tempo written into tags.
+        duration: Take length in seconds.
+        seed: Fixed ACE / sampler seed.
+        phase: Album phase index.
+        prefix: SaveAudio stem ``NN - Title``.
+        description: Lab graph description.
+        lyrics: Formatted lyric block.
+        artist: Branded act name.
+        artist_slug: Artist folder slug.
+        album: Album title.
+        album_slug: Album folder slug.
+        track: One-based track number.
+        tracktotal: Album track count.
+        year: Release year.
+        cover_prompt: US-safe cover-art prompt.
+    """
+
     stem: str
     slug: str
     rel: str
@@ -65,16 +92,40 @@ class DissExample(TypedDict):
 
 
 def nill_output_prefix(title: str, track: int) -> str:
-    """SaveAudio prefix for a Nill Bye take."""
+    """SaveAudio prefix for a Nill Bye take.
+
+    Args:
+        title: Catalog song title.
+        track: One-based track number (values below 1 become 1).
+
+    Returns:
+        ``NN - Song Title``.
+    """
     return music_output_prefix(title, track if track >= 1 else 1)
 
 
 def nill_tags(*parts: str, bpm: int) -> str:
-    """Join style tags with the locked Nill Bye vocal and bpm."""
+    """Join style tags with the locked Nill Bye vocal and bpm.
+
+    Args:
+        parts: Genre and production tags for this take.
+        bpm: Tempo written into the tags line.
+
+    Returns:
+        Comma-separated ACE-Step tags line.
+    """
     return ", ".join([*parts, NILL_VOICE, f"{bpm} bpm"])
 
 
 def _desc(take: str) -> str:
+    """Lab graph description for one Nill Bye diss take.
+
+    Args:
+        take: Short roast blurb.
+
+    Returns:
+        Operator-facing description string.
+    """
     return (
         f"US-safe rap 180s diss: Nill Bye {take}, "
         "ACE-Step 1.5 turbo AIO, invented vocal"
@@ -82,6 +133,14 @@ def _desc(take: str) -> str:
 
 
 def _progress_desc(take: str) -> str:
+    """Lab graph description for one Nill Bye progress take.
+
+    Args:
+        take: Short progress blurb.
+
+    Returns:
+        Operator-facing description string.
+    """
     return (
         f"US-safe rap 180s progress: Nill Bye {take}, "
         "ACE-Step 1.5 turbo AIO, invented vocal"
@@ -96,7 +155,18 @@ def format_diss_lyrics(
     outro: str,
     spoken: str | None = None,
 ) -> str:
-    """Build a 180s diss lyric block with repeating choruses."""
+    """Build a 180s diss lyric block with repeating choruses.
+
+    Args:
+        intro: Intro bar block.
+        verses: At least three verse blocks.
+        chorus: Chorus repeated after each verse.
+        outro: Closing bar block.
+        spoken: Optional spoken-word block before the intro.
+
+    Returns:
+        ACE-Step lyrics with labeled sections.
+    """
     if len(verses) < 3:
         raise ValueError("diss lyrics need at least 3 verses")
     parts: list[str] = []
@@ -111,7 +181,14 @@ def format_diss_lyrics(
 
 
 def nill_slug_from_stem(stem: str) -> str:
-    """Kebab slug from a legacy or short Nill Bye stem."""
+    """Kebab slug from a legacy or short Nill Bye stem.
+
+    Args:
+        stem: Lab filename stem (legacy prefix optional).
+
+    Returns:
+        Title slug without the numeric track prefix.
+    """
     text = stem.removeprefix("music-rap-nill-bye-").removesuffix("-lab-example")
     if text[:1].isdigit() and "-" in text:
         return text.split("-", 1)[1]
@@ -119,7 +196,14 @@ def nill_slug_from_stem(stem: str) -> str:
 
 
 def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample, ...]:
-    """Number tracks, set album metadata, and rewrite stems for one series."""
+    """Number tracks, set album metadata, and rewrite stems for one series.
+
+    Args:
+        rows: Partial catalog rows sharing one series key.
+
+    Returns:
+        Completed ``DissExample`` rows for that album.
+    """
     if not rows:
         return ()
     info = nill_album_for_series(rows[0]["series"])
@@ -151,6 +235,11 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
 
 
 def _catalog() -> tuple[DissExample, ...]:
+    """Assemble every Nill Bye series into numbered album rows.
+
+    Returns:
+        All diss examples in catalog order.
+    """
     from .diss_civic import DISS_CIVIC
     from .diss_civic_club import DISS_CIVIC_CLUB
     from .diss_federal import DISS_FEDERAL
@@ -178,4 +267,5 @@ def _catalog() -> tuple[DissExample, ...]:
     return tuple(out)
 
 
+# Numbered Nill Bye catalog (all series).
 DISS_EXAMPLES: tuple[DissExample, ...] = _catalog()

@@ -7,10 +7,19 @@ from pathlib import Path
 
 from .metadata import COVER_NAMES
 
+# Masters packed into the album zip.
 AUDIO_SUFFIXES = (".flac", ".mp3", ".wav")
 
 
 def _audio_files(album_dir: Path) -> list[Path]:
+    """List FLAC/MP3/WAV files in an album folder.
+
+    Args:
+        album_dir: Album output directory.
+
+    Returns:
+        Sorted audio paths that exist as files.
+    """
     files: list[Path] = []
     for suffix in AUDIO_SUFFIXES:
         files.extend(sorted(album_dir.glob(f"*{suffix}")))
@@ -20,7 +29,7 @@ def _audio_files(album_dir: Path) -> list[Path]:
 def write_m3u(album_dir: Path, *, album: str) -> Path:
     """Write ``<Album>.m3u`` listing audio in track order.
 
-    Arguments:
+    Args:
         album_dir: Folder with numbered masters.
         album: Playlist title (also the filename stem).
     Returns:
@@ -45,7 +54,7 @@ def write_m3u(album_dir: Path, *, album: str) -> Path:
 def pack_album(album_dir: Path, *, album: str) -> Path:
     """Zip audio, optional cover, sidecar JSON, and M3U.
 
-    Arguments:
+    Args:
         album_dir: ``albums/<Artist>/<Album>``.
         album: Album title (zip stem).
     Returns:

@@ -72,6 +72,13 @@ def _compiles(source: str, filename: str = "<model_management.py>") -> bool:
 
     Full modules (real ComfyUI files) compile as ``exec``. Indent-only snippets
     used in unit tests are accepted if they form a valid function body when wrapped.
+
+    Args:
+        source: Python source to compile.
+        filename: Name used in SyntaxError messages.
+
+    Returns:
+        Whether ``source`` compiles as a module or as a wrapped function body.
     """
     try:
         compile(source, filename, "exec")
@@ -90,7 +97,15 @@ def _compiles(source: str, filename: str = "<model_management.py>") -> bool:
 
 
 def _restore_from_git(root: Path, rel: str = "comfy/model_management.py") -> bool:
-    """Best-effort git checkout of a file under the ComfyUI root."""
+    """Best-effort git checkout of a file under the ComfyUI root.
+
+    Args:
+        root: ComfyUI repository root (``git -C`` target).
+        rel: Path relative to ``root`` to restore.
+
+    Returns:
+        True when ``git checkout --`` exits 0.
+    """
     try:
         proc = subprocess.run(
             ["git", "-C", str(root), "checkout", "--", rel],
@@ -105,7 +120,14 @@ def _restore_from_git(root: Path, rel: str = "comfy/model_management.py") -> boo
 
 
 def _strip_marker_lines(text: str) -> str:
-    """Remove lines that contain the patch marker (best-effort unpatch)."""
+    """Remove lines that contain the patch marker (best-effort unpatch).
+
+    Args:
+        text: File contents that may include prior marker lines.
+
+    Returns:
+        ``text`` with every line containing ``MARKER`` dropped.
+    """
     lines = text.splitlines(keepends=True)
     kept = [ln for ln in lines if MARKER not in ln]
     return "".join(kept)
@@ -114,8 +136,11 @@ def _strip_marker_lines(text: str) -> str:
 def _apply_single_line(text: str) -> tuple[str, bool]:
     """Replace the first matching mem_get_info line; preserve its indent.
 
+    Args:
+        text: ``model_management.py`` source.
+
     Returns:
-        (new_text, changed)
+        ``(new_text, changed)`` where ``changed`` is True when a line was replaced.
     """
     lines = text.splitlines(keepends=True)
     for i, line in enumerate(lines):
@@ -138,7 +163,15 @@ def _apply_single_line(text: str) -> tuple[str, bool]:
 def repair_broken_patch(root: Path, path: Path, text: str) -> str:
     """If a prior patch left invalid syntax, restore a clean file when possible.
 
-    Order: git checkout → strip marker lines. Returns text to continue applying on.
+    Order: git checkout → strip marker lines.
+
+    Args:
+        root: ComfyUI repository root.
+        path: Absolute path to ``comfy/model_management.py``.
+        text: Current (possibly broken) file contents.
+
+    Returns:
+        Source to continue applying on (git-restored or marker-stripped).
     """
     print(
         "[spark-patch] prior patch left invalid syntax — attempting repair",

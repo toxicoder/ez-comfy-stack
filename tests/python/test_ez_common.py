@@ -17,6 +17,8 @@ import ez_common as ec  # noqa: E402
 def test_pack_has_no_nodes() -> None:
     assert ec.NODE_CLASS_MAPPINGS == {}
     assert ec.NODE_DISPLAY_NAME_MAPPINGS == {}
+    payload: ec.ComfyInputTypes = {"required": {"x": ("STRING", {"default": ""})}}
+    assert payload["required"]["x"][0] == "STRING"
 
 
 def test_null_progress_is_noop() -> None:

@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "custom_nodes"))
@@ -66,7 +67,7 @@ def test_mix_stems_happy_fake_ffmpeg(tmp_path: Path) -> None:
     dx.write_bytes(b"x")
     dest = tmp_path / "stems" / "01"
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         Path(argv[-1]).write_bytes(b"m4a")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 

@@ -8,13 +8,14 @@ import json
 import os
 import sys
 import time
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 from operator_log import PREFIX as PROGRESS_PREFIX
 from operator_log import emit as _ol_emit
 
+# Restricted YAML keys and leftover ranking (keep skip names in sync with disk_scan.sh).
 _LIST_KEYS = (
     "match_suffix",
     "match_contains",
@@ -63,13 +64,58 @@ SKIP_BASENAMES = frozenset(
 WALK_PROGRESS_EVERY = 500
 
 
-def _empty_sig() -> dict[str, Any]:
+class CatalogSignature(TypedDict):
+    """One disk-catalog signature row."""
+
+    risk: str
+    reclaim: str
+    leftover_weight: int
+    what: str
+    why: str
+    leftover_when: str
+    docker_type: str
+    match_broken_symlink: bool
+    match_refuse: bool
+    match_keep_set: bool
+    match_suffix: list[str]
+    match_contains: list[str]
+    match_basename: list[str]
+    match_prefix: list[str]
+    roots: list[str]
+    refuse_if: list[str]
+
+
+class DiskCatalog(TypedDict):
+    """Parsed config/disk-catalog.yaml."""
+
+    schema: int
+    signatures: dict[str, CatalogSignature]
+
+
+class DiskCandidate(TypedDict):
+    """Rankable leftover candidate."""
+
+    id: str
+    path: str
+    size_bytes: int
+    risk: str
+    reclaim: str
+    what: str
+    why: str
+    leftover_when: str
+    docker_type: str
+    refuse_if: list[str]
+    score: float
+    step: str
+
+
+def _empty_sig() -> CatalogSignature:
     """Default signature fields.
 
     Returns:
         Mutable signature mapping.
     """
-    row: dict[str, Any] = {
+    row: CatalogSignature = {
         "risk": "review",
         "reclaim": "none",
         "leftover_weight": 0,
@@ -80,9 +126,13 @@ def _empty_sig() -> dict[str, Any]:
         "match_broken_symlink": False,
         "match_refuse": False,
         "match_keep_set": False,
+        "match_suffix": [],
+        "match_contains": [],
+        "match_basename": [],
+        "match_prefix": [],
+        "roots": [],
+        "refuse_if": [],
     }
-    for key in _LIST_KEYS:
-        row[key] = []
     return row
 
 
@@ -96,7 +146,7 @@ def load_catalog(path: Path) -> dict[str, Any]:
         Mapping with schema + signatures.
     """
     text = path.read_text(encoding="utf-8")
-    signatures: dict[str, dict[str, Any]] = {}
+    signatures: dict[str, CatalogSignature] = {}
     section = ""
     sig = ""
     list_key = ""
@@ -127,7 +177,9 @@ def load_catalog(path: Path) -> dict[str, Any]:
             list_key = stripped[:-1]
             continue
         if list_key and stripped.startswith("- "):
-            signatures[sig][list_key].append(stripped[2:].strip().strip('"').strip("'"))
+            signatures[sig][list_key].append(  # type: ignore[literal-required]
+                stripped[2:].strip().strip('"').strip("'")
+            )
             continue
         if ":" in stripped and not stripped.startswith("- "):
             list_key = ""
@@ -135,11 +187,11 @@ def load_catalog(path: Path) -> dict[str, Any]:
             key = key.strip()
             val = val.strip().strip('"').strip("'")
             if key in _BOOL_KEYS:
-                signatures[sig][key] = val.lower() == "true"
+                signatures[sig][key] = val.lower() == "true"  # type: ignore[literal-required]
             elif key in _INT_KEYS:
-                signatures[sig][key] = int(val or "0")
+                signatures[sig][key] = int(val or "0")  # type: ignore[literal-required]
             elif key in _STR_KEYS:
-                signatures[sig][key] = val
+                signatures[sig][key] = val  # type: ignore[literal-required]
     for sid, row in signatures.items():
         if row["risk"] not in VALID_RISK:
             raise ValueError(f"{sid}: bad risk {row['risk']!r}")
@@ -190,7 +242,9 @@ def rank_score(size_bytes: int, leftover_weight: int, risk: str) -> float:
     return (max(int(size_bytes), 0) * max(int(leftover_weight), 0)) / float(penalty)
 
 
-def _path_matches(path: str, sig: MappingSig, keep_set: set[str], refuse: list[str]) -> bool:
+def _path_matches(
+    path: str, sig: Mapping[str, Any], keep_set: set[str], refuse: list[str]
+) -> bool:
     """True when a signature applies to path.
 
     Args:
@@ -231,10 +285,6 @@ def _path_matches(path: str, sig: MappingSig, keep_set: set[str], refuse: list[s
     return False
 
 
-# Typed alias for readability in helpers.
-MappingSig = dict[str, Any]
-
-
 def classify_path(
     path: str,
     catalog: dict[str, Any],
@@ -267,15 +317,14 @@ def classify_path(
         sig = catalog["signatures"].get("keep-set-weight") or _empty_sig()
         return _candidate("keep-set-weight", path, size_bytes, sig)
     for sid, sig in catalog["signatures"].items():
-        probe = dict(sig)
         if broken_symlink and sid == "dangling-symlink":
-            return _candidate(sid, real, size_bytes, probe)
-        if _path_matches(real, probe, keep, refuse_list):
+            return _candidate(sid, real, size_bytes, sig)
+        if _path_matches(real, sig, keep, refuse_list):
             if sid == "dangling-symlink" and not broken_symlink:
                 continue
             if sid == "keep-set-weight":
                 continue
-            return _candidate(sid, real, size_bytes, probe)
+            return _candidate(sid, real, size_bytes, sig)
     unknown = _empty_sig()
     unknown["what"] = "Unclassified path"
     unknown["why"] = "No catalog signature matched"
@@ -287,7 +336,7 @@ def classify_path(
 
 
 def _candidate(
-    sid: str, path: str, size_bytes: int, sig: MappingSig
+    sid: str, path: str, size_bytes: int, sig: Mapping[str, Any]
 ) -> dict[str, Any]:
     """Build a rankable candidate dict.
 
@@ -404,6 +453,9 @@ def walk_root_files(
 
     Yields:
         JSONL-ready row mappings.
+
+    Returns:
+        Iterator of JSONL-ready row mappings.
     """
     dirs = skip_dirs if skip_dirs is not None else SKIP_DIR_NAMES
     bases = skip_basenames if skip_basenames is not None else SKIP_BASENAMES
@@ -411,6 +463,15 @@ def walk_root_files(
         return
 
     def rec(dirpath: str, depth: int) -> Iterator[dict[str, Any]]:
+        """Walk one directory at the given depth.
+
+        Args:
+            dirpath: Directory to scan.
+            depth: Depth of dirpath (root is 0).
+
+        Returns:
+            File/symlink row iterator.
+        """
         child_depth = depth + 1
         if child_depth > max_depth:
             return

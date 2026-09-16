@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 #
+# ## bats_runner
+#
 # Hermetic BATS runner for use inside Bazel sh_test.
 #
-# Locates the hermetic bats binary and the test sources via runfiles,
-# computes REPO_ROOT so existing tests/bats/*.bats keep relative paths,
-# then execs bats.
+# Purpose:
+#   Locate the hermetic bats binary and the test sources via runfiles,
+#   compute REPO_ROOT so existing tests/bats/*.bats keep relative paths,
+#   then exec bats.
+#
+# Style:
+#   Google Shell Style Guide (project deviations in docs/project-conventions.md).
+#
 
 set -euo pipefail
 

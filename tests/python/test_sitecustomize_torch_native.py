@@ -6,13 +6,14 @@ import importlib
 import sys
 import types
 from pathlib import Path
+from typing import Any
 
 import pytest
 
 PYTHONPATH_DIR = Path(__file__).resolve().parents[2] / "docker" / "pythonpath"
 
 
-def _load_sitecustomize(monkeypatch: pytest.MonkeyPatch, env_value: str | None):
+def _load_sitecustomize(monkeypatch: pytest.MonkeyPatch, env_value: str | None) -> types.ModuleType:
     """Load sitecustomize freshly with the given env flag."""
     if env_value is None:
         monkeypatch.delenv("LAB_DISABLE_TORCH_NATIVE_TRITON", raising=False)
@@ -65,7 +66,7 @@ def test_apply_ignores_missing_torch(monkeypatch: pytest.MonkeyPatch) -> None:
 
     real_import = builtins.__import__
 
-    def _block_torch(name, *args, **kwargs):
+    def _block_torch(name: str, *args: Any, **kwargs: Any) -> Any:
         if name == "torch" or name.startswith("torch."):
             raise ImportError("blocked")
         return real_import(name, *args, **kwargs)

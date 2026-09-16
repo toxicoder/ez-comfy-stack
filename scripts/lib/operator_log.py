@@ -11,17 +11,29 @@ import sys
 import time
 from typing import TextIO
 
+# Stderr banner and TTY rewrite latch (shared with disk_catalog).
 PREFIX = "[ez-comfy]"
 _REWRITE = False
 
 
 def progress_enabled() -> bool:
-    """True unless EZ_COMFY_PROGRESS=0."""
+    """True unless EZ_COMFY_PROGRESS=0.
+
+    Returns:
+        Whether operator progress bars and heartbeats may emit.
+    """
     return os.environ.get("EZ_COMFY_PROGRESS", "1") != "0"
 
 
 def use_color(*, stream: TextIO | None = None) -> bool:
-    """True when the stream is a TTY and NO_COLOR is unset."""
+    """True when the stream is a TTY and NO_COLOR is unset.
+
+    Args:
+        stream: Stream to test. Defaults to stderr.
+
+    Returns:
+        Whether ANSI color is allowed.
+    """
     target = stream if stream is not None else sys.stderr
     if os.environ.get("NO_COLOR"):
         return False
@@ -29,7 +41,11 @@ def use_color(*, stream: TextIO | None = None) -> bool:
 
 
 def progress_interval_s() -> float:
-    """Heartbeat seconds from EZ_COMFY_PROGRESS_INTERVAL (0 disables)."""
+    """Heartbeat seconds from EZ_COMFY_PROGRESS_INTERVAL (0 disables).
+
+    Returns:
+        Interval in seconds. Invalid values fall back to 2.0.
+    """
     raw = os.environ.get("EZ_COMFY_PROGRESS_INTERVAL", "2")
     try:
         return float(raw)
@@ -38,7 +54,14 @@ def progress_interval_s() -> float:
 
 
 def format_elapsed(secs: float) -> str:
-    """Format seconds as m:ss or h:mm:ss."""
+    """Format seconds as m:ss or h:mm:ss.
+
+    Args:
+        secs: Elapsed seconds (negative values clamp to 0).
+
+    Returns:
+        Human elapsed string.
+    """
     total = int(secs)
     if total < 0:
         total = 0
@@ -50,7 +73,15 @@ def format_elapsed(secs: float) -> str:
 
 
 def bar_fill(filled: int, width: int = 20) -> str:
-    """Unicode bar: filled cells then empty cells."""
+    """Unicode bar: filled cells then empty cells.
+
+    Args:
+        filled: Number of filled cells.
+        width: Total cells. Non-positive values become 20.
+
+    Returns:
+        String of ``▓`` / ``░`` cells.
+    """
     if width <= 0:
         width = 20
     if filled < 0:
@@ -64,6 +95,11 @@ def emit(msg: str, *, rewrite: bool = False, stream: TextIO | None = None) -> No
     """Write a prefixed line to stderr.
 
     TTY heartbeats rewrite the current line; non-TTY always emits a newline.
+
+    Args:
+        msg: Body without the ``[ez-comfy]`` prefix.
+        rewrite: When True and the stream is a TTY, rewrite the current line.
+        stream: Destination. Defaults to stderr.
     """
     global _REWRITE
     target = stream if stream is not None else sys.stderr
@@ -80,32 +116,58 @@ def emit(msg: str, *, rewrite: bool = False, stream: TextIO | None = None) -> No
 
 
 def log(msg: str) -> None:
-    """Informational line (never rewrites)."""
+    """Informational line (never rewrites).
+
+    Args:
+        msg: Message body.
+    """
     emit(msg, rewrite=False)
 
 
 def warn(msg: str) -> None:
-    """Warning line."""
+    """Warning line.
+
+    Args:
+        msg: Warning body (prefixed with ``[WARN]``).
+    """
     emit(f"[WARN] {msg}", rewrite=False)
 
 
 def error(msg: str) -> None:
-    """Error line (does not exit)."""
+    """Error line (does not exit).
+
+    Args:
+        msg: Error body (prefixed with ``[ERROR]``).
+    """
     emit(f"[ERROR] {msg}", rewrite=False)
 
 
 def log_ok(msg: str) -> None:
-    """Success line."""
+    """Success line.
+
+    Args:
+        msg: Success body (prefixed with a check mark).
+    """
     emit(f"✓ {msg}", rewrite=False)
 
 
 def log_step(n: int, total: int, msg: str) -> None:
-    """Numbered phase banner."""
+    """Numbered phase banner.
+
+    Args:
+        n: Current 1-based step.
+        total: Total steps.
+        msg: Phase title.
+    """
     emit(f"══ {n}/{total} ══ {msg}", rewrite=False)
 
 
 def log_debug(msg: str) -> None:
-    """Debug line when LAB_DEBUG=1 or EZ_COMFY_LOG_LEVEL=debug."""
+    """Debug line when LAB_DEBUG=1 or EZ_COMFY_LOG_LEVEL=debug.
+
+    Args:
+        msg: Debug body.
+    """
     if os.environ.get("LAB_DEBUG") == "1" or os.environ.get(
         "EZ_COMFY_LOG_LEVEL", "info"
     ) == "debug":
@@ -113,7 +175,14 @@ def log_debug(msg: str) -> None:
 
 
 def progress_bar(cur: int, total: int, label: str = "", extra: str = "") -> None:
-    """Percent bar on stderr (rewrites on TTY)."""
+    """Percent bar on stderr (rewrites on TTY).
+
+    Args:
+        cur: Completed units.
+        total: Total units (0 yields 0%).
+        label: Optional job name.
+        extra: Optional trailing note (size, path).
+    """
     width = 20
     pct = 0
     filled = 0
@@ -129,6 +198,11 @@ def progress_bar(cur: int, total: int, label: str = "", extra: str = "") -> None
 
 
 def heartbeat(label: str, start: float) -> None:
-    """Newline heartbeat (safe when the child also writes stderr)."""
+    """Newline heartbeat (safe when the child also writes stderr).
+
+    Args:
+        label: Job name shown after the ellipsis.
+        start: ``time.monotonic()`` start timestamp.
+    """
     elapsed = format_elapsed(time.monotonic() - start)
     emit(f"… {label}  elapsed {elapsed}  (still running)", rewrite=False)

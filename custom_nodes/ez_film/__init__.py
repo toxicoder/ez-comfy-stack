@@ -8,5 +8,6 @@ Import is hermetic: stdlib only at pack load. ffmpeg is resolved inside
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
 WEB_DIRECTORY = "./js"
+"""Relative path to the Queue-finished film player overlay."""
 
 __all__ = ["NODE_CLASS_MAPPINGS", "NODE_DISPLAY_NAME_MAPPINGS", "WEB_DIRECTORY"]

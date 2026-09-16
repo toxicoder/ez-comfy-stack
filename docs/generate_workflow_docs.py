@@ -23,6 +23,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
+# Repo paths for lab graphs, generated pages, encyclopedia, and style catalog.
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_DIR = REPO_ROOT / "docs"
 LAB_DIR = REPO_ROOT / "workflows" / "_lab"
@@ -34,6 +35,7 @@ STYLES_FILE = REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "styles.json"
 if str(DOCS_DIR) not in sys.path:
     sys.path.insert(0, str(DOCS_DIR))
 
+# Whitespace collapse used when quoting widget values in tables.
 _WS_RE = re.compile(r"\s+")
 
 
@@ -1196,6 +1198,14 @@ def inject_nav(nav: list[Any], manifest_pages: list[dict[str, str]]) -> list[Any
         children.append({lane: items})
 
     def walk(items: list[Any]) -> list[Any]:
+        """Rebuild a nav list, substituting the Workflow details subtree.
+
+        Args:
+            items: MkDocs nav entries (strings or single-key dicts).
+
+        Returns:
+            A new nav list with generated children under Workflow details.
+        """
         out: list[Any] = []
         for item in items:
             if isinstance(item, dict) and "Workflow details" in item:

@@ -16,10 +16,28 @@ from .ltx_timing import FPS_DEFAULT
 
 
 def _rational(frames: int, rate: int = FPS_DEFAULT) -> dict[str, Any]:
+    """Build an OTIO ``RationalTime.1`` dict.
+
+    Args:
+        frames: Time value in frames.
+        rate: Frame rate.
+
+    Returns:
+        OTIO rational-time payload.
+    """
     return {"OTIO_SCHEMA": "RationalTime.1", "value": int(frames), "rate": float(rate)}
 
 
 def _seconds_to_frames(seconds: float, rate: int = FPS_DEFAULT) -> int:
+    """Round seconds to an integer frame count.
+
+    Args:
+        seconds: Duration in seconds.
+        rate: Frame rate.
+
+    Returns:
+        Rounded frame count.
+    """
     return int(round(float(seconds) * int(rate)))
 
 
@@ -34,6 +52,15 @@ def build_timeline(
 
     Only ``ok`` shots with an mp4 path become clips. Missing files are skipped
     (accept-gate in Wave 4 fails closed before concat).
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        fps: Timeline frame rate.
+        duration_s: Per-clip duration in seconds.
+        tol: Duration tolerance recorded in metadata (not applied here).
+
+    Returns:
+        OTIO Timeline dict (JSON-serializable).
     """
     state = load_state(dest)
     slug = str(state.get("slug") or dest.name)
@@ -98,7 +125,15 @@ def build_timeline(
 
 
 def write_otio(dest: Path, path: Path | None = None) -> Path:
-    """Write ``publish/<slug>.otio``. Returns the path."""
+    """Write ``publish/<slug>.otio``. Returns the path.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        path: Override destination; default ``publish/<slug>.otio``.
+
+    Returns:
+        Path of the written OTIO file.
+    """
     timeline = build_timeline(dest)
     slug = str(timeline["name"])
     out = path or (dest / "publish" / f"{slug}.otio")
@@ -108,7 +143,14 @@ def write_otio(dest: Path, path: Path | None = None) -> Path:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI used by film-export-otio.sh."""
+    """CLI used by film-export-otio.sh.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.otio_export")
     parser.add_argument("--dest", required=True, help="films/<slug> directory")
     args = parser.parse_args(argv)

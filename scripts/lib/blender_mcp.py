@@ -13,24 +13,49 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, TypedDict, cast
 
+# MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "ez-blender"
 SERVER_VERSION = "1"
 
+RpcId = str | int | None
 ToolHandler = Callable[[dict[str, Any]], dict[str, Any]]
 
 
+class ToolSpec(TypedDict):
+    """One MCP tool: description, JSON Schema, handler."""
+
+    description: str
+    inputSchema: dict[str, Any]
+    handler: ToolHandler
+
+
 def _repo_root() -> Path:
+    """Return the repository root (parent of ``scripts/``).
+
+    Returns:
+        Absolute repo path.
+    """
     return Path(__file__).resolve().parents[2]
 
 
 def _output_dir() -> Path:
+    """Return COMFY_OUTPUT_DIR (host occupancy / asset dump root).
+
+    Returns:
+        Output directory path.
+    """
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
 def _occupancy_bin() -> Path:
+    """Return the occupancy.sh path (EZ_OCCUPANCY_BIN override).
+
+    Returns:
+        Occupancy helper path.
+    """
     override = os.environ.get("EZ_OCCUPANCY_BIN")
     if override:
         return Path(override)
@@ -38,7 +63,11 @@ def _occupancy_bin() -> Path:
 
 
 def occupancy_status() -> dict[str, Any]:
-    """Read occupancy JSON (file, or occupancy.sh --json)."""
+    """Read occupancy JSON (file, or occupancy.sh --json).
+
+    Returns:
+        Occupancy mapping (JSON boundary).
+    """
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
@@ -73,7 +102,11 @@ def occupancy_status() -> dict[str, Any]:
 
 
 def desk_allowed() -> bool:
-    """True when bpy tools may run (parked blender-desk, or compose down)."""
+    """True when bpy tools may run (parked blender-desk, or compose down).
+
+    Returns:
+        Whether live bpy tools are allowed.
+    """
     state = occupancy_status()
     mode = str(state.get("mode") or "idle")
     parked = bool(state.get("parked"))
@@ -86,6 +119,11 @@ def desk_allowed() -> bool:
 
 
 def _require_desk() -> dict[str, Any] | None:
+    """Return an error payload when blender-desk is not occupied.
+
+    Returns:
+        Error mapping, or None when bpy tools may run.
+    """
     if desk_allowed():
         return None
     return {
@@ -95,6 +133,15 @@ def _require_desk() -> dict[str, Any] | None:
 
 
 def _run_occupancy_enter(mode: str, yes: bool) -> dict[str, Any]:
+    """Run ``occupancy.sh enter MODE``.
+
+    Args:
+        mode: Occupancy mode (idle, blender-desk, klein, …).
+        yes: Pass ``--yes`` (skip confirm).
+
+    Returns:
+        Tool payload with ok/returncode/stderr.
+    """
     binary = _occupancy_bin()
     cmd = [str(binary), "enter", mode]
     if yes:
@@ -109,7 +156,14 @@ def _run_occupancy_enter(mode: str, yes: bool) -> dict[str, Any]:
 
 
 def _is_executable(path: Path) -> bool:
-    """True when path is a regular executable file."""
+    """True when path is a regular executable file.
+
+    Args:
+        path: Candidate binary.
+
+    Returns:
+        Whether the path is an executable file.
+    """
     try:
         return path.is_file() and os.access(path, os.X_OK)
     except OSError:
@@ -117,7 +171,11 @@ def _is_executable(path: Path) -> bool:
 
 
 def _well_known_blender_paths() -> tuple[Path, ...]:
-    """Host locations besides PATH (never the Comfy image)."""
+    """Host locations besides PATH (never the Comfy image).
+
+    Returns:
+        Candidate blender binaries.
+    """
     home = Path.home()
     paths: list[Path] = [
         home / ".local" / "bin" / "blender",
@@ -136,6 +194,11 @@ def _well_known_blender_paths() -> tuple[Path, ...]:
 
 
 def _blender_bin() -> str | None:
+    """Resolve a host blender binary (BLENDER_BIN, PATH, well-known).
+
+    Returns:
+        Absolute path string, or None if missing.
+    """
     override = os.environ.get("BLENDER_BIN", "").strip()
     if override:
         cand = Path(override)
@@ -151,6 +214,15 @@ def _blender_bin() -> str | None:
 
 
 def _run_blender(script: str, blend: str | None = None) -> dict[str, Any]:
+    """Run ``blender --background [--python-expr]``.
+
+    Args:
+        script: Python expression passed to ``--python-expr``.
+        blend: Optional .blend path.
+
+    Returns:
+        Tool payload with ok/returncode/stdout/stderr.
+    """
     binary = _blender_bin()
     if binary is None:
         return {
@@ -171,10 +243,26 @@ def _run_blender(script: str, blend: str | None = None) -> dict[str, Any]:
 
 
 def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: read occupancy JSON.
+
+    Args:
+        _args: Unused tool arguments.
+
+    Returns:
+        ``{ok, occupancy}``.
+    """
     return {"ok": True, "occupancy": occupancy_status()}
 
 
 def tool_occupancy_enter(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: enter an occupancy mode (does not start Compose).
+
+    Args:
+        args: ``mode`` (required), optional ``yes``.
+
+    Returns:
+        Occupancy-enter payload or error.
+    """
     mode = str(args.get("mode") or "")
     yes = bool(args.get("yes") or False)
     if not mode:
@@ -183,6 +271,14 @@ def tool_occupancy_enter(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_scene_info(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: list object names in the current Blender scene.
+
+    Args:
+        args: Optional ``blend`` path.
+
+    Returns:
+        Blender run payload or occupancy error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -195,6 +291,14 @@ def tool_scene_info(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_create_primitive(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: add a Workbench primitive.
+
+    Args:
+        args: Optional ``kind`` and ``name``.
+
+    Returns:
+        Blender run payload or error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -224,6 +328,14 @@ def tool_create_primitive(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_set_camera(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: set Camera location.
+
+    Args:
+        args: Optional ``location`` ``[x, y, z]``.
+
+    Returns:
+        Blender run payload or occupancy error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -240,6 +352,14 @@ def tool_set_camera(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_keyframe_object(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: insert a location keyframe on a named object.
+
+    Args:
+        args: Required ``name``, optional ``frame``.
+
+    Returns:
+        Blender run payload or error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -258,6 +378,14 @@ def tool_keyframe_object(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_export_glb(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: export GLB under COMFY_OUTPUT_DIR/assets.
+
+    Args:
+        args: Optional ``path``.
+
+    Returns:
+        Blender run payload (includes ``path``) or error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -278,6 +406,15 @@ def tool_export_glb(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def _run_utility(script_name: str, extra: list[str]) -> dict[str, Any]:
+    """Run a host utility under ``scripts/utilities``.
+
+    Args:
+        script_name: Basename (e.g. ``blender-guide.sh``).
+        extra: Extra argv after the script.
+
+    Returns:
+        Subprocess payload or occupancy error.
+    """
     blocked = _require_desk()
     if blocked:
         return blocked
@@ -297,6 +434,14 @@ def _run_utility(script_name: str, extra: list[str]) -> dict[str, Any]:
 
 
 def tool_export_guides(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: dump a 5.00s clay/depth/canny guide pack.
+
+    Args:
+        args: Optional ``film``, ``shot``, ``blend``.
+
+    Returns:
+        blender-guide.sh payload.
+    """
     film = str(args.get("film") or "go-see")
     shot = str(args.get("shot") or "12")
     extra = ["--film", film, "--shot", shot]
@@ -306,6 +451,14 @@ def tool_export_guides(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_blender_stills(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: dump a creator still pack.
+
+    Args:
+        args: Optional ``film``, ``plate``, ``size``, ``blend``.
+
+    Returns:
+        blender-stills.sh payload.
+    """
     film = str(args.get("film") or "go-see")
     plate = str(args.get("plate") or "mug")
     extra = ["--film", film, "--plate", plate]
@@ -317,11 +470,20 @@ def tool_blender_stills(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_house_views(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: dump Instagram 4:5 greybox stills + GLB.
+
+    Args:
+        args: Optional ``slug``.
+
+    Returns:
+        house-views.sh payload.
+    """
     slug = str(args.get("slug") or "lab-penthouse")
     return _run_utility("house-views.sh", ["--slug", slug])
 
 
-TOOLS: dict[str, dict[str, Any]] = {
+# Typed MCP tool table (names are the public tool ids).
+TOOLS: dict[str, ToolSpec] = {
     "occupancy_status": {
         "description": "Read GB10 occupancy mode, parked flag, and PIDs.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -428,6 +590,11 @@ TOOLS: dict[str, dict[str, Any]] = {
 
 
 def list_tools() -> list[dict[str, Any]]:
+    """List MCP tools without handlers.
+
+    Returns:
+        ``{name, description, inputSchema}`` rows.
+    """
     return [
         {
             "name": name,
@@ -439,6 +606,15 @@ def list_tools() -> list[dict[str, Any]]:
 
 
 def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Dispatch a named MCP tool.
+
+    Args:
+        name: Tool id.
+        arguments: JSON-object arguments (JSON boundary).
+
+    Returns:
+        Tool payload (``ok`` false on unknown tool).
+    """
     spec = TOOLS.get(name)
     if spec is None:
         return {"ok": False, "error": f"unknown tool {name}"}
@@ -446,18 +622,44 @@ def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str
     return handler(dict(arguments or {}))
 
 
-def _rpc_result(msg_id: Any, result: Any) -> dict[str, Any]:
+def _rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 success envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        result: Method result payload.
+
+    Returns:
+        JSON-RPC response object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "result": result}
 
 
-def _rpc_error(msg_id: Any, code: int, message: str) -> dict[str, Any]:
+def _rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 error envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        code: JSON-RPC error code.
+        message: Error text.
+
+    Returns:
+        JSON-RPC error object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": message}}
 
 
 def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
-    """Handle one JSON-RPC message. Notifications return None."""
+    """Handle one JSON-RPC message. Notifications return None.
+
+    Args:
+        message: Parsed JSON-RPC request (JSON boundary).
+
+    Returns:
+        Response object, or None for notifications.
+    """
     method = str(message.get("method") or "")
-    msg_id = message.get("id")
+    msg_id = cast(RpcId, message.get("id"))
     params = message.get("params") or {}
     if method == "notifications/initialized":
         return None
@@ -489,6 +691,7 @@ def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def serve_stdio() -> None:
+    """Serve JSON-RPC on stdin/stdout (one JSON object per line)."""
     for raw in sys.stdin:
         line = raw.strip()
         if not line:
@@ -506,6 +709,14 @@ def serve_stdio() -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI: --stdio | --list-tools | --call TOOL [JSON].
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     args = list(sys.argv[1:] if argv is None else argv)
     if not args or args[0] in ("--stdio", "stdio"):
         serve_stdio()

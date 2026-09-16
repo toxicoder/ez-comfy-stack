@@ -4,6 +4,7 @@ Hermetic: only stdlib + the hooks module loaded from docs/hooks.py.
 """
 
 from __future__ import annotations
+from types import ModuleType
 
 import importlib.util
 import os
@@ -15,7 +16,7 @@ import pytest
 HOOKS_PATH = Path(__file__).resolve().parents[2] / "docs" / "hooks.py"
 
 
-def _load_hooks():
+def _load_hooks() -> ModuleType:
     """Load docs/hooks.py as a module without installing a package.
 
     Returns:
@@ -29,7 +30,7 @@ def _load_hooks():
 
 
 @pytest.fixture
-def hooks(monkeypatch: pytest.MonkeyPatch):
+def hooks(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
     """Load hooks with a clean env (no version stamps).
 
     Args:
@@ -50,14 +51,14 @@ def hooks(monkeypatch: pytest.MonkeyPatch):
     return module
 
 
-def test_docs_version_prefers_mike(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_docs_version_prefers_mike(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """MIKE_DOCS_VERSION wins over EZ_DOCS_VERSION."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
     monkeypatch.setenv("EZ_DOCS_VERSION", "latest")
     assert hooks.docs_version() == "development"
 
 
-def test_docs_version_falls_back_to_ez(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_docs_version_falls_back_to_ez(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """EZ_DOCS_VERSION is used when MIKE_DOCS_VERSION is unset."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "Development")
     assert hooks.docs_version() == "development"
@@ -89,25 +90,25 @@ def test_git_head_parses_iso_timestamp(monkeypatch: pytest.MonkeyPatch) -> None:
     assert stamp.year == 2026
 
 
-def test_docs_git_ref_default_main(hooks) -> None:
+def test_docs_git_ref_default_main(hooks: ModuleType) -> None:
     """Unset version maps edit/source links to main."""
     assert hooks.docs_git_ref() == "main"
 
 
-def test_docs_git_ref_development(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_docs_git_ref_development(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """Development docs version maps to the development branch."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
     assert hooks.docs_git_ref() == "development"
 
 
-def test_docs_git_ref_override(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_docs_git_ref_override(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """EZ_DOCS_GIT_REF overrides version-derived ref."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
     monkeypatch.setenv("EZ_DOCS_GIT_REF", "main")
     assert hooks.docs_git_ref() == "main"
 
 
-def test_on_config_stamps_edit_uri(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_on_config_stamps_edit_uri(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """on_config writes edit_uri for the active long-lived ref."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
     config = {"edit_uri": "edit/main/docs/"}
@@ -115,7 +116,7 @@ def test_on_config_stamps_edit_uri(hooks, monkeypatch: pytest.MonkeyPatch) -> No
     assert out["edit_uri"] == "edit/development/docs/"
 
 
-def test_on_config_injects_workflow_details_when_manifest_exists(hooks) -> None:
+def test_on_config_injects_workflow_details_when_manifest_exists(hooks: ModuleType) -> None:
     """Workflow details becomes a nested nav tree when the manifest is present."""
     manifest = HOOKS_PATH.parent / "generated" / "workflows" / "manifest.json"
     config = {
@@ -140,7 +141,7 @@ def test_on_config_injects_workflow_details_when_manifest_exists(hooks) -> None:
 
 
 def test_stamp_git_ref_rewrites_this_repo_only(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Only this repo's blob/tree main|master|development segments are stamped."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
@@ -160,7 +161,7 @@ def test_stamp_git_ref_rewrites_this_repo_only(
     assert "https://github.com/toxicoder/ez-comfy-stack/tree/development/scripts/" in out
 
 
-def test_stamp_docs_git_ref_placeholder_default_main(hooks) -> None:
+def test_stamp_docs_git_ref_placeholder_default_main(hooks: ModuleType) -> None:
     """Unset version replaces __DOCS_GIT_REF__ with main."""
     text = "git clone -b __DOCS_GIT_REF__ https://github.com/toxicoder/ez-comfy-stack.git"
     out = hooks.stamp_docs_git_ref_placeholder(text)
@@ -171,7 +172,7 @@ def test_stamp_docs_git_ref_placeholder_default_main(hooks) -> None:
 
 
 def test_stamp_docs_git_ref_placeholder_development(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Development docs version stamps the placeholder to development."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
@@ -182,7 +183,7 @@ def test_stamp_docs_git_ref_placeholder_development(
 
 
 def test_stamp_docs_git_ref_placeholder_override(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """EZ_DOCS_GIT_REF wins when stamping the placeholder."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
@@ -193,7 +194,7 @@ def test_stamp_docs_git_ref_placeholder_override(
 
 
 def test_stamp_docs_git_ref_placeholder_leaves_prose(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Literal branch names in prose are not rewritten without the placeholder."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "latest")
@@ -202,7 +203,7 @@ def test_stamp_docs_git_ref_placeholder_leaves_prose(
 
 
 def test_on_page_markdown_stamps_setup_clone(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """on_page_markdown stamps Setup-style clone -b and GitHub refs together."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "development")
@@ -224,7 +225,7 @@ def test_on_page_markdown_stamps_setup_clone(
     assert "Always branch from development." in out
 
 
-def test_on_page_markdown_expands_ezcmd(hooks) -> None:
+def test_on_page_markdown_expands_ezcmd(hooks: ModuleType) -> None:
     """ezcmd fences become builder widgets during markdown processing."""
     out = hooks.on_page_markdown("```ezcmd\nid: download-music\n```\n")
     assert "```ezcmd" not in out
@@ -232,7 +233,7 @@ def test_on_page_markdown_expands_ezcmd(hooks) -> None:
     assert "download-music --tier turbo" in out
 
 
-def test_on_post_page_injects_command_builder_json(hooks) -> None:
+def test_on_post_page_injects_command_builder_json(hooks: ModuleType) -> None:
     """Every page gets #ez-cmd-data for the Your Spark panel."""
     html = "<html><body><article class=\"md-content__inner\"><h1>Hi</h1></article></body></html>"
     out = hooks.on_post_page(html)
@@ -241,7 +242,7 @@ def test_on_post_page_injects_command_builder_json(hooks) -> None:
 
 
 def test_on_page_markdown_stamps_main_for_latest(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """latest alias stamps the placeholder to main."""
     monkeypatch.setenv("EZ_DOCS_VERSION", "latest")
@@ -250,7 +251,7 @@ def test_on_page_markdown_stamps_main_for_latest(
 
 
 def test_on_post_page_stamps_placeholder(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """on_post_page replaces residual __DOCS_GIT_REF__ in rendered HTML."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
@@ -262,7 +263,7 @@ def test_on_post_page_stamps_placeholder(
 
 
 def test_on_post_page_injects_dev_banner(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Development version injects a banner before the first h1 when needed."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "development")
@@ -273,7 +274,7 @@ def test_on_post_page_injects_dev_banner(
 
 
 def test_on_post_page_skips_banner_for_latest(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """latest alias does not inject the development banner."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "latest")
@@ -282,7 +283,7 @@ def test_on_post_page_skips_banner_for_latest(
     assert "ez-docs-dev-banner" not in out
 
 
-def test_published_at_parses_iso_z(hooks, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_published_at_parses_iso_z(hooks: ModuleType, monkeypatch: pytest.MonkeyPatch) -> None:
     """EZ_DOCS_PUBLISHED_AT ISO-8601 with Z becomes aware UTC."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
     got = hooks.published_at()
@@ -290,7 +291,7 @@ def test_published_at_parses_iso_z(hooks, monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_published_at_parses_unix_seconds(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Integer unix seconds in EZ_DOCS_PUBLISHED_AT are accepted."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "1694332800")
@@ -299,7 +300,7 @@ def test_published_at_parses_unix_seconds(
 
 
 def test_published_at_prefers_env_over_epoch(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """EZ_DOCS_PUBLISHED_AT wins over SOURCE_DATE_EPOCH."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-01-02T00:00:00Z")
@@ -309,7 +310,7 @@ def test_published_at_prefers_env_over_epoch(
 
 
 def test_published_at_uses_source_date_epoch(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """SOURCE_DATE_EPOCH is used when EZ_DOCS_PUBLISHED_AT is unset."""
     monkeypatch.setenv("SOURCE_DATE_EPOCH", "1694332800")
@@ -318,7 +319,7 @@ def test_published_at_uses_source_date_epoch(
 
 
 def test_published_at_uses_git_helper(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Git HEAD committer date is the last fallback."""
     stamp = datetime(2026, 4, 1, 12, 0, tzinfo=timezone.utc)
@@ -327,26 +328,26 @@ def test_published_at_uses_git_helper(
 
 
 def test_published_at_invalid_env_skips(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Invalid EZ_DOCS_PUBLISHED_AT does not fail the build; chip is omitted."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "not-a-date")
     assert hooks.published_at() is None
 
 
-def test_published_at_none_when_unset(hooks) -> None:
+def test_published_at_none_when_unset(hooks: ModuleType) -> None:
     """No env and no git helper → no timestamp (do not use now())."""
     assert hooks.published_at() is None
 
 
-def test_format_published_label_english_day(hooks) -> None:
+def test_format_published_label_english_day(hooks: ModuleType) -> None:
     """Visible date is English, no locale, no zero-padded day."""
     dt = datetime(2026, 9, 4, 8, 5, tzinfo=timezone.utc)
     assert hooks.format_published_label(dt) == "4 Sep 2026"
 
 
 def test_on_post_page_injects_published_chip(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Chip is prepended to article.md-content__inner when a stamp exists."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
@@ -367,7 +368,7 @@ def test_on_post_page_injects_published_chip(
     assert article_at < chip_at < h1_at
 
 
-def test_on_post_page_skips_chip_without_stamp(hooks) -> None:
+def test_on_post_page_skips_chip_without_stamp(hooks: ModuleType) -> None:
     """No resolved timestamp means no chip (never datetime.now())."""
     html = (
         '<html><body><article class="md-content__inner md-typeset">'
@@ -378,7 +379,7 @@ def test_on_post_page_skips_chip_without_stamp(hooks) -> None:
 
 
 def test_on_post_page_does_not_duplicate_chip(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A page that already has the chip is left with a single instance."""
     monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2026-09-10T14:32:00Z")
@@ -393,7 +394,7 @@ def test_on_post_page_does_not_duplicate_chip(
 
 
 def test_on_post_page_chip_on_latest(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """latest alias still gets the published chip (banner stays off)."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "latest")
@@ -405,7 +406,7 @@ def test_on_post_page_chip_on_latest(
 
 
 def test_on_post_page_chip_and_dev_banner(
-    hooks, monkeypatch: pytest.MonkeyPatch
+    hooks: ModuleType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Development alias keeps the banner and adds the chip before h1."""
     monkeypatch.setenv("MIKE_DOCS_VERSION", "development")

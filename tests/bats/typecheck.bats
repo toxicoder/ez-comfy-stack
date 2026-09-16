@@ -102,6 +102,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'check_untyped_defs' "${cfg}"
   [ "${status}" -eq 0 ]
+  run grep -F 'disallow_untyped_defs' "${cfg}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'disallow_incomplete_defs' "${cfg}"
+  [ "${status}" -eq 0 ]
 }
 
 @test "requirements pin mypy" {

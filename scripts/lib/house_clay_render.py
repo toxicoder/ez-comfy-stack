@@ -15,6 +15,7 @@ from typing import Any, Mapping, Sequence
 from guide_pack import write_rgb_png
 from operator_log import log as ol_log
 
+# Instagram 4:5 clay plate (internal raster is smaller, then nearest upsample).
 PACK_WIDTH = 1024
 PACK_HEIGHT = 1280
 RENDER_WIDTH = 256
@@ -33,22 +34,67 @@ Rgb = tuple[int, int, int]
 
 
 def _sub(a: Vec3, b: Vec3) -> Vec3:
+    """Subtract two vectors.
+
+    Args:
+        a: Left operand.
+        b: Right operand.
+
+    Returns:
+        ``a - b``.
+    """
     return (a[0] - b[0], a[1] - b[1], a[2] - b[2])
 
 
 def _add(a: Vec3, b: Vec3) -> Vec3:
+    """Add two vectors.
+
+    Args:
+        a: Left operand.
+        b: Right operand.
+
+    Returns:
+        ``a + b``.
+    """
     return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 
 
 def _scale(a: Vec3, s: float) -> Vec3:
+    """Scale a vector.
+
+    Args:
+        a: Vector.
+        s: Scalar.
+
+    Returns:
+        ``a * s``.
+    """
     return (a[0] * s, a[1] * s, a[2] * s)
 
 
 def _dot(a: Vec3, b: Vec3) -> float:
+    """Dot product.
+
+    Args:
+        a: Left operand.
+        b: Right operand.
+
+    Returns:
+        Scalar product.
+    """
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 
 
 def _cross(a: Vec3, b: Vec3) -> Vec3:
+    """Cross product.
+
+    Args:
+        a: Left operand.
+        b: Right operand.
+
+    Returns:
+        ``a × b``.
+    """
     return (
         a[1] * b[2] - a[2] * b[1],
         a[2] * b[0] - a[0] * b[2],
@@ -57,6 +103,14 @@ def _cross(a: Vec3, b: Vec3) -> Vec3:
 
 
 def _norm(a: Vec3) -> Vec3:
+    """Unit vector, or +Y when the length is near zero.
+
+    Args:
+        a: Vector.
+
+    Returns:
+        Normalized vector.
+    """
     length = math.sqrt(_dot(a, a))
     if length < 1e-9:
         return (0.0, 1.0, 0.0)
@@ -64,6 +118,15 @@ def _norm(a: Vec3) -> Vec3:
 
 
 def _shade(rgb: Rgb, normal: Vec3) -> Rgb:
+    """Lambert-tint an RGB triple.
+
+    Args:
+        rgb: Base clay color.
+        normal: Face normal.
+
+    Returns:
+        Shaded 8-bit RGB.
+    """
     light = _norm(LIGHT)
     ndotl = max(0.42, min(1.0, _dot(_norm(normal), light)))
     return (
@@ -74,6 +137,15 @@ def _shade(rgb: Rgb, normal: Vec3) -> Rgb:
 
 
 def _camera_basis(pos: Vec3, look: Vec3) -> tuple[Vec3, Vec3, Vec3]:
+    """Orthonormal camera right/up/forward.
+
+    Args:
+        pos: Camera position.
+        look: Look-at point.
+
+    Returns:
+        ``(right, up, forward)``.
+    """
     forward = _norm(_sub(look, pos))
     world_up = (0.0, 1.0, 0.0)
     right = _cross(forward, world_up)
@@ -100,6 +172,22 @@ def _project(
     width: int,
     height: int,
 ) -> tuple[float, float, float] | None:
+    """Project a world point into pixel space.
+
+    Args:
+        point: World position.
+        pos: Camera position.
+        right: Camera right axis.
+        up: Camera up axis.
+        forward: Camera forward axis.
+        tan_x: Horizontal half-FOV tangent.
+        tan_y: Vertical half-FOV tangent.
+        width: Raster width.
+        height: Raster height.
+
+    Returns:
+        ``(u, v, z)`` or None when behind the near plane.
+    """
     cam = _sub(point, pos)
     z = _dot(cam, forward)
     if z <= NEAR:
@@ -121,6 +209,18 @@ def _fill_triangle(
     c: tuple[float, float, float],
     color: Rgb,
 ) -> None:
+    """Rasterize one triangle with a z-buffer.
+
+    Args:
+        pixels: Packed RGB buffer.
+        zbuf: Per-pixel depth (smaller is closer).
+        width: Raster width.
+        height: Raster height.
+        a: First projected vertex ``(u, v, z)``.
+        b: Second projected vertex.
+        c: Third projected vertex.
+        color: Fill color.
+    """
     ax, ay, az = a
     bx, by, bz = b
     cx, cy, cz = c
@@ -160,6 +260,15 @@ def _fill_triangle(
 
 
 def _aabb_faces(mn: Vec3, mx: Vec3) -> list[tuple[tuple[Vec3, Vec3, Vec3, Vec3], Vec3]]:
+    """Return the six faces of an AABB as quads plus outward normals.
+
+    Args:
+        mn: Min corner.
+        mx: Max corner.
+
+    Returns:
+        List of ``(corners, normal)``.
+    """
     x0, y0, z0 = mn
     x1, y1, z1 = mx
     return [
@@ -191,6 +300,15 @@ def _aabb_faces(mn: Vec3, mx: Vec3) -> list[tuple[tuple[Vec3, Vec3, Vec3, Vec3],
 
 
 def _center_size_box(center: Sequence[float], size: Sequence[float]) -> tuple[Vec3, Vec3]:
+    """Convert center+size to min/max corners.
+
+    Args:
+        center: Box center ``(x, y, z)``.
+        size: Box extents ``(sx, sy, sz)``.
+
+    Returns:
+        ``(min, max)`` corners.
+    """
     cx, cy, cz = float(center[0]), float(center[1]), float(center[2])
     sx, sy, sz = float(size[0]), float(size[1]), float(size[2])
     return (
@@ -248,6 +366,18 @@ def layout_boxes(layout: Mapping[str, Any]) -> list[tuple[Vec3, Vec3, Rgb]]:
 def _upsample_nearest(
     src: bytes, sw: int, sh: int, dw: int, dh: int
 ) -> bytes:
+    """Nearest-neighbor upsample packed RGB.
+
+    Args:
+        src: Source packed RGB.
+        sw: Source width.
+        sh: Source height.
+        dw: Destination width.
+        dh: Destination height.
+
+    Returns:
+        Packed RGB of size ``dw*dh*3``.
+    """
     out = bytearray(dw * dh * 3)
     for y in range(dh):
         sy = (y * sh) // dh
@@ -262,6 +392,13 @@ def _upsample_nearest(
 
 
 def _fill_sky(pixels: bytearray, width: int, height: int) -> None:
+    """Fill a vertical sky gradient.
+
+    Args:
+        pixels: Packed RGB buffer.
+        width: Raster width.
+        height: Raster height.
+    """
     denom = max(height - 1, 1)
     for y in range(height):
         t = y / denom

@@ -6,6 +6,7 @@ in tags, not the filename. Output dir: ``albums/<Artist>/<Album>/``.
 
 from __future__ import annotations
 
+# Fictional act names and title-case skip words.
 NILL_BYE_ARTIST = "Nill Bye"
 DRIVE_THROUGH_ARTIST = "Drive-through"
 _SMALL_WORDS = frozenset({"a", "an", "and", "of", "or", "the", "vs"})
@@ -14,7 +15,7 @@ _SMALL_WORDS = frozenset({"a", "an", "and", "of", "or", "the", "vs"})
 def title_case_song(title: str) -> str:
     """Title-case a catalog song title, including hyphenated tokens.
 
-    Arguments:
+    Args:
         title: Catalog ``title`` field (usually lowercase).
     Returns:
         Title-cased song name for SaveAudio prefixes.
@@ -45,7 +46,7 @@ def title_case_song(title: str) -> str:
 def music_output_prefix(title: str, track: int) -> str:
     """Build the SaveAudio filename stem for one catalog take.
 
-    Arguments:
+    Args:
         title: Catalog song title.
         track: One-based track number on the album.
     Returns:
@@ -61,7 +62,7 @@ def music_output_prefix(title: str, track: int) -> str:
 def album_output_dir(artist: str, album: str) -> str:
     """Relative output folder under Comfy output dir.
 
-    Arguments:
+    Args:
         artist: Branded act name.
         album: Album title.
     Returns:

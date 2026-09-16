@@ -5,6 +5,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
+# Film bible: slugs, print templates, shot-card enums, and YAML keys.
 FILM_SLUGS = {
     "go-see": "gosee",
     "still-here": "stillhere",
@@ -62,6 +63,12 @@ def print_template(mode: str) -> str:
     ``dfr`` is not a vendored JSON blob (UUID subgraphs). The stub records
     the Templates SoT path from ``workflows/quality/ltx-2.5/NOTICE.md``.
     ``dcc-final`` is Path A (engine beauty) and is not a lab printer yet.
+
+    Args:
+        mode: YAML ``print:`` value.
+
+    Returns:
+        Lab graph path or Templates SoT stub.
     """
     if mode == "dfr":
         return DFR_TEMPLATE
@@ -82,7 +89,7 @@ def print_template(mode: str) -> str:
 def film_slug(film: str) -> str:
     """Map film id to output prefix slug.
 
-    Arguments:
+    Args:
         film: go-see, still-here, or switchyard.
     Returns:
         Slug string (gosee, stillhere, switchyard).
@@ -96,6 +103,15 @@ def film_slug(film: str) -> str:
 
 
 def _block_field(body: str, name: str) -> str:
+    """Join a folded YAML ``name: |`` block into one line.
+
+    Args:
+        body: Shot list item text.
+        name: Block key (``ltx_i2v`` or ``wan_i2v``).
+
+    Returns:
+        Collapsed prompt text.
+    """
     match = re.search(rf"^[ \t]*{name}:[ \t]*\|[ \t]*\n", body, re.M)
     if not match:
         raise ValueError(f"missing block {name}")
@@ -115,6 +131,14 @@ def _block_field(body: str, name: str) -> str:
 
 
 def _unquote(value: str) -> str:
+    """Strip matching single or double quotes.
+
+    Args:
+        value: Raw YAML scalar.
+
+    Returns:
+        Unquoted text.
+    """
     text = value.strip()
     if len(text) >= 2 and text[0] == text[-1] and text[0] in {'"', "'"}:
         return text[1:-1]
@@ -122,6 +146,15 @@ def _unquote(value: str) -> str:
 
 
 def _scalar(body: str, name: str) -> str:
+    """Require a YAML scalar ``name:`` in ``body``.
+
+    Args:
+        body: Shot list item text.
+        name: Key to read.
+
+    Returns:
+        Unquoted scalar.
+    """
     match = re.search(rf"^\s*{name}:\s*(.+)$", body, re.M)
     if not match:
         raise ValueError(f"missing {name}")
@@ -129,6 +162,16 @@ def _scalar(body: str, name: str) -> str:
 
 
 def _optional_scalar(body: str, name: str, default: str = "") -> str:
+    """Read an optional YAML scalar, or ``default``.
+
+    Args:
+        body: Shot list item text.
+        name: Key to read.
+        default: Value when the key is missing.
+
+    Returns:
+        Unquoted scalar or ``default``.
+    """
     match = re.search(rf"^\s*{name}:\s*(.*)$", body, re.M)
     if not match:
         return default
@@ -136,6 +179,16 @@ def _optional_scalar(body: str, name: str, default: str = "") -> str:
 
 
 def _optional_meta(text: str, name: str, default: str) -> str:
+    """Read an optional top-level YAML scalar, or ``default``.
+
+    Args:
+        text: Full YAML file contents.
+        name: Meta key.
+        default: Value when the key is missing.
+
+    Returns:
+        Unquoted scalar or ``default``.
+    """
     match = re.search(rf"^{name}:\s*(.*)$", text, re.M)
     if not match:
         return default
@@ -143,10 +196,28 @@ def _optional_meta(text: str, name: str, default: str) -> str:
 
 
 def _norm_token(token: str) -> str:
+    """Collapse whitespace and lowercase a choice token.
+
+    Args:
+        token: Raw YAML value.
+
+    Returns:
+        Normalized token.
+    """
     return " ".join(str(token).strip().lower().split())
 
 
 def _validate_choice(name: str, value: str, allowed: tuple[str, ...]) -> str:
+    """Return the canonical enum value or raise.
+
+    Args:
+        name: Field name for the error message.
+        value: Raw token.
+        allowed: Closed set of canonical values.
+
+    Returns:
+        Matching canonical token.
+    """
     key = _norm_token(value)
     for item in allowed:
         if key == item:
@@ -158,6 +229,12 @@ def normalize_camera(token: str) -> str:
     """Return a canonical camera verb, or empty when unset.
 
     ``fixed`` is accepted as ``fixed camera`` (enum in prompt_enums).
+
+    Args:
+        token: Camera widget or YAML value.
+
+    Returns:
+        Canonical camera token, or empty when unset.
     """
     if not token.strip():
         return ""
@@ -173,7 +250,14 @@ def normalize_camera(token: str) -> str:
 
 
 def apply_shot_card_defaults(parsed: dict[str, Any]) -> dict[str, Any]:
-    """Fill fail-closed defaults for optional shot-card keys (mutates parsed)."""
+    """Fill fail-closed defaults for optional shot-card keys (mutates parsed).
+
+    Args:
+        parsed: Dict with ``meta`` and ``shots``.
+
+    Returns:
+        The same ``parsed`` dict.
+    """
     meta = parsed["meta"]
     meta["audio_policy"] = _validate_choice(
         "audio_policy",
@@ -210,7 +294,7 @@ def apply_shot_card_defaults(parsed: dict[str, Any]) -> dict[str, Any]:
 def parse_shots_yaml(text: str) -> dict[str, Any]:
     """Parse a film bible YAML subset.
 
-    Arguments:
+    Args:
         text: File contents of ``{film}.shots.yaml``.
     Returns:
         Dict with ``meta``, ``identity``, and ``shots`` (18 dicts).
@@ -272,6 +356,14 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
 
 
 def _yaml_quote(value: str) -> str:
+    """Quote a YAML scalar when it contains special characters.
+
+    Args:
+        value: Unquoted text.
+
+    Returns:
+        YAML scalar token.
+    """
     if value == "":
         return '""'
     if any(ch in value for ch in (":", "#", "{", "}", "[", "]", ",", "&", "*")):
@@ -281,6 +373,16 @@ def _yaml_quote(value: str) -> str:
 
 
 def _emit_block(name: str, text: str, indent: str) -> str:
+    """Emit a folded YAML ``name: |`` block wrapped near 88 columns.
+
+    Args:
+        name: Block key.
+        text: Prompt body.
+        indent: Leading whitespace for the key line.
+
+    Returns:
+        YAML fragment without a trailing newline on the last line.
+    """
     lines = [f"{indent}{name}: |"]
     words = text.split()
     if not words:
@@ -300,7 +402,14 @@ def _emit_block(name: str, text: str, indent: str) -> str:
 
 
 def write_shots_yaml(parsed: dict[str, Any]) -> str:
-    """Serialize a parsed film bible including shot-card defaults."""
+    """Serialize a parsed film bible including shot-card defaults.
+
+    Args:
+        parsed: Dict with ``meta``, ``identity``, and ``shots``.
+
+    Returns:
+        YAML document text.
+    """
     apply_shot_card_defaults(parsed)
     meta = parsed["meta"]
     lines = [
@@ -346,5 +455,12 @@ def write_shots_yaml(parsed: dict[str, Any]) -> str:
 
 
 def scaffold_shot_sheet(src_text: str) -> str:
-    """Parse a lab bible and emit a shot-card YAML with defaults filled."""
+    """Parse a lab bible and emit a shot-card YAML with defaults filled.
+
+    Args:
+        src_text: Existing ``*.shots.yaml`` contents.
+
+    Returns:
+        YAML with shot-card defaults filled.
+    """
     return write_shots_yaml(parse_shots_yaml(src_text))

@@ -17,6 +17,7 @@ from typing import Any
 
 from .search import SearchHit, format_sources, search_web
 
+# Prompt files, subagent clamp, and filesystem slug sanitizer.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 MIN_SUBAGENTS = 1
 MAX_SUBAGENTS = 3
@@ -34,10 +35,23 @@ class ResearchResult:
 
 
 def _log(message: str) -> None:
+    """Write a pack status line to stderr.
+
+    Args:
+        message: Text after the ``[ez_research]`` prefix.
+    """
     print(f"[ez_research] {message}", file=sys.stderr)
 
 
 def _progress(total: int) -> Any:
+    """Comfy ProgressBar when importable.
+
+    Args:
+        total: Expected steps.
+
+    Returns:
+        Progress bar, or None in tests / missing pack.
+    """
     _ensure_lab_custom_nodes_path()
     try:
         from ez_common import node_progress
@@ -59,13 +73,27 @@ def _ensure_lab_custom_nodes_path() -> None:
 
 
 def load_prompt(name: str) -> str:
-    """Load a system prompt from ``prompts/<name>.txt``."""
+    """Load a system prompt from ``prompts/<name>.txt``.
+
+    Args:
+        name: Stem without ``.txt``.
+
+    Returns:
+        File contents stripped of trailing whitespace.
+    """
     path = PROMPTS_DIR / f"{name}.txt"
     return path.read_text(encoding="utf-8").strip()
 
 
 def clamp_subagents(value: object) -> int:
-    """Clamp the subagent count to 1–3."""
+    """Clamp the subagent count to 1–3.
+
+    Args:
+        value: Widget INT or loose numeric token.
+
+    Returns:
+        Integer in ``[MIN_SUBAGENTS, MAX_SUBAGENTS]``.
+    """
     count = 2
     if isinstance(value, bool):
         count = int(value)
@@ -86,7 +114,16 @@ def clamp_subagents(value: object) -> int:
 
 
 def parse_planner_queries(text: str, fallback: str, limit: int) -> list[str]:
-    """Parse planner JSON ``{"queries":[...]}``. Fallback is the user message."""
+    """Parse planner JSON ``{"queries":[...]}``. Fallback is the user message.
+
+    Args:
+        text: Planner LLM output.
+        fallback: User message used when JSON is missing.
+        limit: Max queries (clamped 1–3).
+
+    Returns:
+        Unique query strings, length at most ``limit``.
+    """
     cap = clamp_subagents(limit)
     blob = (text or "").strip()
     queries: list[str] = []
@@ -118,7 +155,15 @@ def parse_planner_queries(text: str, fallback: str, limit: int) -> list[str]:
 
 
 def _complete(system: str, user: str) -> tuple[str, str]:
-    """GPU sidecar / occupancy-aware 4B via prompt-enhance. Fail-soft on import."""
+    """GPU sidecar / occupancy-aware 4B via prompt-enhance. Fail-soft on import.
+
+    Args:
+        system: System prompt.
+        user: User message.
+
+    Returns:
+        ``(text, reason)``; empty text when llama.cpp is unavailable.
+    """
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import complete as llama_complete
@@ -130,6 +175,14 @@ def _complete(system: str, user: str) -> tuple[str, str]:
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a Comfy widget value to bool.
+
+    Args:
+        value: BOOLEAN widget or loose truthy token.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -140,6 +193,16 @@ def _as_bool(value: object) -> bool:
 
 
 def _compose_user(message: str, history: str, extra: str = "") -> str:
+    """Join the user message with optional history and extra context.
+
+    Args:
+        message: Current user question.
+        history: Prior turns.
+        extra: Optional source block or planner notes.
+
+    Returns:
+        Combined user prompt.
+    """
     parts = [message.strip()]
     hist = (history or "").strip()
     if hist:
@@ -151,6 +214,15 @@ def _compose_user(message: str, history: str, extra: str = "") -> str:
 
 
 def _fallback_brief(message: str, hits: list[SearchHit]) -> str:
+    """Template brief used when the LLM returns empty text.
+
+    Args:
+        message: User question.
+        hits: Search hits (may be empty).
+
+    Returns:
+        Markdown brief with sources and prompt ingredients.
+    """
     lines = [
         "## Brief",
         message.strip() or "(empty)",
@@ -177,6 +249,14 @@ def _fallback_brief(message: str, hits: list[SearchHit]) -> str:
 
 
 def _hits_block(hits: list[SearchHit]) -> str:
+    """Format search hits for the synthesizer user message.
+
+    Args:
+        hits: Search hits.
+
+    Returns:
+        ``Sources:`` block, or a none placeholder.
+    """
     if not hits:
         return "Sources: (none)"
     chunks: list[str] = []
@@ -192,7 +272,16 @@ def run_chat(
     history: str = "",
     web_search: bool = False,
 ) -> ResearchResult:
-    """One-turn chat. Optional search snippets prepended to the user message."""
+    """One-turn chat. Optional search snippets prepended to the user message.
+
+    Args:
+        message: User question.
+        history: Prior turns.
+        web_search: When true, fetch SSRF-safe sources first.
+
+    Returns:
+        Reply, sources, status, and optional query list.
+    """
     text = (message or "").strip()
     if not text:
         return ResearchResult("", "", "empty message", [])
@@ -221,7 +310,17 @@ def run_research(
     web_search: bool = True,
     subagents: object = 2,
 ) -> ResearchResult:
-    """Planner → N searchers → synthesizer. Sequential; one GGUF."""
+    """Planner → N searchers → synthesizer. Sequential; one GGUF.
+
+    Args:
+        message: User question.
+        history: Prior turns.
+        web_search: When true, run web search for each planner query.
+        subagents: Planner query count (clamped 1–3).
+
+    Returns:
+        Synthesized brief, sources, status, and planner queries.
+    """
     text = (message or "").strip()
     if not text:
         return ResearchResult("", "", "empty message", [])
@@ -268,7 +367,14 @@ def run_research(
 
 
 def slug_for_prompt(prompt: str) -> str:
-    """Filesystem slug from the first words of the message."""
+    """Filesystem slug from the first words of the message.
+
+    Args:
+        prompt: User question.
+
+    Returns:
+        Lowercase hyphenated slug, at most 40 characters.
+    """
     raw = (prompt or "brief").lower()
     slug = _SLUG_RE.sub("-", raw).strip("-")
     if not slug:
@@ -284,6 +390,14 @@ def write_brief(
     """Write ``ez_research_<slug>.md`` under ``COMFY_OUTPUT_DIR/research``.
 
     Never writes under MODELS_DIR.
+
+    Args:
+        result: Research or chat result.
+        prompt: User question used for the filename slug.
+        output_dir: Output root; default resolves via ez_common / env.
+
+    Returns:
+        Written path, or None when the dest is refused or I/O fails.
     """
     if output_dir is None:
         try:

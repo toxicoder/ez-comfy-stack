@@ -279,7 +279,7 @@ def test_validate_stitch_stems_fail_closed(tmp_path: Path) -> None:
         validate_stitch_stems(shots, ffprobe="ffprobe", run=silent)
 
     class _ShortIter(list[str]):
-        def __iter__(self):  # type: ignore[override]
+        def __iter__(self) -> object:  # type: ignore[override]
             for index, item in enumerate(list.__iter__(self)):
                 if index >= 17:
                     return

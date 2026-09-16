@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 _root = str(Path(__file__).resolve().parent.parent)
 if _root not in sys.path:
@@ -13,6 +14,10 @@ from ez_prompt_enhance.samples import CUSTOM, resolve_prompt, sample_combo_label
 
 from .pipeline import AUTO, ForgeResult, generate_app, template_combo_labels
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Default as_app BOOLEAN widget and seed brief.
 _BOOL = (
     "BOOLEAN",
     {"default": True, "label_on": "On", "label_off": "Off"},
@@ -24,6 +29,14 @@ _DEFAULT_BRIEF = (
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a Comfy widget value to bool.
+
+    Args:
+        value: BOOLEAN widget or loose truthy token.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -33,7 +46,15 @@ def _as_bool(value: object) -> bool:
     return False
 
 
-def _pack(result: ForgeResult) -> dict:
+def _pack(result: ForgeResult) -> dict[str, Any]:
+    """Build the Comfy output-node payload for a forge result.
+
+    Args:
+        result: Clone outcome.
+
+    Returns:
+        UI summary plus STRING path (or error).
+    """
     summary = result.path if result.ok else (result.error or "failed")
     widgets = ", ".join(result.widgets) if result.widgets else "(none)"
     return {
@@ -52,7 +73,12 @@ class EZAppForge:
     """CPU desk that clones a shipped lab graph into live `_user/`."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (sample, prompt, template, slug, flags).
+        """
         templates = template_combo_labels()
         if AUTO not in templates:
             templates = [AUTO, *templates]
@@ -78,6 +104,7 @@ class EZAppForge:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("path",)
     FUNCTION = "run"
@@ -99,7 +126,21 @@ class EZAppForge:
         overwrite: object = False,
         sample: object = CUSTOM,
         catalog: object = "",
-    ) -> dict:
+    ) -> dict[str, Any]:
+        """Clone a lab graph into live `_user/` from a brief.
+
+        Args:
+            prompt: Operator brief or sample override.
+            template: Lab rel or ``auto``.
+            slug: Destination stem under `_user/`.
+            as_app: Write ``.app.json`` when true.
+            overwrite: Replace an existing `_user` graph.
+            sample: Prompt catalog sample id.
+            catalog: Optional sample catalog override.
+
+        Returns:
+            Comfy output-node payload with the saved path or error.
+        """
         brief = resolve_prompt(
             catalog,
             sample,
@@ -117,6 +158,7 @@ class EZAppForge:
         return _pack(result)
 
 
+# Comfy custom-node registries.
 NODE_CLASS_MAPPINGS = {
     "EZAppForge": EZAppForge,
 }

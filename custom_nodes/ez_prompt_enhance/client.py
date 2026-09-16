@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# Paths, GGUF defaults, occupancy, heal, style, and rewrite constants.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 STYLES_PATH = Path(__file__).resolve().parent / "styles.json"
 VIEWS_PATH = Path(__file__).resolve().parent / "views.json"
@@ -185,11 +186,20 @@ _WEAVE_BY_FLAVOR = {
 
 
 def _log(message: str) -> None:
+    """Write an operator status line to stderr.
+
+    Args:
+        message: Human status without a trailing newline.
+    """
     print(f"[ez_prompt_enhance] {message}", file=sys.stderr)
 
 
 def llama_cpp_direct_wheel_url() -> str:
-    """GitHub release manylinux wheel for this CPU arch, or empty."""
+    """GitHub release manylinux wheel for this CPU arch, or empty.
+
+    Returns:
+        Wheel URL for aarch64/x86_64, else empty.
+    """
     machine = platform.machine().lower()
     if machine in {"aarch64", "arm64"}:
         tag = "manylinux2014_aarch64.manylinux_2_17_aarch64"
@@ -205,7 +215,11 @@ def llama_cpp_direct_wheel_url() -> str:
 
 
 def llama_cpp_cpu_pip_index_args() -> list[str]:
-    """pip install operands: CPU extra-index as --index-url, pin, binaries only."""
+    """pip install operands: CPU extra-index as --index-url, pin, binaries only.
+
+    Returns:
+        Argument list after ``python -m pip install``.
+    """
     return [
         "--only-binary=:all:",
         "--index-url",
@@ -217,7 +231,11 @@ def llama_cpp_cpu_pip_index_args() -> list[str]:
 
 
 def llama_cpp_direct_wheel_pip_args() -> list[str]:
-    """pip install operands: replace a same-version wheel from GitHub."""
+    """pip install operands: replace a same-version wheel from GitHub.
+
+    Returns:
+        Force-reinstall args, or empty when the arch has no wheel URL.
+    """
     wheel = llama_cpp_direct_wheel_url()
     if not wheel:
         return []
@@ -230,7 +248,11 @@ def llama_cpp_direct_wheel_pip_args() -> list[str]:
 
 
 def llama_cpp_operator_pip_command() -> str:
-    """Exact docker exec pip line for a blocking Dub / Enhance status."""
+    """Exact docker exec pip line for a blocking Dub / Enhance status.
+
+    Returns:
+        One-line ``docker exec … pip install`` the operator can paste.
+    """
     args = llama_cpp_direct_wheel_pip_args() or llama_cpp_cpu_pip_index_args()
     return (
         f"docker exec ez-comfy-studio {LLAMA_CPP_OPERATOR_PYTHON} "
@@ -239,7 +261,11 @@ def llama_cpp_operator_pip_command() -> str:
 
 
 def llama_cpp_unavailable_status() -> str:
-    """Operator-facing next step when Llama cannot import after heal."""
+    """Operator-facing next step when Llama cannot import after heal.
+
+    Returns:
+        Status line including the pip command.
+    """
     cmd = llama_cpp_operator_pip_command()
     pip_detail = _HEAL_ERROR.strip()
     import_detail = _LAST_IMPORT_ERROR.strip()
@@ -263,7 +289,14 @@ def reset_llama_runtime_for_tests() -> None:
 
 
 def _pip_install(args: list[str]) -> subprocess.CompletedProcess[str]:
-    """Run ``python -m pip install`` on this interpreter. Tests patch this."""
+    """Run ``python -m pip install`` on this interpreter. Tests patch this.
+
+    Args:
+        args: Operand list after ``pip install``.
+
+    Returns:
+        Completed process (timeout becomes a non-zero synthetic result).
+    """
     try:
         return subprocess.run(
             [sys.executable, "-m", "pip", "install", *args],
@@ -282,6 +315,14 @@ def _pip_install(args: list[str]) -> subprocess.CompletedProcess[str]:
 
 
 def _short_pip_error(proc: subprocess.CompletedProcess[str]) -> str:
+    """Last non-empty pip line, truncated.
+
+    Args:
+        proc: Failed or timed-out pip result.
+
+    Returns:
+        One-line error for Enhance status.
+    """
     text = (proc.stderr or proc.stdout or "").strip()
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     if not lines:
@@ -290,6 +331,7 @@ def _short_pip_error(proc: subprocess.CompletedProcess[str]) -> str:
 
 
 def _forget_llama_module() -> None:
+    """Drop cached ``llama_cpp`` modules so the next import reloads the wheel."""
     for name in list(sys.modules):
         if name == "llama_cpp" or name.startswith("llama_cpp."):
             sys.modules.pop(name, None)
@@ -297,7 +339,11 @@ def _forget_llama_module() -> None:
 
 
 def _load_llama_class() -> Any | None:
-    """Return llama_cpp.Llama, or None when the CPU wheel is missing."""
+    """Return llama_cpp.Llama, or None when the CPU wheel is missing.
+
+    Returns:
+        ``Llama`` class, or None after recording the import error.
+    """
     global _LAST_IMPORT_ERROR
     try:
         from llama_cpp import Llama
@@ -310,7 +356,11 @@ def _load_llama_class() -> Any | None:
 
 
 def _heal_llama_cpp_cpu() -> str:
-    """Install the CPU wheel once per process. Empty string on success."""
+    """Install the CPU wheel once per process. Empty string on success.
+
+    Returns:
+        Empty on importable Llama, else a short pip/import error.
+    """
     global _HEAL_TRIED, _HEAL_ERROR, _HEAL_PIP_FAILED
     with _HEAL_LOCK:
         if _HEAL_TRIED:
@@ -320,6 +370,11 @@ def _heal_llama_cpp_cpu() -> str:
         _log("llama-cpp-python missing — installing CPU wheel")
 
         def _import_ok() -> bool:
+            """Reload llama_cpp and report whether Llama imports.
+
+            Returns:
+                True when ``Llama`` is importable after dropping cached modules.
+            """
             _forget_llama_module()
             return _load_llama_class() is not None
 
@@ -349,7 +404,7 @@ def _heal_llama_cpp_cpu() -> str:
 def status_for_reason(reason: str | None) -> str:
     """Operator-facing Enhance status (never mixed into CLIP text).
 
-    Arguments:
+    Args:
         reason: Internal passthrough token, or None when the rewriter ran.
 
     Returns:
@@ -377,11 +432,20 @@ class EnhanceResult:
 
     @property
     def preview(self) -> str:
-        """CLIP string only (the prefix used to confuse the CLIP prompt box)."""
+        """CLIP string only (the prefix used to confuse the CLIP prompt box).
+
+        Returns:
+            The rewritten or original prompt text.
+        """
         return self.text
 
     @property
     def status(self) -> str:
+        """Operator-facing passthrough reason, or empty on success.
+
+        Returns:
+            Status line from ``status_for_reason``.
+        """
         return status_for_reason(self.reason)
 
 
@@ -393,11 +457,11 @@ def join_prompt(
 ) -> str:
     """Join a world bible, locked inventory, persist lock, and shot line.
 
-    Arguments:
-      identity: camera-free place/subject bible
-      shot: camera, light, or action line for this still
-      inventory: object list that must repeat across views
-      lock: view (new camera) or state (same camera)
+    Args:
+        identity: Camera-free place/subject bible.
+        shot: Camera, light, or action line for this still.
+        inventory: Object list that must repeat across views.
+        lock: ``view`` (new camera) or ``state`` (same camera).
     Returns:
       One CLIP string, or empty when every field is blank.
       lock=view with a shot card front-loads the camera so Klein treats
@@ -439,8 +503,8 @@ def join_prompt(
 def load_system_prompt(name: str) -> str:
     """Load a named system prompt from the prompts/ directory.
 
-    Arguments:
-      name: stem without .txt (e.g. klein_t2i)
+    Args:
+        name: Stem without ``.txt`` (e.g. ``klein_t2i``).
     Returns:
       File contents stripped of trailing whitespace.
     Raises:
@@ -451,7 +515,18 @@ def load_system_prompt(name: str) -> str:
 
 
 def load_view_pack(name: str) -> list[dict[str, str]]:
-    """Load one camera-role pack from views.json (label + shot, no identity nouns)."""
+    """Load one camera-role pack from views.json (label + shot, no identity nouns).
+
+    Args:
+        name: Pack key in ``views.json``.
+
+    Returns:
+        Cards with ``label`` and ``shot`` strings.
+
+    Raises:
+        KeyError: Unknown pack name.
+        ValueError: Malformed catalog.
+    """
     global _VIEWS
     if _VIEWS is None:
         raw = json.loads(VIEWS_PATH.read_text(encoding="utf-8"))
@@ -479,7 +554,11 @@ def load_view_pack(name: str) -> list[dict[str, str]]:
 
 
 def load_styles() -> dict[str, dict[str, Any]]:
-    """Load the style catalog (id -> structured look fields)."""
+    """Load the style catalog (id -> structured look fields).
+
+    Returns:
+        Style id to look-field mapping, file order preserved.
+    """
     global _STYLES
     if _STYLES is None:
         raw = json.loads(STYLES_PATH.read_text(encoding="utf-8"))
@@ -495,17 +574,38 @@ def load_styles() -> dict[str, dict[str, Any]]:
 
 
 def style_ids() -> list[str]:
-    """Combo choices: none first, then catalog ids in file order."""
+    """Combo choices: none first, then catalog ids in file order.
+
+    Returns:
+        Style ids for the Enhance style widget.
+    """
     return [STYLE_NONE, *load_styles().keys()]
 
 
 def _style_entry(style_id: str) -> dict[str, Any]:
+    """Look up one style catalog row.
+
+    Args:
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        Style object, or empty dict for none/unknown.
+    """
     if style_id == STYLE_NONE:
         return {}
     return load_styles().get(style_id) or {}
 
 
 def _string_list(entry: dict[str, Any], field: str) -> list[str]:
+    """Read a string or list-of-strings style field.
+
+    Args:
+        entry: Style object.
+        field: Key such as ``must_include``.
+
+    Returns:
+        Non-empty stripped strings.
+    """
     raw = entry.get(field) or []
     if isinstance(raw, str):
         return [raw.strip()] if raw.strip() else []
@@ -520,15 +620,38 @@ def _string_list(entry: dict[str, Any], field: str) -> list[str]:
 
 
 def style_must_include(style_id: str) -> list[str]:
+    """Phrases that must appear in a restyled CLIP prompt.
+
+    Args:
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        ``must_include`` strings.
+    """
     return _string_list(_style_entry(style_id), "must_include")
 
 
 def style_conflicts(style_id: str) -> list[str]:
+    """Look language this style should replace.
+
+    Args:
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        ``conflicts`` strings.
+    """
     return _string_list(_style_entry(style_id), "conflicts")
 
 
 def style_llm_block(style_id: str) -> str:
-    """Dense look paragraph (medium through camera) for one catalog id."""
+    """Dense look paragraph (medium through camera) for one catalog id.
+
+    Args:
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        Joined look fields, or empty.
+    """
     entry = _style_entry(style_id)
     parts = []
     for key in _STYLE_LOOK_FIELDS:
@@ -539,6 +662,14 @@ def style_llm_block(style_id: str) -> str:
 
 
 def style_suffix(style_id: str) -> str:
+    """Optional CLIP trailer for one style.
+
+    Args:
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        Suffix string, or empty.
+    """
     if style_id == STYLE_NONE:
         return ""
     entry = _style_entry(style_id)
@@ -546,14 +677,30 @@ def style_suffix(style_id: str) -> str:
 
 
 def with_style_system(system: str, style_id: str) -> str:
-    """Append the dropdown-wins addendum when a style is selected."""
+    """Append the dropdown-wins addendum when a style is selected.
+
+    Args:
+        system: Family system prompt.
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        System text, unchanged when style is none.
+    """
     if style_id == STYLE_NONE:
         return system
     return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
 
 
 def with_context_system(system: str, context: str) -> str:
-    """Append the Context-block addendum when supporting text is present."""
+    """Append the Context-block addendum when supporting text is present.
+
+    Args:
+        system: Family system prompt.
+        context: Bible / logline / research / script.
+
+    Returns:
+        System text, unchanged when context is blank.
+    """
     if not (context or "").strip():
         return system
     return f"{system.rstrip()}\n\n{CONTEXT_SYSTEM_ADDENDUM}"
@@ -562,7 +709,7 @@ def with_context_system(system: str, context: str) -> str:
 def compose_context_user(prompt: str, context: str = "") -> str:
     """Build a rewriter user message with an optional Context block.
 
-    Arguments:
+    Args:
         prompt: Operator prompt, tags, or lyrics.
         context: Bible / logline / research / script. Empty is omitted.
     Returns:
@@ -580,7 +727,7 @@ def compose_context_user(prompt: str, context: str = "") -> str:
 def join_context_fields(*pairs: tuple[str, str]) -> str:
     """Pack labeled STRING fields, skipping empties.
 
-    Arguments:
+    Args:
         pairs: (label, value) tuples in display order.
     Returns:
         ``Label:\\nvalue`` blocks separated by blank lines, or empty.
@@ -596,6 +743,14 @@ def join_context_fields(*pairs: tuple[str, str]) -> str:
 
 
 def _collapse_spaces(text: str) -> str:
+    """Fold runs of space and extra blank lines.
+
+    Args:
+        text: Raw CLIP text.
+
+    Returns:
+        Stripped text with compact whitespace.
+    """
     cleaned = re.sub(r"[ \t]+", " ", text)
     cleaned = re.sub(r" +([,.;:])", r"\1", cleaned)
     cleaned = re.sub(r"\s+\n", "\n", cleaned)
@@ -604,6 +759,15 @@ def _collapse_spaces(text: str) -> str:
 
 
 def _drop_phrase(text: str, phrase: str) -> str:
+    """Remove one case-insensitive phrase from CLIP text.
+
+    Args:
+        text: Prompt body.
+        phrase: Literal to strip (ignored when shorter than 5 chars).
+
+    Returns:
+        Text with matches removed (spaces not yet collapsed).
+    """
     token = (phrase or "").strip()
     if len(token) < 5:
         return text
@@ -612,6 +776,14 @@ def _drop_phrase(text: str, phrase: str) -> str:
 
 
 def _own_look_blob(style_id: str) -> str:
+    """Lowercased look fields that belong to this style.
+
+    Args:
+        style_id: Catalog id.
+
+    Returns:
+        Joined medium/light/color/texture/camera plus must-include and suffix.
+    """
     entry = _style_entry(style_id)
     parts = [str(entry.get(field) or "") for field in _STYLE_LOOK_FIELDS]
     parts.extend(style_must_include(style_id))
@@ -620,6 +792,14 @@ def _own_look_blob(style_id: str) -> str:
 
 
 def _strip_phrases(style_id: str) -> list[str]:
+    """Phrases to remove so a restyle does not stack two looks.
+
+    Args:
+        style_id: Catalog id being applied.
+
+    Returns:
+        Conflict phrases, lab look cliches, and other styles' mediums, longest first.
+    """
     own = _own_look_blob(style_id)
     phrases = list(style_conflicts(style_id))
     for extra in _LAB_LOOK_PHRASES:
@@ -641,9 +821,9 @@ def _strip_phrases(style_id: str) -> list[str]:
 def apply_style_to_prompt(text: str, style_id: str) -> str:
     """Force the dropdown style into CLIP text: strip fights, front-load medium.
 
-    Arguments:
-      text: rewriter or source prompt
-      style_id: catalog id or none
+    Args:
+        text: Rewriter or source prompt.
+        style_id: Catalog id or ``none``.
     Returns:
       text unchanged when style is none; otherwise a restyled CLIP prompt.
     """
@@ -676,10 +856,19 @@ def apply_style_to_prompt(text: str, style_id: str) -> str:
 
 
 def ensure_style_details(text: str, style_id: str) -> str:
-    """Apply the selected style to CLIP text (alias of apply_style_to_prompt)."""
+    """Apply the selected style to CLIP text (alias of apply_style_to_prompt).
+
+    Args:
+        text: Rewriter or source prompt.
+        style_id: Catalog id or ``none``.
+
+    Returns:
+        Restyled CLIP prompt, or ``text`` when style is none.
+    """
     return apply_style_to_prompt(text, style_id)
 
 
+# Negative-prompt artifact tokens and word matcher.
 _ARTIFACT_KEEP = (
     "watermark",
     "watermarks",
@@ -708,9 +897,9 @@ _WORD_RE = re.compile(r"[a-z0-9][a-z0-9'-]{4,}")
 def compose_negative_user(prompt: str, positive: str) -> str:
     """Build the rewriter user message: positive context plus negative seed.
 
-    Arguments:
-      prompt: canned or lazy negative seed
-      positive: CLIP-bound positive string (may be empty)
+    Args:
+        prompt: Canned or lazy negative seed.
+        positive: CLIP-bound positive string (may be empty).
     Returns:
       User message with POSITIVE / NEGATIVE SEED sections.
     """
@@ -724,10 +913,26 @@ def compose_negative_user(prompt: str, positive: str) -> str:
 
 
 def _negative_tokens(negative: str) -> list[str]:
+    """Split a comma-separated negative seed.
+
+    Args:
+        negative: Negative CLIP string.
+
+    Returns:
+        Stripped tokens, empties dropped.
+    """
     return [token.strip() for token in (negative or "").split(",") if token.strip()]
 
 
 def _is_artifact_token(token: str) -> bool:
+    """True when a negative token is a keep-forever artifact.
+
+    Args:
+        token: One comma-separated negative clause.
+
+    Returns:
+        Whether the token mentions a protected artifact phrase.
+    """
     low = token.lower()
     for keep in _ARTIFACT_KEEP:
         if keep in low or low in keep:
@@ -736,6 +941,15 @@ def _is_artifact_token(token: str) -> bool:
 
 
 def _token_hits_blob(token: str, blob: str) -> bool:
+    """True when a negative token overlaps a positive look blob.
+
+    Args:
+        token: Lowercased negative clause.
+        blob: Lowercased positive look text.
+
+    Returns:
+        Whether the whole token or a 5+ char word appears in ``blob``.
+    """
     if not token or not blob:
         return False
     if token in blob:
@@ -747,6 +961,14 @@ def _token_hits_blob(token: str, blob: str) -> bool:
 
 
 def _inferred_style_ids(positive: str) -> list[str]:
+    """Guess selected style ids from positive CLIP text.
+
+    Args:
+        positive: CLIP-bound positive string.
+
+    Returns:
+        Catalog ids whose medium/label/suffix/must-include appear in the positive.
+    """
     blob = (positive or "").lower()
     if not blob:
         return []
@@ -766,6 +988,14 @@ def _inferred_style_ids(positive: str) -> list[str]:
 
 
 def _style_own_look(style_id: str) -> str:
+    """Lowercased look blob plus label and Wan stylization.
+
+    Args:
+        style_id: Catalog id.
+
+    Returns:
+        Text used to decide which negative tokens fight this style.
+    """
     entry = _style_entry(style_id)
     parts = [
         _own_look_blob(style_id),
@@ -778,9 +1008,9 @@ def _style_own_look(style_id: str) -> str:
 def complement_negative(negative: str, positive: str) -> str:
     """Drop negative tokens that fight the positive look; keep artifacts.
 
-    Arguments:
-      negative: comma-separated negative seed or rewriter output
-      positive: CLIP-bound positive (style already applied)
+    Args:
+        negative: Comma-separated negative seed or rewriter output.
+        positive: CLIP-bound positive (style already applied).
     Returns:
       Comma-separated negative. Unchanged when positive is empty.
     """
@@ -806,7 +1036,14 @@ def complement_negative(negative: str, positive: str) -> str:
 
 
 def flavor_for_system(name: str) -> str:
-    """Map a system-prompt stem to a style-instruction flavor."""
+    """Map a system-prompt stem to a style-instruction flavor.
+
+    Args:
+        name: Prompt file stem such as ``wan_i2v``.
+
+    Returns:
+        ``klein``, ``klein_edit``, ``klein_identity``, ``wan``, ``ltx``, or ``zimage``.
+    """
     if name == "klein_edit":
         return FLAVOR_KLEIN_EDIT
     if name == "klein_identity":
@@ -825,9 +1062,9 @@ def flavor_for_system(name: str) -> str:
 def format_style_instruction(style_id: str, flavor: str) -> str:
     """Compose the user-message style block for the local rewriter.
 
-    Arguments:
-      style_id: catalog id or none
-      flavor: klein, klein_edit, wan, or ltx
+    Args:
+        style_id: Catalog id or ``none``.
+        flavor: ``klein``, ``klein_edit``, ``wan``, or ``ltx``.
     Returns:
       Empty string when style is none or unknown; otherwise a mandatory
       instruction the 4B model should weave into the rewrite.
@@ -864,7 +1101,14 @@ def format_style_instruction(style_id: str, flavor: str) -> str:
 
 
 def strip_model_wrapping(text: str) -> str:
-    """Remove think tags, markdown fences, or wrapping quotes from a model reply."""
+    """Remove think tags, markdown fences, or wrapping quotes from a model reply.
+
+    Args:
+        text: Raw model content.
+
+    Returns:
+        CLIP-ready string with wrappers stripped.
+    """
     cleaned = (text or "").strip()
     for pattern in _THINK_BLOCKS:
         cleaned = pattern.sub("", cleaned)
@@ -882,6 +1126,11 @@ def strip_model_wrapping(text: str) -> str:
 
 
 def _timeout_s() -> int:
+    """LLM generate timeout in seconds from ``EZ_LLM_TIMEOUT_S``.
+
+    Returns:
+        Positive timeout, else ``DEFAULT_TIMEOUT_S``.
+    """
     raw = os.environ.get("EZ_LLM_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip()
     try:
         value = int(raw)
@@ -893,6 +1142,11 @@ def _timeout_s() -> int:
 
 
 def _n_threads() -> int:
+    """llama.cpp CPU thread count from ``EZ_LLM_N_THREADS``.
+
+    Returns:
+        Positive thread count, else ``DEFAULT_N_THREADS``.
+    """
     raw = os.environ.get("EZ_LLM_N_THREADS", str(DEFAULT_N_THREADS)).strip()
     try:
         value = int(raw)
@@ -904,6 +1158,11 @@ def _n_threads() -> int:
 
 
 def _n_ctx() -> int:
+    """llama.cpp context length from ``EZ_LLM_N_CTX``.
+
+    Returns:
+        Context size of at least 512, else ``DEFAULT_N_CTX``.
+    """
     raw = os.environ.get("EZ_LLM_N_CTX", str(DEFAULT_N_CTX)).strip()
     try:
         value = int(raw)
@@ -915,7 +1174,11 @@ def _n_ctx() -> int:
 
 
 def occupancy_mode() -> str:
-    """Read occupancy mode from outputs ``.occupancy.json`` (unknown if missing)."""
+    """Read occupancy mode from outputs ``.occupancy.json`` (unknown if missing).
+
+    Returns:
+        Occupancy mode string, or ``unknown`` when the file is missing.
+    """
     seen: set[str] = set()
     candidates: list[Path] = []
     for raw in (
@@ -941,7 +1204,14 @@ def occupancy_mode() -> str:
 
 
 def sidecar_occupancy_ok(mode: str | None = None) -> bool:
-    """True when occupancy allows the host 35B sidecar (not a visual/ACE GPU job)."""
+    """True when occupancy allows the host 35B sidecar (not a visual/ACE GPU job).
+
+    Args:
+        mode: Occupancy id to test; ``None`` reads ``.occupancy.json``.
+
+    Returns:
+        Whether the sidecar may take this rewrite.
+    """
     current = occupancy_mode() if mode is None else str(mode or "").strip()
     if not current:
         current = "unknown"
@@ -949,7 +1219,11 @@ def sidecar_occupancy_ok(mode: str | None = None) -> bool:
 
 
 def sidecar_base_url() -> str:
-    """OpenAI-compatible origin. Container uses host.docker.internal."""
+    """OpenAI-compatible origin. Container uses host.docker.internal.
+
+    Returns:
+        ``http://host:port`` with no trailing slash.
+    """
     port = os.environ.get("EZ_LLM_SIDECAR_PORT", DEFAULT_SIDECAR_PORT).strip()
     if not port.isdigit():
         port = DEFAULT_SIDECAR_PORT
@@ -964,6 +1238,11 @@ def sidecar_base_url() -> str:
 
 
 def _sidecar_timeout_s() -> float:
+    """Sidecar HTTP timeout from ``EZ_LLM_TIMEOUT_S``.
+
+    Returns:
+        Positive timeout in seconds.
+    """
     try:
         value = float(os.environ.get("EZ_LLM_TIMEOUT_S", str(DEFAULT_TIMEOUT_S)).strip())
     except ValueError:
@@ -974,7 +1253,15 @@ def _sidecar_timeout_s() -> float:
 
 
 def _urlopen_sidecar(request: urllib.request.Request, timeout: float) -> Any:
-    """Indirection so pytest can mock sidecar HTTP without touching search."""
+    """Indirection so pytest can mock sidecar HTTP without touching search.
+
+    Args:
+        request: ``urllib`` request for ``/v1/models`` or chat.
+        timeout: Socket timeout in seconds.
+
+    Returns:
+        Opened HTTP response (caller closes it).
+    """
     return urllib.request.urlopen(request, timeout=timeout)
 
 
@@ -985,7 +1272,17 @@ def _complete_via_sidecar(
     max_tokens: int = DEFAULT_MAX_TOKENS,
     temperature: float = 0.0,
 ) -> tuple[str, str | None] | None:
-    """Use llama-server /v1 when occupancy allows and it answers. None if down."""
+    """Use llama-server /v1 when occupancy allows and it answers. None if down.
+
+    Args:
+        system: System prompt.
+        user: User message.
+        max_tokens: Chat completion cap.
+        temperature: Sampling temperature (clamped at 0).
+
+    Returns:
+        ``(text, reason)`` when the sidecar answers, or None if it is down.
+    """
     if not sidecar_occupancy_ok():
         return None
     base = sidecar_base_url()
@@ -1050,6 +1347,9 @@ def _n_gpu_layers() -> int:
     ``EZ_LLM_ALLOW_GPU=0`` forces CPU. Occupancy ``wan``/``ltx``/``trellis``
     forces CPU even if ngl is set. GPU-safe occupancy (klein/llm/idle/…)
     defaults to 99 so CPU is not the writing-desk default.
+
+    Returns:
+        ``n_gpu_layers`` for llama.cpp (0 means CPU).
     """
     allow = os.environ.get("EZ_LLM_ALLOW_GPU", "").strip().lower()
     if allow in {"0", "false", "no", "off"}:
@@ -1109,10 +1409,20 @@ def resolve_gguf_path() -> str:
 
 
 def _gguf_path() -> str:
+    """Resolved GGUF path for this process.
+
+    Returns:
+        Path from ``resolve_gguf_path``.
+    """
     return resolve_gguf_path()
 
 
 def _unload_after() -> bool:
+    """True when ``EZ_LLM_UNLOAD`` asks to close the handle after each call.
+
+    Returns:
+        Whether ``complete`` should unload llama.cpp.
+    """
     return os.environ.get("EZ_LLM_UNLOAD", "").strip().lower() in {
         "1",
         "true",
@@ -1122,6 +1432,7 @@ def _unload_after() -> bool:
 
 
 def _close_llm() -> None:
+    """Drop the cached llama.cpp handle and close it when possible."""
     global _LLM, _LLM_PATH
     handle = _LLM
     _LLM = None
@@ -1137,7 +1448,11 @@ def _close_llm() -> None:
 
 
 def _get_llama() -> tuple[Any | None, str | None]:
-    """Load llama.cpp once. Returns (handle, fail_reason)."""
+    """Load llama.cpp once. Returns (handle, fail_reason).
+
+    Returns:
+        ``(Llama, None)`` on success, or ``(None, reason)`` for fail-soft.
+    """
     global _LLM, _LLM_PATH
     path = _gguf_path()
     if not path or not os.path.isfile(path):
@@ -1193,6 +1508,18 @@ def _generate(
     max_tokens: int = DEFAULT_MAX_TOKENS,
     temperature: float = 0.0,
 ) -> str:
+    """Run one chat completion on a loaded llama.cpp handle.
+
+    Args:
+        llm: llama.cpp ``Llama`` instance.
+        system: System prompt.
+        user: User message.
+        max_tokens: Completion cap.
+        temperature: Sampling temperature (clamped at 0).
+
+    Returns:
+        Stripped assistant content, or empty on a malformed response.
+    """
     tokens = int(max_tokens) if int(max_tokens) > 0 else DEFAULT_MAX_TOKENS
     temp = float(temperature)
     if temp < 0.0:
@@ -1222,7 +1549,18 @@ def complete(
     temperature: float | None = None,
     timeout_s: int | None = None,
 ) -> tuple[str, str | None]:
-    """GPU sidecar when occupancy allows, else local 4B. Empty text plus a reason."""
+    """GPU sidecar when occupancy allows, else local 4B. Empty text plus a reason.
+
+    Args:
+        system: System prompt.
+        user: User message.
+        max_tokens: Completion cap; ``None`` uses the default.
+        temperature: Sampling temperature; ``None`` is 0.
+        timeout_s: Local generate timeout; ``None`` uses env/default.
+
+    Returns:
+        ``(text, None)`` on success, or ``("", reason)`` for fail-soft.
+    """
     _log("enhancing prompt (sidecar or local 4B)…")
     tokens = DEFAULT_MAX_TOKENS if max_tokens is None else int(max_tokens)
     if tokens < 1:
@@ -1271,7 +1609,17 @@ def enhance_prompt(
     enhance: bool,
     fallback: str,
 ) -> EnhanceResult:
-    """Rewrite fallback via local LLM when enhance is true."""
+    """Rewrite fallback via local LLM when enhance is true.
+
+    Args:
+        system: System prompt.
+        user: User message (operator prompt plus optional context).
+        enhance: When false, return ``fallback`` with enhance-off reason.
+        fallback: Original CLIP / tags string.
+
+    Returns:
+        ``EnhanceResult`` with rewritten text or the original on fail-soft.
+    """
     original = fallback if isinstance(fallback, str) else str(fallback)
     if not enhance:
         return EnhanceResult(original, REASON_ENHANCE_OFF)

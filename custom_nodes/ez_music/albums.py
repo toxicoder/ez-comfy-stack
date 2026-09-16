@@ -9,10 +9,24 @@ from typing import TypedDict
 
 from .naming import DRIVE_THROUGH_ARTIST, NILL_BYE_ARTIST
 
+# Shared release year stamped on every catalog album.
 ALBUM_YEAR = 2026
 
 
 class AlbumInfo(TypedDict):
+    """One shipped album row (artist, slug, cover prompt).
+
+    Attributes:
+        artist: Branded act name.
+        artist_slug: Folder slug under ``audio/albums``.
+        title: Album title.
+        slug: Folder slug for the album.
+        series: Catalog series key.
+        phase: Zero-based series or live-set index.
+        year: Release year stamped on masters.
+        cover_prompt: US-safe cover-art prompt (no living likeness).
+    """
+
     artist: str
     artist_slug: str
     title: str
@@ -24,6 +38,16 @@ class AlbumInfo(TypedDict):
 
 
 def _cover(artist: str, album: str, scene: str) -> str:
+    """Build a US-safe square cover prompt (no living likeness).
+
+    Args:
+        artist: Fictional act name.
+        album: Album title.
+        scene: Graphic-print scene (no faces).
+
+    Returns:
+        Cover-art prompt string.
+    """
     return (
         f"square album cover, graphic print, {scene}, "
         f"fictional act {artist}, album {album}, no text, no letters, "
@@ -31,6 +55,7 @@ def _cover(artist: str, album: str, scene: str) -> str:
     )
 
 
+# Shipped Nill Bye and Drive-through album rows.
 NILL_BYE_ALBUMS: dict[str, AlbumInfo] = {
     "lab": {
         "artist": NILL_BYE_ARTIST,
@@ -237,7 +262,7 @@ DRIVE_THROUGH_ALBUMS: dict[int, AlbumInfo] = {
 def nill_album_for_series(series: str) -> AlbumInfo:
     """Return the Nill Bye album row for a catalog series.
 
-    Arguments:
+    Args:
         series: Diss series key (``lab``, ``civic``, …).
     Returns:
         Album metadata.
@@ -250,7 +275,7 @@ def nill_album_for_series(series: str) -> AlbumInfo:
 def drive_album_for_phase(phase: int) -> AlbumInfo:
     """Return the Drive-through album row for a catalog phase.
 
-    Arguments:
+    Args:
         phase: Zero-based live-set hour index.
     Returns:
         Album metadata.
@@ -261,7 +286,11 @@ def drive_album_for_phase(phase: int) -> AlbumInfo:
 
 
 def shipped_albums() -> tuple[AlbumInfo, ...]:
-    """Nill Bye albums in catalog order, then Drive-through hours."""
+    """Nill Bye albums in catalog order, then Drive-through hours.
+
+    Returns:
+        Album metadata rows in ship order.
+    """
     nill = tuple(NILL_BYE_ALBUMS[key] for key in NILL_BYE_ALBUMS)
     drive = tuple(DRIVE_THROUGH_ALBUMS[key] for key in sorted(DRIVE_THROUGH_ALBUMS))
     return nill + drive
@@ -270,7 +299,7 @@ def shipped_albums() -> tuple[AlbumInfo, ...]:
 def album_rel(artist_slug: str, album_slug: str, stem: str) -> str:
     """Lab-relative id under ``audio/albums``.
 
-    Arguments:
+    Args:
         artist_slug: Folder name (``nill-bye``).
         album_slug: Folder name (``peer-review``).
         stem: File stem (``01-lab-coat``, ``album``, ``cover``).

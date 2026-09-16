@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
+
 from .client import (
     LOCK_IDS,
     LOCK_VIEW,
@@ -39,7 +41,10 @@ from .cinema import (
 )
 from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
 
+# Shared Comfy widget specs (boolean, optional context, hidden catalog).
 _ENHANCE_BOOL = (
     "BOOLEAN",
     {"default": True, "label_on": "On", "label_off": "Off"},
@@ -51,11 +56,27 @@ _CONTEXT_INPUT = (
 _CATALOG_INPUT = ("STRING", {"default": "", "multiline": False})
 
 
-def _sample_input(catalog_id: str) -> tuple:
+def _sample_input(catalog_id: str) -> tuple[list[str], dict[str, str]]:
+    """Combo widget: union of sample labels, preferred catalog first.
+
+    Args:
+        catalog_id: Family default catalog stem.
+
+    Returns:
+        ``(labels, {default: custom})`` widget spec.
+    """
     return (sample_combo_labels(catalog_id), {"default": CUSTOM})
 
 
 def _as_bool(value: object) -> bool:
+    """Parse a Comfy BOOLEAN widget.
+
+    Args:
+        value: Bool, number, or yes/no string.
+
+    Returns:
+        Parsed flag; unrecognized strings are False.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -66,6 +87,14 @@ def _as_bool(value: object) -> bool:
 
 
 def _family_id(value: object) -> str:
+    """Normalize a negative-prompt family combo.
+
+    Args:
+        value: Widget value.
+
+    Returns:
+        Known family id, or ``klein``.
+    """
     raw = value if isinstance(value, str) else str(value or "klein")
     cleaned = raw.strip().lower()
     if cleaned in NEGATIVE_FAMILIES:
@@ -74,6 +103,14 @@ def _family_id(value: object) -> str:
 
 
 def _style_id(value: object) -> str:
+    """Normalize a style combo.
+
+    Args:
+        value: Widget value.
+
+    Returns:
+        Catalog id, or ``none`` when unknown.
+    """
     raw = value if isinstance(value, str) else str(value or STYLE_NONE)
     cleaned = raw.strip() or STYLE_NONE
     if cleaned not in style_ids():
@@ -87,6 +124,17 @@ def _compose_user(
     audio_notes: str = "",
     context: str = "",
 ) -> str:
+    """Build the rewriter user message from widgets.
+
+    Args:
+        prompt: Resolved operator prompt.
+        duration_hint: Duration / framing line.
+        audio_notes: Optional LTX/DreamX audio notes.
+        context: Optional bible/research block.
+
+    Returns:
+        User message with optional duration, audio, and Context sections.
+    """
     parts = [compose_context_user(prompt, context)]
     if not parts[0]:
         parts = []
@@ -99,7 +147,15 @@ def _compose_user(
     return "\n\n".join(parts)
 
 
-def _pack(result: EnhanceResult) -> dict:
+def _pack(result: EnhanceResult) -> dict[str, Any]:
+    """Pack a single-string Enhance result for Comfy.
+
+    Args:
+        result: Rewritten text plus passthrough reason.
+
+    Returns:
+        OUTPUT_NODE payload with ``ui`` and ``result``.
+    """
     return {
         "ui": {
             "text": (result.text,),
@@ -121,7 +177,25 @@ def _run(
     sample: object = CUSTOM,
     catalog: object = "",
     node_type: str = "",
-) -> dict:
+) -> dict[str, Any]:
+    """Resolve sample, optionally rewrite, and pack CLIP text.
+
+    Args:
+        system_name: Prompt file stem under ``prompts/``.
+        prompt: Custom textarea when the sample combo is Custom.
+        enhance: BOOLEAN widget; off is fail-soft passthrough.
+        duration_hint: Duration / framing line.
+        audio_notes: Optional audio notes for AV families.
+        style: Style catalog id or none.
+        mode: Family mode (i2v/flf/…) used to ignore style.
+        context: Optional supporting STRING.
+        sample: Sample combo label.
+        catalog: Hidden catalog widget.
+        node_type: Comfy class name for family catalog fallback.
+
+    Returns:
+        Packed Enhance payload. LLM miss returns the original prompt.
+    """
     original = resolve_prompt(
         catalog,
         sample,
@@ -167,7 +241,12 @@ class EZKleinPromptEnhance:
     """Rewrite a lazy still/edit prompt for FLUX.2 Klein 4B (Qwen3-4B)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for Klein t2i/edit/identity.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("klein_t2i"),
@@ -186,6 +265,7 @@ class EZKleinPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -202,15 +282,30 @@ class EZKleinPromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        mode,
-        duration_hint,
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        mode: str,
+        duration_hint: str,
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a Klein still/edit/identity prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
+            mode: ``t2i``, ``edit``, or ``identity``.
+            duration_hint: Framing line (e.g. YouTube 16:9 still).
+            style: Style catalog id or none.
+            context: Optional bible/research STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         if mode == "edit":
             name = "klein_edit"
         elif mode == "identity":
@@ -235,7 +330,12 @@ class EZWanPromptEnhance:
     """Rewrite a lazy prompt for Wan 2.2 TI2V-5B (UMT5, silent)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for Wan t2v/i2v/flf/vace/s2v.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("wan_t2v"),
@@ -254,6 +354,7 @@ class EZWanPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -270,15 +371,30 @@ class EZWanPromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        mode,
-        duration_hint,
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        mode: str,
+        duration_hint: str,
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a Wan video prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
+            mode: ``t2v``, ``i2v``, ``flf``, ``vace``, or ``s2v``.
+            duration_hint: Duration / fps line.
+            style: Style catalog id or none (ignored on i2v/flf/vace/s2v).
+            context: Optional supporting STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         if mode == "i2v":
             name = "wan_i2v"
         elif mode == "flf":
@@ -307,7 +423,12 @@ class EZLTXPromptEnhance:
     """Rewrite a lazy prompt for LTX-2.5 (Gemma4-with-proj, joint AV)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for LTX t2v/i2v/iclora.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("ltx_t2v"),
@@ -330,6 +451,7 @@ class EZLTXPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -344,16 +466,32 @@ class EZLTXPromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        mode,
-        duration_hint,
-        audio_notes="",
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        mode: str,
+        duration_hint: str,
+        audio_notes: str = "",
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite an LTX joint-AV prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
+            mode: ``t2v``, ``i2v``, or ``iclora``.
+            duration_hint: Duration / fps line.
+            audio_notes: Optional acoustic events.
+            style: Style catalog id or none (ignored on i2v).
+            context: Optional identity/logline STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         if mode == "i2v":
             name = "ltx_i2v"
         elif mode == "iclora":
@@ -379,7 +517,12 @@ class EZPromptJoin:
     """Join a shared identity paragraph with a shot-specific camera line."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for identity/shot join.
+
+        Returns:
+            Required widget map.
+        """
         return {
             "required": {
                 "identity": (
@@ -402,6 +545,7 @@ class EZPromptJoin:
             }
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -413,7 +557,24 @@ class EZPromptJoin:
         "action. Inventory is a locked object list."
     )
 
-    def run(self, identity, shot, inventory="", lock=LOCK_VIEW):
+    def run(
+        self,
+        identity: str,
+        shot: str,
+        inventory: str = "",
+        lock: str = LOCK_VIEW,
+    ) -> tuple[str]:
+        """Join bible, inventory, persist lock, and shot line.
+
+        Args:
+            identity: Camera-free place/subject bible.
+            shot: Camera, light, or action line for this still.
+            inventory: Object list that must repeat across views.
+            lock: ``view`` (new camera) or ``state`` (same camera).
+
+        Returns:
+            One-element CLIP tuple.
+        """
         return (join_prompt(identity, shot, inventory, lock),)
 
 
@@ -421,7 +582,12 @@ class EZContextJoin:
     """Pack labeled desk fields into one context STRING for rewriter nodes."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for labeled context fields.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "a": _CONTEXT_INPUT,
@@ -437,6 +603,7 @@ class EZContextJoin:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("context",)
     FUNCTION = "run"
@@ -448,15 +615,30 @@ class EZContextJoin:
 
     def run(
         self,
-        a,
-        label_a="Logline",
-        label_b="Script",
-        label_c="Audio policy",
-        label_d="Score",
-        b="",
-        c="",
-        d="",
-    ):
+        a: object,
+        label_a: object = "Logline",
+        label_b: object = "Script",
+        label_c: object = "Audio policy",
+        label_d: object = "Score",
+        b: object = "",
+        c: object = "",
+        d: object = "",
+    ) -> tuple[str]:
+        """Join up to four labeled STRING fields.
+
+        Args:
+            a: First context field (required input).
+            label_a: Label for ``a``.
+            label_b: Label for ``b``.
+            label_c: Label for ``c``.
+            label_d: Label for ``d``.
+            b: Optional second field.
+            c: Optional third field.
+            d: Optional fourth field.
+
+        Returns:
+            One-element context tuple (empty fields omitted).
+        """
         return (
             join_context_fields(
                 (str(label_a or "Logline"), a if isinstance(a, str) else str(a or "")),
@@ -477,7 +659,7 @@ def sanitize_instrumental_lyrics(lyrics: str) -> str:
     scores belong as ``[drop - warped 808]`` (cues inside the brackets) or
     empty-body ``[inst]``.
 
-    Arguments:
+    Args:
         lyrics: Widget lyrics, possibly with production cues as lines.
     Returns:
         Empty-body or cue-in-bracket section tags, or ``[inst]`` if empty.
@@ -490,6 +672,7 @@ def sanitize_instrumental_lyrics(lyrics: str) -> str:
     pending_cues: list[str] = []
 
     def flush() -> None:
+        """Emit the current section tag with any pending cue lines."""
         nonlocal pending_inner, pending_cues
         if pending_inner is None:
             pending_cues = []
@@ -519,7 +702,17 @@ def sanitize_instrumental_lyrics(lyrics: str) -> str:
     return "\n\n".join(kept) if kept else "[inst]"
 
 
-def _pack_ace(tags: str, lyrics: str, status: str) -> dict:
+def _pack_ace(tags: str, lyrics: str, status: str) -> dict[str, Any]:
+    """Pack ACE-Step tags and lyrics for Comfy.
+
+    Args:
+        tags: Genre-first tag string.
+        lyrics: Section-tagged lyrics or ``[inst]``.
+        status: Enhance passthrough reason, or empty.
+
+    Returns:
+        OUTPUT_NODE payload with ``ui`` preview and ``(tags, lyrics)``.
+    """
     preview = tags if not lyrics.strip() else f"{tags}\n---\n{lyrics}"
     return {
         "ui": {
@@ -534,7 +727,12 @@ class EZAceStepPromptEnhance:
     """Rewrite ACE-Step 1.5 tags and lyrics with the on-box GGUF."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for ACE-Step tags/lyrics.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("rap_draft"),
@@ -559,6 +757,7 @@ class EZAceStepPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("tags", "lyrics")
     FUNCTION = "run"
@@ -573,14 +772,28 @@ class EZAceStepPromptEnhance:
 
     def run(
         self,
-        tags,
-        lyrics,
-        enhance=True,
-        mode="vocal",
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        tags: str,
+        lyrics: str,
+        enhance: object = True,
+        mode: str = "vocal",
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite ACE-Step tags and lyrics.
+
+        Args:
+            tags: Custom tags when sample is Custom.
+            lyrics: Custom lyrics when sample is Custom.
+            enhance: BOOLEAN; off sanitizes instrumental lyrics only.
+            mode: ``vocal`` or ``instrumental``.
+            context: Optional episode-script STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed tags/lyrics and Enhance status. Fail-soft without a GGUF.
+        """
         original_tags, original_lyrics = resolve_ace_sample(
             catalog,
             sample,
@@ -658,7 +871,12 @@ class EZZimagePromptEnhance:
     """Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for Z-Image Turbo t2i.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("klein_t2i"),
@@ -676,6 +894,7 @@ class EZZimagePromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -690,14 +909,28 @@ class EZZimagePromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        duration_hint,
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        duration_hint: str,
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a Z-Image Turbo still prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
+            duration_hint: Framing line.
+            style: Style catalog id or none.
+            context: Optional supporting STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         return _run(
             "zimage_t2i",
             prompt,
@@ -716,7 +949,12 @@ class EZLongCatPromptEnhance:
     """Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for LongCat t2v/i2v/vc.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("wan_t2v"),
@@ -735,6 +973,7 @@ class EZLongCatPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -749,15 +988,30 @@ class EZLongCatPromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        mode,
-        duration_hint,
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        mode: str,
+        duration_hint: str,
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a LongCat-Video prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
+            mode: ``t2v``, ``i2v``, or ``vc``.
+            duration_hint: Duration / fps line.
+            style: Style catalog id or none (ignored on i2v/vc).
+            context: Optional supporting STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         if mode == "i2v":
             name = "longcat_i2v"
         elif mode == "vc":
@@ -782,7 +1036,12 @@ class EZDreamXPromptEnhance:
     """Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for DreamX i2v.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("ltx_i2v"),
@@ -804,6 +1063,7 @@ class EZDreamXPromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -818,15 +1078,30 @@ class EZDreamXPromptEnhance:
 
     def run(
         self,
-        prompt,
-        enhance,
-        duration_hint,
-        audio_notes="",
-        style=STYLE_NONE,
-        context="",
-        sample=CUSTOM,
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        duration_hint: str,
+        audio_notes: str = "",
+        style: object = STYLE_NONE,
+        context: str = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a DreamX first-frame+text prompt.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            enhance: BOOLEAN; off returns the resolved prompt (style ignored on i2v).
+            duration_hint: Duration / fps line.
+            audio_notes: Optional acoustic events.
+            style: Style catalog id or none (ignored; start image owns look).
+            context: Optional supporting STRING.
+            sample: Sample combo label.
+            catalog: Hidden catalog widget.
+
+        Returns:
+            Packed CLIP prompt and Enhance status.
+        """
         return _run(
             "dreamx_i2v",
             prompt,
@@ -846,7 +1121,12 @@ class EZSamplePrompt:
     """STRING source with a sample-prompt combo plus Custom textarea."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for the sample-prompt source.
+
+        Returns:
+            Required widget map.
+        """
         return {
             "required": {
                 "sample": _sample_input("forge_lazy"),
@@ -858,6 +1138,7 @@ class EZSamplePrompt:
             }
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -867,7 +1148,22 @@ class EZSamplePrompt:
         "or a desk field. Custom uses the textarea as typed."
     )
 
-    def run(self, prompt, catalog="", sample=CUSTOM):
+    def run(
+        self,
+        prompt: str,
+        catalog: object = "",
+        sample: object = CUSTOM,
+    ) -> tuple[str]:
+        """Resolve a sample combo or Custom textarea.
+
+        Args:
+            prompt: Custom textarea used when sample is Custom.
+            catalog: Hidden catalog widget.
+            sample: Sample combo label.
+
+        Returns:
+            One-element prompt tuple.
+        """
         return (
             resolve_prompt(
                 catalog,
@@ -882,7 +1178,12 @@ class EZNegativePromptEnhance:
     """Rewrite a negative CLIP seed so it does not fight the positive."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for negative CLIP rewrite.
+
+        Returns:
+            Required and optional widget map.
+        """
         return {
             "required": {
                 "prompt": (
@@ -900,6 +1201,7 @@ class EZNegativePromptEnhance:
             },
         }
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("prompt",)
     FUNCTION = "run"
@@ -912,7 +1214,24 @@ class EZNegativePromptEnhance:
         "Fail-soft without a GGUF; a deterministic complement still runs."
     )
 
-    def run(self, prompt, enhance, family="klein", positive=""):
+    def run(
+        self,
+        prompt: object,
+        enhance: object,
+        family: object = "klein",
+        positive: object = "",
+    ) -> dict[str, Any]:
+        """Rewrite a negative CLIP seed against the positive.
+
+        Args:
+            prompt: Negative seed textarea.
+            enhance: BOOLEAN; off still runs deterministic complement.
+            family: Negative prompt family (klein/wan/ltx/…).
+            positive: Optional CLIP-bound positive STRING.
+
+        Returns:
+            Packed negative prompt and Enhance status.
+        """
         original = prompt if isinstance(prompt, str) else str(prompt or "")
         pos = positive if isinstance(positive, str) else str(positive or "")
         fam = _family_id(family)
@@ -948,8 +1267,13 @@ class EZCinemaRack:
     """Pick one technique per cinematography axis and splice a CLIP string."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
-        required: dict = {
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for Cinema Rack axes.
+
+        Returns:
+            Required widget map (subject, flavor, recipe, 13 axes).
+        """
+        required: dict[str, tuple[object, ...]] = {
             "subject": (
                 "STRING",
                 {
@@ -965,6 +1289,7 @@ class EZCinemaRack:
             required[axis_id] = (combo_ids(axis_id), {"default": CINEMA_NONE})
         return {"required": required}
 
+    # Comfy node registration fields.
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("prompt", "notes")
     FUNCTION = "run"
@@ -984,6 +1309,17 @@ class EZCinemaRack:
         recipe: object = CINEMA_NONE,
         **axes: object,
     ) -> tuple[str, str]:
+        """Splice axis picks into a model-native CLIP string.
+
+        Args:
+            subject: Optional front-loaded subject sentence.
+            flavor: Klein / Wan / LTX flavor id.
+            recipe: Named splice that fills empty axes only.
+            **axes: One technique id per cinematography axis.
+
+        Returns:
+            Prompt text and operator notes (drops, Wan camera).
+        """
         picks = {
             axis_id: str(axes.get(axis_id, CINEMA_NONE) or CINEMA_NONE)
             for axis_id in WIDGET_AXIS_ORDER
@@ -997,7 +1333,8 @@ class EZCinemaRack:
         return (result.text, format_notes(result))
 
 
-NODE_CLASS_MAPPINGS = {
+# Comfy node registries.
+NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
@@ -1012,7 +1349,7 @@ NODE_CLASS_MAPPINGS = {
     "EZCinemaRack": EZCinemaRack,
 }
 
-NODE_DISPLAY_NAME_MAPPINGS = {
+NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",

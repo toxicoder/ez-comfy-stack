@@ -82,7 +82,7 @@ bazelisk run //:validate
 
 Prefer `bazelisk test //tests:bats_<suite>_test` while red/green. `make test` / `make coverage` / `make lint` delegate to Bazelisk when it is on `PATH`.
 
-**Pyright (Pylance) and mypy** run inside `//:test-fast` and `//:lint`. Type errors are defects. Do not consider a task complete while Pyright or mypy reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
+**Pyright (Pylance) and mypy** run inside `//:test-fast` and `//:lint`. mypy uses `disallow_untyped_defs`. Type errors are defects. Do not consider a task complete while Pyright or mypy reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
 
 ## Safety callouts
 

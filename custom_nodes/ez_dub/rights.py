@@ -10,7 +10,7 @@ class RightsError(ValueError):
 def as_bool(value: object) -> bool:
     """Coerce widget values to bool.
 
-    Arguments:
+    Args:
         value: Comfy BOOLEAN widget or stringy truthy.
     Returns:
         True only for true/1/yes/on.
@@ -27,7 +27,7 @@ def as_bool(value: object) -> bool:
 def require_rights(have_rights: object) -> None:
     """Refuse cloning unless the operator attested rights.
 
-    Arguments:
+    Args:
         have_rights: App widget value.
     Raises:
         RightsError: when the attestation is missing or false.

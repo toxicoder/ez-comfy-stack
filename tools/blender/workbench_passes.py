@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 
+# Workbench clay / canny colors and EEVEE engine ids to try in order.
 CLAY_RGB = (0.55, 0.52, 0.48)
 CANNY_BG = (0.02, 0.02, 0.02)
 CANNY_LINE = (1.0, 1.0, 1.0)
@@ -15,7 +16,15 @@ EEVEE_IDS = ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT")
 
 
 def configure_resolution(scene: Any, width: int, height: int, fps: int, frames: int) -> None:
-    """Set PNG still/anim resolution and frame range."""
+    """Set PNG still/anim resolution and frame range.
+
+    Args:
+        scene: Blender scene (duck-typed).
+        width: Pixel width.
+        height: Pixel height.
+        fps: Frames per second.
+        frames: Inclusive end frame (start is 1).
+    """
     scene.render.resolution_x = int(width)
     scene.render.resolution_y = int(height)
     scene.render.resolution_percentage = 100
@@ -27,7 +36,11 @@ def configure_resolution(scene: Any, width: int, height: int, fps: int, frames: 
 
 
 def configure_clay(scene: Any) -> None:
-    """Workbench unshaded clay (Path B). Not Cycles beauty."""
+    """Workbench unshaded clay (Path B). Not Cycles beauty.
+
+    Args:
+        scene: Blender scene (duck-typed).
+    """
     scene.render.engine = "BLENDER_WORKBENCH"
     shading = scene.display.shading
     shading.light = "STUDIO"
@@ -38,7 +51,11 @@ def configure_clay(scene: Any) -> None:
 
 
 def configure_canny(scene: Any) -> None:
-    """Workbench flat + object outline as a line-art / canny stand-in."""
+    """Workbench flat + object outline as a line-art / canny stand-in.
+
+    Args:
+        scene: Blender scene (duck-typed).
+    """
     scene.render.engine = "BLENDER_WORKBENCH"
     shading = scene.display.shading
     shading.light = "FLAT"
@@ -55,7 +72,11 @@ def configure_canny(scene: Any) -> None:
 
 
 def configure_mist_depth(world: Any | None) -> None:
-    """Mist 0–1, near=white / far=black. Raw metric Z is a QC fail."""
+    """Mist 0–1, near=white / far=black. Raw metric Z is a QC fail.
+
+    Args:
+        world: Blender world or ``None``.
+    """
     if world is None or not hasattr(world, "mist_settings"):
         return
     world.mist_settings.use_mist = True
@@ -68,7 +89,15 @@ def configure_mist_depth(world: Any | None) -> None:
 
 
 def try_set_engine(scene: Any, names: tuple[str, ...] = EEVEE_IDS) -> str | None:
-    """Set the first engine id the scene accepts. Returns the id or None."""
+    """Set the first engine id the scene accepts.
+
+    Args:
+        scene: Blender scene (duck-typed).
+        names: Engine identifiers to try in order.
+
+    Returns:
+        The engine id that stuck, or ``None``.
+    """
     for name in names:
         try:
             scene.render.engine = name
@@ -80,7 +109,15 @@ def try_set_engine(scene: Any, names: tuple[str, ...] = EEVEE_IDS) -> str | None
 
 
 def configure_eevee_normal(scene: Any, view_layer: Any | None) -> bool:
-    """Enable EEVEE + Normal pass when the engine exists."""
+    """Enable EEVEE + Normal pass when the engine exists.
+
+    Args:
+        scene: Blender scene (duck-typed).
+        view_layer: Active view layer, or ``None``.
+
+    Returns:
+        True when EEVEE is set and the Normal pass is enabled.
+    """
     if try_set_engine(scene) is None:
         return False
     if view_layer is not None and hasattr(view_layer, "use_pass_normal"):
@@ -90,6 +127,14 @@ def configure_eevee_normal(scene: Any, view_layer: Any | None) -> bool:
 
 
 def _vec3(value: Any) -> list[float]:
+    """Coerce a Blender vector or sequence to three floats.
+
+    Args:
+        value: ``None``, a 3-sequence, or an object with ``x``/``y``/``z``.
+
+    Returns:
+        ``[x, y, z]`` (zeros when ``value`` is ``None``).
+    """
     if value is None:
         return [0.0, 0.0, 0.0]
     if hasattr(value, "__getitem__"):
@@ -98,7 +143,16 @@ def _vec3(value: Any) -> list[float]:
 
 
 def frame_extrinsic(scene: Any, cam: Any, frame: int) -> dict[str, Any]:
-    """One camera pose at ``frame`` (pos/rot/fov)."""
+    """One camera pose at ``frame`` (pos/rot/fov).
+
+    Args:
+        scene: Blender scene (duck-typed).
+        cam: Camera object.
+        frame: 1-based frame to sample.
+
+    Returns:
+        Mapping with ``frame``, ``pos``, ``rot``, and ``fov``.
+    """
     if hasattr(scene, "frame_set"):
         scene.frame_set(int(frame))
     loc: Any = getattr(cam, "location", None)
@@ -129,7 +183,18 @@ def camera_document(
     size: list[int],
     extrinsics: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """Per-frame camera.json payload (optional on the pack)."""
+    """Per-frame camera.json payload (optional on the pack).
+
+    Args:
+        name: Camera object name.
+        frames: Frame count.
+        fps: Frames per second.
+        size: ``[width, height]``.
+        extrinsics: Per-frame pose dicts from :func:`frame_extrinsic`.
+
+    Returns:
+        JSON-serializable camera document.
+    """
     first = extrinsics[0] if extrinsics else {}
     return {
         "name": name,

@@ -23,6 +23,7 @@ from ez_film.ltx_timing import snap_ltx_frames  # noqa: E402
 
 from .align import center_crop_bcthw, snap_hw  # noqa: E402
 
+# Wrap marker and LTX execute positional indexes for width/length widgets.
 WRAPPED_ATTR = "_ez_ltx_spatial_wrapped"
 
 # LTXVImgToVideo.execute(cls, positive, negative, image, vae, width, height, length, ...)
@@ -48,11 +49,27 @@ def log(message: str) -> None:
 
 
 def _is_wrapped(fn: Any) -> bool:
+    """True when this pack already wrapped ``fn``.
+
+    Args:
+        fn: Function or classmethod.
+
+    Returns:
+        Whether ``WRAPPED_ATTR`` is set on the underlying function.
+    """
     raw = getattr(fn, "__func__", fn)
     return bool(getattr(raw, WRAPPED_ATTR, False))
 
 
 def _mark_wrapped(fn: Callable[..., Any]) -> Callable[..., Any]:
+    """Stamp ``WRAPPED_ATTR`` so a second apply is a no-op.
+
+    Args:
+        fn: Wrapper function.
+
+    Returns:
+        The same function.
+    """
     setattr(fn, WRAPPED_ATTR, True)
     return fn
 
@@ -147,12 +164,34 @@ def _wrap_classmethod_wh(
     length_index: int | None = None,
     length_kwarg: str = "length",
 ) -> bool:
+    """Wrap a classmethod so width/height/length widgets snap before execute.
+
+    Args:
+        cls: LTX node class.
+        name: Classmethod name (usually ``execute``).
+        width_index: Positional index of ``width``, or None to skip spatial snap.
+        length_index: Positional index of the frame count, or None.
+        length_kwarg: Keyword name for the frame count.
+
+    Returns:
+        True when this call installed a new wrap.
+    """
     orig = getattr(cls, name, None)
     if orig is None or _is_wrapped(orig):
         return False
     orig_fn = getattr(orig, "__func__", orig)
 
     def execute(inner_cls: type, *args: Any, **kwargs: Any) -> Any:
+        """Snap width/height/length then call the original classmethod.
+
+        Args:
+            inner_cls: LTX node class.
+            *args: Positional execute args after cls.
+            **kwargs: Keyword execute args.
+
+        Returns:
+            Original execute result.
+        """
         if width_index is not None:
             args, kwargs = snap_width_height_in_call(args, kwargs, width_index)
         if length_index is not None:
@@ -169,12 +208,29 @@ def _wrap_classmethod_wh(
 
 
 def _wrap_video_vae_encode(cls: Any) -> bool:
+    """Center-crop VideoVAE.encode inputs to a ÷32 spatial window.
+
+    Args:
+        cls: ``VideoVAE`` class.
+
+    Returns:
+        True when this call installed a new wrap.
+    """
     orig = getattr(cls, "encode", None)
     if orig is None or _is_wrapped(orig):
         return False
     orig_fn = getattr(orig, "__func__", orig)
 
     def encode(self: Any, x: Any, device: Any = None) -> Any:
+        """Crop ``x`` to ÷32 then call the original encode.
+
+        Args:
+            x: Latent or pixel tensor with spatial trailing axes.
+            device: Optional encode device (forwarded).
+
+        Returns:
+            Original encode result.
+        """
         try:
             cropped = center_crop_bcthw(x)
         except Exception as exc:
