@@ -6,35 +6,35 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Purpose, consumers, and safety for disk-catalog, model-manifest, resource-policy, farm env, .env.example, and schemas/.">
+        <meta name="description" content="Simplified Visual Generative AI (ComfyUI US-safe local studio) for a single NVIDIA DGX Spark">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/reference/config-and-schemas/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/inspire/app-forge/">
       
       
-        <link rel="prev" href="../custom-nodes/">
+        <link rel="prev" href="../../optional/wan/i2v-a14b/">
       
       
-        <link rel="next" href="../studio-ui/">
+        <link rel="next" href="../beat-sheet/">
       
       
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Config and schemas - ez-comfy-stack</title>
+        <title>app-forge - ez-comfy-stack</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#config-and-schemas" class="md-skip">
+        <a href="#inspireapp-forge" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href="../../../.." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Config and schemas
+              app-forge
             
           </span>
         </div>
@@ -227,7 +227,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../../.." class="md-tabs__link">
         
   
   
@@ -248,7 +248,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../learn/" class="md-tabs__link">
+        <a href="../../../../learn/" class="md-tabs__link">
           
   
   
@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../getting-started/" class="md-tabs__link">
+        <a href="../../../../getting-started/" class="md-tabs__link">
           
   
   
@@ -290,7 +290,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../visual-generative-ai/" class="md-tabs__link">
+        <a href="../../../../visual-generative-ai/" class="md-tabs__link">
           
   
   
@@ -310,7 +310,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../occupancy/" class="md-tabs__link">
+        <a href="../../../../occupancy/" class="md-tabs__link">
           
   
   
@@ -330,7 +330,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../project-conventions/" class="md-tabs__link">
+        <a href="../../../../project-conventions/" class="md-tabs__link">
           
   
   
@@ -370,7 +370,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href="../../../.." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -400,7 +400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../../.." class="md-nav__link">
         
   
   
@@ -479,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/" class="md-nav__link">
+      <a href="../../../../learn/" class="md-nav__link">
         
   
   
@@ -507,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/architecture/" class="md-nav__link">
+      <a href="../../../../learn/architecture/" class="md-nav__link">
         
   
   
@@ -535,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/comfyui/" class="md-nav__link">
+      <a href="../../../../learn/comfyui/" class="md-nav__link">
         
   
   
@@ -563,7 +563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/generation/" class="md-nav__link">
+      <a href="../../../../learn/generation/" class="md-nav__link">
         
   
   
@@ -591,7 +591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/pipeline/" class="md-nav__link">
+      <a href="../../../../learn/pipeline/" class="md-nav__link">
         
   
   
@@ -619,7 +619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/clay-to-finish/" class="md-nav__link">
+      <a href="../../../../learn/clay-to-finish/" class="md-nav__link">
         
   
   
@@ -647,7 +647,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/blender-creator/" class="md-nav__link">
+      <a href="../../../../learn/blender-creator/" class="md-nav__link">
         
   
   
@@ -675,7 +675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/comfy-first-blender/" class="md-nav__link">
+      <a href="../../../../learn/comfy-first-blender/" class="md-nav__link">
         
   
   
@@ -703,7 +703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/dream-house/" class="md-nav__link">
+      <a href="../../../../learn/dream-house/" class="md-nav__link">
         
   
   
@@ -731,7 +731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../learn/hardware/" class="md-nav__link">
+      <a href="../../../../learn/hardware/" class="md-nav__link">
         
   
   
@@ -759,7 +759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../glossary/" class="md-nav__link">
+      <a href="../../../../glossary/" class="md-nav__link">
         
   
   
@@ -846,7 +846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../getting-started/" class="md-nav__link">
+      <a href="../../../../getting-started/" class="md-nav__link">
         
   
   
@@ -874,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../prompting/" class="md-nav__link">
+      <a href="../../../../prompting/" class="md-nav__link">
         
   
   
@@ -954,7 +954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/cinema-rack/" class="md-nav__link">
+      <a href="../../../../create/cinema-rack/" class="md-nav__link">
         
   
   
@@ -982,7 +982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/" class="md-nav__link">
+      <a href="../../../cinema/" class="md-nav__link">
         
   
   
@@ -1010,7 +1010,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/framing_shot_size/" class="md-nav__link">
+      <a href="../../../cinema/framing_shot_size/" class="md-nav__link">
         
   
   
@@ -1038,7 +1038,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/camera_angles/" class="md-nav__link">
+      <a href="../../../cinema/camera_angles/" class="md-nav__link">
         
   
   
@@ -1066,7 +1066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/lenses_optics/" class="md-nav__link">
+      <a href="../../../cinema/lenses_optics/" class="md-nav__link">
         
   
   
@@ -1094,7 +1094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/composition/" class="md-nav__link">
+      <a href="../../../cinema/composition/" class="md-nav__link">
         
   
   
@@ -1122,7 +1122,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/lighting/" class="md-nav__link">
+      <a href="../../../cinema/lighting/" class="md-nav__link">
         
   
   
@@ -1150,7 +1150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/color_film_look/" class="md-nav__link">
+      <a href="../../../cinema/color_film_look/" class="md-nav__link">
         
   
   
@@ -1178,7 +1178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/atmosphere_weather/" class="md-nav__link">
+      <a href="../../../cinema/atmosphere_weather/" class="md-nav__link">
         
   
   
@@ -1206,7 +1206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/genre_looks/" class="md-nav__link">
+      <a href="../../../cinema/genre_looks/" class="md-nav__link">
         
   
   
@@ -1234,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/viral_looks/" class="md-nav__link">
+      <a href="../../../cinema/viral_looks/" class="md-nav__link">
         
   
   
@@ -1262,7 +1262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/time_motion/" class="md-nav__link">
+      <a href="../../../cinema/time_motion/" class="md-nav__link">
         
   
   
@@ -1290,7 +1290,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/camera_movement/" class="md-nav__link">
+      <a href="../../../cinema/camera_movement/" class="md-nav__link">
         
   
   
@@ -1318,7 +1318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/in_camera_optical/" class="md-nav__link">
+      <a href="../../../cinema/in_camera_optical/" class="md-nav__link">
         
   
   
@@ -1346,7 +1346,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/cinema/editing_transitions/" class="md-nav__link">
+      <a href="../../../cinema/editing_transitions/" class="md-nav__link">
         
   
   
@@ -1382,7 +1382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/app-forge/" class="md-nav__link">
+      <a href="../../../../create/app-forge/" class="md-nav__link">
         
   
   
@@ -1410,7 +1410,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../licenses/" class="md-nav__link">
+      <a href="../../../../licenses/" class="md-nav__link">
         
   
   
@@ -1438,7 +1438,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../start/faq/" class="md-nav__link">
+      <a href="../../../../start/faq/" class="md-nav__link">
         
   
   
@@ -1466,7 +1466,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../start/when-to-use-vs-spark-lab/" class="md-nav__link">
+      <a href="../../../../start/when-to-use-vs-spark-lab/" class="md-nav__link">
         
   
   
@@ -1558,7 +1558,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../visual-generative-ai/" class="md-nav__link">
+      <a href="../../../../visual-generative-ai/" class="md-nav__link">
         
   
   
@@ -1586,7 +1586,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-apps/" class="md-nav__link">
+      <a href="../../../../studio-apps/" class="md-nav__link">
         
   
   
@@ -1614,7 +1614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-workflows/" class="md-nav__link">
+      <a href="../../../../studio-workflows/" class="md-nav__link">
         
   
   
@@ -1639,6 +1639,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1654,11 +1656,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
@@ -1679,7 +1681,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1697,7 +1699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/workflows-index/" class="md-nav__link">
+      <a href="../../../../create/workflows-index/" class="md-nav__link">
         
   
   
@@ -1725,7 +1727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/" class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
@@ -1753,7 +1755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflow-nodes/" class="md-nav__link">
+      <a href="../../../../reference/workflow-nodes/" class="md-nav__link">
         
   
   
@@ -1833,7 +1835,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/banner-wide/" class="md-nav__link">
+      <a href="../../klein/banner-wide/" class="md-nav__link">
         
   
   
@@ -1861,7 +1863,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/before-after/" class="md-nav__link">
+      <a href="../../klein/before-after/" class="md-nav__link">
         
   
   
@@ -1889,7 +1891,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/camera-angles/" class="md-nav__link">
+      <a href="../../klein/camera-angles/" class="md-nav__link">
         
   
   
@@ -1917,7 +1919,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/character-draft/" class="md-nav__link">
+      <a href="../../klein/character-draft/" class="md-nav__link">
         
   
   
@@ -1945,7 +1947,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/character-tweak/" class="md-nav__link">
+      <a href="../../klein/character-tweak/" class="md-nav__link">
         
   
   
@@ -1973,7 +1975,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/color-moods/" class="md-nav__link">
+      <a href="../../klein/color-moods/" class="md-nav__link">
         
   
   
@@ -2001,7 +2003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/dream-house-clay/" class="md-nav__link">
+      <a href="../../klein/dream-house-clay/" class="md-nav__link">
         
   
   
@@ -2029,7 +2031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/dream-house/" class="md-nav__link">
+      <a href="../../klein/dream-house/" class="md-nav__link">
         
   
   
@@ -2057,7 +2059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/endcard-cta/" class="md-nav__link">
+      <a href="../../klein/endcard-cta/" class="md-nav__link">
         
   
   
@@ -2085,7 +2087,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/food-tabletop/" class="md-nav__link">
+      <a href="../../klein/food-tabletop/" class="md-nav__link">
         
   
   
@@ -2113,7 +2115,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/hook-still/" class="md-nav__link">
+      <a href="../../klein/hook-still/" class="md-nav__link">
         
   
   
@@ -2141,7 +2143,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/identity-sheet/" class="md-nav__link">
+      <a href="../../klein/identity-sheet/" class="md-nav__link">
         
   
   
@@ -2169,7 +2171,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/ig-square/" class="md-nav__link">
+      <a href="../../klein/ig-square/" class="md-nav__link">
         
   
   
@@ -2197,7 +2199,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/lighting-trio/" class="md-nav__link">
+      <a href="../../klein/lighting-trio/" class="md-nav__link">
         
   
   
@@ -2225,7 +2227,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/lower-third-bg/" class="md-nav__link">
+      <a href="../../klein/lower-third-bg/" class="md-nav__link">
         
   
   
@@ -2253,7 +2255,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/og-blog/" class="md-nav__link">
+      <a href="../../klein/og-blog/" class="md-nav__link">
         
   
   
@@ -2281,7 +2283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/platform-pack/" class="md-nav__link">
+      <a href="../../klein/platform-pack/" class="md-nav__link">
         
   
   
@@ -2309,7 +2311,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/podcast-cover/" class="md-nav__link">
+      <a href="../../klein/podcast-cover/" class="md-nav__link">
         
   
   
@@ -2337,7 +2339,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/product-packshot/" class="md-nav__link">
+      <a href="../../klein/product-packshot/" class="md-nav__link">
         
   
   
@@ -2365,7 +2367,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/quote-bg/" class="md-nav__link">
+      <a href="../../klein/quote-bg/" class="md-nav__link">
         
   
   
@@ -2393,7 +2395,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/shorts-still/" class="md-nav__link">
+      <a href="../../klein/shorts-still/" class="md-nav__link">
         
   
   
@@ -2421,7 +2423,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/still-daily/" class="md-nav__link">
+      <a href="../../klein/still-daily/" class="md-nav__link">
         
   
   
@@ -2449,7 +2451,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/still-draft/" class="md-nav__link">
+      <a href="../../klein/still-draft/" class="md-nav__link">
         
   
   
@@ -2477,7 +2479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/still-hero/" class="md-nav__link">
+      <a href="../../klein/still-hero/" class="md-nav__link">
         
   
   
@@ -2505,7 +2507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/storyboard-6up/" class="md-nav__link">
+      <a href="../../klein/storyboard-6up/" class="md-nav__link">
         
   
   
@@ -2533,7 +2535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/style-lock/" class="md-nav__link">
+      <a href="../../klein/style-lock/" class="md-nav__link">
         
   
   
@@ -2561,7 +2563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/talking-head/" class="md-nav__link">
+      <a href="../../klein/talking-head/" class="md-nav__link">
         
   
   
@@ -2589,7 +2591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/thumbnail/" class="md-nav__link">
+      <a href="../../klein/thumbnail/" class="md-nav__link">
         
   
   
@@ -2617,7 +2619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/klein/time-of-day/" class="md-nav__link">
+      <a href="../../klein/time-of-day/" class="md-nav__link">
         
   
   
@@ -2705,7 +2707,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/bumper-loop/" class="md-nav__link">
+      <a href="../../wan/bumper-loop/" class="md-nav__link">
         
   
   
@@ -2733,7 +2735,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/flf-5s/" class="md-nav__link">
+      <a href="../../wan/flf-5s/" class="md-nav__link">
         
   
   
@@ -2761,7 +2763,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/gif-loop/" class="md-nav__link">
+      <a href="../../wan/gif-loop/" class="md-nav__link">
         
   
   
@@ -2789,7 +2791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/i2v-5s/" class="md-nav__link">
+      <a href="../../wan/i2v-5s/" class="md-nav__link">
         
   
   
@@ -2817,7 +2819,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/i2v-shot/" class="md-nav__link">
+      <a href="../../wan/i2v-shot/" class="md-nav__link">
         
   
   
@@ -2845,7 +2847,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/orbit-i2v/" class="md-nav__link">
+      <a href="../../wan/orbit-i2v/" class="md-nav__link">
         
   
   
@@ -2873,7 +2875,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/parallax-i2v/" class="md-nav__link">
+      <a href="../../wan/parallax-i2v/" class="md-nav__link">
         
   
   
@@ -2901,7 +2903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/push-in-i2v/" class="md-nav__link">
+      <a href="../../wan/push-in-i2v/" class="md-nav__link">
         
   
   
@@ -2929,7 +2931,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/shorts-i2v/" class="md-nav__link">
+      <a href="../../wan/shorts-i2v/" class="md-nav__link">
         
   
   
@@ -2957,7 +2959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/sticker-loop/" class="md-nav__link">
+      <a href="../../wan/sticker-loop/" class="md-nav__link">
         
   
   
@@ -2985,7 +2987,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/t2v-5s/" class="md-nav__link">
+      <a href="../../wan/t2v-5s/" class="md-nav__link">
         
   
   
@@ -3013,7 +3015,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/wan/vace-join/" class="md-nav__link">
+      <a href="../../wan/vace-join/" class="md-nav__link">
         
   
   
@@ -3101,7 +3103,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/a2v-5s/" class="md-nav__link">
+      <a href="../../ltx/a2v-5s/" class="md-nav__link">
         
   
   
@@ -3129,7 +3131,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/broll-ambient/" class="md-nav__link">
+      <a href="../../ltx/broll-ambient/" class="md-nav__link">
         
   
   
@@ -3157,7 +3159,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/dialogue-5s/" class="md-nav__link">
+      <a href="../../ltx/dialogue-5s/" class="md-nav__link">
         
   
   
@@ -3185,7 +3187,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/flf-5s/" class="md-nav__link">
+      <a href="../../ltx/flf-5s/" class="md-nav__link">
         
   
   
@@ -3213,7 +3215,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/hook-av/" class="md-nav__link">
+      <a href="../../ltx/hook-av/" class="md-nav__link">
         
   
   
@@ -3241,7 +3243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/i2v-5s/" class="md-nav__link">
+      <a href="../../ltx/i2v-5s/" class="md-nav__link">
         
   
   
@@ -3269,7 +3271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/i2v-shot/" class="md-nav__link">
+      <a href="../../ltx/i2v-shot/" class="md-nav__link">
         
   
   
@@ -3297,7 +3299,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/interior-ambience/" class="md-nav__link">
+      <a href="../../ltx/interior-ambience/" class="md-nav__link">
         
   
   
@@ -3325,7 +3327,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/multishot-5s/" class="md-nav__link">
+      <a href="../../ltx/multishot-5s/" class="md-nav__link">
         
   
   
@@ -3353,7 +3355,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/product-hero/" class="md-nav__link">
+      <a href="../../ltx/product-hero/" class="md-nav__link">
         
   
   
@@ -3381,7 +3383,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/shorts-i2v/" class="md-nav__link">
+      <a href="../../ltx/shorts-i2v/" class="md-nav__link">
         
   
   
@@ -3409,7 +3411,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/t2v-5s/" class="md-nav__link">
+      <a href="../../ltx/t2v-5s/" class="md-nav__link">
         
   
   
@@ -3437,7 +3439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/ltx/weather-broll/" class="md-nav__link">
+      <a href="../../ltx/weather-broll/" class="md-nav__link">
         
   
   
@@ -3525,7 +3527,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/shorts/go-see/" class="md-nav__link">
+      <a href="../../shorts/go-see/" class="md-nav__link">
         
   
   
@@ -3553,7 +3555,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/shorts/still-here/" class="md-nav__link">
+      <a href="../../shorts/still-here/" class="md-nav__link">
         
   
   
@@ -3581,7 +3583,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/shorts/switchyard/" class="md-nav__link">
+      <a href="../../shorts/switchyard/" class="md-nav__link">
         
   
   
@@ -3669,7 +3671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/klein/from-canny/" class="md-nav__link">
+      <a href="../../dcc/klein/from-canny/" class="md-nav__link">
         
   
   
@@ -3697,7 +3699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/klein/from-clay-plates/" class="md-nav__link">
+      <a href="../../dcc/klein/from-clay-plates/" class="md-nav__link">
         
   
   
@@ -3725,7 +3727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/klein/from-clay/" class="md-nav__link">
+      <a href="../../dcc/klein/from-clay/" class="md-nav__link">
         
   
   
@@ -3753,7 +3755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/klein/from-guide-loader/" class="md-nav__link">
+      <a href="../../dcc/klein/from-guide-loader/" class="md-nav__link">
         
   
   
@@ -3781,7 +3783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/ltx/iclora-canny-5s/" class="md-nav__link">
+      <a href="../../dcc/ltx/iclora-canny-5s/" class="md-nav__link">
         
   
   
@@ -3809,7 +3811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/ltx/iclora-depth-5s/" class="md-nav__link">
+      <a href="../../dcc/ltx/iclora-depth-5s/" class="md-nav__link">
         
   
   
@@ -3837,7 +3839,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/ltx/iclora-depth-shorts/" class="md-nav__link">
+      <a href="../../dcc/ltx/iclora-depth-shorts/" class="md-nav__link">
         
   
   
@@ -3865,7 +3867,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/ltx/iclora-from-guide-loader/" class="md-nav__link">
+      <a href="../../dcc/ltx/iclora-from-guide-loader/" class="md-nav__link">
         
   
   
@@ -3893,7 +3895,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/trellis/from-klein-still/" class="md-nav__link">
+      <a href="../../dcc/trellis/from-klein-still/" class="md-nav__link">
         
   
   
@@ -3921,7 +3923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/dcc/wan/flf-from-guide/" class="md-nav__link">
+      <a href="../../dcc/wan/flf-from-guide/" class="md-nav__link">
         
   
   
@@ -4009,7 +4011,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/optional/klein/trellis2/" class="md-nav__link">
+      <a href="../../optional/klein/trellis2/" class="md-nav__link">
         
   
   
@@ -4037,7 +4039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/optional/longcat-video/" class="md-nav__link">
+      <a href="../../optional/longcat-video/" class="md-nav__link">
         
   
   
@@ -4065,7 +4067,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/optional/wan/i2v-a14b/" class="md-nav__link">
+      <a href="../../optional/wan/i2v-a14b/" class="md-nav__link">
         
   
   
@@ -4098,8 +4100,10 @@
                 
   
   
+    
   
   
+  
     
     
     
@@ -4110,11 +4114,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4_10" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4_10" checked>
         
           
           <label class="md-nav__link" for="__nav_4_4_10" id="__nav_4_4_10_label" tabindex="0">
@@ -4135,7 +4139,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_4_10_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_4_10_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_4_10">
             <span class="md-nav__icon md-icon"></span>
             
@@ -4150,10 +4154,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../generated/workflows/inspire/app-forge/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    app-forge
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -4169,6 +4200,209 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Purpose
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-queue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to Queue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodes-on-this-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes on this graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node parameter reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node parameter reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note — Note
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Note — Note">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ezappforge-app-forge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EZAppForge — App Forge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="EZAppForge — App Forge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        slug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#as_app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        as_app
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        overwrite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        catalog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -4181,7 +4415,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/inspire/beat-sheet/" class="md-nav__link">
+      <a href="../beat-sheet/" class="md-nav__link">
         
   
   
@@ -4209,7 +4443,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/inspire/cinema-rack/" class="md-nav__link">
+      <a href="../cinema-rack/" class="md-nav__link">
         
   
   
@@ -4237,7 +4471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/inspire/prompt-forge/" class="md-nav__link">
+      <a href="../prompt-forge/" class="md-nav__link">
         
   
   
@@ -4265,7 +4499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/inspire/research-chat/" class="md-nav__link">
+      <a href="../research-chat/" class="md-nav__link">
         
   
   
@@ -4353,7 +4587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/dub/localize/" class="md-nav__link">
+      <a href="../../audio/dub/localize/" class="md-nav__link">
         
   
   
@@ -4381,7 +4615,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/finish/" class="md-nav__link">
+      <a href="../../audio/finish/" class="md-nav__link">
         
   
   
@@ -4409,7 +4643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/music/rap-draft/" class="md-nav__link">
+      <a href="../../audio/music/rap-draft/" class="md-nav__link">
         
   
   
@@ -4437,7 +4671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/music/rap-full/" class="md-nav__link">
+      <a href="../../audio/music/rap-full/" class="md-nav__link">
         
   
   
@@ -4465,7 +4699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/podcast/audio-first/" class="md-nav__link">
+      <a href="../../audio/podcast/audio-first/" class="md-nav__link">
         
   
   
@@ -4493,7 +4727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/podcast/radio-drama/" class="md-nav__link">
+      <a href="../../audio/podcast/radio-drama/" class="md-nav__link">
         
   
   
@@ -4581,7 +4815,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/drive-through/afterparty/" class="md-nav__link">
+      <a href="../../audio/albums/drive-through/afterparty/" class="md-nav__link">
         
   
   
@@ -4609,7 +4843,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/drive-through/headliner/" class="md-nav__link">
+      <a href="../../audio/albums/drive-through/headliner/" class="md-nav__link">
         
   
   
@@ -4637,7 +4871,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/drive-through/hour-1/" class="md-nav__link">
+      <a href="../../audio/albums/drive-through/hour-1/" class="md-nav__link">
         
   
   
@@ -4665,7 +4899,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/drive-through/hour-2/" class="md-nav__link">
+      <a href="../../audio/albums/drive-through/hour-2/" class="md-nav__link">
         
   
   
@@ -4693,7 +4927,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/drive-through/secret-homage/" class="md-nav__link">
+      <a href="../../audio/albums/drive-through/secret-homage/" class="md-nav__link">
         
   
   
@@ -4721,7 +4955,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/citation-needed/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/citation-needed/" class="md-nav__link">
         
   
   
@@ -4749,7 +4983,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/duty-switch/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/duty-switch/" class="md-nav__link">
         
   
   
@@ -4777,7 +5011,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/false-drop/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/false-drop/" class="md-nav__link">
         
   
   
@@ -4805,7 +5039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/frozen-ercot/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/frozen-ercot/" class="md-nav__link">
         
   
   
@@ -4833,7 +5067,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/lone-star-tab/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/lone-star-tab/" class="md-nav__link">
         
   
   
@@ -4861,7 +5095,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/pardon-flood/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/pardon-flood/" class="md-nav__link">
         
   
   
@@ -4889,7 +5123,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/peer-review/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/peer-review/" class="md-nav__link">
         
   
   
@@ -4917,7 +5151,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/thirty-four-counts/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/thirty-four-counts/" class="md-nav__link">
         
   
   
@@ -4945,7 +5179,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/workflows/audio/albums/nill-bye/winterize-wells/" class="md-nav__link">
+      <a href="../../audio/albums/nill-bye/winterize-wells/" class="md-nav__link">
         
   
   
@@ -4989,7 +5223,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../workflow-nodes/" class="md-nav__link">
+      <a href="../../../../reference/workflow-nodes/" class="md-nav__link">
         
   
   
@@ -5017,7 +5251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/workflows-stills/" class="md-nav__link">
+      <a href="../../../../create/workflows-stills/" class="md-nav__link">
         
   
   
@@ -5045,7 +5279,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/workflows-motion/" class="md-nav__link">
+      <a href="../../../../create/workflows-motion/" class="md-nav__link">
         
   
   
@@ -5073,7 +5307,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/workflows-film/" class="md-nav__link">
+      <a href="../../../../create/workflows-film/" class="md-nav__link">
         
   
   
@@ -5101,7 +5335,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/workflows-audio/" class="md-nav__link">
+      <a href="../../../../create/workflows-audio/" class="md-nav__link">
         
   
   
@@ -5129,7 +5363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../shorts/" class="md-nav__link">
+      <a href="../../../../shorts/" class="md-nav__link">
         
   
   
@@ -5157,7 +5391,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../podcast/" class="md-nav__link">
+      <a href="../../../../podcast/" class="md-nav__link">
         
   
   
@@ -5185,7 +5419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dub/" class="md-nav__link">
+      <a href="../../../../dub/" class="md-nav__link">
         
   
   
@@ -5213,7 +5447,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../music/" class="md-nav__link">
+      <a href="../../../../music/" class="md-nav__link">
         
   
   
@@ -5241,7 +5475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/music-rap/" class="md-nav__link">
+      <a href="../../../../create/music-rap/" class="md-nav__link">
         
   
   
@@ -5269,7 +5503,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/music-edm/" class="md-nav__link">
+      <a href="../../../../create/music-edm/" class="md-nav__link">
         
   
   
@@ -5297,7 +5531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../create/music-disclosure/" class="md-nav__link">
+      <a href="../../../../create/music-disclosure/" class="md-nav__link">
         
   
   
@@ -5325,7 +5559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../studio-sidecars/" class="md-nav__link">
+      <a href="../../../../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -5353,7 +5587,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../asset-bible/" class="md-nav__link">
+      <a href="../../../../asset-bible/" class="md-nav__link">
         
   
   
@@ -5381,7 +5615,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../blender-gb10-sidecar/" class="md-nav__link">
+      <a href="../../../../blender-gb10-sidecar/" class="md-nav__link">
         
   
   
@@ -5409,7 +5643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../dcc-workflows/" class="md-nav__link">
+      <a href="../../../../dcc-workflows/" class="md-nav__link">
         
   
   
@@ -5437,7 +5671,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../splat-sidecar/" class="md-nav__link">
+      <a href="../../../../splat-sidecar/" class="md-nav__link">
         
   
   
@@ -5465,7 +5699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../custom-nodes/" class="md-nav__link">
+      <a href="../../../../reference/custom-nodes/" class="md-nav__link">
         
   
   
@@ -5490,37 +5724,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Config and schemas
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../../reference/config-and-schemas/" class="md-nav__link">
         
   
   
@@ -5536,59 +5743,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#operator-config" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Operator config
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#schemas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Schemas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Related
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -5601,7 +5755,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../studio-ui/" class="md-nav__link">
+      <a href="../../../../reference/studio-ui/" class="md-nav__link">
         
   
   
@@ -5688,7 +5842,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../occupancy/" class="md-nav__link">
+      <a href="../../../../occupancy/" class="md-nav__link">
         
   
   
@@ -5716,7 +5870,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/occupancy-matrix/" class="md-nav__link">
+      <a href="../../../../operate/occupancy-matrix/" class="md-nav__link">
         
   
   
@@ -5744,7 +5898,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/mcp/" class="md-nav__link">
+      <a href="../../../../operate/mcp/" class="md-nav__link">
         
   
   
@@ -5772,7 +5926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../manage-cli/" class="md-nav__link">
+      <a href="../../../../manage-cli/" class="md-nav__link">
         
   
   
@@ -5800,7 +5954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../generated/shell/reference/" class="md-nav__link">
+      <a href="../../../shell/reference/" class="md-nav__link">
         
   
   
@@ -5828,7 +5982,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../models-and-cache/" class="md-nav__link">
+      <a href="../../../../models-and-cache/" class="md-nav__link">
         
   
   
@@ -5856,7 +6010,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../download-tiers/" class="md-nav__link">
+      <a href="../../../../download-tiers/" class="md-nav__link">
         
   
   
@@ -5884,7 +6038,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../download-limit/" class="md-nav__link">
+      <a href="../../../../download-limit/" class="md-nav__link">
         
   
   
@@ -5912,7 +6066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/models-packs/" class="md-nav__link">
+      <a href="../../../../operate/models-packs/" class="md-nav__link">
         
   
   
@@ -5940,7 +6094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/models-tokens/" class="md-nav__link">
+      <a href="../../../../operate/models-tokens/" class="md-nav__link">
         
   
   
@@ -5968,7 +6122,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/models-sharing/" class="md-nav__link">
+      <a href="../../../../operate/models-sharing/" class="md-nav__link">
         
   
   
@@ -5996,7 +6150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../disk-wizard/" class="md-nav__link">
+      <a href="../../../../disk-wizard/" class="md-nav__link">
         
   
   
@@ -6024,7 +6178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/backup-restore/" class="md-nav__link">
+      <a href="../../../../operate/backup-restore/" class="md-nav__link">
         
   
   
@@ -6052,7 +6206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../reboot-safety/" class="md-nav__link">
+      <a href="../../../../reboot-safety/" class="md-nav__link">
         
   
   
@@ -6080,7 +6234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../spark-farm/" class="md-nav__link">
+      <a href="../../../../spark-farm/" class="md-nav__link">
         
   
   
@@ -6108,7 +6262,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../troubleshooting/" class="md-nav__link">
+      <a href="../../../../troubleshooting/" class="md-nav__link">
         
   
   
@@ -6136,7 +6290,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-docs-site/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-docs-site/" class="md-nav__link">
         
   
   
@@ -6164,7 +6318,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-canvas/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-canvas/" class="md-nav__link">
         
   
   
@@ -6192,7 +6346,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-host-docker/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-host-docker/" class="md-nav__link">
         
   
   
@@ -6220,7 +6374,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-downloads/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-downloads/" class="md-nav__link">
         
   
   
@@ -6248,7 +6402,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-start-runtime/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-start-runtime/" class="md-nav__link">
         
   
   
@@ -6276,7 +6430,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../operate/troubleshooting-models-workflows/" class="md-nav__link">
+      <a href="../../../../operate/troubleshooting-models-workflows/" class="md-nav__link">
         
   
   
@@ -6363,7 +6517,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../project-conventions/" class="md-nav__link">
+      <a href="../../../../project-conventions/" class="md-nav__link">
         
   
   
@@ -6391,7 +6545,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contribute/building-with-bazel/" class="md-nav__link">
+      <a href="../../../../contribute/building-with-bazel/" class="md-nav__link">
         
   
   
@@ -6419,7 +6573,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contribute/docs-style/" class="md-nav__link">
+      <a href="../../../../contribute/docs-style/" class="md-nav__link">
         
   
   
@@ -6447,7 +6601,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contribute/testing-docs/" class="md-nav__link">
+      <a href="../../../../contribute/testing-docs/" class="md-nav__link">
         
   
   
@@ -6475,7 +6629,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contribute/contributing/" class="md-nav__link">
+      <a href="../../../../contribute/contributing/" class="md-nav__link">
         
   
   
@@ -6503,7 +6657,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../contribute/security/" class="md-nav__link">
+      <a href="../../../../contribute/security/" class="md-nav__link">
         
   
   
@@ -6558,10 +6712,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#operator-config" class="md-nav__link">
+  <a href="#purpose" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Operator config
+        Purpose
       
     </span>
   </a>
@@ -6569,10 +6723,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#schemas" class="md-nav__link">
+  <a href="#how-to-queue" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Schemas
+        How to Queue
       
     </span>
   </a>
@@ -6580,13 +6734,163 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#related" class="md-nav__link">
+  <a href="#graph" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Related
+        Graph
       
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nodes-on-this-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes on this graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Node parameter reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Node parameter reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-note" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note — Note
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Note — Note">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#text" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        text
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ezappforge-app-forge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        EZAppForge — App Forge
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="EZAppForge — App Forge">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        sample
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prompt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prompt
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slug" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        slug
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#as_app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        as_app
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overwrite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        overwrite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#catalog" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        catalog
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -6610,172 +6914,188 @@
   
 
 
-<h1 id="config-and-schemas">Config and schemas<a class="headerlink" href="#config-and-schemas" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
-<li><strong>Operator config</strong> — disk catalog, model manifest, resource policy, farm example env, <code>.env.example</code></li>
-<li><strong>Handshake schemas</strong> — asset, guide packs, house layout, scene, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="shot-card" data-href="../../glossary/#shot-card" data-short="Per-shot YAML extras: script, camera, clay required, audio policy, stems." data-category="Film" title="Per-shot YAML extras: script, camera, clay required, audio policy, stems.">shot card</span></li>
-<li><strong>Who consumes each file</strong> (<code>manage.sh</code> verb or library)</li>
-<li><strong>Safety</strong> — keep-set, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" data-short="Free host RAM/disk checked before start so SSH still works under load." data-category="Hardware and safety" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span>, no secrets in git</li>
+<hr />
+<p>title: <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-forge" data-href="../../../../glossary/#app-forge" data-short="No-UNET Inspire App that clones a shipped lab graph into live _user/ as a new App." data-category="Studio" title="No-UNET Inspire App that clones a shipped lab graph into live _user/ as a new App.">inspire/app-forge</span>
+description: No-<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="unet" data-href="../../../../glossary/#unet" data-short="Denoiser / transformer weights that turn noise + conditioning into a sample." data-category="Models" title="Denoiser / transformer weights that turn noise + conditioning into a sample.">UNET</span> App Forge: clone a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../../../../glossary/#workflow" data-short="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file." data-category="Studio" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">lab graph</span> into live _user/
+tags: [workflows, generated, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../../../../glossary/#comfyui" data-short="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio." data-category="Studio" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">comfyui</span>, inspire]</p>
+<hr />
+<h1 id="inspireapp-forge">inspire/app-forge<a class="headerlink" href="#inspireapp-forge" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
+<li><strong>Purpose, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../../../glossary/#occupancy" data-short="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX." data-category="Hardware and safety" title="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.">occupancy</span>, and models</strong> from the on-canvas Note</li>
+<li><strong>Graph flow</strong> (groups when the canvas is large)</li>
+<li><strong>Every node id</strong> on this graph</li>
+<li><strong>Node parameter reference</strong> for each type, with this graph's values and the other legal choices</li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
-<li><strong>Knowing</strong> which YAML is a disk bible vs a DCC pack vs a farm placeholder</li>
-<li><strong>Avoiding</strong> committing <code>${HF_TOKEN}</code> or real <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span> hostnames</li>
-<li><strong>Leaving</strong> keys and values to the files themselves (this page does not dump them)</li>
+<li><strong>Queuing this filename</strong> with known widgets</li>
+<li><strong>Changing a parameter</strong> with a documented generation effect</li>
 </ul></div></div>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
+<p><strong>Who this is for:</strong> studio users who loaded <code>inspire/app-forge</code> from Apps or Workflows.</p>
+<blockquote>
+<p>Generated from <code>workflows/_lab/inspire/app-forge.json</code>. Do not hand-edit this file. Re-run <code>python3 docs/generate_workflow_docs.py</code> (or <code>make docs</code>).</p>
+</blockquote>
+<h2 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h2>
+<p>Occupancy <strong>llm</strong>. Outputs under <code>${COMFY_OUTPUT_DIR}</code>. Unload the previous family before <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../../../../glossary/#queue" data-short="One run of the current graph: encode, sample, decode, save." data-category="Studio" title="One run of the current graph: encode, sample, decode, save.">Queue</span>.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>## inspire/app-forge
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>App Forge — clone a shipped lab graph into live `_user/` as a new App.
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>No UNET, no VAE, no KSampler. Does not Queue the result.
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>  ./scripts/manage.sh occupancy enter llm-desk --yes
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>   a lab id such as klein/ig-square.
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>4. Open `_user/&lt;slug&gt;` from the Apps sidebar. Queue that graph when GB10
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>   occupancy matches the result (klein / wan / ltx / …).
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 </span></code></pre></div>
-<div class="admonition danger">
-<p class="admonition-title">Do not commit secrets</p>
-<p>Never put <code>HF_TOKEN</code>, a filled <code>.env</code>, or production hostnames into git. Farm hosts in <code>config/spark-farm.example.env</code> are <strong>placeholders</strong> (<code>spark-0.local</code>, fabric <code>10.0.0.1</code>…). Do not treat those as a real cluster.</p>
-</div>
+<h2 id="how-to-queue">How to Queue<a class="headerlink" href="#how-to-queue" title="Permanent link">&para;</a></h2>
+<ol>
+<li><code>./scripts/manage.sh start</code> so <code>_lab</code> is seeded</li>
+<li>Load <strong>inspire/app-forge</strong> from <strong>Apps</strong> or <strong>Workflows</strong></li>
+<li>Read the on-canvas Note, change widgets, Queue</li>
+</ol>
+<p>Do not edit raw <code>_lab</code> JSON. Save keepers under <code>_user/</code>.</p>
+<h2 id="graph">Graph<a class="headerlink" href="#graph" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+  N1["Operator note"]
+  N2["App Forge"]</code></pre>
+<h2 id="nodes-on-this-graph">Nodes on this graph<a class="headerlink" href="#nodes-on-this-graph" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Id</th>
+<th>Title</th>
+<th>Type</th>
+<th>Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Operator note</td>
+<td><code>Note</code></td>
+<td>NOTE</td>
+</tr>
+<tr>
+<td>2</td>
+<td>App Forge</td>
+<td><code>EZAppForge</code></td>
+<td>FORGE</td>
+</tr>
+</tbody>
+</table>
+<h2 id="node-parameter-reference">Node parameter reference<a class="headerlink" href="#node-parameter-reference" title="Permanent link">&para;</a></h2>
+<p>Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.34.6 / lab <code>INPUT_TYPES</code> — not SD1.5 folklore.</p>
+<h3 id="note-note"><code>Note</code> — Note<a class="headerlink" href="#note-note" title="Permanent link">&para;</a></h3>
+<p>On-canvas operator note (not executed).</p>
 <div class="admonition warning">
-<p class="admonition-title">Do not weaken headroom</p>
-<p><code>config/resource-policy.yaml</code> documents <code>min_host_free_gib: 28</code> and <code>memory_limit: 90g</code>. <code>manage.sh start</code> mirrors those via <code>MIN_HOST_FREE_GIB</code> / <code>MEM_LIMIT</code>. Demos do not get a pass.</p>
+<p class="admonition-title">Lab notes</p>
+<p>Every lab graph has one. Purpose, models, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sampler" data-href="../../../../glossary/#sampler" data-short="Node that denoises latents for N steps at a CFG, seed, and scheduler." data-category="Studio" title="Node that denoises latents for N steps at a CFG, seed, and scheduler.">sampler</span>, occupancy, run steps.</p>
 </div>
-<hr />
-<h2 id="operator-config">Operator config<a class="headerlink" href="#operator-config" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Purpose</th>
-<th>Who consumes it</th>
-<th>Safety</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>config/disk-catalog.yaml</code></td>
-<td>Leftover signatures for <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="disk-wizard" data-href="../../glossary/#disk-wizard" data-short="Guided host reclaim. Default --plan. Does not replace cleanup or reap-models." data-category="Hardware and safety" title="Guided host reclaim. Default --plan. Does not replace cleanup or reap-models.">disk-wizard</span> (<code>risk</code> / <code>reclaim</code>)</td>
-<td><code>./scripts/manage.sh disk-wizard</code> → <code>scripts/lib/disk_catalog.py</code></td>
-<td>Keep-set weights and volume <code>ez-comfy-state</code> are <strong>dangerous / none</strong>. Never <code>docker system prune -a --volumes</code></td>
-</tr>
-<tr>
-<td><code>config/model-manifest.yaml</code></td>
-<td>Disk bible for <code>${MODELS_DIR}</code>: keep-set packs + <strong>refuse</strong> list</td>
-<td><code>reap-models</code>, <code>models-status</code>, <code>scripts/lib/model_manifest.py</code> / <code>models.sh</code>. License bible stays <code>LICENSE-MODELS.md</code></td>
-<td>Refuse includes MiniMax-H3, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein-9b" data-href="../../glossary/#klein-9b" data-short="FLUX Non-Commercial 9B. Not the lab default. Distilled 4B Apache is." data-category="Licenses" title="FLUX Non-Commercial 9B. Not the lab default. Distilled 4B Apache is.">Klein 9B</span>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="flux2-dev" data-href="../../glossary/#flux2-dev" data-short="Banned still weights. There is no quality image tier. Use Klein 4B Apache." data-category="Licenses" title="Banned still weights. There is no quality image tier. Use Klein 4B Apache.">FLUX.2-dev</span>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="da3-large" data-href="../../glossary/#da3-large" data-short="Refused depth weight. DA3-BASE Apache is the allowed sidecar." data-category="Licenses" title="Refused depth weight. DA3-BASE Apache is the allowed sidecar.">DA3-LARGE</span>, …</td>
-</tr>
-<tr>
-<td><code>config/resource-policy.yaml</code></td>
-<td>Human-readable <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../../glossary/#gb10" data-short="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy." data-category="Hardware and safety" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span> headroom, mem 90g/80g, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../../glossary/#occupancy" data-short="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX." data-category="Hardware and safety" title="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.">occupancy</span> mode table, default model tiers</td>
-<td>Operators; <strong>mirrored</strong> by <code>manage.sh</code> defaults (<code>MIN_HOST_FREE_GIB</code>, <code>MEM_LIMIT</code>, stack ports)</td>
-<td>Do not lower <code>min_host_free_gib</code> without measuring <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ssh" data-href="../../glossary/#ssh" data-short="How you reach a remote Spark. Headroom, restart no, and download-limit exist so this stays up." data-category="Hardware and safety" title="How you reach a remote Spark. Headroom, restart no, and download-limit exist so this stays up.">SSH</span> under load</td>
-</tr>
-<tr>
-<td><code>config/spark-farm.example.env</code></td>
-<td>Copy-and-fill farm variables</td>
-<td><code>./scripts/utilities/spark-farm.sh</code> after <code>set -a; source …</code></td>
-<td>Placeholders only. Management SSH is <strong>not</strong> the 200 GbE fabric. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="h3" data-href="../../glossary/#h3" data-short="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused." data-category="Licenses" title="Banned. US Excluded Territory for weights and outputs. download-h3 aliases are refused.">MiniMax H3</span> banned. <a href="../../spark-farm/">Spark farm</a></td>
-</tr>
-<tr>
-<td><code>.env.example</code></td>
-<td>Template <code>setup</code> copies to <code>.env</code></td>
-<td><code>./scripts/manage.sh setup</code> / Compose interpolation</td>
-<td><code>HF_TOKEN=</code> stays commented. Do not commit a filled <code>.env</code></td>
-</tr>
-</tbody>
-</table>
-<p><code>.env.example</code> session keys used in docs: <code>MODELS_DIR</code>, <code>COMFY_OUTPUT_DIR</code>, <code>COMFY_PORT</code>, <code>DOWNLOAD_LIMIT</code>, plus <code>MEM_LIMIT</code> / <code>MEM_RESERVATION</code> / <code>MIN_HOST_FREE_GIB</code>. <code>SPARK_HOST</code> / <code>SPARK_USER</code> are docs/session (browser <strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="your-spark" data-href="../../glossary/#your-spark" data-short="Docs panel that stores SPARK_HOST and friends in this browser for copy buttons." data-category="Studio" title="Docs panel that stores SPARK_HOST and friends in this browser for copy buttons.">Your Spark</span></strong> panel and SSH), not required Compose keys.</p>
-<p>Farm placeholders (from the example file — not a real rack):</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># After you copy and fill — do not commit real names</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nv">SPARK_HOSTS</span><span class="o">=</span>spark-0.local,spark-1.local,spark-2.local
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nv">SPARK_USER</span><span class="o">=</span>nvidia
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nv">SPARK_COMFY_URLS</span><span class="o">=</span>http://spark-0.local:8188,http://spark-1.local:8188,http://spark-2.local:8188
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nv">SPARK_FABRIC_IPS</span><span class="o">=</span><span class="m">10</span>.0.0.1,10.0.0.2,10.0.0.3
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nv">MODELS_DIR</span><span class="o">=</span>/mnt/models
+<h4 id="text"><code>text</code><a class="headerlink" href="#text" title="Permanent link">&para;</a></h4>
+<p>Type <code>STRING</code>.</p>
+<p>Markdown-ish operator note.</p>
+<p><strong>How it affects generation:</strong> Does not affect pixels. Read it before Queue.</p>
+<p><strong>This graph:</strong> <code>## inspire/app-forge App Forge — clone a shipped lab graph into live</code>_user/<code>as a new App. No UNET, no VAE, no KSampler. Does not Queue the result. Occupancy: llm — graph label (not a CLI mode). Pre…</code></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>## inspire/app-forge
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>App Forge — clone a shipped lab graph into live `_user/` as a new App.
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>No UNET, no VAE, no KSampler. Does not Queue the result.
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  ./scripts/manage.sh occupancy enter llm-desk --yes
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>   a lab id such as klein/ig-square.
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>4. Open `_user/&lt;slug&gt;` from the Apps sidebar. Queue that graph when GB10
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>   occupancy matches the result (klein / wan / ltx / …).
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 </span></code></pre></div>
-<hr />
-<h2 id="schemas">Schemas<a class="headerlink" href="#schemas" title="Permanent link">&para;</a></h2>
-<p>Restricted YAML (stdlib parsers; no PyYAML). <code>scene.json</code> is JSON.</p>
+<h3 id="ezappforge-app-forge"><code>EZAppForge</code> — App Forge<a class="headerlink" href="#ezappforge-app-forge" title="Permanent link">&para;</a></h3>
+<p>Clone a shipped lab graph into live _user/ as a new App. No UNET.</p>
+<div class="admonition warning">
+<p class="admonition-title">Lab notes</p>
+<p>Occupancy llm. Does not Queue the result. Does not write _lab. Keyword heuristic if <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../../../../glossary/#gguf" data-short="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file." data-category="Models" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> is missing. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="path-d" data-href="../../../../glossary/#path-d" data-short="Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode." data-category="Hardware and safety" title="Laptop SSH tunnel to MCP or llm-desk. Not a fourth occupancy CLI mode.">Path D</span>: <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="studio-mcp" data-href="../../../../glossary/#studio-mcp" data-short="In-tree MCP that clones lab graphs into live _user/. No execute_code. No Queue." data-category="Studio" title="In-tree MCP that clones lab graphs into live _user/. No execute_code. No Queue.">studio-mcp</span>. Not Comfy Cloud <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="mcp" data-href="../../../../glossary/#mcp" data-short="Model Context Protocol. This stack ships typed stdio servers, not Comfy Cloud MCP." data-category="Studio" title="Model Context Protocol. This stack ships typed stdio servers, not Comfy Cloud MCP.">MCP</span>.</p>
+</div>
 <table>
 <thead>
 <tr>
-<th>File</th>
-<th>Purpose</th>
-<th>Who consumes it</th>
-<th>Safety</th>
+<th>Socket</th>
+<th>Dir</th>
+<th>Type</th>
+<th>What it carries</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>schemas/asset.yaml</code></td>
-<td><code>ez.asset.v1</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="asset-bible" data-href="../../glossary/#asset-bible" data-short="Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR." data-category="Studio" title="Versioned 3D asset catalog under COMFY_OUTPUT_DIR/assets. Outputs, never MODELS_DIR.">Asset Bible</span> record (outputs under <code>${COMFY_OUTPUT_DIR}/assets</code>)</td>
-<td><code>./scripts/manage.sh asset-ls</code> → <code>scripts/lib/asset_bible.py</code></td>
-<td><strong>Never</strong> <code>${MODELS_DIR}</code>. <code>license: operator-output</code> on the example</td>
-</tr>
-<tr>
-<td><code>schemas/guide_pack.shot.yaml</code></td>
-<td><code>ez.guide.shot.v1</code> DCC ↔ Comfy print handshake (120 frames @ 24 fps)</td>
-<td><code>export-guides</code> / <code>scripts/lib/guide_pack.py</code></td>
-<td>Size is <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" data-short="Joint audio/video model (Community License, gated, $10M company-revenue cap)." data-category="Models" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vae-grid" data-href="../../glossary/#vae-grid" data-short="LTX spatial size must be divisible by 32. Lab landscape is 1280×704, not 720." data-category="Studio" title="LTX spatial size must be divisible by 32. Lab landscape is 1280×704, not 720.">VAE grid</span> <strong>1280×704</strong> or <strong>768×1280</strong>. Never 1280×720</td>
-</tr>
-<tr>
-<td><code>schemas/guide_pack.still.yaml</code></td>
-<td><code>ez.guide.still.v1</code> single-frame <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clay" data-href="../../glossary/#clay" data-short="Greybox / Workbench pass (still or 5 s video) that Klein or LTX restyles." data-category="Studio" title="Greybox / Workbench pass (still or 5 s video) that Klein or LTX restyles.">clay</span>/depth/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="canny" data-href="../../glossary/#canny" data-short="Edge / outline pass from Blender or a still. Control for Klein or IC-LoRA." data-category="Studio" title="Edge / outline pass from Blender or a still. Control for Klein or IC-LoRA.">canny</span> plates</td>
-<td><code>blender-stills</code></td>
-<td>Allowed sizes: 1280×704, 768×1280, 1024×1280, 1024×1024, 1280×720 (<strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" data-short="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine." data-category="Models" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> thumb only</strong>, never LTX)</td>
-</tr>
-<tr>
-<td><code>schemas/house_layout.yaml</code></td>
-<td><code>ez.house.layout.v1</code> greybox for Instagram 4:5 clay stills</td>
-<td><code>house-views</code>, <code>start</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../../glossary/#seed" data-short="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore." data-category="Studio" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span>-inputs → <code>scripts/lib/house_layout.py</code></td>
-<td>Y-up meters. Occupancy: dump dies if Comfy is a heavy job</td>
-</tr>
-<tr>
-<td><code>schemas/scene.json</code></td>
-<td>Instance list (<code>ref</code> + transform) — no embedded meshes</td>
-<td><code>asset_bible.py</code> <code>validate</code> / <code>load_scene</code></td>
-<td>Refuses data-URI / huge strings (meshes do not belong here)</td>
-</tr>
-<tr>
-<td><code>schemas/shot_card.yaml</code></td>
-<td><code>ez.shot.card.v1</code> film bible extras on <code>workflows/shorts/*.shots.yaml</code></td>
-<td><code>shot-sheet</code>; lab YAML on the host (not copied by entrypoint)</td>
-<td>Optional keys default fail-closed. Does <strong>not</strong> replace <code>ez.guide.shot.v1</code></td>
+<td><code>path</code></td>
+<td>out</td>
+<td><code>STRING</code></td>
+<td>Written _user path or error.</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2 id="related">Related<a class="headerlink" href="#related" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Need</th>
-<th>Page</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>--tier</code> pack map</td>
-<td><a href="../../download-tiers/">Download tiers</a></td>
-</tr>
-<tr>
-<td>Keep-set vs <code>cleanup</code></td>
-<td><a href="../../models-and-cache/">Models and cache</a></td>
-</tr>
-<tr>
-<td>Disk leftovers</td>
-<td><a href="../../disk-wizard/">Disk wizard</a></td>
-</tr>
-<tr>
-<td>Occupancy modes in resource-policy</td>
-<td><a href="../../operate/occupancy-matrix/">Occupancy matrix</a></td>
-</tr>
-</tbody>
-</table>
+<h4 id="sample"><code>sample</code><a class="headerlink" href="#sample" title="Permanent link">&para;</a></h4>
+<p>Type <code>COMBO</code>. Range / default: custom.</p>
+<p>Sample brief or Custom.</p>
+<p><strong>How it affects generation:</strong> Custom uses the Brief box.</p>
+<p><strong>This graph:</strong> <code>custom</code></p>
+<h4 id="prompt"><code>prompt</code><a class="headerlink" href="#prompt" title="Permanent link">&para;</a></h4>
+<p>Type <code>STRING</code>.</p>
+<p>Brief.</p>
+<p><strong>How it affects generation:</strong> What the new App should make. Template auto picks a lab graph.</p>
+<p><strong>This graph:</strong> <code>1:1 IG still of a chipped cobalt mug on pale stone, unmarked surfaces.</code></p>
+<h4 id="template"><code>template</code><a class="headerlink" href="#template" title="Permanent link">&para;</a></h4>
+<p>Type <code>COMBO</code>. Range / default: auto.</p>
+<p>Lab graph to clone.</p>
+<p><strong>How it affects generation:</strong> auto uses the GGUF planner or a keyword heuristic. Pin <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../../../glossary/#klein" data-short="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine." data-category="Models" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">klein</span>/ig-square to skip.</p>
+<p><strong>This graph:</strong> <code>auto</code></p>
+<h4 id="slug"><code>slug</code><a class="headerlink" href="#slug" title="Permanent link">&para;</a></h4>
+<p>Type <code>STRING</code>.</p>
+<p>Filename stem.</p>
+<p><strong>How it affects generation:</strong> Live _user/<slug>.app.json. Lowercase letters, digits, hyphen.</p>
+<p><strong>This graph:</strong> <code>mug-ig</code></p>
+<h4 id="as_app"><code>as_app</code><a class="headerlink" href="#as_app" title="Permanent link">&para;</a></h4>
+<p>Type <code>BOOLEAN</code>. Range / default: true.</p>
+<p>Write an App.</p>
+<p><strong>How it affects generation:</strong> true writes *.app.json for the Apps sidebar.</p>
+<p><strong>This graph:</strong> <code>true</code></p>
+<h4 id="overwrite"><code>overwrite</code><a class="headerlink" href="#overwrite" title="Permanent link">&para;</a></h4>
+<p>Type <code>BOOLEAN</code>. Range / default: false.</p>
+<p>Replace existing.</p>
+<p><strong>How it affects generation:</strong> false refuses an existing _user file.</p>
+<p><strong>This graph:</strong> <code>false</code></p>
+<h4 id="catalog"><code>catalog</code><a class="headerlink" href="#catalog" title="Permanent link">&para;</a></h4>
+<p>Type <code>STRING</code>.</p>
+<p>Catalog id.</p>
+<p><strong>How it affects generation:</strong> Leave as stamped.</p>
+<p><strong>This graph:</strong> <code>inspire/app-forge</code></p>
 
 
 
 
 
 
-
-  
-  
 
 
 
@@ -6827,18 +7147,18 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../../javascripts/glossary.js"></script>
+        <script src="../../../../javascripts/glossary.js"></script>
       
-        <script src="../../javascripts/commands.js"></script>
+        <script src="../../../../javascripts/commands.js"></script>
       
-        <script src="../../javascripts/tables.js"></script>
+        <script src="../../../../javascripts/tables.js"></script>
       
-        <script src="../../javascripts/published.js"></script>
+        <script src="../../../../javascripts/published.js"></script>
       
     
   <script type="application/json" id="ez-cmd-data">{"variables":[{"id":"SPARK_HOST","label":"Spark IP / DNS","default":"127.0.0.1"},{"id":"SPARK_USER","label":"SSH user","default":"spark"},{"id":"MODELS_DIR","label":"MODELS_DIR","default":"/mnt/models"},{"id":"COMFY_OUTPUT_DIR","label":"COMFY_OUTPUT_DIR","default":"/mnt/comfy-output"},{"id":"COMFY_PORT","label":"ComfyUI port","default":"8188"},{"id":"DOWNLOAD_LIMIT","label":"Download limit","default":"auto"}],"commands":[{"id":"download-models","title":"download-models","description":"Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.","argv":["./scripts/manage.sh","download-models"],"flags":[{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto (85% of speedtest when HTB works)"},{"value":"off","label":"off (SSH risk — full-rate pull)"}]},{"name":"drop-incomplete","kind":"bool","default":false,"label":"Delete stuck *.incomplete then re-pull"}]},{"id":"download-image","title":"download-image --tier","description":"Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.","argv":["./scripts/utilities/download-image.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"fast","choices":[{"value":"fast","label":"fast — Klein 4B distilled FP8 + TE + VAE (default, in download-models)"},{"value":"nvfp4","label":"nvfp4 — Klein 4B NVFP4 still UNET (optional)"},{"value":"base","label":"base — Klein 4B base FP8 still UNET (optional)"},{"value":"zimage","label":"zimage — Z-Image Turbo stills (optional)"},{"value":"all","label":"all — fast + nvfp4 + base + zimage"}]}]},{"id":"download-wan","title":"download-wan --tier","description":"Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.","argv":["./scripts/utilities/download-wan.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"5b","choices":[{"value":"5b","label":"5b — Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"},{"value":"a14b","label":"a14b — Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"},{"value":"fun-inp","label":"fun-inp — Fun InP A14B first-last-frame (~47 GB, floor 40)"},{"value":"vace","label":"vace — Wan 2.1 VACE 1.3B join (~6 GB, not in all)"},{"value":"s2v","label":"s2v — Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"},{"value":"all","label":"all — 5b + a14b + fun-inp (not vace, not s2v)"}]}]},{"id":"download-ltx","title":"download-ltx --tier","description":"LTX generation selector, not “better”. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).","argv":["./scripts/utilities/download-ltx.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"2.5","choices":[{"value":"2.5","label":"2.5 — distilled INT8-convrot AV (~30 GB, in download-models)"},{"value":"2.3","label":"2.3 — retired distilled FP8 fallback (auto-includes gemma)"},{"value":"balanced","label":"balanced — 2.3 alias (FP8, auto-includes gemma)"},{"value":"quality","label":"quality — 2.3 BF16 alias (larger, auto-includes gemma)"},{"value":"iclora","label":"iclora — IC-LoRA Union Control (~1 GB, not in all)"},{"value":"gemma","label":"gemma — LTX-2.3 Gemma DualCLIP (~8 GB)"},{"value":"all","label":"all — 2.5 + 2.3 + gemma (not iclora)"}]}]},{"id":"download-podcast","title":"download-podcast --tier","description":"Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-podcast"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"analog","choices":[{"value":"analog","label":"analog — Kokoro-82M ONNX + voices (tiny, default)"},{"value":"acestep","label":"acestep — ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"},{"value":"chatterbox","label":"chatterbox — optional MIT GPU TTS"},{"value":"qwen3tts","label":"qwen3tts — optional Qwen3-TTS 0.6B"},{"value":"all","label":"all — analog + acestep + chatterbox + qwen3tts"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-dub","title":"download-dub --tier","description":"Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools\u003c82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-dub"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"asr","choices":[{"value":"asr","label":"asr — Silero VAD + faster-whisper large-v3 (default)"},{"value":"clone","label":"clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},{"value":"all","label":"all — asr + clone"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-music","title":"download-music --tier","description":"Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.","argv":["./scripts/manage.sh","download-music"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"turbo","choices":[{"value":"turbo","label":"turbo — ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"},{"value":"xl","label":"xl — split XL files (larger; not the default)"},{"value":"all","label":"all — turbo + xl"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-3d","title":"download-3d --tier","description":"Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.","argv":["./scripts/manage.sh","download-3d"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"trellis2","choices":[{"value":"trellis2","label":"trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},{"value":"da3-base","label":"da3-base — Depth Anything 3 BASE Apache (~1 GB)"},{"value":"all","label":"all — trellis2 + da3-base"}]}]},{"id":"download-longcat","title":"download-longcat --tier","description":"Opt-in MIT LongCat. No NCCL in this sample stack.","argv":["./scripts/manage.sh","download-longcat"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"video","choices":[{"value":"video","label":"video — LongCat-Video"},{"value":"avatar","label":"avatar — LongCat-Video-Avatar"},{"value":"all","label":"all — video + avatar"}]}]},{"id":"download-dreamx","title":"download-dreamx --tier","description":"Apache DreamX-Creator only. DreamX-World is refused.","argv":["./scripts/manage.sh","download-dreamx"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"creator","choices":[{"value":"creator","label":"creator — DreamX-Creator 1.0 Apache (~8 GB selective, full repo ~54 GB)"}]}]},{"id":"download-restore","title":"download-restore --tier","description":"Post-concat SeedVR2 restore pack. Not part of download-models.","argv":["./scripts/manage.sh","download-restore"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"seedvr2-3b","choices":[{"value":"seedvr2-3b","label":"seedvr2-3b — SeedVR2-3B Apache (~15 GB)"}]}]},{"id":"download-llm","title":"download-llm --tier","description":"Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.","argv":["./scripts/manage.sh","download-llm"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"enhance","choices":[{"value":"enhance","label":"enhance — Qwen3-4B Q4_K_M (default, in download-models)"},{"value":"qwen36-35b-a3b","label":"qwen36-35b-a3b — Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"},{"value":"all","label":"all — enhance + qwen36-35b-a3b"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"occupancy","title":"occupancy enter","description":"Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.","argv":["./scripts/manage.sh","occupancy","enter"],"flags":[{"name":"mode","kind":"choice","required":true,"default":"blender-desk","choices":[{"value":"blender-desk","label":"blender-desk — park Comfy, Workbench dumps"},{"value":"llm-desk","label":"llm-desk — park Comfy, host 35B llama-server"},{"value":"klein","label":"klein — stop Blender and 35B sidecar, Queue stills"},{"value":"trellis","label":"trellis — stop Blender and 35B sidecar, Queue TRELLIS.2"},{"value":"wan","label":"wan — stop Blender and 35B sidecar, Queue silent motion"},{"value":"ltx","label":"ltx — stop Blender and 35B sidecar, Queue AV print"},{"value":"idle","label":"idle — stop Blender, 35B sidecar, and Compose"}]}]},{"id":"research-mcp","title":"research-mcp","description":"In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.","argv":["./scripts/manage.sh","research-mcp"],"flags":[]},{"id":"studio-mcp","title":"studio-mcp","description":"In-tree studio MCP (clone _lab graphs into live _user/; generate_app). CPU GGUF. No execute_code. Does not Queue.","argv":["./scripts/manage.sh","studio-mcp"],"flags":[]},{"id":"ssh-forward","title":"SSH port-forward","description":"Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.","argv":["ssh","-L","${COMFY_PORT}:127.0.0.1:${COMFY_PORT}","${SPARK_USER}@${SPARK_HOST}"],"flags":[]},{"id":"open-ui","title":"Open ComfyUI URL","description":"On-box / LAN URL. Use ssh-forward from a laptop instead.","argv":["echo","http://${SPARK_HOST}:${COMFY_PORT}"],"flags":[]},{"id":"doctor","title":"doctor","description":"Preflight. Missing weights are a warning, not a hard fail.","argv":["./scripts/manage.sh","doctor"],"flags":[]},{"id":"start","title":"start","description":"Type yes. Headroom preflight. Compose restart: no.","argv":["./scripts/manage.sh","start"],"flags":[]},{"id":"stop","title":"stop","description":"Stop containers. Keeps models, outputs, and the comfy-state volume.","argv":["./scripts/manage.sh","stop"],"flags":[]},{"id":"reap-models-plan","title":"reap-models --plan","description":"MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.","argv":["./scripts/manage.sh","reap-models","--plan"],"flags":[]},{"id":"disk-wizard-plan","title":"disk-wizard --plan","description":"Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.","argv":["./scripts/manage.sh","disk-wizard","--plan"],"flags":[]},{"id":"help","title":"help","description":"Print the manage.sh command list.","argv":["./scripts/manage.sh","help"],"flags":[]},{"id":"setup","title":"setup","description":".env, MODELS_DIR, COMFY_OUTPUT_DIR, optional Docker CE, hf CLI, then doctor.","argv":["./scripts/manage.sh","setup"],"flags":[{"name":"install-docker","kind":"bool","default":false,"label":"Install Docker CE + compose plugin when missing"}]},{"id":"status","title":"status","description":"Compose project status. Prints MODELS_DIR, COMFY_OUTPUT_DIR, port.","argv":["./scripts/manage.sh","status"],"flags":[]},{"id":"restart","title":"restart","description":"stop then start. Full yes confirm and headroom again.","argv":["./scripts/manage.sh","restart"],"flags":[]},{"id":"logs","title":"logs","description":"Follow compose logs.","argv":["./scripts/manage.sh","logs"],"flags":[]},{"id":"download-limit","title":"download-limit","description":"Throttle Hugging Face pulls. wrap always clears on exit.","argv":["./scripts/manage.sh","download-limit","status"],"flags":[]},{"id":"clear-hf-locks","title":"clear-hf-locks","description":"Remove stale Hugging Face .lock files under MODELS_DIR.","argv":["./scripts/manage.sh","clear-hf-locks"],"flags":[]},{"id":"reset-hf-partials","title":"reset-hf-partials","description":"Delete *.incomplete under MODELS_DIR. Finished weights kept.","argv":["./scripts/manage.sh","reset-hf-partials"],"flags":[]},{"id":"print-shot","title":"print-shot","description":"Queue one compiled 90s shot into films/\u003cslug>/shots/.","argv":["./scripts/manage.sh","print-shot"],"flags":[]},{"id":"film-resume","title":"film-resume","description":"Reprint failed 90s shots only. Skip ok 5.00s takes.","argv":["./scripts/manage.sh","film-resume"],"flags":[]},{"id":"film-export-otio","title":"film-export-otio","description":"Write films/\u003cslug>/publish OTIO from the jobstore. Host-side.","argv":["./scripts/manage.sh","film-export-otio"],"flags":[]},{"id":"film-proxies","title":"film-proxies","description":"NVENC proxies. Refuse if compose is up. Never rewrite masters.","argv":["./scripts/manage.sh","film-proxies"],"flags":[]},{"id":"take-promote","title":"take-promote","description":"Copy a take into shots/NN.mp4 and mark the shot ok.","argv":["./scripts/manage.sh","take-promote"],"flags":[]},{"id":"promote-workflow","title":"promote-workflow","description":"Copy a live _user graph into workflows/_lab/\u003clane>/. Does not commit.","argv":["./scripts/manage.sh","promote-workflow"],"flags":[]},{"id":"album-render","title":"album-render","description":"Queue one shipped album then zip. Compose must already be up.","argv":["./scripts/manage.sh","album-render"],"flags":[]},{"id":"llm-sidecar","title":"llm-sidecar","description":"Host llama-server for occupancy llm-desk (127.0.0.1:30000). Prefer occupancy enter llm-desk.","argv":["./scripts/manage.sh","llm-sidecar","status"],"flags":[]},{"id":"blender-mcp","title":"blender-mcp","description":"In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.","argv":["./scripts/manage.sh","blender-mcp"],"flags":[]},{"id":"blender-llm","title":"blender-llm","description":"Optional host Qwen3-4B CPU client for blender-mcp. Path D if llama.cpp missing.","argv":["./scripts/manage.sh","blender-llm"],"flags":[]},{"id":"blender","title":"blender","description":"Host Blender sidecar. Workbench in blender-desk. Dies if Comfy is a heavy job.","argv":["./scripts/manage.sh","blender"],"flags":[]},{"id":"blender-install","title":"blender-install","description":"Host apt install of Ubuntu blender (universe). Never in the Dockerfile. Occupancy does not install Blender.","argv":["./scripts/manage.sh","blender-install"],"flags":[]},{"id":"export-guides","title":"export-guides","description":"Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","export-guides"],"flags":[]},{"id":"blender-stills","title":"blender-stills","description":"Dump a single-frame clay/depth/canny still. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","blender-stills"],"flags":[]},{"id":"house-views","title":"house-views","description":"Dump 1024x1280 Instagram clay stills + GLB. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","house-views"],"flags":[]},{"id":"asset-ls","title":"asset-ls","description":"Read-only Asset Bible catalog under COMFY_OUTPUT_DIR/assets.","argv":["./scripts/manage.sh","asset-ls"],"flags":[]},{"id":"film-accept","title":"film-accept","description":"Fail-closed 90s gate: 5.00s, 1280x704, LTX audio.","argv":["./scripts/manage.sh","film-accept"],"flags":[]},{"id":"shot-sheet","title":"shot-sheet","description":"Write films/\u003cslug>/shots.yaml with shot-card defaults.","argv":["./scripts/manage.sh","shot-sheet"],"flags":[]},{"id":"overlay-qc","title":"overlay-qc","description":"50% clay/look overlay. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","overlay-qc"],"flags":[]},{"id":"film-animatic","title":"film-animatic","description":"Cheap 90s animatic from clay.mp4 or stills. Host ffmpeg.","argv":["./scripts/manage.sh","film-animatic"],"flags":[]},{"id":"stem-mix","title":"stem-mix","description":"Picture-lock stems; duck -15 dB; YouTube loudnorm. Occupancy audio.","argv":["./scripts/manage.sh","stem-mix"],"flags":[]},{"id":"audio-still-video","title":"audio-still-video","description":"Mux a still + audio master to YouTube MP4. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","audio-still-video"],"flags":[]},{"id":"spark-timing","title":"spark-timing","description":"Kitchen wall-clock table. Do not record on pytorch-fallback.","argv":["./scripts/manage.sh","spark-timing","show"],"flags":[]},{"id":"models-status","title":"models-status","description":"Disk bible: keep-set + refuse list. Does not delete.","argv":["./scripts/manage.sh","models-status"],"flags":[]},{"id":"cleanup","title":"cleanup","description":"Type DELETE. Removes ez-comfy-state only. Keeps MODELS_DIR and COMFY_OUTPUT_DIR.","argv":["./scripts/manage.sh","cleanup"],"flags":[]},{"id":"spark-farm-status","title":"spark-farm status","description":"Probe independent Spark workers. Never starts compose remotely. No NCCL.","argv":["./scripts/utilities/spark-farm.sh","status"],"flags":[]}]}</script>

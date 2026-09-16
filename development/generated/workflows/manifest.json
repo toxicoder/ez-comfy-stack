@@ -103,6 +103,12 @@
       "kind": "graph"
     },
     {
+      "id": "inspire/app-forge",
+      "path": "generated/workflows/inspire/app-forge.md",
+      "lane": "inspire",
+      "kind": "graph"
+    },
+    {
       "id": "inspire/beat-sheet",
       "path": "generated/workflows/inspire/beat-sheet.md",
       "lane": "inspire",
@@ -571,6 +577,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 328,
-  "page_count": 96
+  "graph_count": 329,
+  "page_count": 97
 }
