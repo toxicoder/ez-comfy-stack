@@ -52,6 +52,13 @@ comfy-state/
 site/
 .cache/
 
+# Bazel build artifacts (never commit outputs)
+bazel-*
+.bazel/
+.bazelrc.user
+bazel-out/
+external/
+
 # Test temp
 /tmp/
 test-results/

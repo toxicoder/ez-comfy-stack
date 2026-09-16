@@ -1,6 +1,6 @@
 ---
 title: When to use ez-comfy-stack vs spark-lab
-description: Compose demo on one Spark vs K3s lab — this repo must not grow K3s, Bazel, or in-tree NCCL.
+description: Compose demo on one Spark vs K3s lab — this repo must not grow K3s, a dashboard, or in-tree NCCL.
 tags: [spark-lab, compose, k3s, nccl, farm]
 ---
 
@@ -9,7 +9,7 @@ tags: [spark-lab, compose, k3s, nccl, farm]
 **What's on this page**
 
 - **Compose demo vs K3s lab** — what each repo is for
-- **What this sample stack refuses** — K3s, Bazel, NCCL-as-a-feature, MiniMax H3
+- **What this sample stack refuses** — K3s, a full dashboard, NCCL-as-a-feature, MiniMax H3
 - **Independent Sparks** may share `${MODELS_DIR}`; still **no NCCL**
 - **How to graduate** without rewriting this tree into the lab
 
@@ -61,7 +61,7 @@ flowchart TB
 
 !!! warning "This repo must not grow K3s"
 
-    Do not pull K3s, Bazel, a full dashboard, or in-tree NCCL into ez-comfy-stack. Point long-term users at nvidia-dgx-spark-lab. Independent Sparks may still **share `${MODELS_DIR}`**; that is NFS/rsync, **not** NCCL.
+    Do not pull K3s, a full dashboard, or in-tree NCCL into ez-comfy-stack. Bazelisk is the contributor test/lint/docs entry point only. Point long-term cluster users at nvidia-dgx-spark-lab. Independent Sparks may still **share `${MODELS_DIR}`**; that is NFS/rsync, **not** NCCL.
 
 ---
 

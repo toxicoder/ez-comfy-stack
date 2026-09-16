@@ -1,0 +1,50 @@
+{
+  "name": "ez-comfy-stack",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".",
+    "args": {
+      "BAZELISK_VERSION": "v1.25.0",
+      "BUILDIFIER_VERSION": "v8.2.1",
+      "SHFMT_ASSET_VERSION": "3.10.0"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12",
+      "installTools": true
+    }
+  },
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "4gb",
+    "storage": "16gb"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bazelbuild.vscode-bazel",
+        "ms-python.python",
+        "ms-python.mypy-type-checker",
+        "mkhl.shfmt",
+        "timonwong.shellcheck"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "bazel.executable": "/usr/local/bin/bazelisk",
+        "bazel.buildifierExecutable": "/usr/local/bin/buildifier"
+      }
+    }
+  },
+  "forwardPorts": [8000, 8188],
+  "portsAttributes": {
+    "8000": { "label": "MkDocs", "onAutoForward": "notify" },
+    "8188": { "label": "ComfyUI", "onAutoForward": "notify" }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteUser": "vscode"
+}

@@ -1,0 +1,78 @@
+name: Setup Bazel
+description: Install Bazelisk and restore disk/repository caches for CI jobs.
+
+inputs:
+  install-lint-tools:
+    description: Run the shared lint-tool installer (shellcheck, shfmt, buildifier, pyright, mypy)
+    required: false
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Cache Bazelisk binary
+      uses: actions/cache@v5
+      id: bazelisk-cache
+      with:
+        path: /usr/local/bin/bazelisk
+        key: bazelisk-${{ runner.os }}-v1.25.0
+
+    - name: Install Bazelisk
+      if: steps.bazelisk-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        set -euo pipefail
+        BAZELISK_VERSION="${BAZELISK_VERSION:-v1.25.0}"
+        arch="$(uname -m)"
+        case "$arch" in
+          x86_64|amd64) barch=amd64 ;;
+          aarch64|arm64) barch=arm64 ;;
+          *) echo "unsupported arch: $arch" >&2; exit 1 ;;
+        esac
+        curl -fsSL "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-${barch}" \
+          -o /tmp/bazelisk
+        sudo install /tmp/bazelisk /usr/local/bin/bazelisk
+        bazelisk version
+
+    - name: Ensure Bazelisk is executable
+      if: steps.bazelisk-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: |
+        sudo chmod +x /usr/local/bin/bazelisk
+        bazelisk version
+
+    - name: Cache Bazel disk and repository cache
+      uses: actions/cache@v5
+      with:
+        path: |
+          ~/.cache/bazel-disk
+          ~/.cache/bazel-repo
+        key: bazel-${{ runner.os }}-${{ hashFiles('MODULE.bazel.lock', '.bazelversion') }}
+        restore-keys: |
+          bazel-${{ runner.os }}-
+
+    - name: Cache lint tool binaries
+      if: inputs.install-lint-tools == 'true'
+      uses: actions/cache@v5
+      id: lint-tools-cache
+      with:
+        path: |
+          /usr/local/bin/buildifier
+          /usr/local/bin/shfmt
+        key: lint-bins-${{ runner.os }}-${{ runner.arch }}-bf8.2.1-sh3.10.0
+
+    - name: Cache lint pip packages
+      if: inputs.install-lint-tools == 'true'
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/pip
+        key: lint-pip-${{ runner.os }}-${{ hashFiles('tests/requirements.txt', 'scripts/ci/install-lint-tools.sh') }}
+        restore-keys: |
+          lint-pip-${{ runner.os }}-
+
+    - name: Install lint tools for Bazel targets
+      if: inputs.install-lint-tools == 'true'
+      shell: bash
+      env:
+        LINT_BINS_CACHE_HIT: ${{ steps.lint-tools-cache.outputs.cache-hit }}
+      run: .github/scripts/install-lint-tools.sh

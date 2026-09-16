@@ -21,7 +21,9 @@
 #
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${0}")/.." && pwd)"
+# shellcheck source=repo_root.sh disable=SC1091
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/repo_root.sh"
+ROOT="$(tests_repo_root)"
 cd "${ROOT}"
 
 #######################################

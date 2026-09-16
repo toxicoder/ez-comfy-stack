@@ -1,0 +1,11 @@
+"""Package purpose: Host Blender helper scripts used by DCC utilities."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "blender",
+    srcs = glob(
+        ["blender/*.py"],
+        allow_empty = True,
+    ),
+)

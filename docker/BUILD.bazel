@@ -1,0 +1,17 @@
+"""Package purpose: Compose, Dockerfile, entrypoint, install-comfy, and Spark patches."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "sources",
+    srcs = glob(
+        [
+            "**/*.sh",
+            "**/*.py",
+            "**/*.yml",
+            "Dockerfile",
+            ".dockerignore",
+        ],
+        allow_empty = True,
+    ),
+)

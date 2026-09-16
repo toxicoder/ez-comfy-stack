@@ -90,7 +90,7 @@ They are not the same product. Default `start` does **not** launch studio-ui. Wi
 
 Stay here for a **Compose demo** on one Spark (or independent Sparks sharing `${MODELS_DIR}`). Graduate when you need K3s, a multi-workload dashboard, or tensor-parallel LLMs.
 
-This repo must **not** grow K3s, Bazel, or in-tree NCCL. Table: [When to use vs spark-lab](when-to-use-vs-spark-lab.md).
+This repo must **not** grow K3s, a full dashboard, or in-tree NCCL. Bazelisk is the contributor graph (`bazelisk run //:validate`). Table: [When to use vs spark-lab](when-to-use-vs-spark-lab.md).
 
 ---
 

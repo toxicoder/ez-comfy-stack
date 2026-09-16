@@ -1,0 +1,149 @@
+"""Package purpose: Root Bazel targets for test suites, lint aggregation, docs aliases, and repo-wide entry points.
+
+Bazel is the primary entry point: test, lint, docs, and operational scripts.
+
+Common entry points:
+
+  bazelisk run //:validate              # git-aware build + test + lint + docs
+  bazelisk test //:test                 # hermetic suite including strict MkDocs
+  bazelisk test //:test-fast            # CI core (BATS + pytest + typecheck + inventory)
+  bazelisk test //:lint --test_tag_filters=manual
+  bazelisk run //:manage -- doctor
+  bazelisk run //docs:serve
+
+See docs/contribute/building-with-bazel.md.
+"""
+
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+package(default_visibility = ["//visibility:private"])
+
+exports_files([
+    "fix.sh",
+    "mkdocs.yml",
+    "mypy.ini",
+    "pyrightconfig.json",
+])
+
+filegroup(
+    name = "devcontainer",
+    srcs = [
+        ".devcontainer/Dockerfile",
+        ".devcontainer/devcontainer.json",
+        ".devcontainer/doctor.sh",
+        ".devcontainer/post-create.sh",
+        ".devcontainer/tool-versions.env",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "ci_workflows",
+    srcs = [
+        ".github/actions/setup-bazel/action.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/deploy-docs.yml",
+        ".github/workflows/publish-image.yml",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "manage",
+    actual = "//scripts:manage",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "bats",
+    actual = "//tests:bats",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "manage_help_test",
+    actual = "//scripts:manage_help_test",
+    visibility = ["//visibility:public"],
+)
+
+_TEST_FAST = [
+    "//scripts:manage_help_test",
+    "//tests:bats",
+    "//tests:pytest",
+    "//tests:typecheck",
+    "//tests:shell_inventory",
+]
+
+test_suite(
+    name = "test-fast",
+    tests = _TEST_FAST,
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = _TEST_FAST + [
+        "//docs:test_mkdocs_build",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "all",
+    srcs = [
+        ":manage",
+        "//docs",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "lint",
+    tags = ["lint"],
+    tests = [
+        "//lints:all",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "docs-serve",
+    actual = "//docs:serve",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "docs-build",
+    actual = "//docs:docs",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "docs",
+    actual = "//docs:docs",
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "fix",
+    srcs = ["fix.sh"],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "validate",
+    actual = "//scripts:validate",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "check",
+    actual = ":validate",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "coverage",
+    actual = "//tests:coverage",
+    visibility = ["//visibility:public"],
+)

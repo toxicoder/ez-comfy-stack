@@ -51,7 +51,6 @@ teardown() {
   [ "${status}" -eq 0 ]
   run grep -F 'tests/typecheck.sh' "${mk}"
   [ "${status}" -eq 0 ]
-  awk '/^lint:/{p=1; next} p && /^[^[:space:]#]/{exit} p' "${mk}" | grep -F 'tests/typecheck.sh'
 }
 
 @test "Makefile typecheck help names mypy" {
@@ -112,7 +111,7 @@ teardown() {
 
 @test "AGENTS.md finish-with requires Pyright (Pylance) and mypy" {
   local agents="${REPO_ROOT}/AGENTS.md"
-  run grep -F 'make lint' "${agents}"
+  run grep -F 'bazelisk run //:validate' "${agents}"
   [ "${status}" -eq 0 ]
   run grep -E 'Pyright|Pylance' "${agents}"
   [ "${status}" -eq 0 ]

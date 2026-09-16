@@ -162,6 +162,7 @@ nav:
       - Models and workflows: operate/troubleshooting-models-workflows.md
   - Contribute:
       - Conventions: project-conventions.md
+      - Building with Bazel: contribute/building-with-bazel.md
       - Docs style: contribute/docs-style.md
       - Testing docs: contribute/testing-docs.md
       - Contributing: contribute/contributing.md

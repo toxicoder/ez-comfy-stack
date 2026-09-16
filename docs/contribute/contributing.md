@@ -37,9 +37,9 @@ Session vars are for operator fences. Contributors still branch from **`developm
 ## Workflow (from the root file)
 
 1. Branch from latest `development`
-2. Prefer TDD (`make test` / `make coverage`)
+2. Prefer TDD (`bazelisk test //:test-fast` / `make test`)
 3. **Commit tests with the production files they cover** (same commit)
-4. Run `make lint` (ShellCheck + shfmt + Pyright + mypy) and `make docs`
+4. Run `bazelisk test //:lint --test_tag_filters=manual` and `bazelisk run //docs:docs`
 5. Open a PR into `development`
 
 Install Python test tools once: `pip install -r tests/requirements.txt`.
@@ -48,7 +48,7 @@ Install Python test tools once: `pip install -r tests/requirements.txt`.
 flowchart TB
   A["Branch from development"] --> B["TDD: red → green → refactor"]
   B --> C["Commit tests + production together"]
-  C --> D["make lint · make docs · make coverage"]
+  C --> D["bazelisk run //:validate"]
   D --> E["PR into development"]
 ```
 
@@ -70,9 +70,9 @@ Commit titles: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
 ## PR checklist
 
 - [ ] Tests updated in the same commits as the code they exercise
-- [ ] `make coverage` passes (100% gate + Pyright + mypy)
-- [ ] `make lint` clean (ShellCheck, shfmt, Pyright, mypy)
-- [ ] `make docs` (mkdocs strict)
+- [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% gate + Pyright + mypy)
+- [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
+- [ ] `bazelisk run //docs:docs` (mkdocs strict)
 - [ ] Safety impact called out if Docker/resources/download-limit changed
 - [ ] Docs updated for operator-facing changes
 - [ ] **AI-drafted docs still received a human pass**

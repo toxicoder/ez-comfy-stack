@@ -70,19 +70,19 @@ When adding or editing shell (including `tests/bats/*.bash` helpers and `tests/*
 
 - Prefer `"${var}"`, `[[ … ]]`, `$(…)`, process substitution over `find | while`
 - Document functions with **Globals / Arguments / Outputs / Returns**
-- Run `make fmt` and `make lint` (ShellCheck warnings, Pyright errors, and mypy errors are defects)
+- Run `bazelisk run //:fix` and `bazelisk test //:lint --test_tag_filters=manual` (ShellCheck warnings, Pyright errors, and mypy errors are defects). `make fmt` / `make lint` are shims.
 - Do not use `eval` or aliases in scripts
 - See conventions for intentional deviations (`env bash`, modular script length)
 - Coverage: new functions must be **named and exercised under `tests/`** in the same commit
 Finish with:
 
 ```bash
-make test
-make coverage
-make lint
+bazelisk run //:validate
 ```
 
-**Pyright (Pylance) and mypy** run inside `make test`, `make coverage`, and `make lint`. Type errors are defects. Do not consider a task complete while Pyright or mypy reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
+Prefer `bazelisk test //tests:bats_<suite>_test` while red/green. `make test` / `make coverage` / `make lint` delegate to Bazelisk when it is on `PATH`.
+
+**Pyright (Pylance) and mypy** run inside `//:test-fast` and `//:lint`. Type errors are defects. Do not consider a task complete while Pyright or mypy reports errors — fix the types; do not skip the gate. Install with `pip install -r tests/requirements.txt`.
 
 ## Safety callouts
 
@@ -122,4 +122,4 @@ Public site publishes after merge via `.github/workflows/deploy-docs.yml` (mike)
 
 ## Scope
 
-This is a **sample** stack. Do not pull in K3s, Bazel, full dashboard, or multi-node NCCL. Point long-term users at nvidia-dgx-spark-lab. Independent Sparks share `MODELS_DIR`; still no in-tree NCCL.
+This is a **sample** Compose stack. Bazelisk is the contributor/CI entry point for test, lint, and docs (`bazelisk run //:validate`). Do **not** pull in K3s, a full dashboard, or multi-node NCCL. Point long-term cluster users at nvidia-dgx-spark-lab. Independent Sparks share `MODELS_DIR`; still no in-tree NCCL.

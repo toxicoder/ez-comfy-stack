@@ -1,0 +1,50 @@
+# ez-comfy-stack .bazelrc
+# Modern Bazel + Bzlmod. Conservative defaults for a small Compose repo.
+
+# =============================================================================
+# Core
+# =============================================================================
+common --enable_bzlmod
+common --noenable_workspace
+
+# =============================================================================
+# Performance & Caching
+# =============================================================================
+build --disk_cache=~/.cache/bazel-disk
+test --disk_cache=~/.cache/bazel-disk
+build --repository_cache=~/.cache/bazel-repo
+test --repository_cache=~/.cache/bazel-repo
+
+build --jobs=HOST_CPUS*0.75
+build --local_resources=memory=HOST_RAM*0.5
+
+build --spawn_strategy=sandboxed
+test --spawn_strategy=local,sandboxed
+
+# =============================================================================
+# Output & UI
+# =============================================================================
+build --show_progress_rate_limit=0.2
+test --test_output=errors
+
+# =============================================================================
+# CI Configuration
+# =============================================================================
+# Use with: bazelisk test //:test-fast --config=ci
+build:ci --noshow_progress
+build:ci --show_progress_rate_limit=5
+test:ci --test_output=errors
+test:ci --test_summary=detailed
+build:ci --remote_download_minimal
+test:ci --remote_download_minimal
+build:ci --jobs=HOST_CPUS
+build:ci --local_resources=memory=HOST_RAM*0.8
+test:ci --jobs=HOST_CPUS
+test:ci --local_resources=memory=HOST_RAM*0.8
+test:ci --test_sharding_strategy=disabled
+test:ci --keep_going
+
+# =============================================================================
+# Query
+# =============================================================================
+query --query_file=-

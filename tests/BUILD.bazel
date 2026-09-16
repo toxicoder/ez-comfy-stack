@@ -1,0 +1,111 @@
+"""Package purpose: Hermetic BATS, pytest coverage, typecheck, and shell inventory."""
+
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load(":bats.bzl", "bats_file_tests")
+
+package(default_visibility = ["//visibility:private"])
+
+filegroup(
+    name = "bats_tool",
+    srcs = ["@bats_core//:bin/bats"],
+    data = [
+        "@bats_core//:libexec/bats-core/bats",
+        "@bats_core//:libexec/bats-core/bats-exec-file",
+        "@bats_core//:libexec/bats-core/bats-exec-suite",
+        "@bats_core//:libexec/bats-core/bats-exec-test",
+        "@bats_core//:libexec/bats-core/bats-format-cat",
+        "@bats_core//:libexec/bats-core/bats-format-junit",
+        "@bats_core//:libexec/bats-core/bats-format-pretty",
+        "@bats_core//:libexec/bats-core/bats-format-tap",
+        "@bats_core//:libexec/bats-core/bats-format-tap13",
+        "@bats_core//:libexec/bats-core/bats-gather-tests",
+        "@bats_core//:libexec/bats-core/bats-preprocess",
+    ],
+)
+
+_BATS_COMMON = [
+    "bats/test_helper.bash",
+    "bats_runner.sh",
+    ":bats_tool",
+    "//:ci_workflows",
+    "//:devcontainer",
+    "//config:policy",
+    "//custom_nodes:sources",
+    "//docker:sources",
+    "//scripts:ci_install_lint_tools",
+    "//scripts:doc_sources",
+    "//scripts:validate",
+    "//studio-ui:sources",
+    "//tools:blender",
+    "//workflows:lab_graphs",
+]
+
+bats_file_tests(
+    srcs = glob(["bats/*.bats"]),
+    common_data = _BATS_COMMON,
+)
+
+exports_files(
+    [
+        "bats_runner.sh",
+        "coverage.sh",
+        "run_all.sh",
+        "run_pytest.sh",
+        "shell_inventory.sh",
+        "typecheck.sh",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "pytest",
+    size = "large",
+    timeout = "moderate",
+    srcs = ["run_pytest.sh"],
+    data = [
+        "repo_root.sh",
+        "//scripts:doc_sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "typecheck",
+    size = "medium",
+    srcs = ["typecheck.sh"],
+    data = [
+        "repo_root.sh",
+        "//scripts:doc_sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "shell_inventory",
+    size = "small",
+    srcs = ["shell_inventory.sh"],
+    data = [
+        "repo_root.sh",
+        "//scripts:doc_sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "coverage",
+    srcs = ["coverage.sh"],
+    visibility = ["//visibility:public"],
+)

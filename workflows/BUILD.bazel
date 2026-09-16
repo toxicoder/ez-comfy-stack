@@ -1,0 +1,15 @@
+"""Package purpose: Shipped _lab Comfy graphs and shorts YAML (never _user dumps)."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "lab_graphs",
+    srcs = glob(
+        [
+            "_lab/**/*.json",
+            "shorts/*.yaml",
+            "quality/**/NOTICE.md",
+        ],
+        allow_empty = True,
+    ),
+)

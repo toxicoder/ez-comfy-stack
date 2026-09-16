@@ -1,0 +1,121 @@
+"""Package purpose: manage.sh operational binary, utility scripts, validate orchestrator, and doc sources."""
+
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+package(default_visibility = ["//visibility:private"])
+
+sh_binary(
+    name = "manage",
+    srcs = ["manage.sh"],
+    data = [
+        ":doc_sources",
+        "//config:policy",
+        "//docker:sources",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "manage_help_test",
+    size = "small",
+    srcs = ["manage.sh"],
+    args = ["help"],
+    data = [
+        ":doc_sources",
+        "//config:policy",
+        "//docker:sources",
+    ],
+    tags = [
+        "local",
+        "no-sandbox",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+exports_files(
+    [
+        "manage.sh",
+        "validate.sh",
+        "ci_check_only.sh",
+    ] + glob(
+        ["lib/*.sh"],
+        allow_empty = True,
+    ) + glob(
+        ["lib/*.py"],
+        allow_empty = True,
+    ) + glob(
+        ["utilities/*.sh"],
+        allow_empty = True,
+    ) + glob(
+        ["ci/*.sh"],
+        allow_empty = True,
+    ),
+    visibility = [
+        "//docs:__pkg__",
+        "//lints:__pkg__",
+        "//tests:__pkg__",
+        "//visibility:public",
+    ],
+)
+
+filegroup(
+    name = "doc_sources",
+    srcs = [
+        "manage.sh",
+        "validate.sh",
+    ] + glob(
+        ["lib/*.sh"],
+        allow_empty = True,
+    ) + glob(
+        ["lib/*.py"],
+        allow_empty = True,
+    ) + glob(
+        ["utilities/*.sh"],
+        allow_empty = True,
+    ),
+    visibility = [
+        "//docs:__pkg__",
+        "//lints:__pkg__",
+        "//tests:__pkg__",
+        "//visibility:public",
+    ],
+)
+
+filegroup(
+    name = "utilities",
+    srcs = glob(
+        ["utilities/*.sh"],
+        allow_empty = True,
+    ) + glob(
+        ["lib/*.sh"],
+        allow_empty = True,
+    ) + glob(
+        ["lib/*.py"],
+        allow_empty = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "run-utility",
+    srcs = ["utilities/runner.sh"],
+    data = [":utilities"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "validate",
+    srcs = ["validate.sh"],
+    data = [
+        "ci_check_only.sh",
+        "lib/paths.sh",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "ci_install_lint_tools",
+    srcs = ["ci/install-lint-tools.sh"],
+    visibility = ["//visibility:public"],
+)

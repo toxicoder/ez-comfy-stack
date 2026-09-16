@@ -1,0 +1,17 @@
+"""Package purpose: First-party Comfy custom node sources for pytest PYTHONPATH."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "sources",
+    srcs = glob(
+        [
+            "**/*.py",
+            "**/*.js",
+            "**/*.json",
+            "**/*.txt",
+            "**/*.md",
+        ],
+        allow_empty = True,
+    ),
+)
