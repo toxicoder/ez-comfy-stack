@@ -76,6 +76,7 @@ FROZEN_MANAGE_VERBS=(
   occupancy
   blender-mcp
   research-mcp
+  studio-mcp
   blender-llm
   download-llm
   llm-sidecar
@@ -311,6 +312,9 @@ FROZEN_MANAGE_VERBS=(
   [ "${status}" -eq 0 ]
   run cmd_research_mcp --help
   [ "${status}" -eq 0 ]
+  run cmd_studio_mcp --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"execute_code"* ]] || [[ "${output}" == *"No execute_code"* ]]
   run cmd_blender_llm --help
   [ "${status}" -eq 0 ]
   run cmd_blender --help

@@ -50,6 +50,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 8 nodes | Klein / Wan / LTX / negative / join / context join / ACE-Step / sample prompt |
 | `ez_research` | 1 node | Creative research chat |
+| `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
 
@@ -169,6 +170,16 @@ Graph label `llm` means **nothing GPU** on the App occupancy chip unless `llm-de
 
 ---
 
+## ez_studio_forge
+
+Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` (never `${MODELS_DIR}`, never `_lab/`). MCP twin: [MCP](../operate/mcp.md).
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZAppForge` | App Forge | `sample` combo, `prompt` STRING (default 1:1 mug brief), `template` combo (`auto` + lab ids), `slug` STRING, `as_app` BOOLEAN (default on), `overwrite` BOOLEAN (default off), `catalog` STRING | `STRING` path | graph **`llm`** (not CLI `occupancy enter llm`) | Clones a shipped lab graph. Does not Queue. Fail-soft without a GGUF (keyword heuristic). Banned MiniMax / Klein 9B / FLUX.2-dev |
+
+---
+
 ## ez_studio_app (JS occupancy chip)
 
 **No Python nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
@@ -184,7 +195,7 @@ Graph label `llm` means **nothing GPU** on the App occupancy chip unless `llm-de
 | `film` | everything else on that Spark |
 | `audio` | Klein / Wan / LTX session |
 
-This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
+This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
 
 ---
 

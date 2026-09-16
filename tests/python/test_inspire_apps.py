@@ -141,6 +141,48 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
     _assert_no_overlap(graph)
 
 
+def test_app_forge_has_no_unet_and_stamps_llm() -> None:
+    graph = _load("inspire/app-forge")
+    assert graph["id"] == "app-forge"
+    assert graph["extra"].get("lab_rel") == "inspire/app-forge"
+    types = {n.get("type") for n in graph["nodes"]}
+    for heavy in HEAVY:
+        assert heavy not in types, heavy
+    assert "EZAppForge" in types
+    blob = json.dumps(graph)
+    for needle in BANNED:
+        assert needle not in blob
+    extra = graph["extra"]
+    assert extra["lab_app_mode"]["enabled"] is True
+    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["occupancy"] == "llm"
+    assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
+    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert extra["lab_mcp"]["server"] == "studio-mcp"
+    assert "generate_app" in extra["lab_mcp"]["tools"]
+    labels = []
+    names = []
+    for entry in extra["linearData"]["inputs"]:
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or entry[1])
+        names.append(entry[1])
+    assert names == [
+        "sample",
+        "prompt",
+        "template",
+        "slug",
+        "as_app",
+        "overwrite",
+    ]
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Brief"
+    assert "Template" in labels
+    assert "Slug" in labels
+    assert "As app" in labels
+    assert len(labels) == len(set(labels)), labels
+    _assert_no_overlap(graph)
+
+
 def test_character_draft_is_t2i_without_reference() -> None:
     graph = _load("klein/character-draft")
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"

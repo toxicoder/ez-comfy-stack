@@ -909,6 +909,24 @@
     "see_also": ["research-chat", "occupancy", "path-d"]
   },
   {
+    "id": "app-forge",
+    "title": "App Forge",
+    "aliases": ["App Forge", "inspire/app-forge"],
+    "category": "Studio",
+    "short": "No-UNET Inspire App that clones a shipped lab graph into live _user/ as a new App.",
+    "long": "Load inspire/app-forge. Type a Brief, leave Template on auto (or pin klein/ig-square), set Slug, Queue. Writes ${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json. Occupancy llm for the generator; the result keeps the source occupancy. Does not Queue the clone. Path D: ./scripts/manage.sh studio-mcp --stdio. See [App Forge](create/app-forge.md).",
+    "see_also": ["studio-mcp", "app-mode", "prompt-forge", "occupancy"]
+  },
+  {
+    "id": "studio-mcp",
+    "title": "studio-mcp",
+    "aliases": ["studio-mcp", "ez-studio"],
+    "category": "Studio",
+    "short": "In-tree MCP that clones lab graphs into live _user/. No execute_code. No Queue.",
+    "long": "Typed stdio MCP (`./scripts/manage.sh studio-mcp`). Tools: occupancy_status, search_templates, get_template, apply_slots, validate_workflow, save_workflow, create_app, generate_app. Does not Queue Comfy, does not refuse a GPU session, does not map idle to blender-desk. Official Comfy Cloud MCP is out of tree. See [MCP](operate/mcp.md).",
+    "see_also": ["app-forge", "research-mcp", "occupancy", "path-d"]
+  },
+  {
     "id": "h3",
     "title": "MiniMax H3",
     "aliases": ["MiniMax H3"],

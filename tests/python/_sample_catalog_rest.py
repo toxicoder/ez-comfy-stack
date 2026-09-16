@@ -2821,6 +2821,32 @@ def research_chat() -> list[dict[str, str]]:
     return [_row(sid, label, prompt) for sid, label, prompt in extras]
 
 
+def app_forge() -> list[dict[str, str]]:
+    extras = [
+        ("mug-ig", "Mug IG square", "1:1 IG still of a chipped cobalt mug on pale stone, unmarked surfaces."),
+        ("rooftop-still", "Rooftop still", "Spark still of a techno wizard on a tropical rooftop at golden hour."),
+        ("silent-i2v", "Silent I2V", "silent 5s from a still of a wizard mid-stride on a terrace."),
+        ("gif-palms", "GIF palms", "gif loop of palms and glyph motes, locked camera, ping-pong safe."),
+        ("ltx-av", "LTX AV", "ltx 5s AV of a terrace with world foley, no score."),
+        ("dialogue", "Dialogue 5s", "dialogue 5s with one quoted line and world SFX under."),
+        ("thumbnail", "YouTube thumb", "thumbnail of a wizard and a chipped mug, 1280x720, unmarked."),
+        ("banner", "Wide banner", "banner-wide still of a tropical bay between unmarked towers."),
+        ("packshot", "Packshot", "packshot of one cobalt mug, 1:1, honest contact shadow."),
+        ("podcast", "Podcast desk", "podcast two-host local hour about keeping the master on the box."),
+        ("rap-draft", "Rap draft", "rap draft boom-bap booth take, dry vocals, no autotune."),
+        ("beat-sheet", "Beat sheet", "beat-sheet logline for a rooftop sprint, world SFX only."),
+        ("og-blog", "OG blog", "og-blog still of a teak desk and blank notebook, 1216x640."),
+        ("character", "Character still", "character still of the techno wizard, 1024x1280, identity lock."),
+        ("hook-still", "Hook still", "9:16 hook still of a wizard at a night rail, lanterns only."),
+        ("a2v", "A2V freeze", "a2v freeze a 5s wav of rain on a terrace, picture follows audio."),
+        ("bumper", "Bumper loop", "bumper loop MP4 of glyph rings, ping-pong."),
+        ("weather-broll", "Weather B-roll", "ltx weather b-roll of tropical rain on unmarked stone."),
+        ("clay-edit", "Clay edit", "Klein edit of clay first.png without moving the camera."),
+        ("research-next", "Research next", "still of prompt ingredients from a night rooftop lighting brief."),
+    ]
+    return [_row(sid, label, prompt) for sid, label, prompt in extras]
+
+
 def beat_sheet_logline() -> list[dict[str, str]]:
     extras = [
         ("approve-first", "Approve before UNET", "One-line premise. Approve before any UNET."),
@@ -2879,5 +2905,6 @@ def rest_catalogs() -> dict[str, list[dict[str, str]]]:
         "podcast_radio": podcast_radio(),
         "forge_lazy": forge_lazy(),
         "research_chat": research_chat(),
+        "app_forge": app_forge(),
         "beat_sheet_logline": beat_sheet_logline(),
     }

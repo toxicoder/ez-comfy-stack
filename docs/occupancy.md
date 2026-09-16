@@ -12,8 +12,8 @@ tags: [occupancy, blender, trellis, safety, gb10]
 - Modes: idle, blender-desk, llm-desk, klein, trellis, wan, ltx — matrix: [Occupancy matrix](operate/occupancy-matrix.md)
 - Park Comfy with `POST /free` instead of `stop` for Workbench dumps or the 35B sidecar
 - What stays XOR (NVENC, Cycles CUDA, LTX next to TRELLIS, llm-desk next to blender-desk)
-- Graph occupancy label `llm` (Prompt Forge) is **not** a CLI mode
-- In-tree MCP: blender-mcp (desk) and research-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D) — tools: [MCP](operate/mcp.md)
+- Graph occupancy label `llm` (Prompt Forge / App Forge) is **not** a CLI mode
+- In-tree MCP: blender-mcp (desk), research-mcp, and studio-mcp (GPU sidecar when llm-desk; CPU 4B as OOM fallback; Path D) — tools: [MCP](operate/mcp.md)
 
 **What this enables**
 
@@ -89,7 +89,7 @@ If `/free` fails, Workbench may still contend for unified memory — `occupancy 
 
 Tool tables and Path D tunnels: [MCP](operate/mcp.md).
 
-In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no** telemetry. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch path).
+In-tree MCP servers are typed-tool stdio processes. **No** `execute_code`, **no** telemetry. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the launch path). **studio-mcp** clones `_lab` graphs into `_user/` and does **not** Queue.
 
 **blender-mcp** wraps occupancy and host Blender (primitives, camera, keyframes, GLB, guide dumps). **No** cloud 3D APIs. bpy tools need blender-desk.
 
@@ -110,5 +110,12 @@ Qwen3-4B will place primitives. Cinematic scenes: Path D — laptop Grok/Cursor 
 ```
 
 Path D: laptop agent is the MCP client; Spark runs `research-mcp`. Briefs land under `${COMFY_OUTPUT_DIR}/research/` (never `MODELS_DIR`). Copy prompt ingredients into Prompt Forge, then Spark Still. MCP does not Queue Comfy.
+
+**studio-mcp** is the App Forge desk (search/clone/stamp lab graphs into live `_user/`). Graph occupancy **llm**. Same GGUF / sidecar rules as research-mcp. Does **not** Queue the cloned graph. Open `_user/<slug>` and Queue under the **source** occupancy (klein / wan / ltx / …).
+
+```bash
+./scripts/manage.sh studio-mcp --stdio
+./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
+```
 
 Related: [Occupancy matrix](operate/occupancy-matrix.md) · [MCP](operate/mcp.md) · [ComfyUI Apps](studio-apps.md) · [Blender GB10 sidecar](blender-gb10-sidecar.md) · [Studio sidecars](studio-sidecars.md) · [Hardware, memory, and safety](learn/hardware.md) · [Architecture](learn/architecture.md) · [Troubleshooting — studio canvas](operate/troubleshooting-canvas.md).

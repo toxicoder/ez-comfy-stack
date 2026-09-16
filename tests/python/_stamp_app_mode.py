@@ -228,6 +228,7 @@ ENHANCE_TYPES = (
     "EZPodcastScript",
     "EZSamplePrompt",
     "EZCreativeResearch",
+    "EZAppForge",
 )
 
 
@@ -255,6 +256,9 @@ WIDGET_ORDER = (
     "required_mode",
     "sample",
     "prompt",
+    "template",
+    "as_app",
+    "overwrite",
     "subject",
     "recipe",
     "flavor",
@@ -330,6 +334,9 @@ WIDGET_HEIGHTS = {
 GENERIC_LABELS = {
     "sample": "Sample prompt",
     "prompt": "Prompt",
+    "template": "Template",
+    "as_app": "As app",
+    "overwrite": "Overwrite",
     "subject": "Subject",
     "recipe": "Recipe",
     "flavor": "Family",
@@ -402,6 +409,9 @@ GENERIC_LABELS = {
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
+    "template": "auto picks a shipped lab graph. Pin a lab_rel to skip the picker.",
+    "as_app": "On: write *.app.json for the Apps sidebar. Off: graph-only *.json.",
+    "overwrite": "On: replace an existing _user file with this slug.",
     "subject": "Who or what is in the shot. Cinema Rack splices technique clauses after this.",
     "recipe": "Named splice that fills empty axes only. Explicit dropdowns win.",
     "flavor": "klein / wan_t2v / ltx_t2v (and edit, identity, i2v). Wan emits one camera verb.",
@@ -577,6 +587,15 @@ def display_label(
             "subagents": "Subagents",
             "history": "History",
         }.get(name, generic)
+    if ntype == "EZAppForge":
+        return {
+            "sample": "Sample prompt",
+            "prompt": "Brief",
+            "template": "Template",
+            "slug": "Slug",
+            "as_app": "As app",
+            "overwrite": "Overwrite",
+        }.get(name, generic)
     if ntype == "EZSamplePrompt":
         if name == "prompt":
             return title or generic
@@ -686,6 +705,14 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
                 "Optional prior turns. One Queue per message — not a streaming chat."
             ),
         }.get(name)
+    if ntype == "EZAppForge":
+        return {
+            "prompt": "What the new App should make. Template auto picks a lab graph.",
+            "template": "auto picks a shipped lab graph. Pin a lab_rel to skip the picker.",
+            "slug": "Live _user filename stem. Lowercase letters, digits, hyphen.",
+            "as_app": "On: write *.app.json for the Apps sidebar. Off: graph-only *.json.",
+            "overwrite": "On: replace an existing _user file with this slug.",
+        }.get(name)
     if name == "mode" and ntype == "EZAceStepPromptEnhance":
         return (
             "Vocal vs instrumental. Instrumental forces no-vocals tags and "
@@ -785,6 +812,7 @@ def _spec(
     forge_widgets: bool = False,
     cinema_widgets: bool = False,
     research_widgets: bool = False,
+    app_forge_widgets: bool = False,
     primitive_strings: bool = False,
     hide_images: bool = False,
     ace_instrumental_score: bool = False,
@@ -802,6 +830,7 @@ def _spec(
         "forge_widgets": forge_widgets,
         "cinema_widgets": cinema_widgets,
         "research_widgets": research_widgets,
+        "app_forge_widgets": app_forge_widgets,
         "primitive_strings": primitive_strings,
         "hide_images": hide_images,
         "ace_instrumental_score": ace_instrumental_score,
@@ -882,6 +911,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "inspire/prompt-forge",
         "klein/still-draft",
         research_widgets=True,
+    ),
+    "inspire/app-forge": _spec(
+        "inspire",
+        "llm",
+        "inspire/prompt-forge",
+        "klein/still-draft",
+        app_forge_widgets=True,
     ),
     "inspire/beat-sheet": _spec(
         "inspire",
@@ -1099,6 +1135,7 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZLTXPromptEnhance",
     ),
     "inspire/research-chat": ("EZCreativeResearch",),
+    "inspire/app-forge": ("EZAppForge",),
     "wan/flf-5s": ("LoadImage",),
     "wan/vace-join": ("LoadImage",),
 }
@@ -1290,6 +1327,23 @@ def _collect_raw_inputs(
                 )
         return raw
 
+    if spec.get("app_forge_widgets"):
+        for node in graph.get("nodes") or []:
+            if node.get("type") == "EZAppForge":
+                nid = node["id"]
+                if not hide_sample:
+                    raw.append((nid, "sample", node))
+                raw.extend(
+                    (
+                        (nid, "prompt", node),
+                        (nid, "template", node),
+                        (nid, "slug", node),
+                        (nid, "as_app", node),
+                        (nid, "overwrite", node),
+                    )
+                )
+        return raw
+
     saw_seed = False
     saw_primary_enhance = False
     for node in graph.get("nodes") or []:
@@ -1475,7 +1529,7 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         inputs.append(
             _input_spec(nid, name, spec, node=node, collide=collide)
         )
-    if spec.get("research_widgets"):
+    if spec.get("research_widgets") or spec.get("app_forge_widgets"):
         return inputs
     return order_app_inputs(inputs, graph)
 
@@ -1494,6 +1548,12 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
             int(node["id"])
             for node in graph.get("nodes") or []
             if node.get("type") == "EZCreativeResearch"
+        ]
+    if spec.get("app_forge_widgets"):
+        return [
+            int(node["id"])
+            for node in graph.get("nodes") or []
+            if node.get("type") == "EZAppForge"
         ]
     if spec.get("forge_widgets") or spec.get("cinema_widgets"):
         return [

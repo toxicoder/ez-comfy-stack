@@ -98,6 +98,30 @@ Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 """
 
+APP_FORGE_NOTE = """## inspire/app-forge
+
+App Forge — clone a shipped lab graph into live `_user/` as a new App.
+No UNET, no VAE, no KSampler. Does not Queue the result.
+
+Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+
+  ./scripts/manage.sh occupancy enter llm-desk --yes
+
+Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
+heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
+
+1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
+   a lab id such as klein/ig-square.
+2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
+3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
+4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
+   occupancy matches the result (klein / wan / ltx / …).
+
+Laptop agents: `./scripts/manage.sh studio-mcp --stdio` (Path D). Same
+pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
+Does not write `workflows/_lab/`. Keepers: `promote-workflow`.
+"""
+
 CINEMA_NOTE = """## inspire/cinema-rack
 
 Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
@@ -122,6 +146,10 @@ Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
 RESEARCH_MESSAGE = (
     "What lighting and camera language fits a night rooftop still of a techno "
     "wizard in a tropical city?"
+)
+
+APP_FORGE_BRIEF = (
+    "1:1 IG still of a chipped cobalt mug on pale stone, unmarked surfaces."
 )
 
 SHOT_ROLES = ("enter", "traverse", "exit")
@@ -610,6 +638,77 @@ def build_research_chat() -> dict:
     return graph
 
 
+def build_app_forge() -> dict:
+    note_h = 380.0
+    note_group_h = note_h + GROUP_TITLE_INSET
+    desk_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_y = desk_group_top + GROUP_TITLE_INSET
+    desk_h = 460.0
+    note = _node(
+        1,
+        "Note",
+        [40, LAB_NODE_Y0],
+        [720, note_h],
+        "Operator note",
+        [APP_FORGE_NOTE],
+        0,
+    )
+    desk = _node(
+        2,
+        "EZAppForge",
+        [40, desk_y],
+        [720, desk_h],
+        "App Forge",
+        ["custom", APP_FORGE_BRIEF, "auto", "mug-ig", True, False, "inspire/app-forge"],
+        1,
+        [{"name": "path", "type": "STRING", "links": None, "slot_index": 0}],
+    )
+    graph = {
+        "id": "inspire/app-forge",
+        "revision": 1,
+        "last_node_id": 2,
+        "last_link_id": 0,
+        "nodes": [note, desk],
+        "links": [],
+        "groups": [
+            _group(1, "NOTE", 20, LAB_GROUP_Y0, 760, note_group_h, "#3f789e"),
+            _group(
+                2,
+                "FORGE",
+                20,
+                desk_group_top,
+                760,
+                desk_h + GROUP_TITLE_INSET,
+                "#3f789e",
+            ),
+        ],
+        "config": {},
+        "extra": {
+            "lab_profile": "inspire/app-forge",
+            "lab_note": APP_FORGE_NOTE,
+            "lab_description": (
+                "No-UNET App Forge: clone a lab graph into live _user/"
+            ),
+            "lab_mcp": {
+                "server": "studio-mcp",
+                "tools": [
+                    "search_templates",
+                    "get_template",
+                    "apply_slots",
+                    "validate_workflow",
+                    "save_workflow",
+                    "create_app",
+                    "generate_app",
+                ],
+                "workflow": "workflows/_lab/inspire/app-forge.json",
+            },
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+    return graph
+
+
 def build_cinema_rack() -> dict:
     note_h = 360.0
     note_group_h = note_h + GROUP_TITLE_INSET
@@ -731,6 +830,7 @@ def main() -> None:
     _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
     _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
     _dump(lab_dest("inspire/cinema-rack.json"), build_cinema_rack())
+    _dump(lab_dest("inspire/app-forge.json"), build_app_forge())
 
 
 if __name__ == "__main__":

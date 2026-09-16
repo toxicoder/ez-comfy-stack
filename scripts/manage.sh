@@ -367,6 +367,7 @@ Commands:
   llm-sidecar       Host llama-server for occupancy llm-desk (127.0.0.1). Never in Dockerfile.
   blender-mcp       In-tree Blender MCP (typed tools; bpy needs blender-desk)
   research-mcp      In-tree research MCP (chat, web search, lab-app list; CPU GGUF)
+  studio-mcp        In-tree studio MCP (clone _lab graphs into _user/; no Queue)
   blender-llm       Optional host Qwen3-4B CPU client; Path D if llama.cpp missing
   blender           Host Blender sidecar (Workbench in blender-desk; dies if Comfy is heavy)
   blender-install   Host apt install of Ubuntu blender (never in Dockerfile)
@@ -1552,6 +1553,14 @@ cmd_research_mcp() {
   bash "${REPO_ROOT}/scripts/utilities/research-mcp.sh" "$@"
 }
 
+# @command studio-mcp
+#######################################
+# In-tree studio MCP (clone lab graphs into _user/; no Queue).
+#######################################
+cmd_studio_mcp() {
+  bash "${REPO_ROOT}/scripts/utilities/studio-mcp.sh" "$@"
+}
+
 # @command blender-llm
 #######################################
 # Optional on-box Qwen3-4B CPU client for blender-mcp.
@@ -1842,6 +1851,7 @@ main() {
     llm-sidecar) cmd_llm_sidecar "$@" ;;
     blender-mcp) cmd_blender_mcp "$@" ;;
     research-mcp) cmd_research_mcp "$@" ;;
+    studio-mcp) cmd_studio_mcp "$@" ;;
     blender-llm) cmd_blender_llm "$@" ;;
     blender) cmd_blender "$@" ;;
     blender-install) cmd_blender_install "$@" ;;

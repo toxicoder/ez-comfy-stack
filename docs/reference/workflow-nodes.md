@@ -347,6 +347,74 @@ Album folder display name.
 
 **How it affects generation:** Queue tracks first (or album-render). CPU only.
 
+### `EZAppForge` — App Forge
+
+Clone a shipped lab graph into live _user/ as a new App. No UNET.
+
+!!! warning "Lab notes"
+
+    Occupancy llm. Does not Queue the result. Does not write _lab. Keyword heuristic if GGUF is missing. Path D: studio-mcp. Not Comfy Cloud MCP.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `path` | out | `STRING` | Written _user path or error. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample brief or Custom.
+
+**How it affects generation:** Custom uses the Brief box.
+
+#### `prompt`
+
+Type `STRING`.
+
+Brief.
+
+**How it affects generation:** What the new App should make. Template auto picks a lab graph.
+
+#### `template`
+
+Type `COMBO`. Range / default: auto.
+
+Lab graph to clone.
+
+**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/ig-square to skip.
+
+#### `slug`
+
+Type `STRING`.
+
+Filename stem.
+
+**How it affects generation:** Live _user/<slug>.app.json. Lowercase letters, digits, hyphen.
+
+#### `as_app`
+
+Type `BOOLEAN`. Range / default: true.
+
+Write an App.
+
+**How it affects generation:** true writes *.app.json for the Apps sidebar.
+
+#### `overwrite`
+
+Type `BOOLEAN`. Range / default: false.
+
+Replace existing.
+
+**How it affects generation:** false refuses an existing _user file.
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id.
+
+**How it affects generation:** Leave as stamped.
+
 ### `EZAudioMetadata` — Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.

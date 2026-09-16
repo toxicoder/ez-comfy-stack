@@ -1178,6 +1178,7 @@ def main() -> None:
         "audio/music/rap-full": "rap_full",
         "inspire/prompt-forge": "forge_lazy",
         "inspire/research-chat": "research_chat",
+        "inspire/app-forge": "app_forge",
         "inspire/beat-sheet": "beat_sheet_logline",
     }
     for name, rows in catalogs.items():

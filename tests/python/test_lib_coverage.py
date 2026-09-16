@@ -28,6 +28,7 @@ _LIB_MAINS = (
     "scripts/lib/house_layout.py",
     "scripts/lib/model_manifest.py",
     "scripts/lib/research_mcp.py",
+    "scripts/lib/studio_mcp.py",
     "custom_nodes/ez_dcc/_guide_pack.py",
 )
 
