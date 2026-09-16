@@ -47,6 +47,11 @@ PUBLISH_FILES = {
     "gosee": "ez_gosee_90s.mp4",
     "stillhere": "ez_stillhere_90s.mp4",
     "switchyard": "ez_switchyard_90s.mp4",
+    "tidetable": "ez_tidetable_450s.mp4",
+    "nightoven": "ez_nightoven_450s.mp4",
+    "glasshouse": "ez_glasshouse_450s.mp4",
+    "lastlane": "ez_lastlane_450s.mp4",
+    "breakwater": "ez_breakwater_450s.mp4",
 }
 
 

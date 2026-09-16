@@ -83,7 +83,9 @@ def test_pack_imports_without_comfy() -> None:
     assert EZFilmConcat.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.OUTPUT_NODE is True
     spec = EZFilmConcat.INPUT_TYPES()
-    assert spec["required"]["film"][0] == ["go-see", "still-here", "switchyard"]
+    assert spec["required"]["film"][0][0] == "go-see"
+    assert "tide-table" in spec["required"]["film"][0]
+    assert "act" in spec["required"]
     assert spec["required"]["cap_seconds"][1]["default"] == 90.0
     assert spec["required"]["xfade_cs"][1]["default"] == 0
     for index in range(1, 19):
@@ -93,7 +95,7 @@ def test_pack_imports_without_comfy() -> None:
     body = js.read_text(encoding="utf-8")
     assert "EZFilmConcat" in body
     assert "onExecuted" in body
-    assert "90s film ready" in body
+    assert "Film ready" in body
     assert "download" in body.lower()
 
 
@@ -122,9 +124,11 @@ def test_film_slug_and_publish_path(tmp_path: Path) -> None:
     assert film_slug("go-see") == "gosee"
     assert film_slug("still-here") == "stillhere"
     assert film_slug("switchyard") == "switchyard"
+    assert film_slug("tide-table") == "tidetable"
     with pytest.raises(ValueError):
         film_slug("nope")
     assert publish_path("go-see", tmp_path) == tmp_path / "ez_gosee_90s.mp4"
+    assert publish_path("tide-table", tmp_path) == tmp_path / "ez_tidetable_450s.mp4"
 
 
 def test_parse_go_see_yaml() -> None:
@@ -593,7 +597,7 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
         return out_mp4
 
     with patch.object(film_nodes, "stitch_film", side_effect=fake_stitch):
-        packed = EZFilmConcat().run("go-see", 90.0, 0, "", **shots)
+        packed = EZFilmConcat().run("go-see", 90.0, 0, disclosure="", act=0, **shots)
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
     assert packed["ui"]["gifs"][0]["filename"] == "ez_gosee_90s.mp4"
     assert packed["ui"]["gifs"][0]["format"] == "video/h264-mp4"
@@ -635,7 +639,7 @@ def test_film_concat_node_picks_vhs_audio_mp4(
         return out_mp4
 
     with patch.object(film_nodes, "stitch_film", side_effect=fake_stitch):
-        packed = EZFilmConcat().run("go-see", 90.0, 8, "", **shots)
+        packed = EZFilmConcat().run("go-see", 90.0, 8, disclosure="", act=0, **shots)
     assert captured == [expected]
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
 

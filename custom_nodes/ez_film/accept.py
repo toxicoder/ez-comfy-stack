@@ -16,7 +16,8 @@ from pathlib import Path
 from typing import Any, Callable
 
 from .jobstore import DURATION_S, DURATION_TOL, load_state, shot_mp4
-from .shots import SHOT_COUNT, film_slug
+from .catalog import master_filename
+from .shots import SHOT_COUNT, film_publish_cap, film_slug, film_total_shots
 from .stems import LUFS_TARGET, LUFS_TOL, lufs_in_band, parse_lufs
 
 # Accept-gate geometry, duration, loudness, and speech-band ffmpeg filters.
@@ -631,8 +632,9 @@ def accept_master(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
     audio_policy: str = "world-only",
+    cap_seconds: float = MASTER_DURATION_S,
 ) -> list[str]:
-    """Defects for a published 90s master (empty = pass).
+    """Defects for a published master (empty = pass).
 
     Args:
         mp4: Published master path.
@@ -640,6 +642,7 @@ def accept_master(
         ffmpeg: Override ffmpeg path.
         run: Override ``subprocess.run``.
         audio_policy: ``world-only`` enables the speech-band gate.
+        cap_seconds: Expected master duration (90.00 or 450.00).
 
     Returns:
         Defect strings (empty = pass).
@@ -648,10 +651,9 @@ def accept_master(
     if not mp4.is_file():
         return [f"master: missing {mp4}"]
     dur = probe_duration_s(mp4, ffprobe=ffprobe, run=run)
-    if dur is None or abs(dur - MASTER_DURATION_S) > MASTER_TOL_S:
-        defects.append(
-            f"master: duration {dur!r} (need {MASTER_DURATION_S}±{MASTER_TOL_S})"
-        )
+    cap = float(cap_seconds)
+    if dur is None or abs(dur - cap) > MASTER_TOL_S:
+        defects.append(f"master: duration {dur!r} (need {cap}±{MASTER_TOL_S})")
     wh = probe_wh(mp4, ffprobe=ffprobe, run=run)
     if wh != (ACCEPT_WIDTH, ACCEPT_HEIGHT):
         defects.append(
@@ -760,7 +762,7 @@ def accept_film(
     run: RunFn = subprocess.run,
     probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> dict[str, Any]:
-    """Fail closed: all 18 shots ok, 5.00s, 1280×704, LTX audio present.
+    """Fail closed: all shots ok, 5.00s, 1280×704, LTX audio present.
 
     Args:
         dest: ``films/<slug>`` jobstore directory.
@@ -776,8 +778,13 @@ def accept_film(
     defects: list[str] = []
     shots = list(state.get("shots") or [])
     audio_policy = str(state.get("audio_policy") or "world-only")
-    if len(shots) != SHOT_COUNT:
-        defects.append(f"shot count {len(shots)} (need {SHOT_COUNT})")
+    film = str(state.get("film") or "")
+    if film:
+        expected = film_total_shots(film)
+    else:
+        expected = int(state.get("total_shots") or SHOT_COUNT)
+    if len(shots) != expected:
+        defects.append(f"shot count {len(shots)} (need {expected})")
     for row in shots:
         defects.extend(
             accept_shot(
@@ -791,8 +798,14 @@ def accept_film(
             )
         )
     slug = str(state.get("slug") or "")
+    if film:
+        cap = film_publish_cap(film)
+    else:
+        cap = float(state.get("publish_cap_s") or MASTER_DURATION_S)
     master_candidates = [dest / "publish" / "master.mp4"]
-    if slug:
+    if film:
+        master_candidates.append(dest.parent.parent / master_filename(film))
+    elif slug:
         master_candidates.append(dest.parent.parent / f"ez_{slug}_90s.mp4")
     for candidate in master_candidates:
         if candidate.is_file():
@@ -803,6 +816,7 @@ def accept_film(
                     ffmpeg=ffmpeg,
                     run=run,
                     audio_policy=audio_policy,
+                    cap_seconds=cap,
                 )
             )
             break

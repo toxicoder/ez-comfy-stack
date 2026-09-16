@@ -1,0 +1,1821 @@
+film: breakwater
+slug: breakwater
+frames: 121
+fps: 24
+duration_s: 5.00
+beats: 30
+shots_per_beat: 3
+total_shots: 90
+publish_cap_s: 450.00
+print: ltx
+audio_policy: world-only
+score: none
+identity_seed: 42
+identity_enhance: false
+identity_look: |
+  A chest-mounted first-person body-cam still, eye-level, already walking a wet granite
+  storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black
+  gloves enter from the bottom edge: contralateral swing, empty palms, hands free. Grey
+  sea to the left, unmarked concrete to the right. Wide 24mm body-cam, slight barrel, a
+  full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked
+  lens, empty of lettering.
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_breakwater_b1_s1
+    load_from: identity
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A walk already underway on wet granite
+    dialogue: ""
+    audio_world: "boot, wind"
+    end_state: granite blocks
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A walk already
+      underway on wet granite boot, wind The camera tracks forward, no cut. The wearer's own
+      yellow unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge,
+      empty palms, no second body, no face. Last frames hold granite blocks. No speech. No
+      music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A walk already underway on wet granite tracking, no cut, locked identity.
+      Last frames hold granite blocks.
+  - beat: 1
+    shot: 2
+    prefix: ez_breakwater_b1_s2
+    load_from: ez_breakwater_b1_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Gloves swing contralateral
+    dialogue: ""
+    audio_world: "cloth, fabric"
+    end_state: swing
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves swing
+      contralateral cloth, fabric The camera tracks forward, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold swing. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves swing contralateral tracking, no cut, locked identity. Last frames
+      hold swing.
+  - beat: 1
+    shot: 3
+    prefix: ez_breakwater_b1_s3
+    load_from: ez_breakwater_b1_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Spray from the left
+    dialogue: ""
+    audio_world: "splash, wind"
+    end_state: spray
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Spray from the
+      left splash, wind The camera tracks forward, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold spray. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Spray from the left tracking, no cut, locked identity. Last frames hold
+      spray.
+  - beat: 2
+    shot: 1
+    prefix: ez_breakwater_b2_s1
+    load_from: ez_breakwater_b1_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The sea hits the wall
+    dialogue: ""
+    audio_world: "splash, wind"
+    end_state: white water
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The sea hits the
+      wall splash, wind The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold white water. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The sea hits the wall dolly in, no cut, locked identity. Last frames hold
+      white water.
+  - beat: 2
+    shot: 2
+    prefix: ez_breakwater_b2_s2
+    load_from: ez_breakwater_b2_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A look at the next block
+    dialogue: ""
+    audio_world: "boot, grit"
+    end_state: next block
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A look at the next
+      block boot, grit The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold next block. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A look at the next block dolly in, no cut, locked identity. Last frames
+      hold next block.
+  - beat: 2
+    shot: 3
+    prefix: ez_breakwater_b2_s3
+    load_from: ez_breakwater_b2_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The block is taken
+    dialogue: ""
+    audio_world: "footstep, scrape"
+    end_state: taken block
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The block is taken
+      footstep, scrape The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold taken block. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The block is taken dolly in, no cut, locked identity. Last frames hold
+      taken block.
+  - beat: 3
+    shot: 1
+    prefix: ez_breakwater_b3_s1
+    load_from: ez_breakwater_b2_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A gap between blocks
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: gap
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A gap between
+      blocks wind, grit The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold gap. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A gap between blocks pan left, no cut, locked identity. Last frames hold
+      gap.
+  - beat: 3
+    shot: 2
+    prefix: ez_breakwater_b3_s2
+    load_from: ez_breakwater_b3_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A step over the gap
+    dialogue: ""
+    audio_world: "boot, splash"
+    end_state: over gap
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A step over the
+      gap boot, splash The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold over gap. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A step over the gap pan left, no cut, locked identity. Last frames hold
+      over gap.
+  - beat: 3
+    shot: 3
+    prefix: ez_breakwater_b3_s3
+    load_from: ez_breakwater_b3_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The far block holds
+    dialogue: ""
+    audio_world: "footstep, cloth"
+    end_state: far block
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The far block
+      holds footstep, cloth The camera pans left, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold far block. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The far block holds pan left, no cut, locked identity. Last frames hold far
+      block.
+  - beat: 4
+    shot: 1
+    prefix: ez_breakwater_b4_s1
+    load_from: ez_breakwater_b3_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "A generic foghorn, not a real harbour"
+    dialogue: ""
+    audio_world: "horn, wind"
+    end_state: horn
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A generic foghorn,
+      not a real harbour horn, wind The camera pans right, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold horn. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A generic foghorn, not a real harbour pan right, no cut, locked identity.
+      Last frames hold horn.
+  - beat: 4
+    shot: 2
+    prefix: ez_breakwater_b4_s2
+    load_from: ez_breakwater_b4_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Gloves do not cover ears
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: open gloves
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves do not
+      cover ears fabric, tick The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold open gloves. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves do not cover ears pan right, no cut, locked identity. Last frames
+      hold open gloves.
+  - beat: 4
+    shot: 3
+    prefix: ez_breakwater_b4_s3
+    load_from: ez_breakwater_b4_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The wall turns
+    dialogue: ""
+    audio_world: "boot, scrape"
+    end_state: turn
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The wall turns
+      boot, scrape The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold turn. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The wall turns pan right, no cut, locked identity. Last frames hold turn.
+  - beat: 5
+    shot: 1
+    prefix: ez_breakwater_b5_s1
+    load_from: ez_breakwater_b4_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The turn shows more wall
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: more wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The turn shows
+      more wall wind, splash The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold more wall. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The turn shows more wall fixed camera, no cut, locked identity. Last frames
+      hold more wall.
+  - beat: 5
+    shot: 2
+    prefix: ez_breakwater_b5_s2
+    load_from: ez_breakwater_b5_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A puddle on granite
+    dialogue: ""
+    audio_world: "water tick, grit"
+    end_state: puddle
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A puddle on
+      granite water tick, grit The camera stays fixed, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold puddle. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A puddle on granite fixed camera, no cut, locked identity. Last frames hold
+      puddle.
+  - beat: 5
+    shot: 3
+    prefix: ez_breakwater_b5_s3
+    load_from: ez_breakwater_b5_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Through the puddle
+    dialogue: ""
+    audio_world: "splash, boot"
+    end_state: past puddle
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Through the puddle
+      splash, boot The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold past puddle. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Through the puddle fixed camera, no cut, locked identity. Last frames hold
+      past puddle.
+  - beat: 6
+    shot: 1
+    prefix: ez_breakwater_b6_s1
+    load_from: ez_breakwater_b5_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "Rail to the right, unmarked"
+    dialogue: ""
+    audio_world: "metal tick, wind"
+    end_state: rail
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Rail to the right,
+      unmarked metal tick, wind The camera dollies out, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold rail. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Rail to the right, unmarked dolly out, no cut, locked identity. Last frames
+      hold rail.
+  - beat: 6
+    shot: 2
+    prefix: ez_breakwater_b6_s2
+    load_from: ez_breakwater_b6_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "A glove near the rail, not grabbing"
+    dialogue: ""
+    audio_world: "cloth, scrape"
+    end_state: near rail
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A glove near the
+      rail, not grabbing cloth, scrape The camera dollies out, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold near rail. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A glove near the rail, not grabbing dolly out, no cut, locked identity.
+      Last frames hold near rail.
+  - beat: 6
+    shot: 3
+    prefix: ez_breakwater_b6_s3
+    load_from: ez_breakwater_b6_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The rail ends
+    dialogue: ""
+    audio_world: "boot, grit"
+    end_state: rail end
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The rail ends
+      boot, grit The camera dollies out, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold rail end. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The rail ends dolly out, no cut, locked identity. Last frames hold rail
+      end.
+  - beat: 7
+    shot: 1
+    prefix: ez_breakwater_b7_s1
+    load_from: ez_breakwater_b6_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: "Open wall, sea louder"
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: open wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Open wall, sea
+      louder wind, splash The camera tracks forward, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold open wall. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Open wall, sea louder tracking, no cut, locked identity. Last frames hold
+      open wall.
+  - beat: 7
+    shot: 2
+    prefix: ez_breakwater_b7_s2
+    load_from: ez_breakwater_b7_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A low crouch of the camera
+    dialogue: ""
+    audio_world: "boot, cloth"
+    end_state: low cam
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A low crouch of
+      the camera boot, cloth The camera tracks forward, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold low cam. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A low crouch of the camera tracking, no cut, locked identity. Last frames
+      hold low cam.
+  - beat: 7
+    shot: 3
+    prefix: ez_breakwater_b7_s3
+    load_from: ez_breakwater_b7_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Up again
+    dialogue: ""
+    audio_world: "footstep, wind"
+    end_state: eye-level
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Up again footstep,
+      wind The camera tracks forward, no cut. The wearer's own yellow unmarked slicker sleeves
+      and blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold eye-level. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Up again tracking, no cut, locked identity. Last frames hold eye-level.
+  - beat: 8
+    shot: 1
+    prefix: ez_breakwater_b8_s1
+    load_from: ez_breakwater_b7_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Horizon bob with walk
+    dialogue: ""
+    audio_world: "boot, wind"
+    end_state: bob
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Horizon bob with
+      walk boot, wind The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold bob. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Horizon bob with walk dolly in, no cut, locked identity. Last frames hold
+      bob.
+  - beat: 8
+    shot: 2
+    prefix: ez_breakwater_b8_s2
+    load_from: ez_breakwater_b8_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Spray again
+    dialogue: ""
+    audio_world: "splash, fabric"
+    end_state: spray two
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Spray again
+      splash, fabric The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold spray two. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Spray again dolly in, no cut, locked identity. Last frames hold spray two.
+  - beat: 8
+    shot: 3
+    prefix: ez_breakwater_b8_s3
+    load_from: ez_breakwater_b8_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A stair of blocks down
+    dialogue: ""
+    audio_world: "grit, scrape"
+    end_state: stairs
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A stair of blocks
+      down grit, scrape The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold stairs. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A stair of blocks down dolly in, no cut, locked identity. Last frames hold
+      stairs.
+  - beat: 9
+    shot: 1
+    prefix: ez_breakwater_b9_s1
+    load_from: ez_breakwater_b8_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Down three blocks
+    dialogue: ""
+    audio_world: "boot, footstep"
+    end_state: down
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Down three blocks
+      boot, footstep The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold down. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Down three blocks pan left, no cut, locked identity. Last frames hold down.
+  - beat: 9
+    shot: 2
+    prefix: ez_breakwater_b9_s2
+    load_from: ez_breakwater_b9_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A landing
+    dialogue: ""
+    audio_world: "grit, wind"
+    end_state: landing
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A landing grit,
+      wind The camera pans left, no cut. The wearer's own yellow unmarked slicker sleeves and
+      blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold landing. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A landing pan left, no cut, locked identity. Last frames hold landing.
+  - beat: 9
+    shot: 3
+    prefix: ez_breakwater_b9_s3
+    load_from: ez_breakwater_b9_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The sea is closer
+    dialogue: ""
+    audio_world: "splash, horn"
+    end_state: close sea
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The sea is closer
+      splash, horn The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold close sea. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The sea is closer pan left, no cut, locked identity. Last frames hold close
+      sea.
+  - beat: 10
+    shot: 1
+    prefix: ez_breakwater_b10_s1
+    load_from: ez_breakwater_b9_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "Green water, unmarked"
+    dialogue: ""
+    audio_world: "splash, wind"
+    end_state: green water
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Green water,
+      unmarked splash, wind The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold green water. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Green water, unmarked pan right, no cut, locked identity. Last frames hold
+      green water.
+  - beat: 10
+    shot: 2
+    prefix: ez_breakwater_b10_s2
+    load_from: ez_breakwater_b10_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "A look, then walk"
+    dialogue: ""
+    audio_world: "boot, cloth"
+    end_state: walk on
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A look, then walk
+      boot, cloth The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold walk on. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A look, then walk pan right, no cut, locked identity. Last frames hold walk
+      on.
+  - beat: 10
+    shot: 3
+    prefix: ez_breakwater_b10_s3
+    load_from: ez_breakwater_b10_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "A chain, unmarked, rust"
+    dialogue: ""
+    audio_world: "metal, scrape"
+    end_state: chain
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A chain, unmarked,
+      rust metal, scrape The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold chain. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A chain, unmarked, rust pan right, no cut, locked identity. Last frames
+      hold chain.
+  - beat: 11
+    shot: 1
+    prefix: ez_breakwater_b11_s1
+    load_from: ez_breakwater_b10_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The chain is not held
+    dialogue: ""
+    audio_world: "metal tick, wind"
+    end_state: idle chain
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The chain is not
+      held metal tick, wind The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold idle chain. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The chain is not held fixed camera, no cut, locked identity. Last frames
+      hold idle chain.
+  - beat: 11
+    shot: 2
+    prefix: ez_breakwater_b11_s2
+    load_from: ez_breakwater_b11_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Past the chain
+    dialogue: ""
+    audio_world: "boot, grit"
+    end_state: past chain
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Past the chain
+      boot, grit The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold past chain. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Past the chain fixed camera, no cut, locked identity. Last frames hold past
+      chain.
+  - beat: 11
+    shot: 3
+    prefix: ez_breakwater_b11_s3
+    load_from: ez_breakwater_b11_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A wider landing
+    dialogue: ""
+    audio_world: "footstep, splash"
+    end_state: wide landing
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A wider landing
+      footstep, splash The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold wide landing. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A wider landing fixed camera, no cut, locked identity. Last frames hold
+      wide landing.
+  - beat: 12
+    shot: 1
+    prefix: ez_breakwater_b12_s1
+    load_from: ez_breakwater_b11_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Puddles and grit
+    dialogue: ""
+    audio_world: "grit, water tick"
+    end_state: grit puddles
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Puddles and grit
+      grit, water tick The camera dollies out, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold grit puddles. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Puddles and grit dolly out, no cut, locked identity. Last frames hold grit
+      puddles.
+  - beat: 12
+    shot: 2
+    prefix: ez_breakwater_b12_s2
+    load_from: ez_breakwater_b12_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A pause
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: pause
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A pause wind,
+      cloth The camera dollies out, no cut. The wearer's own yellow unmarked slicker sleeves
+      and blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold pause. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A pause dolly out, no cut, locked identity. Last frames hold pause.
+  - beat: 12
+    shot: 3
+    prefix: ez_breakwater_b12_s3
+    load_from: ez_breakwater_b12_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Walk resumes
+    dialogue: ""
+    audio_world: "boot, fabric"
+    end_state: resume
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Walk resumes boot,
+      fabric The camera dollies out, no cut. The wearer's own yellow unmarked slicker sleeves
+      and blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold resume. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Walk resumes dolly out, no cut, locked identity. Last frames hold resume.
+  - beat: 13
+    shot: 1
+    prefix: ez_breakwater_b13_s1
+    load_from: ez_breakwater_b12_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The wall climbs
+    dialogue: ""
+    audio_world: "footstep, scrape"
+    end_state: climb
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The wall climbs
+      footstep, scrape The camera tracks forward, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold climb. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The wall climbs tracking, no cut, locked identity. Last frames hold climb.
+  - beat: 13
+    shot: 2
+    prefix: ez_breakwater_b13_s2
+    load_from: ez_breakwater_b13_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Gloves pump
+    dialogue: ""
+    audio_world: "cloth, wind"
+    end_state: pump
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves pump cloth,
+      wind The camera tracks forward, no cut. The wearer's own yellow unmarked slicker sleeves
+      and blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold pump. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves pump tracking, no cut, locked identity. Last frames hold pump.
+  - beat: 13
+    shot: 3
+    prefix: ez_breakwater_b13_s3
+    load_from: ez_breakwater_b13_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The top is a path
+    dialogue: ""
+    audio_world: "boot, grit"
+    end_state: top path
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The top is a path
+      boot, grit The camera tracks forward, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold top path. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The top is a path tracking, no cut, locked identity. Last frames hold top
+      path.
+  - beat: 14
+    shot: 1
+    prefix: ez_breakwater_b14_s1
+    load_from: ez_breakwater_b13_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: "A path of wet concrete, unmarked"
+    dialogue: ""
+    audio_world: "grit, wind"
+    end_state: concrete path
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A path of wet
+      concrete, unmarked grit, wind The camera dollies in, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold concrete path. No speech. No music and
+      no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A path of wet concrete, unmarked dolly in, no cut, locked identity. Last
+      frames hold concrete path.
+  - beat: 14
+    shot: 2
+    prefix: ez_breakwater_b14_s2
+    load_from: ez_breakwater_b14_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: "Sea left, townless right"
+    dialogue: ""
+    audio_world: "splash, boot"
+    end_state: sea left
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Sea left, townless
+      right splash, boot The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold sea left. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Sea left, townless right dolly in, no cut, locked identity. Last frames
+      hold sea left.
+  - beat: 14
+    shot: 3
+    prefix: ez_breakwater_b14_s3
+    load_from: ez_breakwater_b14_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: "A lamp, generic, unlit"
+    dialogue: ""
+    audio_world: "metal tick, cloth"
+    end_state: unlit lamp
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A lamp, generic,
+      unlit metal tick, cloth The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold unlit lamp. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A lamp, generic, unlit dolly in, no cut, locked identity. Last frames hold
+      unlit lamp.
+  - beat: 15
+    shot: 1
+    prefix: ez_breakwater_b15_s1
+    load_from: ez_breakwater_b14_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Past the lamp
+    dialogue: ""
+    audio_world: "boot, wind"
+    end_state: past lamp
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Past the lamp
+      boot, wind The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold past lamp. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Past the lamp pan left, no cut, locked identity. Last frames hold past
+      lamp.
+  - beat: 15
+    shot: 2
+    prefix: ez_breakwater_b15_s2
+    load_from: ez_breakwater_b15_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Fog on the path
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: fog path
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Fog on the path
+      wind, cloth The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold fog path. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Fog on the path pan left, no cut, locked identity. Last frames hold fog
+      path.
+  - beat: 15
+    shot: 3
+    prefix: ez_breakwater_b15_s3
+    load_from: ez_breakwater_b15_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The fog thickens
+    dialogue: ""
+    audio_world: "splash, grit"
+    end_state: thick fog
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The fog thickens
+      splash, grit The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold thick fog. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The fog thickens pan left, no cut, locked identity. Last frames hold thick
+      fog.
+  - beat: 16
+    shot: 1
+    prefix: ez_breakwater_b16_s1
+    load_from: ez_breakwater_b15_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The wall edge is a guess
+    dialogue: ""
+    audio_world: "wind, boot"
+    end_state: edge guess
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The wall edge is a
+      guess wind, boot The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold edge guess. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The wall edge is a guess pan right, no cut, locked identity. Last frames
+      hold edge guess.
+  - beat: 16
+    shot: 2
+    prefix: ez_breakwater_b16_s2
+    load_from: ez_breakwater_b16_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A slower walk
+    dialogue: ""
+    audio_world: "footstep, cloth"
+    end_state: slow walk
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A slower walk
+      footstep, cloth The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold slow walk. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A slower walk pan right, no cut, locked identity. Last frames hold slow
+      walk.
+  - beat: 16
+    shot: 3
+    prefix: ez_breakwater_b16_s3
+    load_from: ez_breakwater_b16_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "The horn again, generic"
+    dialogue: ""
+    audio_world: "horn, wind"
+    end_state: horn two
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The horn again,
+      generic horn, wind The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold horn two. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The horn again, generic pan right, no cut, locked identity. Last frames
+      hold horn two.
+  - beat: 17
+    shot: 1
+    prefix: ez_breakwater_b17_s1
+    load_from: ez_breakwater_b16_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: No answering horn
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: one horn
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. No answering horn
+      wind, splash The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold one horn. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. No answering horn fixed camera, no cut, locked identity. Last frames hold
+      one horn.
+  - beat: 17
+    shot: 2
+    prefix: ez_breakwater_b17_s2
+    load_from: ez_breakwater_b17_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Gloves stay visible
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: visible gloves
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves stay
+      visible fabric, tick The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold visible gloves. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves stay visible fixed camera, no cut, locked identity. Last frames hold
+      visible gloves.
+  - beat: 17
+    shot: 3
+    prefix: ez_breakwater_b17_s3
+    load_from: ez_breakwater_b17_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Fog thins on a gust
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: thin fog
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Fog thins on a
+      gust wind, grit The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold thin fog. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Fog thins on a gust fixed camera, no cut, locked identity. Last frames hold
+      thin fog.
+  - beat: 18
+    shot: 1
+    prefix: ez_breakwater_b18_s1
+    load_from: ez_breakwater_b17_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The path again
+    dialogue: ""
+    audio_world: "boot, scrape"
+    end_state: path again
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The path again
+      boot, scrape The camera dollies out, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold path again. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The path again dolly out, no cut, locked identity. Last frames hold path
+      again.
+  - beat: 18
+    shot: 2
+    prefix: ez_breakwater_b18_s2
+    load_from: ez_breakwater_b18_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "A bench, unmarked, empty"
+    dialogue: ""
+    audio_world: "wood creak, wind"
+    end_state: empty bench
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A bench, unmarked,
+      empty wood creak, wind The camera dollies out, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold empty bench. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A bench, unmarked, empty dolly out, no cut, locked identity. Last frames
+      hold empty bench.
+  - beat: 18
+    shot: 3
+    prefix: ez_breakwater_b18_s3
+    load_from: ez_breakwater_b18_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The bench is passed
+    dialogue: ""
+    audio_world: "footstep, cloth"
+    end_state: past bench
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The bench is
+      passed footstep, cloth The camera dollies out, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold past bench. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The bench is passed dolly out, no cut, locked identity. Last frames hold
+      past bench.
+  - beat: 19
+    shot: 1
+    prefix: ez_breakwater_b19_s1
+    load_from: ez_breakwater_b18_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A dip in the wall
+    dialogue: ""
+    audio_world: "grit, splash"
+    end_state: dip
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A dip in the wall
+      grit, splash The camera tracks forward, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold dip. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A dip in the wall tracking, no cut, locked identity. Last frames hold dip.
+  - beat: 19
+    shot: 2
+    prefix: ez_breakwater_b19_s2
+    load_from: ez_breakwater_b19_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Through the dip
+    dialogue: ""
+    audio_world: "boot, wind"
+    end_state: through dip
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Through the dip
+      boot, wind The camera tracks forward, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold through dip. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Through the dip tracking, no cut, locked identity. Last frames hold through
+      dip.
+  - beat: 19
+    shot: 3
+    prefix: ez_breakwater_b19_s3
+    load_from: ez_breakwater_b19_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The far side climbs
+    dialogue: ""
+    audio_world: "footstep, scrape"
+    end_state: climb two
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The far side
+      climbs footstep, scrape The camera tracks forward, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold climb two. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The far side climbs tracking, no cut, locked identity. Last frames hold
+      climb two.
+  - beat: 20
+    shot: 1
+    prefix: ez_breakwater_b20_s1
+    load_from: ez_breakwater_b19_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Up to a lookout pad
+    dialogue: ""
+    audio_world: "boot, grit"
+    end_state: lookout
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Up to a lookout
+      pad boot, grit The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold lookout. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Up to a lookout pad dolly in, no cut, locked identity. Last frames hold
+      lookout.
+  - beat: 20
+    shot: 2
+    prefix: ez_breakwater_b20_s2
+    load_from: ez_breakwater_b20_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A hold on the sea
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: held sea
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A hold on the sea
+      wind, splash The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold held sea. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A hold on the sea dolly in, no cut, locked identity. Last frames hold held
+      sea.
+  - beat: 20
+    shot: 3
+    prefix: ez_breakwater_b20_s3
+    load_from: ez_breakwater_b20_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: No ships with marks
+    dialogue: ""
+    audio_world: "horn, cloth"
+    end_state: empty sea
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. No ships with
+      marks horn, cloth The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold empty sea. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. No ships with marks dolly in, no cut, locked identity. Last frames hold
+      empty sea.
+  - beat: 21
+    shot: 1
+    prefix: ez_breakwater_b21_s1
+    load_from: ez_breakwater_b20_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Grey to the horizon
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: horizon
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Grey to the
+      horizon wind, splash The camera pans left, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold horizon. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Grey to the horizon pan left, no cut, locked identity. Last frames hold
+      horizon.
+  - beat: 21
+    shot: 2
+    prefix: ez_breakwater_b21_s2
+    load_from: ez_breakwater_b21_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A turn back along the wall
+    dialogue: ""
+    audio_world: "boot, fabric"
+    end_state: turn back
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A turn back along
+      the wall boot, fabric The camera pans left, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold turn back. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A turn back along the wall pan left, no cut, locked identity. Last frames
+      hold turn back.
+  - beat: 21
+    shot: 3
+    prefix: ez_breakwater_b21_s3
+    load_from: ez_breakwater_b21_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The path home
+    dialogue: ""
+    audio_world: "footstep, grit"
+    end_state: home path
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The path home
+      footstep, grit The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold home path. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The path home pan left, no cut, locked identity. Last frames hold home
+      path.
+  - beat: 22
+    shot: 1
+    prefix: ez_breakwater_b22_s1
+    load_from: ez_breakwater_b21_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The unlit lamp returns
+    dialogue: ""
+    audio_world: "metal tick, wind"
+    end_state: lamp return
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The unlit lamp
+      returns metal tick, wind The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold lamp return. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The unlit lamp returns pan right, no cut, locked identity. Last frames hold
+      lamp return.
+  - beat: 22
+    shot: 2
+    prefix: ez_breakwater_b22_s2
+    load_from: ez_breakwater_b22_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Past it the other way
+    dialogue: ""
+    audio_world: "boot, cloth"
+    end_state: other way
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Past it the other
+      way boot, cloth The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold other way. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Past it the other way pan right, no cut, locked identity. Last frames hold
+      other way.
+  - beat: 22
+    shot: 3
+    prefix: ez_breakwater_b22_s3
+    load_from: ez_breakwater_b22_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Spray less
+    dialogue: ""
+    audio_world: "splash, grit"
+    end_state: less spray
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Spray less splash,
+      grit The camera pans right, no cut. The wearer's own yellow unmarked slicker sleeves and
+      blank matte-black gloves stay along the bottom edge, empty palms, no second body, no
+      face. Last frames hold less spray. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Spray less pan right, no cut, locked identity. Last frames hold less spray.
+  - beat: 23
+    shot: 1
+    prefix: ez_breakwater_b23_s1
+    load_from: ez_breakwater_b22_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The sea is a rumble
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: rumble
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The sea is a
+      rumble wind, splash The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold rumble. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The sea is a rumble fixed camera, no cut, locked identity. Last frames hold
+      rumble.
+  - beat: 23
+    shot: 2
+    prefix: ez_breakwater_b23_s2
+    load_from: ez_breakwater_b23_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A faster walk
+    dialogue: ""
+    audio_world: "footstep, fabric"
+    end_state: faster
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A faster walk
+      footstep, fabric The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold faster. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A faster walk fixed camera, no cut, locked identity. Last frames hold
+      faster.
+  - beat: 23
+    shot: 3
+    prefix: ez_breakwater_b23_s3
+    load_from: ez_breakwater_b23_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The stairs up
+    dialogue: ""
+    audio_world: "boot, scrape"
+    end_state: stairs up
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The stairs up
+      boot, scrape The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold stairs up. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The stairs up fixed camera, no cut, locked identity. Last frames hold
+      stairs up.
+  - beat: 24
+    shot: 1
+    prefix: ez_breakwater_b24_s1
+    load_from: ez_breakwater_b23_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Up the blocks
+    dialogue: ""
+    audio_world: "footstep, grit"
+    end_state: up
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Up the blocks
+      footstep, grit The camera dollies out, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold up. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Up the blocks dolly out, no cut, locked identity. Last frames hold up.
+  - beat: 24
+    shot: 2
+    prefix: ez_breakwater_b24_s2
+    load_from: ez_breakwater_b24_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The original wall
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: original wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The original wall
+      wind, cloth The camera dollies out, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold original wall. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The original wall dolly out, no cut, locked identity. Last frames hold
+      original wall.
+  - beat: 24
+    shot: 3
+    prefix: ez_breakwater_b24_s3
+    load_from: ez_breakwater_b24_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The gap again
+    dialogue: ""
+    audio_world: "boot, splash"
+    end_state: gap two
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The gap again
+      boot, splash The camera dollies out, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold gap two. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The gap again dolly out, no cut, locked identity. Last frames hold gap two.
+  - beat: 25
+    shot: 1
+    prefix: ez_breakwater_b25_s1
+    load_from: ez_breakwater_b24_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Over the gap homeward
+    dialogue: ""
+    audio_world: "footstep, scrape"
+    end_state: over home
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Over the gap
+      homeward footstep, scrape The camera tracks forward, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold over home. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Over the gap homeward tracking, no cut, locked identity. Last frames hold
+      over home.
+  - beat: 25
+    shot: 2
+    prefix: ez_breakwater_b25_s2
+    load_from: ez_breakwater_b25_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Gloves still blank
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: blank gloves
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves still blank
+      fabric, tick The camera tracks forward, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold blank gloves. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves still blank tracking, no cut, locked identity. Last frames hold
+      blank gloves.
+  - beat: 25
+    shot: 3
+    prefix: ez_breakwater_b25_s3
+    load_from: ez_breakwater_b25_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The first granite
+    dialogue: ""
+    audio_world: "boot, wind"
+    end_state: first granite
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The first granite
+      boot, wind The camera tracks forward, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold first granite. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The first granite tracking, no cut, locked identity. Last frames hold first
+      granite.
+  - beat: 26
+    shot: 1
+    prefix: ez_breakwater_b26_s1
+    load_from: ez_breakwater_b25_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The start of the wall
+    dialogue: ""
+    audio_world: "grit, splash"
+    end_state: start wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The start of the
+      wall grit, splash The camera dollies in, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold start wall. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The start of the wall dolly in, no cut, locked identity. Last frames hold
+      start wall.
+  - beat: 26
+    shot: 2
+    prefix: ez_breakwater_b26_s2
+    load_from: ez_breakwater_b26_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A last look at sea
+    dialogue: ""
+    audio_world: "wind, horn"
+    end_state: last sea
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A last look at sea
+      wind, horn The camera dollies in, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold last sea. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A last look at sea dolly in, no cut, locked identity. Last frames hold last
+      sea.
+  - beat: 26
+    shot: 3
+    prefix: ez_breakwater_b26_s3
+    load_from: ez_breakwater_b26_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Walk toward the unmarked land end
+    dialogue: ""
+    audio_world: "boot, cloth"
+    end_state: land end
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Walk toward the
+      unmarked land end boot, cloth The camera dollies in, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold land end. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Walk toward the unmarked land end dolly in, no cut, locked identity. Last
+      frames hold land end.
+  - beat: 27
+    shot: 1
+    prefix: ez_breakwater_b27_s1
+    load_from: ez_breakwater_b26_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Concrete meets a path
+    dialogue: ""
+    audio_world: "grit, footstep"
+    end_state: path join
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Concrete meets a
+      path grit, footstep The camera pans left, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold path join. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Concrete meets a path pan left, no cut, locked identity. Last frames hold
+      path join.
+  - beat: 27
+    shot: 2
+    prefix: ez_breakwater_b27_s2
+    load_from: ez_breakwater_b27_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: "No gate, no sign"
+    dialogue: ""
+    audio_world: "wind, scrape"
+    end_state: no gate
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. No gate, no sign
+      wind, scrape The camera pans left, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold no gate. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. No gate, no sign pan left, no cut, locked identity. Last frames hold no
+      gate.
+  - beat: 27
+    shot: 3
+    prefix: ez_breakwater_b27_s3
+    load_from: ez_breakwater_b27_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A stop
+    dialogue: ""
+    audio_world: "boot, cloth"
+    end_state: stop
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A stop boot, cloth
+      The camera pans left, no cut. The wearer's own yellow unmarked slicker sleeves and blank
+      matte-black gloves stay along the bottom edge, empty palms, no second body, no face.
+      Last frames hold stop. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A stop pan left, no cut, locked identity. Last frames hold stop.
+  - beat: 28
+    shot: 1
+    prefix: ez_breakwater_b28_s1
+    load_from: ez_breakwater_b27_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Gloves hang still
+    dialogue: ""
+    audio_world: "fabric, wind"
+    end_state: still gloves
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Gloves hang still
+      fabric, wind The camera pans right, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold still gloves. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Gloves hang still pan right, no cut, locked identity. Last frames hold
+      still gloves.
+  - beat: 28
+    shot: 2
+    prefix: ez_breakwater_b28_s2
+    load_from: ez_breakwater_b28_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Only wind at the wall
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: wind only
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Only wind at the
+      wall wind, splash The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold wind only. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Only wind at the wall pan right, no cut, locked identity. Last frames hold
+      wind only.
+  - beat: 28
+    shot: 3
+    prefix: ez_breakwater_b28_s3
+    load_from: ez_breakwater_b28_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A hold on the wall behind
+    dialogue: ""
+    audio_world: "grit, tick"
+    end_state: wall behind
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. A hold on the wall
+      behind grit, tick The camera pans right, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold wall behind. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. A hold on the wall behind pan right, no cut, locked identity. Last frames
+      hold wall behind.
+  - beat: 29
+    shot: 1
+    prefix: ez_breakwater_b29_s1
+    load_from: ez_breakwater_b28_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The storm wall in grey
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: grey wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The storm wall in
+      grey wind, splash The camera stays fixed, no cut. The wearer's own yellow unmarked
+      slicker sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no
+      second body, no face. Last frames hold grey wall. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The storm wall in grey fixed camera, no cut, locked identity. Last frames
+      hold grey wall.
+  - beat: 29
+    shot: 2
+    prefix: ez_breakwater_b29_s2
+    load_from: ez_breakwater_b29_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Sleeves at the bottom edge
+    dialogue: ""
+    audio_world: "cloth, fabric"
+    end_state: sleeves
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Sleeves at the
+      bottom edge cloth, fabric The camera stays fixed, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold sleeves. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Sleeves at the bottom edge fixed camera, no cut, locked identity. Last
+      frames hold sleeves.
+  - beat: 29
+    shot: 3
+    prefix: ez_breakwater_b29_s3
+    load_from: ez_breakwater_b29_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The sea keeps
+    dialogue: ""
+    audio_world: "horn, boot"
+    end_state: keeping sea
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The sea keeps
+      horn, boot The camera stays fixed, no cut. The wearer's own yellow unmarked slicker
+      sleeves and blank matte-black gloves stay along the bottom edge, empty palms, no second
+      body, no face. Last frames hold keeping sea. No speech. No music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The sea keeps fixed camera, no cut, locked identity. Last frames hold
+      keeping sea.
+  - beat: 30
+    shot: 1
+    prefix: ez_breakwater_b30_s1
+    load_from: ez_breakwater_b29_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Yellow unmarked slicker sleeves in frame
+    dialogue: ""
+    audio_world: "cloth, wind"
+    end_state: sleeves in frame
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Yellow unmarked
+      slicker sleeves in frame cloth, wind The camera dollies out, no cut. The wearer's own
+      yellow unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge,
+      empty palms, no second body, no face. Last frames hold sleeves in frame. No speech. No
+      music and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Yellow unmarked slicker sleeves in frame dolly out, no cut, locked
+      identity. Last frames hold sleeves in frame.
+  - beat: 30
+    shot: 2
+    prefix: ez_breakwater_b30_s2
+    load_from: ez_breakwater_b30_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "Blank gloves, empty palms"
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: empty palms
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. Blank gloves,
+      empty palms fabric, tick The camera dollies out, no cut. The wearer's own yellow
+      unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge, empty
+      palms, no second body, no face. Last frames hold empty palms. No speech. No music and no
+      score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. Blank gloves, empty palms dolly out, no cut, locked identity. Last frames
+      hold empty palms.
+  - beat: 30
+    shot: 3
+    prefix: ez_breakwater_b30_s3
+    load_from: ez_breakwater_b30_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The frame holds the wall and the sea
+    dialogue: ""
+    audio_world: "splash, grit"
+    end_state: held wall
+    ltx_i2v: |
+      The start image holds as the first frame. Wordless mix: silent mouth. The frame holds
+      the wall and the sea splash, grit The camera dollies out, no cut. The wearer's own
+      yellow unmarked slicker sleeves and blank matte-black gloves stay along the bottom edge,
+      empty palms, no second body, no face. Last frames hold held wall. No speech. No music
+      and no score.
+    wan_i2v: |
+      First-person eye-level body-cam, yellow slicker sleeves and blank gloves along the
+      bottom edge. The frame holds the wall and the sea dolly out, no cut, locked identity.
+      Last frames hold held wall.

@@ -20,24 +20,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
-
-#######################################
-# Map film id to jobstore slug.
-# Arguments:
-#   $1  film id
-# Outputs:
-#   slug
-# Returns:
-#   0 known; 1 unknown
-#######################################
-film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
-}
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 #######################################
 # Export OTIO JSON.
@@ -48,7 +32,7 @@ export_otio() {
   local film="${1:-}"
   local slug dest
   if [[ -z ${film} ]]; then
-    err "Usage: film-export-otio.sh go-see|still-here|switchyard"
+    err "Usage: film-export-otio.sh FILM"
     return 1
   fi
   slug="$(film_slug "${film}")" || {

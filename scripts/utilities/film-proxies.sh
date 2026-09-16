@@ -23,21 +23,11 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${REPO_ROOT}/scripts/lib/common.sh"
 # shellcheck source=../lib/compose.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/compose.sh"
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 FILM=""
 DRY_RUN=1
-
-#######################################
-# Map film id to slug.
-#######################################
-film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
-}
 
 #######################################
 # Parse flags.
@@ -48,15 +38,18 @@ parse_args() {
       --dry-run) DRY_RUN=1 ;;
       --yes | -y) DRY_RUN=0 ;;
       -h | --help)
-        echo "Usage: $0 go-see|still-here|switchyard [--dry-run|--yes]" >&2
+        echo "Usage: $0 FILM [--dry-run|--yes]" >&2
         echo "  Writes 960x528 h264 ~2 Mbps proxies. Never rewrites masters." >&2
         echo "  Refuses while ComfyUI compose is running." >&2
         exit 0
         ;;
-      go-see | still-here | switchyard) FILM="${1}" ;;
       *)
-        err "Unknown arg: $1"
-        exit 1
+        if film_slug "${1}" >/dev/null 2>&1; then
+          FILM="${1}"
+        else
+          err "Unknown arg: $1"
+          exit 1
+        fi
         ;;
     esac
     shift
@@ -69,7 +62,7 @@ parse_args() {
 cmd_run() {
   local slug dest src out
   if [[ -z ${FILM} ]]; then
-    err "Usage: film-proxies.sh go-see|still-here|switchyard [--yes]"
+    err "Usage: film-proxies.sh FILM [--yes]"
     return 1
   fi
   slug="$(film_slug "${FILM}")" || return 1

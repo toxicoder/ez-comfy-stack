@@ -1,6 +1,6 @@
 ---
 title: shorts/still-here
-description: One-click 90s household morning: Klein identity + 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags,
+description: One-click household morning: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is enc
 tags: [workflows, generated, comfyui, shorts]
 ---
 
@@ -31,15 +31,15 @@ Occupancy **film**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fam
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
+The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
 
-One-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
+One-click 90s unit (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
 Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
-3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. A **90s film ready** overlay plays it; `ez_stillhere_90s.html` is a local player. Copy off the Spark with scp.
+3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4` (act graphs write `ez_stillhere_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **ltx/i2v-shot**. Optional silent rehearsal: **wan/i2v-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`
 
@@ -85,10 +85,11 @@ flowchart TB
 | 7 | KSampler | `KSampler` | 1. Identity (Klein) |
 | 8 | VAE Decode | `VAEDecode` | 1. Identity (Klein) |
 | 9 | Save identity PNG | `SaveImage` | 1. Identity (Klein) |
-| 10 | Operator note — one-click 90s film | `Note` | 1. Identity (Klein) |
+| 10 | Operator note — one-click film | `Note` | 1. Identity (Klein) |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | 1. Identity (Klein) |
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 1. Identity (Klein) |
-| 13 | still-here 90s shot map | `MarkdownNote` | Ungrouped |
+| 13 | Quality | `EZQuality` | Ungrouped |
+| 52 | still-here 90s shot map | `MarkdownNote` | Ungrouped |
 | 50 | Unload models (pass IMAGE) | `EZUnloadModels` | 1. Identity (Klein) |
 | 100 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | 2. LTX models |
 | 101 | LTX-2.5 video VAE | `VAELoader` | 2. LTX models |
@@ -314,8 +315,7 @@ flowchart TB
 | 549 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 × 5.00s LTX) |
 | 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
-| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 9. Publish 90s MP4 |
-| 903 | Quality | `EZQuality` | Ungrouped |
+| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 
 ## Node parameter reference
 
@@ -831,22 +831,22 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## shorts/still-here LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `…`
+**This graph:** `## shorts/still-here LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as…`
 
 ```text
 ## shorts/still-here
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}/ez_*_90s.mp4` (container `/outputs`) as a faststart H.264 master, plus `ez_*_90s.html`. After Queue, a **90s film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
+The stitched MP4 is written automatically to `${COMFY_OUTPUT_DIR}` (container `/outputs`) as a faststart H.264 master, plus an HTML sidecar. After Queue, a **Film ready** overlay offers play and download. Per-shot VHS nodes remain for inspection. Optional board: studio-ui `/watch/<slug>`.
 
-One-click 90s film (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
+One-click 90s unit (household morning): Klein identity still + 18 sequential LTX 5.00s AV prints + in-graph stitch.
 Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, t2i mode) · LTX-2.5 distilled INT8-convrot + gemma4 CLIP ltxv + video/audio VAEs (print).
 LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
-3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4`. A **90s film ready** overlay plays it; `ez_stillhere_90s.html` is a local player. Copy off the Spark with scp.
+3. The MP4 is already on disk at `${COMFY_OUTPUT_DIR}/ez_stillhere_90s.mp4` (act graphs write `ez_stillhere_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
 4. Optional single-shot iterate: **ltx/i2v-shot**. Optional silent rehearsal: **wan/i2v-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film still-here --yes`
 
@@ -1065,6 +1065,36 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
+
 ### `MarkdownNote` — Markdown Note
 
 Rendered markdown note (90s shot maps).
@@ -1077,10 +1107,10 @@ Markdown body.
 
 **How it affects generation:** Does not affect pixels. 90s films put the beat table here.
 
-**This graph:** `## still-here 90s (household morning) Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n …`
+**This graph:** `## still-here (household morning) Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per …`
 
 ```text
-## still-here 90s (household morning)
+## still-here (household morning)
 
 Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/i2v-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film still-here --yes`.
 
@@ -1159,7 +1189,7 @@ Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 
 !!! warning "Lab notes"
 
-    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8.
+    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1182,13 +1212,13 @@ Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 | `shot_17` | in | `VHS_FILENAMES` | Shot 17 MP4. |
 | `shot_18` | in | `VHS_FILENAMES` | Shot 18 MP4. |
 | `disclosure` | in | `STRING` | EZFilmDisclosure text. |
-| `path` | out | `STRING` | ez_<slug>_90s.mp4 path. |
+| `path` | out | `STRING` | Published MP4 path. |
 
 #### `film`
 
 Type `COMBO`.
 
-Film slug.
+Film id.
 
 **How it affects generation:** Picks output name and shot-map. Must match the graph.
 
@@ -1201,14 +1231,19 @@ Film slug.
 | `go-see` | Parkour 90s. |
 | `still-here` | Household morning 90s. |
 | `switchyard` | Night freight-yard 90s. |
+| `tide-table` | Dawn skiff 7.5 min. |
+| `night-oven` | Bakery 7.5 min. |
+| `glasshouse` | Storm glasshouse 7.5 min. |
+| `last-lane` | Night two-lane 7.5 min. |
+| `breakwater` | Storm-wall walk 7.5 min. |
 
 #### `cap_seconds`
 
 Type `FLOAT`. Range / default: 90.0 max.
 
-Hard duration cap.
+Hard duration cap for this 18-shot stitch.
 
-**How it affects generation:** Stay 90. Longer fights the product rule (no 90 s denoise; this is a stitch cap).
+**How it affects generation:** Stay 90. This is a stitch cap, not a denoise length. 7.5 min masters are host concat of 90 stems.
 
 **This graph:** `90.0`
 
@@ -1218,7 +1253,17 @@ Type `INT`. Range / default: 0–50; 10 = 0.10 s.
 
 Audio-only acrossfade in centiseconds.
 
-**How it affects generation:** 0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see. Picture stays cut-only so duration stays on picture.
+**How it affects generation:** 0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see / last-lane / breakwater. Picture stays cut-only so duration stays on picture.
+
+**This graph:** `0`
+
+#### `act`
+
+Type `INT`. Range / default: 0–5.
+
+0 = 90s film master; 1–5 = act master for a 7.5 min film.
+
+**How it affects generation:** Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4.
 
 **This graph:** `0`
 
@@ -1704,33 +1749,3 @@ Type `STRING`.
 Optional extra line after the stock disclosure.
 
 **How it affects generation:** Empty = stock sentence only. Do not strip provenance.
-
-### `EZQuality` — Quality
-
-Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
-
-!!! warning "Lab notes"
-
-    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
-
-#### `quality`
-
-Type `COMBO`. Range / default: lab.
-
-Lab default, Draft (faster), or High (slower).
-
-**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
-
-**This graph:** `lab`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `lab` | Authored lab widgets. Default. |
-| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
-| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

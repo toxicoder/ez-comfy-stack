@@ -1,4 +1,4 @@
-"""ez-comfy 90s film helpers (unload between Klein/LTX, stitch 18 shots).
+"""ez-comfy film helpers (unload between Klein/LTX, stitch 18-shot acts).
 
 Import is hermetic: stdlib only at pack load. ffmpeg is resolved inside
 ``EZFilmConcat.run``. Optional ``comfy.model_management`` is lazy in

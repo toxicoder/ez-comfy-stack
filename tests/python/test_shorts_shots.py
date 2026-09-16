@@ -17,6 +17,7 @@ CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
 
+from ez_film.catalog import LONG_FILMS, NINETY_S_FILMS, film_slug  # noqa: E402
 from ez_film.shots import (  # noqa: E402
     DFR_TEMPLATE,
     ICLORA_TEMPLATE,
@@ -29,11 +30,8 @@ from ez_film.shots import (  # noqa: E402
 
 SHORTS = ROOT / "workflows" / "shorts"
 
-FILMS = (
-    ("go-see", "gosee"),
-    ("still-here", "stillhere"),
-    ("switchyard", "switchyard"),
-)
+FILMS = tuple((film, film_slug(film)) for film in NINETY_S_FILMS)
+LONG = tuple((film, film_slug(film)) for film in LONG_FILMS)
 
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev")
 LONG_LATENT_TYPES = (
@@ -74,6 +72,8 @@ def test_print_template_ltx_and_dfr() -> None:
 
 def test_three_shot_bibles_exist() -> None:
     for film, _slug in FILMS:
+        assert _path(film).is_file(), film
+    for film, _slug in LONG:
         assert _path(film).is_file(), film
 
 
@@ -116,8 +116,47 @@ def test_eighteen_shots_and_chain() -> None:
             assert shot["dialogue"] == ""
 
 
+def test_long_film_bibles_and_chain() -> None:
+    for film, slug in LONG:
+        text = _path(film).read_text(encoding="utf-8")
+        parsed = parse_shots_yaml(text)
+        meta = parsed["meta"]
+        assert meta["film"] == film
+        assert meta["slug"] == slug
+        assert meta["frames"] == "121"
+        assert meta["fps"] == "24"
+        assert meta["duration_s"] == "5.00"
+        assert meta["beats"] == "30"
+        assert meta["shots_per_beat"] == "3"
+        assert meta["total_shots"] == "90"
+        assert meta["publish_cap_s"] == "450.00"
+        assert meta["print"] == "ltx"
+        assert meta["identity_seed"] == "42"
+        if film in ("last-lane", "breakwater"):
+            assert meta["identity_enhance"] == "false"
+        else:
+            assert meta["identity_enhance"] == "true"
+        shots = parsed["shots"]
+        assert len(shots) == 90, (film, len(shots))
+        prefixes = [s["prefix"] for s in shots]
+        assert len(set(prefixes)) == 90
+        assert shots[0]["load_from"] == "identity"
+        for i, shot in enumerate(shots):
+            assert shot["prefix"] == f"ez_{slug}_b{shot['beat']}_s{shot['shot']}"
+            if i:
+                assert shot["load_from"] == f"{shots[i - 1]['prefix']}_last"
+        assert parsed["identity"].strip()
+        assert LTX_CLOSE in text
+        assert parsed["meta"]["audio_policy"] == "world-only"
+        assert parsed["meta"]["score"] == "none"
+        for shot in shots:
+            assert shot["clay"] == "skip"
+            assert shot["audio_lock"] == "none"
+            assert shot["dialogue"] == ""
+
+
 def test_klein_identity_is_model_native() -> None:
-    for film, _slug in FILMS:
+    for film, _slug in (*FILMS, *LONG):
         identity = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))["identity"]
         lower = identity.lower()
         assert "YouTube 16:9" in identity or "youtube 16:9" in lower
@@ -130,7 +169,7 @@ def test_klein_identity_is_model_native() -> None:
 
 
 def test_ltx_i2v_prompts_are_model_native() -> None:
-    for film, _slug in FILMS:
+    for film, _slug in (*FILMS, *LONG):
         parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
         for shot in parsed["shots"]:
             ltx = shot["ltx_i2v"]
@@ -206,7 +245,7 @@ def test_shot_card_roundtrip_defaults() -> None:
 
 
 def test_shorts_yaml_has_no_banned_models() -> None:
-    for film, _slug in FILMS:
+    for film, _slug in (*FILMS, *LONG):
         text = _path(film).read_text(encoding="utf-8")
         for needle in BANNED:
             assert needle not in text, (film, needle)
@@ -314,7 +353,7 @@ def test_creative_locks() -> None:
 def _json_files() -> list[Path]:
     from _lab_paths import LAB_ROOT
 
-    files = sorted((LAB_ROOT / "shorts").glob("*.json"))
+    files = sorted(p for p in (LAB_ROOT / "shorts").rglob("*.json") if p.is_file())
     assert files, "expected shorts lab JSON"
     return files
 
@@ -348,12 +387,17 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 
 def test_shorts_json_parse_ids_and_banned_strings() -> None:
+    from _lab_paths import lab_rel_of
+
     expected = {
-        "go-see",
-        "still-here",
-        "switchyard",
+        "shorts/go-see",
+        "shorts/still-here",
+        "shorts/switchyard",
     }
-    names = {p.stem for p in _json_files()}
+    for film in LONG:
+        for act in range(1, 6):
+            expected.add(f"shorts/{film[0]}/act-0{act}")
+    names = {lab_rel_of(p) for p in _json_files()}
     assert names == expected
     for path in _json_files():
         text = path.read_text(encoding="utf-8")
@@ -361,6 +405,7 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
             assert needle not in text, (path.name, needle)
         graph = json.loads(text)
         assert graph.get("id") == path.stem
+        assert graph.get("extra", {}).get("lab_rel") == lab_rel_of(path)
         ids = [n["id"] for n in graph["nodes"]]
         assert len(ids) == len(set(ids)), path.name
         assert not _overlap_hits(graph), (path.name, _overlap_hits(graph))
@@ -454,7 +499,8 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert any(n.get("type") == "EZUnloadModels" for n in graph["nodes"])
         concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
         assert concat["widgets_values"][0] == film
-        assert len(concat["widgets_values"]) >= 3
+        assert len(concat["widgets_values"]) >= 4
+        assert concat["widgets_values"][3] == 0
         title = (concat.get("title") or "").lower()
         assert "play" in title or "preview" in title or "download" in title
         if film == "go-see":
@@ -556,3 +602,33 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         table = mmap["widgets_values"][0]
         assert "121" in table
         assert "90" in table
+
+
+def test_long_film_act_graphs() -> None:
+    for film, slug in LONG:
+        parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
+        for act in range(1, 6):
+            rel = f"shorts/{film}/act-0{act}"
+            graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
+            printers = [n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo"]
+            assert len(printers) == 18, rel
+            concat = next(n for n in graph["nodes"] if n.get("type") == "EZFilmConcat")
+            assert concat["widgets_values"][0] == film
+            assert concat["widgets_values"][3] == act
+            offset = (act - 1) * 18
+            vhs = [n for n in graph["nodes"] if n.get("type") == "VHS_VideoCombine"]
+            prefixes = {n["widgets_values"]["filename_prefix"] for n in vhs}
+            expected = {
+                f"{s['prefix']}_ltx_video" for s in parsed["shots"][offset : offset + 18]
+            }
+            assert prefixes == expected, rel
+            loads = [n for n in graph["nodes"] if n.get("type") == "LoadImage"]
+            if act == 1:
+                assert not loads
+            else:
+                assert len(loads) == 1
+                prev = parsed["shots"][offset - 1]["prefix"]
+                assert prev in str(loads[0]["widgets_values"][0])
+            extra = graph.get("extra") or {}
+            assert extra.get("lab_rel") == rel
+            assert extra.get("lab_act") == act

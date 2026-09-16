@@ -28,6 +28,18 @@ def _compile(tmp_path: Path) -> Path:
     return dest
 
 
+def test_accept_film_without_catalog_id(tmp_path: Path) -> None:
+    dest = tmp_path / "films" / "orphan"
+    state = js.new_state("go-see", "gosee")
+    state["film"] = ""
+    del state["total_shots"]
+    del state["publish_cap_s"]
+    js.save_state(dest, state)
+    report = acc.accept_film(dest)
+    assert report["ok"] is False
+    assert any("status" in d or "shot count" in d for d in report["defects"])
+
+
 def test_accept_fails_when_shots_pending(tmp_path: Path) -> None:
     dest = _compile(tmp_path)
     report = acc.accept_film(dest)

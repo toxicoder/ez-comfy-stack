@@ -9,7 +9,7 @@
 #   from the YAML bible. Does not Queue Comfy. Does not start Docker.
 #
 # Usage:
-#   ./scripts/utilities/compile-film.sh go-see|still-here|switchyard
+#   ./scripts/utilities/compile-film.sh FILM
 #
 # Environment:
 #   COMFY_OUTPUT_DIR — default /mnt/comfy-output
@@ -27,23 +27,20 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 #######################################
 # Map film id to jobstore slug.
 # Arguments:
-#   $1  go-see|still-here|switchyard
+#   $1  film id
 # Outputs:
 #   slug on stdout
 # Returns:
 #   0 known; 1 unknown
 #######################################
 compile_film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
+  film_slug "${1:-}"
 }
 
 #######################################
@@ -61,7 +58,7 @@ compile_film_run() {
   local film="${1:-}"
   local slug yaml dest
   if [[ -z ${film} ]]; then
-    err "Usage: compile-film.sh go-see|still-here|switchyard"
+    err "Usage: compile-film.sh FILM"
     return 1
   fi
   slug="$(compile_film_slug "${film}")" || {
@@ -86,7 +83,7 @@ compile_film_run() {
 #######################################
 main() {
   if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
-    echo "Usage: $0 go-see|still-here|switchyard" >&2
+    echo "Usage: $0 FILM" >&2
     exit 0
   fi
   compile_film_run "${1:-}"

@@ -10,8 +10,8 @@ fps: 24
 duration_s: 5.00
 beats: 6
 shots_per_beat: 3
-total_shots: 18
-publish_cap_s: 90.00
+total_shots: 18          # 18 for 90s films; 90 for 7.5 min (5 acts)
+publish_cap_s: 90.00     # 90.00 or 450.00; must match ez_film.catalog
 print: ltx                 # ltx | ltx-iclora-depth | dfr | wan-flf | dcc-final
 audio_policy: world-only   # world-only | stems | a2v-lock
 score: none                # none | acestep-instrumental

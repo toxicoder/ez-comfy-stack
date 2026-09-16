@@ -1288,7 +1288,7 @@ Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 
 !!! warning "Lab notes"
 
-    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8.
+    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1311,13 +1311,13 @@ Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
 | `shot_17` | in | `VHS_FILENAMES` | Shot 17 MP4. |
 | `shot_18` | in | `VHS_FILENAMES` | Shot 18 MP4. |
 | `disclosure` | in | `STRING` | EZFilmDisclosure text. |
-| `path` | out | `STRING` | ez_<slug>_90s.mp4 path. |
+| `path` | out | `STRING` | Published MP4 path. |
 
 #### `film`
 
 Type `COMBO`.
 
-Film slug.
+Film id.
 
 **How it affects generation:** Picks output name and shot-map. Must match the graph.
 
@@ -1328,14 +1328,19 @@ Film slug.
 | `go-see` | Parkour 90s. |
 | `still-here` | Household morning 90s. |
 | `switchyard` | Night freight-yard 90s. |
+| `tide-table` | Dawn skiff 7.5 min. |
+| `night-oven` | Bakery 7.5 min. |
+| `glasshouse` | Storm glasshouse 7.5 min. |
+| `last-lane` | Night two-lane 7.5 min. |
+| `breakwater` | Storm-wall walk 7.5 min. |
 
 #### `cap_seconds`
 
 Type `FLOAT`. Range / default: 90.0 max.
 
-Hard duration cap.
+Hard duration cap for this 18-shot stitch.
 
-**How it affects generation:** Stay 90. Longer fights the product rule (no 90 s denoise; this is a stitch cap).
+**How it affects generation:** Stay 90. This is a stitch cap, not a denoise length. 7.5 min masters are host concat of 90 stems.
 
 #### `xfade_cs`
 
@@ -1343,7 +1348,15 @@ Type `INT`. Range / default: 0–50; 10 = 0.10 s.
 
 Audio-only acrossfade in centiseconds.
 
-**How it affects generation:** 0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see. Picture stays cut-only so duration stays on picture.
+**How it affects generation:** 0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see / last-lane / breakwater. Picture stays cut-only so duration stays on picture.
+
+#### `act`
+
+Type `INT`. Range / default: 0–5.
+
+0 = 90s film master; 1–5 = act master for a 7.5 min film.
+
+**How it affects generation:** Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4.
 
 ### `EZFilmDisclosure` — LTX AI-media disclosure
 

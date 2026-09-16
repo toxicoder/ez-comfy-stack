@@ -156,7 +156,7 @@ STRING out → CLIPTextEncode `text` input.
 
 | Pin Enhance **off** | Why |
 | --- | --- |
-| 90s films (identity + 18 LTX shots) | Baked `shots.yaml`; rewriter changes camera and foley |
+| 90s films and 7.5 min acts (identity + 18 LTX shots) | Baked `shots.yaml`; rewriter changes camera and foley |
 | Talking-head LTX I2V | A2V freeze recipe |
 | **ltx/dialogue-5s** / **multishot-5s** / **product-hero** / **flf-5s** / **a2v-5s** | Authored LTX-2.5 showcase; quoted speech, named cuts, freeze bed |
 | GIF / bumper / sticker loops | Ping-pong needs cyclic locked-camera motion |

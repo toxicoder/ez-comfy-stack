@@ -770,7 +770,7 @@
     "aliases": ["film-accept"],
     "category": "Film",
     "short": "Fail-closed gate: 5.00 s, 1280×704, LTX audio present before concat.",
-    "long": "`manage.sh film-accept go-see` (and concat `--film --yes`) refuse shots that drift. `--skip-accept` is an escape hatch, not a default. See [90s shorts](shorts.md).",
+    "long": "`manage.sh film-accept go-see` (and concat `--film --yes`) refuse shots that drift. 7.5 min films expect 90 stems and a 450s master. `--skip-accept` is an escape hatch, not a default. See [Short films](shorts.md).",
     "see_also": ["last-frame", "ltx"]
   },
   {
