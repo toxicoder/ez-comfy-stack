@@ -16,7 +16,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Negative CLIP nodes go through **Negative Prompt Enhance** (positive CLIP string as context) so canned `illustration` / `Pixar` terms cannot fight the intended look
 - Rewriter **context** sockets carry a bible, logline, research brief, or episode script. Enhance **off** ignores context so authored recipes stay pinned
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
-- Sample prompt dropdown: 20 lab recipes per graph family plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit.
+- Sample prompt dropdown: 20 lab recipes per graph family plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit. Place recipes (Cliff villa, Forest cabin, …) on **klein/dream-house** are valid Sample values — Comfy accepts every catalog label even though the App dropdown shows only this graph’s twenty.
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
 **What this enables**

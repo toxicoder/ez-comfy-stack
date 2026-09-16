@@ -259,6 +259,48 @@ def sample_labels(catalog_id: str) -> list[str]:
     return labels
 
 
+@lru_cache(maxsize=32)
+def _sample_combo_labels_cached(preferred: str) -> tuple[str, ...]:
+    """Cached union of every catalog label, preferred family first."""
+    seen: set[str] = set()
+    body: list[str] = []
+
+    def add_label(label: str) -> None:
+        key = label.lower()
+        if not label or key == CUSTOM or key in seen:
+            return
+        seen.add(key)
+        body.append(label)
+
+    if preferred:
+        for item in load_catalog(preferred):
+            add_label(item.label)
+    for catalog_id in list_catalog_ids():
+        if catalog_id == preferred:
+            continue
+        for item in load_catalog(catalog_id):
+            add_label(item.label)
+    body.append(CUSTOM)
+    return tuple(body)
+
+
+def sample_combo_labels(preferred: str = "") -> list[str]:
+    """Labels Comfy must accept on the sample combo.
+
+    JS still filters the visible dropdown to one catalog. The Python combo is
+    the union of every catalog so a graph like ``klein/dream-house``
+    (``klein_place``) does not fail frontend validation when the App picks a
+    place recipe such as Cliff villa.
+
+    Args:
+        preferred: Catalog stem whose labels come first (family default).
+
+    Returns:
+        Unique labels, preferred catalog first, then others, then Custom.
+    """
+    return list(_sample_combo_labels_cached(_as_str(preferred).strip()))
+
+
 def _lookup(catalog_id: str, sample: str) -> Sample | None:
     choice = _norm_choice(sample)
     if not choice or choice.lower() == CUSTOM:

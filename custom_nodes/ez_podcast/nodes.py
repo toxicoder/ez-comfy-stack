@@ -65,9 +65,9 @@ def _log(message: str) -> None:
 
 def _sample_combo() -> tuple:
     _ensure_lab_custom_nodes_path()
-    from ez_prompt_enhance.samples import CUSTOM, sample_labels
+    from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
-    return (sample_labels("podcast_two_host"), {"default": CUSTOM})
+    return (sample_combo_labels("podcast_two_host"), {"default": CUSTOM})
 
 
 def _ensure_lab_custom_nodes_path() -> None:
