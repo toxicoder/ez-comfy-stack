@@ -280,6 +280,9 @@ def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
 def test_wired_edit_and_i2v_keep_image() -> None:
     tweak = _widget_names(_load("klein/character-tweak.json"))
     assert "image" in tweak
+    swap = _widget_names(_load("klein/text-swap.json"))
+    assert "image" in swap
+    assert "style" not in swap
     i2v = _widget_names(_load("wan/still-to-video-5s.json"))
     assert "image" in i2v
     clay = _widget_names(_load("dcc/klein/clay-hero.json"))

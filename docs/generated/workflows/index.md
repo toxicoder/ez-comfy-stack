@@ -160,6 +160,7 @@ tags: [workflows, generated, comfyui]
 | `klein/storyboard-6up` | [klein/storyboard-6up.md](klein/storyboard-6up.md) |
 | `klein/style-lock` | [klein/style-lock.md](klein/style-lock.md) |
 | `klein/talking-head` | [klein/talking-head.md](klein/talking-head.md) |
+| `klein/text-swap` | [klein/text-swap.md](klein/text-swap.md) |
 | `klein/thumbnail` | [klein/thumbnail.md](klein/thumbnail.md) |
 | `klein/time-of-day` | [klein/time-of-day.md](klein/time-of-day.md) |
 

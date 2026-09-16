@@ -1514,11 +1514,11 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
 
 **Other choices**
 
@@ -1527,6 +1527,7 @@ System prompt flavor.
 | `t2i` | New still. |
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
+| `text_swap` | Replace lettering; source still owns look and size. |
 
 #### `duration_hint`
 
@@ -2267,6 +2268,22 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
+### `EZMatchImageSize` — Match image size
+
+Resize a still to another image's exact width and height.
+
+!!! warning "Lab notes"
+
+    klein/text-swap restores the decode to the uploaded still's pixel size.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Edited still. |
+| `size_src` | in | `IMAGE` | Source still whose H×W is the target. |
+| `IMAGE` | out | `IMAGE` | Edited still at source size. |
+
+No widgets. Sockets only.
+
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
 Rewrite a negative CLIP seed so it does not fight the positive.
@@ -2518,6 +2535,21 @@ Type `STRING`.
 Catalog id (inspire/prompt-forge).
 
 **How it affects generation:** Leave as stamped.
+
+### `EZSnapImage` — Snap image (div 16)
+
+Scale a still to the largest width and height that fit inside the source and are multiples of 16.
+
+!!! warning "Lab notes"
+
+    klein/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. |
+| `IMAGE` | out | `IMAGE` | Snapped still. |
+
+No widgets. Sockets only.
 
 ### `EZUnloadModels` — Unload models
 

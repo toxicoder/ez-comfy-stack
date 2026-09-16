@@ -15,6 +15,8 @@ from pathlib import Path
 from _lab_theme import (
     CHARACTER_DRAFT,
     CHARACTER_TWEAK,
+    TEXT_SWAP,
+    TEXT_SWAP_LOCK,
     CREATOR_IDENTITY,
     GIF_MOTION,
     GOSEE_IDENTITY,
@@ -971,6 +973,109 @@ def klein_food() -> list[dict[str, str]]:
     return [_row(sid, label, prompt) for sid, label, prompt in plates]
 
 
+def klein_text_swap() -> list[dict[str, str]]:
+    lock = TEXT_SWAP_LOCK
+    swaps = [
+        ("hello-lock", "Replace with HELLO", TEXT_SWAP),
+        (
+            "neon-closed",
+            "Neon CLOSED",
+            f"Replace the visible lettering with: CLOSED. {lock}",
+        ),
+        (
+            "mug-good-morning",
+            "Mug GOOD MORNING",
+            f"Replace the mug lettering with: GOOD MORNING. {lock}",
+        ),
+        (
+            "poster-headline",
+            "Poster OPEN TONIGHT",
+            f"Replace the poster headline with: OPEN TONIGHT. {lock}",
+        ),
+        (
+            "book-spine",
+            "Book spine FIELD NOTES",
+            f"Replace the book-spine lettering with: FIELD NOTES. {lock}",
+        ),
+        (
+            "awning-open",
+            "Awning OPEN",
+            f"Replace the awning lettering with: OPEN. {lock}",
+        ),
+        (
+            "tee-print",
+            "Tee KEEP GOING",
+            f"Replace the shirt print with: KEEP GOING. {lock}",
+        ),
+        (
+            "thumb-title",
+            "Thumb NEW EPISODE",
+            f"Replace the thumbnail title with: NEW EPISODE. {lock}",
+        ),
+        (
+            "street-sign",
+            "Street sign HARBOR WAY",
+            f"Replace the street-sign lettering with: HARBOR WAY. {lock}",
+        ),
+        (
+            "bakery-hours",
+            "Hours 7AM-2PM",
+            f"Replace the hours lettering with: 7AM-2PM. {lock}",
+        ),
+        (
+            "sale-to-open",
+            "SALE to OPEN",
+            f"Replace SALE with OPEN. {lock}",
+        ),
+        (
+            "chapter-card",
+            "Chapter ONE",
+            f"Replace the chapter-card lettering with: ONE. {lock}",
+        ),
+        (
+            "enamel-pin",
+            "Pin HELLO",
+            f"Replace the pin lettering with: HELLO. {lock}",
+        ),
+        (
+            "vinyl-sticker",
+            "Sticker WAVE",
+            f"Replace the sticker lettering with: WAVE. {lock}",
+        ),
+        (
+            "cafe-chalkboard",
+            "Board TODAY'S SOUP",
+            f"Replace the chalkboard lettering with: TODAY'S SOUP. {lock}",
+        ),
+        (
+            "shipping-crate",
+            "Crate FRAGILE",
+            f"Replace the crate stencil with: FRAGILE. {lock}",
+        ),
+        (
+            "stadium-banner",
+            "Banner GO HOME",
+            f"Replace the banner lettering with: GO HOME. {lock}",
+        ),
+        (
+            "arcade-marquee",
+            "Marquee INSERT COIN",
+            f"Replace the marquee lettering with: INSERT COIN. {lock}",
+        ),
+        (
+            "luggage-tag",
+            "Tag GATE B",
+            f"Replace the luggage-tag lettering with: GATE B. {lock}",
+        ),
+        (
+            "window-vinyl",
+            "Window YES WE'RE OPEN",
+            f"Replace the window vinyl with: YES WE'RE OPEN. {lock}",
+        ),
+    ]
+    return [_row(sid, label, prompt) for sid, label, prompt in swaps]
+
+
 def klein_clay_edit() -> list[dict[str, str]]:
     looks = [
         ("photoreal-finish", "Photoreal stem-mix", CLAY_FINISH),
@@ -1098,6 +1203,7 @@ def main() -> None:
         "klein_product": klein_product(),
         "klein_food": klein_food(),
         "klein_clay_edit": klein_clay_edit(),
+        "klein_text_swap": klein_text_swap(),
     }
     # Remaining catalogs are filled by the rest of this module via import-time
     # helpers defined below main in the second half — keep a single dump loop.
@@ -1131,6 +1237,7 @@ def main() -> None:
         "klein/dream-house-clay": "klein_place",
         "klein/character-draft": "klein_character",
         "klein/character-tweak": "klein_character_edit",
+        "klein/text-swap": "klein_text_swap",
         "klein/product-packshot": "klein_product",
         "klein/food-tabletop": "klein_food",
         "klein/talking-head": "ltx_talking",

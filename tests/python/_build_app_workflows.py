@@ -24,6 +24,7 @@ from _lab_theme import (
     HOUSE_IDENTITY,
     KLEIN_NEG_STILL,
     KLEIN_STILL_DAILY,
+    TEXT_SWAP,
 )
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
@@ -132,6 +133,16 @@ Klein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Cha
 VAEEncode + ReferenceLatent. Do not Queue without a start image.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+"""
+
+TEXT_SWAP_NOTE = """## klein/text-swap
+
+Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). Prefix `ez_text_swap`.
+
+Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
+
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden — the source still owns look.
 """
 
 PACK_NOTE = """## klein/platform-pack
@@ -1317,6 +1328,204 @@ def build_character_tweak() -> dict:
     return graph
 
 
+def _rewire_text_swap_canvas(graph: dict) -> None:
+    """Drop the fixed latent; snap source → encode → sampler + reference; match size."""
+    from _build_dcc_workflows import _add_link, _append_out_link
+    from _wire_prompt_enhance import next_ids, remove_node
+
+    empty = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+    remove_node(graph, int(empty["id"]))
+    load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
+    encode = next(n for n in graph["nodes"] if n.get("type") == "VAEEncode")
+    decode = next(n for n in graph["nodes"] if n.get("type") == "VAEDecode")
+    save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
+    sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
+
+    def _drop_link_into(node: dict, name: str) -> None:
+        inp = next(item for item in node.get("inputs") or [] if item.get("name") == name)
+        old = inp.get("link")
+        if old is None:
+            return
+        old_id = int(old)
+        graph["links"] = [link for link in graph.get("links") or [] if int(link[0]) != old_id]
+        inp["link"] = None
+        live = {int(link[0]) for link in graph.get("links") or []}
+        for other in graph["nodes"]:
+            for out in other.get("outputs") or []:
+                links = out.get("links")
+                if isinstance(links, list):
+                    out["links"] = [lid for lid in links if int(lid) in live]
+
+    _drop_link_into(encode, "pixels")
+    _drop_link_into(save, "images")
+
+    nid, lid = next_ids(graph)
+    snap_id = nid
+    match_id = nid + 1
+    link_load_snap = lid
+    link_snap_enc = lid + 1
+    link_enc_samp = lid + 2
+    link_dec_match = lid + 3
+    link_load_match = lid + 4
+    link_match_save = lid + 5
+
+    graph["nodes"].append(
+        {
+            "id": snap_id,
+            "type": "EZSnapImage",
+            "pos": [2180, 410],
+            "size": [240, 60],
+            "flags": {},
+            "order": 19,
+            "mode": 0,
+            "inputs": [{"name": "image", "type": "IMAGE", "link": link_load_snap}],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [link_snap_enc],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZSnapImage"},
+            "widgets_values": [],
+            "title": "Snap to Klein grid",
+        }
+    )
+    graph["nodes"].append(
+        {
+            "id": match_id,
+            "type": "EZMatchImageSize",
+            "pos": [1840, 140],
+            "size": [280, 80],
+            "flags": {},
+            "order": 22,
+            "mode": 0,
+            "inputs": [
+                {"name": "image", "type": "IMAGE", "link": link_dec_match},
+                {"name": "size_src", "type": "IMAGE", "link": link_load_match},
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [link_match_save],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZMatchImageSize"},
+            "widgets_values": [],
+            "title": "Match source size",
+        }
+    )
+
+    def _slot(node: dict, name: str) -> int:
+        for index, item in enumerate(node.get("inputs") or []):
+            if item.get("name") == name:
+                return index
+        raise KeyError(name)
+
+    pix = next(item for item in encode["inputs"] if item.get("name") == "pixels")
+    pix["link"] = link_snap_enc
+    images = next(item for item in save["inputs"] if item.get("name") == "images")
+    images["link"] = link_match_save
+    latent_in = next(
+        item for item in sampler["inputs"] if item.get("name") == "latent_image"
+    )
+    latent_in["link"] = link_enc_samp
+
+    _append_out_link(load, 0, link_load_snap)
+    _append_out_link(load, 0, link_load_match)
+    _append_out_link(encode, 0, link_enc_samp)
+    decode_out = decode["outputs"][0]
+    dec_links = [lid for lid in (decode_out.get("links") or []) if lid]
+    decode_out["links"] = dec_links + [link_dec_match]
+
+    _add_link(graph, link_load_snap, int(load["id"]), 0, snap_id, 0, "IMAGE")
+    _add_link(
+        graph,
+        link_snap_enc,
+        snap_id,
+        0,
+        int(encode["id"]),
+        _slot(encode, "pixels"),
+        "IMAGE",
+    )
+    _add_link(
+        graph,
+        link_enc_samp,
+        int(encode["id"]),
+        0,
+        int(sampler["id"]),
+        _slot(sampler, "latent_image"),
+        "LATENT",
+    )
+    _add_link(graph, link_dec_match, int(decode["id"]), 0, match_id, 0, "IMAGE")
+    _add_link(graph, link_load_match, int(load["id"]), 0, match_id, 1, "IMAGE")
+    _add_link(
+        graph,
+        link_match_save,
+        match_id,
+        0,
+        int(save["id"]),
+        _slot(save, "images"),
+        "IMAGE",
+    )
+    graph["last_node_id"] = match_id
+    graph["last_link_id"] = link_match_save
+
+
+def build_text_swap() -> dict:
+    graph = build_character_tweak()
+    graph["id"] = "klein/text-swap"
+    graph["revision"] = 1
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "klein/text-swap"
+    extra["lab_note"] = TEXT_SWAP_NOTE
+    extra["lab_description"] = (
+        "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. "
+        "Output matches source size. Prefix ez_text_swap."
+    )
+    extra.pop("lab_dcc", None)
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "EZKleinPromptEnhance":
+            node["widgets_values"] = [
+                TEXT_SWAP,
+                True,
+                "text_swap",
+                "match the source still",
+                "none",
+            ]
+            node["title"] = "Klein Prompt Enhance (text swap)"
+        elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
+            node["widgets_values"] = [TEXT_SWAP]
+        elif ntype == "SaveImage":
+            node["widgets_values"] = ["ez_text_swap"]
+            node["title"] = "Save text swap"
+        elif ntype == "LoadImage":
+            node["widgets_values"] = ["example.png", "image"]
+            node["title"] = "Source still"
+        elif ntype == "Note":
+            node["widgets_values"] = [TEXT_SWAP_NOTE]
+            node["title"] = "Operator note"
+        elif ntype == "VAEEncode":
+            node["title"] = "Encode snapped source"
+        elif ntype == "ReferenceLatent":
+            node["title"] = "Positive + source plate"
+        elif ntype == "KSampler":
+            widgets = list(node.get("widgets_values") or [])
+            if len(widgets) >= 7:
+                widgets[0] = 42
+                widgets[1] = "fixed"
+                widgets[2] = 8
+                widgets[3] = 1.0
+                widgets[6] = 1.0
+            node["widgets_values"] = widgets
+    _rewire_text_swap_canvas(graph)
+    return graph
+
+
 def main() -> None:
     still = build_still_app()
     gif = build_gif_loop()
@@ -1325,6 +1534,7 @@ def main() -> None:
     pack = build_platform_pack()
     draft = build_character_draft()
     tweak = build_character_tweak()
+    swap = build_text_swap()
     _dump(lab_json("klein/still-daily.json"), still)
     _dump(lab_json("wan/gif-loop.json"), gif)
     _dump(lab_json("klein/dream-house.json"), house)
@@ -1332,9 +1542,10 @@ def main() -> None:
     _dump(lab_json("klein/platform-pack.json"), pack)
     _dump(lab_dest("klein/character-draft"), draft)
     _dump(lab_dest("klein/character-tweak"), tweak)
+    _dump(lab_dest("klein/text-swap"), swap)
     print(
         "wrote still-app, gif-loop, dream-house, dream-house-clay, "
-        "platform-pack, character draft/tweak"
+        "platform-pack, character draft/tweak, text-swap"
     )
 
 

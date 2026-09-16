@@ -637,6 +637,12 @@
       "kind": "graph"
     },
     {
+      "id": "klein/text-swap",
+      "path": "generated/workflows/klein/text-swap.md",
+      "lane": "klein",
+      "kind": "graph"
+    },
+    {
       "id": "klein/thumbnail",
       "path": "generated/workflows/klein/thumbnail.md",
       "lane": "klein",
@@ -1327,6 +1333,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 454,
-  "page_count": 222
+  "graph_count": 455,
+  "page_count": 223
 }

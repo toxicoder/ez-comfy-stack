@@ -22,6 +22,7 @@ _FAMILY_FOR_MODE: dict[tuple[str, str], str] = {
     ("EZKleinPromptEnhance", "t2i"): "klein_t2i",
     ("EZKleinPromptEnhance", "edit"): "klein_clay_edit",
     ("EZKleinPromptEnhance", "identity"): "klein_identity",
+    ("EZKleinPromptEnhance", "text_swap"): "klein_text_swap",
     ("EZWanPromptEnhance", "t2v"): "wan_t2v",
     ("EZWanPromptEnhance", "i2v"): "wan_i2v",
     ("EZWanPromptEnhance", "flf"): "wan_flf",

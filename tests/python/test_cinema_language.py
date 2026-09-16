@@ -72,6 +72,9 @@ def test_cinema_language_addendum_lists_axes_recipes_and_tokens() -> None:
     neg = cinema.cinema_language_addendum("negative_klein")
     assert "Do not negate" in neg
     assert cinema.cinema_language_addendum("ace_tags") == ""
+    assert cinema.cinema_language_addendum("klein_text_swap") == ""
+    assert cinema.addendum_kind("klein_text_swap") == "skip"
+    assert cinema.addendum_kind("klein_t2i", "text_swap") == "skip"
     assert cinema.addendum_kind("dreamx_i2v") == "i2v"
     assert cinema.addendum_kind("wan_t2v", "i2v") == "i2v"
     assert cinema.addendum_kind("ltx_t2v", "iclora") == "iclora"

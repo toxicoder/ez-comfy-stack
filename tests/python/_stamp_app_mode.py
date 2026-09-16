@@ -323,7 +323,7 @@ WIDGET_ORDER = (
     "unet_name",
 )
 HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock", "catalog"})
-STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace"})
+STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace", "text_swap"})
 NODE_MODE_ALWAYS = 0
 NODE_MODE_BYPASS = 4
 WIDGET_HEIGHTS = {
@@ -582,6 +582,9 @@ def display_label(
     ntype = str(node.get("type") or "")
     title = str(node.get("title") or "").strip()
     title_l = title.lower()
+    if ntype == "EZKleinPromptEnhance" and name == "prompt":
+        if _enhance_mode(node) == "text_swap":
+            return "New lettering"
     if ntype == "LoadImage" and name == "image":
         return title or generic
     if ntype == "LoadAudio" and name == "audio":
@@ -734,6 +737,12 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         )
     if name == "seconds" and ntype == "EmptyAceStep1.5LatentAudio":
         return "Bed or sting length in seconds."
+    if name == "prompt" and ntype == "EZKleinPromptEnhance":
+        if _enhance_mode(node) == "text_swap":
+            return (
+                "Replacement lettering, or Replace SALE with OPEN. "
+                "Rewrite prompt expands this into a glyph-lock instruction."
+            )
     if name == "prompt" and ntype == "EZPodcastScript":
         return "Speaker A/B lines. Disclosure prepends the spoken bumper."
     if name == "prompt" and ntype == "EZDubScript":
@@ -956,6 +965,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "ltx/first-last-5s",
     ),
     "klein/thumbnail": _spec("produce", "klein"),
+    "klein/text-swap": _spec(
+        "produce",
+        "klein",
+        "wan/still-to-video-5s",
+    ),
     "klein/product-packshot": _spec("produce", "klein", "ltx/product-hero"),
     "klein/instagram-square": _spec("produce", "klein"),
     "klein/open-graph": _spec("produce", "klein"),

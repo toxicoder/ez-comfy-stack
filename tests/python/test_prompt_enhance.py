@@ -136,6 +136,11 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "first frame" in ltx_i2v.lower()
     assert "camera motion" in ltx_i2v.lower()
     assert "new objects" in ltx_i2v.lower()
+    swap = client.load_system_prompt("klein_text_swap")
+    assert "lettering" in swap.lower()
+    assert "spell" in swap.lower()
+    assert "typeface" in swap.lower()
+    assert "cinema rack" not in swap.lower()
     ident = client.load_system_prompt("klein_identity")
     assert "camera-free" in ident.lower()
     assert "lens" in ident.lower()
@@ -1570,6 +1575,8 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert enhance["label_off"] == "Off"
     assert wan.INPUT_TYPES()["required"]["enhance"][1]["label_on"] == "On"
     assert ltx.INPUT_TYPES()["required"]["enhance"][1]["label_off"] == "Off"
+    modes = klein.INPUT_TYPES()["required"]["mode"][0]
+    assert modes == ["t2i", "edit", "identity", "text_swap"]
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 151
@@ -1592,6 +1599,16 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert on["ui"]["text"][0] == "rewritten-klein"
     system = mock.call_args[0][0]
     assert "identity" in system.lower()
+    with patch.object(
+        client,
+        "complete",
+        return_value=("rewritten-swap", None),
+    ) as mock_swap:
+        swapped = klein.run("OPEN", True, "text_swap", "match the source still", "none")
+    assert swapped["result"] == ("rewritten-swap",)
+    swap_system = mock_swap.call_args[0][0]
+    assert "lettering" in swap_system.lower()
+    assert "spell" in swap_system.lower()
     with patch.object(client, "complete", return_value=("rewritten-style", None)) as mock:
         klein.run("photoreal 85mm portrait of a bike", True, "t2i", "", "anime")
     user = mock.call_args[0][1]

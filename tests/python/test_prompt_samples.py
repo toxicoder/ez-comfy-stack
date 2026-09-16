@@ -145,6 +145,9 @@ def test_family_fallback_from_node_type() -> None:
     assert resolve_catalog("", node_type="EZKleinPromptEnhance", mode="t2i") == (
         "klein_t2i"
     )
+    assert resolve_catalog("", node_type="EZKleinPromptEnhance", mode="text_swap") == (
+        "klein_text_swap"
+    )
     assert resolve_catalog("", node_type="EZWanPromptEnhance", mode="i2v") == (
         "wan_i2v"
     )

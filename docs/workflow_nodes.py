@@ -634,6 +634,29 @@ def encyclopedia() -> dict[str, Any]:
                 _w("quality", index=1, typ="COMBO", rng="320k", desc="Bitrate preset.", gen="320k is the lab master. Lower bitrates are smaller and harsher on hats.", choices=[("320k", "Lab default."), ("192k", "Smaller, more artifacts."), ("128k", "Preview only.")]),
             ],
         ),
+        "EZSnapImage": _n(
+            "Snap image (div 16)",
+            "Scale a still to the largest width and height that fit inside the source and are multiples of 16.",
+            origin="ez_image",
+            lab="klein/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Source still."),
+                _s("IMAGE", "IMAGE", "out", "Snapped still."),
+            ],
+            widgets=[],
+        ),
+        "EZMatchImageSize": _n(
+            "Match image size",
+            "Resize a still to another image's exact width and height.",
+            origin="ez_image",
+            lab="klein/text-swap restores the decode to the uploaded still's pixel size.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Edited still."),
+                _s("size_src", "IMAGE", "in", "Source still whose H×W is the target."),
+                _s("IMAGE", "IMAGE", "out", "Edited still at source size."),
+            ],
+            widgets=[],
+        ),
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
@@ -1048,7 +1071,7 @@ def encyclopedia() -> dict[str, Any]:
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Lab sample prompt or Custom.", gen="Custom keeps the textarea. Picking a sample fills and locks the Prompt. Python combo is the union of every catalog so Comfy accepts place recipes (Cliff villa on dream-house); JS still filters the App dropdown to this graph."),
             _w("prompt", index=1, desc="Lazy sentence or authored still prompt.", gen="When Enhance is on, the GGUF expands this into Klein-native sentences."),
             _w("enhance", index=2, typ="BOOLEAN", rng="on for lazy printers", desc="Run the rewriter.", gen="Off = encode the widget as-is (plus style suffix if set)."),
-            _w("mode", index=3, typ="COMBO", rng="t2i / edit / identity", desc="System prompt flavor.", gen="t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).", choices=[("t2i", "New still."), ("edit", "Klein-edit / clay / tweak."), ("identity", "Camera-free identity bible.")]),
+            _w("mode", index=3, typ="COMBO", rng="t2i / edit / identity / text_swap", desc="System prompt flavor.", gen="t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.", choices=[("t2i", "New still."), ("edit", "Klein-edit / clay / tweak."), ("identity", "Camera-free identity bible."), ("text_swap", "Replace lettering; source still owns look and size.")]),
             _w("duration_hint", index=4, desc="Framing hint (YouTube 16:9 still, Instagram 4:5, …).", gen="Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does."),
             _w("style", index=5, typ="COMBO", rng="none", desc="Look reference woven into the CLIP prompt.", gen="none = off. Dropdown wins over style words already in the source. Hidden on I2V graphs.", choices_from="styles"),
             _w("catalog", index=6, desc="Sample-catalog id (graph stem).", gen="Internal. Leave as stamped so sample dropdowns resolve."),

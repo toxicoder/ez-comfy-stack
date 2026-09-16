@@ -228,7 +228,9 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
             if ntype == "EZKleinPromptEnhance":
                 if "IDENTITY" in title.upper() or mode == "identity":
                     mode = "identity"
-                elif mode not in ("t2i", "edit", "identity"):
+                elif "TEXT SWAP" in title.upper() or mode == "text_swap":
+                    mode = "text_swap"
+                elif mode not in ("t2i", "edit", "identity", "text_swap"):
                     mode = "t2i"
             else:
                 if "flf" in graph_id or mode == "flf":
