@@ -81,6 +81,32 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     _assert_no_overlap(graph)
 
 
+def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
+    graph = _load("inspire/cinema-rack")
+    assert graph["id"] == "cinema-rack"
+    assert graph["extra"].get("lab_rel") == "inspire/cinema-rack"
+    types = {n.get("type") for n in graph["nodes"]}
+    for heavy in HEAVY:
+        assert heavy not in types, heavy
+    assert "EZCinemaRack" in types
+    assert "EZKleinPromptEnhance" in types
+    assert "EZWanPromptEnhance" in types
+    assert "EZLTXPromptEnhance" in types
+    blob = json.dumps(graph)
+    for needle in BANNED:
+        assert needle not in blob
+    extra = graph["extra"]
+    assert extra["lab_app_mode"]["enabled"] is True
+    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["occupancy"] == "llm"
+    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    names = [entry[1] for entry in extra["linearData"]["inputs"]]
+    assert names[0] == "subject"
+    assert "recipe" in names
+    assert "camera_movement" in names
+    _assert_no_overlap(graph)
+
+
 def test_research_chat_has_no_unet_and_stamps_llm() -> None:
     graph = _load("inspire/research-chat")
     assert graph["id"] == "research-chat"

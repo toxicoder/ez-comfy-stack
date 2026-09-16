@@ -153,6 +153,7 @@ Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft withou
 | `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | — | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
 | `EZContextJoin` | Context Join | `a` STRING (forceInput), `label_a`…`label_d`; optional `b` `c` `d` STRING (forceInput) | `STRING` context | — | Packs labeled desk fields (logline/script/audio policy/score). Empty values omitted. Wire into Prompt Enhance `context` |
 | `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `sample` combo, `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`), `catalog`; optional `context` | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and empty-body `[inst]` / `[drop]` lyrics (free-text lines fold into the brackets so ACE does not sing them). Context (episode script) ignored when Enhance is off. Album tracks hide Sample in App Mode |
+| `EZCinemaRack` | Cinema Rack | `subject` STRING, `flavor` combo, `recipe` combo, thirteen axis combos (default `none`) | `STRING` prompt, `STRING` notes | — | Deterministic splice. Recipe fills empty axes. Wan emits one camera verb. I2V drops look. Editing omitted on stills. Catalogs: [Cinema Rack](../create/cinema-rack.md) |
 
 ---
 

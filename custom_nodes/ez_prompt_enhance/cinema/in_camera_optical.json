@@ -1,0 +1,2219 @@
+[
+  {
+    "id": "fx_spherical_flare",
+    "label": "Spherical Flare",
+    "clause": "Let a spherical sun-star bloom on the glass with hexagonal ghosts stacked toward the lamp.",
+    "still": "Spherical sun-star blooming on the glass, hexagonal ghosts stacked toward the lamp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_cool_horizontal_streak",
+    "label": "Cool Horizontal Streak",
+    "clause": "Paint cool horizontal streak flares across the highlights, oval bokeh stretching sideways.",
+    "still": "Cool horizontal streak flares across highlights, oval bokeh stretched sideways.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "fx_veiling_flare",
+    "label": "Veiling Flare",
+    "clause": "Flood the image with veiling flare so contrast collapses into a milky wash from the practical.",
+    "still": "Veiling flare as a milky wash, contrast collapsed from the practical.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_ghost_orb",
+    "label": "Ghost Orb Flare",
+    "clause": "Raise a ghost orb opposite the lamp, a pale disc repeating the source across the plate.",
+    "still": "Pale ghost orb opposite the lamp, disc repeating the source.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "ghost"
+    ]
+  },
+  {
+    "id": "fx_rain_on_lens",
+    "label": "Rain On Lens",
+    "clause": "Leave rain beads on the front element so city lamps smear through each drop.",
+    "still": "Rain beads on the front element, city lamps smeared through each drop.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_smear_across_glass",
+    "label": "Smear Across Glass",
+    "clause": "Smear a wet finger-track across the taking glass so highlights drag into commas.",
+    "still": "Wet finger-track on the taking glass, highlights dragged into commas.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_breath_fog",
+    "label": "Breath Fog Element",
+    "clause": "Fog the element with breath so the close face blooms and distant lamps halo.",
+    "still": "Breath-fogged element, close face blooming, distant lamps haloed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_snap_zoom",
+    "label": "Snap Zoom In",
+    "clause": "Snap-zoom optically into the eyes in one accent, magnification jumping without a body move.",
+    "still": "Snap-zoom frozen at the accent, eyes suddenly large, no body move.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_crash_zoom",
+    "label": "Crash Zoom",
+    "clause": "Crash-zoom optically into the face so magnification slams without any dolly travel.",
+    "still": "Frozen at the punch of an optical crash-zoom, face filling the plate, walls compressed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_whip_pan_blur",
+    "label": "Whip Pan Blur",
+    "clause": "Whip-pan so practicals collapse into unreadable color bands across the plate.",
+    "still": "Whip-pan smear frozen mid-blur, practicals as unreadable color bands.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "blur",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_iris_in",
+    "label": "Iris In",
+    "clause": "Iris in from black, the circle opening on the figure until the full plate is restored.",
+    "still": "Iris mid-open, black circle around a centered figure.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_iris_out",
+    "label": "Iris Out",
+    "clause": "Iris out to black, the circle closing on the last look until the plate dies.",
+    "still": "Iris mid-close, last look shrinking inside a black circle.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_fade_to_black_incamera",
+    "label": "In-Camera Fade To Black",
+    "clause": "Fade to black in-camera with the iris or a flag, exposure dying on the set not in an edit.",
+    "still": "Exposure dying on the set, in-camera fade to black mid-dim.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fade"
+    ]
+  },
+  {
+    "id": "fx_double_exposure",
+    "label": "Double Exposure",
+    "clause": "Double-expose a face over a city grid so eyes and windows occupy the same silver.",
+    "still": "Face over a city grid, eyes and windows occupying the same silver.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "exposure"
+    ]
+  },
+  {
+    "id": "fx_multiple_exposure",
+    "label": "Multiple Exposure",
+    "clause": "Stack multiple exposures of the same walker so the path becomes a crowd of one person.",
+    "still": "A crowd of one walker stacked, multiple exposures of the same path.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "exposure"
+    ]
+  },
+  {
+    "id": "fx_ghost_overlay",
+    "label": "Ghost Overlay",
+    "clause": "Overlay a ghost of the previous occupant, semi-transparent, on the empty chair.",
+    "still": "Ghost of the previous occupant semi-transparent on the empty chair.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ghost",
+      "exposure"
+    ]
+  },
+  {
+    "id": "fx_kaleidoscope",
+    "label": "Kaleidoscope",
+    "clause": "Kaleidoscope the practicals into repeating wedges of lamp and fabric.",
+    "still": "Repeating wedges of lamp and fabric, kaleidoscope still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_prism",
+    "label": "Prism Split",
+    "clause": "Hold a prism at the taking glass so the figure splits into rainbow-edged copies.",
+    "still": "Figure split into rainbow-edged copies from a prism at the glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_split_screen_matte",
+    "label": "In-Camera Split Matte",
+    "clause": "Matte a split-screen in-camera so two rooms share the plate along a hard seam.",
+    "still": "Two rooms sharing the plate along a hard in-camera matte seam.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "matte"
+    ]
+  },
+  {
+    "id": "fx_fg_glass_distort",
+    "label": "Foreground Glass Distortion",
+    "clause": "Shoot through foreground glass distortion so the street wobbles in bottle-green waves.",
+    "still": "Street wobbling in bottle-green waves through foreground glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_water_tank_glass",
+    "label": "Water Tank Glass",
+    "clause": "Shoot through a water-tank glass so caustics crawl over the face like living lace.",
+    "still": "Caustics crawling over the face like living lace, water-tank glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "water"
+    ]
+  },
+  {
+    "id": "fx_heat_haze",
+    "label": "Heat Haze",
+    "clause": "Let heat haze from asphalt or a vent ripple the background while the close body stays readable.",
+    "still": "Heat haze rippling the background, close body readable, asphalt shimmer.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "fx_edge_smear_diffusion",
+    "label": "Edge Smear Diffusion",
+    "clause": "Smear a thin grease at the frame edge so the center stays sharp and the rim blooms.",
+    "still": "Center sharp, rim blooming from a thin grease smear at the edge.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_net_over_lens",
+    "label": "Net Over Lens",
+    "clause": "Stretch a fine net over the lens so highlights catch a knitted glow and skin smooths.",
+    "still": "Knitted glow on highlights from a fine net, skin smoothed, pores still hinted.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion",
+      "net"
+    ]
+  },
+  {
+    "id": "fx_star_spikes",
+    "label": "Star Spikes",
+    "clause": "Cut star spikes on bright points so lamps grow long needles across the dark.",
+    "still": "Lamps growing long star-spike needles across the dark.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_cross_hatch",
+    "label": "Cross Hatch Flare",
+    "clause": "Cross-hatch the highlights so each lamp becomes a small plus-sign of glare.",
+    "still": "Each lamp a small plus-sign of glare, cross-hatch still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_tunnel_vision",
+    "label": "Tunnel Vision",
+    "clause": "Crush the edges into tunnel vision so only a bright center path remains.",
+    "still": "Edges crushed into tunnel vision, only a bright center path remains.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vignette"
+    ]
+  },
+  {
+    "id": "fx_vignette_crush",
+    "label": "Vignette Crush",
+    "clause": "Crush a heavy vignette so corners go to tar and the face becomes a spotlight.",
+    "still": "Corners gone to tar, face in a spotlight, vignette crush.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vignette"
+    ]
+  },
+  {
+    "id": "fx_light_leak",
+    "label": "Light Leak Burn",
+    "clause": "Burn a light leak along one edge as if the magazine door kissed sun, orange-pink wash.",
+    "still": "Orange-pink light leak along one edge, magazine-door sun kiss.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "leak"
+    ]
+  },
+  {
+    "id": "fx_shutter_drag_writing",
+    "label": "Shutter Drag Light Writing",
+    "clause": "Drag the shutter and write with a lamp so glyphs of light snake through the still figure.",
+    "still": "Glyphs of light snaking through a still figure, shutter-drag writing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter",
+      "leak"
+    ]
+  },
+  {
+    "id": "fx_freeze_flash",
+    "label": "Freeze Flash",
+    "clause": "Pop a freeze-flash so flying water and hair are razor-stopped while the ambient stays dim.",
+    "still": "Flying water and hair razor-stopped by freeze-flash, ambient dim around them.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash",
+      "freeze"
+    ]
+  },
+  {
+    "id": "fx_rear_curtain_sync",
+    "label": "Rear Curtain Sync",
+    "clause": "Use a rear-curtain sync look so the smear of motion sits behind a sharp late pop.",
+    "still": "Motion smear sitting behind a sharp late pop, rear-curtain sync still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash",
+      "shutter"
+    ]
+  },
+  {
+    "id": "fx_fg_flare_bars",
+    "label": "Foreground Flare Bars",
+    "clause": "Let foreground flare bars from a half-flagged lamp stripe the plate with hot geometry.",
+    "still": "Hot geometric flare bars striping the plate from a half-flagged lamp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_lens_spray",
+    "label": "Lens Spray",
+    "clause": "Spray the lens with a fine mist so every highlight becomes a tiny globe.",
+    "still": "Fine mist on the lens, every highlight a tiny globe.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_dirt_in_gate",
+    "label": "Dirt In Gate",
+    "clause": "Wear dirt-in-gate as a look: specks and a hair dancing at the edge of the picture.",
+    "still": "Specks and a hair at the picture edge, dirt-in-gate as a look.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_kaleido_repeat",
+    "label": "Kaleido Repeat",
+    "clause": "Kaleido-repeat the dancer into a radial burst of limbs around a dark center.",
+    "still": "Dancer as a radial burst of limbs around a dark center, kaleido still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_split_diopter",
+    "label": "Split Diopter Effect",
+    "clause": "Split-diopter the plate so a close glass and a distant face are both sharp across a blur seam.",
+    "still": "Close glass and distant face both sharp, split-diopter blur seam between them.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diopter"
+    ]
+  },
+  {
+    "id": "fx_speed_ramp_optical",
+    "label": "Optical Speed Ramp Zoom",
+    "clause": "Speed-ramp the zoom optically, magnification easing then leaping on the reveal.",
+    "still": "Magnification caught mid-leap, optical speed-ramp zoom freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom",
+      "ramp"
+    ]
+  },
+  {
+    "id": "fx_smash_zoom",
+    "label": "Smash Zoom",
+    "clause": "Smash-zoom into the reaction so the room collapses into a mouth and eyes.",
+    "still": "Room collapsed into a mouth and eyes, smash-zoom punch frozen.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_snap_zoom_out",
+    "label": "Snap Zoom Out",
+    "clause": "Snap-zoom out so context slams around a face that was filling the plate.",
+    "still": "Context slammed around a face that was filling the plate, snap-zoom out freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_out"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_rack_through_glass",
+    "label": "Rack Through Glass",
+    "clause": "Rack through dirty glass from the reflection to the person beyond.",
+    "still": "Dirty glass mid-rack, reflection and the person beyond both half-sharp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rack",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_dirty_close_filter",
+    "label": "Dirty Close Filter",
+    "clause": "Hang a dirty close filter so dust, fingerprints, and a greasy bloom sit on the close-up.",
+    "still": "Dust, fingerprints, and a greasy bloom on the close-up, dirty close filter.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion",
+      "dirt"
+    ]
+  },
+  {
+    "id": "fx_rainbow_ghost",
+    "label": "Rainbow Ghost",
+    "clause": "Cast a rainbow ghost of the lamp, a spectral double drifting toward the opposite corner.",
+    "still": "Spectral double of the lamp drifting toward the opposite corner, rainbow ghost.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "ghost"
+    ]
+  },
+  {
+    "id": "fx_cool_streak_lamp",
+    "label": "Cool Streak From Lamp",
+    "clause": "Throw a cool horizontal streak from a small practical, a thin cyan bar across the dark.",
+    "still": "Thin cyan bar across the dark from a small practical, cool streak.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "fx_fade_from_black",
+    "label": "In-Camera Fade From Black",
+    "clause": "Fade from black in-camera, exposure blooming on the set as if the iris wakes.",
+    "still": "Exposure blooming on the set, in-camera fade from black mid-wake.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fade"
+    ]
+  },
+  {
+    "id": "fx_fade_to_white",
+    "label": "In-Camera Fade To White",
+    "clause": "Fade to white in-camera as a window overexposes until the plate is paper.",
+    "still": "Window overexposing toward paper, in-camera fade to white.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fade"
+    ]
+  },
+  {
+    "id": "fx_iris_hold",
+    "label": "Iris Hold Peek",
+    "clause": "Hold a small iris peek on the keyhole of the action, black surrounding a tiny circle.",
+    "still": "Tiny circle of action in a small iris peek, black surrounding.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_zoom_breathe",
+    "label": "Zoom Breathe",
+    "clause": "Breathe the zoom in tiny pulses as if the lens is inhaling with the actor.",
+    "still": "Zoom caught mid-pulse, lens inhaling with the actor.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "fx_crash_zoom_out",
+    "label": "Crash Zoom Out",
+    "clause": "Crash-zoom out so isolation slams around a figure that was a close head-and-shoulders.",
+    "still": "Isolation slammed around a figure that was a close head-and-shoulders, crash-zoom out.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_out"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_whip_zoom",
+    "label": "Whip Zoom",
+    "clause": "Whip-zoom in a blurred magnification so the face arrives as a smear that sharpens late.",
+    "still": "Face arriving as a smear that has not yet sharpened, whip-zoom freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom",
+      "blur"
+    ]
+  },
+  {
+    "id": "fx_rack_flare",
+    "label": "Rack Into Flare",
+    "clause": "Rack into a flare so the far lamp blows as focus finds it.",
+    "still": "Far lamp blowing as focus finds it, rack-into-flare still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rack",
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_sun_through_trees",
+    "label": "Sun Through Trees Flare",
+    "clause": "Let sun through trees strobe the glass with leafy flares as branches pass.",
+    "still": "Leafy sun flares on the glass, branches implied, woodland bloom.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_headlight_veiling",
+    "label": "Headlight Veiling",
+    "clause": "Let oncoming headlights veil the windshield until the road becomes a white wall.",
+    "still": "Oncoming headlights veiling the windshield, road as a white wall.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "fx_candle_ghost",
+    "label": "Candle Ghost Disc",
+    "clause": "Raise a candle ghost disc, a second flame floating opposite the real wick.",
+    "still": "Second flame floating opposite the real wick, candle ghost disc.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ghost",
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_window_reflection_burn",
+    "label": "Window Reflection Burn",
+    "clause": "Burn the window reflection so interior lamps write over the face as pale architecture.",
+    "still": "Interior lamps writing over the face as pale architecture, window burn.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_mist_on_element",
+    "label": "Mist On Element",
+    "clause": "Settle mist on the element so the world is pearls of street-lamp.",
+    "still": "Pearls of street-lamp on a misted element, world beaded.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather"
+    ]
+  },
+  {
+    "id": "fx_fingerprint_on_lens",
+    "label": "Fingerprint On Lens",
+    "clause": "Leave a fingerprint on the lens so one highlight becomes a greasy spiral.",
+    "still": "One highlight as a greasy spiral from a fingerprint on the lens.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dirt",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_scratch_on_gate",
+    "label": "Scratch On Gate",
+    "clause": "Wear a scratch on the gate as a bright hairline that stays put while the scene moves.",
+    "still": "Bright hairline scratch on the gate, staying put on the still plate.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_hair_in_gate",
+    "label": "Hair In Gate",
+    "clause": "Leave a hair in the gate, a dark squiggle at the top of the picture like old film.",
+    "still": "Dark squiggle of a hair in the gate at the top of the picture.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_black_diffusion",
+    "label": "Fine Black Diffusion",
+    "clause": "Diffuse with a fine black netting so blacks stay rich and highlights roll off.",
+    "still": "Rich blacks, highlights rolled off, fine black diffusion on skin.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_white_diffusion",
+    "label": "White Diffusion Veil",
+    "clause": "Veil the plate with white diffusion so the air looks dusty and lamps bloom large.",
+    "still": "Dusty air, lamps blooming large, white diffusion veil.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_center_spot_clear",
+    "label": "Clear Center Spot",
+    "clause": "Keep a clear center spot while the surround is misted, a face-hole in fog.",
+    "still": "Face-hole in fog, clear center spot, misted surround.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_macro_split_diopter",
+    "label": "Macro Split Diopter",
+    "clause": "Split-diopter a macro coin against a sharp street behind, two scales at once.",
+    "still": "Macro coin and sharp street at once, two scales on a split diopter.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diopter",
+      "macro"
+    ]
+  },
+  {
+    "id": "fx_sweet_spot_tilt",
+    "label": "Sweet Spot Tilt",
+    "clause": "Tilt a sweet-spot optic so only a slice of the toy is sharp and the rest melts.",
+    "still": "Only a slice of the toy sharp, the rest melted, sweet-spot tilt.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tilt"
+    ]
+  },
+  {
+    "id": "fx_barrel_distortion",
+    "label": "Barrel Distortion",
+    "clause": "Barrel-distort the lobby so columns bow and the ceiling becomes a belly.",
+    "still": "Columns bowing, ceiling a belly, barrel-distorted lobby.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "distort"
+    ]
+  },
+  {
+    "id": "fx_fisheye_wrap",
+    "label": "Fisheye Wrap",
+    "clause": "Fisheye-wrap the room so walls curve around a huge center and feet balloon.",
+    "still": "Walls curving around a huge center, feet ballooned, fisheye wrap.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "distort"
+    ]
+  },
+  {
+    "id": "fx_chromatic_fringe",
+    "label": "Chromatic Fringe",
+    "clause": "Fringe high-contrast edges with chromatic split, cyan and red fighting the outlines.",
+    "still": "Cyan and red fighting the outlines, chromatic fringe on high-contrast edges.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aberration"
+    ]
+  },
+  {
+    "id": "fx_purple_fringe",
+    "label": "Purple Fringe",
+    "clause": "Let purple fringe crawl along backlit hair and chrome.",
+    "still": "Purple fringe crawling along backlit hair and chrome.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aberration"
+    ]
+  },
+  {
+    "id": "fx_halation_highlights",
+    "label": "Halation Highlights",
+    "clause": "Halate the highlights so bright windows bleed a rosy ring into the dark.",
+    "still": "Bright windows bleeding a rosy ring into the dark, halation still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "halation"
+    ]
+  },
+  {
+    "id": "fx_gate_weave",
+    "label": "Gate Weave",
+    "clause": "Add a slight gate weave so the picture breathes against the mask.",
+    "still": "Picture slightly off the mask as if mid-gate-weave.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_corner_leak",
+    "label": "Corner Light Leak",
+    "clause": "Burn a corner light leak, a wedge of amber eating the lower right.",
+    "still": "Amber wedge eating the lower right, corner light leak.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "leak"
+    ]
+  },
+  {
+    "id": "fx_red_scale_leak",
+    "label": "Red Scale Leak",
+    "clause": "Flood a red-scale leak as if the film saw raw light, crimson wash on one side.",
+    "still": "Crimson wash on one side, red-scale leak as raw light.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "leak"
+    ]
+  },
+  {
+    "id": "fx_orange_flash_leak",
+    "label": "Orange Flash Leak",
+    "clause": "Pop an orange flash leak, a sudden sun-kiss that almost erases the face.",
+    "still": "Sudden sun-kiss orange flash leak, face almost erased on one cheek.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "leak",
+      "flash"
+    ]
+  },
+  {
+    "id": "fx_prism_rainbow_edge",
+    "label": "Prism Rainbow Edge",
+    "clause": "Prism the edge of the plate into a rainbow border while the center stays honest.",
+    "still": "Rainbow border from a prismed edge, center still honest.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_crystal_ball_fg",
+    "label": "Crystal Ball Foreground",
+    "clause": "Fill the foreground with a crystal ball that inverts and fish-eyes the room.",
+    "still": "Crystal ball inverting and fish-eyeing the room in the foreground.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "fg"
+    ]
+  },
+  {
+    "id": "fx_wineglass_fg",
+    "label": "Wineglass Distortion",
+    "clause": "Shoot through a wineglass so the lover becomes a warped jewel in the stemware.",
+    "still": "Lover as a warped jewel in the stemware, wineglass distortion.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "fg"
+    ]
+  },
+  {
+    "id": "fx_bottle_base_wide",
+    "label": "Bottle Base Wide",
+    "clause": "Peer through a bottle base so the bar goes ultra-wide and bubbles become bokeh.",
+    "still": "Bar ultra-wide through a bottle base, bubbles as bokeh.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "fg"
+    ]
+  },
+  {
+    "id": "fx_stocking_diffusion",
+    "label": "Stocking Diffusion",
+    "clause": "Stretch stocking mesh over the taking glass for a vintage knitted bloom on lamps.",
+    "still": "Vintage knitted bloom on lamps from stocking mesh, skin softened.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "net",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_breath_then_wipe",
+    "label": "Breath Then Wipe",
+    "clause": "Fog with breath then wipe a clear streak so a path of sharpness cuts the bloom.",
+    "still": "Clear wipe-streak through breath fog, a path of sharpness in the bloom.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_rain_smear_wipe",
+    "label": "Rain Smear Wipe",
+    "clause": "Let rain smear then a wiper clear an arc of readable street.",
+    "still": "Wiper arc of readable street through rain smear on the glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "fx_grease_thumb_edge",
+    "label": "Grease Thumb Edge",
+    "clause": "Thumb a grease smear at the frame edge so the rim becomes a buttery blur and the center bites.",
+    "still": "Buttery blur at the rim from a grease thumb, center biting.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_shaped_bokeh_circles",
+    "label": "Circle Bokeh Field",
+    "clause": "Fill the dark with large circle bokeh from distant practicals, discs overlapping.",
+    "still": "Large overlapping circle bokeh from distant practicals, dark field of discs.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "fx_oval_bokeh_streak",
+    "label": "Oval Bokeh Streak",
+    "clause": "Stretch bokeh into ovals that lean into cool streaks toward the lamps.",
+    "still": "Oval bokeh leaning into cool streaks toward the lamps.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh",
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "fx_swirly_bokeh",
+    "label": "Swirly Bokeh",
+    "clause": "Swirl the background bokeh into a vortex around a sharp center face.",
+    "still": "Background bokeh as a vortex around a sharp center face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "fx_cat_eye_bokeh",
+    "label": "Cat Eye Bokeh",
+    "clause": "Cat-eye the edge bokeh so discs become almonds at the rim of the plate.",
+    "still": "Edge bokeh as almonds, cat-eye discs at the rim.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "fx_onion_ring_bokeh",
+    "label": "Onion Ring Bokeh",
+    "clause": "Onion-ring the bokeh so each disc shows concentric texture like cut glass.",
+    "still": "Each bokeh disc showing concentric onion-ring texture like cut glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "fx_focus_breathing",
+    "label": "Focus Breathing",
+    "clause": "Let focus breathing change the crop as you rack, the room slightly zooming with the pull.",
+    "still": "Room slightly zoomed by focus breathing, rack frozen mid-pull.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rack"
+    ]
+  },
+  {
+    "id": "fx_internal_reflection",
+    "label": "Internal Reflection",
+    "clause": "Raise an internal reflection, a faint inverted copy of the window inside the glass.",
+    "still": "Faint inverted copy of the window inside the glass, internal reflection.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ghost",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_veiling_window",
+    "label": "Veiling Through Window",
+    "clause": "Shoot through a bright window so veiling flare turns the interior into a silhouette wash.",
+    "still": "Interior as a silhouette wash from a bright window's veiling flare.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_dirty_window_shoot",
+    "label": "Dirty Window Shoot",
+    "clause": "Shoot through a dirty window so grit, rain-tracks, and a ghost street sit on the close face.",
+    "still": "Grit and rain-tracks on the close face, dirty window between lens and skin.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "dirt"
+    ]
+  },
+  {
+    "id": "fx_screen_door_through",
+    "label": "Through Screen Door",
+    "clause": "Shoot through a screen door so a mesh grid tattoos the face with tiny squares.",
+    "still": "Mesh grid tattooing the face with tiny squares, screen door between.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg",
+      "net"
+    ]
+  },
+  {
+    "id": "fx_chainlink_through",
+    "label": "Through Chainlink",
+    "clause": "Shoot through chainlink so diamonds of wire slice the figure into a fence close-up.",
+    "still": "Diamonds of wire slicing the figure, chainlink close-up.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg"
+    ]
+  },
+  {
+    "id": "fx_lace_curtain_through",
+    "label": "Through Lace Curtain",
+    "clause": "Shoot through a lace curtain so floral mesh prints on the backlit body.",
+    "still": "Floral mesh printed on a backlit body, lace curtain between.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_blinds_stripe",
+    "label": "Blinds Stripe",
+    "clause": "Let venetian blinds stripe the face with hard bars of sun and shadow.",
+    "still": "Venetian hard bars of sun and shadow striping the face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg"
+    ]
+  },
+  {
+    "id": "fx_water_drop_macro_lens",
+    "label": "Water Drop On Lens",
+    "clause": "Park a water drop on the lens so one inverted room lives inside the bead.",
+    "still": "One inverted room living inside a water bead on the lens.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "water",
+      "macro"
+    ]
+  },
+  {
+    "id": "fx_soap_bubble_fg",
+    "label": "Soap Bubble Foreground",
+    "clause": "Hold a soap bubble in the foreground so the street becomes a rainbow film over the scene.",
+    "still": "Street as a rainbow film on a soap bubble in the foreground.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg",
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_smoke_between",
+    "label": "Smoke Between",
+    "clause": "Put smoke between lens and subject so shafts become visible and edges go velvety.",
+    "still": "Visible shafts, velvety edges, smoke between lens and subject.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "atmosphere",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_powder_on_element",
+    "label": "Powder On Element",
+    "clause": "Dust the element with powder so highlights sparkle as if the glass had frost.",
+    "still": "Highlights sparkling as frost from powder on the element.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dirt",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_ash_on_element",
+    "label": "Ash On Element",
+    "clause": "Let ash specks sit on the element, tiny dark planets crossing lamps.",
+    "still": "Ash specks as tiny dark planets crossing lamps on the element.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dirt"
+    ]
+  },
+  {
+    "id": "fx_snow_on_lens",
+    "label": "Snow On Lens",
+    "clause": "Catch snowflakes on the lens so crystals sit sharp against a soft street.",
+    "still": "Snow crystals sharp on the lens against a soft street.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_condensation_run",
+    "label": "Condensation Runs",
+    "clause": "Let condensation run down the taking glass, the close face breaking into vertical rivers.",
+    "still": "Close face breaking into vertical rivers of condensation on the taking glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_ice_crystal_lens",
+    "label": "Ice Crystal Lens",
+    "clause": "Frost the element with ice crystals so the world becomes a fern of white over the night.",
+    "still": "Fern of white ice crystals over the night, frosted element.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_magnifier_fg",
+    "label": "Magnifier Foreground",
+    "clause": "Hold a magnifier in the foreground so one eye is huge and the rest of the face is normal.",
+    "still": "One huge eye in a magnifier, the rest of the face normal.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fg",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_binocular_mask",
+    "label": "Binocular Mask",
+    "clause": "Mask as binoculars, two circles of view on black, a slight chromatic edge.",
+    "still": "Two circles of view on black, binocular mask with a slight chromatic edge.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "matte"
+    ]
+  },
+  {
+    "id": "fx_keyhole_mask",
+    "label": "Keyhole Mask",
+    "clause": "Mask as a keyhole, a tiny shaped peek of the room on black.",
+    "still": "Tiny shaped peek of the room on black, keyhole mask.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "matte",
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_underwater_port",
+    "label": "Underwater Port Distortion",
+    "clause": "Shoot through an underwater port so the pool deck warps at the dome and caustics crawl.",
+    "still": "Pool deck warping at the dome, caustics crawling, underwater port.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "water"
+    ]
+  },
+  {
+    "id": "fx_dome_port_caustic",
+    "label": "Dome Port Caustics",
+    "clause": "Fill a dome port with caustics so the swimmer is written in moving lace of sun.",
+    "still": "Swimmer written in moving lace of sun, dome-port caustics frozen.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "water",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_split_level_waterline",
+    "label": "Split Level Waterline",
+    "clause": "Split the plate at the waterline, dry air above and submerged green below in one take.",
+    "still": "Dry air above and submerged green below, split-level waterline still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "water",
+      "matte"
+    ]
+  },
+  {
+    "id": "fx_rotating_prism",
+    "label": "Rotating Prism",
+    "clause": "Rotate a prism so copies of the lamp orbit the center while the figure holds.",
+    "still": "Copies of the lamp orbiting the center, rotating prism freeze, figure holding.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_handheld_flash_pop",
+    "label": "Handheld Flash Pop",
+    "clause": "Pop a handheld flash so the close face is paper-white and the room falls to cave.",
+    "still": "Close face paper-white from a handheld flash, room fallen to cave.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash"
+    ]
+  },
+  {
+    "id": "fx_multiple_flash_strobe",
+    "label": "Multiple Flash Strobe",
+    "clause": "Strobe multiple flashes so one gesture becomes a stack of white statues in one plate.",
+    "still": "One gesture as a stack of white statues, multiple-flash strobe still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash",
+      "strobe"
+    ]
+  },
+  {
+    "id": "fx_first_curtain_sync",
+    "label": "First Curtain Sync",
+    "clause": "Use a first-curtain sync look so the smear of motion sits ahead of a sharp early pop.",
+    "still": "Motion smear sitting ahead of a sharp early pop, first-curtain sync still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash",
+      "shutter"
+    ]
+  },
+  {
+    "id": "fx_drag_and_pop",
+    "label": "Drag And Pop",
+    "clause": "Drag ambient then pop a flash so the figure is sharp over a river of lamps.",
+    "still": "Sharp figure over a river of lamps, drag-and-pop still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flash",
+      "shutter"
+    ]
+  },
+  {
+    "id": "fx_matte_box_flag_flare",
+    "label": "Flag Fail Flare",
+    "clause": "Fail the flag so a strip of raw lamp sneaks the matte box as a flare bar.",
+    "still": "Strip of raw lamp sneaking the matte box as a flare bar.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_hood_fail_flare",
+    "label": "Hood Fail Flare",
+    "clause": "Fail the lens hood so sun sneaks the rim and veils half the plate.",
+    "still": "Sun sneaking the hood rim, half the plate veiled.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_filter_stack_ghost",
+    "label": "Filter Stack Ghost",
+    "clause": "Stack filters until internal ghosts multiply the lamp into a chain of discs.",
+    "still": "Lamp multiplied into a chain of discs, filter-stack ghosts.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ghost",
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_anamorphic_oval_bokeh",
+    "label": "Oval Highlight Field",
+    "clause": "Render highlights as standing ovals, a widescreen oval-bokeh field behind the face.",
+    "still": "Standing oval highlights, widescreen oval-bokeh field behind the face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh",
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "fx_blue_horizontal_bar",
+    "label": "Cool Horizontal Bar",
+    "clause": "Throw a single cool horizontal bar through a highlight, a thin streak with no other flare.",
+    "still": "Single cool horizontal bar through a highlight, thin streak, no other flare.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "fx_iris_shaped_bokeh",
+    "label": "Iris Shaped Bokeh",
+    "clause": "Shape bokeh to the iris blades so discs are polygons, not circles.",
+    "still": "Polygonal bokeh from iris blades, discs as polygons not circles.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh",
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_rack_net_glow",
+    "label": "Rack Through Net Glow",
+    "clause": "Rack through a netted glow so the far lamp knits then sharpens.",
+    "still": "Far lamp knitted then half-sharp, rack through net glow.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rack",
+      "net"
+    ]
+  },
+  {
+    "id": "fx_double_iris_peek",
+    "label": "Double Iris Peek",
+    "clause": "Iris twice\u2014open, close to a peek, open\u2014so the plate blinks mechanically.",
+    "still": "Iris at the peek, plate blinked mechanically, double-iris hold.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_in_camera_fade_dip",
+    "label": "In-Camera Dip",
+    "clause": "Dip exposure in-camera then recover, a live blink of the set going dark and back.",
+    "still": "Set mid-dip, exposure in-camera at the dark blink.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fade"
+    ]
+  },
+  {
+    "id": "fx_prism_face_split",
+    "label": "Prism Face Split",
+    "clause": "Split the face with a prism so one eye is duplicated beside the real one.",
+    "still": "One eye duplicated beside the real one, prism face split.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_split_diopter_table",
+    "label": "Table Split Diopter",
+    "clause": "Split-diopter a tabletop glass against a sharp diner in the back, both planes biting.",
+    "still": "Tabletop glass and diner both biting, split-diopter across the table.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diopter"
+    ]
+  },
+  {
+    "id": "fx_smear_headlight",
+    "label": "Headlight Smear",
+    "clause": "Smear headlights on wet glass into long commas while the dashboard stays readable.",
+    "still": "Headlights as long commas on wet glass, dashboard readable.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "glass",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "fx_breath_closeup",
+    "label": "Breath Close Fog",
+    "clause": "Let the actor's breath fog the close taking glass until the eyes are clouds.",
+    "still": "Eyes as clouds behind actor-breath on the close taking glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather"
+    ]
+  },
+  {
+    "id": "fx_gate_dust_dance",
+    "label": "Gate Dust Dance",
+    "clause": "Let gate dust dance as bright specks that feel like old print damage.",
+    "still": "Bright specks of gate dust, old print damage as a look.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_light_leak_sprocket",
+    "label": "Sprocket Edge Leak",
+    "clause": "Burn a sprocket-edge leak, a rhythmic orange chew along the film edge.",
+    "still": "Rhythmic orange chew along the film edge, sprocket-edge leak.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "leak",
+      "gate"
+    ]
+  },
+  {
+    "id": "fx_smash_zoom_eyes",
+    "label": "Smash Zoom Eyes",
+    "clause": "Smash-zoom into a single eye so the iris becomes the whole geography.",
+    "still": "Iris as the whole geography, smash-zoom into a single eye.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom",
+      "energy"
+    ]
+  },
+  {
+    "id": "fx_snap_zoom_insert",
+    "label": "Snap Zoom Insert",
+    "clause": "Snap-zoom from a medium onto an insert of the hands, optical not a cut.",
+    "still": "Hands as an insert after a snap-zoom from a medium, optical not a cut.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "fx_rack_rain_glass",
+    "label": "Rack Rain Glass",
+    "clause": "Rack from rain on glass to the figure beyond, drops going from jewels to blur.",
+    "still": "Rain drops as jewels, figure beyond half-coming, rack on rain glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rack",
+      "weather"
+    ]
+  },
+  {
+    "id": "fx_dirty_anamorphic_streak",
+    "label": "Dirty Cool Streak",
+    "clause": "Dirty the glass so cool horizontal streaks catch on every smear and fingerprint.",
+    "still": "Cool horizontal streaks catching on every smear and fingerprint.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "dirt"
+    ]
+  },
+  {
+    "id": "fx_star_filter_street",
+    "label": "Street Star Spikes",
+    "clause": "Grow star spikes on every streetlamp so the block becomes a field of needles.",
+    "still": "Every streetlamp a needle, block as a field of star spikes.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare"
+    ]
+  },
+  {
+    "id": "fx_tunnel_binocular_blend",
+    "label": "Tunnel Into Binocular",
+    "clause": "Blend tunnel vision into a binocular mask, the hunt tightening into two circles.",
+    "still": "Hunt tightening into two circles, tunnel blended with binocular mask.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vignette",
+      "matte"
+    ]
+  },
+  {
+    "id": "fx_veiling_fog_lamp",
+    "label": "Fog Lamp Veil",
+    "clause": "Veil from a fog-lamp into the lens so the road becomes a white throat.",
+    "still": "Road as a white throat, fog-lamp veiling the lens.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "flare",
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "fx_in_camera_super",
+    "label": "In-Camera Super",
+    "clause": "Superimpose in-camera a second pass of handwriting over the sleeping face.",
+    "still": "Handwriting superimposed over the sleeping face, in-camera super.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "exposure"
+    ]
+  },
+  {
+    "id": "fx_kaleido_lamps",
+    "label": "Kaleido Lamps",
+    "clause": "Kaleidoscope only the lamps, leaving a small honest center of the dancer.",
+    "still": "Lamps kaleidoscoped, small honest center of the dancer remaining.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "prism"
+    ]
+  },
+  {
+    "id": "fx_heat_vent_ripple",
+    "label": "Vent Heat Ripple",
+    "clause": "Ripple the background with vent heat while the close product stays razor true.",
+    "still": "Vent heat rippling the background, close product razor true.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "fx_water_tank_titles",
+    "label": "Water Tank Titles",
+    "clause": "Shoot titles through water-tank glass so letters swim in caustic lace.",
+    "still": "Letters swimming in caustic lace, water-tank titles still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "water",
+      "glass"
+    ]
+  },
+  {
+    "id": "fx_net_close_face",
+    "label": "Netted Close Face",
+    "clause": "Net the close face so catchlights are knitted and skin is velvet.",
+    "still": "Knitted catchlights, velvet skin, netted close face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "net",
+      "diffusion"
+    ]
+  },
+  {
+    "id": "fx_iris_out_on_prop",
+    "label": "Iris Out On Prop",
+    "clause": "Iris out on a prop\u2014the ring, the key\u2014until only that object remains then black.",
+    "still": "Only the prop remaining inside a closing iris, then black implied.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "fx_fade_black_on_lamp",
+    "label": "Fade As Lamp Dies",
+    "clause": "Fade to black in-camera as a practical lamp is switched off, the set dying with it.",
+    "still": "Practical lamp mid-death, set dying, in-camera fade with the switch.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fade"
+    ]
+  }
+]

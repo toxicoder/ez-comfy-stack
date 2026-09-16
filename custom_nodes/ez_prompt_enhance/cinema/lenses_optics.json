@@ -1,0 +1,2123 @@
+[
+  {
+    "id": "opt_fisheye",
+    "label": "Fisheye",
+    "clause": "A circular or strongly bowed fisheye, horizons smiling, the room wrapping the lens.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_rect_14",
+    "label": "14mm rectilinear",
+    "clause": "Ultra-wide rectilinear 14mm-equivalent, verticals held, a huge near/far jump.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_18_establish",
+    "label": "18mm establish",
+    "clause": "18mm-equivalent establishing wide, architecture readable, people small.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_24_wide",
+    "label": "24mm wide",
+    "clause": "24mm-equivalent wide, environmental portrait with honest rooms.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_28_street",
+    "label": "28mm street",
+    "clause": "28mm-equivalent street perspective, close enough to feel inside the walk.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "street"
+    ]
+  },
+  {
+    "id": "opt_35_classic",
+    "label": "35mm classic",
+    "clause": "35mm-equivalent, the classic reportage view, moderate depth.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_40_normal",
+    "label": "40mm normal",
+    "clause": "40mm-equivalent, near-normal, mild compression, documentary calm.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_50_normal",
+    "label": "50mm normal",
+    "clause": "50mm-equivalent normal, how a standing person sees a conversation.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_65_portrait",
+    "label": "65mm portrait",
+    "clause": "65mm-equivalent short portrait, faces kind, rooms still present.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_85_portrait",
+    "label": "85mm portrait",
+    "clause": "85mm-equivalent portrait, background melting, features flattered.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_100_compress",
+    "label": "100mm compress",
+    "clause": "100mm-equivalent, space stacking, a tight head with compressed street.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_135_isolate",
+    "label": "135mm isolate",
+    "clause": "135mm-equivalent isolation, a face or product cut out of the world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_200_sports",
+    "label": "200mm isolation",
+    "clause": "200mm-equivalent, a figure pulled from a crowd, background a wash.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_400_extreme",
+    "label": "400mm extreme",
+    "clause": "400mm-equivalent extreme compression, heat shimmer and stacked planes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_spherical_clean",
+    "label": "Spherical clean",
+    "clause": "Spherical glass, round highlights, no oval streak, honest geometry.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spherical"
+    ]
+  },
+  {
+    "id": "opt_anamorphic_class",
+    "label": "Anamorphic-class",
+    "clause": "Anamorphic-class oval highlights and a horizontal flare streak across lamps.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_anamorphic_squeeze",
+    "label": "Widescreen oval bokeh",
+    "clause": "Widescreen squeeze look: oval bokeh, slightly shallower sides, cinematic width in the glass itself.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_split_diopter",
+    "label": "Split diopter",
+    "clause": "A split diopter holds a near object and a far face both sharp, a seam of softness between.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_tilt_rake",
+    "label": "Tilt rake",
+    "clause": "Tilt the focus plane so a table or street is sharp along its length, the rest falls.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tilt"
+    ]
+  },
+  {
+    "id": "opt_swing_landscape",
+    "label": "Swing landscape",
+    "clause": "Swing the lens so a receding fence line is the sharp plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tilt"
+    ]
+  },
+  {
+    "id": "opt_tilt_miniature",
+    "label": "Tilt miniature",
+    "clause": "A steep tilt that makes a real street read as a tiny model.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tilt"
+    ]
+  },
+  {
+    "id": "opt_sweet_spot",
+    "label": "Sweet-spot optic",
+    "clause": "A sweet-spot optic: a sharp island, the rest a swirling blur.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_probe",
+    "label": "Probe",
+    "clause": "A probe lens into a tight cavity, a miniature interior opening around the entrance.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_periscope",
+    "label": "Periscope optic",
+    "clause": "A periscope optic looking over a wall the camera body could not clear.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_probe_miniature",
+    "label": "Probe through miniature",
+    "clause": "A probe through a miniature set, forced perspective as if the room were full size.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_shift_verticals",
+    "label": "Shift verticals",
+    "clause": "Shift the lens to keep building verticals parallel, no keystone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "opt_deep_focus",
+    "label": "Deep focus",
+    "clause": "Deep focus from inches to infinity, every plane readable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_shallow",
+    "label": "Shallow plane",
+    "clause": "A shallow plane of focus on the eyes, everything else cream.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_razor",
+    "label": "Razor focus",
+    "clause": "A razor-thin plane, even ears going, only lashes sharp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_rack_forward",
+    "label": "Rack forward",
+    "clause": "Rack focus from a far figure onto a near object in the hands.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_rack_back",
+    "label": "Rack back",
+    "clause": "Rack focus from a near glass to the person beyond it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_rumble_rack",
+    "label": "Rumble rack",
+    "clause": "A searching rumble of focus that hunts then lands.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_locked_iris",
+    "label": "Locked iris",
+    "clause": "Locked iris, no breathing, the world does not pulse.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "opt_breathing_character",
+    "label": "Breathing iris",
+    "clause": "Iris breathing as a character, the world dimming and opening.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "iris"
+    ]
+  },
+  {
+    "id": "opt_halation_diffusion",
+    "label": "Halation diffusion",
+    "clause": "Mild diffusion so highlights bloom a soft halo, not a brand filter name.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_heavy_diffusion",
+    "label": "Heavy bloom",
+    "clause": "Heavy bloom, lamps becoming globes, contrast gentle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_net",
+    "label": "Net over lens",
+    "clause": "A net or stocking over the lens, highlights catching a faint mesh glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_diopter_close",
+    "label": "Close diopter",
+    "clause": "A close-up diopter on a tiny object, working distance inches.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_macro_extension",
+    "label": "Macro extension",
+    "clause": "Macro extension, pores and weave as landscape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_close_focus_wide",
+    "label": "Close-focus wide",
+    "clause": "A wide lens at its minimum focus, a huge near object and a real room behind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_rear_streak",
+    "label": "Rear-filter streak",
+    "clause": "A rear streak filter throwing lamps into lines.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "effect"
+    ]
+  },
+  {
+    "id": "opt_zoom_in",
+    "label": "Zoom in",
+    "clause": "Zoom in on a locked nodal point, magnification without the camera body moving.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_zoom_out",
+    "label": "Zoom out",
+    "clause": "Zoom out on a locked nodal point, the world widening without a dolly.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_out"
+    ],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_crash_zoom_optic",
+    "label": "Optical crash zoom",
+    "clause": "A crash zoom on the glass, the face punching larger in one hit.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_slow_zoom_in",
+    "label": "Slow zoom in",
+    "clause": "A crawl zoom, compression changing over a long sentence.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_super_speed_cream",
+    "label": "Low-light cream",
+    "clause": "A fast optic wide open, low-light cream, backgrounds dissolving.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_stopped_down_bite",
+    "label": "Stopped-down bite",
+    "clause": "Stopped down for bite and deep detail, highlights tight.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_variable_nd_dark",
+    "label": "Dark ND world",
+    "clause": "A dark ND world, shutter still cinematic, noon looking like dusk in exposure only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "exposure"
+    ]
+  },
+  {
+    "id": "opt_dirty_close_diopter",
+    "label": "Dirty close diopter",
+    "clause": "A dirty close diopter, dust and grease in the near glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_split_field_both",
+    "label": "Split-field both sharp",
+    "clause": "Near and far both sharp with a split field, a visible focus seam.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_soft_edge_center_sharp",
+    "label": "Soft-edge center sharp",
+    "clause": "Center sharp, edges dissolving as if the optic were a toy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_long_lens_smash",
+    "label": "Long-lens smash",
+    "clause": "A long lens smash into a face from a distant camera, space crushed.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_wide_hero_low",
+    "label": "Wide hero low",
+    "clause": "A wide lens at belt height, legs huge, towers falling back.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_normal_doc",
+    "label": "Normal documentary",
+    "clause": "A normal documentary optic, neither flattering nor accusing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_portrait_long_night",
+    "label": "Long night portrait",
+    "clause": "A long portrait optic at night, lamps as big discs behind a quiet face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_architecture_tilt_shift",
+    "label": "Architecture shift",
+    "clause": "Shift for a facade, verticals true, the building a rectangle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "opt_interior_24",
+    "label": "Interior 24",
+    "clause": "24mm in a small room, walls present, no fisheye bow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_interior_35",
+    "label": "Interior 35",
+    "clause": "35mm in a room, a person and their furniture in honest scale.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_food_macro",
+    "label": "Food macro",
+    "clause": "Macro on steam and garnish, the plate a landscape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_product_85",
+    "label": "Product 85",
+    "clause": "85mm on a product, wrap light, background a smooth falloff.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_sports_follow",
+    "label": "Sports follow long",
+    "clause": "A long sports follow, the athlete sharp, crowd a texture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_wildlife_distance",
+    "label": "Distance isolate",
+    "clause": "Extreme distance isolation, a small creature large in frame, habitat stacked.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_underwater_wide",
+    "label": "Underwater wide",
+    "clause": "A wide underwater optic, dome port, caustics and a huge near hand.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_anamorphic_flare_night",
+    "label": "Night horizontal flare",
+    "clause": "Night lamps throwing cool horizontal streaks, oval car lights.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_spherical_night_round",
+    "label": "Night round bokeh",
+    "clause": "Night spherical round bokeh, coins of practicals.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spherical"
+    ]
+  },
+  {
+    "id": "opt_vintage_low_con",
+    "label": "Vintage low contrast",
+    "clause": "Vintage low-contrast glass, veiling in the highlights, gentle microcontrast.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vintage"
+    ]
+  },
+  {
+    "id": "opt_modern_bite",
+    "label": "Modern bite",
+    "clause": "Modern high-microcontrast glass, edges crisp, coatings keeping flare down.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modern"
+    ]
+  },
+  {
+    "id": "opt_uncoated_flare",
+    "label": "Uncoated flare",
+    "clause": "Uncoated or lightly coated glass, flares taking over the highlights.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vintage"
+    ]
+  },
+  {
+    "id": "opt_rear_anamorphic_look",
+    "label": "Rear anamorphic look",
+    "clause": "Rear anamorphic-class look: oval bokeh with less side distortion than a front squeeze.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_front_anamorphic_look",
+    "label": "Front anamorphic look",
+    "clause": "Front anamorphic-class look: stronger oval, more barrel in the sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_diopter_split_face",
+    "label": "Diopter on face",
+    "clause": "A + diopter so a close face is sharp at a distance the taking lens could not.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_extension_tube",
+    "label": "Extension tube close",
+    "clause": "Extension-tube close focus, a ring or label filling the plate.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_teleconverter_reach",
+    "label": "Teleconverter reach",
+    "clause": "Teleconverter reach, a distant face large, a little extra softness and compression.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_wide_converter_room",
+    "label": "Wide converter room",
+    "clause": "A wide converter making a small room huge, some edge stretch.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_isf_shift_rise",
+    "label": "Rise shift",
+    "clause": "Rise the lens to include a ceiling without tilting the camera.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "opt_isf_shift_fall",
+    "label": "Fall shift",
+    "clause": "Fall the lens to include a floor without tilting.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "opt_lock_focus_infinity",
+    "label": "Infinity lock",
+    "clause": "Focus locked at infinity, near objects as blur, the far city sharp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_lock_focus_near",
+    "label": "Near lock",
+    "clause": "Focus locked on a near object, the world beyond a wash.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_follow_focus_walk",
+    "label": "Follow-focus walk",
+    "clause": "Follow-focus holds eyes on a walker, background breathing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_no_follow_miss",
+    "label": "Missed focus as grammar",
+    "clause": "A missed focus that hunts, then finds, as a documentary beat.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_deep_night_fast",
+    "label": "Deep night fast glass",
+    "clause": "Fast glass wide open at night, a thin plane, lamps huge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_day_stopped_deep",
+    "label": "Day stopped deep",
+    "clause": "Daylight stopped down, deep focus, hard sun detail.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_diffusion_black_promist_class",
+    "label": "Black-diffusion class",
+    "clause": "Black-diffusion-class look: bloomed highlights, blacks staying black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_white_diffusion_class",
+    "label": "White-diffusion class",
+    "clause": "White-diffusion-class look: veiling, lifted blacks, dream air.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_low_con_filter_class",
+    "label": "Low-con class",
+    "clause": "Low-con class: contrast down, highlights taking on a glow without a product name.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "opt_clear_zero",
+    "label": "Clear zero",
+    "clause": "No taking filter, maximum bite and contrast.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "clean"
+    ]
+  },
+  {
+    "id": "opt_polarize_sky",
+    "label": "Polarized sky",
+    "clause": "A polarizer deepening sky and cutting glare on glass and water.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "filter"
+    ]
+  },
+  {
+    "id": "opt_polarize_shop",
+    "label": "Polarized shop glass",
+    "clause": "A polarizer killing window reflections so the interior reads.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "filter"
+    ]
+  },
+  {
+    "id": "opt_grad_nd_sky",
+    "label": "Graduated sky",
+    "clause": "A graduated ND holding a bright sky while the ground stays open.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "filter"
+    ]
+  },
+  {
+    "id": "opt_warming_glass",
+    "label": "Warming glass",
+    "clause": "A warming glass, daylight going amber without a grade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "filter"
+    ]
+  },
+  {
+    "id": "opt_cooling_glass",
+    "label": "Cooling glass",
+    "clause": "A cooling glass, tungsten rooms going cleaner without a grade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "filter"
+    ]
+  },
+  {
+    "id": "opt_cross_star",
+    "label": "Star spikes",
+    "clause": "Point sources throwing star spikes, a night street of asterisks.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "effect"
+    ]
+  },
+  {
+    "id": "opt_soft_spot",
+    "label": "Center soft spot",
+    "clause": "A center soft-spot, edges sharper than the middle, dream portrait.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_pinhole_look",
+    "label": "Pinhole look",
+    "clause": "Pinhole look: infinite depth, glow, long exposure smear if anything moves.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_zone_plate_glow",
+    "label": "Zone-plate glow",
+    "clause": "Zone-plate-class glow, highlights as concentric rings.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_lensbaby_class_edge",
+    "label": "Edge whirl",
+    "clause": "A whirl of blur around a sharp sweet spot, the street spinning.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_macro_stack",
+    "label": "Macro stack implied",
+    "clause": "A macro so shallow only a letter of a label is sharp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_copy_stand",
+    "label": "Copy-stand flat",
+    "clause": "A copy-stand flat optic, no distortion, a document or drawing true.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_shift_stitch_wide",
+    "label": "Shift-stitch wide",
+    "clause": "A shift-stitch ultra-wide, high resolution, no fisheye bow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "architecture"
+    ]
+  },
+  {
+    "id": "opt_tilt_table_food",
+    "label": "Tilt table food",
+    "clause": "Tilt so a long table of dishes is sharp from near garnish to far glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tilt"
+    ]
+  },
+  {
+    "id": "opt_anamorphic_day_oval",
+    "label": "Day oval bokeh",
+    "clause": "Daylight anamorphic-class ovals in foliage behind a portrait.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_spherical_85_open",
+    "label": "85 open spherical",
+    "clause": "85mm spherical wide open, round cream, no oval.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_24_open_env",
+    "label": "24 open environmental",
+    "clause": "24mm wide open, the room still mostly sharp, only the far street going.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_50_open_talk",
+    "label": "50 open talk",
+    "clause": "50mm wide open on a talk, the far wall a gentle melt.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_135_open_stage",
+    "label": "135 open stage",
+    "clause": "135mm wide open on a stage figure, house a wash of discs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_zoom_parfocal_hold",
+    "label": "Parfocal zoom hold",
+    "clause": "A parfocal zoom that holds focus while magnifying.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_zoom_breathe_varifocal",
+    "label": "Varifocal breathe",
+    "clause": "A varifocal zoom that breathes focus as it magnifies, old-school.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_crash_out_optic",
+    "label": "Optical crash out",
+    "clause": "A crash zoom out, context slamming around a face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_punch_in_optic",
+    "label": "Optical punch in",
+    "clause": "A punch-in zoom to an insert of the eyes or a label.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "zoom"
+    ]
+  },
+  {
+    "id": "opt_probe_liquid",
+    "label": "Probe in liquid",
+    "clause": "A probe in liquid, droplets on the barrel, a tiny world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_endoscope_tunnel",
+    "label": "Tunnel optic",
+    "clause": "An endoscope-adjacent tunnel, a pipe or throat as architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "specialty"
+    ]
+  },
+  {
+    "id": "opt_security_wide",
+    "label": "Security wide",
+    "clause": "A high-corner security wide, slight barrel, cold coverage.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_dash_wide",
+    "label": "Dash wide",
+    "clause": "A dash-cam wide, road and wipers, barrel at the edges.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_bodycam_wide",
+    "label": "Body-cam wide",
+    "clause": "A chest-cam wide, sleeves in the bottom, landing huge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_drone_wide_rect",
+    "label": "Drone wide rectilinear",
+    "clause": "A drone wide rectilinear, the city a map without a fisheye ball.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_drone_medium",
+    "label": "Drone medium",
+    "clause": "A drone medium, a roof figure readable, not a plan.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_imax_class_deep",
+    "label": "Large-format deep",
+    "clause": "Large-format-class deep: more height in the frame, gentle falloff, huge places.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  },
+  {
+    "id": "opt_16mm_class_grain_glass",
+    "label": "Small-format grit glass",
+    "clause": "Small-format-class grit: more depth, a harder wide, less cream.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  },
+  {
+    "id": "opt_35_class_cinema",
+    "label": "35-class cinema",
+    "clause": "35mm-motion-picture-class perspective, the default dramatic room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  },
+  {
+    "id": "opt_65_class_scope_feel",
+    "label": "65-class scope feel",
+    "clause": "65-class presence: more air around a face even in a close-up.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  },
+  {
+    "id": "opt_super_16_doc",
+    "label": "Super16-class doc",
+    "clause": "Super16-class documentary: a bit more depth, a slightly harder wide.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  },
+  {
+    "id": "opt_closed_iris_sunstar",
+    "label": "Sunstar iris",
+    "clause": "A closed iris turning the sun or a practical into a sunstar.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_open_iris_ghost",
+    "label": "Open iris ghost",
+    "clause": "Wide open, a veiling ghost of the lamp rather than a star.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aperture"
+    ]
+  },
+  {
+    "id": "opt_focus_throw_long",
+    "label": "Long focus throw",
+    "clause": "A long focus throw, the rack taking time, the hunt visible.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_focus_throw_snap",
+    "label": "Snap focus",
+    "clause": "A snap focus throw, the plane jumping in one beat.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "focus"
+    ]
+  },
+  {
+    "id": "opt_bokeh_busy",
+    "label": "Busy bokeh",
+    "clause": "Busy, noisy bokeh from foliage, the background a fidget.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "opt_bokeh_smooth",
+    "label": "Smooth bokeh",
+    "clause": "Smooth creamy bokeh, the background a quiet wash.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "opt_cat_eye_bokeh",
+    "label": "Cat-eye bokeh",
+    "clause": "Cat-eye ovals toward the edges, a vintage spherical tell.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "opt_soap_bubble_bokeh",
+    "label": "Soap-bubble bokeh",
+    "clause": "Soap-bubble bokeh, bright rings around discs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "opt_swirly_bokeh",
+    "label": "Swirly bokeh",
+    "clause": "Swirly Petzval-class bokeh, the street rotating around a sharp face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "bokeh"
+    ]
+  },
+  {
+    "id": "opt_anamorphic_blue_streak",
+    "label": "Cool horizontal streak",
+    "clause": "A cool horizontal streak through a night lamp, anamorphic-class, no brand.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "anamorphic"
+    ]
+  },
+  {
+    "id": "opt_no_streak_night",
+    "label": "Night no streak",
+    "clause": "Night lamps as rounds, no horizontal streak, spherical discipline.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spherical"
+    ]
+  },
+  {
+    "id": "opt_macro_insect_plane",
+    "label": "Macro insect plane",
+    "clause": "A macro plane so thin a label's serif is the only sharp line.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_wide_group",
+    "label": "Wide group",
+    "clause": "A wide that holds a whole group without lining them on a 50.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "opt_long_group_compress",
+    "label": "Long group compress",
+    "clause": "A long lens on a group, faces stacked, space between them denied.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "long"
+    ]
+  },
+  {
+    "id": "opt_normal_two_shot",
+    "label": "Normal two-shot",
+    "clause": "A normal two-shot, both heads honest, neither giant.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_portrait_two_shot",
+    "label": "Portrait two-shot",
+    "clause": "A short-tele two-shot, both faces kind, the room falling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_insert_macro_label",
+    "label": "Insert macro label",
+    "clause": "A macro insert of a label or screen, letters as architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "opt_roomtone_35_locked",
+    "label": "Locked 35 room",
+    "clause": "A locked 35mm-equivalent on a room, the default coverage lens.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "normal"
+    ]
+  },
+  {
+    "id": "opt_coverage_85_single",
+    "label": "Coverage 85 single",
+    "clause": "An 85mm-equivalent single for coverage, dirty OTS going clean.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "opt_establishing_drone_24",
+    "label": "Establishing 24 aerial",
+    "clause": "A 24mm-equivalent aerial establish, the place as a model you could walk.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  }
+]

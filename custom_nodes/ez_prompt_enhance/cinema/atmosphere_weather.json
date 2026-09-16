@@ -1,0 +1,2841 @@
+[
+  {
+    "id": "atm_clear_plaza",
+    "label": "Cloudless plaza",
+    "clause": "Hold a cloudless civic plaza in crisp sun, granite joints razor-sharp, no veil between cornice and enamel sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry pigeon wing-flaps and a distant fountain.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "atm_blizzard_grid",
+      "atm_heavy_overcast_mill"
+    ],
+    "tags": [
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_cirrus_runway",
+    "label": "High cirrus runway",
+    "clause": "Streak mare-tail cirrus over a quiet runway, ice-feathers barely dimming sun on pale concrete.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Thin wind over open tarmac.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cirrus",
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_heavy_overcast_mill",
+    "label": "Heavy overcast mill",
+    "clause": "Clamp a lead-gray stratus lid on a brick mill yard, shadows erased, wet soot color in every mortar line.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant mill hum under muffled air.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "atm_clear_plaza"
+    ],
+    "tags": [
+      "overcast"
+    ]
+  },
+  {
+    "id": "atm_storm_shelf_wheat",
+    "label": "Storm shelf wheat",
+    "clause": "Advance a charcoal shelf cloud over a wheat horizon, the underbelly scalloped, farmhouses still in leftover sun.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant thunder, grain going still.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "storm",
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_post_rain_bright",
+    "label": "Post-rain bright",
+    "clause": "Open post-rain air so puddles become mirrors and painted railings bead, leftover clouds as bright marble over warehouses.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dripping eaves and a far siren on wet streets.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "post-rain",
+      "wet"
+    ]
+  },
+  {
+    "id": "atm_marine_layer_blvd",
+    "label": "Marine layer boulevard",
+    "clause": "Slide a marine-layer deck inland over a coastal boulevard, upper towers in sun, palms fog-wet at curb height.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muffled traffic and a far foghorn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "marine",
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_inversion_haze_basin",
+    "label": "Inversion haze basin",
+    "clause": "Trap brown inversion haze in a basin of freeways, distant ridges dissolved, near overpasses still readable in dirty gold.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Flattened highway roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "haze",
+      "inversion"
+    ]
+  },
+  {
+    "id": "atm_wildfire_orange_air",
+    "label": "Orange fire-sky air",
+    "clause": "Stain the whole sky copper-orange from distant fire smoke, a playground in strange noon, rust-colored shadows on plastic slides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry hush and a far aircraft drone.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_drizzle_cobble",
+    "label": "Drizzle cobble",
+    "clause": "Stipple a cobbled lane with fine drizzle, wool shoulders darkening, cobbles glistening without splash.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Tiny ticks of drizzle on stone.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drizzle",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_rain_bus_shelter",
+    "label": "Steady rain shelter",
+    "clause": "Drive steady rain through a bus-shelter fluorescent, umbrellas flashing, gutter rivers carrying leaflets.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on plexi and passing tires.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_downpour_market",
+    "label": "Market downpour",
+    "clause": "Hammer a downpour on a tin market roof, water sheeting off awnings, figures sprinting between stall poles.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Roar of rain on corrugated tin.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "atm_clear_plaza"
+    ],
+    "tags": [
+      "downpour",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_backlit_rain_alley",
+    "label": "Backlit rain alley",
+    "clause": "Backlight rain into silver needles against a dark alley mouth, each drop a streak toward a lone bulb.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sparse drops and a buzzing fixture.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_dry_snow_lake",
+    "label": "Dry powder lake",
+    "clause": "Let dry powder snow skate across a frozen lake, crystals sparkling, boot prints filling instantly.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry snow hiss and ice creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow"
+    ]
+  },
+  {
+    "id": "atm_wet_snow_iron",
+    "label": "Wet snow iron",
+    "clause": "Paste wet snow on a black iron fence, clumps sliding, sidewalk slush reflecting shop windows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wet slush slap under boots.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "wet"
+    ]
+  },
+  {
+    "id": "atm_blizzard_grid",
+    "label": "Blizzard white-out",
+    "clause": "Erase a street grid in blizzard white-out, a stop sign appearing then vanishing, snow bullets traveling sideways.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Screaming wind and ice hitting metal.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "atm_clear_plaza",
+      "atm_mesa_enamel"
+    ],
+    "tags": [
+      "blizzard",
+      "snow"
+    ]
+  },
+  {
+    "id": "atm_sleet_greenhouse",
+    "label": "Sleet greenhouse",
+    "clause": "Pelt sleet against a greenhouse roof, ice-rain ticking, plants inside still, glass frosting in patches.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sleet ticking on glass.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "sleet",
+      "ice"
+    ]
+  },
+  {
+    "id": "atm_hail_pickup_hood",
+    "label": "Hail on hood",
+    "clause": "Bounce hail off a pickup hood, ice marbles collecting in the bed, dent-bright flashes on paint.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Hail hammering steel.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hail"
+    ]
+  },
+  {
+    "id": "atm_mist_pine_ridge",
+    "label": "Pine ridgeline mist",
+    "clause": "Veil a pine ridgeline in pale mist, trunks fading by tens of meters, spider silk beading in the foreground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muffled birds and dripping needles.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mist",
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_summer_haze_river",
+    "label": "Summer river haze",
+    "clause": "Wash a river city in summer haze, bridges stacked as silhouettes, sun a white disk over brown water.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant barge horn in thick air.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "haze"
+    ]
+  },
+  {
+    "id": "atm_ground_fog_pasture",
+    "label": "Ground fog pasture",
+    "clause": "Pool knee-high ground fog in a pasture, cattle legs missing, fence posts as islands, stars still sharp above.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Cowbells muffled in fog.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_valley_fog_spire",
+    "label": "Valley fog islands",
+    "clause": "Fill a river valley with a fog ocean, only barn roofs and a church spire as islands at sunrise.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant rooster through fog.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "valley"
+    ]
+  },
+  {
+    "id": "atm_marine_fog_harbor",
+    "label": "Harbor marine fog",
+    "clause": "Roll marine fog through a fishing harbor, masts appearing as lines, wet rope in close-up, hulls as ghosts.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Foghorn and dripping rigging.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_cabin_woodsmoke",
+    "label": "Cabin woodsmoke",
+    "clause": "Drift woodsmoke from a cabin chimney across a snow yard, the plume blue in shadow and gold where sun hits.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Firewood pop under still air.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_barn_loft_dust",
+    "label": "Barn loft dust",
+    "clause": "Hang ochre dust in a barn loft, a sun shaft making motes into a solid beam, hay texture glowing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Settling chaff and a far animal shift.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dust"
+    ]
+  },
+  {
+    "id": "atm_meadow_pollen_cloud",
+    "label": "Meadow pollen cloud",
+    "clause": "Cloud gold pollen off a meadow, backlit as a glowing fog around a walker, ragweed heads shaking.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Bees and dry seed-heads ticking.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pollen"
+    ]
+  },
+  {
+    "id": "atm_breakwater_spray",
+    "label": "Breakwater spray",
+    "clause": "Throw white sea spray over a breakwater walk, salt crust on railings, figures leaning into the gust.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Crashing surf and wind in jackets.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_manhole_steam",
+    "label": "Manhole steam",
+    "clause": "Vent manhole steam in a winter avenue, the plume wrapping a crossing signal, wet asphalt shining.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Steam hiss and wet tire roll.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_tram_breath_vapor",
+    "label": "Tram-stop breath",
+    "clause": "Hang breath-vapor clouds in front of wool scarves at a tram stop, each exhale a small weather system.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wool rustle and a tram bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "breath"
+    ]
+  },
+  {
+    "id": "atm_desert_heat_shimmer",
+    "label": "Desert highway shimmer",
+    "clause": "Ripple heat shimmer over a desert highway, the vanishing point dancing, asphalt looking wet with false water.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Cicada heat and a far truck.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "heat",
+      "desert"
+    ]
+  },
+  {
+    "id": "atm_wet_asphalt_mirror",
+    "label": "Wet asphalt mirror",
+    "clause": "Polish wet asphalt into a black mirror, streetlamp globes doubling, tire tracks as dull scribbles.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Drip and a lone car on wet tar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_puddle_skyline",
+    "label": "Puddle skyline",
+    "clause": "Use a curb puddle as a second city, signs inverted, a boot breaking the doubled cornices.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Splash and city hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_village_snowpack",
+    "label": "Village snow pack",
+    "clause": "Lay a settled snow pack on a village roofscape, blue shadow in troughs, chimney bricks the only dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Soft snow hush, a shovel far off.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_red_clay_ruts",
+    "label": "Red clay ruts",
+    "clause": "Churn red clay mud on a rural track, tire ruts filled with sky, splash dried on fenders.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wet mud suck under tires.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mud",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_dirt_road_talc",
+    "label": "Dirt-road talc kick",
+    "clause": "Kick dry talc dust from a dirt road behind a walking figure, the plume hanging, sagebrush still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry dust hiss and boot grit.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dust",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_sycamore_leaf_wind",
+    "label": "Sycamore leaf wind",
+    "clause": "Drive a river of dry sycamore leaves down a brownstone sidewalk, leaf-stars scraping, a stoop catching piles.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Scratching leaves and wind in stoops.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wind",
+      "leaves"
+    ]
+  },
+  {
+    "id": "atm_dawn_dew_lawn",
+    "label": "Dawn dew lawn",
+    "clause": "Bead dawn dew on a spider-netted lawn, every blade a string of glass, first sun making them fire.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Quiet insects and a distant sprinkler tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dew",
+      "dawn"
+    ]
+  },
+  {
+    "id": "atm_stucco_noon_knife",
+    "label": "Stucco noon knife",
+    "clause": "Hold noon air so a white stucco wall throws a knife shadow, no cloud, a ceramic pot the only dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Cicadas and a far dog.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "clear",
+      "noon"
+    ]
+  },
+  {
+    "id": "atm_orchard_gold_dust",
+    "label": "Orchard golden dust",
+    "clause": "Rake orchard dust at golden hour, backlight turning irrigation spray into gold fog between trunks.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sprinkler hiss and leaf rustle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "golden",
+      "dust"
+    ]
+  },
+  {
+    "id": "atm_harbor_blue_hour",
+    "label": "Harbor blue-hour hush",
+    "clause": "Soak a harbor in blue-hour hush, wet bollards, a single sodium lamp, water like dark glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Water lap and a creaking hawser.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "blue-hour"
+    ]
+  },
+  {
+    "id": "atm_park_lamp_moisture",
+    "label": "Park-lamp moisture",
+    "clause": "Let night moisture halo every park lamp, moths in the glow, benches glistening.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Moth tick on glass and distant traffic.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "night",
+      "moisture"
+    ]
+  },
+  {
+    "id": "atm_black_wet_tavern",
+    "label": "Black-wet cobble",
+    "clause": "Black-wet a cobblestone lane so every brick is lacquer, a tavern window the only color, rain just ended.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Leftover drip and muffled bar murmur.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_tropical_verandah",
+    "label": "Tropical verandah humidity",
+    "clause": "Weigh tropical humidity on a verandah, banana leaves dripping without rain, air thick enough to see, lizards still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dripping leaves and a ceiling fan.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "humidity",
+      "tropical"
+    ]
+  },
+  {
+    "id": "atm_mesa_enamel",
+    "label": "Mesa enamel clear",
+    "clause": "Clarify a mesa landscape to the last butte, shadows ink, sky a hard enamel, no haze at all.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry wind over rock.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "atm_blizzard_grid"
+    ],
+    "tags": [
+      "desert",
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_granite_saddle",
+    "label": "Granite saddle thin air",
+    "clause": "Thin the air on a granite saddle, distant peaks stacked without softening, a flag snapping, sky almost black-blue.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Thin wind and flag snap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_cooling_stack_dusk",
+    "label": "Cooling-stack dusk steam",
+    "clause": "Billow cooling-stack steam across a river at dusk, the plume pink, gantries as silhouettes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Industrial venting and river lap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "industrial",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_terrace_chimney",
+    "label": "Terrace chimney pencil",
+    "clause": "Pencil a thin chimney smoke column from a terrace fireplace into still evening, palm fronds unmoving.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Quiet fire pop.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_cliff_path_spray",
+    "label": "Cliff path sea spray",
+    "clause": "Blast sea spray across a cliff path, ice-plant leaves jeweled, horizon a white grind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Surf grind and wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_ice_fog_headlights",
+    "label": "Ice-fog headlights",
+    "clause": "Fill a river town with ice fog, crystals glittering in headlights, eyelashes frosted, stop-lights as orbs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice-crystal tinkle and muffled engines.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice-fog",
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_sun_shower_slide",
+    "label": "Sun-shower playground",
+    "clause": "Fall a sun shower on a bright playground, rain glittering while the slide stays in full sun, a rainbow fragment.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Light rain ticks and far voices.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "sun-shower",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_prairie_virga",
+    "label": "Prairie virga",
+    "clause": "Hang virga streaks under a prairie anvil, rain evaporating before the ground, the soil still dust-dry.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry wind and distant thunder.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "virga",
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_two_lane_mirage",
+    "label": "Two-lane heat mirage",
+    "clause": "Mirror a heat-mirage lake on a straight two-lane, telephone poles doubling, a pickup floating on fake water.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Hot wind and tire drone.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mirage",
+      "heat"
+    ]
+  },
+  {
+    "id": "atm_ozone_after_storm",
+    "label": "After-storm ozone clear",
+    "clause": "Rinse the air after a storm so brick and leaf edges cut, leftover clouds as bright marble, gutters still running.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Gutter rush and dripping trees.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "post-storm",
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_altostratus_dome",
+    "label": "Altostratus courthouse",
+    "clause": "Milk the sky with altostratus so a courthouse dome sits under a featureless white bowl, shadows barely there.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muted city, no bird song.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "overcast"
+    ]
+  },
+  {
+    "id": "atm_mammatus_fairground",
+    "label": "Mammatus fairground",
+    "clause": "Pouch mammatus under a departing anvil over a fairground, the sky a quilt of hanging pouches, rides still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant thunder and a loose banner.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "storm",
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_thunderhead_soy",
+    "label": "Thunderhead over soy",
+    "clause": "Build a thunderhead column over a soybean grid, the anvil spreading like a lid, the field still sunlit.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Building rumble and insect hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_sheet_lightning_silos",
+    "label": "Sheet lightning silos",
+    "clause": "Flash sheet lightning inside a cloud-mass over silos, the whole underbelly exposing rivets of light, ground dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Thunder roll after a silent flash.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lightning"
+    ]
+  },
+  {
+    "id": "atm_heat_lightning_corn",
+    "label": "Heat lightning corn",
+    "clause": "Pulse distant heat lightning on a summer horizon beyond corn, no rain here, porch screens still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Cricket wash and far thunder.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lightning"
+    ]
+  },
+  {
+    "id": "atm_rainbow_pasture",
+    "label": "Pasture rainbow",
+    "clause": "Anchor a primary rainbow on a wet pasture, one foot in a barn roof, the grass supernaturally green.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dripping eaves and a far cow.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rainbow",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_crepuscular_barge",
+    "label": "Crepuscular barge",
+    "clause": "Shoot crepuscular rays through broken storm holes onto a river barge, god-beams in dirty air.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Water slap and a tow engine.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rays",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_sundog_harbor",
+    "label": "Frozen-harbor sun dog",
+    "clause": "Plant a sun dog beside a winter sun over a frozen harbor, ice-halo fragments, cranes rimed.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice boom and a chain rattle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "ice"
+    ]
+  },
+  {
+    "id": "atm_moon_halo_pines",
+    "label": "Pine cemetery moon halo",
+    "clause": "Ring a full moon with an ice-crystal halo over a pine cemetery, headstones rimed, needles silver.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Owl and frozen needle tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "moon"
+    ]
+  },
+  {
+    "id": "atm_noctilucent_lake",
+    "label": "Noctilucent lake",
+    "clause": "Streak electric-blue noctilucent clouds after midnight over a still lake, ripples copying the ribs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Almost silence, a fish jump.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_civil_twilight_close",
+    "label": "Civil twilight close",
+    "clause": "Hold civil twilight over a suburban close, windows already lamp-warm, sky a green-blue gradient, no stars yet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sprinkler tick and a porch door.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "twilight"
+    ]
+  },
+  {
+    "id": "atm_moonlight_quarry",
+    "label": "Moonlight quarry",
+    "clause": "Paint a quarry in silver moonlight, limestone ledges stepped, a pool black, edges frost-bright.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Drip in the pit and a far train.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "moon"
+    ]
+  },
+  {
+    "id": "atm_starlight_camp",
+    "label": "Starlight desert camp",
+    "clause": "Expose starlight-only on a high desert camp, the milky band bright, tent a dark triangle, no moon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Tent nylon tick in cold.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "night",
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_snowglow_spruce",
+    "label": "Overcast snow-glow",
+    "clause": "Glow a snow-covered close under overcast, the ground brighter than the sky, spruce almost black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Snow hush and a plow far off.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "overcast"
+    ]
+  },
+  {
+    "id": "atm_lake_effect_bands",
+    "label": "Lake-effect snow bands",
+    "clause": "Stream lake-effect snow bands across a lakeshore boulevard, one block white, the next merely wet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind off water and wet tires.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow"
+    ]
+  },
+  {
+    "id": "atm_graupel_bleachers",
+    "label": "Graupel on bleachers",
+    "clause": "Bounce graupel pellets on a stadium seat, soft hail like foam beads, a field still green.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Pellets ticking plastic seats.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graupel",
+      "hail"
+    ]
+  },
+  {
+    "id": "atm_freezing_rain_park",
+    "label": "Freezing-rain glass park",
+    "clause": "Glaze every twig in freezing rain, a park becoming glass sculpture, sidewalk a sheet, streetlights doubled in ice.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice ticking branches and a crack.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_rime_ridge_fence",
+    "label": "Rime ridge fence",
+    "clause": "Grow rime feathers on a ridge fence, windward ice-needles, the leeward wood still brown.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Screaming ridge wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_hoarfrost_meadow",
+    "label": "Hoarfrost meadow",
+    "clause": "Sugar hoarfrost on a meadow, every seed-head white, first sun melting the south faces only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Frost-crunch under a boot.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "frost"
+    ]
+  },
+  {
+    "id": "atm_cafe_dew_window",
+    "label": "Cafe dew window",
+    "clause": "Fog a cafe window with interior dew, a finger-wiped viewport to a rainy street, condensation rivulets.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Machine hiss and rain on pane.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "condensation"
+    ]
+  },
+  {
+    "id": "atm_night_bus_rain_pane",
+    "label": "Night-bus rain pane",
+    "clause": "Sheet rain down a night bus window, city lights streaking, a reflected face over the drops.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wiper squeak and interior chatter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_loft_skylight_rain",
+    "label": "Loft skylight rain",
+    "clause": "Pepper a skylight with rain, the loft below getting moving caustics, hanging plants dripping.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on glass and a pipe drip.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_monsoon_courtyard",
+    "label": "Monsoon courtyard curtain",
+    "clause": "Drop a monsoon curtain across a courtyard, one half dry tile, the other a waterfall off the eave.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Waterfall eave and a scooter in water.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "monsoon",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_cloudburst_overpass",
+    "label": "Overpass cloudburst",
+    "clause": "Burst a cloudburst on a freeway overpass, spray from trucks as walls, road paint disappearing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wipers at full and truck spray.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "downpour"
+    ]
+  },
+  {
+    "id": "atm_thunderstorm_core",
+    "label": "Thunderstorm core",
+    "clause": "Stand in a thunderstorm core: rain as rods, a green-black sky, a street tree thrashing, gutters overflowing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Thunder close and rain rods.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "storm",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_squall_ballfield",
+    "label": "Squall-line ballfield",
+    "clause": "Roll a squall line of dust then rain across a ball field, the outfield vanishing, flags snapping.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Flag snap then a sudden rain wall.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "squall",
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_gust_front_town",
+    "label": "Gust-front town",
+    "clause": "Push a gust-front wall of dust down a grid town, trash-can lids flying, tan air then dark rain.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Metal lids and a wind roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dust",
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_haboob_palms",
+    "label": "Haboob palm avenue",
+    "clause": "Advance a story-tall dust wall down a palm avenue, daylight turning to amber night.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rushing dust and palm fronds thrashing.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dust",
+      "desert"
+    ]
+  },
+  {
+    "id": "atm_dune_sandstorm",
+    "label": "Dune camp sandstorm",
+    "clause": "Scour a sandstorm across a dune camp, tents drumming, sun a rust coin, ripples moving on the slipface.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sand blasting nylon.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "sand",
+      "dust"
+    ]
+  },
+  {
+    "id": "atm_dust_devil_chaff",
+    "label": "Dust devil chaff",
+    "clause": "Spin a dust devil across a fallow field, a skinny tan ghost, chaff in the corkscrew.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry chaff hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dust"
+    ]
+  },
+  {
+    "id": "atm_prairie_wind_waves",
+    "label": "Prairie wind waves",
+    "clause": "Comb prairie grass in long wind-waves toward a grain elevator, cloud-shadows racing, no rain.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Grass hiss and elevator metal tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wind"
+    ]
+  },
+  {
+    "id": "atm_slot_canyon_sand",
+    "label": "Slot-canyon wind",
+    "clause": "Funnel wind down a slot of red rock, sand hissing along the floor, a ribbon of sky still blue.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sand hiss and echo wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wind",
+      "desert"
+    ]
+  },
+  {
+    "id": "atm_glacier_katabatic",
+    "label": "Glacier katabatic",
+    "clause": "Pour katabatic cold air down a glacier tongue, flags snapping downhill, breath instantly ice.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Downhill roar and ice crack.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mountain",
+      "ice"
+    ]
+  },
+  {
+    "id": "atm_cornice_spindrift",
+    "label": "Cornice spindrift",
+    "clause": "Blow spindrift off an alpine cornice, a snow-smoke banner against cobalt, rocks rime-toothed.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Spindrift hiss and ridge wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_glacier_valley_glare",
+    "label": "Glacier valley glare",
+    "clause": "Blast glacier glare so a valley is overexposed white, ice-blue crevasses the only drawing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice drip and a far rumble.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_pack_ice_sea_smoke",
+    "label": "Pack-ice sea smoke",
+    "clause": "Steam sea-smoke off pack ice, black water leads smoking, a ship rail rimed.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Hull creak and steaming leads.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_coastal_highway_fog",
+    "label": "Coastal highway fog",
+    "clause": "Advection-fog a coastal highway, headlights as cones, a lighthouse beam a dull smudge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Foghorn and wet tires.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_hollow_radiation_fog",
+    "label": "Hollow radiation fog",
+    "clause": "Pool radiation fog in a hollow after a clear night, a bridge deck above it, treetops as a forest on a cloud.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dripping and a truck on the bridge.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_upslope_fog_town",
+    "label": "Upslope fog town",
+    "clause": "Push upslope fog against a mountain town, streets appearing floor by floor as you descend.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muffled church bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_freezing_fog_cables",
+    "label": "Freezing fog cables",
+    "clause": "Deposit freezing-fog rime on a suspension cable, every wire furred, the river below invisible.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice tick on cables and a horn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice-fog"
+    ]
+  },
+  {
+    "id": "atm_pine_needle_drizzle",
+    "label": "Pine-needle drizzle",
+    "clause": "Bead drizzle on pine needles until each fascicle is jeweled, a forest floor barely damp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Tiny drops on needles.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drizzle"
+    ]
+  },
+  {
+    "id": "atm_tin_porch_rain",
+    "label": "Tin-porch rain",
+    "clause": "Drum rain on a corrugated tin porch, water-beads racing the channels, a rocking chair still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on tin and a chair creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_canvas_awning_rain",
+    "label": "Canvas awning rain",
+    "clause": "Darken a canvas awning with rain, a market alley steaming, fruit skins beading.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on canvas and a drip-bucket.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_rainforest_drip",
+    "label": "Rainforest drip stages",
+    "clause": "Drip rainforest rain in stages: leaf-roof first, then understory, leaf-cups overflowing onto ferns.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Layered drips and a frog.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "tropical"
+    ]
+  },
+  {
+    "id": "atm_herringbone_cobble_rain",
+    "label": "Herringbone cobble rain",
+    "clause": "Gloss rain on herringbone cobble, cart ruts as mirrors, gas-lamp reflections broken.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on stone and a shutter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_glass_tower_sheet",
+    "label": "Glass-tower rain sheet",
+    "clause": "Sheet rain down a glass tower, interior offices still, each floor a different reflection of clouds.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind-driven rain on curtain wall.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_neon_noodle_rain",
+    "label": "Neon noodle rain",
+    "clause": "Mix neon with rain so a noodle-shop sign melts on wet pavement, steam from a grate, umbrellas as colored lids.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain, sizzle, and a shop bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "neon"
+    ]
+  },
+  {
+    "id": "atm_monsoon_curb_flood",
+    "label": "Monsoon curb flood",
+    "clause": "Flood monsoon puddles to curb height, scooter wake, tropical trees dripping, a reflected sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Scooter through water and heavy drip.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "monsoon",
+      "wet"
+    ]
+  },
+  {
+    "id": "atm_hot_asphalt_steam_rain",
+    "label": "Hot-asphalt steam rain",
+    "clause": "Steam a tropical downpour off hot asphalt, rain and vapor indistinguishable, a mango cart huddled.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain hissing on hot tar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tropical",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_boardwalk_salt_haze",
+    "label": "Boardwalk salt haze",
+    "clause": "Haze a boardwalk in salt air, distant ride structure soft, near painted rails crisp, gulls sharp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Gulls and a soft surf.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "marine",
+      "haze"
+    ]
+  },
+  {
+    "id": "atm_brown_basin_smog",
+    "label": "Brown-basin smog",
+    "clause": "Sit a city in brown-air basin smog, mountains gone, near murals still saturated, sun white.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Flattened traffic drone.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smog",
+      "haze"
+    ]
+  },
+  {
+    "id": "atm_peat_bog_smoke",
+    "label": "Peat-bog smoke",
+    "clause": "Drift peat smoke across a bog road, the air amber, heather dark, a cottage lamp early.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Peat fire and wind in heather.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_snowed_cabin_inversion",
+    "label": "Cabin inversion smoke",
+    "clause": "Leak woodstove smoke from a snowed cabin eave, the plume flattening under inversion, split logs in the yard.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Stove draw and snow tick on metal.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke",
+      "inversion"
+    ]
+  },
+  {
+    "id": "atm_mill_stack_stripe",
+    "label": "Mill-stack plume",
+    "clause": "Stripe a mill-stack plume across a brick-mill town, the smoke pink then gray over rail yards.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant coupling cars.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "industrial",
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_cooling_tower_cumulus",
+    "label": "Cooling-tower cumulus",
+    "clause": "Roll cooling-tower cumulus over a river plant, the man-made clouds the only weather, vapor blooming.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Plant hum and river.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "industrial",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_foundry_door_glow",
+    "label": "Foundry door steam",
+    "clause": "Vent foundry steam and orange glow from a mill door, snowflakes melting in the plume, slag texture underfoot.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Furnace roar and melting flakes hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "industrial",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_laundry_grate_steam",
+    "label": "Laundry-grate steam",
+    "clause": "Billow laundry steam from a basement grate, winter pedestrians' legs, wet brick, vapor in a column.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Steam hiss and footsteps.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_night_kitchen_pass",
+    "label": "Night-kitchen steam",
+    "clause": "Fill a night-kitchen pass with steam, stainless catching, a plate emerging from fog, tile wet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sizzle, plate clack, extractor.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_subway_grate_winter",
+    "label": "Subway-grate winter steam",
+    "clause": "Gush subway-grate steam around ankles on a winter sidewalk, a grate glowing, taxis smearing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Subway rumble and steam.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_geyser_sinter",
+    "label": "Geyser sinter steam",
+    "clause": "Jet geyser steam against a cold blue sky, sinter terraces wet, onlookers as silhouettes in the plume.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Geyser roar and dripping sinter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_riverside_hotspring",
+    "label": "Riverside hot-spring steam",
+    "clause": "Steam a riverside hot spring, snow meeting mineral-blue water, vapor flattening at dusk.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Bubbling mineral and a river.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_volcanic_ash_town",
+    "label": "Ash-veiled town",
+    "clause": "Veil a town in fine volcanic ash, a gray flour on awnings, sun a copper disk, footprints on cars.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry ash crunch underfoot.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ash",
+      "dust"
+    ]
+  },
+  {
+    "id": "atm_cottonwood_june",
+    "label": "Cottonwood fluff June",
+    "clause": "Snow the air with cottonwood fluff in June, a river path looking like a warm blizzard, seeds catching in hair.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Seed fluff and a river.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pollen"
+    ]
+  },
+  {
+    "id": "atm_dandelion_vacant_lot",
+    "label": "Dandelion-seed vacant lot",
+    "clause": "Backlight a dandelion-seed blizzard over a vacant lot, each parachute a spark, chain-link catching tufts.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry weed tick and a far highway.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pollen"
+    ]
+  },
+  {
+    "id": "atm_waterfall_footbridge",
+    "label": "Waterfall footbridge mist",
+    "clause": "Soak a footbridge in waterfall mist, a rainbow in the spray, moss black-green, stone slick.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Waterfall roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray",
+      "mist"
+    ]
+  },
+  {
+    "id": "atm_pier_piling_shorebreak",
+    "label": "Pier piling shore-break",
+    "clause": "Explode shore-break spray against a pier piling, foam hanging, a lens beaded, planks dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Boom of shore-break.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_ferry_bow_rainbow",
+    "label": "Ferry bow spray",
+    "clause": "Throw bow-spray from a ferry, a rainbow in the droplets, the city approaching, deck wet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Bow slap and wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray"
+    ]
+  },
+  {
+    "id": "atm_ballpark_sprinkler",
+    "label": "Ballpark sprinkler gold",
+    "clause": "Catch late-day sprinkler spray in a ballpark outfield, each arc a gold hyphen, grass steaming.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sprinkler ratchet and wet grass.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray"
+    ]
+  },
+  {
+    "id": "atm_plaza_fountain_mist",
+    "label": "Plaza fountain mist",
+    "clause": "Halo a plaza fountain in wind-torn mist, granite wet, pigeons shaking, sun making a small rainbow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Fountain white-noise and wings.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "spray"
+    ]
+  },
+  {
+    "id": "atm_paddock_horse_breath",
+    "label": "Paddock horse-breath",
+    "clause": "Jet horse-breath in a winter paddock, nostrils steaming, frost on the fence, hay gold.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Horse snort and hay rustle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "breath"
+    ]
+  },
+  {
+    "id": "atm_tar_roof_shimmer",
+    "label": "Tar-roof heat shimmer",
+    "clause": "Shimmer a tar rooftop at mid-afternoon, HVAC units wobbling, the skyline dancing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "HVAC drone and hot tar tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "heat",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_wet_marble_palace",
+    "label": "Wet marble palace",
+    "clause": "Polish a wet marble plaza after rain, palace columns doubling, pigeons walking on sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Pigeon wings and drip from cornice.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_oil_slick_forecourt",
+    "label": "Oil-slick forecourt",
+    "clause": "Iris an oil-slick puddle with spectrum rings, a garage forecourt, neon breaking into colors.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Drip of oil and a distant compressor.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_sastrugi_barn",
+    "label": "Sastrugi barn drift",
+    "clause": "Sculpt wind-carved snow drifts against a red barn, sastrugi texture, one door dug out.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind on barn tin.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_pine_bough_dump",
+    "label": "Pine-bough snow dump",
+    "clause": "Load pine boughs until they dump, a forest path muffled, trunks black, snow-smoke when a branch lets go.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Sudden dump thud and hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow"
+    ]
+  },
+  {
+    "id": "atm_crosswalk_slush",
+    "label": "Crosswalk brown slush",
+    "clause": "Churn brown slush at a crosswalk, salt stains, bus spray, a yellow signal smeared.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Slush slap and bus hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slush",
+      "wet"
+    ]
+  },
+  {
+    "id": "atm_overpass_black_ice",
+    "label": "Overpass black ice",
+    "clause": "Sheen black ice on an empty overpass, the asphalt looking merely wet, city lights long in the glaze.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Almost silence, a far horn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_farmhouse_frost_ferns",
+    "label": "Farmhouse frost ferns",
+    "clause": "Grow frost ferns on a farmhouse pane, kitchen warmth implied, the yard a blur through ice-flowers.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Kettle and wind at the sash.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "frost"
+    ]
+  },
+  {
+    "id": "atm_eave_icicle_thaw",
+    "label": "Eave icicle thaw",
+    "clause": "Drip icicles from a gutter edge in thaw, each drop catching sun, a dagger row shortening.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Drip into a puddle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thaw",
+      "ice"
+    ]
+  },
+  {
+    "id": "atm_alley_snowmelt_braids",
+    "label": "Alley snowmelt braids",
+    "clause": "Run snowmelt braids down a dirt alley, winter debris, prints in the mud-snow mix.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Trickle and a dripping fire escape.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thaw",
+      "mud"
+    ]
+  },
+  {
+    "id": "atm_sideways_rain_shelter",
+    "label": "Sideways rain shelter",
+    "clause": "Drive rain sideways under a bus shelter, the far wall dry, legs wet, flags traveling with the gust.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain hitting the back wall and flag snap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "wind"
+    ]
+  },
+  {
+    "id": "atm_polar_diamond_dust",
+    "label": "Polar diamond dust",
+    "clause": "Sparkle diamond dust in a polar street, ice needles falling from a clear sky, every lamp a pillar.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Faint ice tinkle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_frozen_waterfall_cave",
+    "label": "Frozen waterfall cave",
+    "clause": "Lock a waterfall into amber-white ice, a cave of blue behind, spray still smoking at the lip.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Ice groan and a trickle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ice"
+    ]
+  },
+  {
+    "id": "atm_lightning_pier_beads",
+    "label": "Lightning-lit pier rain",
+    "clause": "Freeze-flash raindrops with a lightning bolt over a pier, every drop a bead, the sea white for a frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Thunder crack and rain.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lightning",
+      "rain"
+    ]
+  },
+  {
+    "id": "atm_anvil_iridescence",
+    "label": "Anvil iridescence",
+    "clause": "Iridesce the sunward edge of an anvil, pastel oil-slick on ice-cloud, a field dark below.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Distant thunder.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_first_rain_dust_craters",
+    "label": "First-rain dust craters",
+    "clause": "Darken dry earth to chocolate in the first minutes of rain, dust craters becoming mud cups, leaves jumping.",
+    "still": "",
+    "wan_token": "",
+    "audio": "First fat drops on dirt.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rain",
+      "ground"
+    ]
+  },
+  {
+    "id": "atm_mackerel_port",
+    "label": "Mackerel sky port",
+    "clause": "Scale a mackerel sky over a fishing port, altocumulus ripples, boats still, the pattern slowly traveling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Gulls and a halyard tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_lenticular_cone",
+    "label": "Lenticular over cone",
+    "clause": "Park a lenticular disk over a volcanic cone, the cloud stationary, wind screaming implied on the slopes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "High wind roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud",
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_pileus_silk_cap",
+    "label": "Pileus silk cap",
+    "clause": "Cap a growing tower with pileus silk, the smooth hat over a soybean field.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Still air and a far rumble.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_coastal_roll_cloud",
+    "label": "Coastal roll cloud",
+    "clause": "Slide a roll cloud down a coast like a tube, the rest of the sky clear, surfers pointing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Surf and a sudden cool gust.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud",
+      "marine"
+    ]
+  },
+  {
+    "id": "atm_scud_rest_stop",
+    "label": "Scud at rest-stop",
+    "clause": "Race scud fragments under a dark base, a highway rest-stop, the low clouds shredded and traveling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Truck idle and wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_fogbow_cliff",
+    "label": "Cliff fog-bow",
+    "clause": "Draw a white fog-bow over a cliff trail, no color, the sun behind, the drop-off gone in white.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind and a distant buoy.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "fog"
+    ]
+  },
+  {
+    "id": "atm_brocken_glory_ridge",
+    "label": "Ridge Brocken glory",
+    "clause": "Cast a Brocken glory around a shadow on a cloud deck from a ridge, a rainbow halo on the fog below.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind in alpine grass.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "mountain"
+    ]
+  },
+  {
+    "id": "atm_polar_night_village",
+    "label": "Polar-night village",
+    "clause": "Hold polar-night blue at midday, a fishing village in cobalt, windows gold, snow reflecting a sun that never rises.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Snow crunch and a generator far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "polar",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_midnight_sun_fjord",
+    "label": "Midnight-sun fjord",
+    "clause": "Stretch midnight-sun glitter on a fjord, the disk circling, cabins in perpetual gold, no real night.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Water lap in endless evening.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "polar",
+      "golden"
+    ]
+  },
+  {
+    "id": "atm_inversion_smoke_lid",
+    "label": "Inversion smoke-lid",
+    "clause": "Cap chimney smoke under an inversion so a valley town wears a flat smoke-lid, peaks in sun.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muffled dogs and still air.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "inversion",
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_shrine_incense_shafts",
+    "label": "Shrine incense shafts",
+    "clause": "Layer incense as interior weather, sun-shafts becoming solid in a shrine, gilt catching, floorboards dusty-gold.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Soft bell and a floor creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "incense",
+      "interior"
+    ]
+  },
+  {
+    "id": "atm_lake_campfire_smoke",
+    "label": "Lake campfire smoke",
+    "clause": "Lean campfire smoke along a lake at dusk, the plume hugging water, sparks, pine silhouettes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Fire crackle and a loon far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_backyard_barbecue_plume",
+    "label": "Backyard barbecue plume",
+    "clause": "Drift barbecue smoke across a backyard at golden hour, chain-link, a plume following the fence line.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Fat drip sizzle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "smoke"
+    ]
+  },
+  {
+    "id": "atm_windshield_pollen_smear",
+    "label": "Windshield pollen smear",
+    "clause": "Yellow a windshield in pollen so thick the wipers smear gold, a suburban driveway, spring trees.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wiper smear and bees.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pollen"
+    ]
+  },
+  {
+    "id": "atm_canal_petal_storm",
+    "label": "Canal petal storm",
+    "clause": "Storm pink petals down a canal walk, water covered, a bicycle leaving a wake in blossoms.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Petals on water and a bike bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "petals",
+      "wind"
+    ]
+  },
+  {
+    "id": "atm_wheat_oak_waves",
+    "label": "Wheat-field wind toward oak",
+    "clause": "Run wind-waves through ripe wheat toward a lone oak, cloud-shadows, grain whispering.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wheat hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wind"
+    ]
+  },
+  {
+    "id": "atm_civic_flag_row",
+    "label": "Civic flag row",
+    "clause": "Snap a row of unmarked flags on a civic plaza, sky enamel, the cloth the only weather, shadows whipping.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Flag snap and plaza echo.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wind",
+      "clear"
+    ]
+  },
+  {
+    "id": "atm_frost_football_field",
+    "label": "Pre-dawn frost field",
+    "clause": "White a football field in pre-dawn frost, yard lines faint, breath from a single figure, sky still navy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Frost crunch and a whistle far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "frost",
+      "dawn"
+    ]
+  },
+  {
+    "id": "atm_bakery_blue_hour_snow",
+    "label": "Bakery blue-hour snow",
+    "clause": "Fall blue-hour snow in big flakes past a bakery window, interior gold, flakes slowing near the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Hush and a door chime.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "blue-hour"
+    ]
+  },
+  {
+    "id": "atm_bridge_sodium_fog",
+    "label": "Bridge sodium fog",
+    "clause": "Halo night fog around sodium lamps on a bridge, each globe a dandelion of glow, cables disappearing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Foghorn and wet tires.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_used_car_overcast",
+    "label": "Used-car overcast fluorescent",
+    "clause": "Turn overcast noon into a giant fluorescent, a used-car lot with no shadow, chrome dull, sky white.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Lot flags limp, a radio far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "overcast",
+      "noon"
+    ]
+  },
+  {
+    "id": "atm_warehouse_cloud_patches",
+    "label": "Warehouse sun-shade patches",
+    "clause": "Patch broken cloud so a warehouse roof strobes between sun and shade, puddles blinking.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Metal tick as sun hits.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cloud"
+    ]
+  },
+  {
+    "id": "atm_wall_cloud_silos",
+    "label": "Wall cloud over silos",
+    "clause": "Lower a rotating wall cloud over prairie silos, the base looking close enough to touch, dust spinning up.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Siren far and grain-dryer hum.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "storm"
+    ]
+  },
+  {
+    "id": "atm_pink_sunset_virga",
+    "label": "Pink sunset virga",
+    "clause": "Color sunset virga pink under a departing cell, the streaks not reaching a still-dry highway.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry wind and a far rumble.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "virga",
+      "golden"
+    ]
+  },
+  {
+    "id": "atm_marine_sunrise_cypress",
+    "label": "Marine-layer sunrise cypress",
+    "clause": "Break sunrise through a marine layer as a red disk, a cliff path above the fog ocean, cypress black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Surf under fog.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "marine",
+      "dawn"
+    ]
+  },
+  {
+    "id": "atm_swamp_cypress_mist",
+    "label": "Cypress-knee swamp mist",
+    "clause": "Hang swamp mist between cypress knees, bubbles in black water, moss beading, air green-gray.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Frogs and a mosquito whine.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mist",
+      "swamp"
+    ]
+  },
+  {
+    "id": "atm_jungle_track_steam",
+    "label": "Jungle-track after-rain steam",
+    "clause": "Steam a jungle track after rain, leaf-litter smoking, the leaf-roof dripping, butterflies working the sun-holes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Drip and insect roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tropical",
+      "steam"
+    ]
+  },
+  {
+    "id": "atm_tundra_standing_water",
+    "label": "Tundra close overcast",
+    "clause": "Flatten tundra under a close overcast, lichen and standing water, a cabin, no shadow, wind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Wind over puddles.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tundra",
+      "overcast"
+    ]
+  },
+  {
+    "id": "atm_salt_flat_erase",
+    "label": "Salt-flat noon erase",
+    "clause": "Erase horizon on a salt flat at noon, white crust polygons, a figure standing in glare, sky and ground one.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Salt crunch and empty wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desert",
+      "optical"
+    ]
+  },
+  {
+    "id": "atm_sage_two_lane_noon",
+    "label": "Sage two-lane noon",
+    "clause": "Cut high-desert noon so sage throws short black shadows, a two-lane, ranges knife-sharp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry insect and a far pickup.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desert",
+      "noon"
+    ]
+  },
+  {
+    "id": "atm_redrock_rain_potholes",
+    "label": "Red-rock rain potholes",
+    "clause": "Saturate red rock after a desert rain, potholes as skies, sandstone dark, a brief waterfall in a crack.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Trickle in sandstone.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desert",
+      "wet"
+    ]
+  },
+  {
+    "id": "atm_glass_canyon_shimmer",
+    "label": "Glass-canyon heat shimmer",
+    "clause": "Shimmer an urban canyon of glass at late afternoon, taxi roofs wobbling, AC drip, a scrap of sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "AC drip and horn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "heat",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_humid_porch_bugs",
+    "label": "Humid porch-light bugs",
+    "clause": "Thicken a humid night with bugs in a porch light, air visible as wings, screen door, a swamp of glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Insect roar and a screen slap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "humidity",
+      "night"
+    ]
+  },
+  {
+    "id": "atm_wood_sauna_snow_window",
+    "label": "Sauna steam snow window",
+    "clause": "Fill a wood sauna with steam so bodies are shapes, a small window of snow, ladle drip on stones.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Hiss on stones and wood creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam",
+      "interior"
+    ]
+  },
+  {
+    "id": "atm_laundry_press_ghosts",
+    "label": "Laundry-press steam ghosts",
+    "clause": "Burst iron-press steam in a laundry, shirts as ghosts, fluorescent, wet tile.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Press hiss and a radio.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "steam",
+      "interior"
+    ]
+  },
+  {
+    "id": "atm_stage_apron_low_fog",
+    "label": "Stage-apron low fog",
+    "clause": "Fog a stage apron with low white vapor, footlights cutting sheets, curtains heavy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "HVAC and a board creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "interior"
+    ]
+  },
+  {
+    "id": "atm_river_dawn_towboat",
+    "label": "River-dawn fog towboat",
+    "clause": "Unspool river fog at first light, trees as smudges, water invisible, a towboat a shadow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Muffled horn and drip.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fog",
+      "dawn"
+    ]
+  },
+  {
+    "id": "atm_desert_milky_band",
+    "label": "Desert-clear milky band",
+    "clause": "Hold desert-clear night so the milky band is weather, a two-lane, sage, no humidity veil.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Coyote far and cooling rock tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "clear",
+      "night",
+      "desert"
+    ]
+  },
+  {
+    "id": "atm_hydrant_packing_snow",
+    "label": "Hydrant packing snow",
+    "clause": "Pack wet snow on a hydrant until it becomes a white sculpture, a shoveled path, city gray.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Shovel scrape.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "snow",
+      "urban"
+    ]
+  },
+  {
+    "id": "atm_aurora_snow_field",
+    "label": "Aurora-colored snow",
+    "clause": "Glow green aurora on a snow field, the snow taking the color, spruce black, no moon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Snow hush and a dog far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "optical",
+      "snow"
+    ]
+  },
+  {
+    "id": "atm_desert_golden_buttes",
+    "label": "Desert golden buttes",
+    "clause": "Rake golden-hour sun across desert buttes, long purple shadows, dust as gold fog, a two-lane flashing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Dry wind and a hawk cry.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "golden",
+      "desert"
+    ]
+  },
+  {
+    "id": "atm_black_wet_night_neon",
+    "label": "Black-wet night neon",
+    "clause": "Black-wet a night avenue so neon writes twice, once in air and once in tar, umbrellas as commas.",
+    "still": "",
+    "wan_token": "",
+    "audio": "Rain on awnings and a taxi hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wet",
+      "night",
+      "neon"
+    ]
+  }
+]

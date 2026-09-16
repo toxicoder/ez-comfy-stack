@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 MKDOCS = ROOT / "mkdocs.yml"
 DOCS = ROOT / "docs"
 WORKFLOW_MANIFEST = DOCS / "generated" / "workflows" / "manifest.json"
+CINEMA_MANIFEST = DOCS / "generated" / "cinema" / "manifest.json"
 
 # Python / JS / CSS / hooks are not nav pages.
 SKIP_SUFFIXES = {".py", ".js", ".css"}
@@ -65,15 +66,34 @@ def _workflow_manifest_paths() -> set[str]:
     return paths
 
 
+def _cinema_manifest_paths() -> set[str]:
+    """Return generated cinema catalog page paths.
+
+    Returns:
+        Docs-relative paths listed in the cinema manifest.
+    """
+    if not CINEMA_MANIFEST.is_file():
+        return set()
+    payload = json.loads(CINEMA_MANIFEST.read_text(encoding="utf-8"))
+    paths: set[str] = set()
+    for row in payload.get("pages") or []:
+        if isinstance(row, dict):
+            path = row.get("path")
+            if isinstance(path, str) and path.endswith(".md"):
+                paths.add(path)
+    return paths
+
+
 def test_mkdocs_nav_lists_every_docs_markdown_page() -> None:
     """Every docs/**/*.md page appears in nav (no orphan pages).
 
     Generated workflow-details pages are injected at MkDocs ``on_config``
     from ``docs/generated/workflows/manifest.json`` rather than 90+
-    hand-listed nav lines.
+    hand-listed nav lines. Cinema catalogs inject from
+    ``docs/generated/cinema/manifest.json``.
     """
     nav = MKDOCS.read_text(encoding="utf-8")
-    listed = _nav_targets(nav) | _workflow_manifest_paths()
+    listed = _nav_targets(nav) | _workflow_manifest_paths() | _cinema_manifest_paths()
     pages = sorted(
         p.relative_to(DOCS).as_posix()
         for p in DOCS.rglob("*.md")

@@ -1,0 +1,2792 @@
+[
+  {
+    "id": "vir_snap_push_hold",
+    "label": "Vertical snap-push hold",
+    "clause": "Snap-push in on a vertical axis then hold the face for one second, upper third occupied, empty caption air below.",
+    "still": "Frozen at the end of a vertical snap-push, face held in the upper third, empty caption air in the lower frame.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_talking_mcu",
+    "label": "Face-to-camera talking MCU",
+    "clause": "Hold a talking MCU square to lens, eyes to camera, a lived room behind, mouth and micro-expressions as the only action.",
+    "still": "Frozen mid-sentence in a talking MCU, eyes to camera, a lived room behind.",
+    "wan_token": "",
+    "audio": "Room tone and close speech.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_walk_talk_gimbal",
+    "label": "Walking-and-talking gimbal",
+    "clause": "Gimbal-walk beside a talking figure down a sidewalk, horizon true, shopfronts traveling, face staying readable.",
+    "still": "Frozen mid-stride in a sidewalk walk-and-talk, shopfronts as a traveling smear behind a sharp face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_breakfast_hands",
+    "label": "Breakfast hands day-in-life",
+    "clause": "Fill the frame with breakfast hands: kettle, toast, a phone face-down, morning window, no head yet.",
+    "still": "Frozen on breakfast hands at a kettle and toast, morning window, phone face-down.",
+    "wan_token": "",
+    "audio": "Kettle click and toast scrape.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands",
+      "food"
+    ]
+  },
+  {
+    "id": "vir_mirror_ready_glass",
+    "label": "Mirror-ready lit glass",
+    "clause": "Hold a mirror-ready close at a lit bathroom glass, face and hands doing hair or skin, the reflection as the true subject.",
+    "still": "Frozen at a lit bathroom glass, hands in hair, the reflection owning the frame.",
+    "wan_token": "",
+    "audio": "Tap drip and a brush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_pov_chore_hands",
+    "label": "POV chore hands",
+    "clause": "Shoot POV chore hands wiping a counter or folding cloth, the body implied, the task as the hook.",
+    "still": "Frozen POV on chore hands mid-wipe, counter grain, no face.",
+    "wan_token": "",
+    "audio": "Cloth on laminate.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_macro_pour",
+    "label": "Satisfying macro pour",
+    "clause": "Macro-pour a viscous liquid into a glass so the ribbon and bubbles are landscape, labels unmarked.",
+    "still": "Frozen mid-pour, a viscous ribbon hitting a glass, bubbles as landscape.",
+    "wan_token": "",
+    "audio": "Viscous pour and glass ring.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_product_orbit",
+    "label": "Orbit product",
+    "clause": "Orbit a tabletop product at display speed, highlights walking around the object, seamless or lived backdrop.",
+    "still": "Frozen mid-orbit on a tabletop product, a highlight parked on the leading edge.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product"
+    ]
+  },
+  {
+    "id": "vir_crash_zoom_react",
+    "label": "Crash-zoom reaction",
+    "clause": "Crash-zoom into a reaction face from a medium, then hold the surprise, background compressing.",
+    "still": "Frozen at the end of a crash-zoom on a reaction face, background compressed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "reaction"
+    ]
+  },
+  {
+    "id": "vir_outfit_match_cut",
+    "label": "Outfit match-cut",
+    "clause": "Match-cut an outfit change on a held pose, same mark, clothes swapping as if the body were a mannequin.",
+    "still": "Frozen on the after-outfit at the same mark and pose as the implied before.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_location_jump_cut",
+    "label": "Location jump match",
+    "clause": "Match-cut a walking figure from one location into another on the same stride, clothes continuous, world swapped.",
+    "still": "Frozen on the landing stride in the second location, same clothes, new world.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edit",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_cyclorama_studio",
+    "label": "Cyclorama studio",
+    "clause": "Plant a figure on a seamless cyclorama, even studio bounce, no set dressing, product or body as the only object.",
+    "still": "Frozen on a seamless cyclorama, figure or product isolated on a horizon of nothing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "studio"
+    ]
+  },
+  {
+    "id": "vir_caption_safe_916",
+    "label": "Caption-safe 9:16 headroom",
+    "clause": "Compose 9:16 with the face in the upper third and the lower half empty of important features so caption air stays clean.",
+    "still": "Frozen 9:16 with face in the upper third and a clean empty lower half for caption air.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_lower_third_empty"
+    ],
+    "tags": [
+      "safe"
+    ]
+  },
+  {
+    "id": "vir_lower_third_empty",
+    "label": "Lower-third-safe empty",
+    "clause": "Keep the lower third of a vertical frame empty of hands, logos, and faces so a lower-third can sit later.",
+    "still": "Frozen vertical with a clean empty lower third, subject parked in the upper two-thirds.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_caption_safe_916"
+    ],
+    "tags": [
+      "safe"
+    ]
+  },
+  {
+    "id": "vir_before_after_wipe",
+    "label": "Before/after wipe",
+    "clause": "Wipe a before/after across a held composition, same mark, the world or face changing along a traveling edge.",
+    "still": "Frozen mid-wipe, half before and half after on the same mark.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_silent_hook_hold",
+    "label": "Silent-hook hold then move",
+    "clause": "Hold a silent hook still for one second then begin motion, the first beat a picture not a pan.",
+    "still": "Frozen on the silent one-second hook before motion starts, a complete picture.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_subway_pole_close",
+    "label": "Subway-pole close",
+    "clause": "Hold a subway-pole close, face and a hand on steel, fluorescent smear, other riders as bokeh, 9:16 center axis.",
+    "still": "Frozen on a subway pole, face and a gripping hand, fluorescent smear, riders as bokeh.",
+    "wan_token": "",
+    "audio": "Car rumble and pole squeak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_dash_talking",
+    "label": "Dash talking",
+    "clause": "Mount on a dash looking aft at a talking driver, road smearing in the windows, city as traveling bokeh.",
+    "still": "Frozen on a dash-mounted talking driver, road smear in the side glass.",
+    "wan_token": "",
+    "audio": "Cabin road roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_golden_boom_stick",
+    "label": "Golden-hour boom stick",
+    "clause": "Boom an arm's-length stick at golden hour so face and sky share the vertical, wind in hair, the sun as a rim.",
+    "still": "Frozen on an arm's-length golden-hour boom, face and sky sharing the vertical, sun as a rim.",
+    "wan_token": "",
+    "audio": "Wind in hair and distant surf or traffic.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "golden",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_drone_hero_slowmo",
+    "label": "Drone-hero reveal slow-mo",
+    "clause": "Reveal a figure from a drone rise then drop into slow-mo on the face, landscape arriving then time thickening.",
+    "still": "Frozen at the drone-reveal crest, figure small in landscape before the slow-mo drop.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_fpv_dive_mark",
+    "label": "FPV dive to subject",
+    "clause": "Dive as an FPV flyer toward a waiting figure, ground rushing, the last meters aimed at a chest mark.",
+    "still": "Frozen in an FPV dive, ground rushing, a waiting figure filling the center.",
+    "wan_token": "",
+    "audio": "Wind scream implied.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone",
+      "energy"
+    ]
+  },
+  {
+    "id": "vir_street_interview",
+    "label": "Street-interview two-shot",
+    "clause": "Hold a street-interview two-shot, interviewer shoulder dirty, subject face-lit by bounce, sidewalk traffic wiping.",
+    "still": "Frozen on a street-interview two-shot, dirty interviewer shoulder, subject face-lit, traffic as smear.",
+    "wan_token": "",
+    "audio": "Sidewalk chatter and a bus hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "street"
+    ]
+  },
+  {
+    "id": "vir_confessional_mcu",
+    "label": "Confessional MCU",
+    "clause": "Hold a confessional MCU against a simple wall, eyes to camera, a practical lamp, the talk as a private leak.",
+    "still": "Frozen in a confessional MCU against a simple wall, eyes to camera, a practical lamp.",
+    "wan_token": "",
+    "audio": "Close speech and room hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_storytime_close",
+    "label": "Storytime close",
+    "clause": "Push a storytime close so the mouth and eyes fill the vertical, a lived pillow or car-seat behind, hands occasionally entering.",
+    "still": "Frozen in a storytime close, mouth and eyes filling the vertical, a pillow behind.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_macro_texture_whisper",
+    "label": "Macro texture whisper",
+    "clause": "Macro a satisfying texture: fabric nap, ice crystals, frosting, the sound implied by the surface, no face required.",
+    "still": "Frozen on a macro texture of fabric nap or frosting, no face, the surface as landscape.",
+    "wan_token": "",
+    "audio": "Close texture ticks and a hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_cook_overhead",
+    "label": "Cooking overhead",
+    "clause": "Lock overhead on a board: knife, herbs, a pan entering, hands as the dancers, 9:16 or a cropped square in the vertical.",
+    "still": "Frozen overhead on a board, knife and herbs, hands mid-prep.",
+    "wan_token": "",
+    "audio": "Knife on board and a pan tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_recipe_inserts",
+    "label": "Recipe insert cascade",
+    "clause": "Cascade recipe inserts: pour, sizzle, plate, each a clean insert on black or marble, no talking head.",
+    "still": "Frozen on one insert of the cascade, a plated bite on marble, steam still.",
+    "wan_token": "",
+    "audio": "Sizzle and a plate clink.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_gym_handheld",
+    "label": "Gym-effort handheld",
+    "clause": "Handheld a gym effort, breath and iron, a mirror sometimes, the face effort-ugly, the space a rack of plates.",
+    "still": "Frozen mid-rep in a handheld gym effort, iron and breath, effort on the face.",
+    "wan_token": "",
+    "audio": "Iron plates and hard breath.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gym"
+    ]
+  },
+  {
+    "id": "vir_sunset_talk",
+    "label": "Sunset talk",
+    "clause": "Talk to camera at sunset, sun as a disk or rim, wind, a railing, the sky doing half the work.",
+    "still": "Frozen in a sunset talk to camera, sun as a rim, a railing, wind in hair.",
+    "wan_token": "",
+    "audio": "Wind and distant traffic.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "golden"
+    ]
+  },
+  {
+    "id": "vir_rain_walk",
+    "label": "Rain-walk",
+    "clause": "Walk a rain street toward camera or with, hood beading, neon smear, steps splashing, the weather as co-star.",
+    "still": "Frozen mid-stride in a rain-walk, hood beading, neon smear, a splash hanging.",
+    "wan_token": "",
+    "audio": "Rain on a hood and wet steps.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "weather"
+    ]
+  },
+  {
+    "id": "vir_night_bokeh_walk",
+    "label": "Night-city bokeh walk",
+    "clause": "Walk a night city so shop-lights become bokeh balls, face sharp, the sidewalk a river of color.",
+    "still": "Frozen in a night-city bokeh walk, face sharp, shop-lights as balls.",
+    "wan_token": "",
+    "audio": "City hush and heel ticks.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_halfsec_change",
+    "label": "First-half-second change",
+    "clause": "Change the picture in the first half-second: a smash of color, a door, a face, then settle, the hook before thought.",
+    "still": "Frozen on the post-change picture after a half-second smash, the new world already there.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_split_screen_vert",
+    "label": "Vertical split-screen",
+    "clause": "Split the vertical into two stacked or side rooms, same person or a pair, actions answering each other.",
+    "still": "Frozen as a vertical split-screen, two rooms stacked or side by side, actions mid-answer.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_stacked_two_shot"
+    ],
+    "tags": [
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_gyro_skate_low",
+    "label": "Gyro skate low POV",
+    "clause": "Ride a low gyro POV on a skate or board, asphalt grain, trucks, the city rushing at cheek height.",
+    "still": "Frozen at cheek height on a low skate POV, asphalt grain, trucks, city rushing.",
+    "wan_token": "",
+    "audio": "Wheels on tar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "energy"
+    ]
+  },
+  {
+    "id": "vir_float_car_mount",
+    "label": "Floating vehicle mount",
+    "clause": "Float a vehicle mount with no operator body, the car as a moving island, city sliding, the subject talking or silent.",
+    "still": "Frozen on a floating vehicle mount, no operator body, city sliding past a talking or silent rider.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "vir_hyperlapse_block",
+    "label": "Hyperlapse city block",
+    "clause": "Hyperlapse a city block, lockoffs stepping forward, clouds and crowds streaking, architecture still between jumps.",
+    "still": "Frozen on one hyperlapse plate of a city block, crowds as ghosts, architecture sharp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time",
+      "city"
+    ]
+  },
+  {
+    "id": "vir_ccd_soft_digital",
+    "label": "Vintage small-sensor softness",
+    "clause": "Render a vintage small-sensor digital still: slight bloom, weak microcontrast, pastel channel shift, a snapshot kitchen, no logo.",
+    "still": "Frozen as a vintage small-sensor digital still, bloomed highlights, pastel shift, a snapshot kitchen.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "look",
+      "still-look"
+    ]
+  },
+  {
+    "id": "vir_mist_halation_phone",
+    "label": "Phone mist-filter halation",
+    "clause": "Bloom phone highlights through a misted optic, street lamps halating, skin glowing, a night sidewalk, no brand on the device.",
+    "still": "Frozen on a night sidewalk through a misted phone optic, lamps halating, skin glowing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "look",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_imperfect_handheld",
+    "label": "Imperfect-by-design handheld",
+    "clause": "Keep imperfect handheld by design: micro-sway, a thumb in the edge, living timing, not a stabilizer commercial.",
+    "still": "Frozen mid-sway in imperfect handheld, a thumb in the edge, living timing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "handheld"
+    ]
+  },
+  {
+    "id": "vir_center_axis_vert",
+    "label": "Center-axis vertical",
+    "clause": "Plant the subject on the vertical center axis with depth behind, not a side third, the 9:16 as a tunnel.",
+    "still": "Frozen on a center-axis vertical, subject on the spine of the frame, depth as a tunnel behind.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_depth_center_axis"
+    ],
+    "tags": [
+      "comp"
+    ]
+  },
+  {
+    "id": "vir_z_dolly_hook",
+    "label": "Z-axis dolly-in hook",
+    "clause": "Dolly in on the Z-axis as the hook, face growing, background breathing, a three-second punch into eyes.",
+    "still": "Frozen mid Z-axis dolly-in, face growing, background breathing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "move"
+    ]
+  },
+  {
+    "id": "vir_three_sec_still",
+    "label": "Three-second hook then stillness",
+    "clause": "Spend three seconds on a hook move then land in stillness, the hold as the talk beat.",
+    "still": "Frozen on the landed stillness after a three-second hook move, talk-ready.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_depth_center_axis",
+    "label": "Vertical dynamics with depth",
+    "clause": "Build vertical dynamics: subject on center axis with a deep hallway or street behind, not a flat wall, motion in Z.",
+    "still": "Frozen on a center-axis figure with a deep hallway or street behind, Z-space readable.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_center_axis_vert"
+    ],
+    "tags": [
+      "comp"
+    ]
+  },
+  {
+    "id": "vir_reaction_jump",
+    "label": "Reaction-cut jump",
+    "clause": "Jump-cut to a reaction: a face replacing a thing, eyeline to camera or off, the cut as the joke.",
+    "still": "Frozen on the reaction face after a jump, eyeline to camera or off.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edit",
+      "reaction"
+    ]
+  },
+  {
+    "id": "vir_top_bumper_empty",
+    "label": "Text-safe top bumper empty",
+    "clause": "Leave the top bumper of the vertical empty of important face so a text bumper can sit, subject slightly low-center.",
+    "still": "Frozen with a clean empty top bumper, subject slightly low-center, face clear of the hat.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "safe"
+    ]
+  },
+  {
+    "id": "vir_stacked_two_shot",
+    "label": "Stacked two-shot",
+    "clause": "Stack two talking heads in a vertical two-shot, one above the other, a shared beat, no platform chrome, a simple split.",
+    "still": "Frozen as a stacked two-shot, one talking head above the other, a shared beat, no platform chrome.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "vir_split_screen_vert"
+    ],
+    "tags": [
+      "talking",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_grocery_pov",
+    "label": "POV grocery walk",
+    "clause": "Walk a grocery POV, cart edge, fluorescent aisles, a hand grabbing unmarked goods, the store as a tunnel.",
+    "still": "Frozen POV in a grocery aisle, cart edge, a hand on unmarked goods.",
+    "wan_token": "",
+    "audio": "Cart squeak and aisle hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_unbox_inserts",
+    "label": "Unbox insert cascade",
+    "clause": "Cascade unbox inserts: tape peel, foam pull, object reveal, each a clean close, no talking.",
+    "still": "Frozen on a foam-pull insert, the object half-revealed in packing.",
+    "wan_token": "",
+    "audio": "Tape peel and foam rub.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_desk_overhead",
+    "label": "Desk-setup overhead",
+    "clause": "Lock overhead on a desk setup: keyboard, a plant, a mug, hands arranging, the rectangle as a dollhouse.",
+    "still": "Frozen overhead on a desk, keyboard and mug, hands mid-arrange.",
+    "wan_token": "",
+    "audio": "Keycaps and a mug set-down.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk"
+    ]
+  },
+  {
+    "id": "vir_night_drive_bokeh",
+    "label": "Night-drive bokeh",
+    "clause": "Ride a night drive with windshield bokeh, dash glow on a face, wipers optional, the city as melted coins.",
+    "still": "Frozen on a night-drive face, dash glow, windshield bokeh as melted coins.",
+    "wan_token": "",
+    "audio": "Cabin road roar and a blinker.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_rooftop_golden_talk",
+    "label": "Rooftop golden talk",
+    "clause": "Talk on a rooftop at golden hour, vents and a skyline, wind, face to camera, the city as a terrace.",
+    "still": "Frozen in a rooftop golden-hour talk, vents, skyline, face to camera.",
+    "wan_token": "",
+    "audio": "Wind and a distant horn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "golden"
+    ]
+  },
+  {
+    "id": "vir_whisper_mouth",
+    "label": "Whisper-close mouth",
+    "clause": "Fill the vertical with a whisper-close mouth and a cheek, breath visible, the rest of the face cropped, ASMR-adjacent without a brand.",
+    "still": "Frozen on a whisper-close mouth and cheek, breath, the rest of the face cropped.",
+    "wan_token": "",
+    "audio": "Close breath and a whisper.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_eyebrow_hold",
+    "label": "Eyebrow-raise hold",
+    "clause": "Hold an eyebrow-raise to camera for a beat before speech, MCU, a lived wall, the face as a title card.",
+    "still": "Frozen on an eyebrow-raise to camera, MCU, a lived wall, pre-speech.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_point_lens",
+    "label": "Point-at-lens",
+    "clause": "Point at the lens as a hook, finger large, face behind, then drop the hand into talk.",
+    "still": "Frozen with a finger pointed at the lens, face behind, hook beat.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_outfit_spin",
+    "label": "Outfit spin",
+    "clause": "Spin a full outfit on a center axis, clothes flaring, a lived room or cyc, then stop on a three-quarter.",
+    "still": "Frozen at the stop of an outfit spin, clothes still settling, three-quarter to camera.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion"
+    ]
+  },
+  {
+    "id": "vir_hallway_fashion",
+    "label": "Hallway fashion walk",
+    "clause": "Walk a fashion hallway toward camera, clothes reading, fluorescent or window, the corridor as a runway of ordinary architecture.",
+    "still": "Frozen mid-stride in a fashion hallway walk, clothes reading, corridor as runway.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_fridge_pov",
+    "label": "Fridge-open POV",
+    "clause": "Open a fridge as POV, light blooming, a hand choosing, unmarked cartons, the kitchen dark around the box.",
+    "still": "Frozen POV inside an open fridge bloom, a hand on an unmarked carton.",
+    "wan_token": "",
+    "audio": "Fridge seal and a bottle clink.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "food"
+    ]
+  },
+  {
+    "id": "vir_coffee_steam",
+    "label": "Coffee-steam close",
+    "clause": "Close on coffee steam in a window, cup unmarked, hands wrapping, morning bokeh, the vapor as weather.",
+    "still": "Frozen on coffee steam in a window, hands wrapping an unmarked cup.",
+    "wan_token": "",
+    "audio": "Soft sip and a window tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_ice_cube_drop",
+    "label": "Ice-cube drop",
+    "clause": "Drop ice into a glass as a macro event, splash crown, amber or clear liquid, the cube as a meteor.",
+    "still": "Frozen at the ice-cube splash crown in a glass, liquid amber or clear.",
+    "wan_token": "",
+    "audio": "Ice crack and a glass ping.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_sauce_drizzle",
+    "label": "Sauce drizzle",
+    "clause": "Drizzle sauce over a plated bite in macro, the ribbon controlled, garnish waiting, steam optional.",
+    "still": "Frozen mid-drizzle, a sauce ribbon over a plated bite.",
+    "wan_token": "",
+    "audio": "Viscous drizzle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_chop_overhead",
+    "label": "Knife-chop overhead",
+    "clause": "Chop overhead in rhythm, board crumbs, herbs, hands safe but fast, the cadence as the hook.",
+    "still": "Frozen overhead mid-chop, herbs and crumbs, knife in the board.",
+    "wan_token": "",
+    "audio": "Knife cadence on wood.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_dough_stretch",
+    "label": "Dough stretch",
+    "clause": "Stretch dough toward camera, gluten window, flour atmosphere, hands as the machine.",
+    "still": "Frozen on a dough stretch, gluten window backlit, flour in the air.",
+    "wan_token": "",
+    "audio": "Dough slap and flour puff.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_latte_pour",
+    "label": "Latte-art pour",
+    "clause": "Pour latte art in a close cup, white ribbon on brown, the pattern forming, unmarked ceramic.",
+    "still": "Frozen mid latte-art pour, white ribbon on brown, pattern half-formed.",
+    "wan_token": "",
+    "audio": "Milk pour and a cup set.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_pan_sizzle",
+    "label": "Pan sizzle",
+    "clause": "Fill the frame with a pan sizzle, oil weather, an ingredient hitting, steam as a wall.",
+    "still": "Frozen at the ingredient hit in a sizzling pan, oil weather, steam as a wall.",
+    "wan_token": "",
+    "audio": "Hard sizzle and a spatula.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_oven_pull",
+    "label": "Oven pull",
+    "clause": "Pull a tray from an oven toward camera, heat ripple, mitts, the kitchen blooming with gold.",
+    "still": "Frozen on an oven-pull, tray halfway, heat ripple, mitts.",
+    "wan_token": "",
+    "audio": "Oven door and a tray scrape.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_first_bite",
+    "label": "First-bite close",
+    "clause": "Close on a first bite, steam, a crumb, eyes optional, the food as the actor.",
+    "still": "Frozen on a first bite, steam and a crumb, food as the actor.",
+    "wan_token": "",
+    "audio": "A crisp bite.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_closet_tryon",
+    "label": "Closet try-on",
+    "clause": "Try on in a closet, hangers, a mirror slice, outfits swapping on a body, the small room as a booth.",
+    "still": "Frozen in a closet try-on, hangers, a mirror slice, an outfit mid-swap.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion"
+    ]
+  },
+  {
+    "id": "vir_shoe_floor_pov",
+    "label": "Shoe-on floor POV",
+    "clause": "POV a shoe onto a floor, laces, unmarked leather or mesh, the room beyond the toe.",
+    "still": "Frozen POV as a shoe meets the floor, laces, room beyond the toe.",
+    "wan_token": "",
+    "audio": "Sole on wood.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "fashion"
+    ]
+  },
+  {
+    "id": "vir_jewelry_macro",
+    "label": "Jewelry macro",
+    "clause": "Macro unmarked jewelry on skin or velvet, a catchlight walking, the metal as landscape.",
+    "still": "Frozen jewelry macro on skin or velvet, a catchlight parked.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_perfume_backlight",
+    "label": "Perfume-spray backlight",
+    "clause": "Backlight a perfume spray so the mist becomes weather, an unmarked bottle, a neck, the droplets as stars.",
+    "still": "Frozen on a backlit perfume mist, unmarked bottle, droplets as stars.",
+    "wan_token": "",
+    "audio": "A spray hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_skincare_dots",
+    "label": "Skincare dots",
+    "clause": "Dot skincare on a face in a lit glass, white points, hands patting, the bathroom as a clinic of ordinary tile.",
+    "still": "Frozen on skincare dots on a face in a lit glass, hands about to pat.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_brush_macro",
+    "label": "Makeup-brush macro",
+    "clause": "Macro a brush on skin, bristle weather, pigment, the face a landscape of pores and product.",
+    "still": "Frozen brush-macro on skin, bristles bent, pigment.",
+    "wan_token": "",
+    "audio": "Bristle whisper.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_hair_flip",
+    "label": "Hair-flip slow",
+    "clause": "Slow a hair-flip in backlight, strands as weather, a window or practical, then settle on a face to camera.",
+    "still": "Frozen mid hair-flip, strands as weather in backlight.",
+    "wan_token": "",
+    "audio": "Hair whoosh.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_ring_vanity_led",
+    "label": "Circular vanity LED",
+    "clause": "Key a face with a circular vanity LED at a glass, even beauty, tile behind, the circle catching in the eyes.",
+    "still": "Frozen at a circular vanity LED glass, even beauty, tile, the circle in the eyes.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_elevator_mirror",
+    "label": "Elevator-mirror close",
+    "clause": "Hold an elevator-mirror close, fluorescent, a floor-number glow, outfit check, the box as a booth.",
+    "still": "Frozen in an elevator-mirror close, fluorescent, floor-number glow, outfit check.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "urban"
+    ]
+  },
+  {
+    "id": "vir_gym_mirror",
+    "label": "Gym-mirror effort",
+    "clause": "Use a gym mirror so the effort and the room both read, iron, a phone not branded, sweat.",
+    "still": "Frozen in a gym-mirror effort, iron and sweat, the room doubled.",
+    "wan_token": "",
+    "audio": "Plates and breath.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gym"
+    ]
+  },
+  {
+    "id": "vir_lift_side",
+    "label": "Lift side-on effort",
+    "clause": "Side-on a lift, bar path, effort face, a rack, handheld allowed to be ugly.",
+    "still": "Frozen side-on mid-lift, bar path, effort face, a rack.",
+    "wan_token": "",
+    "audio": "Bar clink and a brace breath.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gym"
+    ]
+  },
+  {
+    "id": "vir_run_watch_pov",
+    "label": "Run-watch POV",
+    "clause": "POV a run with a watch-arm entering, path grain, breath, the city or park rushing.",
+    "still": "Frozen run POV, watch-arm in, path grain, city or park rushing.",
+    "wan_token": "",
+    "audio": "Breath and footfalls.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "gym"
+    ]
+  },
+  {
+    "id": "vir_bottle_squeeze",
+    "label": "Water-bottle squeeze",
+    "clause": "Squeeze a water bottle in gym light, plastic flex, a drink, sweat, the hydration as the insert.",
+    "still": "Frozen on a squeezed bottle, plastic flex, gym light, sweat.",
+    "wan_token": "",
+    "audio": "Plastic flex and a gulp.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "gym"
+    ]
+  },
+  {
+    "id": "vir_smoothie_pour",
+    "label": "Smoothie pour",
+    "clause": "Pour a smoothie in macro, thick ribbon, an unmarked glass, fruit grit visible.",
+    "still": "Frozen mid smoothie pour, thick ribbon, fruit grit, unmarked glass.",
+    "wan_token": "",
+    "audio": "Thick pour.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_meal_prep_grid",
+    "label": "Meal-prep container grid",
+    "clause": "Overhead a meal-prep grid of containers, hands filling, color-blocked food, the counter as a factory.",
+    "still": "Frozen overhead on a meal-prep grid, hands filling color-blocked containers.",
+    "wan_token": "",
+    "audio": "Lid clicks.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_grocery_haul",
+    "label": "Grocery-haul bag",
+    "clause": "Dump a grocery haul onto a counter, unmarked packaging, a bag, the kitchen receiving cargo.",
+    "still": "Frozen as groceries hit a counter, unmarked packaging, a bag still in frame.",
+    "wan_token": "",
+    "audio": "Bag rustle and cans.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_foam_pull",
+    "label": "Foam-pull unbox",
+    "clause": "Pull foam from a box in a satisfying close, the object appearing, packing weather, no logo readable.",
+    "still": "Frozen mid foam-pull, the object appearing, packing weather.",
+    "wan_token": "",
+    "audio": "Foam rub.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product"
+    ]
+  },
+  {
+    "id": "vir_peel_plastic",
+    "label": "Peel-plastic satisfy",
+    "clause": "Peel a plastic film in macro, the curl traveling, a clean surface revealed, the sound as the star.",
+    "still": "Frozen mid plastic-peel, a curl traveling, clean surface half-revealed.",
+    "wan_token": "",
+    "audio": "Plastic peel.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_magnet_click",
+    "label": "Magnet click-in",
+    "clause": "Click a magnet or lid into place as a satisfying close, the join as the hook, unmarked object.",
+    "still": "Frozen at the magnet or lid click-in, the join as the picture.",
+    "wan_token": "",
+    "audio": "A crisp click.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_led_desk_wash",
+    "label": "Colored LED desk wash",
+    "clause": "Wash a desk in colored LED, a face in monitor glow, hands on unmarked keys, the night room as a cockpit.",
+    "still": "Frozen at a colored-LED desk, face in monitor glow, hands on unmarked keys.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_keyboard_close",
+    "label": "Keyboard close",
+    "clause": "Close on unmarked keycaps, fingers, a satisfying travel, the desk a blur, the sound implied.",
+    "still": "Frozen on unmarked keycaps, fingers mid-travel, desk a blur.",
+    "wan_token": "",
+    "audio": "Keycap ticks.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_cable_tidy",
+    "label": "Cable-management tidy",
+    "clause": "Tidy cables in a desk close, clips, a before mess becoming a line, hands as the solver.",
+    "still": "Frozen mid cable-tidy, clips, a mess becoming a line.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_monitor_glow",
+    "label": "Monitor-glow face",
+    "clause": "Key a face with monitor glow only, the room dark, eyes to the screen then a glance to camera.",
+    "still": "Frozen on a monitor-glow face in a dark room, a glance to camera.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_night_code",
+    "label": "Night-code desk",
+    "clause": "Hold a night-code desk, two screens unmarked, a mug, hands, the window a black rectangle.",
+    "still": "Frozen on a night-code desk, two unmarked screens, a mug, hands.",
+    "wan_token": "",
+    "audio": "Keycaps and a far siren.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_study_overhead",
+    "label": "Study-with-me overhead",
+    "clause": "Overhead a study spread: book, lamp, a timer unmarked, a hand annotating, the table as a quiet stage.",
+    "still": "Frozen overhead on a study spread, book and lamp, a hand annotating.",
+    "wan_token": "",
+    "audio": "Page turn and a pen.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk"
+    ]
+  },
+  {
+    "id": "vir_plant_water",
+    "label": "Plant-watering close",
+    "clause": "Water a plant in a close, spout, soil darkening, a window, the leaf as the face.",
+    "still": "Frozen on a plant being watered, spout, soil darkening, a window.",
+    "wan_token": "",
+    "audio": "Water on soil.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_dog_golden_walk",
+    "label": "Dog golden-hour walk",
+    "clause": "Walk a dog at golden hour, leash, face and animal sharing the vertical, a park path.",
+    "still": "Frozen in a golden-hour dog walk, leash, face and animal sharing the vertical.",
+    "wan_token": "",
+    "audio": "Collar jingle and footsteps.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "golden"
+    ]
+  },
+  {
+    "id": "vir_park_bench_talk",
+    "label": "Park-bench talk",
+    "clause": "Talk on a park bench to camera, trees bokeh, a path of extras, the seat as a studio.",
+    "still": "Frozen on a park-bench talk to camera, trees bokeh, a path of extras.",
+    "wan_token": "",
+    "audio": "Birds and a far bike bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_market_bag",
+    "label": "Farmer-market bag",
+    "clause": "Fill a market bag with produce, stall canvas, sun, hands, the haul as the story.",
+    "still": "Frozen filling a market bag with produce, stall canvas, sun.",
+    "wan_token": "",
+    "audio": "Paper bag and a stall murmur.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_bakery_window",
+    "label": "Bakery-window close",
+    "clause": "Close on a bakery window, trays, a face reflection optional, the glass as a menu of steam.",
+    "still": "Frozen on a bakery window of trays, steam on glass, a street reflection.",
+    "wan_token": "",
+    "audio": "A door chime and street.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_bookstore_aisle",
+    "label": "Bookstore-aisle walk",
+    "clause": "Walk a bookstore aisle, spines unmarked, a hand pulling a volume, the stack as a canyon of paper.",
+    "still": "Frozen in a bookstore aisle, a hand pulling a volume, spines unmarked.",
+    "wan_token": "",
+    "audio": "Page hush and a floor creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_crate_dig",
+    "label": "Record-crate dig",
+    "clause": "Dig a record crate, unmarked sleeves, fingers, a shop lamp, the bin as a treasure box.",
+    "still": "Frozen digging a record crate, unmarked sleeves, fingers, a shop lamp.",
+    "wan_token": "",
+    "audio": "Sleeve card and shop murmur.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_vinyl_needle",
+    "label": "Vinyl needle drop",
+    "clause": "Drop a needle on vinyl in macro, groove weather, a label unmarked, the tonearm as a crane.",
+    "still": "Frozen at a needle drop on unmarked vinyl, groove weather, tonearm.",
+    "wan_token": "",
+    "audio": "Needle crackle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "music"
+    ]
+  },
+  {
+    "id": "vir_crowd_phone_glow",
+    "label": "Crowd phone-glow",
+    "clause": "Hold a crowd at night with phone-glows as stars, a stage smear, the vertical full of raised hands, no brand on glass.",
+    "still": "Frozen on a night crowd, phone-glows as stars, raised hands, stage smear.",
+    "wan_token": "",
+    "audio": "Crowd roar and a kick drum far.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "night",
+      "crowd"
+    ]
+  },
+  {
+    "id": "vir_festival_dust",
+    "label": "Festival-dust sunset",
+    "clause": "Walk festival dust at sunset, flags, a bottle unmarked, face to camera, the field as gold weather.",
+    "still": "Frozen in festival dust at sunset, flags, face to camera, gold weather.",
+    "wan_token": "",
+    "audio": "Distant bass and dust wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "golden",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_beach_gimbal",
+    "label": "Beach gimbal walk",
+    "clause": "Gimbal-walk a beach, horizon true, feet optional, face talking or silent, glare managed.",
+    "still": "Frozen in a beach gimbal walk, horizon true, glare, face talking or silent.",
+    "wan_token": "",
+    "audio": "Surf and wind.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "beach"
+    ]
+  },
+  {
+    "id": "vir_pool_overhead",
+    "label": "Pool-float overhead",
+    "clause": "Overhead a pool float, water caustics, a body, the rectangle of blue as the whole world.",
+    "still": "Frozen overhead on a pool float, caustics, a body, a rectangle of blue.",
+    "wan_token": "",
+    "audio": "Water lap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beach"
+    ]
+  },
+  {
+    "id": "vir_dive_board_pov",
+    "label": "Diving-board POV",
+    "clause": "POV a diving-board walk then the drop, tile, the water rushing up, the last frame a smash of blue.",
+    "still": "Frozen on a diving-board POV, water rushing up, tile behind.",
+    "wan_token": "",
+    "audio": "Board spring and a splash.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "energy"
+    ]
+  },
+  {
+    "id": "vir_ski_goggle_pov",
+    "label": "Ski-goggle POV",
+    "clause": "POV through ski goggles, snow grain, a slope, breath in the foam, poles entering.",
+    "still": "Frozen ski-goggle POV, snow grain, a slope, breath in the foam.",
+    "wan_token": "",
+    "audio": "Wind and ski chatter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "snow"
+    ]
+  },
+  {
+    "id": "vir_handlebar_city",
+    "label": "Handlebar city POV",
+    "clause": "POV handlebars through a city, unmarked stem, potholes, the vanishing point a street.",
+    "still": "Frozen handlebar POV, unmarked stem, a city vanishing point, potholes.",
+    "wan_token": "",
+    "audio": "Tire hum and a bell.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "vir_bus_window_face",
+    "label": "Bus-window face",
+    "clause": "Hold a bus-window face, passing world as smear, interior reflection, 9:16, the pane as weather.",
+    "still": "Frozen on a bus-window face, passing smear, interior reflection.",
+    "wan_token": "",
+    "audio": "Bus rumble.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_train_seat_talk",
+    "label": "Train-seat talk",
+    "clause": "Talk from a train seat to camera, window fields, a table, the car as a moving room.",
+    "still": "Frozen in a train-seat talk, window fields, a table, the car as a moving room.",
+    "wan_token": "",
+    "audio": "Rail click and HVAC.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_plane_window_wing",
+    "label": "Plane-window wing",
+    "clause": "Hold a plane-window wing, weather, a tray table, a face optional, the wing as a landscape.",
+    "still": "Frozen on a plane-window wing, weather, a tray table.",
+    "wan_token": "",
+    "audio": "Cabin hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_hotel_room_pan",
+    "label": "Hotel-room pan tour",
+    "clause": "Pan a hotel room as a tour, bed, window, a bag, no logos, the space as a brief home.",
+    "still": "Frozen mid hotel-room pan, bed and window, a bag, no logos.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "travel"
+    ]
+  },
+  {
+    "id": "vir_pack_cubes",
+    "label": "Packing-cube fill",
+    "clause": "Fill packing cubes on a bed, clothes, a zipper, the suitcase as a puzzle.",
+    "still": "Frozen filling a packing cube on a bed, clothes, a zipper halfway.",
+    "wan_token": "",
+    "audio": "Zipper and fabric.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands",
+      "travel"
+    ]
+  },
+  {
+    "id": "vir_boot_mud_hike",
+    "label": "Hiking-boot mud",
+    "clause": "Close on a hiking boot in mud, tread, a trail, the step as the hook.",
+    "still": "Frozen on a hiking boot in mud, tread, a trail.",
+    "wan_token": "",
+    "audio": "Mud suck.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_summit_reveal",
+    "label": "Summit reveal",
+    "clause": "Reveal a summit view past a figure, wind, a tiny person, the drop as the punch.",
+    "still": "Frozen at a summit reveal, a tiny figure, the drop, wind in clothes.",
+    "wan_token": "",
+    "audio": "Wind roar.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "vir_tent_morning",
+    "label": "Tent-morning unzip",
+    "clause": "Unzip a tent morning, gold light, a sleeping-bag, the fly as a curtain, landscape arriving.",
+    "still": "Frozen mid tent-unzip, gold light, a sleeping-bag, landscape arriving.",
+    "wan_token": "",
+    "audio": "Zipper and birds.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "travel"
+    ]
+  },
+  {
+    "id": "vir_camp_coffee",
+    "label": "Camp-coffee pour",
+    "clause": "Pour camp coffee over a stove, enamel cup unmarked, pines, steam in cold air.",
+    "still": "Frozen pouring camp coffee into unmarked enamel, pines, steam in cold air.",
+    "wan_token": "",
+    "audio": "Stove hiss and a pour.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_bonfire_talk",
+    "label": "Bonfire talk",
+    "clause": "Talk at a bonfire, faces gold, sparks, a dark ring of friends, the fire as the key.",
+    "still": "Frozen in a bonfire talk, face gold, sparks, a dark ring of friends.",
+    "wan_token": "",
+    "audio": "Fire crackle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_cake_slice",
+    "label": "Cake-slice pull",
+    "clause": "Pull a cake slice, crumb weather, a plate, the cut as the satisfy.",
+    "still": "Frozen pulling a cake slice, crumb weather, a plate.",
+    "wan_token": "",
+    "audio": "A knife through crumb.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_unwrap_gift",
+    "label": "Gift unwrap",
+    "clause": "Unwrap a gift in close, paper tear, an object unmarked, hands, the reveal as the hook.",
+    "still": "Frozen mid gift-unwrap, paper tear, an unmarked object appearing.",
+    "wan_token": "",
+    "audio": "Paper tear.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_side_eye_lens",
+    "label": "Side-eye to lens",
+    "clause": "Throw a side-eye to the lens from a conversation, MCU, the fourth-wall as the joke.",
+    "still": "Frozen on a side-eye to the lens from a conversation, MCU.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_wink_hold",
+    "label": "Fourth-wall wink hold",
+    "clause": "Wink to camera and hold, MCU, a lived room, then resume the task.",
+    "still": "Frozen on a wink to camera, MCU, a lived room.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_paper_tear",
+    "label": "Paper-tear transition",
+    "clause": "Tear paper as a transition, the hole becoming the next scene, hands, kraft texture.",
+    "still": "Frozen mid paper-tear, a hole opening into the next scene.",
+    "wan_token": "",
+    "audio": "Paper tear.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edit",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_whip_to_product",
+    "label": "Whip to product",
+    "clause": "Whip-pan to a product on a table, the smear resolving on the hero object, then a hold.",
+    "still": "Frozen at the end of a whip-to-product, smear resolved on the hero object.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_pottery_wheel",
+    "label": "Pottery-wheel close",
+    "clause": "Close on a pottery wheel, clay weather, wet hands, the cylinder rising, water as spray.",
+    "still": "Frozen on a pottery wheel, clay cylinder rising, wet hands.",
+    "wan_token": "",
+    "audio": "Wet clay slap and a wheel hum.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hands",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_match_strike",
+    "label": "Match-strike backlight",
+    "clause": "Strike a match in backlight, sulfur bloom, a candle waiting, the flame as the cut-in.",
+    "still": "Frozen at match-strike bloom, sulfur, a candle waiting.",
+    "wan_token": "",
+    "audio": "Match hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_tea_high_pour",
+    "label": "High tea pour",
+    "clause": "Pour tea from a height, the stream a line, unmarked pot, steam, a table of ordinary china.",
+    "still": "Frozen on a high tea pour, the stream a line, steam, unmarked pot.",
+    "wan_token": "",
+    "audio": "Stream into a cup.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_dumpling_fold",
+    "label": "Dumpling-fold close",
+    "clause": "Fold dumplings in a close, pleats, flour, hands skilled, a tray filling.",
+    "still": "Frozen mid dumpling-fold, a pleat, flour, a tray.",
+    "wan_token": "",
+    "audio": "Dough pinch.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_night_market_steam",
+    "label": "Night-market steam",
+    "clause": "Walk a night market of steam, skewers, neon smear, a bite, the aisle as weather.",
+    "still": "Frozen in a night-market steam aisle, skewers, neon smear, a bite.",
+    "wan_token": "",
+    "audio": "Sizzle and crowd murmur.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_umbrella_street",
+    "label": "Umbrella-street walk",
+    "clause": "Walk under an umbrella on a wet street, the dome as a lid, face in shadow, neon on the fabric.",
+    "still": "Frozen under an umbrella on a wet street, neon on the fabric, face in shadow.",
+    "wan_token": "",
+    "audio": "Rain on fabric.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "weather"
+    ]
+  },
+  {
+    "id": "vir_mitten_cup",
+    "label": "Mitten-hold cup",
+    "clause": "Hold a mittened cup in cold air, steam, a street, the hands as the story.",
+    "still": "Frozen on mittened hands around a steaming cup, a cold street.",
+    "wan_token": "",
+    "audio": "A soft sip and snow hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "winter"
+    ]
+  },
+  {
+    "id": "vir_fireplace_talk",
+    "label": "Fireplace talk",
+    "clause": "Talk by a fireplace, gold flicker on a face, a room of books, the fire as the only key.",
+    "still": "Frozen in a fireplace talk, gold flicker on a face, a room of books.",
+    "wan_token": "",
+    "audio": "Fire pop.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "interior"
+    ]
+  },
+  {
+    "id": "vir_lantern_walk",
+    "label": "Lantern walk",
+    "clause": "Walk with a lantern, the pool of gold traveling, a path, moths, the dark as the walls.",
+    "still": "Frozen in a lantern walk, a gold pool on a path, moths, dark walls.",
+    "wan_token": "",
+    "audio": "Footsteps and insect hush.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_soap_cut",
+    "label": "Soap-cut satisfy",
+    "clause": "Cut soap or wax in macro, the slice clean, shavings, the interior pattern revealed.",
+    "still": "Frozen mid soap-cut, a clean slice, interior pattern, shavings.",
+    "wan_token": "",
+    "audio": "A knife through wax.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_paint_pour",
+    "label": "Paint-pour bloom",
+    "clause": "Pour paint so colors bloom on a surface, unnamed fluid art, the puddle as weather.",
+    "still": "Frozen mid paint-pour, colors blooming on a surface.",
+    "wan_token": "",
+    "audio": "Viscous puddle.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_incense_curl",
+    "label": "Incense-curl backlight",
+    "clause": "Backlight an incense curl, the smoke as a drawing, an unmarked stick, a still room.",
+    "still": "Frozen on a backlit incense curl, smoke as a drawing, an unmarked stick.",
+    "wan_token": "",
+    "audio": "A quiet room and a faint hiss.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "interior"
+    ]
+  },
+  {
+    "id": "vir_rain_window_talk",
+    "label": "Rain-window talk",
+    "clause": "Talk at a rain window, drops as bokeh, face interior-lit, the weather as the other actor.",
+    "still": "Frozen in a rain-window talk, drops as bokeh, face interior-lit.",
+    "wan_token": "",
+    "audio": "Rain on pane.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "weather"
+    ]
+  },
+  {
+    "id": "vir_breath_cold_talk",
+    "label": "Cold-breath talk",
+    "clause": "Talk in cold air so breath is weather, a street or rooftop, face to camera, wool.",
+    "still": "Frozen in a cold-breath talk, vapor, wool, face to camera.",
+    "wan_token": "",
+    "audio": "Wool rustle and a far horn.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "winter"
+    ]
+  },
+  {
+    "id": "vir_string_light_porch",
+    "label": "String-light porch talk",
+    "clause": "Talk on a porch under string-lights, moths, a railing, the yard black, the face gold.",
+    "still": "Frozen on a string-light porch talk, moths, a railing, face gold.",
+    "wan_token": "",
+    "audio": "Bug-zapper far and a chair creak.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_cocktail_shake",
+    "label": "Cocktail shake",
+    "clause": "Shake a cocktail in close, ice weather, an unmarked tin, then a pour.",
+    "still": "Frozen mid cocktail-shake, ice weather, unmarked tin.",
+    "wan_token": "",
+    "audio": "Ice in a tin.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_plate_wipe",
+    "label": "Plate-wipe garnish",
+    "clause": "Wipe a plate and place a garnish as a chef close, sauce comma, steam, the china unmarked.",
+    "still": "Frozen on a plate-wipe, a garnish landing, sauce comma, steam.",
+    "wan_token": "",
+    "audio": "Plate and a tweezer tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_thrift_table",
+    "label": "Thrift-table flip",
+    "clause": "Flip thrift finds on a table, unmarked garments, a hand, a window, the pile as a treasure map.",
+    "still": "Frozen flipping a thrift garment on a table, a window, a pile.",
+    "wan_token": "",
+    "audio": "Hanger tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_noodle_pull",
+    "label": "Noodle-pull close",
+    "clause": "Pull noodles in a close, flour atmosphere, dough ropes, hands as machines.",
+    "still": "Frozen mid noodle-pull, dough ropes, flour atmosphere.",
+    "wan_token": "",
+    "audio": "Dough slap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_espresso_crema",
+    "label": "Espresso crema close",
+    "clause": "Close on espresso crema forming, unmarked cup, a machine implied, the tiger-skin as landscape.",
+    "still": "Frozen on forming espresso crema, unmarked cup, tiger-skin surface.",
+    "wan_token": "",
+    "audio": "Machine pump and a drip.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_ice_latte_swirl",
+    "label": "Ice-latte swirl",
+    "clause": "Swirl an ice latte so milk weather marbles the glass, cubes, an unmarked straw later.",
+    "still": "Frozen on an ice-latte swirl, milk weather marbling the glass, cubes.",
+    "wan_token": "",
+    "audio": "Ice and a stir.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_citrus_twist",
+    "label": "Citrus-twist macro",
+    "clause": "Twist citrus over a glass, oil spray as stars in backlight, peel, an unmarked drink.",
+    "still": "Frozen on a citrus twist, oil spray as stars, peel, unmarked glass.",
+    "wan_token": "",
+    "audio": "Peel crack and a spray.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "macro"
+    ]
+  },
+  {
+    "id": "vir_puddle_jump",
+    "label": "Puddle-jump",
+    "clause": "Jump a puddle toward camera, splash crown, rain clothes, a street, the splash as the hook.",
+    "still": "Frozen at a puddle-jump splash crown, rain clothes, a street.",
+    "wan_token": "",
+    "audio": "A splash.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "weather"
+    ]
+  },
+  {
+    "id": "vir_rewind_outfit",
+    "label": "Rewind outfit change",
+    "clause": "Rewind an outfit change on a held mark, clothes flying back, then play forward, the body as a hinge.",
+    "still": "Frozen mid rewind-outfit, clothes in a flying in-between, the mark held.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_stop_motion_desk",
+    "label": "Stop-motion desk",
+    "clause": "Animate a desk in stop-motion, objects traveling in chops, a hand sometimes, the table as a stage.",
+    "still": "Frozen on one stop-motion desk chop, objects mid-travel.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "desk",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_clone_offset",
+    "label": "Offset clone two-shot",
+    "clause": "Offset the same person twice in a vertical, two tasks, a shared room, no platform chrome.",
+    "still": "Frozen as an offset clone two-shot of the same person, two tasks, a shared room.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_notification_face",
+    "label": "Notification-face glance",
+    "clause": "Glance down at a phone then up to camera, MCU, the face as a reaction, the glass unmarked.",
+    "still": "Frozen on the up-glance to camera after a phone look, MCU, unmarked glass.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reaction",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_text_safe_lower_talk",
+    "label": "Talk with lower-third air",
+    "clause": "Talk MCU with the lower third empty of chin-hands, caption air reserved, a lived wall.",
+    "still": "Frozen in a talking MCU with empty lower-third air, chin clear of the hat.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "safe"
+    ]
+  },
+  {
+    "id": "vir_boom_reveal_roof",
+    "label": "Boom-up rooftop reveal",
+    "clause": "Boom up from a rooftop parapet to a talking face and skyline, the city arriving under the chin.",
+    "still": "Frozen at the top of a rooftop boom, face and skyline, parapet gone.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "move",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_slowmo_hair_sun",
+    "label": "Slow-mo hair sun",
+    "clause": "Slow-mo hair in sun, strands, a laugh, then resume talk speed.",
+    "still": "Frozen in slow-mo hair-in-sun, strands, a laugh mid-peak.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "beauty",
+      "golden"
+    ]
+  },
+  {
+    "id": "vir_doorway_enter_hook",
+    "label": "Doorway-enter hook",
+    "clause": "Enter a doorway toward camera as the first-frame hook, interior blooming, then talk.",
+    "still": "Frozen in a doorway-enter, interior blooming around a figure coming at camera.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "walk"
+    ]
+  },
+  {
+    "id": "vir_bag_drop_desk",
+    "label": "Bag-drop desk start",
+    "clause": "Drop a bag on a desk as the start, keys, a chair, then sit into talk, the arrival as the hook.",
+    "still": "Frozen at a bag-drop on a desk, keys, the sit not yet begun.",
+    "wan_token": "",
+    "audio": "Bag thud and keys.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "desk"
+    ]
+  },
+  {
+    "id": "vir_window_lean_talk",
+    "label": "Window-lean talk",
+    "clause": "Lean in a window talking to camera, street below, curtains, the sill as a desk.",
+    "still": "Frozen leaning in a window talking to camera, street below, curtains.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_bike_city_talk",
+    "label": "Bike-city talking mount",
+    "clause": "Talk from a bike-city mount, unmarked bars, wind, storefronts traveling, the face stable-ish.",
+    "still": "Frozen on a bike-city talking mount, unmarked bars, storefronts traveling.",
+    "wan_token": "",
+    "audio": "Wind and a freewheel.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_escalator_talk",
+    "label": "Escalator talking rise",
+    "clause": "Talk on an escalator rise, mall or station architecture unrolling, face to camera, the steps as a treadmill.",
+    "still": "Frozen on an escalator talking rise, architecture unrolling, face to camera.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_laundry_fold_talk",
+    "label": "Laundry-fold talk",
+    "clause": "Fold laundry while talking to camera, cloth weather, a couch, the domestic as the set.",
+    "still": "Frozen folding laundry while talking, cloth weather, a couch.",
+    "wan_token": "",
+    "audio": "Cloth snap.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "hands"
+    ]
+  },
+  {
+    "id": "vir_sink_splash_wake",
+    "label": "Sink-splash wake",
+    "clause": "Splash a sink as a wake-up hook, water weather, a face coming up, tile.",
+    "still": "Frozen at a sink-splash, water weather, a face coming up, tile.",
+    "wan_token": "",
+    "audio": "Water in a basin.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "beauty"
+    ]
+  },
+  {
+    "id": "vir_blinds_open_hook",
+    "label": "Blinds-open hook",
+    "clause": "Open blinds as the first-frame hook, dust in the new sun, a room waking, then a turn to camera.",
+    "still": "Frozen mid blinds-open, dust in new sun, a room waking.",
+    "wan_token": "",
+    "audio": "Blinds clatter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_match_cut_food_to_face",
+    "label": "Food-to-face match",
+    "clause": "Match-cut a plated bite to a first-bite face on the same axis, the food becoming the eater.",
+    "still": "Frozen on the face after a food-to-face match, the bite implied, same axis.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_center_product_hands",
+    "label": "Center-axis product hands",
+    "clause": "Hold a product in center-axis hands, 9:16, a lived table, the object turning, face optional above.",
+    "still": "Frozen holding a product on the center axis, lived table, object mid-turn.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product",
+      "comp"
+    ]
+  },
+  {
+    "id": "vir_rain_bus_talk",
+    "label": "Rain-bus talking",
+    "clause": "Talk on a rain bus, pane drops, fluorescent, a pole, the public as the set.",
+    "still": "Frozen talking on a rain bus, pane drops, fluorescent, a pole.",
+    "wan_token": "",
+    "audio": "Bus HVAC and rain on glass.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "transit"
+    ]
+  },
+  {
+    "id": "vir_golden_field_spin",
+    "label": "Golden-field spin",
+    "clause": "Spin in a golden field, clothes flaring, then stop to camera, pollen weather.",
+    "still": "Frozen at the stop of a golden-field spin, clothes settling, pollen weather, face to camera.",
+    "wan_token": "",
+    "audio": "Wind in grass.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "golden",
+      "fashion"
+    ]
+  },
+  {
+    "id": "vir_night_rooftop_bokeh_talk",
+    "label": "Night rooftop bokeh talk",
+    "clause": "Talk on a night rooftop, city bokeh, a practical, wind, the skyline as jewelry.",
+    "still": "Frozen in a night rooftop talk, city bokeh, a practical, skyline as jewelry.",
+    "wan_token": "",
+    "audio": "Wind and a far siren.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "night"
+    ]
+  },
+  {
+    "id": "vir_asmr_ice_crack",
+    "label": "Ice-crack macro",
+    "clause": "Crack ice in macro, fissures traveling, backlight, the sound as the star.",
+    "still": "Frozen mid ice-crack, fissures traveling, backlight.",
+    "wan_token": "",
+    "audio": "Ice crack.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "macro",
+      "asmr"
+    ]
+  },
+  {
+    "id": "vir_pour_over_bloom",
+    "label": "Pour-over bloom",
+    "clause": "Bloom a pour-over in close, unmarked dripper, coffee weather, a spiral pour.",
+    "still": "Frozen on a pour-over bloom, unmarked dripper, a spiral pour.",
+    "wan_token": "",
+    "audio": "Kettle and drip.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food"
+    ]
+  },
+  {
+    "id": "vir_skillet_flip",
+    "label": "Skillet flip",
+    "clause": "Flip a skillet toward camera, food in air, then the catch, a stove, the stunt as the hook.",
+    "still": "Frozen with food in air above a skillet, stove, the catch implied.",
+    "wan_token": "",
+    "audio": "A pan whoosh.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "food",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_closet_light_pull",
+    "label": "Closet-light pull",
+    "clause": "Pull a closet light, the booth blooming, clothes as a wall, then a try-on.",
+    "still": "Frozen at the closet-light bloom, clothes as a wall, try-on about to start.",
+    "wan_token": "",
+    "audio": "A pull-chain tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_window_seat_book",
+    "label": "Window-seat book",
+    "clause": "Hold a window-seat with a book, rain or sun, a face sometimes, the glass as weather TV.",
+    "still": "Frozen on a window-seat book, rain or sun on the glass, a face optional.",
+    "wan_token": "",
+    "audio": "Page and pane.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "still-look"
+    ]
+  },
+  {
+    "id": "vir_crosswalk_center",
+    "label": "Crosswalk center-axis",
+    "clause": "Walk a crosswalk on the center axis toward camera, signals, a city, the stripes as a runway.",
+    "still": "Frozen mid crosswalk on the center axis, signals, stripes as a runway.",
+    "wan_token": "",
+    "audio": "A walk signal and traffic.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "comp"
+    ]
+  },
+  {
+    "id": "vir_mirror_flash_change",
+    "label": "Mirror flash outfit change",
+    "clause": "Use a mirror flash or blink to hide an outfit change, same mark, the glass as a cut.",
+    "still": "Frozen after a mirror-flash outfit change, same mark, new clothes, the glass still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fashion",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_caption_headroom_talk",
+    "label": "Talking with caption headroom",
+    "clause": "Talk MCU with extra headroom and empty lower third, 9:16, a lived wall, safe for later type.",
+    "still": "Frozen talking MCU with extra headroom and empty lower third, lived wall.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "safe"
+    ]
+  },
+  {
+    "id": "vir_silent_product_hold",
+    "label": "Silent product one-second hold",
+    "clause": "Hold a silent product hero for one second then orbit or tilt, the still as the thumb-stop.",
+    "still": "Frozen on a silent one-second product hero before the orbit starts.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "product",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_face_then_insert",
+    "label": "Face then insert cut",
+    "clause": "Hold a talking face then cut to a matching insert of the thing named, the grammar of show-after-tell.",
+    "still": "Frozen on the insert after a talking face, the named object filling the frame.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "talking",
+      "edit"
+    ]
+  },
+  {
+    "id": "vir_z_push_then_hold_talk",
+    "label": "Z-push then hold talk",
+    "clause": "Z-push into a talking MCU then hold for speech, the move as the hook, the hold as the point.",
+    "still": "Frozen at the hold after a Z-push, talking MCU, speech-ready.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "talking"
+    ]
+  },
+  {
+    "id": "vir_crowd_part_walk",
+    "label": "Crowd-part walk to camera",
+    "clause": "Walk through a parting crowd toward camera, shoulders wiping, then a MCU land.",
+    "still": "Frozen walking through a parting crowd toward camera, shoulders wiping, MCU approaching.",
+    "wan_token": "",
+    "audio": "Crowd murmur.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "hook"
+    ]
+  },
+  {
+    "id": "vir_umbrella_open_hook",
+    "label": "Umbrella-open hook",
+    "clause": "Open an umbrella toward camera as the first-frame bloom, then a rain-walk, the dome as a cut to weather.",
+    "still": "Frozen at umbrella-open bloom toward camera, rain implied, the dome filling the frame.",
+    "wan_token": "",
+    "audio": "Fabric whoosh and rain.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hook",
+      "weather"
+    ]
+  }
+]

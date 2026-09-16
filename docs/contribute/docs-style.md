@@ -55,6 +55,8 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` `on_post
 
 **Workflow details:** `python3 docs/generate_workflow_docs.py` (also `make docs`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.34.6 / lab `INPUT_TYPES`. Hooks inject the pages under Create → Workflow details from `manifest.json`.
 
+**Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Playbook: [Cinema Rack](../create/cinema-rack.md).
+
 **Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
 
 Safety callouts: `!!! danger` / `!!! warning` for occupancy XOR, `restart: "no"`, headroom, download-limit, licenses.

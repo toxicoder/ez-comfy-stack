@@ -1,0 +1,564 @@
+{
+  "id": "cinema-rack",
+  "revision": 1,
+  "last_node_id": 5,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        1340,
+        360.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## inspire/cinema-rack\n\nCinema Rack \u2014 pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a **Subject** (who/what). Leave empty to splice techniques only.\n2. Optional **Recipe** fills empty axes. Explicit dropdowns win.\n3. Pick at most one technique per axis (shot size, angle, move, lens, \u2026).\n4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).\n5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.\n6. Copy the family you need into **klein/still-draft** or an I2V graph.\n\nWan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.\nCinema Rack is deterministic (no LLM). Enhance is optional downstream.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 5,
+      "type": "EZCinemaRack",
+      "pos": [
+        40,
+        496.0
+      ],
+      "size": [
+        1340,
+        420.0
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            1,
+            2,
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "notes",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZCinemaRack"
+      },
+      "widgets_values": [
+        "A techno wizard on a sunny tropical city rooftop.",
+        "klein",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none",
+        "none"
+      ],
+      "title": "Cinema Rack"
+    },
+    {
+      "id": 2,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        40,
+        992.0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 1,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "A techno wizard on a sunny tropical city rooftop.",
+        true,
+        "t2i",
+        "YouTube 16:9 still",
+        "none",
+        "inspire/cinema-rack"
+      ],
+      "title": "Klein family"
+    },
+    {
+      "id": 3,
+      "type": "EZWanPromptEnhance",
+      "pos": [
+        500,
+        992.0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZWanPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "A techno wizard on a sunny tropical city rooftop.",
+        true,
+        "t2v",
+        "5 seconds, 24 fps",
+        "none",
+        "inspire/cinema-rack"
+      ],
+      "title": "Wan family"
+    },
+    {
+      "id": 4,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        960,
+        992.0
+      ],
+      "size": [
+        420,
+        380
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "A techno wizard on a sunny tropical city rooftop.",
+        true,
+        "t2v",
+        "5 seconds, 24 fps",
+        "world SFX, no score",
+        "none",
+        "inspire/cinema-rack"
+      ],
+      "title": "LTX family"
+    }
+  ],
+  "links": [
+    [
+      1,
+      5,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      5,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      5,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      2,
+      0,
+      4,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1380,
+        416.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "RACK",
+      "bounding": [
+        20,
+        440.0,
+        1380,
+        476.0
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "KLEIN",
+      "bounding": [
+        20,
+        936.0,
+        460,
+        356
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "WAN",
+      "bounding": [
+        480,
+        936.0,
+        460,
+        356
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "LTX",
+      "bounding": [
+        940,
+        936.0,
+        460,
+        436
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "inspire/cinema-rack",
+    "lab_note": "## inspire/cinema-rack\n\nCinema Rack \u2014 pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a **Subject** (who/what). Leave empty to splice techniques only.\n2. Optional **Recipe** fills empty axes. Explicit dropdowns win.\n3. Pick at most one technique per axis (shot size, angle, move, lens, \u2026).\n4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).\n5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.\n6. Copy the family you need into **klein/still-draft** or an I2V graph.\n\nWan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.\nCinema Rack is deterministic (no LLM). Enhance is optional downstream.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "No-UNET Cinema Rack: splice cinematography axes into Klein / Wan / LTX",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_rel": "inspire/cinema-rack",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "inspire",
+      "occupancy": "llm",
+      "enhance_off_identity": false,
+      "handoff": [
+        "inspire/prompt-forge",
+        "klein/still-draft"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          5,
+          "subject",
+          {
+            "description": "Who or what is in the shot. Cinema Rack splices technique clauses after this.",
+            "label": "Subject",
+            "height": 140
+          }
+        ],
+        [
+          5,
+          "recipe",
+          {
+            "description": "Named splice that fills empty axes only. Explicit dropdowns win.",
+            "label": "Recipe"
+          }
+        ],
+        [
+          5,
+          "flavor",
+          {
+            "description": "klein / wan_t2v / ltx_t2v (and edit, identity, i2v). Wan emits one camera verb.",
+            "label": "Family"
+          }
+        ],
+        [
+          5,
+          "framing_shot_size",
+          {
+            "description": "How much of the subject fills the frame.",
+            "label": "Shot size"
+          }
+        ],
+        [
+          5,
+          "camera_angles",
+          {
+            "description": "Camera height and subject-relative angle.",
+            "label": "Angle"
+          }
+        ],
+        [
+          5,
+          "camera_movement",
+          {
+            "description": "The single camera verb. Wan uses this token only.",
+            "label": "Camera move"
+          }
+        ],
+        [
+          5,
+          "lenses_optics",
+          {
+            "description": "Focal length, depth of field, and optic character.",
+            "label": "Lens"
+          }
+        ],
+        [
+          5,
+          "composition",
+          {
+            "description": "Where masses sit in the frame.",
+            "label": "Composition"
+          }
+        ],
+        [
+          5,
+          "lighting",
+          {
+            "description": "Key quality, direction, and motivation.",
+            "label": "Lighting"
+          }
+        ],
+        [
+          5,
+          "color_film_look",
+          {
+            "description": "Grade, grain, and photochemical grammar. No stock names.",
+            "label": "Color"
+          }
+        ],
+        [
+          5,
+          "time_motion",
+          {
+            "description": "Shutter, speed, and temporal grammar.",
+            "label": "Time"
+          }
+        ],
+        [
+          5,
+          "in_camera_optical",
+          {
+            "description": "Flare, zoom, and in-camera tricks.",
+            "label": "Optical FX"
+          }
+        ],
+        [
+          5,
+          "editing_transitions",
+          {
+            "description": "Named cuts. Omitted on Klein stills.",
+            "label": "Edit"
+          }
+        ],
+        [
+          5,
+          "atmosphere_weather",
+          {
+            "description": "Air, precip, and ground. LTX interleaves foley.",
+            "label": "Weather"
+          }
+        ],
+        [
+          5,
+          "genre_looks",
+          {
+            "description": "Genre lighting and texture grammar, not a titled film.",
+            "label": "Genre"
+          }
+        ],
+        [
+          5,
+          "viral_looks",
+          {
+            "description": "Short-form hook grammar. I2V drops look axes.",
+            "label": "Viral look"
+          }
+        ],
+        [
+          2,
+          "style",
+          {
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Klein style"
+          }
+        ],
+        [
+          3,
+          "style",
+          {
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Wan style"
+          }
+        ],
+        [
+          4,
+          "style",
+          {
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "LTX style"
+          }
+        ],
+        [
+          2,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite Klein"
+          }
+        ],
+        [
+          3,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite Wan"
+          }
+        ],
+        [
+          4,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite LTX"
+          }
+        ],
+        [
+          4,
+          "audio_notes",
+          {
+            "description": "World SFX to interleave. No score unless you asked for music.",
+            "label": "Audio notes",
+            "height": 80
+          }
+        ]
+      ],
+      "outputs": [
+        2,
+        3,
+        4
+      ]
+    },
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "EZKleinPromptEnhance",
+      "EZLTXPromptEnhance",
+      "EZWanPromptEnhance"
+    ]
+  },
+  "version": 0.4
+}

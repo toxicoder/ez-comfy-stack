@@ -67,6 +67,7 @@ tags: [workflows, generated, comfyui]
 | Graph | Page |
 | --- | --- |
 | `inspire/beat-sheet` | [inspire/beat-sheet.md](inspire/beat-sheet.md) |
+| `inspire/cinema-rack` | [inspire/cinema-rack.md](inspire/cinema-rack.md) |
 | `inspire/prompt-forge` | [inspire/prompt-forge.md](inspire/prompt-forge.md) |
 | `inspire/research-chat` | [inspire/research-chat.md](inspire/research-chat.md) |
 

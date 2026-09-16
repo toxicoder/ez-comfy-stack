@@ -1,0 +1,1967 @@
+[
+  {
+    "id": "size_ecu",
+    "label": "Extreme Close-Up",
+    "clause": "Fill the rectangle with a fragment of face so pores, a catchlight, and one eyebrow become the entire landscape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_ecu_iris",
+    "label": "Iris Insert",
+    "clause": "Crop until a single iris, pupil, and catchlight occupy the whole pane, lashes grazing the edges.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_ecu_tear",
+    "label": "Tear Insert",
+    "clause": "Isolate a tear on a cheek so the droplet and skin grain replace any sense of a full face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_ecu_mouth",
+    "label": "Mouth Insert",
+    "clause": "Fill the pane with lips and teeth so speech becomes a moving landscape of moisture and enamel.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_ecu_breath",
+    "label": "Breath Insert",
+    "clause": "Crop to nostrils and upper lip so exhaled vapor or a tremor is the only action.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_choker",
+    "label": "Choker",
+    "clause": "Crop just under the chin and through the hairline so the neck almost vanishes and the face feels too close.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close"
+    ]
+  },
+  {
+    "id": "size_ecu_ear",
+    "label": "Ear Insert",
+    "clause": "Let an ear, earring, and a strip of jaw own the rectangle, the rest of the head implied offscreen.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_ecu_hands",
+    "label": "Hands Insert",
+    "clause": "Fill with fingers working an object so knuckles, tendons, and the tool become the scene.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_handshake",
+    "label": "Handshake Insert",
+    "clause": "Crop two meeting palms so the grip and ring fingers tell the deal.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_palm",
+    "label": "Palm Insert",
+    "clause": "Open a single palm toward the lens until creases and a held token fill the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_fingertips",
+    "label": "Fingertip Insert",
+    "clause": "Magnify fingertips on a surface so prints, grit, and contact are the story.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_feet",
+    "label": "Feet Insert",
+    "clause": "Crop to shoes and pavement so gait, scuff, and the next step own the picture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_toes",
+    "label": "Toes Insert",
+    "clause": "Isolate bare toes on tile so nails and grout lines replace the body.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_ecu_ankles",
+    "label": "Ankle Insert",
+    "clause": "Hold ankles and hems so standing weight and a puddle tell the wait.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "body"
+    ]
+  },
+  {
+    "id": "size_insert_ring",
+    "label": "Ring Insert",
+    "clause": "Magnify a ring on a finger against cloth so metal and fabric are the only readable objects.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_key",
+    "label": "Key Insert",
+    "clause": "Crop a key entering a lock so bitting and the keyhole eclipse the hand.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_drink",
+    "label": "Drink Insert",
+    "clause": "Fill with a glass rim, liquid, and condensation so the pour is the event.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_document",
+    "label": "Document Insert",
+    "clause": "Hold unmarked paper so blocks of type, a stamp, and a signature fill the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_product",
+    "label": "Product Insert",
+    "clause": "Pack a product so its silhouette and a specular edge sit in a clean field.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_label",
+    "label": "Label Insert",
+    "clause": "Crop an unmarked bottle label so paper fiber, glue line, and letterforms are readable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_screen",
+    "label": "Screen Insert",
+    "clause": "Fill with a glowing unmarked display so interface glow, not the room, owns exposure.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_phone",
+    "label": "Handheld Screen",
+    "clause": "Crop a handheld screen in palms so the glow lights fingers and the room falls away.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_insert_clock",
+    "label": "Clock Cutaway",
+    "clause": "Cut away to a clock face so hands and numerals announce time without the people.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cutaway"
+    ]
+  },
+  {
+    "id": "size_insert_food",
+    "label": "Food Insert",
+    "clause": "Magnify a bite on a plate so steam, sauce, and garnish become terrain.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_bcu",
+    "label": "Big Close-Up",
+    "clause": "Crop brow to mouth so eyes and nostrils dominate, forehead and chin clipped.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close"
+    ]
+  },
+  {
+    "id": "size_cu",
+    "label": "Close-Up",
+    "clause": "Hold a face from mid-forehead to just below the chin with shoulders only hinted.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close"
+    ]
+  },
+  {
+    "id": "size_mcu",
+    "label": "Medium Close-Up",
+    "clause": "Cut at mid-chest so face, neck, and a collar sit with breathing room above the hair.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close"
+    ]
+  },
+  {
+    "id": "size_head_shoulders",
+    "label": "Head and Shoulders",
+    "clause": "Include both shoulders and the full head so posture reads before expression.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "close"
+    ]
+  },
+  {
+    "id": "size_ms",
+    "label": "Medium Shot",
+    "clause": "Cut at the waist so hands can enter, belt visible, environment a muted band behind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_cowboy",
+    "label": "Cowboy",
+    "clause": "Cut mid-thigh so a belt line, holster height, and torso read as a standing figure of action.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_leaner",
+    "label": "Leaner",
+    "clause": "Let a figure lean into the pane from the edge so torso and face arrive while hips stay offscreen.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_mls",
+    "label": "Medium Long Shot",
+    "clause": "Cut at the shins so knees, stride, and most of the body read against a readable room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_knee",
+    "label": "Knee Shot",
+    "clause": "Cut at the knees so gesture from thigh up is complete and the floor is only a strip.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_full",
+    "label": "Full Shot",
+    "clause": "Include head to toe with a ribbon of floor and a ribbon of air so the whole costume reads.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "full"
+    ]
+  },
+  {
+    "id": "size_full_grounded",
+    "label": "Grounded Full",
+    "clause": "Plant the feet on the bottom edge with almost no floor, head clearing the top by a breath.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "full"
+    ]
+  },
+  {
+    "id": "size_long",
+    "label": "Long Shot",
+    "clause": "Place a full body small enough that architecture and path around them are equally important.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_very_long",
+    "label": "Very Long Shot",
+    "clause": "Shrink the figure until clothing color becomes a speck and the street or field is the true owner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_ews",
+    "label": "Extreme Wide Shot",
+    "clause": "Hold a landscape or city massing where a person is optional and weather owns the scale.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_els",
+    "label": "Extreme Long Shot",
+    "clause": "Set a traveler tiny on a road or ridge so distance, not expression, is the information.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_ws_interior",
+    "label": "Interior Wide",
+    "clause": "Take in ceiling, floor, and opposing walls so the room becomes a complete box around anyone inside.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_master_int",
+    "label": "Interior Master",
+    "clause": "Cover the whole playing area of a room so every doorway, seat, and crossing is visible at once.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_master_ext",
+    "label": "Exterior Master",
+    "clause": "Hold the building, sidewalk, and approach so geography of the scene is complete before closer coverage.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_establishing",
+    "label": "Establishing",
+    "clause": "Open on the unmarked place from outside so the audience can name the location before any face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_establishing_weather",
+    "label": "Weather Establishing",
+    "clause": "Show the place under current sky so rain, haze, or glare is the first fact.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_establishing_aerial",
+    "label": "Aerial Establishing",
+    "clause": "Survey from altitude so roof, courtyard, and surrounding streets map the site.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_reestablishing",
+    "label": "Re-establishing",
+    "clause": "Return to a broader view after close coverage so the room's new blocking and emptied chairs are clear.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_reestablishing_reverse",
+    "label": "Reverse Re-establish",
+    "clause": "Re-open the scene from the opposite side so previously unseen walls and exits appear.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "size_cutaway_window",
+    "label": "Window Cutaway",
+    "clause": "Cut away to a window view so outside traffic or weather comments without the speakers.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cutaway"
+    ]
+  },
+  {
+    "id": "size_cutaway_crowd",
+    "label": "Crowd Cutaway",
+    "clause": "Cut away to watching faces so reaction, not the action, fills the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cutaway"
+    ]
+  },
+  {
+    "id": "size_cutaway_sky",
+    "label": "Sky Cutaway",
+    "clause": "Cut away to unmarked sky and a roofline so time of day continues without bodies.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cutaway"
+    ]
+  },
+  {
+    "id": "size_cutaway_other_hands",
+    "label": "Other Hands Cutaway",
+    "clause": "Cut away to someone else's hands elsewhere in the room doing a private task.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cutaway"
+    ]
+  },
+  {
+    "id": "size_insert_prop",
+    "label": "Prop Detail Insert",
+    "clause": "Magnify a story object on a table so scratches and use-wear replace the owners.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_two_shot",
+    "label": "Two-Shot",
+    "clause": "Fit two people in one rectangle so both faces and the air between them are readable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_two_shot_walk",
+    "label": "Walking Two-Shot",
+    "clause": "Hold two walkers side by side so paired stride and shared path fill the width.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_two_shot_seated",
+    "label": "Seated Two-Shot",
+    "clause": "Sit two people at a table so plates, hands, and both torsos share the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_two_shot_profile",
+    "label": "Profile Two-Shot",
+    "clause": "Face two profiles toward each other so noses and the gap between them are the axis.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_fifty_fifty",
+    "label": "Fifty-Fifty",
+    "clause": "Split the rectangle evenly between two facing bodies so neither owns more area than the other.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_power_two",
+    "label": "Power Two-Shot",
+    "clause": "Stand one figure over a seated other so stature, not dialogue, states the rank.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_stacked_two",
+    "label": "Stacked Two-Shot",
+    "clause": "Align one head in front of another so the rear person becomes a stacked halo behind the nearer face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_three_shot",
+    "label": "Three-Shot",
+    "clause": "Arrange three people so all faces read, typically a triangle of seats or shoulders.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_three_shot_line",
+    "label": "Line Three-Shot",
+    "clause": "Line three bodies across the pane so a bench or railing holds them in a row.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_group",
+    "label": "Group Shot",
+    "clause": "Fit a cluster of four or more so relationships of height and huddle are visible.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_group_table",
+    "label": "Table Group",
+    "clause": "Surround a table with a dining or meeting cluster so faces, plates, and the tabletop oval all read.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_crowd_wide",
+    "label": "Crowd Wide",
+    "clause": "Fill the place with a crowd so individuals melt into density and the mass is the owner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_crowd_packed",
+    "label": "Packed Crowd",
+    "clause": "Compress bodies until shoulders and heads tile the rectangle with almost no ground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_crowd_behind",
+    "label": "Behind the Crowd",
+    "clause": "Shoot from among backs of heads so the distant event is glimpsed through a forest of hair.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_figure_in_crowd",
+    "label": "Isolated in Crowd",
+    "clause": "Keep one sharp figure in a sea of softer bodies so isolation reads inside density.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_clean_single",
+    "label": "Clean Single",
+    "clause": "Isolate one person with empty air around them, no other body even as a blur.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_dirty_single",
+    "label": "Dirty Single",
+    "clause": "Keep one person as the focus while a smear of another body or object dirties an edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_profile_single",
+    "label": "Profile Single",
+    "clause": "Turn one person to full profile so the nose-to-nape silhouette is the owner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_profile_walker",
+    "label": "Profile Walker",
+    "clause": "Hold a walking profile so the stride becomes a side-view cutout against the wall.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_ots_dirty_l",
+    "label": "Dirty OTS Left",
+    "clause": "Blur a foreground cheek and ear so the speaker beyond is seen past living flesh.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_dirty_r",
+    "label": "Dirty OTS Right",
+    "clause": "Park a foreground jaw, collar, and shoulder mass as a dark slab the distant face must clear.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_clean_l",
+    "label": "Clean OTS Left",
+    "clause": "Aim past an empty shoulder line with no flesh in the foreground plane, the distant person clean and full.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_clean_r",
+    "label": "Clean OTS Right",
+    "clause": "Use architecture as the shoulder stand-in so the distant face is clean, no cheek in the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_deep",
+    "label": "Deep Over-Shoulder",
+    "clause": "Keep the foreground body large and the distant person small in a doorway so depth, not equality, rules.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_reverse",
+    "label": "Reverse Over-Shoulder",
+    "clause": "Flip to the opposite over-shoulder so the previous listener's face now owns the distant plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_single_front",
+    "label": "Front Single",
+    "clause": "Face one person square to the lens so both ears are hinted and the gaze hits the glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_single_three_q",
+    "label": "Three-Quarter Single",
+    "clause": "Turn the body forty-five degrees so one ear hides and the closer shoulder leads.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_open_frame",
+    "label": "Open Frame",
+    "clause": "Leave an exit of empty air on the travel side so the person could walk out without hitting a wall of the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_closed_frame",
+    "label": "Closed Frame",
+    "clause": "Box the person with door jambs, shelves, or a window grid so the world feels sealed around them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_looking_room",
+    "label": "Looking Room",
+    "clause": "Put extra air in front of the eyes so the gaze has a place to land inside the rectangle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_lead_room",
+    "label": "Lead Room",
+    "clause": "Put extra air in front of a moving body so the path they are about to take is visible.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_short_sided",
+    "label": "Short-Sided",
+    "clause": "Crowd the face toward the edge they stare at so the back of the head sits in empty air and the gaze feels trapped.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_nose_room",
+    "label": "Nose Room",
+    "clause": "Give a profile extra air beyond the nose so the face is not kissing the edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_foot_room",
+    "label": "Foot Room",
+    "clause": "Include a strip of floor beyond the toes so stance and the next step have ground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_crushed_headroom",
+    "label": "Crushed Headroom",
+    "clause": "Let the crown graze or break the top edge so the ceiling feels too close.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_generous_headroom",
+    "label": "Generous Headroom",
+    "clause": "Stack extra air above the hair so the person sits sunk and the architecture towers.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_doorway_frame",
+    "label": "Doorway Frame",
+    "clause": "Nest the person in a doorway so the jambs crop them as a picture inside the picture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_arch_frame",
+    "label": "Arch Frame",
+    "clause": "Nest the figure under an arch so stone or plaster curves become a second rectangle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_mirror_frame",
+    "label": "Mirror Frame",
+    "clause": "Hold the person only as a reflection so the real body is offscreen and glass is the set.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "headroom"
+    ]
+  },
+  {
+    "id": "size_169_presenter",
+    "label": "16:9 Presenter Headroom",
+    "clause": "Sit a talking head in sixteen-by-nine with a band of empty wall above the hair and a desk line holding the lower third.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_169_landscape",
+    "label": "16:9 Landscape",
+    "clause": "Spread a place across sixteen-by-nine so the horizon sits on a third and unmarked sky becomes a lid.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_169_two",
+    "label": "16:9 Conversation",
+    "clause": "Fit a seated pair in sixteen-by-nine so both faces live in the middle band with lamps in the side panels.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_916_standing",
+    "label": "9:16 Standing Full",
+    "clause": "Stack a standing person in nine-by-sixteen from shoes to hair with pavement below and sky leftover for a caption band.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_916_face",
+    "label": "9:16 Face Stack",
+    "clause": "Fill nine-by-sixteen with a face in the upper half and torso falling away so the chin sits above the true center.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_916_upward",
+    "label": "9:16 Upward Room",
+    "clause": "Put a figure in the lower half of nine-by-sixteen and let building or trees rise through the tall leftover air.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_45_portrait",
+    "label": "4:5 Face-Plate Headroom",
+    "clause": "Crop a four-by-five face plate so the crown nearly kisses the top and the chest pins the bottom, shoulders almost touching sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_45_three_q",
+    "label": "4:5 Three-Quarter Body",
+    "clause": "Fit head-to-thighs in four-by-five so fashion length reads without empty pavement.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_45_place",
+    "label": "4:5 Place Plate",
+    "clause": "Stand a building in four-by-five with ground in the lower third and the facade climbing the remaining height.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_11_face",
+    "label": "1:1 Centered Face",
+    "clause": "Center a face in a square with equal cheek margin and the chin hovering just above the bottom edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_11_product",
+    "label": "1:1 Product Square",
+    "clause": "Center a product in a square with equal empty field so the object becomes a heraldic badge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_11_courtyard",
+    "label": "1:1 Courtyard",
+    "clause": "Map a courtyard or room in a square so floor-plan geometry, not a horizon, organizes the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_239_figure",
+    "label": "2.39 Tiny Figure",
+    "clause": "Float a small walker in a two-three-nine ribbon with empty bay or desert stretching on both sides of the body.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_239_pair",
+    "label": "2.39 Pair",
+    "clause": "Seat two people far apart in a two-three-nine ribbon so the long silence of furniture between them is the true width.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_239_interior",
+    "label": "2.39 Interior Span",
+    "clause": "Span a long interior in a two-three-nine ribbon so lamps recede in a line and the ceiling becomes a thin strip.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_185_room",
+    "label": "1.85 Room",
+    "clause": "Fit ceiling and floor of a room in one-eight-five with modest hair-to-top air so a standing person occupies the middle band.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_185_close",
+    "label": "1.85 Close Face",
+    "clause": "Place a close face in one-eight-five with extra side air so cheeks do not hit the edges and the background stays a thin story.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_185_street",
+    "label": "1.85 Street",
+    "clause": "Hold a street in one-eight-five with modest sky and readable shopfronts, less panoramic than a two-three-nine ribbon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_169_lower_clear",
+    "label": "16:9 Lower-Third Clear",
+    "clause": "Keep sixteen-by-nine torso and face raised enough that the bottom fifth is empty wall or desk for later type.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_916_lower_safe",
+    "label": "9:16 Lower Safe",
+    "clause": "Keep nine-by-sixteen feet and hands out of the bottom fifth so interface chrome could sit on pavement.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_45_top_safe",
+    "label": "4:5 Top Safe",
+    "clause": "Keep four-by-five hair below a thin top margin so the crown never clips in a four-by-five window.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "size_insert_type_macro",
+    "label": "Macro Type Insert",
+    "clause": "Magnify unmarked type on packaging until letterforms are architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_torso_fashion",
+    "label": "Headless Torso",
+    "clause": "Crop out the head so clothing, hands, and stance are the identity.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "full"
+    ]
+  },
+  {
+    "id": "size_over_table_two",
+    "label": "Over-Table Two-Shot",
+    "clause": "Aim across a tabletop so glasses in the foreground field and two faces beyond the plates share focus.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_single_vs_mass",
+    "label": "Single Against Mass",
+    "clause": "Pin one person at an edge while a crowd occupies the rest, scale stating solitude.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_balcony_group",
+    "label": "Balcony Group",
+    "clause": "Arrange several people on a balcony rail so bodies stack against a drop of city.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_queue_line",
+    "label": "Queue Line",
+    "clause": "Recede a line of waiting bodies so the queue becomes a perspective machine.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_audience_from_stage",
+    "label": "Audience from Stage",
+    "clause": "Fill with seated watchers from a stage eyeline so rows and faces are the landscape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_stage_from_house",
+    "label": "Stage from House",
+    "clause": "Shoot a distant figure on a platform over a foreground of heads and seat backs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "size_ecu_lashes",
+    "label": "Lash Insert",
+    "clause": "Fill with closed lashes and lid so makeup grain and a tremor replace the eyeball.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_insert_ui",
+    "label": "Interface Insert",
+    "clause": "Hold only an unmarked UI panel so buttons and a cursor, not a face, carry the beat.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_cowboy_seated",
+    "label": "Seated Cowboy",
+    "clause": "Sit a figure so the cowboy cut still shows thighs, belt, and torso, chair arms in the sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "medium"
+    ]
+  },
+  {
+    "id": "size_ews_city_aerial",
+    "label": "Aerial City Extreme",
+    "clause": "Map unmarked city fabric from altitude so blocks and rivers are texture and people vanish.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wide"
+    ]
+  },
+  {
+    "id": "size_profile_on_wall",
+    "label": "Profile Against Wall",
+    "clause": "Pin a profile to a wall so the silhouette becomes a cutout and the room behind is denied.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "single"
+    ]
+  },
+  {
+    "id": "size_ots_high",
+    "label": "High Over-Shoulder",
+    "clause": "Raise the over-shoulder so we see the far scalp and notes on a table, the foreground shoulder a dark hill.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ots_low",
+    "label": "Low Over-Shoulder",
+    "clause": "Drop the over-shoulder so the foreground back becomes a wall and the far face sits against ceiling lamps.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "size_ecu_collar",
+    "label": "Collar Insert",
+    "clause": "Crop to collar, throat, and a pulse so jewelry or a button is the landscape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ecu"
+    ]
+  },
+  {
+    "id": "size_insert_watch",
+    "label": "Watch Insert",
+    "clause": "Magnify an unmarked watch face so hands, crystal, and a wrist hairline own the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "size_full_costume",
+    "label": "Costume Full",
+    "clause": "Hold head-to-toe with generous side air so the entire costume silhouette reads as a fashion plate.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "full"
+    ]
+  },
+  {
+    "id": "size_insert_label_glue",
+    "label": "Glue-Line Label",
+    "clause": "Magnify the glue line and paper edge of an unmarked label until packaging becomes a landscape of fiber.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  }
+]

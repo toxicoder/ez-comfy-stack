@@ -24,6 +24,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup
 - Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX
 - Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
+- **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. [Cinema Rack](create/cinema-rack.md)
 
 !!! tip "Lab graphs already ship model-native prompts"
 
@@ -132,7 +133,7 @@ STRING out → CLIPTextEncode `text` input.
 | Rap tags + lyrics (draft, full, nill-bye) | `[verse]`/`[chorus]`, BPM, `language=en` vs encoder widgets |
 | Drive-through EDM arrangement scores | empty-body `[drop]`/`[inst]`/`[outro]` with cues inside the brackets, BPM; eighty-three takes stay instrumental; two bass-set treats add one 1–2 word `[chorus]` chop (no `[verse]`). Free-text under a marker is sung |
 
-Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
+Lazy Klein stills, identity bibles you type, Klein edit, generic 5s Wan/LTX printers, Prompt Forge, Cinema Rack, and Beat Sheet stay **on**. Dub **Rewrite translation** stays on — that path translates turns, it does not CLIP-rewrite. Identity mode keeps the bible camera-free and still weaves a selected style (medium and texture, no camera). Style is ignored on I2V / FLF / VACE (the start image owns look). Do not Klein-t2i-enhance Prompt Join shot cards.
 
 ```mermaid
 flowchart TD

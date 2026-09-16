@@ -373,6 +373,56 @@ def inject_workflow_nav(config: dict[str, Any]) -> dict[str, Any]:
     return config
 
 
+def inject_cinema_nav(config: dict[str, Any]) -> dict[str, Any]:
+    """Nest generated cinema catalog pages under Start → Cinema Rack.
+
+    Args:
+        config: MkDocs config mapping (mutated in place).
+
+    Returns:
+        The same config mapping.
+    """
+    manifest = Path(__file__).resolve().parent / "generated" / "cinema" / "manifest.json"
+    nav = config.get("nav")
+    if not manifest.is_file() or not isinstance(nav, list):
+        return config
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return config
+    pages = payload.get("pages")
+    if not isinstance(pages, list):
+        return config
+    children: list[Any] = [
+        {"Playbook": "create/cinema-rack.md"},
+        {"All axes": "generated/cinema/index.md"},
+    ]
+    for page in pages:
+        if not isinstance(page, dict) or page.get("kind") == "index":
+            continue
+        label = str(page.get("label") or page.get("id") or "axis")
+        path = str(page.get("path") or "")
+        if path:
+            children.append({label: path})
+
+    def _walk(items: list[Any]) -> list[Any]:
+        out: list[Any] = []
+        for item in items:
+            if isinstance(item, dict) and set(item.keys()) == {"Cinema Rack"}:
+                out.append({"Cinema Rack": children})
+            elif isinstance(item, dict):
+                mapped: dict[str, Any] = {}
+                for key, value in item.items():
+                    mapped[key] = _walk(value) if isinstance(value, list) else value
+                out.append(mapped)
+            else:
+                out.append(item)
+        return out
+
+    config["nav"] = _walk(nav)
+    return config
+
+
 def on_config(config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
     """Stamp ``edit_uri`` and inject generated workflow nav.
 
@@ -387,7 +437,8 @@ def on_config(config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
     """
     del kwargs
     config["edit_uri"] = f"edit/{docs_git_ref()}/docs/"
-    return inject_workflow_nav(config)
+    inject_workflow_nav(config)
+    return inject_cinema_nav(config)
 
 
 def stamp_git_ref(text: str, ref: str | None = None) -> str:

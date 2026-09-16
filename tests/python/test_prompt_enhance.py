@@ -1422,6 +1422,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZAceStepPromptEnhance",
         "EZContextJoin",
         "EZSamplePrompt",
+        "EZCinemaRack",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()

@@ -1,0 +1,2991 @@
+[
+  {
+    "id": "move_pan_left",
+    "label": "Pan left",
+    "clause": "The camera pans left on a locked tripod head, sweeping the unmarked street from the doorway toward the corner lamp.",
+    "still": "Locked as if mid-pan-left, sweeping the unmarked street from the doorway toward the corner lamp.",
+    "wan_token": "pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_whip_pan_left"
+    ],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pan_right",
+    "label": "Pan right",
+    "clause": "The camera pans right on a locked tripod head, letting terrace lanterns drift across the bay slot.",
+    "still": "Locked as if mid-pan-right, letting terrace lanterns drift across the bay slot.",
+    "wan_token": "pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_whip_pan_right"
+    ],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_pan_left",
+    "label": "Slow pan left",
+    "clause": "The camera pans left at crawl speed on a geared head, clouds and distant towers sliding a finger-width at a time.",
+    "still": "Locked as if a crawl pan left frozen, clouds and distant towers sliding a finger-width at a time.",
+    "wan_token": "slow pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_pan_right",
+    "label": "Slow pan right",
+    "clause": "The camera pans right at crawl speed on a geared head, a long colonnade revealing one column after another.",
+    "still": "Locked as if a crawl pan right frozen, a long colonnade revealing one column after another.",
+    "wan_token": "slow pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_whip_pan_left",
+    "label": "Whip pan left",
+    "clause": "The camera whips left in a blurred pan, streaking practicals into unreadable color bands.",
+    "still": "Locked as if a whip-pan smear frozen mid-blur, streaking practicals into unreadable color bands.",
+    "wan_token": "whip pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_pan_left",
+      "move_locked_off"
+    ],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_whip_pan_right",
+    "label": "Whip pan right",
+    "clause": "The camera whips right in a blurred pan, neon shopfronts collapsing into horizontal streaks.",
+    "still": "Locked as if a whip-pan smear frozen mid-blur, neon shopfronts collapsing into horizontal streaks.",
+    "wan_token": "whip pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_pan_right",
+      "move_locked_off"
+    ],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_search_pan",
+    "label": "Search pan",
+    "clause": "The camera pans in a searching arc on a fluid head, hunting a doorway then overshooting and correcting.",
+    "still": "Locked as if mid-search pan, hunting a doorway then overshooting and correcting.",
+    "wan_token": "pan",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_tilt_up",
+    "label": "Tilt up",
+    "clause": "The camera tilts up from a locked tripod, rising from pavement grit to the unmarked crown of the tower.",
+    "still": "Locked as if mid-tilt-up, rising from pavement grit to the unmarked crown of the tower.",
+    "wan_token": "tilt up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_tilt_down",
+    "label": "Tilt down",
+    "clause": "The camera tilts down from a locked tripod, dropping from sky to the subject's hands and the teak deck.",
+    "still": "Locked as if mid-tilt-down, dropping from sky to the subject's hands and the teak deck.",
+    "wan_token": "tilt down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_tilt_up",
+    "label": "Slow tilt up",
+    "clause": "The camera tilts up at crawl speed, a facade unrolling floor by floor.",
+    "still": "Locked as if a crawl tilt-up frozen, a facade unrolling floor by floor.",
+    "wan_token": "slow tilt up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_tilt_down",
+    "label": "Slow tilt down",
+    "clause": "The camera tilts down at crawl speed, a tree canopy giving way to roots and wet soil.",
+    "still": "Locked as if a crawl tilt-down frozen, a tree canopy giving way to roots and wet soil.",
+    "wan_token": "slow tilt down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_snap_tilt_up",
+    "label": "Snap tilt up",
+    "clause": "The camera snaps tilt up in one accent, punching from shoes to sky in a single jerk.",
+    "still": "Locked as if a snap tilt frozen at the top, punching from shoes to sky in a single jerk.",
+    "wan_token": "tilt up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_nod_tilt",
+    "label": "Nod tilt",
+    "clause": "The camera tilts in a small nodding search, checking the subject's face then the object in their hands.",
+    "still": "Locked as if a nodding tilt frozen, checking the subject's face then the object in their hands.",
+    "wan_token": "tilt",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_dutch_roll",
+    "label": "Dutch roll",
+    "clause": "The camera rolls the horizon off-level while holding position, the floor line tilting as if the room lost its balance.",
+    "still": "Locked as if a canted roll frozen, the floor line tilting as if the room lost its balance.",
+    "wan_token": "roll",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "move_level_out",
+    "label": "Level out",
+    "clause": "The camera rolls from a canted horizon back to level, the verticals of the tower standing up straight again.",
+    "still": "Locked as if mid-level-out from a dutch, the verticals of the tower standing up straight again.",
+    "wan_token": "roll",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "move_dolly_in",
+    "label": "Dolly in",
+    "clause": "The camera dollies in on a locked wheeled support, tightening without zooming, the subject's face growing while background geometry stays honest.",
+    "still": "Locked as if mid-dolly-in, the subject's face growing while background geometry stays honest.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "fx_crash_zoom",
+      "opt_zoom_in"
+    ],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_dolly_out",
+    "label": "Dolly out",
+    "clause": "The camera dollies out on a locked wheeled support, widening without zooming, the room expanding around a still figure.",
+    "still": "Locked as if mid-dolly-out, the room expanding around a still figure.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "opt_zoom_out"
+    ],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_dolly_in",
+    "label": "Slow dolly in",
+    "clause": "The camera creeps in on silent dolly wheels, breath and blinks becoming the only motion in a shrinking frame.",
+    "still": "Locked as if a crawl dolly-in frozen, breath and blinks becoming the only motion in a shrinking frame.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_dolly_out",
+    "label": "Slow dolly out",
+    "clause": "The camera creeps out on silent dolly wheels, isolation growing as walls recede.",
+    "still": "Locked as if a crawl dolly-out frozen, isolation growing as walls recede.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crash_dolly_in",
+    "label": "Crash dolly in",
+    "clause": "The camera crashes in on a fast dolly, the background ripping past in a sudden close-up.",
+    "still": "Locked as if a crash dolly-in frozen on a tight face, the background ripping past in a sudden close-up.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_slow_dolly_in"
+    ],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_dolly_zoom_in",
+    "label": "Dolly zoom in",
+    "clause": "The camera dollies in while zooming out so the subject size holds and space warps, the corridor stretching while the face stays the same size.",
+    "still": "Locked as if a dolly-zoom warp frozen, the corridor stretching while the face stays the same size.",
+    "wan_token": "dolly zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in",
+      "opt_zoom_out"
+    ],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_dolly_zoom_out",
+    "label": "Dolly zoom out",
+    "clause": "The camera dollies out while zooming in so the subject size holds and space crushes, the world flattening behind a face that does not grow.",
+    "still": "Locked as if a reverse dolly-zoom frozen, the world flattening behind a face that does not grow.",
+    "wan_token": "dolly zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_out",
+      "opt_zoom_in"
+    ],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_tracking_left",
+    "label": "Tracking left",
+    "clause": "The camera tracks left parallel to the subject, keeping pace beside a walk along a wet unmarked arcade.",
+    "still": "Locked as if mid-tracking-left, keeping pace beside a walk along a wet unmarked arcade.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_tracking_right",
+    "label": "Tracking right",
+    "clause": "The camera tracks right parallel to the subject, matching stride along a night rail over the bay.",
+    "still": "Locked as if mid-tracking-right, matching stride along a night rail over the bay.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_lead_tracking",
+    "label": "Lead tracking",
+    "clause": "The camera tracks ahead of the subject, looking back, the walker advancing toward camera down a long hall.",
+    "still": "Locked as if lead-tracking frozen, the walker advancing toward camera down a long hall.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_chase_tracking",
+    "label": "Chase tracking",
+    "clause": "The camera tracks behind the subject, following, the back of a coat leading into an unmarked tunnel.",
+    "still": "Locked as if chase-tracking frozen, the back of a coat leading into an unmarked tunnel.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_lateral_truck_left",
+    "label": "Truck left",
+    "clause": "The camera trucks left on a perpendicular axis, sliding past a row of columns that wipe the frame.",
+    "still": "Locked as if mid-truck-left, sliding past a row of columns that wipe the frame.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_lateral_truck_right",
+    "label": "Truck right",
+    "clause": "The camera trucks right on a perpendicular axis, a storefront sequence wiping by like cards.",
+    "still": "Locked as if mid-truck-right, a storefront sequence wiping by like cards.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pedestal_up",
+    "label": "Pedestal up",
+    "clause": "The camera pedestals straight up with no tilt, the horizon staying level while the camera rises past a railing.",
+    "still": "Locked as if mid-pedestal-up, the horizon staying level while the camera rises past a railing.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pedestal_down",
+    "label": "Pedestal down",
+    "clause": "The camera pedestals straight down with no tilt, sinking from standing height to the grain of the floorboards.",
+    "still": "Locked as if mid-pedestal-down, sinking from standing height to the grain of the floorboards.",
+    "wan_token": "boom down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crane_up",
+    "label": "Crane up",
+    "clause": "The camera cranes up on a jib arm, the terrace shrinking as rooftops and bay enter the top of frame.",
+    "still": "Locked as if mid-crane-up, the terrace shrinking as rooftops and bay enter the top of frame.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crane_down",
+    "label": "Crane down",
+    "clause": "The camera cranes down on a jib arm, descending from weather into a private face.",
+    "still": "Locked as if mid-crane-down, descending from weather into a private face.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crane_in",
+    "label": "Crane in",
+    "clause": "The camera cranes on an arc that also pushes in, arriving from above into an intimate two-shot.",
+    "still": "Locked as if mid-crane-in, arriving from above into an intimate two-shot.",
+    "wan_token": "crane in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_crane_reveal",
+    "label": "Crane reveal",
+    "clause": "The camera cranes up and over a foreground occluder, a parapet dropping away to show the whole unmarked plaza.",
+    "still": "Locked as if a crane-reveal frozen past the occluder, a parapet dropping away to show the whole unmarked plaza.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_jib_sweep",
+    "label": "Jib sweep",
+    "clause": "The camera sweeps a short jib in a smiling arc, the camera scooping from low dirt to eye-level in one piece.",
+    "still": "Locked as if mid-jib-sweep, the camera scooping from low dirt to eye-level in one piece.",
+    "wan_token": "crane",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_arm_over",
+    "label": "Long arm over",
+    "clause": "The camera swings a long arm over the set, looking down the dining table as if from a gallery.",
+    "still": "Locked as if a long-arm-over frozen, looking down the dining table as if from a gallery.",
+    "wan_token": "crane",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slider_left",
+    "label": "Slider left",
+    "clause": "The camera slides left on a short rail, a product on a table gaining a new three-quarter.",
+    "still": "Locked as if mid-slider-left, a product on a table gaining a new three-quarter.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slider_right",
+    "label": "Slider right",
+    "clause": "The camera slides right on a short rail, parallax shifting a bottle against a soft practical.",
+    "still": "Locked as if mid-slider-right, parallax shifting a bottle against a soft practical.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slider_in",
+    "label": "Slider in",
+    "clause": "The camera slides in on a short rail aimed at the subject, a tabletop hero growing without a zoom.",
+    "still": "Locked as if mid-slider-in, a tabletop hero growing without a zoom.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slider_push_low",
+    "label": "Low slider push",
+    "clause": "The camera slides in from ankle height, floorboards racing toward a seated figure.",
+    "still": "Locked as if a low slider-push frozen, floorboards racing toward a seated figure.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_steadicam_follow",
+    "label": "Stabilized follow",
+    "clause": "The camera follows on a body-worn stabilizer, the operator floating through a doorway without foot-thud shake.",
+    "still": "Locked as if a stabilized follow frozen, the operator floating through a doorway without foot-thud shake.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stabilized"
+    ]
+  },
+  {
+    "id": "move_steadicam_lead",
+    "label": "Stabilized lead",
+    "clause": "The camera leads on a body-worn stabilizer, walking backward, the subject walking toward a floating lens down a corridor.",
+    "still": "Locked as if a stabilized lead frozen, the subject walking toward a floating lens down a corridor.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stabilized"
+    ]
+  },
+  {
+    "id": "move_gimbal_orbit",
+    "label": "Gimbal orbit",
+    "clause": "The camera orbits on a handheld gimbal, circling a standing figure while the horizon stays locked.",
+    "still": "Locked as if mid-gimbal-orbit, circling a standing figure while the horizon stays locked.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stabilized"
+    ]
+  },
+  {
+    "id": "move_gimbal_rise",
+    "label": "Gimbal rise",
+    "clause": "The camera rises on a handheld gimbal from kneel to stand, the lens lifting with the operator's legs, horizon true.",
+    "still": "Locked as if a gimbal-rise frozen, the lens lifting with the operator's legs, horizon true.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stabilized"
+    ]
+  },
+  {
+    "id": "move_handheld_breathe",
+    "label": "Handheld breathe",
+    "clause": "The camera holds handheld with living micro-sway, the frame inhaling with the operator, never locked.",
+    "still": "Locked as if handheld breath frozen mid-sway, the frame inhaling with the operator, never locked.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "handheld"
+    ]
+  },
+  {
+    "id": "move_handheld_walk",
+    "label": "Handheld walk",
+    "clause": "The camera walks handheld, documenting from inside the group, shoulders and footsteps leaking into the frame edges.",
+    "still": "Locked as if a handheld walk frozen, shoulders and footsteps leaking into the frame edges.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "handheld"
+    ]
+  },
+  {
+    "id": "move_handheld_run",
+    "label": "Handheld run",
+    "clause": "The camera runs handheld, horizon fighting to stay useful, pavement shock and pumping arms in a chase document.",
+    "still": "Locked as if a running handheld frozen, pavement shock and pumping arms in a chase document.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "handheld",
+      "energy"
+    ]
+  },
+  {
+    "id": "move_shoulder_doc",
+    "label": "Shoulder documentary",
+    "clause": "The camera rides a shoulder pad in observational mode, a slightly high documentary eyeline with organic drift.",
+    "still": "Locked as if shoulder-doc frozen, a slightly high documentary eyeline with organic drift.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "handheld"
+    ]
+  },
+  {
+    "id": "move_bodycam_sprint",
+    "label": "Body-cam sprint",
+    "clause": "The camera sprints as a chest-mounted body-cam, only the wearer's sleeves along the bottom edge, landing filling the center.",
+    "still": "Locked as if a chest-cam sprint frozen, only the wearer's sleeves along the bottom edge, landing filling the center.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "move_bodycam_lookdown",
+    "label": "Body-cam look-down",
+    "clause": "The camera looks down as a chest-mounted body-cam, gloves and the next foothold filling the lower frame.",
+    "still": "Locked as if chest-cam looking down frozen, gloves and the next foothold filling the lower frame.",
+    "wan_token": "tilt down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "move_fpv_dive",
+    "label": "FPV dive",
+    "clause": "The camera dives as a first-person flyer, the plaza rushing up, lens screaming toward a landing mark.",
+    "still": "Locked as if an FPV dive frozen, the plaza rushing up, lens screaming toward a landing mark.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone",
+      "energy"
+    ]
+  },
+  {
+    "id": "move_fpv_through",
+    "label": "FPV through",
+    "clause": "The camera threads a gap as a first-person flyer, a doorway or railing whipping past at the frame edges.",
+    "still": "Locked as if an FPV gap-thread frozen, a doorway or railing whipping past at the frame edges.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_drone_orbit",
+    "label": "Drone orbit",
+    "clause": "The camera orbits at mid altitude on a quiet multirotor, the unmarked tower turning against the bay.",
+    "still": "Locked as if a drone orbit frozen, the unmarked tower turning against the bay.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_drone_rise",
+    "label": "Drone rise",
+    "clause": "The camera rises on a quiet multirotor, the building shrinking into a city of unmarked glass.",
+    "still": "Locked as if a drone rise frozen, the building shrinking into a city of unmarked glass.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_drone_descend",
+    "label": "Drone descend",
+    "clause": "The camera descends on a quiet multirotor, weather giving way to terrace furniture and palms.",
+    "still": "Locked as if a drone descend frozen, weather giving way to terrace furniture and palms.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_drone_reveal_ridge",
+    "label": "Drone ridge reveal",
+    "clause": "The camera flies up over a ridge or parapet, the hidden plaza blooming into frame past stone.",
+    "still": "Locked as if a ridge-reveal frozen, the hidden plaza blooming into frame past stone.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone",
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_drone_topdown",
+    "label": "Drone top-down",
+    "clause": "The camera holds a nadir descent, plan-view massing of roof and courtyard tightening.",
+    "still": "Locked as if a nadir descent frozen, plan-view massing of roof and courtyard tightening.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_drone_push_in",
+    "label": "Drone push in",
+    "clause": "The camera pushes in from altitude toward a figure, a person on a roof growing from a speck to a readable body.",
+    "still": "Locked as if a high push-in frozen, a person on a roof growing from a speck to a readable body.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_cable_traverse",
+    "label": "Cable traverse",
+    "clause": "The camera traverses on an overhead cable, the street sliding under a high centerline path.",
+    "still": "Locked as if a cable-cam traverse frozen, the street sliding under a high centerline path.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cable"
+    ]
+  },
+  {
+    "id": "move_cable_descend",
+    "label": "Cable descend",
+    "clause": "The camera descends along a cable toward a crowd, faces rising to meet a falling overhead lens.",
+    "still": "Locked as if a cable descend frozen, faces rising to meet a falling overhead lens.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cable"
+    ]
+  },
+  {
+    "id": "move_vehicle_side",
+    "label": "Vehicle side mount",
+    "clause": "The camera rides a side-mounted vehicle camera, asphalt and lane lines streaking under a door-line lens.",
+    "still": "Locked as if a vehicle side-mount frozen, asphalt and lane lines streaking under a door-line lens.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_vehicle_hood",
+    "label": "Vehicle hood mount",
+    "clause": "The camera rides a hood-mounted camera looking aft, the driver and windscreen filling the frame as city smears behind.",
+    "still": "Locked as if a hood-mount frozen, the driver and windscreen filling the frame as city smears behind.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_vehicle_chase",
+    "label": "Vehicle chase",
+    "clause": "The camera chases from a second vehicle, the lead car framed through a windshield, road vibration alive.",
+    "still": "Locked as if a vehicle chase frozen, the lead car framed through a windshield, road vibration alive.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_undercrank_handheld",
+    "label": "Undercranked handheld",
+    "clause": "The camera moves handheld with silent-era undercrank energy, jerky comic haste in every step.",
+    "still": "Locked as if undercranked handheld frozen, jerky comic haste in every step.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "handheld",
+      "time"
+    ]
+  },
+  {
+    "id": "move_locked_off",
+    "label": "Locked off",
+    "clause": "The camera holds a locked-off tripod, zero drift, architecture and body both pinned, only subject motion allowed.",
+    "still": "Locked as if a perfectly locked still frame, architecture and body both pinned, only subject motion allowed.",
+    "wan_token": "fixed camera",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_handheld_breathe",
+      "move_whip_pan_left"
+    ],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_static_then_push",
+    "label": "Hold then push",
+    "clause": "The camera holds locked, then begins a late dolly in, a conversation beat then a slow tightening.",
+    "still": "Locked as if the hold-before-push frozen on the still beat, a conversation beat then a slow tightening.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_push_then_hold",
+    "label": "Push then hold",
+    "clause": "The camera dollies in and lands on a locked close frame, motion dying as the eyes fill the frame.",
+    "still": "Locked as if the landed hold after a push, motion dying as the eyes fill the frame.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_orbit_left",
+    "label": "Orbit left",
+    "clause": "The camera orbits left around the subject at constant radius, background sliding the opposite way, face turning through three-quarter.",
+    "still": "Locked as if mid-orbit-left, background sliding the opposite way, face turning through three-quarter.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_orbit_right",
+    "label": "Orbit right",
+    "clause": "The camera orbits right around the subject at constant radius, a product or person rotating against a traveling city.",
+    "still": "Locked as if mid-orbit-right, a product or person rotating against a traveling city.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_arc_left",
+    "label": "Arc left",
+    "clause": "The camera arcs left on a shallow curve, not a full orbit, a doorway opening into a new wall of the room.",
+    "still": "Locked as if mid-arc-left, a doorway opening into a new wall of the room.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_arc_right",
+    "label": "Arc right",
+    "clause": "The camera arcs right on a shallow curve, not a full orbit, a window coming into play as the camera rounds a chair.",
+    "still": "Locked as if mid-arc-right, a window coming into play as the camera rounds a chair.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_circle_360",
+    "label": "Full circle",
+    "clause": "The camera completes a 360-degree orbit, every wall of the room passing once behind the subject.",
+    "still": "Locked as if mid-360-orbit, every wall of the room passing once behind the subject.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_figure_eight",
+    "label": "Figure-eight",
+    "clause": "The camera traces a figure-eight on the floor around two marks, two subjects trading foreground as the path crosses.",
+    "still": "Locked as if a figure-eight path frozen, two subjects trading foreground as the path crosses.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_boom_up_track",
+    "label": "Boom up while tracking",
+    "clause": "The camera booms up while tracking beside the subject, rising from hip to face without losing the walk.",
+    "still": "Locked as if mid-boom-and-track, rising from hip to face without losing the walk.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_boom_down_track",
+    "label": "Boom down while tracking",
+    "clause": "The camera booms down while tracking beside the subject, dropping to the feet without losing pace.",
+    "still": "Locked as if mid-boom-down-track, dropping to the feet without losing pace.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_reveal_wipe_by",
+    "label": "Wipe-by reveal",
+    "clause": "The camera lets a foreground passerby wipe the lens into a new composition, a shoulder or vehicle clearing to a changed scene.",
+    "still": "Locked as if a wipe-by reveal frozen on the new side, a shoulder or vehicle clearing to a changed scene.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_reveal_focus_pull_in",
+    "label": "Focus-pull reveal in",
+    "clause": "The camera dollies in as focus throws from glass to the person beyond, a dirty window going sharp on the figure inside.",
+    "still": "Locked as if a focus-pull reveal frozen, a dirty window going sharp on the figure inside.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal",
+      "compound"
+    ]
+  },
+  {
+    "id": "move_push_through_door",
+    "label": "Push through door",
+    "clause": "The camera pushes through a doorway on a stabilizer, the frame catching both rooms for a beat of threshold.",
+    "still": "Locked as if mid-door-push, the frame catching both rooms for a beat of threshold.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pull_out_door",
+    "label": "Pull out of door",
+    "clause": "The camera pulls backward through a doorway, the interior shrinking inside a dark jamb.",
+    "still": "Locked as if mid-door-pull, the interior shrinking inside a dark jamb.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_around_corner",
+    "label": "Around the corner",
+    "clause": "The camera rounds a corner and discovers the next plane, a new hallway snapping into existence.",
+    "still": "Locked as if mid-corner-discover, a new hallway snapping into existence.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_elevator_rise",
+    "label": "Elevator rise",
+    "clause": "The camera rises as if in an elevator cab, verticals true, floors of glass sliding down the frame like a count.",
+    "still": "Locked as if an elevator-rise frozen, floors of glass sliding down the frame like a count.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_elevator_drop",
+    "label": "Elevator drop",
+    "clause": "The camera drops as if in an elevator cab, the lobby floor rushing up to meet the boots.",
+    "still": "Locked as if an elevator-drop frozen, the lobby floor rushing up to meet the boots.",
+    "wan_token": "boom down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_underwater_track",
+    "label": "Underwater track",
+    "clause": "The camera tracks underwater with a housed lens, caustics crawling over a body moving through blue.",
+    "still": "Locked as if an underwater track frozen, caustics crawling over a body moving through blue.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "underwater"
+    ]
+  },
+  {
+    "id": "move_underwater_rise",
+    "label": "Underwater rise",
+    "clause": "The camera rises underwater toward the sunlit surface, the underside of the waves becoming a bright ceiling.",
+    "still": "Locked as if an underwater rise frozen, the underside of the waves becoming a bright ceiling.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "underwater"
+    ]
+  },
+  {
+    "id": "move_surface_breach",
+    "label": "Surface breach",
+    "clause": "The camera breaches from underwater into air, droplets and a sudden dry world above the split.",
+    "still": "Locked as if a breach frozen at the waterline, droplets and a sudden dry world above the split.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "underwater",
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_macro_push",
+    "label": "Macro push",
+    "clause": "The camera pushes in at macro working distance, pores, weave, or condensation becoming landscape.",
+    "still": "Locked as if a macro push frozen, pores, weave, or condensation becoming landscape.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_probe_in",
+    "label": "Probe in",
+    "clause": "The camera slides a probe lens into a tight cavity, a miniature interior opening around a tiny entrance.",
+    "still": "Locked as if a probe-in frozen, a miniature interior opening around a tiny entrance.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_periscope_over",
+    "label": "Periscope over",
+    "clause": "The camera looks over a low wall with a periscope optic, the far table appearing as if the camera had no body.",
+    "still": "Locked as if a periscope-over frozen, the far table appearing as if the camera had no body.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_tilt_up_dolly_in",
+    "label": "Tilt up while dollying in",
+    "clause": "The camera tilts up while dollying in, rising attention and closer proximity in one move.",
+    "still": "Locked as if mid-tilt-up-dolly-in, rising attention and closer proximity in one move.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_pan_with_walk",
+    "label": "Pan with walk",
+    "clause": "The camera pans to keep a walker centered, background streaking while the stride stays planted in frame.",
+    "still": "Locked as if a pan-with-walk frozen, background streaking while the stride stays planted in frame.",
+    "wan_token": "pan",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_counter_zoom_track",
+    "label": "Counter-zoom track",
+    "clause": "The camera tracks one way while a slow zoom opposes, speed of background disagreeing with subject size.",
+    "still": "Locked as if a counter-zoom track frozen, speed of background disagreeing with subject size.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_snorricam_body",
+    "label": "Body-mounted facing",
+    "clause": "The camera rides a rig facing the walker from their own chest, the world sliding behind a stable face and shoulders.",
+    "still": "Locked as if a body-facing rig frozen, the world sliding behind a stable face and shoulders.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "move_low_mode_track",
+    "label": "Low-mode track",
+    "clause": "The camera tracks in low-mode with the lens near the floor, shoes and dust kicking, ceiling running overhead.",
+    "still": "Locked as if a low-mode track frozen, shoes and dust kicking, ceiling running overhead.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_high_mode_track",
+    "label": "High-mode track",
+    "clause": "The camera tracks in high-mode above head height, crowns and hats, the floor falling away.",
+    "still": "Locked as if a high-mode track frozen, crowns and hats, the floor falling away.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_steeper_jib_up",
+    "label": "Steep jib up",
+    "clause": "The camera jibs up on a steep almost-vertical arc, going from worm's-eye to plan in one scoop.",
+    "still": "Locked as if a steep jib-up frozen, going from worm's-eye to plan in one scoop.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_carousel_around_table",
+    "label": "Carousel around table",
+    "clause": "The camera circles a table at seated height, plates and faces trading the foreground chair by chair.",
+    "still": "Locked as if a table carousel frozen, plates and faces trading the foreground chair by chair.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_reverse_crash_out",
+    "label": "Crash out",
+    "clause": "The camera crashes out on a fast dolly, the close face ripping to a wide isolation.",
+    "still": "Locked as if a crash-out frozen on a sudden wide, the close face ripping to a wide isolation.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_zolly_horror",
+    "label": "Space-warp push",
+    "clause": "The camera combines a slow push with opposing zoom for dread, the hallway becoming a tunnel while the person does not grow.",
+    "still": "Locked as if a space-warp push frozen, the hallway becoming a tunnel while the person does not grow.",
+    "wan_token": "dolly zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_timelapse_pan",
+    "label": "Timelapse pan",
+    "clause": "The camera pans across a long exposure sequence of the same place, clouds and crowds in streaks, architecture still.",
+    "still": "Locked as if a timelapse pan frozen on one plate, clouds and crowds in streaks, architecture still.",
+    "wan_token": "slow pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "move_hyperlapse_walk",
+    "label": "Hyperlapse walk",
+    "clause": "The camera advances in a hyperlapse along a path, the street jumping forward in stepped lockoffs.",
+    "still": "Locked as if a hyperlapse frame frozen, the street jumping forward in stepped lockoffs.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "move_orbit_and_rise",
+    "label": "Orbit and rise",
+    "clause": "The camera orbits while rising, the subject turning and shrinking as rooftops enter.",
+    "still": "Locked as if an orbit-and-rise frozen, the subject turning and shrinking as rooftops enter.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound",
+      "drone"
+    ]
+  },
+  {
+    "id": "move_push_in_rack",
+    "label": "Push in with rack",
+    "clause": "The camera dollies in as focus racks from eyes to a foreground object, the held object winning the plane as the face softens.",
+    "still": "Locked as if a push-in-rack frozen, the held object winning the plane as the face softens.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_pull_focus_track",
+    "label": "Track with follow-focus",
+    "clause": "The camera tracks while follow-focus holds the moving eyes, the walker sharp, background breathing in and out of plane.",
+    "still": "Locked as if a follow-focus track frozen, the walker sharp, background breathing in and out of plane.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_lock_off_then_whip",
+    "label": "Lock then whip",
+    "clause": "The camera holds locked, then whips to a new mark, a still conversation then a violent redirect.",
+    "still": "Locked as if the pre-whip lock frozen, a still conversation then a violent redirect.",
+    "wan_token": "whip pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_locked_off"
+    ],
+    "tags": [
+      "compound",
+      "energy"
+    ]
+  },
+  {
+    "id": "move_start_stop_dolly",
+    "label": "Start-stop dolly",
+    "clause": "The camera dollies in pulses, easing to dead stops, punctuation in the approach, not a constant glide.",
+    "still": "Locked as if a start-stop dolly frozen on a dead stop, punctuation in the approach, not a constant glide.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_ease_in_pan",
+    "label": "Ease-in pan",
+    "clause": "The camera starts a pan from a dead stop with a long ease, the street only just beginning to travel.",
+    "still": "Locked as if an ease-in pan frozen at the first inch, the street only just beginning to travel.",
+    "wan_token": "pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_ease_out_dolly",
+    "label": "Ease-out dolly",
+    "clause": "The camera ends a dolly with a long settle, the last inch of approach dying into a portrait.",
+    "still": "Locked as if an ease-out dolly frozen on the settle, the last inch of approach dying into a portrait.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_parallax_slide",
+    "label": "Parallax slide",
+    "clause": "The camera slides so near objects wipe faster than far towers, a railing streaking, the bay almost still.",
+    "still": "Locked as if a parallax slide frozen, a railing streaking, the bay almost still.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_vertigo_corridor",
+    "label": "Corridor stretch",
+    "clause": "The camera walks a long corridor with a slow opposing zoom, linoleum and doors receding unnaturally.",
+    "still": "Locked as if a corridor-stretch frozen, linoleum and doors receding unnaturally.",
+    "wan_token": "dolly zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_helmet_cam",
+    "label": "Helmet cam",
+    "clause": "The camera rides a helmet-mounted lens, the visor edge and the next obstacle owning the frame.",
+    "still": "Locked as if a helmet-cam frozen, the visor edge and the next obstacle owning the frame.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "move_dash_forward",
+    "label": "Dash forward",
+    "clause": "The camera looks forward from a dash mount, the road and wipers, city rushing the vanishing point.",
+    "still": "Locked as if a dash-forward frozen, the road and wipers, city rushing the vanishing point.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle",
+      "pov"
+    ]
+  },
+  {
+    "id": "move_bike_low",
+    "label": "Bike low mount",
+    "clause": "The camera rides a low bicycle or board mount, wheels, tar, and ankles at speed.",
+    "still": "Locked as if a bike-low frozen, wheels, tar, and ankles at speed.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_wheelchair_smooth",
+    "label": "Chair-smooth track",
+    "clause": "The camera tracks from a wheelchair or doorway dolly, very smooth and low, interior thresholds gliding at seated height.",
+    "still": "Locked as if a chair-smooth track frozen, interior thresholds gliding at seated height.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_office_chair_whip",
+    "label": "Chair whip",
+    "clause": "The camera spins on a chair dolly for a fast orbit fragment, the room smearing around a seated subject.",
+    "still": "Locked as if a chair-whip orbit frozen, the room smearing around a seated subject.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_step_print_move",
+    "label": "Step-printed move",
+    "clause": "The camera moves with step-printed stutter on a simple pan, the street advancing in chopped increments.",
+    "still": "Locked as if a step-printed pan frozen, the street advancing in chopped increments.",
+    "wan_token": "pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "move_drone_strafe",
+    "label": "Drone strafe",
+    "clause": "The camera strafes sideways at altitude without yawing, facades sliding as if on a high slider.",
+    "still": "Locked as if a drone strafe frozen, facades sliding as if on a high slider.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_boom_over_bed",
+    "label": "Boom over bed",
+    "clause": "The camera booms over a bed or table from foot to overhead, the recumbent figure going from profile to plan.",
+    "still": "Locked as if a boom-over-bed frozen, the recumbent figure going from profile to plan.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_entry_threshold",
+    "label": "Threshold enter",
+    "clause": "The camera crosses a threshold from dark exterior to lit interior, exposure and color of the room blooming around the lens.",
+    "still": "Locked as if a threshold-enter frozen, exposure and color of the room blooming around the lens.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_exit_threshold",
+    "label": "Threshold exit",
+    "clause": "The camera crosses from lit interior into night, the warm room shrinking behind a dark street.",
+    "still": "Locked as if a threshold-exit frozen, the warm room shrinking behind a dark street.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_spiral_stair",
+    "label": "Spiral stair",
+    "clause": "The camera descends or climbs a spiral with the railing as a guide, the well of the stair turning around a central void.",
+    "still": "Locked as if a spiral-stair move frozen, the well of the stair turning around a central void.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crowd_part",
+    "label": "Crowd part",
+    "clause": "The camera pushes through a parting crowd on a stabilizer, shoulders wiping either side of a path to a waiting face.",
+    "still": "Locked as if a crowd-part push frozen, shoulders wiping either side of a path to a waiting face.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_window_pass",
+    "label": "Window pass",
+    "clause": "The camera passes a window from outside, seeing in then out, interior lamp-light then reflection of the street.",
+    "still": "Locked as if a window-pass frozen, interior lamp-light then reflection of the street.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_mirror_slide",
+    "label": "Mirror slide",
+    "clause": "The camera slides along a mirror so the reflection rebuilds the room, the real room and its double trading dominance.",
+    "still": "Locked as if a mirror-slide frozen, the real room and its double trading dominance.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_over_shoulder_adjust",
+    "label": "Over-shoulder adjust",
+    "clause": "The camera makes a tiny lateral to dirty or clean an over-shoulder, a cheek entering or leaving the foreground edge.",
+    "still": "Locked as if an OTS micro-adjust frozen, a cheek entering or leaving the foreground edge.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_push_to_insert",
+    "label": "Push to insert",
+    "clause": "The camera pushes from a medium into an insert of the hands, the face leaving, the object becoming the scene.",
+    "still": "Locked as if a push-to-insert frozen on the hands, the face leaving, the object becoming the scene.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pull_to_wide",
+    "label": "Pull to wide",
+    "clause": "The camera pulls from a close face to a wide of the whole place, context arriving around a still expression.",
+    "still": "Locked as if a pull-to-wide frozen, context arriving around a still expression.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crane_kiss",
+    "label": "Crane kiss",
+    "clause": "The camera cranes down to a near-touch of a tabletop then stops, the last inch of air over glass or food.",
+    "still": "Locked as if a crane-kiss frozen above the surface, the last inch of air over glass or food.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slider_vert",
+    "label": "Vertical slider",
+    "clause": "The camera slides vertically on a tower rail, a poster or facade unrolling without a tilt.",
+    "still": "Locked as if a vertical slider frozen, a poster or facade unrolling without a tilt.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_yaw_on_the_move",
+    "label": "Yaw while tracking",
+    "clause": "The camera yaws to a new subject while still tracking the first path, attention leaving one walker for another without stopping.",
+    "still": "Locked as if a yaw-on-the-move frozen, attention leaving one walker for another without stopping.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_hidden_cut_move",
+    "label": "Hidden-cut move",
+    "clause": "The camera moves to a passing occluder meant to hide a join, a column or truck filling the frame as a seam.",
+    "still": "Locked as if a hidden-cut move frozen on the occluder, a column or truck filling the frame as a seam.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "editing"
+    ]
+  },
+  {
+    "id": "move_lock_off_breathing_iris",
+    "label": "Locked with breathing iris",
+    "clause": "The camera holds position while the iris breathes as a character, the world dimming and opening without a pan.",
+    "still": "Locked as if a locked frame with a mid-iris breath, the world dimming and opening without a pan.",
+    "wan_token": "fixed camera",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_mini_jib_food",
+    "label": "Mini-jib food",
+    "clause": "The camera scoops a tiny jib over a plate, steam and garnish becoming the whole landscape.",
+    "still": "Locked as if a mini-jib over food frozen, steam and garnish becoming the whole landscape.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_studio_ped_sit",
+    "label": "Studio pedestal sit",
+    "clause": "The camera sits a studio pedestal to seated eyeline, a talk setup dropping from standing host to guest height.",
+    "still": "Locked as if a studio pedestal sit frozen, a talk setup dropping from standing host to guest height.",
+    "wan_token": "boom down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_studio_ped_stand",
+    "label": "Studio pedestal stand",
+    "clause": "The camera rises a studio pedestal to standing eyeline, the desk falling out as the host stands.",
+    "still": "Locked as if a studio pedestal stand frozen, the desk falling out as the host stands.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_remote_head_tilt",
+    "label": "Remote-head tilt",
+    "clause": "The camera tilts on a remote head at the end of a long arm, the operator nowhere near the lens, the view from a crane tongue.",
+    "still": "Locked as if a remote-head tilt frozen, the operator nowhere near the lens, the view from a crane tongue.",
+    "wan_token": "tilt down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_remote_head_pan_search",
+    "label": "Remote-head search",
+    "clause": "The camera pans a remote head hunting a mark from high up, a high corner looking for a figure in a yard.",
+    "still": "Locked as if a remote-head search frozen, a high corner looking for a figure in a yard.",
+    "wan_token": "pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_slow_orbit_product",
+    "label": "Slow product orbit",
+    "clause": "The camera orbits a product at display speed, highlights walking around a bottle or device.",
+    "still": "Locked as if a slow product orbit frozen, highlights walking around a bottle or device.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_snap_orbit_quarter",
+    "label": "Snap quarter orbit",
+    "clause": "The camera snaps a 90-degree orbit in one accent, the three-quarter appearing as if cut, but moved.",
+    "still": "Locked as if a snap quarter-orbit frozen, the three-quarter appearing as if cut, but moved.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_keep_horizon_run",
+    "label": "Horizon-locked run",
+    "clause": "The camera runs with a gimbal fighting to keep horizon, legs pumping, skyline true, urgency without dutch.",
+    "still": "Locked as if a horizon-locked run frozen, legs pumping, skyline true, urgency without dutch.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stabilized",
+      "energy"
+    ]
+  },
+  {
+    "id": "move_drift_in_current",
+    "label": "Drift in current",
+    "clause": "The camera drifts with water current past a still subject, weeds and particles traveling while a rock or body holds.",
+    "still": "Locked as if a current-drift frozen, weeds and particles traveling while a rock or body holds.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "underwater"
+    ]
+  },
+  {
+    "id": "move_boom_mic_avoid",
+    "label": "Boom-avoiding dip",
+    "clause": "The camera dips under an imagined boom then recovers, the frame ducking then finding eyes again.",
+    "still": "Locked as if a boom-avoid dip frozen, the frame ducking then finding eyes again.",
+    "wan_token": "tilt down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_call_and_answer_pan",
+    "label": "Call-and-answer pan",
+    "clause": "The camera pans from speaker to listener as a sentence lands, the first face leaving, the reaction arriving.",
+    "still": "Locked as if a call-and-answer pan frozen on the listener, the first face leaving, the reaction arriving.",
+    "wan_token": "pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_match_speed_walk",
+    "label": "Match-speed walk",
+    "clause": "The camera matches walking speed exactly, background the only travel, the subject glued in frame, world sliding.",
+    "still": "Locked as if a match-speed walk frozen, the subject glued in frame, world sliding.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_under_speed_walk",
+    "label": "Under-speed walk",
+    "clause": "The camera tracks slower than the walk so the subject overtakes, the walker passing camera and receding.",
+    "still": "Locked as if an under-speed walk frozen, the walker passing camera and receding.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_over_speed_walk",
+    "label": "Over-speed walk",
+    "clause": "The camera tracks faster than the walk so the camera overtakes, the lens pulling ahead and looking back.",
+    "still": "Locked as if an over-speed walk frozen, the lens pulling ahead and looking back.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_crane_sun_against",
+    "label": "Crane against sun",
+    "clause": "The camera cranes up into a backlit sun flare, the figure going to silhouette as the sky floods.",
+    "still": "Locked as if a crane-against-sun frozen, the figure going to silhouette as the sky floods.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_night_practical_push",
+    "label": "Night practical push",
+    "clause": "The camera pushes toward a practical lamp that becomes the key, a porch light blooming as the face enters its pool.",
+    "still": "Locked as if a night practical push frozen, a porch light blooming as the face enters its pool.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_rain_windshield",
+    "label": "Rain windshield",
+    "clause": "The camera looks through a rained windshield with wipers, drops and arcs of the wiper as the road smears.",
+    "still": "Locked as if a rained windshield frozen, drops and arcs of the wiper as the road smears.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_two_shot_rebalance",
+    "label": "Two-shot rebalance",
+    "clause": "The camera slides to rebalance a two-shot as one person sits, empty air filling where a standing body just was.",
+    "still": "Locked as if a two-shot rebalance frozen, empty air filling where a standing body just was.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_close_circle_face",
+    "label": "Close face circle",
+    "clause": "The camera orbits very close around a face, pores and ear giving way to profile, background a ring of blur.",
+    "still": "Locked as if a close face-circle frozen, pores and ear giving way to profile, background a ring of blur.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_god_view_drop",
+    "label": "God-view drop",
+    "clause": "The camera drops from a high plan toward a single person, the crowd becoming one readable figure.",
+    "still": "Locked as if a god-view drop frozen, the crowd becoming one readable figure.",
+    "wan_token": "crane down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_exit_frame_hold",
+    "label": "Hold after exit",
+    "clause": "The camera holds locked after the subject leaves frame, the place continuing without them.",
+    "still": "Locked as if an empty-frame hold after an exit, the place continuing without them.",
+    "wan_token": "fixed camera",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_enter_frame_hold",
+    "label": "Hold before enter",
+    "clause": "The camera holds locked on empty space until someone enters, the doorway waiting.",
+    "still": "Locked as if a pre-enter empty hold, the doorway waiting.",
+    "wan_token": "fixed camera",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_snorricam_hands",
+    "label": "Hands-forward body rig",
+    "clause": "The camera points a body rig at the hands working, tools in the lower frame, world sliding beyond the wrists.",
+    "still": "Locked as if hands-forward body rig frozen, tools in the lower frame, world sliding beyond the wrists.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "move_pocket_peek",
+    "label": "Pocket peek",
+    "clause": "The camera rises from a pocket or bag height to the street, fabric then sudden city.",
+    "still": "Locked as if a pocket-peek rise frozen, fabric then sudden city.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal",
+      "pov"
+    ]
+  },
+  {
+    "id": "move_table_surface_slide",
+    "label": "Table-surface slide",
+    "clause": "The camera slides at tabletop height along a spread of objects, glassware and cards wiping the near field.",
+    "still": "Locked as if a table-surface slide frozen, glassware and cards wiping the near field.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_bookshelf_track",
+    "label": "Bookshelf track",
+    "clause": "The camera tracks along a shelf of unmarked spines, wood and paper rhythm, a face waiting at the aisle end.",
+    "still": "Locked as if a bookshelf track frozen, wood and paper rhythm, a face waiting at the aisle end.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_industrial_catwalk",
+    "label": "Catwalk track",
+    "clause": "The camera tracks a high industrial catwalk, grate floor and a drop to machinery on both sides.",
+    "still": "Locked as if a catwalk track frozen, grate floor and a drop to machinery on both sides.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_fog_in",
+    "label": "Push into fog",
+    "clause": "The camera pushes into thickening fog until the subject is a shape, depth collapsing to tone.",
+    "still": "Locked as if a push-into-fog frozen, depth collapsing to tone.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "atmosphere"
+    ]
+  },
+  {
+    "id": "move_fog_out",
+    "label": "Pull out of fog",
+    "clause": "The camera pulls out of fog into readable air, edges returning to the world.",
+    "still": "Locked as if a pull-out-of-fog frozen, edges returning to the world.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "atmosphere",
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_sparkler_orbit",
+    "label": "Spark-orbit",
+    "clause": "The camera orbits a handheld sparkler or spark source, ember trails wrapping a silhouette.",
+    "still": "Locked as if a spark-orbit frozen, ember trails wrapping a silhouette.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_candle_approach",
+    "label": "Candle approach",
+    "clause": "The camera approaches a single candle until it floods the lens, the flame becoming the whole exposure.",
+    "still": "Locked as if a candle approach frozen, the flame becoming the whole exposure.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_stage_bow_out",
+    "label": "Stage bow-out",
+    "clause": "The camera dollies out down an aisle as if leaving a stage, a figure shrinking in lights, rows entering the sides.",
+    "still": "Locked as if a stage bow-out frozen, a figure shrinking in lights, rows entering the sides.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_aisle_procession",
+    "label": "Aisle procession",
+    "clause": "The camera tracks down a center aisle toward an altar or desk, symmetry pulling the eye to the far plane.",
+    "still": "Locked as if an aisle procession frozen, symmetry pulling the eye to the far plane.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_loading_dock_strafe",
+    "label": "Dock strafe",
+    "clause": "The camera strafes a loading dock at truck-bed height, bumpers and bays counting off.",
+    "still": "Locked as if a dock strafe frozen, bumpers and bays counting off.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_mezzanine_slide",
+    "label": "Mezzanine slide",
+    "clause": "The camera slides a mezzanine railing looking down, the floor below traveling under a banister.",
+    "still": "Locked as if a mezzanine slide frozen, the floor below traveling under a banister.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_skater_low",
+    "label": "Skater low",
+    "clause": "The camera rides a very low board-height lens, coping and asphalt at cheek height.",
+    "still": "Locked as if a skater-low frozen, coping and asphalt at cheek height.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_float_invisible_stick",
+    "label": "Floating stick",
+    "clause": "The camera floats as if on a hidden selfie stick, no operator body, the subject with empty air where a stick would be.",
+    "still": "Locked as if a floating-stick frozen, the subject with empty air where a stick would be.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "viral",
+      "stabilized"
+    ]
+  },
+  {
+    "id": "move_bullet_orbit_freeze",
+    "label": "Orbit freeze",
+    "clause": "The camera orbits while time feels frozen on the subject, clothing and spray hanging while the background travels.",
+    "still": "Locked as if an orbit-freeze frozen, clothing and spray hanging while the background travels.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time",
+      "compound"
+    ]
+  },
+  {
+    "id": "move_crash_zoom_on_move",
+    "label": "Move then crash zoom",
+    "clause": "The camera tracks then crash-zooms the last beat, a walk landing in a sudden tight face.",
+    "still": "Locked as if a move-then-crash-zoom frozen on the punch, a walk landing in a sudden tight face.",
+    "wan_token": "crash zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in",
+      "fx_crash_zoom"
+    ],
+    "tags": [
+      "energy",
+      "compound"
+    ]
+  },
+  {
+    "id": "move_locked_off_zoom",
+    "label": "Locked zoom",
+    "clause": "The camera zooms on a locked tripod, no body move, compression changing while the nodal point holds.",
+    "still": "Locked as if a locked zoom frozen mid-magnify, compression changing while the nodal point holds.",
+    "wan_token": "zoom in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in"
+    ],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_snap_zoom_in",
+    "label": "Snap zoom in",
+    "clause": "The camera snap-zooms in on a locked support, the face punching larger in one optical hit.",
+    "still": "Locked as if a snap-zoom-in frozen, the face punching larger in one optical hit.",
+    "wan_token": "crash zoom",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "move_dolly_in",
+      "fx_crash_zoom"
+    ],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_snap_zoom_out",
+    "label": "Snap zoom out",
+    "clause": "The camera snap-zooms out on a locked support, context slamming around a face.",
+    "still": "Locked as if a snap-zoom-out frozen, context slamming around a face.",
+    "wan_token": "zoom out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_live_switcher_pan",
+    "label": "Switcher pan",
+    "clause": "The camera pans as if a live-event camera finding a mark, a stage finding the next speaker from a house position.",
+    "still": "Locked as if a switcher pan frozen, a stage finding the next speaker from a house position.",
+    "wan_token": "pan right",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_house_left_push",
+    "label": "House-left push",
+    "clause": "The camera pushes from house left toward a stage, audience heads as foreground, a figure growing on stage.",
+    "still": "Locked as if a house-left push frozen, audience heads as foreground, a figure growing on stage.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_wings_reveal",
+    "label": "Wings reveal",
+    "clause": "The camera slides out from stage wings, black masking giving way to lights and an audience.",
+    "still": "Locked as if a wings reveal frozen, black masking giving way to lights and an audience.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_follow_spotlight_feel",
+    "label": "Follow-spot feel",
+    "clause": "The camera tilts and pans as if chasing a follow-spot beam, the bright pool moving, the camera glued to it.",
+    "still": "Locked as if a follow-spot chase frozen, the bright pool moving, the camera glued to it.",
+    "wan_token": "pan",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_security_pan",
+    "label": "Security pan",
+    "clause": "The camera pans slowly like a high-corner security head, a room surveyed from the ceiling corner, slightly wide and cold.",
+    "still": "Locked as if a security pan frozen, a room surveyed from the ceiling corner, slightly wide and cold.",
+    "wan_token": "slow pan left",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "locked"
+    ]
+  },
+  {
+    "id": "move_baby_mobile_orbit",
+    "label": "Over-crib orbit",
+    "clause": "The camera orbits slowly above a crib or small bed, mobiles and a small recumbent figure in plan.",
+    "still": "Locked as if an over-crib orbit frozen, mobiles and a small recumbent figure in plan.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_kitchen_pass",
+    "label": "Kitchen pass",
+    "clause": "The camera tracks a pass-through from kitchen to dining, steam and plates traveling into the next room.",
+    "still": "Locked as if a kitchen-pass frozen, steam and plates traveling into the next room.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_service_corridor",
+    "label": "Service corridor",
+    "clause": "The camera tracks a narrow service corridor, pipes, scuff, and a vanishing point of doors.",
+    "still": "Locked as if a service-corridor track frozen, pipes, scuff, and a vanishing point of doors.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_garden_hedge_wipe",
+    "label": "Hedge wipe",
+    "clause": "The camera tracks behind a hedge that wipes to a lawn, leaves then sudden open grass.",
+    "still": "Locked as if a hedge-wipe frozen, leaves then sudden open grass.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reveal"
+    ]
+  },
+  {
+    "id": "move_pier_out",
+    "label": "Pier dolly out",
+    "clause": "The camera dollies backward along a pier, the walker shrinking, water widening on both sides.",
+    "still": "Locked as if a pier dolly-out frozen, the walker shrinking, water widening on both sides.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pier_in",
+    "label": "Pier dolly in",
+    "clause": "The camera dollies in along a pier toward a waiting figure, planks rushing, a silhouette growing against the bay.",
+    "still": "Locked as if a pier dolly-in frozen, planks rushing, a silhouette growing against the bay.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_switchback_drone",
+    "label": "Switchback drone",
+    "clause": "The camera follows a mountain switchback from above, hairpin road and a tiny traveler.",
+    "still": "Locked as if a switchback-drone frozen, hairpin road and a tiny traveler.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "move_wave_level",
+    "label": "Wave-level track",
+    "clause": "The camera tracks at the height of breaking water, foam and a body in the same plane.",
+    "still": "Locked as if a wave-level track frozen, foam and a body in the same plane.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "underwater"
+    ]
+  },
+  {
+    "id": "move_train_window",
+    "label": "Train window",
+    "clause": "The camera looks out a train window with passing world, poles and fields strobing, interior reflection faint.",
+    "still": "Locked as if a train-window frozen, poles and fields strobing, interior reflection faint.",
+    "wan_token": "tracking",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_subway_lurch",
+    "label": "Subway lurch",
+    "clause": "The camera handheld in a lurching subway car, straps and poles, the floor not agreeing with the horizon.",
+    "still": "Locked as if a subway lurch frozen, straps and poles, the floor not agreeing with the horizon.",
+    "wan_token": "handheld",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "handheld",
+      "vehicle"
+    ]
+  },
+  {
+    "id": "move_escalator_ride",
+    "label": "Escalator ride",
+    "clause": "The camera rides an escalator, looking with the rise, steps and a mall or station opening above.",
+    "still": "Locked as if an escalator-ride frozen, steps and a mall or station opening above.",
+    "wan_token": "boom up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_down_escalator",
+    "label": "Down escalator",
+    "clause": "The camera rides an escalator down, a concourse rising to meet the lens.",
+    "still": "Locked as if a down-escalator frozen, a concourse rising to meet the lens.",
+    "wan_token": "boom down",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_carousel_horse",
+    "label": "Fairground circle",
+    "clause": "The camera circles as if on a fairground ride, lights smearing, a face returning every turn.",
+    "still": "Locked as if a fairground circle frozen, lights smearing, a face returning every turn.",
+    "wan_token": "orbit",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "move_ferris_rise",
+    "label": "Ferris rise",
+    "clause": "The camera rises on a long slow arc like a ferris chair, the fairground shrinking, wind and city arriving.",
+    "still": "Locked as if a ferris-rise frozen, the fairground shrinking, wind and city arriving.",
+    "wan_token": "crane up",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "compound"
+    ]
+  },
+  {
+    "id": "move_locked_off_cloud",
+    "label": "Locked cloud",
+    "clause": "The camera locks off on sky so only clouds move, architecture as a silhouette against traveling weather.",
+    "still": "Locked as if a locked cloud still with streaked weather implied, architecture as a silhouette against traveling weather.",
+    "wan_token": "fixed camera",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "locked",
+      "time"
+    ]
+  },
+  {
+    "id": "move_push_into_eyes",
+    "label": "Push into eyes",
+    "clause": "The camera dollies until the eyes are the whole story, iris, catchlight, and almost no face left.",
+    "still": "Locked as if a push-into-eyes frozen, iris, catchlight, and almost no face left.",
+    "wan_token": "dolly in",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  },
+  {
+    "id": "move_pull_to_solitude",
+    "label": "Pull to solitude",
+    "clause": "The camera pulls until the person is small in a huge place, architecture and weather dwarfing a single body.",
+    "still": "Locked as if a pull-to-solitude frozen, architecture and weather dwarfing a single body.",
+    "wan_token": "dolly out",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "support"
+    ]
+  }
+]

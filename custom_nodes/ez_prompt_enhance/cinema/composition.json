@@ -1,0 +1,1997 @@
+[
+  {
+    "id": "cmp_thirds_right",
+    "label": "Thirds right",
+    "clause": "Park the subject on the right vertical third with looking room to the left.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thirds"
+    ]
+  },
+  {
+    "id": "cmp_thirds_left",
+    "label": "Thirds left",
+    "clause": "Park the subject on the left vertical third with looking room to the right.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thirds"
+    ]
+  },
+  {
+    "id": "cmp_thirds_upper",
+    "label": "Thirds upper",
+    "clause": "Pin eyes on the upper horizontal third so the lower frame holds body or ground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thirds"
+    ]
+  },
+  {
+    "id": "cmp_thirds_lower",
+    "label": "Thirds lower",
+    "clause": "Sit the figure on the lower third so sky or ceiling dominates the top two-thirds.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "thirds"
+    ]
+  },
+  {
+    "id": "cmp_center_punch",
+    "label": "Center punch",
+    "clause": "Bullseye the face dead center, symmetry of the room echoing both sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "center"
+    ]
+  },
+  {
+    "id": "cmp_center_vertical",
+    "label": "Center axis vertical",
+    "clause": "Hold the body on the vertical midline of a 9:16 plate, depth receding behind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vertical"
+    ]
+  },
+  {
+    "id": "cmp_short_side",
+    "label": "Short side",
+    "clause": "Short-side the look: eyes close to the frame edge they face, tension in the leftover air.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_long_side",
+    "label": "Long side",
+    "clause": "Give generous looking room so the gaze travels across empty architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  },
+  {
+    "id": "cmp_diagonal",
+    "label": "Diagonal",
+    "clause": "Build a diagonal from lower left ground to upper right face, energy climbing the frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_counter_diagonal",
+    "label": "Counter diagonal",
+    "clause": "Slash a diagonal from upper left lamp to lower right hands.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_leading_road",
+    "label": "Leading road",
+    "clause": "Let a road, rail, or corridor lines suck the eye to a small figure.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_leading_hands",
+    "label": "Leading hands",
+    "clause": "Use outstretched arms or a pointed tool as a vector into the face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_vanishing",
+    "label": "Vanishing point",
+    "clause": "Place the subject at a one-point vanishing point of a hall or nave.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_two_point",
+    "label": "Two-point",
+    "clause": "Stand a building on two-point perspective, verticals true, mass on the near corner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_frame_in_frame",
+    "label": "Frame in frame",
+    "clause": "Shoot through a doorway, window, or arch so a second rectangle cages the person.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_dirty_fg",
+    "label": "Dirty foreground",
+    "clause": "Hang an out-of-focus shoulder, plant, or glass in the near field, subject readable beyond.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_clean_graphic",
+    "label": "Clean graphic",
+    "clause": "Empty the near field, subject against a simple wall or sky, poster-flat.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_layers_three",
+    "label": "Three planes",
+    "clause": "Occupy foreground, mid, and far with distinct masses so depth is stacked.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_negative_left",
+    "label": "Negative left",
+    "clause": "Leave the left two-thirds empty so a small figure on the right feels isolated.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  },
+  {
+    "id": "cmp_negative_top",
+    "label": "Negative top",
+    "clause": "Crush the figure to the bottom with a huge empty sky or ceiling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  },
+  {
+    "id": "cmp_figure_ground",
+    "label": "Figure ground",
+    "clause": "Cut a sharp silhouette against a much brighter or darker field.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_isolation",
+    "label": "Isolation",
+    "clause": "Float one person in a huge readable place, tiny in the geography.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_cluster",
+    "label": "Cluster",
+    "clause": "Pack a group into one dense knot, leftover frame empty.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_pattern_break",
+    "label": "Pattern break",
+    "clause": "Repeat a rhythm of windows or trees, then break it with the subject.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rhythm"
+    ]
+  },
+  {
+    "id": "cmp_repetition",
+    "label": "Repetition",
+    "clause": "March identical objects across the frame so the eye counts them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rhythm"
+    ]
+  },
+  {
+    "id": "cmp_juxtapose_scale",
+    "label": "Scale juxtapose",
+    "clause": "Stand a small person against a huge unmarked machine or facade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_overlap",
+    "label": "Overlapping forms",
+    "clause": "Overlap bodies and furniture so nearer shapes hide farther ones.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_aerial_perspective",
+    "label": "Aerial perspective",
+    "clause": "Let distant planes go cooler and softer while the near subject stays crisp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_size_diminution",
+    "label": "Size diminution",
+    "clause": "Same object type near and far, the far one tiny, proving distance.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_tele_stack",
+    "label": "Telephoto stack",
+    "clause": "Compress a crowd or street into a flat stack of overlapping faces.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_wide_near_far",
+    "label": "Wide near far",
+    "clause": "A huge near object and a tiny far figure in one ultra-wide plate.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_formal_balance",
+    "label": "Formal balance",
+    "clause": "Mirror masses left and right of a central axis.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_informal_balance",
+    "label": "Informal balance",
+    "clause": "A large dark mass on one side answered by a small bright practical on the other.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_radial",
+    "label": "Radial",
+    "clause": "Arrange lines and gazes as spokes into a central face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_triangle",
+    "label": "Triangle block",
+    "clause": "Block three heads or lamps as a stable triangle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_sit_stand",
+    "label": "Sit stand contrast",
+    "clause": "One seated, one standing, heights arguing in the same frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "block"
+    ]
+  },
+  {
+    "id": "cmp_enter_left",
+    "label": "Enter from left",
+    "clause": "Leave left-edge air so a body can enter from that wing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motion"
+    ]
+  },
+  {
+    "id": "cmp_exit_right",
+    "label": "Exit right",
+    "clause": "Aim the walk at the right edge with space to leave.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motion"
+    ]
+  },
+  {
+    "id": "cmp_cross_frame",
+    "label": "Cross frame",
+    "clause": "A walker crosses the entire width, path parallel to the sensor.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motion"
+    ]
+  },
+  {
+    "id": "cmp_toward_lens",
+    "label": "Toward lens",
+    "clause": "The subject walks straight at the glass, growing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motion"
+    ]
+  },
+  {
+    "id": "cmp_away_lens",
+    "label": "Away from lens",
+    "clause": "The subject recedes down a path, shrinking.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motion"
+    ]
+  },
+  {
+    "id": "cmp_headroom_tight",
+    "label": "Tight headroom",
+    "clause": "Hair nearly kisses the top edge, no wasted sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_headroom_open",
+    "label": "Open headroom",
+    "clause": "Generous air above the crown, a vertical 9:16 that can take captions later in edit not in-camera.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_ground_plane",
+    "label": "Ground plane",
+    "clause": "Show a lot of floor so the body is planted, not floating.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  },
+  {
+    "id": "cmp_ceiling_crush",
+    "label": "Ceiling crush",
+    "clause": "A low ceiling presses down, the head close to architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  },
+  {
+    "id": "cmp_s_curve",
+    "label": "S-curve",
+    "clause": "A river, path, or body traces an S that the eye follows into depth.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_golden_triangle",
+    "label": "Golden triangle",
+    "clause": "A diagonal divide with a perpendicular from the opposite corner, subject at the intersection.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_fibonacci_curve",
+    "label": "Attention spiral",
+    "clause": "Compose so the eye spirals from a near object into the face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_look_space",
+    "label": "Look space",
+    "clause": "More air in the direction of the gaze than behind the head.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_over_shoulder_dirty",
+    "label": "Dirty over-shoulder",
+    "clause": "A cheek and ear as a dark mass, the far face sharp in the remaining window.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "cmp_profile_line",
+    "label": "Profile line",
+    "clause": "A full profile against a simple field, the nose pointing into space.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_top_heavy",
+    "label": "Top heavy",
+    "clause": "Mass and detail in the upper third, the lower frame quiet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_bottom_heavy",
+    "label": "Bottom heavy",
+    "clause": "Furniture and body weight the lower frame, sky simple.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_left_weight",
+    "label": "Left weight",
+    "clause": "Almost all mass on the left, the right a field of tone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_right_weight",
+    "label": "Right weight",
+    "clause": "Almost all mass on the right, the left a field of tone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_corner_subject",
+    "label": "Corner subject",
+    "clause": "Tuck the person in a corner of the frame, architecture claiming the rest.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_edge_slice",
+    "label": "Edge slice",
+    "clause": "Crop a face or object with the frame edge as a knife, part of it missing.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_amputate_avoid",
+    "label": "Joint-safe crop",
+    "clause": "Crop mid-torso or mid-thigh, never through a joint.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_full_body_grounded",
+    "label": "Full body grounded",
+    "clause": "Head to shoes with floor visible, the person entirely in the world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_insert_hands_center",
+    "label": "Hands center",
+    "clause": "Hands and object dead center, face out.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "cmp_product_hero_center",
+    "label": "Product hero",
+    "clause": "A product on the optical axis, negative space a seamless field.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "cmp_rule_of_odds",
+    "label": "Odds",
+    "clause": "Group three lamps or three people, not two, so the eye rests on the middle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_even_pair",
+    "label": "Even pair",
+    "clause": "Two equal figures, a 50/50 split of the frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_crowd_flow",
+    "label": "Crowd flow",
+    "clause": "Bodies as a current, one readable face against the stream.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_window_light_side",
+    "label": "Window as frame",
+    "clause": "The window rectangle is the composition, the person a mass inside it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_mirror_split",
+    "label": "Mirror split",
+    "clause": "Half real, half reflection, a vertical join down the glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_reflection_puddle",
+    "label": "Puddle double",
+    "clause": "A puddle doubles the world, the real figure standing on the join.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_silhouette_arch",
+    "label": "Silhouette in arch",
+    "clause": "A dark figure in a bright arch, the arch the only geometry.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_color_mass",
+    "label": "Color mass",
+    "clause": "A large field of one hue balanced by a small complementary accent on the subject.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "cmp_high_horizon",
+    "label": "High horizon",
+    "clause": "Horizon near the top, a lot of ground, the person walking a map.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_low_horizon",
+    "label": "Low horizon",
+    "clause": "Horizon near the bottom, a lot of sky, the person a notch on the earth-line.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_no_horizon",
+    "label": "No horizon",
+    "clause": "Deny the horizon: a wall, fog, or canopy so scale is uncertain.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_dutch_compose",
+    "label": "Canted masses",
+    "clause": "The composition itself is a tilt: floors and lamps as diagonals.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "cmp_nested_rectangles",
+    "label": "Nested rectangles",
+    "clause": "Picture frames, screens, and doors as rectangles inside rectangles.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_circle_motif",
+    "label": "Circle motif",
+    "clause": "Wheels, lamps, or arches as repeating circles around a face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rhythm"
+    ]
+  },
+  {
+    "id": "cmp_verticals_only",
+    "label": "Verticals only",
+    "clause": "A forest of verticals, almost no horizontals, the person a vertical too.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_horizontals_only",
+    "label": "Horizontals only",
+    "clause": "Layers of land, water, cloud as stacked bands, a small figure on one band.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_grid",
+    "label": "Grid",
+    "clause": "A facade or tiles as a grid, the subject breaking one cell.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_empty_center",
+    "label": "Empty center",
+    "clause": "Action on the edges, the middle a void the eye keeps returning to.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_busy_center",
+    "label": "Busy center",
+    "clause": "All detail in the middle, edges fall to tone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "center"
+    ]
+  },
+  {
+    "id": "cmp_occluder_left",
+    "label": "Left occluder",
+    "clause": "A dark vertical mass on the left, the scene opening to the right.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_occluder_right",
+    "label": "Right occluder",
+    "clause": "A dark vertical mass on the right, the scene opening to the left.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_over_table",
+    "label": "Over table",
+    "clause": "Tabletop as a foreground plane, faces beyond the glasses.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_under_object",
+    "label": "Under object",
+    "clause": "Look under a table or car so the underside is a ceiling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "angle"
+    ]
+  },
+  {
+    "id": "cmp_through_crowd",
+    "label": "Through crowd",
+    "clause": "Bodies as a broken screen, one far face in a gap.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_power_low",
+    "label": "Power from below",
+    "clause": "Compose so the subject towers, the camera and masses looking up.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "power"
+    ]
+  },
+  {
+    "id": "cmp_power_high",
+    "label": "Power from above",
+    "clause": "Compose so the subject is looked down on, the ground a map around them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "power"
+    ]
+  },
+  {
+    "id": "cmp_equal_eyeline",
+    "label": "Equal eyeline",
+    "clause": "Camera and subject share height, neither dominates.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_caption_safe_vert",
+    "label": "Caption-safe vertical",
+    "clause": "Keep the lower fifth and upper fifth free of faces so later text can sit there, faces in the middle band.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vertical"
+    ]
+  },
+  {
+    "id": "cmp_lower_third_clear",
+    "label": "Lower-third clear",
+    "clause": "Keep the bottom fifth empty of important mass for a later graphic, not burned in.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "safe"
+    ]
+  },
+  {
+    "id": "cmp_square_center",
+    "label": "Square center",
+    "clause": "A 1:1 plate with the subject centered and corners quiet.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "cmp_scope_empty_sides",
+    "label": "Scope side room",
+    "clause": "A 2.39 plate with huge side room, the figure a small event in width.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "cmp_academy_tight",
+    "label": "Academy tight",
+    "clause": "A 1.85 plate filled edge to edge with the conversation.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "cmp_ig_vertical_head",
+    "label": "Tall headroom portrait",
+    "clause": "A 4:5 plate with extra air above the crown and a full torso.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "cmp_wide_lower_safe",
+    "label": "16:9 lower safe",
+    "clause": "A 16:9 plate with the face in the upper half, lower half a quiet set.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "aspect"
+    ]
+  },
+  {
+    "id": "cmp_split_left_right",
+    "label": "Split left right",
+    "clause": "A vertical line (door, wall, light cut) divides two worlds in one frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_split_up_down",
+    "label": "Split up down",
+    "clause": "A horizon or railing splits the frame into two stacked stories.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_tiny_in_door",
+    "label": "Tiny in door",
+    "clause": "A far figure in a distant doorway, the room huge around the dark rectangle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_fill_the_glass",
+    "label": "Fill the glass",
+    "clause": "The face or product fills so much of the frame that context is only edges.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_environmental",
+    "label": "Environmental",
+    "clause": "The place is the story, the person a detail of furniture scale.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_over_shoulder_clean",
+    "label": "Clean single after OTS",
+    "clause": "No foreground cheek, a clean single that still feels like coverage of a pair.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "coverage"
+    ]
+  },
+  {
+    "id": "cmp_group_wedge",
+    "label": "Group wedge",
+    "clause": "A wedge of people pointing at one speaker.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_circle_around",
+    "label": "Circle around",
+    "clause": "Bodies in a ring, camera outside looking in, or inside looking out.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_procession_line",
+    "label": "Procession line",
+    "clause": "A line of people receding, each head a bead.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_one_against_many",
+    "label": "One against many",
+    "clause": "A single distinct costume or stance against a uniform crowd.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_table_symmetry",
+    "label": "Table symmetry",
+    "clause": "A long table as a centerline, faces in pairs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "balance"
+    ]
+  },
+  {
+    "id": "cmp_stair_zigzag",
+    "label": "Stair zigzag",
+    "clause": "A staircase as a zigzag graphic the figure climbs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "line"
+    ]
+  },
+  {
+    "id": "cmp_bridge_span",
+    "label": "Bridge span",
+    "clause": "A span as a horizontal bar, a small walker on it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_window_grid_face",
+    "label": "Window grid face",
+    "clause": "A face behind a grid of panes, one pane owning the eyes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_rain_streak_lines",
+    "label": "Rain as lines",
+    "clause": "Rain streaks as composition lines leading to the figure.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "weather"
+    ]
+  },
+  {
+    "id": "cmp_shadow_as_mass",
+    "label": "Shadow as mass",
+    "clause": "A cast shadow is a second character occupying a third of the frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "light"
+    ]
+  },
+  {
+    "id": "cmp_practical_as_anchor",
+    "label": "Practical as anchor",
+    "clause": "A lamp or neon is the compositional anchor the face answers.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "light"
+    ]
+  },
+  {
+    "id": "cmp_hands_in_lower",
+    "label": "Hands in lower third",
+    "clause": "Story in the hands, face in the upper, a split of labor in one still.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "insert"
+    ]
+  },
+  {
+    "id": "cmp_eyes_on_third_cross",
+    "label": "Eyes on the cross",
+    "clause": "Eyes sit exactly on a thirds intersection, the rest of the face falling away.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "portrait"
+    ]
+  },
+  {
+    "id": "cmp_profile_into_dark",
+    "label": "Profile into dark",
+    "clause": "A profile looking into a dark half, the lit half behind them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_back_to_camera",
+    "label": "Back to camera",
+    "clause": "We see the back, the world they face, the face withheld.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_over_the_hill",
+    "label": "Over the hill",
+    "clause": "A ridge as a graphic, a small figure just breaking the skyline.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "landscape"
+    ]
+  },
+  {
+    "id": "cmp_tunnel_mouth",
+    "label": "Tunnel mouth",
+    "clause": "The tunnel is a dark rectangle, the exit a bright postage stamp with a body in it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_crowd_part_center",
+    "label": "Parted crowd",
+    "clause": "A path through bodies, the far person centered in the gap.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "group"
+    ]
+  },
+  {
+    "id": "cmp_desk_planes",
+    "label": "Desk planes",
+    "clause": "Desktop, mid wall, far window as three parallel planes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_book_aisle",
+    "label": "Book aisle",
+    "clause": "Two walls of unmarked shelves as leading planes, a figure at the vanishing point.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_balcony_down",
+    "label": "Balcony down",
+    "clause": "A railing as a near horizontal, the floor below a second composition.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_mezzanine_split",
+    "label": "Mezzanine split",
+    "clause": "Upper walkway and lower hall in one frame, two scales of people.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_door_threshold",
+    "label": "Threshold split",
+    "clause": "Interior warm and exterior cool meet at a jamb, the person on the line.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "layers"
+    ]
+  },
+  {
+    "id": "cmp_phone_center_axis",
+    "label": "Phone center axis",
+    "clause": "Vertical centerline composition for a handheld 9:16, subject on the spine of the glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "vertical"
+    ]
+  },
+  {
+    "id": "cmp_z_axis_stack",
+    "label": "Z-axis stack",
+    "clause": "Near object, subject, far city stacked on the lens axis, not spread sideways.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "depth"
+    ]
+  },
+  {
+    "id": "cmp_empty_chair",
+    "label": "Empty chair",
+    "clause": "An empty chair as a composed mass implying a missing person.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_occupied_and_empty",
+    "label": "Occupied and empty",
+    "clause": "One side of a sofa lived-in, the other a blank cushion.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_clock_as_circle",
+    "label": "Clock as circle",
+    "clause": "A round clock or fan as the only circle in a rectangular room, drawing the eye.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "graphic"
+    ]
+  },
+  {
+    "id": "cmp_stripe_rhythm",
+    "label": "Stripe rhythm",
+    "clause": "Blinds, siding, or a crosswalk as stripes the figure interrupts.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "rhythm"
+    ]
+  },
+  {
+    "id": "cmp_corner_escape",
+    "label": "Corner escape",
+    "clause": "The subject in a corner with one exit path visible, the other wall a trap.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "tension"
+    ]
+  },
+  {
+    "id": "cmp_open_landscape_tiny",
+    "label": "Open landscape tiny",
+    "clause": "A vast readable place, the person a speck with a clear stance.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "scale"
+    ]
+  },
+  {
+    "id": "cmp_claustrophobic_fill",
+    "label": "Claustrophobic fill",
+    "clause": "Walls, ceiling, and furniture leave almost no air around the body.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "space"
+    ]
+  }
+]

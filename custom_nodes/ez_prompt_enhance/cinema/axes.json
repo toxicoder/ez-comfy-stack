@@ -1,0 +1,132 @@
+{
+  "framing_shot_size": {
+    "id": "framing_shot_size",
+    "label": "Framing and Shot Size",
+    "file": "framing_shot_size.json",
+    "splice_order": 10,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "camera_angles": {
+    "id": "camera_angles",
+    "label": "Camera Angles",
+    "file": "camera_angles.json",
+    "splice_order": 20,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "lenses_optics": {
+    "id": "lenses_optics",
+    "label": "Lenses and Optics",
+    "file": "lenses_optics.json",
+    "splice_order": 30,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "composition": {
+    "id": "composition",
+    "label": "Composition",
+    "file": "composition.json",
+    "splice_order": 40,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "lighting": {
+    "id": "lighting",
+    "label": "Lighting",
+    "file": "lighting.json",
+    "splice_order": 50,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": true,
+    "wan_camera": false
+  },
+  "color_film_look": {
+    "id": "color_film_look",
+    "label": "Color and Film Look",
+    "file": "color_film_look.json",
+    "splice_order": 60,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": true,
+    "wan_camera": false
+  },
+  "atmosphere_weather": {
+    "id": "atmosphere_weather",
+    "label": "Atmosphere and Weather",
+    "file": "atmosphere_weather.json",
+    "splice_order": 70,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": true,
+    "wan_camera": false
+  },
+  "genre_looks": {
+    "id": "genre_looks",
+    "label": "Genre Looks",
+    "file": "genre_looks.json",
+    "splice_order": 80,
+    "still_mode": "clause",
+    "i2v_include": false,
+    "identity_include": true,
+    "wan_camera": false
+  },
+  "viral_looks": {
+    "id": "viral_looks",
+    "label": "Viral Looks",
+    "file": "viral_looks.json",
+    "splice_order": 90,
+    "still_mode": "freeze",
+    "i2v_include": false,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "time_motion": {
+    "id": "time_motion",
+    "label": "Time and Motion",
+    "file": "time_motion.json",
+    "splice_order": 100,
+    "still_mode": "freeze",
+    "i2v_include": true,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "camera_movement": {
+    "id": "camera_movement",
+    "label": "Camera Movement",
+    "file": "camera_movement.json",
+    "splice_order": 110,
+    "still_mode": "freeze",
+    "i2v_include": true,
+    "identity_include": false,
+    "wan_camera": true
+  },
+  "in_camera_optical": {
+    "id": "in_camera_optical",
+    "label": "In-Camera and Optical Effects",
+    "file": "in_camera_optical.json",
+    "splice_order": 120,
+    "still_mode": "freeze",
+    "i2v_include": true,
+    "identity_include": false,
+    "wan_camera": false
+  },
+  "editing_transitions": {
+    "id": "editing_transitions",
+    "label": "Editing and Transitions",
+    "file": "editing_transitions.json",
+    "splice_order": 130,
+    "still_mode": "omit",
+    "i2v_include": true,
+    "identity_include": false,
+    "wan_camera": false
+  }
+}

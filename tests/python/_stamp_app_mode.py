@@ -255,6 +255,22 @@ WIDGET_ORDER = (
     "required_mode",
     "sample",
     "prompt",
+    "subject",
+    "recipe",
+    "flavor",
+    "framing_shot_size",
+    "camera_angles",
+    "camera_movement",
+    "lenses_optics",
+    "composition",
+    "lighting",
+    "color_film_look",
+    "time_motion",
+    "in_camera_optical",
+    "editing_transitions",
+    "atmosphere_weather",
+    "genre_looks",
+    "viral_looks",
     "web_search",
     "subagents",
     "history",
@@ -304,6 +320,7 @@ NODE_MODE_ALWAYS = 0
 NODE_MODE_BYPASS = 4
 WIDGET_HEIGHTS = {
     "prompt": 140,
+    "subject": 140,
     "lyrics": 140,
     "tags": 80,
     "audio_notes": 80,
@@ -313,6 +330,22 @@ WIDGET_HEIGHTS = {
 GENERIC_LABELS = {
     "sample": "Sample prompt",
     "prompt": "Prompt",
+    "subject": "Subject",
+    "recipe": "Recipe",
+    "flavor": "Family",
+    "framing_shot_size": "Shot size",
+    "camera_angles": "Angle",
+    "camera_movement": "Camera move",
+    "lenses_optics": "Lens",
+    "composition": "Composition",
+    "lighting": "Lighting",
+    "color_film_look": "Color",
+    "time_motion": "Time",
+    "in_camera_optical": "Optical FX",
+    "editing_transitions": "Edit",
+    "atmosphere_weather": "Weather",
+    "genre_looks": "Genre",
+    "viral_looks": "Viral look",
     "web_search": "Web search",
     "subagents": "Subagents",
     "history": "History",
@@ -369,6 +402,22 @@ GENERIC_LABELS = {
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
+    "subject": "Who or what is in the shot. Cinema Rack splices technique clauses after this.",
+    "recipe": "Named splice that fills empty axes only. Explicit dropdowns win.",
+    "flavor": "klein / wan_t2v / ltx_t2v (and edit, identity, i2v). Wan emits one camera verb.",
+    "framing_shot_size": "How much of the subject fills the frame.",
+    "camera_angles": "Camera height and subject-relative angle.",
+    "camera_movement": "The single camera verb. Wan uses this token only.",
+    "lenses_optics": "Focal length, depth of field, and optic character.",
+    "composition": "Where masses sit in the frame.",
+    "lighting": "Key quality, direction, and motivation.",
+    "color_film_look": "Grade, grain, and photochemical grammar. No stock names.",
+    "time_motion": "Shutter, speed, and temporal grammar.",
+    "in_camera_optical": "Flare, zoom, and in-camera tricks.",
+    "editing_transitions": "Named cuts. Omitted on Klein stills.",
+    "atmosphere_weather": "Air, precip, and ground. LTX interleaves foley.",
+    "genre_looks": "Genre lighting and texture grammar, not a titled film.",
+    "viral_looks": "Short-form hook grammar. I2V drops look axes.",
     "web_search": "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only.",
     "subagents": "Planner search count (1–3). Sequential CPU workers.",
     "history": "Optional prior turns. One Queue per message — not a streaming chat.",
@@ -734,6 +783,7 @@ def _spec(
     sampler_steps_cfg: bool = False,
     film_minimal: bool = False,
     forge_widgets: bool = False,
+    cinema_widgets: bool = False,
     research_widgets: bool = False,
     primitive_strings: bool = False,
     hide_images: bool = False,
@@ -750,6 +800,7 @@ def _spec(
         "sampler_steps_cfg": sampler_steps_cfg,
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
+        "cinema_widgets": cinema_widgets,
         "research_widgets": research_widgets,
         "primitive_strings": primitive_strings,
         "hide_images": hide_images,
@@ -817,6 +868,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "llm",
         "klein/still-draft",
         forge_widgets=True,
+    ),
+    "inspire/cinema-rack": _spec(
+        "inspire",
+        "llm",
+        "inspire/prompt-forge",
+        "klein/still-draft",
+        cinema_widgets=True,
     ),
     "inspire/research-chat": _spec(
         "inspire",
@@ -1035,6 +1093,11 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
     ),
+    "inspire/cinema-rack": (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+    ),
     "inspire/research-chat": ("EZCreativeResearch",),
     "wan/flf-5s": ("LoadImage",),
     "wan/vace-join": ("LoadImage",),
@@ -1136,6 +1199,50 @@ def _collect_raw_inputs(
                 raw.append((nid, "prompt", node))
             elif node.get("type") == "PrimitiveNode":
                 raw.append((node["id"], "value", node))
+        return raw
+
+    if spec.get("cinema_widgets"):
+        axis_names = (
+            "framing_shot_size",
+            "camera_angles",
+            "camera_movement",
+            "lenses_optics",
+            "composition",
+            "lighting",
+            "color_film_look",
+            "time_motion",
+            "in_camera_optical",
+            "editing_transitions",
+            "atmosphere_weather",
+            "genre_looks",
+            "viral_looks",
+        )
+        for node in graph.get("nodes") or []:
+            if node.get("type") != "EZCinemaRack":
+                continue
+            nid = node["id"]
+            raw.append((nid, "subject", node))
+            raw.append((nid, "recipe", node))
+            raw.append((nid, "flavor", node))
+            for axis_id in axis_names:
+                raw.append((nid, axis_id, node))
+        for node in graph.get("nodes") or []:
+            ntype = node.get("type")
+            nid = node["id"]
+            if ntype not in (
+                "EZKleinPromptEnhance",
+                "EZWanPromptEnhance",
+                "EZLTXPromptEnhance",
+            ):
+                continue
+            raw.extend(
+                (
+                    (nid, "style", node),
+                    (nid, "enhance", node),
+                )
+            )
+            if ntype == "EZLTXPromptEnhance":
+                raw.append((nid, "audio_notes", node))
         return raw
 
     if spec.get("forge_widgets"):
@@ -1388,7 +1495,7 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
             for node in graph.get("nodes") or []
             if node.get("type") == "EZCreativeResearch"
         ]
-    if spec.get("forge_widgets"):
+    if spec.get("forge_widgets") or spec.get("cinema_widgets"):
         return [
             int(node["id"])
             for node in graph.get("nodes") or []

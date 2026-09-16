@@ -45,6 +45,7 @@ SKIP_SAMPLE_PREFIXES = (
     "dcc/trellis/",
     "optional/klein/",
     "optional/longcat",
+    "inspire/cinema-rack",
 )
 
 

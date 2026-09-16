@@ -1,0 +1,2331 @@
+[
+  {
+    "id": "col_color_neg_warm",
+    "label": "Color-negative warmth",
+    "clause": "Warm color-negative look: honey highlights, gentle cyan in shadows, organic dye.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_tungsten_day_cool",
+    "label": "Tungsten-balanced daylight",
+    "clause": "Daylight shot as if tungsten-balanced: the world goes cold cyan, skin holds a bit of warmth.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_cross_process",
+    "label": "Cross-process shift",
+    "clause": "Cross-process shift: skews greens and magentas, contrast up, skies odd.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_bleach_bypass",
+    "label": "Bleach-bypass silver",
+    "clause": "Bleach-bypass: retained silver, crushed color, harsh contrast, metallic skin.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "col_pastel_candy"
+    ],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_retained_silver",
+    "label": "Retained silver",
+    "clause": "ENR-class retained silver: color still there but contrast and grain bite.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_three_strip",
+    "label": "Three-strip primaries",
+    "clause": "Three-strip-adjacent primaries: rich red, green, blue, almost poster separations.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_two_strip",
+    "label": "Two-strip red cyan",
+    "clause": "Two-strip-adjacent: reds and cyans, missing true yellow-green.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_ortho_skies",
+    "label": "Ortho dark skies",
+    "clause": "Orthochromatic-adjacent: skies go dark, lips pale, foliage odd.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_infrared_foliage",
+    "label": "Infrared foliage",
+    "clause": "Infrared-adjacent: foliage glows pale, skies dark, skin porcelain.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_print_density",
+    "label": "Print-film density",
+    "clause": "Print-film density: rich blacks, rolled highlights, a theatrical print.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_faded_print",
+    "label": "Faded print",
+    "clause": "A faded print: magentas lingering, cyans gone, contrast tired.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_complementary_grade",
+    "label": "Complementary grade",
+    "clause": "Shadows a cool teal, skin and practicals warm, a complementary grade without a meme name.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_pastel_candy",
+    "label": "Pastel candy",
+    "clause": "Pastel candy: lifted blacks, sweet hues, low contrast.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "col_bleach_bypass"
+    ],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_crushed_shadow",
+    "label": "Crushed shadow",
+    "clause": "Crushed shadows, no secret in the blacks, graphic night.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_super_white",
+    "label": "Super-white highlight",
+    "clause": "Super-white highlights, windows blowing, HDR-display energy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_sdr_print_roll",
+    "label": "SDR print roll-off",
+    "clause": "SDR print roll-off: highlights gently compress, no HDR glitter.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_mono_panchro",
+    "label": "Panchromatic mono",
+    "clause": "Panchromatic black-and-white, even tones, honest skies.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_mono_red_filter",
+    "label": "Red-filter mono",
+    "clause": "Red-filter mono: dark skies, pale skin, dramatic clouds.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_mono_green_filter",
+    "label": "Green-filter mono",
+    "clause": "Green-filter mono: skin with bite, foliage separated.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_mono_blue_filter",
+    "label": "Blue-filter mono",
+    "clause": "Blue-filter mono: skies pale, skin darker, a harsher face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_split_tone_warm_cool",
+    "label": "Split-tone warm cool",
+    "clause": "Split tone: warm highlights, cool shadows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_split_tone_sepia_blue",
+    "label": "Split-tone sepia blue",
+    "clause": "Sepia highlights, blue shadows, a period postcard.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_analogous_amber",
+    "label": "Analogous amber",
+    "clause": "An analogous amber palette: honey, rust, cream, almost no blue.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_analogous_sea",
+    "label": "Analogous sea",
+    "clause": "An analogous sea palette: teal, foam, slate.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_triadic_circus",
+    "label": "Triadic circus",
+    "clause": "Triadic primaries in costume and paint, a circus of hue.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_muted_earth",
+    "label": "Muted earth",
+    "clause": "Muted earth: clay, olive, dust, desaturated.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_neon_night",
+    "label": "Neon night",
+    "clause": "Neon night: magenta and cyan signs, wet street mixing them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_sodium_street",
+    "label": "Sodium street",
+    "clause": "Sodium-vapor street: monochrome orange air, faces pumpkin.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_fluorescent_office",
+    "label": "Fluorescent office",
+    "clause": "Fluorescent office: green-magenta hum, sick skin, greenish walls.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_candle_tungsten",
+    "label": "Candle tungsten",
+    "clause": "Candle tungsten: deep amber, falloff to black, no cyan.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_overcast_cyan",
+    "label": "Overcast cyan",
+    "clause": "Overcast cyan: cool neutrals, open shadows, no gold.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_golden_amber",
+    "label": "Golden amber",
+    "clause": "Golden-hour amber: honey rims, long warm shadows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_magenta_hour",
+    "label": "Magenta hour",
+    "clause": "Magenta hour: the sky a rose, faces catching it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_fine_grain",
+    "label": "Fine grain",
+    "clause": "Fine grain, almost a clean scan, texture in the shadows only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_heavy_grain",
+    "label": "Heavy grain",
+    "clause": "Heavy grain, dye clouds, a pushed stock look without a stock name.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_dye_cloud",
+    "label": "Dye cloud",
+    "clause": "Dye-cloud grain, color blotches in the midtones.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_gate_weave",
+    "label": "Mild gate weave",
+    "clause": "Mild gate-weave instability, the frame breathing in registration.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_halation_red",
+    "label": "Red halation",
+    "clause": "Red halation around practicals, a photochemical glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_optical_vignette",
+    "label": "Optical vignette",
+    "clause": "A mild optical vignette, corners a stop down, not a social-app darken.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_no_vignette",
+    "label": "Even field",
+    "clause": "An even field, no corner darkening, modern coated evenness.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_hdr_display",
+    "label": "HDR display punch",
+    "clause": "HDR display punch: speculars that hurt, deep but open shadows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "display"
+    ]
+  },
+  {
+    "id": "col_theatrical_xenon",
+    "label": "Theatrical xenon",
+    "clause": "Theatrical xenon print: a cool white, dense blacks, projection punch.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_dci_p3_rich",
+    "label": "Wide-gamut rich",
+    "clause": "Wide-gamut rich: reds and greens more than a consumer display.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "display"
+    ]
+  },
+  {
+    "id": "col_rec709_safe",
+    "label": "Broadcast-safe",
+    "clause": "Broadcast-safe: hues that survive a phone, no illegal primaries.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "display"
+    ]
+  },
+  {
+    "id": "col_skip_bleach_warm_print",
+    "label": "Skip-bleach warm print",
+    "clause": "Skip-bleach then a warm print: silver bite with amber highlights.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_day_for_night_blue",
+    "label": "Day-for-night blue",
+    "clause": "Day-for-night: underexposed daylight, a blue cast, crushed skies.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_night_for_night",
+    "label": "Night-for-night",
+    "clause": "Night-for-night: true dark, practicals as the only color, no blue wash.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_warm_key_cool_fill_grade",
+    "label": "Warm key cool fill grade",
+    "clause": "Grade as if warm key and cool fill: faces honey, rooms teal.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_monochrome_split_gold",
+    "label": "Gold split mono",
+    "clause": "Monochrome with gold split in the highlights only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_selene_blue_mono",
+    "label": "Selene blue mono",
+    "clause": "Monochrome with a cold blue overall, moonlight implied.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_sepia_full",
+    "label": "Full sepia",
+    "clause": "Full sepia, no remaining cool, a uniform brown world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_cyanotype",
+    "label": "Cyanotype",
+    "clause": "Cyanotype: a blue-and-white world, no brown.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_high_key_color",
+    "label": "High-key color",
+    "clause": "High-key color: pastels, open shadows, almost no black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_low_key_color",
+    "label": "Low-key color",
+    "clause": "Low-key color: hue only in the small lit areas, the rest void.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_saturated_theatrical",
+    "label": "Saturated theatrical",
+    "clause": "Saturated theatrical: costumes and gels at eleven, still photochemical.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_desat_almost_mono",
+    "label": "Almost mono color",
+    "clause": "Almost mono: a whisper of hue, mostly silver.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_only_red_accent",
+    "label": "Only red accent",
+    "clause": "A grey world with one red accent (a lamp, a coat).",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_only_green_accent",
+    "label": "Only green accent",
+    "clause": "A grey world with one green practical or exit glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_oppen_orange_teal_soft",
+    "label": "Soft complementary",
+    "clause": "A soft complementary: not a meme crush, just warm skin vs cool rooms.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_green_matrix_office",
+    "label": "Matrix-adjacent office",
+    "clause": "Office green-black, monitors the only other hue \u2014 grammar, not a titled film.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_amber_period",
+    "label": "Amber period",
+    "clause": "Amber period: tobacco, varnish, no modern cool LEDs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_steel_winter",
+    "label": "Steel winter",
+    "clause": "Steel winter: blue-grey, no gold, breath visible in the grade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_tropical_click",
+    "label": "Tropical click",
+    "clause": "Tropical click: greens extra, cyans in water, skin sun-warm.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_desert_bleach",
+    "label": "Desert bleach",
+    "clause": "Desert bleach: yellow-white, color boiled out, hard sun.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_jungle_moss",
+    "label": "Jungle moss",
+    "clause": "Jungle moss: deep greens, little sky, brown-black shadows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_arctic_white",
+    "label": "Arctic white",
+    "clause": "Arctic white: almost no saturation, blue in open shade, skin windburn red.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_urban_sodium_mix",
+    "label": "Urban mix",
+    "clause": "Urban mix: sodium orange plus cool shop LEDs in the same street.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_club_gel",
+    "label": "Club gel",
+    "clause": "Club gel: magenta and cyan on faces, no daylight.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_hospital_green",
+    "label": "Hospital green",
+    "clause": "Hospital green-practical, fluorescent skin, cold tile.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_submarine_red",
+    "label": "Submarine red",
+    "clause": "Submarine red-practical: a red world, instruments the only other marks.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_spacecraft_led",
+    "label": "Spacecraft LED",
+    "clause": "Spacecraft LED: cool white panels, no earth sun, slight green in screens.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_candle_only_grade",
+    "label": "Candle-only grade",
+    "clause": "Candle-only: no fill, falloff to black, skin only where flame reaches.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_overcast_no_grade",
+    "label": "Honest overcast",
+    "clause": "Honest overcast: almost no grade, true neutrals.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_golden_no_crush",
+    "label": "Honest golden",
+    "clause": "Honest golden hour: warmth from the sun, not a LUT crush.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_night_no_teal",
+    "label": "Honest night",
+    "clause": "Honest night: mixed practicals, no forced teal.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_push_process_grain",
+    "label": "Push-process grain",
+    "clause": "Push-process: more grain, more contrast, shadows blocking.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_pull_process_soft",
+    "label": "Pull-process soft",
+    "clause": "Pull-process: finer grain, gentler contrast, a softer world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_expired_shift",
+    "label": "Expired shift",
+    "clause": "Expired-stock shift: odd magentas, uneven dye, surprise hues.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_e6_slide",
+    "label": "Slide-film snap",
+    "clause": "Slide-film snap: high contrast, rich blacks, saturated but not candy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_negative_scan_flat",
+    "label": "Flat negative scan",
+    "clause": "A flat negative scan: low contrast, all color still in the file, waiting.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "capture"
+    ]
+  },
+  {
+    "id": "col_print_through_window",
+    "label": "Print through window",
+    "clause": "As if printed through a window: a little flare, a little lift.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_ib_dye_transfer",
+    "label": "Dye-transfer density",
+    "clause": "Dye-transfer-class density: extraordinary blacks and separated primaries.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_techniscope_grit_grade",
+    "label": "2-perf grit grade",
+    "clause": "2-perf-class grit in the grade: a bit more grain for the same look.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_65_fine_grade",
+    "label": "65 fine grade",
+    "clause": "65-class fine: huge resolution, grain almost gone, color still organic.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_16_chunky",
+    "label": "16 chunky",
+    "clause": "16-class chunky grain, color a little wild, documentary bite.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_super8_weave",
+    "label": "Super8 weave",
+    "clause": "Super8-class: heavy grain, weave, halation, small-format nostalgia.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grain"
+    ]
+  },
+  {
+    "id": "col_digital_clean",
+    "label": "Clean digital",
+    "clause": "Clean digital: no grain, tight highlights, modern sensor.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "digital"
+    ]
+  },
+  {
+    "id": "col_log_flat",
+    "label": "Log-flat",
+    "clause": "Log-flat: grey world, all latitude visible, not a finished print.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "digital"
+    ]
+  },
+  {
+    "id": "col_rec709_punch",
+    "label": "Rec709 punch",
+    "clause": "A finished Rec.709 punch: contrast in, saturation honest.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "digital"
+    ]
+  },
+  {
+    "id": "col_hlg_tv",
+    "label": "HLG television",
+    "clause": "HLG television: brighter windows, still a TV, not a cinema print.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "display"
+    ]
+  },
+  {
+    "id": "col_dci_warm_print",
+    "label": "DCI warm print",
+    "clause": "DCI warm print: a slightly warm white point, theatrical.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_cool_led_cinema",
+    "label": "Cool LED cinema",
+    "clause": "Cool LED cinema white: a modern projection, slightly blue.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_sepia_highlight_only",
+    "label": "Sepia highlights only",
+    "clause": "Sepia in the highlights, shadows stay silver.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_blue_shadow_only",
+    "label": "Blue shadows only",
+    "clause": "Blue only in the shadows, highlights stay neutral.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_green_shadow_horror",
+    "label": "Green shadow horror",
+    "clause": "Green in the shadows, a sick room, highlights still skin.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_magenta_shadow_night",
+    "label": "Magenta night shadow",
+    "clause": "Magenta in night shadows, neon implied even without signs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_yellow_highlight_sun",
+    "label": "Yellow sun highlights",
+    "clause": "Yellow only in the sun side, shade stays grey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_no_orange_teal",
+    "label": "No complementary crush",
+    "clause": "A grade that refuses complementary crush: hues stay where the lamps put them.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_skin_priority",
+    "label": "Skin priority",
+    "clause": "Skin hue locked, the room allowed to go odd around it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_product_true",
+    "label": "Product-true color",
+    "clause": "Product-true: the object\u2019s color honest, the room secondary.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_food_appetite",
+    "label": "Food appetite",
+    "clause": "Food appetite: slightly warm, greens of garnish extra, steam catching light.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_fashion_bleach",
+    "label": "Fashion bleach",
+    "clause": "Fashion bleach: pale skin, crushed color in clothes except one accent.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_news_honest",
+    "label": "News honest",
+    "clause": "News honest: no cinematic grade, mixed lamps as they are.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_sports_punch",
+    "label": "Sports punch",
+    "clause": "Sports punch: extra saturation, extra contrast, grass extra green.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_music_video_smear_color",
+    "label": "Music-video smear color",
+    "clause": "Music-video smear: shutter-drag color, lights painting streaks.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_commercial_wrap_clean",
+    "label": "Commercial wrap clean",
+    "clause": "Commercial wrap: clean whites, product color true, a little pop.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_doc_available_mix",
+    "label": "Doc available mix",
+    "clause": "Documentary available mix: whatever the room lamps are, no unify.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_period_gaslight",
+    "label": "Period gaslight",
+    "clause": "Period gaslight: green-yellow flame, no LED white.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_period_oil",
+    "label": "Period oil lamp",
+    "clause": "Period oil lamp: deep amber, smoke in the air as color.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_period_daylight_north",
+    "label": "North-daylight period",
+    "clause": "North-daylight period: cool window, warm interior mix.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_cyber_wet_neon_grade",
+    "label": "Wet neon grade",
+    "clause": "Wet neon grade: cyan and magenta in the street, skin taking both.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_solar_clear",
+    "label": "Solar clear",
+    "clause": "Solar clear: high noon color, almost no grade, honest sun.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_folk_overcast_mud",
+    "label": "Folk overcast mud",
+    "clause": "Folk overcast: mud, wool, no candy, a little green in the grey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_prestige_shallow_complement",
+    "label": "Prestige complementary",
+    "clause": "Prestige complementary: shallow cream bokeh plus a polite teal-warm split.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_action_haze_sun",
+    "label": "Action haze sun",
+    "clause": "Action haze sun: backlight gold, dust in the air as color.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_horror_underexposed_green",
+    "label": "Horror underexposed green",
+    "clause": "Horror underexposed: a green-black hall, almost no fill.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_giallo_gel",
+    "label": "Giallo gel night",
+    "clause": "Giallo gel night: primary gels on faces, a comic of color.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_noir_silver_hint",
+    "label": "Noir silver hint",
+    "clause": "Noir with a hint of remaining color in practicals, the rest silver.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_western_dust_noon_color",
+    "label": "Western dust noon",
+    "clause": "Western dust noon: yellow-white, sky hard, no lush green.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_western_magic_amber",
+    "label": "Western magic amber",
+    "clause": "Western magic-hour amber: dust as gold, long shadows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_heist_cool_tungsten",
+    "label": "Heist cool tungsten",
+    "clause": "Heist cool tungsten: a little cyan in the practicals, night work.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_romcom_bounce_beauty",
+    "label": "Rom-com bounce beauty",
+    "clause": "Rom-com bounce beauty: open warm faces, pretty highlights, no grit.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_kitchen_sink_overcast",
+    "label": "Kitchen-sink overcast",
+    "clause": "Kitchen-sink overcast: leftover color, no glamour, true rooms.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_melodrama_window",
+    "label": "Melodrama window",
+    "clause": "Melodrama window: a shaft of colored sun, the rest brown-dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_gothic_candle",
+    "label": "Gothic candle",
+    "clause": "Gothic candle: small warm islands, stone going blue-black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_found_footage_auto",
+    "label": "Found-footage auto",
+    "clause": "Found-footage auto-white: mixed, ugly, honest to a consumer camera.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_bodycam_auto",
+    "label": "Body-cam auto",
+    "clause": "Body-cam auto: green-magenta hunt, headlights clipping.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_security_bw",
+    "label": "Security mono",
+    "clause": "Security mono: a high-corner black-and-white, no grade romance.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mono"
+    ]
+  },
+  {
+    "id": "col_phone_ccd_soft",
+    "label": "Soft digital sensor",
+    "clause": "Soft early-digital sensor: slightly smeary color, highlight bloom, no brand.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "digital"
+    ]
+  },
+  {
+    "id": "col_phone_mist_bloom",
+    "label": "Phone mist bloom",
+    "clause": "Phone-shot mist-filter bloom: highlights milky, still a vertical frame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "diffusion"
+    ]
+  },
+  {
+    "id": "col_lut_refused",
+    "label": "No LUT crush",
+    "clause": "No LUT crush: color from lamps and weather only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_print_emulation_gentle",
+    "label": "Gentle print emulation",
+    "clause": "Gentle print emulation: a little density, a little roll-off, still digital-clean underneath.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "print"
+    ]
+  },
+  {
+    "id": "col_silver_retention_night",
+    "label": "Silver night",
+    "clause": "Silver retention at night: street lamps biting, color thin.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "process"
+    ]
+  },
+  {
+    "id": "col_pastel_dawn",
+    "label": "Pastel dawn",
+    "clause": "Pastel dawn: pink and blue, low contrast, no black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_harsh_noon_color",
+    "label": "Harsh noon color",
+    "clause": "Harsh noon: color boiled, contrast from the sun not the grade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_blue_hour_hush",
+    "label": "Blue-hour hush color",
+    "clause": "Blue-hour hush: residual daylight cyan, lamps just coming on amber.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_black_wet_night",
+    "label": "Black-wet night color",
+    "clause": "Black-wet night: speculars on asphalt, color only in reflections.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_sodium_plus_moon",
+    "label": "Sodium plus moon",
+    "clause": "Sodium orange plus a cool moon fill, two nights in one street.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "palette"
+    ]
+  },
+  {
+    "id": "col_led_mixed_ugly",
+    "label": "Mixed LED ugly",
+    "clause": "Mixed LED ugly: green shop, magenta bar, no unify \u2014 documentary night.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "honest"
+    ]
+  },
+  {
+    "id": "col_unify_night_teal",
+    "label": "Unify night cool",
+    "clause": "Unify the night to one cool, practicals still warm islands.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_unify_day_warm",
+    "label": "Unify day warm",
+    "clause": "Unify the day to one warm, shadows still a little cool.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_offset_green",
+    "label": "Offset green",
+    "clause": "A slight green offset in the mids, 1970s television adjacent without a stock name.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_offset_magenta",
+    "label": "Offset magenta",
+    "clause": "A slight magenta offset, shadows going rose.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_lifted_blacks_fog",
+    "label": "Lifted blacks fog",
+    "clause": "Lifted blacks as if fog were in the grade, even indoors.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_inky_blacks",
+    "label": "Inky blacks",
+    "clause": "Inky blacks, no lift, a print that can hide things.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_highlight_amber_only",
+    "label": "Amber highlights only",
+    "clause": "Only the highlights go amber, mids stay grey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_shadow_teal_only",
+    "label": "Teal shadows only",
+    "clause": "Only the shadows go teal, mids stay grey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_skin_desat_room_sat",
+    "label": "Skin desat room sat",
+    "clause": "Skin a little desaturated, the room extra colorful.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_skin_sat_room_desat",
+    "label": "Skin sat room desat",
+    "clause": "Skin rich, the room almost grey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_duotone_amber_ink",
+    "label": "Duotone amber ink",
+    "clause": "Duotone: amber and ink, two inks only.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_duotone_ice_ink",
+    "label": "Duotone ice ink",
+    "clause": "Duotone: ice blue and ink.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_tritone_earth",
+    "label": "Tritone earth",
+    "clause": "Tritone earth: cream, clay, ink.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "grade"
+    ]
+  },
+  {
+    "id": "col_vhs_shift",
+    "label": "Tape-shift color",
+    "clause": "Tape-shift: chroma bleed, a little delay on reds, not a brand.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_broadcast_ntsc_soft",
+    "label": "Broadcast soft chroma",
+    "clause": "Broadcast-soft chroma: hues a little smeared, contrast TV-like.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "texture"
+    ]
+  },
+  {
+    "id": "col_imax_class_color_depth",
+    "label": "Large-format color depth",
+    "clause": "Large-format-class color depth: more separation in the mids, still organic.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "format"
+    ]
+  }
+]

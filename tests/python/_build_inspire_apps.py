@@ -98,6 +98,27 @@ Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
 """
 
+CINEMA_NOTE = """## inspire/cinema-rack
+
+Cinema Rack — pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt. No UNET, no VAE, no KSampler.
+
+Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+
+  ./scripts/manage.sh occupancy enter llm-desk --yes
+
+Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
+
+1. Type a **Subject** (who/what). Leave empty to splice techniques only.
+2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
+3. Pick at most one technique per axis (shot size, angle, move, lens, …).
+4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
+5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
+6. Copy the family you need into **klein/still-draft** or an I2V graph.
+
+Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.
+Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
+"""
+
 RESEARCH_MESSAGE = (
     "What lighting and camera language fits a night rooftop still of a techno "
     "wizard in a tropical city?"
@@ -589,10 +610,127 @@ def build_research_chat() -> dict:
     return graph
 
 
+def build_cinema_rack() -> dict:
+    note_h = 360.0
+    note_group_h = note_h + GROUP_TITLE_INSET
+    rack_h = 420.0
+    desk_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_y = desk_group_top + GROUP_TITLE_INSET
+    enh_group_top = desk_group_top + rack_h + GROUP_TITLE_INSET + 20.0
+    enh_y = enh_group_top + GROUP_TITLE_INSET
+    prompt_links = [1, 2, 3]
+    none = "none"
+    axis_nones = [none] * 13
+    note = _node(
+        1,
+        "Note",
+        [40, LAB_NODE_Y0],
+        [1340, note_h],
+        "Operator note",
+        [CINEMA_NOTE],
+        0,
+    )
+    rack = _node(
+        5,
+        "EZCinemaRack",
+        [40, desk_y],
+        [1340, rack_h],
+        "Cinema Rack",
+        ["A techno wizard on a sunny tropical city rooftop.", "klein", none, *axis_nones],
+        1,
+        [
+            {"name": "prompt", "type": "STRING", "links": prompt_links, "slot_index": 0},
+            {"name": "notes", "type": "STRING", "links": [], "slot_index": 1},
+        ],
+    )
+    klein = _node(
+        2,
+        "EZKleinPromptEnhance",
+        [40, enh_y],
+        [420, 300],
+        "Klein family",
+        ["custom", LAZY, True, "t2i", "YouTube 16:9 still", "none", "inspire/cinema-rack"],
+        2,
+        _str_out(),
+    )
+    klein["inputs"] = [_linked_prompt(1)]
+    wan = _node(
+        3,
+        "EZWanPromptEnhance",
+        [500, enh_y],
+        [420, 300],
+        "Wan family",
+        ["custom", LAZY, True, "t2v", "5 seconds, 24 fps", "none", "inspire/cinema-rack"],
+        3,
+        _str_out(),
+    )
+    wan["inputs"] = [_linked_prompt(2)]
+    ltx = _node(
+        4,
+        "EZLTXPromptEnhance",
+        [960, enh_y],
+        [420, 380],
+        "LTX family",
+        [
+            "custom",
+            LAZY,
+            True,
+            "t2v",
+            "5 seconds, 24 fps",
+            "world SFX, no score",
+            "none",
+            "inspire/cinema-rack",
+        ],
+        4,
+        _str_out(),
+    )
+    ltx["inputs"] = [_linked_prompt(3)]
+    links = [
+        [1, 5, 0, 2, 0, "STRING"],
+        [2, 5, 0, 3, 0, "STRING"],
+        [3, 5, 0, 4, 0, "STRING"],
+    ]
+    graph = {
+        "id": "inspire/cinema-rack",
+        "revision": 1,
+        "last_node_id": 5,
+        "last_link_id": 3,
+        "nodes": [note, rack, klein, wan, ltx],
+        "links": links,
+        "groups": [
+            _group(1, "NOTE", 20, LAB_GROUP_Y0, 1380, note_group_h, "#3f789e"),
+            _group(
+                2,
+                "RACK",
+                20,
+                desk_group_top,
+                1380,
+                rack_h + GROUP_TITLE_INSET,
+                "#3f789e",
+            ),
+            _group(3, "KLEIN", 20, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(4, "WAN", 480, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(5, "LTX", 940, enh_group_top, 460, 380 + GROUP_TITLE_INSET, "#3f789e"),
+        ],
+        "config": {},
+        "extra": {
+            "lab_profile": "inspire/cinema-rack",
+            "lab_note": CINEMA_NOTE,
+            "lab_description": (
+                "No-UNET Cinema Rack: splice cinematography axes into Klein / Wan / LTX"
+            ),
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+    return graph
+
+
 def main() -> None:
     _dump(lab_json("inspire/prompt-forge.json"), build_prompt_forge())
     _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
     _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
+    _dump(lab_dest("inspire/cinema-rack.json"), build_cinema_rack())
 
 
 if __name__ == "__main__":
