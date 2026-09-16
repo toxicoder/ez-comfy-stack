@@ -1,8 +1,8 @@
 {
   "id": "10-cook-firing",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ndub wobble\nNill Bye reading the Fed act\n\n[verse]\nThe Federal Reserve Act built a board that does not sit at will\nFor-cause is the whole independence sentence\nTrump tried to fire Lisa Cook as if cause were a mood\nA mood is not malfeasance. A mood is a rally\nNill Bye reading the first attempted governor-purge\nSince nineteen-thirteen the door had stayed shut, malfeasance\nShut is a tradition with a statute under it, not a vibe, fedact\nA central bank that sits at will is a central bank that sits at a rally\nRallies do not set a funds rate, forcause\nThat is the point of the boring act, malfeasance\nYou treated boring as a defect\nBoring is the feature that keeps a currency from becoming a souvenir\n\n[chorus]\nCook firing\nNill Bye on the first attempted governor-purge\nTrump reached for a Fed seat like it was a loyalty chair\nNo president had tried that door since nineteen-thirteen\nThe Court kept her in the chair pending the merits\nYour purge failed the independence\n\n[verse]\nDubstep wobble on a for-cause that was not a cause\nHalf-time snare under a loyalty chair the act does not sell\nTrump still touring the attempt as accountability\nAccountability for a governor is the statute's cause list, not a post\nNill Bye mad at a post as a removal instrument\nJanuary arguments, justices skeptical of the bid\nJune twenty-nine, twenty-twenty-six, five-four: she stays pending merits\nA stay against the purge is not a personality contest\nIt is a republic declining to let a rate seat become a scalp\nScalps are for rallies. Rate seats are for data\nYou wanted a scalp. The Court wanted the act, fedact\nThe act already had a door with a lock\n\n[chorus]\nCook firing\nNill Bye on the first attempted governor-purge\nTrump reached for a Fed seat like it was a loyalty chair\nNo president had tried that door since nineteen-thirteen\nThe Court kept her in the chair pending the merits\nYour purge failed the independence\n\n[verse]\nSlaughter at the FTC is a different organic statute and a different holding, forcause\nThis bar is the Fed, because the Fed is the one that prices the country\nTrump's bid treated every independent seat as the same trophy wall, malfeasance\nTrophy walls are how you get a politicized funds rate, fedact\nNill Bye filing the cook firing\nI want a cause, you want a mood\nI want a lock, you want a trophy, forcause\nNineteen-thirteen already voted for the lock\nYou tried to pick it with a presser, malfeasance\nPressers are not for-cause\nThe five-four already left her in the chair, fedact\nThe chair already knew it was not a loyalty seat\n\n[chorus]\nCook firing\nNill Bye on the first attempted governor-purge\nTrump reached for a Fed seat like it was a loyalty chair\nNo president had tried that door since nineteen-thirteen\nThe Court kept her in the chair pending the merits\nYour purge failed the independence\n\n[verse]\nKeep the wobble, print the since-nineteen-thirteen\nA first attempt in a century is not a flex. It is a warning light, forcause\nTrump still sure a president owns every chair in town\nOwnership is not the Fed Act. Tenure with cause is\nNill Bye posting the cook firing\nBring malfeasance if you have it\nLose the mood as a removal instrument\nThe lock already held pending merits\nPending is not forever. It is the method, malfeasance\nThe method already declined the scalp\nIndependence already had a statute, fedact\nThe presser already bounced off the lock\n\n[chorus]\nCook firing\nNill Bye on the first attempted governor-purge\nTrump reached for a Fed seat like it was a loyalty chair\nNo president had tried that door since nineteen-thirteen\nThe Court kept her in the chair pending the merits\nYour purge failed the independence\n\n[outro]\nwobble rest\nlock holds\ncut",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/pardon-flood/10-cook-firing",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

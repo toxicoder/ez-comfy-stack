@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from _lab_paths import lab_example_paths
+from _lab_paths import lab_example_paths, lab_json
 from _stamp_app_mode import BANNED, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -82,9 +82,33 @@ def test_lab_graph_completeness(path: Path) -> None:
     assert graph.get("revision") is not None
 
     live = {int(n["id"]) for n in graph.get("nodes") or []}
+    by_id = {int(n["id"]): n for n in graph.get("nodes") or []}
     _, endpoints = _link_endpoints(graph)
     missing = endpoints - live
     assert not missing, f"{path.name} dangling link nodes {missing}"
+
+    for link in graph.get("links") or []:
+        if isinstance(link, dict):
+            lid = int(link.get("id") or link.get("link") or 0)
+            dest = int(link.get("target_id") or link.get("to") or 0)
+            slot = int(link.get("target_slot") or link.get("to_slot") or 0)
+        else:
+            lid = int(link[0])
+            dest = int(link[3])
+            slot = int(link[4])
+        node = by_id.get(dest)
+        assert node is not None, (path.name, lid, dest)
+        inputs = node.get("inputs") or []
+        assert slot < len(inputs), (path.name, node.get("type"), slot, lid)
+        recorded = inputs[slot].get("link")
+        assert recorded is not None and int(recorded) == lid, (
+            path.name,
+            node.get("type"),
+            node.get("title"),
+            inputs[slot].get("name"),
+            recorded,
+            lid,
+        )
 
     blob = json.dumps(graph)
     for needle in BANNED:
@@ -179,3 +203,110 @@ def test_lab_graph_completeness(path: Path) -> None:
             if node.get("title") == "Save last frame":
                 prefix = str((node.get("widgets_values") or [""])[0])
                 assert prefix.endswith("_last"), (path.name, prefix)
+
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "KSampler":
+            continue
+        if int(node.get("mode") or 0) != 0:
+            continue
+        for name in ("positive", "negative"):
+            inp = next(
+                (i for i in node.get("inputs") or [] if i.get("name") == name),
+                None,
+            )
+            assert inp is not None and inp.get("link") is not None, (
+                path.name,
+                node.get("title"),
+                name,
+            )
+
+
+def _source_of(graph: dict, node: dict, name: str) -> dict | None:
+    inp = next((i for i in node.get("inputs") or [] if i.get("name") == name), None)
+    if inp is None or inp.get("link") is None:
+        return None
+    lid = int(inp["link"])
+    by_id = {int(n["id"]): n for n in graph["nodes"]}
+    for link in graph.get("links") or []:
+        if int(link[0]) == lid:
+            return by_id.get(int(link[1]))
+    return None
+
+
+def test_prompt_forge_shares_one_prompt_and_context() -> None:
+    graph = _load(lab_json("inspire/prompt-forge.json"))
+    extra = graph.get("extra") or {}
+    assert extra.get("lab_rel") == "inspire/prompt-forge"
+    prims = {
+        str(n.get("title")): n
+        for n in graph["nodes"]
+        if n.get("type") == "PrimitiveNode"
+    }
+    assert set(prims) >= {"Prompt", "Context"}
+    families = [
+        n
+        for n in graph["nodes"]
+        if n.get("type")
+        in {"EZKleinPromptEnhance", "EZWanPromptEnhance", "EZLTXPromptEnhance"}
+    ]
+    assert len(families) == 3
+    for node in families:
+        prompt_src = _source_of(graph, node, "prompt")
+        ctx_src = _source_of(graph, node, "context")
+        assert prompt_src is prims["Prompt"], node.get("title")
+        assert ctx_src is prims["Context"], node.get("title")
+
+
+def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
+    graph = _load(lab_json("inspire/beat-sheet.json"))
+    prims = {
+        str(n.get("title")): n
+        for n in graph["nodes"]
+        if n.get("type") == "PrimitiveNode"
+    }
+    for title in ("Logline", "Script", "Audio policy", "Score"):
+        assert title in prims
+        outs = prims[title].get("outputs") or []
+        assert any(o.get("links") for o in outs), title
+    join = next(n for n in graph["nodes"] if n.get("type") == "EZContextJoin")
+    assert _source_of(graph, join, "a") is prims["Logline"]
+    assert _source_of(graph, join, "b") is prims["Script"]
+    assert _source_of(graph, join, "c") is prims["Audio policy"]
+    assert _source_of(graph, join, "d") is prims["Score"]
+    ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+    assert len(ltx) == 18
+    for node in ltx:
+        assert _source_of(graph, node, "context") is join
+        audio_src = _source_of(graph, node, "audio_notes")
+        assert audio_src is prims["Audio policy"]
+
+
+def test_film_identity_is_context_for_every_ltx_shot() -> None:
+    for rel in ("shorts/go-see.json", "shorts/still-here.json", "shorts/switchyard.json"):
+        graph = _load(lab_json(rel))
+        klein = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
+        ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
+        assert len(ltx) == 18, rel
+        for node in ltx:
+            assert _source_of(graph, node, "context") is klein, (rel, node.get("title"))
+
+
+def test_rap_draft_and_full_wire_lyrics_writer() -> None:
+    for rel in ("audio/music/rap-draft.json", "audio/music/rap-full.json"):
+        graph = _load(lab_json(rel))
+        rap = next(n for n in graph["nodes"] if n.get("type") == "EZRapLyrics")
+        ace = next(n for n in graph["nodes"] if n.get("type") == "EZAceStepPromptEnhance")
+        assert _source_of(graph, ace, "lyrics") is rap, rel
+
+
+def test_podcast_ace_bed_reads_script_context() -> None:
+    for rel in (
+        "audio/podcast/audio-first.json",
+        "audio/podcast/radio-drama.json",
+    ):
+        graph = _load(lab_json(rel))
+        script = next(n for n in graph["nodes"] if n.get("type") == "EZPodcastScript")
+        aces = [n for n in graph["nodes"] if n.get("type") == "EZAceStepPromptEnhance"]
+        assert aces, rel
+        for ace in aces:
+            assert _source_of(graph, ace, "context") is script, (rel, ace.get("title"))

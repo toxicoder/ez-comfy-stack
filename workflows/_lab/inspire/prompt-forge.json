@@ -1,8 +1,8 @@
 {
   "id": "prompt-forge",
   "revision": 1,
-  "last_node_id": 4,
-  "last_link_id": 0,
+  "last_node_id": 6,
+  "last_link_id": 6,
   "nodes": [
     {
       "id": 1,
@@ -13,7 +13,7 @@
       ],
       "size": [
         1340,
-        300.0
+        320.0
       ],
       "flags": {},
       "order": 0,
@@ -24,20 +24,20 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## inspire/prompt-forge\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein/still-draft** (Spark Still).\n\nTurn Enhance off to pin the widget text.\n"
+        "## inspire/prompt-forge\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence once in **Prompt** (or leave the canned line).\n2. Optional **Context**: paste a research brief or bible. Empty is fine.\n3. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n4. Queue. Each Enhance node previews the rewritten STRING. All three families read the same Prompt and Context.\n5. Copy the family you need into **klein/still-draft** (Spark Still).\n\nTurn Enhance off to pin the widget text. Context is ignored when Enhance is off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
     {
-      "id": 2,
-      "type": "EZKleinPromptEnhance",
+      "id": 5,
+      "type": "PrimitiveNode",
       "pos": [
         40,
-        436.0
+        456.0
       ],
       "size": [
         420,
-        300
+        140.0
       ],
       "flags": {},
       "order": 1,
@@ -45,9 +45,101 @@
       "inputs": [],
       "outputs": [
         {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1,
+            2,
+            3
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "A techno wizard on a sunny tropical city rooftop.",
+        "fixed"
+      ],
+      "title": "Prompt"
+    },
+    {
+      "id": 6,
+      "type": "PrimitiveNode",
+      "pos": [
+        500,
+        456.0
+      ],
+      "size": [
+        420,
+        140.0
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            4,
+            5,
+            6
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "",
+        "fixed"
+      ],
+      "title": "Context"
+    },
+    {
+      "id": 2,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        40,
+        672.0
+      ],
+      "size": [
+        420,
+        300
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
           "name": "prompt",
           "type": "STRING",
-          "links": null,
+          "link": 1,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -68,21 +160,35 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         500,
-        436.0
+        672.0
       ],
       "size": [
         420,
         300
       ],
       "flags": {},
-      "order": 2,
+      "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 2,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 5
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -103,21 +209,35 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960,
-        436.0
+        672.0
       ],
       "size": [
         420,
         380
       ],
       "flags": {},
-      "order": 3,
+      "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 3,
+          "widget": {
+            "name": "prompt"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 6
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -135,7 +255,56 @@
       "title": "LTX family"
     }
   ],
-  "links": [],
+  "links": [
+    [
+      1,
+      5,
+      0,
+      2,
+      0,
+      "STRING"
+    ],
+    [
+      2,
+      5,
+      0,
+      3,
+      0,
+      "STRING"
+    ],
+    [
+      3,
+      5,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      6,
+      0,
+      2,
+      1,
+      "STRING"
+    ],
+    [
+      5,
+      6,
+      0,
+      3,
+      1,
+      "STRING"
+    ],
+    [
+      6,
+      6,
+      0,
+      4,
+      1,
+      "STRING"
+    ]
+  ],
   "groups": [
     {
       "id": 1,
@@ -144,7 +313,7 @@
         20,
         24,
         1380,
-        356.0
+        376.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -152,12 +321,12 @@
     },
     {
       "id": 2,
-      "title": "KLEIN",
+      "title": "DESK",
       "bounding": [
         20,
-        380.0,
-        460,
-        356
+        400.0,
+        1380,
+        196.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -165,10 +334,10 @@
     },
     {
       "id": 3,
-      "title": "WAN",
+      "title": "KLEIN",
       "bounding": [
-        480,
-        380.0,
+        20,
+        616.0,
         460,
         356
       ],
@@ -178,10 +347,23 @@
     },
     {
       "id": 4,
+      "title": "WAN",
+      "bounding": [
+        480,
+        616.0,
+        460,
+        356
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
       "title": "LTX",
       "bounding": [
         940,
-        380.0,
+        616.0,
         460,
         436
       ],
@@ -193,8 +375,8 @@
   "config": {},
   "extra": {
     "lab_profile": "inspire/prompt-forge",
-    "lab_note": "## inspire/prompt-forge\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence (or leave the canned line).\n2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n3. Queue. Each Enhance node previews the rewritten STRING.\n4. Copy the family you need into **klein/still-draft** (Spark Still).\n\nTurn Enhance off to pin the widget text.\n",
-    "lab_description": "No-UNET Prompt Forge: Klein + Wan + LTX enhance preview",
+    "lab_note": "## inspire/prompt-forge\n\nPrompt Forge \u2014 rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.\n\nOccupancy: llm \u2014 graph label (not a CLI mode). Prefer GPU 35B:\n\n  ./scripts/manage.sh occupancy enter llm-desk --yes\n\nFalls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.\n\n1. Type a lazy sentence once in **Prompt** (or leave the canned line).\n2. Optional **Context**: paste a research brief or bible. Empty is fine.\n3. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.\n4. Queue. Each Enhance node previews the rewritten STRING. All three families read the same Prompt and Context.\n5. Copy the family you need into **klein/still-draft** (Spark Still).\n\nTurn Enhance off to pin the widget text. Context is ignored when Enhance is off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_description": "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX enhance preview",
     "ds": {
       "scale": 1,
       "offset": [
@@ -202,6 +384,8 @@
         0
       ]
     },
+    "lab_rel": "inspire/prompt-forge",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -216,30 +400,21 @@
     "linearData": {
       "inputs": [
         [
-          2,
-          "prompt",
+          5,
+          "value",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model.",
-            "label": "Klein prompt",
+            "description": "Lazy sentence. All three family rewriters read this.",
+            "label": "Prompt",
             "height": 140
           }
         ],
         [
-          3,
-          "prompt",
+          6,
+          "value",
           {
-            "description": "What to generate. Rewrite prompt expands this for the model.",
-            "label": "Wan prompt",
-            "height": 140
-          }
-        ],
-        [
-          4,
-          "prompt",
-          {
-            "description": "What to generate. Rewrite prompt expands this for the model.",
-            "label": "LTX prompt",
-            "height": 140
+            "description": "Optional research brief or bible. Empty is fine.",
+            "label": "Context",
+            "height": 72
           }
         ],
         [
@@ -311,9 +486,7 @@
       "EZKleinPromptEnhance",
       "EZLTXPromptEnhance",
       "EZWanPromptEnhance"
-    ],
-    "lab_rel": "inspire/prompt-forge",
-    "workflowRendererVersion": "Vue-corrected"
+    ]
   },
   "version": 0.4
 }

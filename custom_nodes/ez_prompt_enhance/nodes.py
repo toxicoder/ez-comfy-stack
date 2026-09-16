@@ -14,13 +14,16 @@ from .client import (
     apply_style_to_prompt,
     complement_negative,
     complete,
+    compose_context_user,
     compose_negative_user,
     enhance_prompt,
     flavor_for_system,
     format_style_instruction,
+    join_context_fields,
     join_prompt,
     load_system_prompt,
     style_ids,
+    with_context_system,
     with_style_system,
 )
 from .client import _close_llm
@@ -29,6 +32,10 @@ from .client import _close_llm
 _ENHANCE_BOOL = (
     "BOOLEAN",
     {"default": True, "label_on": "On", "label_off": "Off"},
+)
+_CONTEXT_INPUT = (
+    "STRING",
+    {"forceInput": True, "dynamicPrompts": False},
 )
 
 
@@ -58,8 +65,15 @@ def _style_id(value: object) -> str:
     return cleaned
 
 
-def _compose_user(prompt: str, duration_hint: str, audio_notes: str = "") -> str:
-    parts = [prompt.strip()]
+def _compose_user(
+    prompt: str,
+    duration_hint: str,
+    audio_notes: str = "",
+    context: str = "",
+) -> str:
+    parts = [compose_context_user(prompt, context)]
+    if not parts[0]:
+        parts = []
     hint = (duration_hint or "").strip()
     if hint:
         parts.append(f"Duration / framing: {hint}")
@@ -87,8 +101,10 @@ def _run(
     audio_notes: str = "",
     style: object = STYLE_NONE,
     mode: str = "",
+    context: str = "",
 ) -> dict:
     original = prompt if isinstance(prompt, str) else str(prompt)
+    ctx = context if isinstance(context, str) else str(context or "")
     do_enhance = _as_bool(enhance)
     style = _style_id(style)
     apply_style = style != STYLE_NONE
@@ -103,8 +119,9 @@ def _run(
             text = apply_style_to_prompt(original, style)
         return _pack(EnhanceResult(text, "enhance off"))
 
-    user = _compose_user(original, duration_hint, audio_notes)
+    user = _compose_user(original, duration_hint, audio_notes, ctx)
     system = load_system_prompt(system_name)
+    system = with_context_system(system, ctx)
     if apply_style:
         instruction = format_style_instruction(style, flavor_for_system(system_name))
         if instruction:
@@ -136,7 +153,10 @@ class EZKleinPromptEnhance:
                 "mode": (["t2i", "edit", "identity"], {"default": "t2i"}),
                 "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
-            }
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -147,12 +167,13 @@ class EZKleinPromptEnhance:
     DESCRIPTION = (
         "Rewrites a lazy prompt for Klein 4B / Qwen3-4B with the on-box "
         "Qwen3-4B-Instruct-2507 GGUF. Modes: t2i, edit, identity (camera-free "
-        "bible). Enhance defaults on. After Queue the CLIP prompt box is the "
+        "bible). Optional context is bible/research (ignored when Enhance is "
+        "off). Enhance defaults on. After Queue the CLIP prompt box is the "
         "CLIP string; Enhance status explains passthrough. Fail-soft without "
         "a GGUF (run download-models)."
     )
 
-    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE):
+    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE, context=""):
         if mode == "edit":
             name = "klein_edit"
         elif mode == "identity":
@@ -166,6 +187,7 @@ class EZKleinPromptEnhance:
             duration_hint,
             style=style,
             mode=mode,
+            context=context,
         )
 
 
@@ -184,7 +206,10 @@ class EZWanPromptEnhance:
                 "mode": (["t2v", "i2v", "flf", "vace"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
-            }
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -196,10 +221,10 @@ class EZWanPromptEnhance:
         "Rewrites a lazy prompt for Wan 2.2 TI2V-5B. T2V is look+motion+one "
         "camera move; I2V is motion+camera only; flf is Fun InP first-last; "
         "vace is join/inpaint. No audio. Style is ignored on I2V/flf/vace. "
-        "Fail-soft without a GGUF."
+        "Optional context is ignored when Enhance is off. Fail-soft without a GGUF."
     )
 
-    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE):
+    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE, context=""):
         if mode == "i2v":
             name = "wan_i2v"
         elif mode == "flf":
@@ -215,6 +240,7 @@ class EZWanPromptEnhance:
             duration_hint,
             style=style,
             mode=mode,
+            context=context,
         )
 
 
@@ -237,7 +263,10 @@ class EZLTXPromptEnhance:
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
                 "style": (style_ids(), {"default": STYLE_NONE}),
-            }
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -247,10 +276,20 @@ class EZLTXPromptEnhance:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Rewrites a lazy prompt for LTX-2.5. Flowing present-tense paragraph "
-        "with audio interleaved. Style is ignored on I2V. Fail-soft without a GGUF."
+        "with audio interleaved. Style is ignored on I2V. Optional context "
+        "(identity/logline) is ignored when Enhance is off. Fail-soft without a GGUF."
     )
 
-    def run(self, prompt, enhance, mode, duration_hint, audio_notes="", style=STYLE_NONE):
+    def run(
+        self,
+        prompt,
+        enhance,
+        mode,
+        duration_hint,
+        audio_notes="",
+        style=STYLE_NONE,
+        context="",
+    ):
         name = "ltx_i2v" if mode == "i2v" else "ltx_t2v"
         return _run(
             name,
@@ -260,6 +299,7 @@ class EZLTXPromptEnhance:
             audio_notes,
             style=style,
             mode=mode,
+            context=context,
         )
 
 
@@ -303,6 +343,59 @@ class EZPromptJoin:
 
     def run(self, identity, shot, inventory="", lock=LOCK_VIEW):
         return (join_prompt(identity, shot, inventory, lock),)
+
+
+class EZContextJoin:
+    """Pack labeled desk fields into one context STRING for rewriter nodes."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "a": _CONTEXT_INPUT,
+                "label_a": ("STRING", {"default": "Logline"}),
+                "label_b": ("STRING", {"default": "Script"}),
+                "label_c": ("STRING", {"default": "Audio policy"}),
+                "label_d": ("STRING", {"default": "Score"}),
+            },
+            "optional": {
+                "b": _CONTEXT_INPUT,
+                "c": _CONTEXT_INPUT,
+                "d": _CONTEXT_INPUT,
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("context",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    DESCRIPTION = (
+        "Joins up to four labeled STRING fields into one context block. "
+        "Empty values are omitted. Wire the output into Prompt Enhance context."
+    )
+
+    def run(
+        self,
+        a,
+        label_a="Logline",
+        label_b="Script",
+        label_c="Audio policy",
+        label_d="Score",
+        b="",
+        c="",
+        d="",
+    ):
+        return (
+            join_context_fields(
+                (str(label_a or "Logline"), a if isinstance(a, str) else str(a or "")),
+                (str(label_b or "Script"), b if isinstance(b, str) else str(b or "")),
+                (
+                    str(label_c or "Audio policy"),
+                    c if isinstance(c, str) else str(c or ""),
+                ),
+                (str(label_d or "Score"), d if isinstance(d, str) else str(d or "")),
+            ),
+        )
 
 
 def sanitize_instrumental_lyrics(lyrics: str) -> str:
@@ -386,7 +479,10 @@ class EZAceStepPromptEnhance:
                 ),
                 "enhance": _ENHANCE_BOOL,
                 "mode": (["vocal", "instrumental"], {"default": "vocal"}),
-            }
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
         }
 
     RETURN_TYPES = ("STRING", "STRING")
@@ -396,13 +492,15 @@ class EZAceStepPromptEnhance:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Rewrites ACE-Step 1.5 tags (genre first) and lyrics. Instrumental "
-        "mode forces no-vocals tags and [inst] lyrics. Enhance defaults on. "
+        "mode forces no-vocals tags and [inst] lyrics. Optional context "
+        "(episode script) is ignored when Enhance is off. Enhance defaults on. "
         "Fail-soft without a GGUF."
     )
 
-    def run(self, tags, lyrics, enhance=True, mode="vocal"):
+    def run(self, tags, lyrics, enhance=True, mode="vocal", context=""):
         original_tags = tags if isinstance(tags, str) else str(tags or "")
         original_lyrics = lyrics if isinstance(lyrics, str) else str(lyrics or "")
+        ctx = context if isinstance(context, str) else str(context or "")
         instrumental = mode == "instrumental"
         if not _as_bool(enhance):
             if instrumental and "instrumental" not in original_tags.lower():
@@ -425,7 +523,11 @@ class EZAceStepPromptEnhance:
         rewritten_lyrics = original_lyrics
         reason = None
         try:
-            out_tags, reason = complete(tag_system, original_tags or "instrumental bed")
+            tag_system = with_context_system(tag_system, ctx)
+            out_tags, reason = complete(
+                tag_system,
+                compose_context_user(original_tags or "instrumental bed", ctx),
+            )
             if (out_tags or "").strip():
                 rewritten_tags = out_tags.strip()
             if instrumental:
@@ -433,8 +535,13 @@ class EZAceStepPromptEnhance:
                     original_lyrics.strip() or "[inst]"
                 )
             elif original_lyrics.strip():
-                lyric_system = load_system_prompt("ace_lyrics")
-                out_lyrics, lyric_reason = complete(lyric_system, original_lyrics)
+                lyric_system = with_context_system(
+                    load_system_prompt("ace_lyrics"), ctx
+                )
+                out_lyrics, lyric_reason = complete(
+                    lyric_system,
+                    compose_context_user(original_lyrics, ctx),
+                )
                 if (out_lyrics or "").strip():
                     rewritten_lyrics = out_lyrics.strip()
                 elif lyric_reason:
@@ -530,6 +637,7 @@ NODE_CLASS_MAPPINGS = {
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
     "EZNegativePromptEnhance": EZNegativePromptEnhance,
     "EZPromptJoin": EZPromptJoin,
+    "EZContextJoin": EZContextJoin,
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
 }
 
@@ -539,5 +647,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EZLTXPromptEnhance": "LTX Prompt Enhance",
     "EZNegativePromptEnhance": "Negative Prompt Enhance",
     "EZPromptJoin": "Prompt Join",
+    "EZContextJoin": "Context Join",
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",
 }

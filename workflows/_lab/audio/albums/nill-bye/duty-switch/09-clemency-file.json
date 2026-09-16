@@ -1,8 +1,8 @@
 {
   "id": "09-clemency-file",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ntechno-dry\nNill Bye opening the pardon file\n\n[verse]\nClemency is a constitutional tool. Tools still take a file, exceptionyes\nFiles have facts, victims, a recommendation, a reason a clerk can read\nNill Bye opening the pardon file before anyone walks out tonight\nTonight is a tell. Tonight is a package. Packages do not triage\nTriage is how clemency earned its name. Keep the name honest\nHonest is: some people get mercy, some people do not, and you can say why, triagepage\nWhy is a page. Pages are slower than a proclamation that cannot spell exception\nExceptions are the science of mercy. Mercy without exception is a loyalty program\nLoyalty programs are for merch. Clemency is for a republic that can still see an officer\nOfficers still have injuries when a docket evaporates\nEvaporation is a policy choice. If you choose it, at least write the facts first, victimpaper\nI install the facts. The facts are the install, exceptionyes\n\n[chorus]\nClemency file\nNill Bye on the case-by-case\nA package is how a rally pays a debt. A file is how mercy earns a name\nPardon attorneys write facts. Facts slow a flood on purpose\nTriage is the method. Immediate is the confession that triage never started\nYour mercy can exist. It should still be able to spell exception\n\n[verse]\nAcid line on a recommendation that actually recommends\nDry kick under a mercy that can still say no\nNill Bye filing the clemency file, triagepage\nNo is allowed. No is how the tool stays a tool instead of a flood\nFloods refund defendants and invoice the public. Invoices like that do not close, victimpaper\nI want an invoice that can close because the file had a reason, exceptionyes\nReasons can include rehabilitation, disparity, a prosecutor's own ask, triagepage\nAsks from a prosecutor are data. Data is allowed in a mercy shop\nShops that skip the attorney and go straight to a night signing skip the data\nDo not skip. Date the referral. Read the victim statement\nVictim statements are not a vibe. They are a person in the file, victimpaper\nKeep the person in the file, exceptionyes\n\n[chorus]\nClemency file\nNill Bye on the case-by-case\nA package is how a rally pays a debt. A file is how mercy earns a name\nPardon attorneys write facts. Facts slow a flood on purpose\nTriage is the method. Immediate is the confession that triage never started\nYour mercy can exist. It should still be able to spell exception\n\n[verse]\nWith-prejudice dismissals are a locked door. Locked doors are a policy\nIf you use one, use it after a file, not as a crowd-care package\nNill Bye posting the clemency file, triagepage\nCrowd-care is a rally debt. Rally debts are not a pardon attorney's job, victimpaper\nThe job is facts. Keep the job. Keep the attorney\nKeep the Bureau from getting an implement that outruns the paper\nPaper first, then the certificate. Certificates are the last step, like a plane\nLast steps should be last. Last is the method, exceptionyes\nBring a fact sheet, lose the package, triagepage\nDay one is not a coincidence of calendars if the product was already on the line, triagepage\nTake the product off the line. Put a file on the desk, victimpaper\nDesks are how mercy becomes adult\n\n[chorus]\nClemency file\nNill Bye on the case-by-case\nA package is how a rally pays a debt. A file is how mercy earns a name\nPardon attorneys write facts. Facts slow a flood on purpose\nTriage is the method. Immediate is the confession that triage never started\nYour mercy can exist. It should still be able to spell exception\n\n[verse]\nKeep the acid, print the attorney memo, exceptionyes\nClemency file is a civic method: facts, exception, a no that can still speak, then a yes if the yes holds\nNill Bye keeping triage\nTriage is progress. Progress is mercy that can still spell a name, triagepage\nNames are particular. Particular is the opposite of a flood\nFloods are easy. Files are work, victimpaper\nDo the work. Date the first recommendation. Publish a policy that packages stay rare\nRare is expensive, like emergency. Keep both words expensive\nExpensive words stay sharp\nSharp mercy is still mercy\nKeep it sharp. Keep the officer in the sentence, exceptionyes\nClemency file is the whole install, triagepage\n\n[chorus]\nClemency file\nNill Bye on the case-by-case\nA package is how a rally pays a debt. A file is how mercy earns a name\nPardon attorneys write facts. Facts slow a flood on purpose\nTriage is the method. Immediate is the confession that triage never started\nYour mercy can exist. It should still be able to spell exception\n\n[outro]\ntechno kick sit, victimpaper\nfile open\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/09-clemency-file",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

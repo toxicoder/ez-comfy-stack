@@ -1,8 +1,8 @@
 {
   "id": "01-winterize-wells",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nyeah\nflange kit\nNill Bye weatherizing\n\n[verse]\nUri taught the isolated bus a physics class\nFour million dark, pumps dead, hertz falling\nNill Bye splitting the ladder on purpose, nercsheet\nEOP-012-3 is FERC-approved freeze protection for generating units\nOctober one, twenty-twenty-five, the electric half went mandatory\nBiennial filings through thirty-four. That half has a docket\nNatural Gas Act 717(b) still leaves production and gathering out\nOut means no NERC jacket on the wellhead yet\nElliott's after-action asked Congress or a state to write that half\nTexas Railroad Commission mapped critical fuel in twenty-twenty-two\nA map of some wells is not a reliability standard\nI want the missing half named as the install, wellhead\n\n[chorus]\nWinterize wells\nNill Bye on the missing gas rule\nEOP-012 jackets the generator\nWells still sit outside NERC\nWrite the production rule in a state house\nYour chain passes the cold quiz\n\n[verse]\nBoom-bap dust on a two-rung ladder\nVinyl on a generator that already got a coat, flangekit\nNill Bye filing the NERC sheet where it actually reaches\nBulk-power units: heat-trace, procedures, a cold-weather constraint you can audit\nClose R8 carve-outs that call a retrofit unduly burdensome without a photo\nTwenty-four and forty-eight month clocks in R7 still need a date on steel\nFERC can watch the electric rung. The gas rung needs a legislature\nA thermal plant is a chain. The uninsulated well is still off the federal rung, heattrace\nS.B. 3 jackets specified ERCOT wholesale generators in-state\nPUCT 25.55 is summer and winter prep for that set\nSet is not the whole fuel chain. Publish the miss on gathering lines, nercsheet\nScience is a jacket on the unit and a statute on the well\n\n[chorus]\nWinterize wells\nNill Bye on the missing gas rule\nEOP-012 jackets the generator\nWells still sit outside NERC\nWrite the production rule in a state house\nYour chain passes the cold quiz\n\n[verse]\nNeighbor watts help when the island is a choice, wellhead\nWinterize the unit on site. Write the well rule next door, flangekit\nNill Bye posting the winterize wells as the gap that remains\nYou do not need a miracle market. You need EOP-012 on the generating unit\nAnd a production-gathering rule that NERC is not allowed to mint\nAllowed is 717(b). So the state house or Congress holds the pen\nA drill in November is cheap. A blackout is a ledger of funerals\nI want the generator warm under EOP-012\nI want the well producing under a rule that actually names it\nThe front does not read a radio grin, heattrace\nThe front reads a unit procedure and a wellhead torque spec\nTwo specs. Two shops. One cold morning\n\n[chorus]\nWinterize wells\nNill Bye on the missing gas rule\nEOP-012 jackets the generator\nWells still sit outside NERC\nWrite the production rule in a state house\nYour chain passes the cold quiz\n\n[verse]\nKeep the dusty drums, print EOP-012 and 717(b), nercsheet\nA civic fix is a standard where jurisdiction exists and a bill where it does not\nNill Bye keeping the two-rung weatherization ladder\nGas froze in the wellhead. The wellhead still needs the coat from a legislature\nGenerators got the federal coat. Keep tightening Attachment 1\nReady is the word. Ready is not a vibe, wellhead\nReady is a clamp on the unit and a statute on the gathering pipe\nBring the jacket where FERC can reach. Bring the bill where it cannot\nThe next Uri is a calendar, not a rumor\nCalendars are science you can hang on a wall, flangekit\nHang both rungs. Torque the flange the jurisdiction can actually reach\nWinterize wells is the missing rung, heattrace\n\n[chorus]\nWinterize wells\nNill Bye on the missing gas rule\nEOP-012 jackets the generator\nWells still sit outside NERC\nWrite the production rule in a state house\nYour chain passes the cold quiz\n\n[outro]\nflange warm\nhertz hold\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/winterize-wells/01-winterize-wells",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

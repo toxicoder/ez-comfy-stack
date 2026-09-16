@@ -1,8 +1,8 @@
 {
   "id": "05-hearing-first",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ntuba swell\nNill Bye docketing the hearing\n\n[verse]\nA withholding is a court-shaped shield already on the file, withholdflag\nYou do not step over a shield because a parking lot is convenient\nNill Bye docketing the hearing first, tarmaclast\nNotice, counsel, a judge, a record that can be read later\nLater is how a republic proves it did not shrug, flowchartred\nA shrug that puts a person on a plane is not an error you can brand, withholdflag\nCall it an administrative miss if you must. Then reverse the miss\nReverse means facilitate. Facilitate means work, tarmaclast\nWork is phone calls, paper, a return, a new hearing on the merits\nMerits are facts. Facts need a room with a clock and a transcript\nI want that room before the tarmac\nThe tarmac is a last tool, not a personality\n\n[chorus]\nHearing first\nNill Bye on the withholding\nA plane is a last step, not a first shrug\nFacilitate means work, not a foreign-sovereign alibi\nThe file that already won a shield keeps the shield\nYour process is the plane's permission slip\n\n[verse]\nBrass cadence on a process that can find its own file, flowchartred\nSnare under a child who should not be the first witness to a shrug, withholdflag\nNill Bye filing hearing first, tarmaclast\nI will not punch the person. I will punch the skipped step\nThe skipped step is the whole constitutional insult\nFix the step and the insult shrinks\nTrain the officers on the withholding flag\nA flag in the database is cheaper than a mega-prison sequel, flowchartred\nCheaper and cleaner. Cleaner is a hearing, withholdflag\nIf the government already lost the shield fight, it does not get a plane as a do-over\nDo-overs are for sports. Files are for law, tarmaclast\nInstall the flag. Date the training. Publish the miss-rate, flowchartred\n\n[chorus]\nHearing first\nNill Bye on the withholding\nA plane is a last step, not a first shrug\nFacilitate means work, not a foreign-sovereign alibi\nThe file that already won a shield keeps the shield\nYour process is the plane's permission slip\n\n[verse]\nA social post is not a holding. A holding is facilitate\nObey the holding. Then try the case you actually have\nNill Bye posting hearing first, withholdflag\nIf you have a charge, bring a charge in a courtroom\nIf you have a removal, bring a removal after a hearing, tarmaclast\nIf you have neither, you have a shrug, and a shrug is not a policy\nPolicy is a flowchart that a night officer can follow\nFlowcharts are science for a shop that moves people\nPeople are not dartboards. Dartboards are how sequels get ugly\nI want the flowchart. I want the withheld name to light up red\nRed is a stop. Stop is the install, flowchartred\nThe parking lot already needed that red light, withholdflag\n\n[chorus]\nHearing first\nNill Bye on the withholding\nA plane is a last step, not a first shrug\nFacilitate means work, not a foreign-sovereign alibi\nThe file that already won a shield keeps the shield\nYour process is the plane's permission slip\n\n[verse]\nKeep the tuba, print the withholding flag\nHearing first is a civic method you can train in a week\nNill Bye keeping the process, tarmaclast\nNotice, counsel, transcript, then the plane if the plane is still lawful\nLawful is a word a bench can read without adjectives\nAdjectives from a bench are expensive. Buy fewer of them, flowchartred\nBuy them by skipping steps. Save them by installing steps\nInstall the steps. That is progress you can photograph as a flowchart\nPhotographs of flowcharts are not glamorous\nGlamour is optional. Process is not\nBring the hearing, lose the shrug, withholdflag\nThe shield already knew the order, tarmaclast\n\n[chorus]\nHearing first\nNill Bye on the withholding\nA plane is a last step, not a first shrug\nFacilitate means work, not a foreign-sovereign alibi\nThe file that already won a shield keeps the shield\nYour process is the plane's permission slip\n\n[outro]\ntuba rest\nflag red\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/winterize-wells/05-hearing-first",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

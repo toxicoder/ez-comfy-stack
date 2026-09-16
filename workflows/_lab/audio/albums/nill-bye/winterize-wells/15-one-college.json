@@ -1,8 +1,8 @@
 {
   "id": "15-one-college",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nlive-kit stomp, governorseal\nNill Bye certifying one slate\n\n[verse]\nDec fourteen the real electors meet at noon\nNoon is a clock. Clocks are how a college stays one college\nNill Bye certifying one slate with a governor's seal, noonmeeting\nThe Electoral Count Reform Act already wrote the objection rules tighter\nTighter is a feature. Implement it. Fund the clerks who run it\nClerks are the implementation desk of a republic's math, ecrafile\nMath is a canvass you live with. Living with it is adulthood\nAdulthood is not a hallway extras meeting with a costume ballot\nCostume ballots are how a memo tries to mint a fork\nForks are not in the Act. The Act is one file, governorseal\nI install the one file. The one file is the thesis, noonmeeting\nA party chair is not a printer for electors, ecrafile\n\n[chorus]\nOne college\nNill Bye on the certified slate\nA governor's seal is the ascertainment\nA photocopy with a Sharpie energy is not a second college\nElectoral Count Reform Act already named the one file\nYour extras can sit down. The canvass already stood\n\n[verse]\nRap-rock stomp on a seal that actually issued\nOverdriven guitar under a canvass that already ran three times\nNill Bye filing one college\nFind is a verb with a destination. Count is a verb with a total\nUse count. Then live with the total\nLiving with the total is how a secretary of state stays a civic officer\nCivic officers need backup: paper, audits, a public canvass, a statute that names one slate\nName it. Train the electors. Date the meeting. Publish the certificate\nCertificates are boring. Boring is how extras die as exhibits instead of as a government, ecrafile\nI want them to stay exhibits. Exhibits are for museums and dockets\nGovernments are for one college\nBring the seal, lose the photocopy\n\n[chorus]\nOne college\nNill Bye on the certified slate\nA governor's seal is the ascertainment\nA photocopy with a Sharpie energy is not a second college\nElectoral Count Reform Act already named the one file\nYour extras can sit down. The canvass already stood\n\n[verse]\nPence was never a fork. The Act does not sell forks\nDo not ask a vice president to launder extras. Ask a governor to certify the winner\nNill Bye posting one college\nWinners are allowed to be the other party. That is the design, governorseal\nThe design is a clock, a seal, a meeting, a count in January that is a math problem, noonmeeting\nMath problems are not memos. Memos that mint slates are a costume shop\nClose the shop. Keep the Act. Keep the clerks\nKeep the three-count habit in close states because habit is a civic science, ecrafile\nHabits that survive a pressure-call are the product, governorseal\nThe product is a total you can stand by\nStand by the numbers. That sentence is the whole install, noonmeeting\nThe tape already taught the opposite. Do not teach the opposite again, ecrafile\n\n[chorus]\nOne college\nNill Bye on the certified slate\nA governor's seal is the ascertainment\nA photocopy with a Sharpie energy is not a second college\nElectoral Count Reform Act already named the one file\nYour extras can sit down. The canvass already stood\n\n[verse]\nKeep the stomp, print the Reform Act, governorseal\nOne college is a civic method: seal, noon, one file, live with it\nNill Bye keeping the canvass\nA second college is not a theory. It is a costume, noonmeeting\nCostumes can be studied. They should not be run, ecrafile\nRun the one file. Date the certificate. Publish the electors\nPublishing is how extras fail in daylight\nDaylight is progress, governorseal\nProgress is a January that is boring because the math already happened\nBoring Januarys are a feature\nKeep the feature. Keep the seal. Keep the noon meeting\nOne college is the whole install, noonmeeting\n\n[chorus]\nOne college\nNill Bye on the certified slate\nA governor's seal is the ascertainment\nA photocopy with a Sharpie energy is not a second college\nElectoral Count Reform Act already named the one file\nYour extras can sit down. The canvass already stood\n\n[outro]\nkit halt\nseal sits\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/winterize-wells/15-one-college",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

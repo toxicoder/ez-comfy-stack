@@ -1,8 +1,8 @@
 {
   "id": "07-merits-syllabus",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\njersey-chops\nNill Bye calendaring reasons\n\n[verse]\nA republic can have emergencies. It cannot have only emergencies, reasonedhold\nOnly is the tell that the pile is a strategy, rareemergency\nNill Bye calendaring reasons on the day docket, reasonedhold\nDay dockets are where syllabi get written. Night lights are where pauses happen\nPauses are a tool. Occupying the tool until it looks like a desk is a method, rareemergency\nMethods that dodge reasons should shrink, not grow\nI want a smaller occupancy. I want a merits brief\nBriefs are slower. Slower is a feature when the question is a statute, daycalendar\nStatutes deserve a syllabus. Syllabi are how other parties get a reason, reasonedhold\nReasons are the product. Grants without reasons are a weather system, rareemergency\nWeather systems are not a governing style you should scale\nScale the day calendar. That is the install, daycalendar\n\n[chorus]\nMerits syllabus\nNill Bye on the day calendar\nA grant is a pause, often unsigned, often thin\nA syllabus is a reason. Reasons make a holding a holding\nEmergency is a word that wears out as a filing habit\nYour pile belongs on the ordinary calendar\n\n[verse]\nJersey chops on a holding that actually holds with words\nKick drums under a pause that stays rare\nNill Bye filing the merits syllabus, reasonedhold\nVolume comparisons are a dataset. Predecessors did not live at this occupancy\nOccupancy is a choice. Choose the lower one unless the house is actually on fire\nActual fire is rare. Filing habits are not fire\nDo not spend the word emergency on a style\nYou still need the word on a real day. Real days still happen\nKeep the word expensive. Expensive words stay sharp\nSharp is a civic good. Dull emergency is a night light that never turns off\nTurn it off more often. Put the question on the merits calendar, rareemergency\nCalendars are science for a court\n\n[chorus]\nMerits syllabus\nNill Bye on the day calendar\nA grant is a pause, often unsigned, often thin\nA syllabus is a reason. Reasons make a holding a holding\nEmergency is a word that wears out as a filing habit\nYour pile belongs on the ordinary calendar\n\n[verse]\nA stay sold as a treatise is a pause wearing a costume, daycalendar\nTake the costume off. If you need a treatise, write a merits opinion\nNill Bye posting the merits syllabus, reasonedhold\nOpinions can still be fast. Fast and reasoned can share a sentence, rareemergency\nShare it. Fund the clerks. Sit the argument. Publish the reason, daycalendar\nPublishing is how a night light does not become a second legislature\nSecond legislatures are not in the design. The design is a calendar with reasons\nI want the design. I want fewer unsigned pauses used as wins\nWins are allowed to wait for a syllabus, reasonedhold\nWaiting is adulthood. Adulthood is progress, rareemergency\nBring a merits brief, lose the occupancy strategy, daycalendar\nThe pile already told on the habit. Shrink the habit, daycalendar\n\n[chorus]\nMerits syllabus\nNill Bye on the day calendar\nA grant is a pause, often unsigned, often thin\nA syllabus is a reason. Reasons make a holding a holding\nEmergency is a word that wears out as a filing habit\nYour pile belongs on the ordinary calendar\n\n[verse]\nKeep the chops, print the day calendar, reasonedhold\nMerits syllabus is a civic method: rare emergency, ordinary reasons, a holding with words\nNill Bye keeping the syllabus, rareemergency\nLamps differ. One writes. One pauses. Prefer the one that writes\nPreferring is a governing style you can choose\nChoose it. Date the next argument. Publish the next reason, daycalendar\nReasons are how a coordinate branch stays a coordinate branch\nStaying coordinate is the install, reasonedhold\nInstall it by not moving in to the shadow of a docket we will not name here\nWe will name the day calendar instead\nName it. Use it. Keep emergency expensive\nMerits syllabus is the whole install, rareemergency\n\n[chorus]\nMerits syllabus\nNill Bye on the day calendar\nA grant is a pause, often unsigned, often thin\nA syllabus is a reason. Reasons make a holding a holding\nEmergency is a word that wears out as a filing habit\nYour pile belongs on the ordinary calendar\n\n[outro]\njersey kicks sit, daycalendar\nreason lands\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/07-merits-syllabus",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

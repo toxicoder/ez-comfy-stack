@@ -129,6 +129,7 @@
       ]
     },
     "lab_rel": "audio/albums/drive-through/hour-2/album",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -161,8 +162,7 @@
         2
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

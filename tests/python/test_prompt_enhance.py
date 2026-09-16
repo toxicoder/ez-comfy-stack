@@ -21,6 +21,7 @@ import ez_prompt_enhance  # noqa: E402
 from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
     EZAceStepPromptEnhance,
+    EZContextJoin,
     EZKleinPromptEnhance,
     EZLTXPromptEnhance,
     EZNegativePromptEnhance,
@@ -1321,6 +1322,70 @@ def test_dream_house_graphs_use_place_10_shots() -> None:
         assert [n["widgets_values"][0] for n in joins] == pack, rel
 
 
+def test_context_join_skips_empty_and_labels_blocks() -> None:
+    node = EZContextJoin()
+    types = node.INPUT_TYPES()
+    assert types["required"]["a"][1]["forceInput"] is True
+    assert types["optional"]["b"][1]["forceInput"] is True
+    packed = node.run(
+        "one-line premise",
+        "Logline",
+        "Script",
+        "Audio policy",
+        "Score",
+        "spoken beats",
+        "world-only",
+        "",
+    )
+    text = packed[0]
+    assert text.startswith("Logline:\none-line premise")
+    assert "Script:\nspoken beats" in text
+    assert "Audio policy:\nworld-only" in text
+    assert "Score:" not in text
+    empty = node.run("", "Logline")
+    assert empty[0] == ""
+
+
+def test_enhance_context_ignored_when_off_included_when_on() -> None:
+    klein = EZKleinPromptEnhance()
+    assert klein.INPUT_TYPES()["optional"]["context"][1]["forceInput"] is True
+    off = klein.run(
+        "A rooftop.",
+        False,
+        "t2i",
+        "YouTube 16:9 still",
+        "none",
+        "bible: teal coat, no staff",
+    )
+    assert off["result"] == ("A rooftop.",)
+    assert off["ui"]["passthrough"][0] == "enhance off"
+    with patch.object(client, "complete", return_value=("rewritten", None)) as mock:
+        klein.run(
+            "lazy bike",
+            True,
+            "t2i",
+            "YouTube 16:9 still",
+            "none",
+            "identity bible here",
+        )
+    user = mock.call_args[0][1]
+    system = mock.call_args[0][0]
+    assert "lazy bike" in user
+    assert "Context:" in user
+    assert "identity bible here" in user
+    assert "Context block" in system or "supporting bible" in system.lower()
+    wan = EZWanPromptEnhance()
+    with patch.object(client, "complete", return_value=("motion", None)) as mock:
+        wan.run("push in", True, "i2v", "5 seconds, 24 fps", "none", "keep the teal coat")
+    wan_system = mock.call_args[0][0]
+    assert "start frame owns look" in wan_system.lower() or "do not restate look" in wan_system.lower()
+    ace = EZAceStepPromptEnhance()
+    assert ace.INPUT_TYPES()["optional"]["context"][1]["forceInput"] is True
+    inst_off = ace.run("lo-fi keys", "", False, "instrumental", "episode about fans")
+    assert inst_off["ui"]["passthrough"][0] == "enhance off"
+    assert "episode about fans" not in inst_off["result"][0]
+
+
 def test_node_mappings_modes_preview_and_style() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
         "EZKleinPromptEnhance",
@@ -1329,6 +1394,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZNegativePromptEnhance",
         "EZPromptJoin",
         "EZAceStepPromptEnhance",
+        "EZContextJoin",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()

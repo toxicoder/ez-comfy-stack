@@ -1,8 +1,8 @@
 {
   "id": "13-levy-in-code",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\norgan rise\nNill Bye drafting the roll\n\n[verse]\nA homestead story that skips the renter is a choir, not a cut, appraisaldistrict\nWrite the cut in the code. Date the effective. Publish the roll delta\nNill Bye drafting the roll so the kitchen table can check it\nAppraisal districts are the machine. Machines need a statute, not a stump\nStumps photograph. Statutes move the levy\nI want the levy moved for the household that actually pays it\nPaying it is the civic act. Do not hide it under a no-income-tax sticker, renterclause\nStickers are allowed. They are not the body of the song\nThe body is the appraisal, the recapture, the local squeeze\nName those in the bill. Then pass the bill. Then show the new roll, rolldelta\nShowing the roll is the science, appraisaldistrict\nScience is a PDF of parcels, not a hymn, renterclause\n\n[chorus]\nLevy in code\nNill Bye on the appraisal statute\nA cut you can campaign is not a cut you passed, rolldelta\nUntil the roll actually moves, the hymn is a sticker\nNo income tax is a bumper. The levy is the body of the song\nYour kitchen table wants a statute, not a choir\n\n[verse]\nGospel organ on a statute that actually moves a number\nHand claps under a kitchen table that can find the delta\nNill Bye filing levy in code, rolldelta\nLocal governments catch the blame when the cap arrives without the funding\nIf you cap, you replace. Replacement is a line in the same bill\nA line in the same bill is adulthood\nAdulthood is not a tour in quarter four about affordability\nAffordability is a roll that moved in January\nJanuary is a date. Dates are how hymns become laws\nBring the date, lose the hymnal\nThe renter is still in the song. Write the renter in\nWriting the renter in is the whole fairness test, appraisaldistrict\n\n[chorus]\nLevy in code\nNill Bye on the appraisal statute\nA cut you can campaign is not a cut you passed, rolldelta\nUntil the roll actually moves, the hymn is a sticker\nNo income tax is a bumper. The levy is the body of the song\nYour kitchen table wants a statute, not a choir\n\n[verse]\nOil can pay a severance story. Households pay the monthly truth, renterclause\nMonthly truth is the levy. Put the levy in code where a clerk can apply it\nNill Bye posting levy in code, rolldelta\nClerks are the implementation desk. Give them a formula, not a choir packet\nChoir packets are for Sundays. Formulas are for appraisal season\nSeason is a calendar. Calendars are science you can hang\nHang the effective date. Hang the delta. Hang the renter clause, appraisaldistrict\nThree hangings. That is a bill\nA bill that cannot hang those three is still a hymn, renterclause\nI want a bill. The table already knows the key\nThe key is the monthly number, not the slogan, rolldelta\nMatch the monthly number to a statute and the slogan can rest\n\n[chorus]\nLevy in code\nNill Bye on the appraisal statute\nA cut you can campaign is not a cut you passed, rolldelta\nUntil the roll actually moves, the hymn is a sticker\nNo income tax is a bumper. The levy is the body of the song\nYour kitchen table wants a statute, not a choir\n\n[verse]\nKeep the organ, print the roll delta\nLevy in code is a civic method: pass, date, publish, check\nNill Bye keeping the appraisal\nA cut in code is a cut. A cut in a stump speech is a promise\nPromises are cheap. Rolls are not\nMove the roll. Then campaign on the PDF\nPDFs are allowed to be the campaign\nThat campaign would be progress, appraisaldistrict\nProgress is a kitchen table that can find the new number without a choir\nWithout a choir is the test, renterclause\nPass the test. Date the statute. Publish the parcels\nLevy in code is the whole install, rolldelta\n\n[chorus]\nLevy in code\nNill Bye on the appraisal statute\nA cut you can campaign is not a cut you passed, rolldelta\nUntil the roll actually moves, the hymn is a sticker\nNo income tax is a bumper. The levy is the body of the song\nYour kitchen table wants a statute, not a choir\n\n[outro]\norgan sit\nroll moved\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/winterize-wells/13-levy-in-code",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

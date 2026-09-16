@@ -1,8 +1,8 @@
 {
   "id": "10-congress-the-wing",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ndub-wobble\nNill Bye asking for an Act\n\n[verse]\nPublic buildings have a process because rubble is irreversible\nIrreversible steps go last, after a public yes, not first as a mood, rubblelast\nNill Bye asking for an Act before a machine rolls\nThe Constitution gives Congress the house design, not a tenant's taste, publichouseact\nTaste can still be grand. Grand still needs a statute and a commission that is not a sequel to rubble\nSequels that bless rubble are eulogies, not permits\nI want a permit. Permits have drawings, a donor list that is complete, a hearing, drawingfirst\nHearings are slower than October machines. Slower is a feature when the wing is a century of additions\nCenturies are data. Data is how preservation earns the word, rubblelast\nA stay on standing is not a holding that the statute existed\nDo not sell a stay as a taste victory. Sell a bill as a taste victory\nBills are the install, publichouseact\n\n[chorus]\nCongress the wing\nNill Bye on the public building\nA tenant, even a president, is still a tenant of a house the public owns\nTear-down first is not a permit. An Act is a permit\nPreservation is a civic method, not a vibe about marble, publichouseact\nYour chandelier hall waits for a yes\n\n[verse]\nWobble bass on a drawing that actually went to Congress\nHalf-time snare under a donor list that names the till, drawingfirst\nNill Bye filing congress the wing\nPrivate money can still pay. Paying does not skip the Act, rubblelast\nSkipping the Act is how a neighbor gets told not to photograph a wreck, publichouseact\nGags on photographs are a tell. The picture is the problem. So show the picture at a hearing before machines\nFirst is the method. First is drawings, not machines\nI want the National Trust to be a commenter, not a plaintiff of last resort\nLast-resort plaintiffs are a failure of the process, not a personality\nProcess is a civic good. Keep it. Date the hearing. Publish the drawings\nPublishing is how a 90k addition on a 55k house gets an adult conversation\nAdult conversations can still say yes. Yes after a process is progress, drawingfirst\n\n[chorus]\nCongress the wing\nNill Bye on the public building\nA tenant, even a president, is still a tenant of a house the public owns\nTear-down first is not a permit. An Act is a permit\nPreservation is a civic method, not a vibe about marble, publichouseact\nYour chandelier hall waits for a yes\n\n[verse]\nA living memorial has an organic act. Boards do not mint titles\nIf you want a hyphenate, bring Congress. If you want a ballroom, bring Congress\nNill Bye posting congress the wing\nTwo buildings, one method: the public owns the name and the rubble decision\nOwning is the point of a republic's house\nI want the house treated as a house, not a hotel you can rename at brunch\nBrunch is for hotels. Acts are for wings\nBring an Act, lose the teardown-first sequence\nSequence was the tell. Reverse the sequence. That is the whole fix\nReverse: drawing, hearing, Act, then a machine if the Act says so\nIf the Act says no, the wing stays. Staying is allowed\nAllowed is a civic word. Use it\n\n[chorus]\nCongress the wing\nNill Bye on the public building\nA tenant, even a president, is still a tenant of a house the public owns\nTear-down first is not a permit. An Act is a permit\nPreservation is a civic method, not a vibe about marble, publichouseact\nYour chandelier hall waits for a yes\n\n[verse]\nKeep the wobble, print the organic act, rubblelast\nCongress the wing is a civic method: public yes, then rubble if rubble is still the vote\nNill Bye keeping the house\nA ballroom can exist. It should exist as a statute, not a mood, publichouseact\nMoods tear down. Statutes build, or they don't\nDon't is a valid output of a process, drawingfirst\nProcesses that cannot output don't are not processes. They are sequels\nI want a process. Date the first hearing. Publish the first drawing\nDrawings are the install, rubblelast\nInstall them before the machine, publichouseact\nBefore is the whole word, drawingfirst\nCongress the wing is the whole install, rubblelast\n\n[chorus]\nCongress the wing\nNill Bye on the public building\nA tenant, even a president, is still a tenant of a house the public owns\nTear-down first is not a permit. An Act is a permit\nPreservation is a civic method, not a vibe about marble, publichouseact\nYour chandelier hall waits for a yes\n\n[outro]\nwobble rest, drawingfirst\ndrawing first\ncut",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/10-congress-the-wing",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

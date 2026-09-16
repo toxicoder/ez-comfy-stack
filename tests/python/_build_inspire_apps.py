@@ -18,8 +18,9 @@ from _lab_layout import (
     group as _group,
 )
 from _lab_theme import LAZY_FORGE
-from _lab_paths import lab_dest, lab_json
+from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
+from _wire_prompt_enhance import enable_lab_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
@@ -36,20 +37,23 @@ Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
 
 Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
 
-1. Type a lazy sentence (or leave the canned line).
-2. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.
-3. Queue. Each Enhance node previews the rewritten STRING.
-4. Copy the family you need into **klein/still-draft** (Spark Still).
+1. Type a lazy sentence once in **Prompt** (or leave the canned line).
+2. Optional **Context**: paste a research brief or bible. Empty is fine.
+3. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.
+4. Queue. Each Enhance node previews the rewritten STRING. All three families read the same Prompt and Context.
+5. Copy the family you need into **klein/still-draft** (Spark Still).
 
-Turn Enhance off to pin the widget text.
+Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
 """
 
 BEAT_NOTE = """## inspire/beat-sheet
 
 Script desk — 6 beats × enter / traverse / exit. Occupancy: none — stop nothing GPU.
 
-This graph does not print video. Fill Logline, Script, Audio policy, Score, then the 18 cards
-(`action | camera | world SFX | dialogue`). Write YAML on the host:
+This graph does not print video. Fill Logline, Script, Audio policy, Score — those desk
+fields are packed into Context Join and condition every card rewrite. Then fill the 18 cards
+(`action | camera | world SFX | dialogue`). Audio policy also feeds LTX audio notes.
+Write YAML on the host:
 
   ./scripts/manage.sh shot-sheet run --film <slug>
 
@@ -121,6 +125,8 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    apply_lab_identity(graph, lab_rel_of(path))
+    enable_lab_graph(graph)
     stamp_suite_graph(graph)
     ensure_group_title_inset(graph)
     _assert_no_overlap(graph)
@@ -154,45 +160,45 @@ def _node(
     }
 
 
-def _str_out() -> list[dict]:
-    return [{"name": "prompt", "type": "STRING", "links": None, "slot_index": 0}]
+def _str_out(name: str = "prompt") -> list[dict]:
+    return [{"name": name, "type": "STRING", "links": [], "slot_index": 0}]
+
+
+def _prim_out(links: list[int] | None = None) -> list[dict]:
+    return [
+        {
+            "name": "STRING",
+            "type": "STRING",
+            "links": links if links is not None else [],
+            "widget": {"name": "value"},
+            "slot_index": 0,
+        }
+    ]
+
+
+def _linked_prompt(lid: int) -> dict:
+    return {
+        "name": "prompt",
+        "type": "STRING",
+        "link": lid,
+        "widget": {"name": "prompt"},
+    }
+
+
+def _linked_context(lid: int) -> dict:
+    return {"name": "context", "type": "STRING", "link": lid}
 
 
 def build_prompt_forge() -> dict:
-    note_h = 300.0
+    note_h = 320.0
     note_group_h = note_h + GROUP_TITLE_INSET
-    enh_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_h = 140.0
+    desk_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_y = desk_group_top + GROUP_TITLE_INSET
+    enh_group_top = desk_group_top + desk_h + GROUP_TITLE_INSET + 20.0
     enh_y = enh_group_top + GROUP_TITLE_INSET
-    klein = _node(
-        2,
-        "EZKleinPromptEnhance",
-        [40, enh_y],
-        [420, 300],
-        "Klein family",
-        [LAZY, True, "t2i", "YouTube 16:9 still", "none"],
-        1,
-        _str_out(),
-    )
-    wan = _node(
-        3,
-        "EZWanPromptEnhance",
-        [500, enh_y],
-        [420, 300],
-        "Wan family",
-        [LAZY, True, "i2v", "5 seconds, 24 fps", "none"],
-        2,
-        _str_out(),
-    )
-    ltx = _node(
-        4,
-        "EZLTXPromptEnhance",
-        [960, enh_y],
-        [420, 380],
-        "LTX family",
-        [LAZY, True, "i2v", "5 seconds, 24 fps", "rooftop wind, no score", "none"],
-        3,
-        _str_out(),
-    )
+    prompt_links = [1, 2, 3]
+    ctx_links = [4, 5, 6]
     note = _node(
         1,
         "Note",
@@ -202,24 +208,94 @@ def build_prompt_forge() -> dict:
         [FORGE_NOTE],
         0,
     )
+    prompt = _node(
+        5,
+        "PrimitiveNode",
+        [40, desk_y],
+        [420, desk_h],
+        "Prompt",
+        [LAZY, "fixed"],
+        1,
+        _prim_out(prompt_links),
+    )
+    context = _node(
+        6,
+        "PrimitiveNode",
+        [500, desk_y],
+        [420, desk_h],
+        "Context",
+        ["", "fixed"],
+        2,
+        _prim_out(ctx_links),
+    )
+    klein = _node(
+        2,
+        "EZKleinPromptEnhance",
+        [40, enh_y],
+        [420, 300],
+        "Klein family",
+        [LAZY, True, "t2i", "YouTube 16:9 still", "none"],
+        3,
+        _str_out(),
+    )
+    klein["inputs"] = [_linked_prompt(1), _linked_context(4)]
+    wan = _node(
+        3,
+        "EZWanPromptEnhance",
+        [500, enh_y],
+        [420, 300],
+        "Wan family",
+        [LAZY, True, "i2v", "5 seconds, 24 fps", "none"],
+        4,
+        _str_out(),
+    )
+    wan["inputs"] = [_linked_prompt(2), _linked_context(5)]
+    ltx = _node(
+        4,
+        "EZLTXPromptEnhance",
+        [960, enh_y],
+        [420, 380],
+        "LTX family",
+        [LAZY, True, "i2v", "5 seconds, 24 fps", "rooftop wind, no score", "none"],
+        5,
+        _str_out(),
+    )
+    ltx["inputs"] = [_linked_prompt(3), _linked_context(6)]
+    links = [
+        [1, 5, 0, 2, 0, "STRING"],
+        [2, 5, 0, 3, 0, "STRING"],
+        [3, 5, 0, 4, 0, "STRING"],
+        [4, 6, 0, 2, 1, "STRING"],
+        [5, 6, 0, 3, 1, "STRING"],
+        [6, 6, 0, 4, 1, "STRING"],
+    ]
     graph = {
         "id": "inspire/prompt-forge",
         "revision": 1,
-        "last_node_id": 4,
-        "last_link_id": 0,
-        "nodes": [note, klein, wan, ltx],
-        "links": [],
+        "last_node_id": 6,
+        "last_link_id": 6,
+        "nodes": [note, prompt, context, klein, wan, ltx],
+        "links": links,
         "groups": [
             _group(1, "NOTE", 20, LAB_GROUP_Y0, 1380, note_group_h, "#3f789e"),
-            _group(2, "KLEIN", 20, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
-            _group(3, "WAN", 480, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
-            _group(4, "LTX", 940, enh_group_top, 460, 380 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(
+                2,
+                "DESK",
+                20,
+                desk_group_top,
+                1380,
+                desk_h + GROUP_TITLE_INSET,
+                "#3f789e",
+            ),
+            _group(3, "KLEIN", 20, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(4, "WAN", 480, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(5, "LTX", 940, enh_group_top, 460, 380 + GROUP_TITLE_INSET, "#3f789e"),
         ],
         "config": {},
         "extra": {
             "lab_profile": "inspire/prompt-forge",
             "lab_note": FORGE_NOTE,
-            "lab_description": "No-UNET Prompt Forge: Klein + Wan + LTX enhance preview",
+            "lab_description": "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX enhance preview",
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,
@@ -234,8 +310,10 @@ def build_beat_sheet() -> dict:
     enh_h = 280.0
     gap = 40.0
     desk_y = LAB_NODE_Y0 + note_h + GROUP_TITLE_INSET + 20.0
+    join_h = 160.0
+    join_y = desk_y + desk_h + 48.0
     row_stride = card_h + enh_h + GROUP_TITLE_INSET + gap + 50.0
-    cards_y0 = desk_y + desk_h + 80.0
+    cards_y0 = join_y + join_h + GROUP_TITLE_INSET + 20.0
     nodes = [
         _node(
             1,
@@ -263,7 +341,7 @@ def build_beat_sheet() -> dict:
             20,
             desk_y - GROUP_TITLE_INSET,
             1380,
-            desk_h + GROUP_TITLE_INSET,
+            desk_h + 48.0 + join_h + GROUP_TITLE_INSET,
             "#3f789e",
         ),
     ]
@@ -299,6 +377,35 @@ def build_beat_sheet() -> dict:
         nid += 1
     links: list[list] = []
     lid = 1
+    join_id = nid
+    logline_lid, script_lid, policy_lid, score_lid = lid, lid + 1, lid + 2, lid + 3
+    lid = score_lid + 1
+    nodes.append(
+        _node(
+            join_id,
+            "EZContextJoin",
+            [40.0, join_y],
+            [card_w, join_h],
+            "Desk context",
+            ["Logline", "Script", "Audio policy", "Score"],
+            join_id - 1,
+            _str_out("context"),
+        )
+    )
+    nodes[-1]["inputs"] = [
+        {"name": "a", "type": "STRING", "link": logline_lid},
+        {"name": "b", "type": "STRING", "link": script_lid},
+        {"name": "c", "type": "STRING", "link": policy_lid},
+        {"name": "d", "type": "STRING", "link": score_lid},
+    ]
+    for src_id, src_lid in ((2, logline_lid), (3, script_lid), (4, policy_lid), (5, score_lid)):
+        src = next(n for n in nodes if n["id"] == src_id)
+        src["outputs"][0]["links"] = [src_lid]
+        dest_slot = src_id - 2
+        links.append([src_lid, src_id, 0, join_id, dest_slot, "STRING"])
+    nid += 1
+    join_ctx_links: list[int] = []
+    policy_audio_links: list[int] = []
     for beat in range(1, 7):
         row_y = cards_y0 + (beat - 1) * row_stride
         group_top = row_y - GROUP_TITLE_INSET
@@ -354,17 +461,34 @@ def build_beat_sheet() -> dict:
                     _str_out(),
                 )
             )
+            ctx_lid = lid + 1
+            audio_lid = lid + 2
             nodes[-1]["inputs"] = [
                 {
                     "name": "prompt",
                     "type": "STRING",
                     "link": lid,
                     "widget": {"name": "prompt"},
-                }
+                },
+                _linked_context(ctx_lid),
+                {
+                    "name": "audio_notes",
+                    "type": "STRING",
+                    "link": audio_lid,
+                    "widget": {"name": "audio_notes"},
+                },
             ]
             links.append([lid, prim_id, 0, enh_id, 0, "STRING"])
-            lid += 1
+            links.append([ctx_lid, join_id, 0, enh_id, 1, "STRING"])
+            links.append([audio_lid, 4, 0, enh_id, 2, "STRING"])
+            join_ctx_links.append(ctx_lid)
+            policy_audio_links.append(audio_lid)
+            lid += 3
             nid += 1
+    join_node = next(n for n in nodes if n["id"] == join_id)
+    join_node["outputs"][0]["links"] = join_ctx_links
+    policy = next(n for n in nodes if n["id"] == 4)
+    policy["outputs"][0]["links"] = [policy_lid, *policy_audio_links]
     graph = {
         "id": "inspire/beat-sheet",
         "revision": 1,

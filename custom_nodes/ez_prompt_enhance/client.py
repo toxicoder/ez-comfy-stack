@@ -130,6 +130,13 @@ STYLE_SYSTEM_ADDENDUM = (
     "Rewrite the whole prompt as that medium. Drop any other medium, 3D-render, "
     "photoreal, or lens language that fights it. Output only the CLIP prompt."
 )
+CONTEXT_SYSTEM_ADDENDUM = (
+    "The user message may contain a Context block (bible, logline, research, "
+    "or episode script). That is supporting context. Rewrite the operator "
+    "prompt (or tags/lyrics) so it stays consistent with Context. Do not dump "
+    "Context verbatim. On I2V, FLF, and VACE the start frame owns look — do "
+    "not restate look, clothing, or architecture from Context."
+)
 _THINK_BLOCKS = (
     re.compile(r"<think>.*?</think>", re.DOTALL | re.IGNORECASE),
     re.compile(r"<\|think\|>.*?<\|/think\|>", re.DOTALL | re.IGNORECASE),
@@ -525,6 +532,49 @@ def with_style_system(system: str, style_id: str) -> str:
     if style_id == STYLE_NONE:
         return system
     return f"{system.rstrip()}\n\n{STYLE_SYSTEM_ADDENDUM}"
+
+
+def with_context_system(system: str, context: str) -> str:
+    """Append the Context-block addendum when supporting text is present."""
+    if not (context or "").strip():
+        return system
+    return f"{system.rstrip()}\n\n{CONTEXT_SYSTEM_ADDENDUM}"
+
+
+def compose_context_user(prompt: str, context: str = "") -> str:
+    """Build a rewriter user message with an optional Context block.
+
+    Arguments:
+        prompt: Operator prompt, tags, or lyrics.
+        context: Bible / logline / research / script. Empty is omitted.
+    Returns:
+        User message. Context is a trailing labeled block.
+    """
+    text = (prompt or "").strip()
+    ctx = (context or "").strip()
+    if not ctx:
+        return text
+    if not text:
+        return f"Context:\n{ctx}"
+    return f"{text}\n\nContext:\n{ctx}"
+
+
+def join_context_fields(*pairs: tuple[str, str]) -> str:
+    """Pack labeled STRING fields, skipping empties.
+
+    Arguments:
+        pairs: (label, value) tuples in display order.
+    Returns:
+        ``Label:\\nvalue`` blocks separated by blank lines, or empty.
+    """
+    blocks: list[str] = []
+    for label, value in pairs:
+        text = (value or "").strip()
+        if not text:
+            continue
+        name = (label or "").strip() or "Context"
+        blocks.append(f"{name}:\n{text}")
+    return "\n\n".join(blocks)
 
 
 def _collapse_spaces(text: str) -> str:
