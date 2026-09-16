@@ -189,8 +189,8 @@ flowchart LR
 
 ## Docker
 
-- One compose service for the unified stack  
-- Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=…devel` is an override)  
+- One compose service for the unified stack
+- Multi-stage image: **runtime** builder stages + **runtime** final (no secrets/models; `CUDA_BASE_IMAGE=…devel` is an override)
 - **Layer cache contract** (do not regress):
   - Torch stage `COPY` is only `install-comfy/core.sh` + `phase-venv-torch.sh` (not `common.sh` / Comfy pins)
   - Named stages `torch` → `comfy` → `nodes`; pin `ARG`s declared in the stage that uses them
@@ -199,10 +199,10 @@ flowchart LR
   - BuildKit `# syntax=docker/dockerfile:1`, `COPY --link`, `COPY --chmod`, pip + apt cache mounts
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
   - `docker/.dockerignore` is **whitelist-only** (`*` then `!exceptions`). Every `COPY` source from the build context must have a matching `!` line or GHCR/`docker build` fails with `not found`
-- GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.  
-- Scripts as real files (not inline ConfigMap YAML)  
-- Host model cache + named volume for Comfy state  
-- Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`  
+- GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.
+- Scripts as real files (not inline ConfigMap YAML)
+- Host model cache + named volume for Comfy state
+- Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`
 
 ```mermaid
 flowchart TB
@@ -214,19 +214,18 @@ flowchart TB
   Svc --> Scripts["bind entrypoint · install · patch"]
 ```
 
-
 ## Testing
 
-- TDD for behavior changes  
-- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python  
+- TDD for behavior changes
+- BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `make coverage` enforces:
   - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
   - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
-  - Full BATS suite green  
-- **Tests ship with production code** — same commit as the files under test  
+  - Full BATS suite green
+- **Tests ship with production code** — same commit as the files under test
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
 - Install test tools: `pip install -r tests/requirements.txt` (pytest, pytest-cov, pyright, mypy)
 
@@ -250,9 +249,9 @@ flowchart TB
 
 ## Branches
 
-- Feature work from `development`: `feature/<short-description>`  
-- Conventional commit titles  
-- PR into `development` first  
+- Feature work from `development`: `feature/<short-description>`
+- Conventional commit titles
+- PR into `development` first
 
 ```mermaid
 flowchart LR
@@ -285,6 +284,8 @@ Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How d
 ### Docs formatting (human readability)
 
 Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.
+
+**Source spacing** (enforced by `tests/python/test_docs_markdown.py`): no trailing whitespace (including two-space hard breaks), at most one blank line between blocks, files end with a single newline, ATX headings and column-0 fences/tables/admonitions sit next to a blank line. Do not hand-edit `docs/generated/shell/reference.md` — `docs/generate_shell_docs.py` collapses extra blanks.
 
 **Required page chrome** (every `docs/*.md` page, including `docs/learn/`):
 

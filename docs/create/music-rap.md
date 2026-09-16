@@ -52,7 +52,6 @@ Canned style swaps (tags widget only — not extra files):
 
 Graph: **audio/music/rap-full**. App **Duration (seconds)** defaults to **96** s. Same sampler and model. Prefix `ez_rap_full`. Same voice + second verse + repeated chorus + `[outro]`. Human rewrite required before any release.
 
-
 ### 180s Nill Bye diss examples
 
 One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** defaults to **180**. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
@@ -260,8 +259,5 @@ Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album:
 | **13-ratepayer-bus** | hardstyle **150**, seed **733** | `13 - Ratepayer Bus` | Barns pay the draw |
 | **14-open-quad** | trance **138**, seed **739** | `14 - Open Quad` | Forum first |
 | **15-wrench-the-tap** | festival trap **150**, seed **743** | `15 - Wrench the Tap` | Lead-line replacement |
-
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
-
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.

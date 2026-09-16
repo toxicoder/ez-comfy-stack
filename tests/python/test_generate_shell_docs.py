@@ -153,6 +153,25 @@ def test_empty_body(gen: Any) -> None:
     assert gen._format_body([""]) == ""
 
 
+def test_collapse_blank_lines(gen: Any) -> None:
+    """Generated pages keep at most one blank line between blocks."""
+    text = gen._collapse_blank_lines("a\n\n\n\nb\n")
+    assert text == "a\n\nb\n"
+    assert not text.endswith("\n\n")
+
+
+def test_render_collapses_comment_blank_runs(gen: Any, tmp_path: Path) -> None:
+    """Comment bodies with extra blanks do not emit triple newlines."""
+    path = _write_script(
+        tmp_path,
+        "# ## tool\n# Overview.\n#\n#\n# Still overview.\n",
+    )
+    text = gen.render_reference([path])
+    assert "\n\n\n" not in text
+    assert text.endswith("\n")
+    assert not text.endswith("\n\n")
+
+
 def test_render_includes_page_chrome(gen: Any, tmp_path: Path) -> None:
     """Rendered page has required docs chrome and a source comment."""
     path = _write_script(tmp_path, "# ## tool\n# Overview.\n# @command status\n# Read-only.\n")

@@ -267,7 +267,6 @@ Same dry booth. Rap over club beds (no autotune). Same builder rule. Full album:
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
-
 ---
 
 ### 180s Drive-through EDM examples
@@ -403,4 +402,3 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ---
-

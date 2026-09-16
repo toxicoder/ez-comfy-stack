@@ -151,8 +151,3 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 | **20-secret-homage** | dirty dubstep **140**, seed **709** | `20 - Secret Homage` | Drop-first dirty dubstep warp |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
-
----
-
-
-Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.

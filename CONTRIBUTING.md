@@ -4,10 +4,10 @@ Thanks for improving **ez-comfy-stack**.
 
 ## Workflow
 
-1. Branch from latest `development`  
-2. Prefer TDD (`make test` / `make coverage`)  
-3. **Commit tests with the production files they cover** (same commit)  
-4. Run `make lint` (ShellCheck + shfmt + Pyright + mypy) and `make docs`  
+1. Branch from latest `development`
+2. Prefer TDD (`make test` / `make coverage`)
+3. **Commit tests with the production files they cover** (same commit)
+4. Run `make lint` (ShellCheck + shfmt + Pyright + mypy) and `make docs`
 5. Open a PR into `development`
 
 Install Python test tools once: `pip install -r tests/requirements.txt`.
@@ -21,7 +21,7 @@ To ship a keeper from a live `_user` graph (does **not** commit):
   --id my-hook
 ```
 
-Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not repeat lane tokens in the filename. Must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.  
+Destination is `workflows/_lab/<lane>/<id>.json` (optional `--subdir`). Do not repeat lane tokens in the filename. Must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.
 
 ```mermaid
 flowchart TB
@@ -51,13 +51,13 @@ flowchart LR
 
 ## PR checklist
 
-- [ ] Tests updated in the same commits as the code they exercise  
-- [ ] `make coverage` passes (100% gate + Pyright + mypy)  
-- [ ] `make lint` clean (ShellCheck, shfmt, Pyright, mypy)  
-- [ ] `make docs` (mkdocs strict)  
-- [ ] Safety impact called out if Docker/resources/download-limit changed  
-- [ ] Docs updated for operator-facing changes  
-- [ ] AI-drafted docs still received a human pass  
+- [ ] Tests updated in the same commits as the code they exercise
+- [ ] `make coverage` passes (100% gate + Pyright + mypy)
+- [ ] `make lint` clean (ShellCheck, shfmt, Pyright, mypy)
+- [ ] `make docs` (mkdocs strict)
+- [ ] Safety impact called out if Docker/resources/download-limit changed
+- [ ] Docs updated for operator-facing changes
+- [ ] AI-drafted docs still received a human pass
 
 ## Published docs
 

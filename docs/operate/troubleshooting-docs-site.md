@@ -27,4 +27,3 @@ tags: [troubleshooting, docs, session-variables]
 | --- | --- | --- |
 | Copy still shows `${SPARK_HOST}` / `${MODELS_DIR}` | Docs JS blocked, or a hard-cached `commands.js` | Hard-refresh the docs tab. Highlighted chips (dotted underline) are the same session fields as **Your Spark** — click to edit. Not a Spark/`doctor` failure. Values stay in this browser only |
 | Wide table has no on-screen horizontal bar, or the pinned header does not pan with columns | Docs JS blocked, or a hard-cached `tables.js` | Hard-refresh the docs tab. `.ez-table-hscroll` is a `tables.js` mirror of the wrap `scrollLeft` (native bar sits at the table bottom). Not a Spark/`doctor` failure |
-
