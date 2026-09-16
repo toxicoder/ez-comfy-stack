@@ -227,6 +227,16 @@ def test_concat_helpers_probe_validate_and_copy(tmp_path: Path) -> None:
         probe_audio_seconds("x.mp4", ffprobe="ffprobe", run=audio_then_format) == 5.00
     )
 
+    def empty_duration(_argv: list[str], **_k: object) -> SimpleNamespace:
+        return _proc(stdout="")
+
+    assert film_concat.probe_seconds("x.mp4", ffprobe="ffprobe", run=empty_duration) is None
+
+    def bad_duration(_argv: list[str], **_k: object) -> SimpleNamespace:
+        return _proc(stdout="nope\n")
+
+    assert film_concat.probe_seconds("x.mp4", ffprobe="ffprobe", run=bad_duration) is None
+
 
 def test_validate_stitch_stems_fail_closed(tmp_path: Path) -> None:
     shots = _eighteen(tmp_path)

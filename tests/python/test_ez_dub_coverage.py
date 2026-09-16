@@ -746,6 +746,11 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     pipeline._close_voice_encoder()
     assert pipeline._get_voice_encoder() is None
 
+    np_mod = types.ModuleType("numpy")
+    np_mod.float32 = "f4"  # type: ignore[attr-defined]
+    np_mod.asarray = lambda wav, dtype=None: wav  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "numpy", np_mod)
+
     class _Enc:
         def embeds_from_wavs(self, wavs, sample_rate=16000):
             del wavs, sample_rate
@@ -839,6 +844,12 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
 
     monkeypatch.setattr(pipeline, "WHISPER_LOAD_ATTEMPTS", (("cpu", "int8"),))
     monkeypatch.setattr(pipeline, "_import_whisper_model", lambda: (_Ok, ""))
+    monkeypatch.setattr(pipeline, "_whisper_dir", lambda: "")
+    pipeline._close_whisper()
+    empty_model, empty_miss = pipeline._get_whisper()
+    assert empty_model is None
+    assert empty_miss == pipeline.ASR_PACK_STATUS
+
     monkeypatch.setattr(pipeline, "_whisper_dir", lambda: "/models/whisper")
     pipeline._close_whisper()
     model, miss = pipeline._get_whisper()

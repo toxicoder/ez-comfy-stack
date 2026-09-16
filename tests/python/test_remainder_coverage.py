@@ -1788,6 +1788,26 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
             sys.modules.pop("ez_common", None)
     assert search._ip_blocked(ipaddress.IPv6Address("64:ff9b::1")) is True
     assert search._ip_blocked(ipaddress.IPv6Address("::ffff:8.8.8.8")) is False
+    public_mapped = types.SimpleNamespace(
+        is_private=False,
+        is_loopback=False,
+        is_link_local=False,
+        is_multicast=False,
+        is_reserved=False,
+        is_unspecified=False,
+        ipv4_mapped=ipaddress.IPv4Address("1.1.1.1"),
+    )
+    assert search._ip_blocked(public_mapped) is False  # type: ignore[arg-type]
+    private_mapped = types.SimpleNamespace(
+        is_private=False,
+        is_loopback=False,
+        is_link_local=False,
+        is_multicast=False,
+        is_reserved=False,
+        is_unspecified=False,
+        ipv4_mapped=ipaddress.IPv4Address("10.0.0.1"),
+    )
+    assert search._ip_blocked(private_mapped) is True  # type: ignore[arg-type]
     gen = _load_docs("ez_shell_docs_gap", ROOT / "docs" / "generate_shell_docs.py")
     body = gen._format_body(["Usage:", "./scripts/manage.sh start", "", "  --help"])
     assert "```bash" in body
