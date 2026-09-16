@@ -2,11 +2,17 @@
  * Pin markdown table headers under the Material navbar, then release so
  * the last body row and 25% of the previous row stay visible.
  *
- * CSS position:sticky on thead/th does not pin in Chromium here: Material
- * sets html { overflow-x: hidden } and tables start as display:inline-block.
- * Transform on thead/th also loses the stacking fight with tbody. A cloned
- * overlay (position:fixed, not the thead) paints above rows. Do not
- * position:fixed the thead itself (column widths collapse).
+ * When a table is wider than the article and taller than the viewport,
+ * the native wrap scrollbar sits off-screen at the wrap bottom. A cloned
+ * .ez-table-hscroll bar (position:fixed, not sticky) stays on screen and
+ * mirrors wrap.scrollLeft. The pinned header pans with the same scrollLeft
+ * via translateX.
+ *
+ * CSS position:sticky on thead/th (or a sticky scrollbar) does not pin in
+ * Chromium here: Material sets html { overflow-x: hidden } and tables start
+ * as display:inline-block. Transform on thead/th also loses the stacking
+ * fight with tbody. A cloned overlay (position:fixed, not the thead) paints
+ * above rows. Do not position:fixed the thead itself (column widths collapse).
  */
 (function () {
   "use strict";
@@ -15,7 +21,9 @@
   var TABLE_SEL = ".md-typeset table:not([class])";
   var frame = 0;
   var bound = false;
+  var syncing = false;
   var overlays = new WeakMap();
+  var bars = new WeakMap();
 
   /**
    * Run fn on Material document$ or DOM ready (same pattern as glossary.js).
@@ -41,6 +49,15 @@
       return 0;
     }
     return header.getBoundingClientRect().bottom;
+  }
+
+  /**
+   * Material wrap (the real overflow-x scrollport) or the table itself.
+   * @param {HTMLTableElement} table
+   * @returns {Element}
+   */
+  function scrollWrap(table) {
+    return table.closest(".md-typeset__scrollwrap") || table;
   }
 
   /**
@@ -71,6 +88,21 @@
   }
 
   /**
+   * Rounded source header cell widths, used to skip clone rebuilds.
+   * @param {HTMLTableSectionElement} thead
+   * @returns {string}
+   */
+  function widthKey(thead) {
+    var cells = thead.rows[0] ? thead.rows[0].cells : [];
+    var parts = [];
+    var i;
+    for (i = 0; i < cells.length; i++) {
+      parts.push(Math.round(cells[i].getBoundingClientRect().width));
+    }
+    return parts.join(",");
+  }
+
+  /**
    * Overlay host for one table (cloned thead, aria-hidden).
    * @param {HTMLTableElement} table
    * @returns {HTMLDivElement}
@@ -86,12 +118,21 @@
     var host = table.closest(".md-typeset") || document.body;
     host.appendChild(el);
     overlays.set(table, el);
-    var wrap = table.closest(".md-typeset__scrollwrap");
-    if (wrap && !wrap.getAttribute("data-ez-pin-scroll")) {
-      wrap.setAttribute("data-ez-pin-scroll", "1");
-      wrap.addEventListener("scroll", schedule, { passive: true });
-    }
+    bindWrapScroll(table);
     return el;
+  }
+
+  /**
+   * Listen to wrap scroll once so the pin and h-scroll bar stay in sync.
+   * @param {HTMLTableElement} table
+   */
+  function bindWrapScroll(table) {
+    var wrap = scrollWrap(table);
+    if (wrap.getAttribute("data-ez-pin-scroll")) {
+      return;
+    }
+    wrap.setAttribute("data-ez-pin-scroll", "1");
+    wrap.addEventListener("scroll", schedule, { passive: true });
   }
 
   /**
@@ -100,6 +141,10 @@
    * @param {HTMLTableSectionElement} thead
    */
   function fillOverlay(overlay, thead) {
+    var key = widthKey(thead);
+    if (overlay.getAttribute("data-ez-widths") === key && overlay.querySelector("table")) {
+      return;
+    }
     var cloneTable = document.createElement("table");
     var cloneHead = thead.cloneNode(true);
     cloneHead.style.visibility = "";
@@ -114,6 +159,7 @@
     for (i = 0; i < n; i++) {
       dst[i].style.width = src[i].getBoundingClientRect().width + "px";
     }
+    overlay.setAttribute("data-ez-widths", key);
   }
 
   /**
@@ -133,23 +179,107 @@
     var dy = desired - naturalTop;
     if (dy <= 0.5) {
       overlay.hidden = true;
-      overlay.replaceChildren();
       return;
     }
-    var wrap = table.closest(".md-typeset__scrollwrap") || table;
+    var wrap = scrollWrap(table);
     var wrapRect = wrap.getBoundingClientRect();
     var tableRect = table.getBoundingClientRect();
-    var left = Math.max(wrapRect.left, tableRect.left);
-    var right = Math.min(wrapRect.right, tableRect.right);
     overlay.hidden = false;
     overlay.style.top = desired + "px";
-    overlay.style.left = left + "px";
-    overlay.style.width = Math.max(0, right - left) + "px";
+    overlay.style.left = wrapRect.left + "px";
+    overlay.style.width = Math.max(0, wrapRect.width) + "px";
     overlay.style.height = thead.getBoundingClientRect().height + 1 + "px";
     fillOverlay(overlay, thead);
     var inner = overlay.querySelector("table");
     if (inner) {
-      inner.style.marginLeft = tableRect.left - left + "px";
+      // tableRect.left tracks wrap.scrollLeft (plus wrap padding).
+      inner.style.transform = "translateX(" + (tableRect.left - wrapRect.left) + "px)";
+    }
+  }
+
+  /**
+   * Floating h-scroll host for one table (aria-hidden mirror of wrap).
+   * @param {HTMLTableElement} table
+   * @returns {HTMLDivElement}
+   */
+  function barFor(table) {
+    var el = bars.get(table);
+    if (el && el.isConnected) {
+      return el;
+    }
+    el = document.createElement("div");
+    el.className = "ez-table-hscroll";
+    el.setAttribute("aria-hidden", "true");
+    var inner = document.createElement("div");
+    inner.className = "ez-table-hscroll__inner";
+    el.appendChild(inner);
+    var host = table.closest(".md-typeset") || document.body;
+    host.appendChild(el);
+    bars.set(table, el);
+    bindWrapScroll(table);
+    el.addEventListener(
+      "scroll",
+      function () {
+        if (syncing) {
+          return;
+        }
+        var wrap = scrollWrap(table);
+        syncing = true;
+        wrap.scrollLeft = el.scrollLeft;
+        syncing = false;
+      },
+      { passive: true }
+    );
+    return el;
+  }
+
+  /**
+   * Whether wrap overflows X and the native bar at wrap.bottom is off-screen.
+   * @param {Element} wrap
+   * @param {number} pin
+   * @returns {boolean}
+   */
+  function needsHScroll(wrap, pin) {
+    if (wrap.scrollWidth <= wrap.clientWidth + 1) {
+      return false;
+    }
+    var rect = wrap.getBoundingClientRect();
+    var vh = window.innerHeight;
+    if (rect.top >= vh || rect.bottom <= pin) {
+      return false;
+    }
+    if (rect.bottom <= vh && rect.bottom > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Pin a wrap.scrollLeft mirror to the viewport bottom when the native bar
+   * would sit below the fold.
+   * @param {HTMLTableElement} table
+   * @param {number} pin
+   */
+  function placeHScroll(table, pin) {
+    var wrap = scrollWrap(table);
+    var bar = barFor(table);
+    if (!needsHScroll(wrap, pin)) {
+      bar.hidden = true;
+      return;
+    }
+    var wrapRect = wrap.getBoundingClientRect();
+    var inner = bar.firstElementChild;
+    bar.hidden = false;
+    bar.style.left = wrapRect.left + "px";
+    bar.style.width = wrap.clientWidth + "px";
+    bar.style.bottom = "0px";
+    if (inner) {
+      inner.style.width = wrap.scrollWidth + "px";
+    }
+    if (!syncing && bar.scrollLeft !== wrap.scrollLeft) {
+      syncing = true;
+      bar.scrollLeft = wrap.scrollLeft;
+      syncing = false;
     }
   }
 
@@ -163,6 +293,7 @@
     var i;
     for (i = 0; i < tables.length; i++) {
       pinTable(tables[i], pin);
+      placeHScroll(tables[i], pin);
     }
   }
 

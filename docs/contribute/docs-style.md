@@ -100,7 +100,7 @@ Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com
 
 - Fenced `pre > code`: `line-height: 1.55`, padding `0.9em 1.05em`, radius `0.25rem`. Pygments token colors stay.
 - Prose / list / table `code`: terminal green `rgb(134, 183, 55)`. Do not apply that color to `pre > code`.
-- Keep this site’s `.md-typeset { font-size: 0.875rem }` and sticky table pin. Do not copy spark-lab’s `0.82rem` typeset or table `overflow: hidden`.
+- Keep this site’s `.md-typeset { font-size: 0.875rem }`, sticky table pin (`.ez-table-pin`), and floating horizontal scrollbar (`.ez-table-hscroll` in `tables.js`). Do not copy spark-lab’s `0.82rem` typeset or table `overflow: hidden`. Do not `position: sticky` the header or the h-scroll bar.
 
 ---
 
