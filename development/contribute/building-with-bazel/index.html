@@ -6078,7 +6078,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 06:21 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T06:21:46+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 08:01 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T08:01:41+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -6136,7 +6136,7 @@
 <tbody>
 <tr>
 <td><code>//:test-fast</code></td>
-<td>Split BATS + pytest 100% + Pyright + mypy + shell inventory</td>
+<td>Split BATS + pytest 100% (all first-party Python) + Pyright + mypy + shell inventory</td>
 </tr>
 <tr>
 <td><code>//:test</code></td>
@@ -6173,13 +6173,13 @@
 <tbody>
 <tr>
 <td><strong>bazel-core</strong></td>
-<td>scripts/tests/docker/… or CI graph</td>
-<td><code>//:test-fast</code> then <code>//:lint --test_tag_filters=manual</code></td>
+<td>scripts/tests/docker/docs generators/typecheck pins or CI graph</td>
+<td><code>//:test-fast</code> then <code>//:lint</code> (shellcheck/shfmt/buildifier)</td>
 </tr>
 <tr>
 <td><strong>docs-and-render</strong></td>
 <td>docs/** or CI graph</td>
-<td><code>//docs:docs</code></td>
+<td><code>docs/manage-docs.sh build</code> (no Bazel)</td>
 </tr>
 <tr>
 <td><strong>validate-gate</strong></td>
@@ -6188,7 +6188,7 @@
 </tr>
 </tbody>
 </table>
-<p>Disk cache keys on <code>MODULE.bazel.lock</code> + <code>.bazelversion</code>.</p>
+<p>Topic-branch CI runs on <strong>pull_request</strong> only (push is <code>development</code>/<code>main</code>). Disk cache keys include <code>github.job</code> plus <code>MODULE.bazel.lock</code> + <code>.bazelversion</code>.</p>
 <h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
 <p>No safety impact on Compose: <code>restart: "no"</code>, type <strong>yes</strong> on <code>start</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" data-short="Free host RAM/disk checked before start so SSH still works under load." data-category="Hardware and safety" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" data-short="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit." data-category="Downloads" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit stay in <code>docker/docker-compose.yml</code> and <code>manage.sh</code>.</p>
 

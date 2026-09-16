@@ -6078,7 +6078,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 06:21 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T06:21:46+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 08:01 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T08:01:41+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -6089,13 +6089,13 @@
 
 <h1 id="testing-docs">Testing docs<a class="headerlink" href="#testing-docs" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
 <li><strong>Bazel / Make targets</strong> — <code>//:test-fast</code> / <code>coverage</code> / <code>lint</code> / <code>docs</code> / <code>typecheck</code></li>
-<li><strong>100% Python gate</strong> — UM patches + <code>ez_ltx_spatial</code> (not the shell generator)</li>
-<li><strong>Shell function inventory</strong></li>
+<li><strong>100% Python gate</strong> — all first-party production Python (<code>custom_nodes</code>, <code>docker</code>, <code>docs/*.py</code>, <code>scripts/lib</code>, <code>studio-ui</code>, <code>tools</code>)</li>
+<li><strong>Shell function inventory</strong> (invoked by a test, not only named)</li>
 <li><strong><code>deploy-docs.yml</code> + mike</strong> — <code>main</code> → <code>latest</code>, <code>development</code> → <code>development</code></li>
 <li><strong><code>bazelisk run //docs:docs</code></strong> — <code>docs/generate_shell_docs.py</code> + <code>docs/generate_workflow_docs.py</code> then <code>mkdocs build --strict</code></li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
 <li><strong>Running</strong> the same gates CI uses before a docs PR</li>
-<li><strong>Knowing</strong> the coverage number is <strong>not</strong> “every Python file in the repo”</li>
+<li><strong>Knowing</strong> the 100% gate is every first-party production Python module, with GPU/bpy/network branches covered by hermetic fakes</li>
 <li><strong>Publishing</strong> versioned docs without upgrading MkDocs 2.x</li>
 </ul></div></div>
 <p>Style: <a href="../docs-style/">Docs style</a>. Root <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="workflow" data-href="../../glossary/#workflow" data-short="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file." data-category="Studio" title="A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.">workflow</span>: <a href="../contributing/">Contributing</a>.</p>
@@ -6128,7 +6128,7 @@
 </tr>
 <tr>
 <td><strong><code>bazelisk test //:lint --test_tag_filters=manual</code></strong></td>
-<td>ShellCheck + shfmt + buildifier + Pyright + mypy</td>
+<td>ShellCheck + shfmt + buildifier (Pyright + mypy live in <code>//:test-fast</code>)</td>
 </tr>
 <tr>
 <td><strong><code>make typecheck</code></strong></td>
@@ -6152,20 +6152,20 @@
 <p>Pyright errors and mypy errors are <strong>defects</strong>. Do not skip the gate.</p>
 <hr />
 <h2 id="100-python-gate">100% Python gate<a class="headerlink" href="#100-python-gate" title="Permanent link">&para;</a></h2>
-<p><code>make coverage</code> / <code>make python</code> fail-under <strong>100</strong> on:</p>
+<p><code>make coverage</code> / <code>tests/run_pytest.sh</code> fail-under <strong>100</strong> on every first-party production package:</p>
 <ul>
-<li><code>patch_get_free_memory</code></li>
-<li><code>patch_unified_memory_copy</code></li>
-<li><code>patch_magcache_compat</code></li>
-<li><code>patch_vhs_widget_inputs</code></li>
-<li><code>seed_clay_inputs</code></li>
-<li><strong><code>ez_ltx_spatial</code></strong></li>
+<li><code>custom_nodes</code></li>
+<li><code>docker</code> (UM patches, <code>seed_clay_inputs</code>, <code>pythonpath/sitecustomize</code>)</li>
+<li><code>docs</code> generators and hooks</li>
+<li><code>scripts/lib</code></li>
+<li><code>studio-ui</code></li>
+<li><code>tools</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="blender" data-href="../../glossary/#blender" data-short="Host DCC sidecar. Park Comfy (blender-desk) before Cycles CUDA or heavy dumps." data-category="Hardware and safety" title="Host DCC sidecar. Park Comfy (blender-desk) before Cycles CUDA or heavy dumps.">Blender</span> exporters; <code>bpy</code> is faked)</li>
 </ul>
-<p>That is <strong>UM / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="magcache" data-href="../../glossary/#magcache" data-short="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes." data-category="Models" title="Optional Wan draft accelerator. On wan-i2v-5s only; never on LTX heroes.">MagCache</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vhs" data-href="../../glossary/#vhs" data-short="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview." data-category="Models" title="Comfy pack that writes MP4 (and GIF). Open the Save video node after Queue for preview.">VHS</span> widgetInputs / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clay" data-href="../../glossary/#clay" data-short="Greybox / Workbench pass (still or 5 s video) that Klein or LTX restyles." data-category="Studio" title="Greybox / Workbench pass (still or 5 s video) that Klein or LTX restyles.">clay</span> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="seed" data-href="../../glossary/#seed" data-short="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore." data-category="Studio" title="RNG lock for a Queue. Same seed + same graph ≈ same picture; change it to explore.">seed</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../../glossary/#ltx" data-short="Joint audio/video model (Community License, gated, $10M company-revenue cap)." data-category="Models" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> spatial</strong> — <strong>not</strong> <code>docs/generate_shell_docs.py</code> and not the rest of <code>custom_nodes/</code>. The shell generator is exercised by pytest (<code>tests/python/test_generate_shell_docs.py</code>) without a 100% line gate.</p>
-<p><code>PYTHONPATH=docker:custom_nodes</code>.</p>
+<p>Vendored <code>custom_nodes/ez_dcc/_guide_pack.py</code> is included (same tests as <code>scripts/lib/guide_pack.py</code>). GPU loaders, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="llama-cpp" data-href="../../glossary/#llama-cpp" data-short="GGUF runtime. Prompt Enhance is CPU-only; llm-desk uses host llama-server." data-category="Hardware and safety" title="GGUF runtime. Prompt Enhance is CPU-only; llm-desk uses host llama-server.">llama.cpp</span>, and host Blender are exercised with <code>sys.modules</code> fakes — tests stay hermetic.</p>
+<p><code>PYTHONPATH=docker:docker/pythonpath:custom_nodes:scripts/lib:studio-ui:docs:tools</code>.</p>
 <hr />
 <h2 id="shell-function-inventory">Shell function inventory<a class="headerlink" href="#shell-function-inventory" title="Permanent link">&para;</a></h2>
-<p>Every function under <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>named under <code>tests/</code></strong> (strict; production-only refs do not count). Entrypoint <code>main</code> is skipped. New library functions ship with BATS/pytest in the <strong>same commit</strong>.</p>
+<p>Every function under <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>invoked by a test</strong> under <code>tests/</code> (strict; a comment that only names the function does not count). Entrypoint <code>main</code> is skipped. New library functions ship with BATS/pytest in the <strong>same commit</strong>. kcov remains optional and non-fatal.</p>
 <hr />
 <h2 id="make-docs">make docs<a class="headerlink" href="#make-docs" title="Permanent link">&para;</a></h2>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python3<span class="w"> </span>docs/generate_shell_docs.py
