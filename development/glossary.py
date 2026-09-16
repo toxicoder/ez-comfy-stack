@@ -23,6 +23,7 @@ CATEGORY_ORDER = (
     "Models",
     "Modalities",
     "Studio",
+    "Downloads",
     "Hardware and safety",
     "Film",
     "Audio",
@@ -353,6 +354,8 @@ def _render_span(raw: str, term: Term, href: str) -> str:
         'aria-haspopup="dialog" aria-expanded="false" '
         f'data-term="{html.escape(term.id, quote=True)}" '
         f'data-href="{html.escape(href, quote=True)}" '
+        f'data-short="{html.escape(term.short, quote=True)}" '
+        f'data-category="{html.escape(term.category, quote=True)}" '
         f'title="{html.escape(term.short, quote=True)}">{raw}</span>'
     )
 
@@ -532,6 +535,7 @@ def _terms_payload(terms: Sequence[Term]) -> dict[str, dict[str, Any]]:
         term.id: {
             "title": term.title,
             "short": term.short,
+            "category": term.category,
             "see_also": list(term.see_also),
         }
         for term in terms
@@ -561,6 +565,7 @@ def inject_glossary_assets(document: str, terms: Sequence[Term]) -> str:
         '<button type="button" class="ez-glossary-dialog__close" '
         'id="ez-glossary-close" aria-label="Close definition">Close</button>'
         '<h2 class="ez-glossary-dialog__title" id="ez-glossary-title"></h2>'
+        '<p class="ez-glossary-dialog__category" id="ez-glossary-category"></p>'
         '<p class="ez-glossary-dialog__body" id="ez-glossary-body"></p>'
         '<p class="ez-glossary-dialog__see" id="ez-glossary-see" hidden></p>'
         '<p class="ez-glossary-dialog__more">'
