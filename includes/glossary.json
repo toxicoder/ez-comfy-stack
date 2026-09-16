@@ -374,7 +374,7 @@
     "aliases": ["node graph", "lab graph", "workflow"],
     "category": "Studio",
     "short": "A saved ComfyUI graph (JSON). Lab examples are already wired — change widgets, not the file.",
-    "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
+    "long": "Host files live under `workflows/_lab/<lane>/`. The entrypoint copies them into Comfy (`*.app.json` when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. Node-by-node widgets: [Workflow details](create/workflows-index.md). See [Workflow catalog](studio-workflows.md) and [Still workflows](create/workflows-stills.md).",
     "see_also": ["lab-example", "note-node", "widget", "comfyui"]
   },
   {

@@ -18,7 +18,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 - **Looking up** a canvas class without opening `nodes.py`
 - **Seeing** occupancy widgets vs graph labels (`llm` is not a CLI mode)
-- **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the node catalog)
+- **Keeping** App Mode widgets on [ComfyUI Apps](../studio-apps.md) (this page is the pack catalog). Per-graph widgets: [Workflow details](../create/workflows-index.md) · [Workflow node parameters](workflow-nodes.md)
 
 Entrypoint copies these packs into `$COMFY_HOME/custom_nodes/` on `start`. Operator-installed packs live on `${COMFY_OUTPUT_DIR}/custom-nodes-user` (`_user/`) and are not overwritten.
 

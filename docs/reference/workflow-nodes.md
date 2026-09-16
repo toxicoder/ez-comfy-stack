@@ -1,0 +1,3220 @@
+---
+title: Workflow node parameters
+description: Every Comfy node type used in workflows/_lab, with widgets, choices, and generation effects.
+tags: [workflows, generated, comfyui, reference]
+---
+
+# Workflow node parameters
+
+**What's on this page**
+
+- **Every node type** that appears in `workflows/_lab/`
+- **Widgets in lab JSON order**, including combo choices
+- **Lab notes** (CFG 1.0 on distilled Klein, LTX ÷32, occupancy XOR)
+
+**What this enables**
+
+- **Looking up a widget** without opening `nodes.py`
+- **Seeing legal choices** before changing a seeded graph
+
+**Who this is for:** studio users who already Queued a lab graph. Pack catalog: [Custom nodes](custom-nodes.md). Per-graph pages: [Workflow details](../create/workflows-index.md).
+
+> Generated from `docs/workflow_nodes.py`. Do not hand-edit this file.
+
+ComfyUI pin **v0.34.6**. MiniMax / Klein 9B / FLUX.2-dev are not lab defaults.
+
+## Node parameter reference
+
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.34.6 / lab `INPUT_TYPES` — not SD1.5 folklore.
+
+### `AudioAdjustVolume` — Audio Adjust Volume
+
+Gain an AUDIO tensor in dB.
+
+!!! warning "Lab notes"
+
+    Podcast duck −15 dB on the ACE bed under Kokoro speech.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio` | in | `AUDIO` | Bed or sting. |
+| `AUDIO` | out | `AUDIO` | Gained audio. |
+
+#### `volume_db`
+
+Type `FLOAT`. Range / default: lab −15.
+
+Gain in decibels.
+
+**How it affects generation:** Negative ducks the bed. −15 dB is the lab podcast duck (same idea as host stem-mix.sh).
+
+### `AudioConcat` — Audio Concat
+
+Play two AUDIO tensors in sequence.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio1` | in | `AUDIO` | First clip (sting). |
+| `audio2` | in | `AUDIO` | Second clip (bed). |
+| `AUDIO` | out | `AUDIO` | Sting then bed. |
+
+#### `method`
+
+Type `COMBO`. Range / default: after.
+
+Order.
+
+**How it affects generation:** after = audio1 then audio2 (lab sting then bed).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `after` | audio1 then audio2 (lab). |
+| `before` | audio2 then audio1. |
+
+### `AudioMerge` — Audio Merge
+
+Mix two AUDIO tensors.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio1` | in | `AUDIO` | Speech or sting. |
+| `audio2` | in | `AUDIO` | Bed. |
+| `AUDIO` | out | `AUDIO` | Mix. |
+
+#### `merge_method`
+
+Type `COMBO`. Range / default: overlay.
+
+How to combine overlapping samples.
+
+**How it affects generation:** overlay keeps both (lab podcast mix). add can clip. mean quiets both.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `overlay` | Layer both (lab). |
+| `add` | Sum. Can clip. |
+| `mean` | Average. Quieter. |
+
+### `CLIPLoader` — Load CLIP
+
+Load a text encoder. The type combo must match the UNET family.
+
+!!! warning "Lab notes"
+
+    Lab types: flux2 (Qwen3-4B), wan (UMT5), ltxv (Gemma4-with-proj). Wrong type is a Queue error, not a bad prompt. MiniMax type is banned.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `CLIP` | out | `CLIP` | Text encoder for CLIPTextEncode / ACE / LTX. |
+
+#### `clip_name`
+
+Type `STRING`.
+
+Filename under text_encoders.
+
+**How it affects generation:** Must match the family (qwen_3_4b, umt5_xxl, gemma4-12b-with-proj).
+
+#### `type`
+
+Type `COMBO`.
+
+CLIPType enum. Picks tokenizer + template.
+
+**How it affects generation:** flux2 wraps Klein strings in a Qwen chat template — do not paste <|im_start|>. wan is UMT5. ltxv is Gemma4-with-proj.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `flux2` | Klein 4B / Qwen3-4B text encoder. Lab stills. |
+| `wan` | Wan 2.2 UMT5-XXL. Lab silent motion. |
+| `ltxv` | LTX-2.5 Gemma4-with-proj. Lab AV. |
+| `ace` | ACE-Step text encoder. Music graphs use CheckpointLoaderSimple instead. |
+| `stable_diffusion` | SD1.x CLIP. Not a lab default. |
+| `stable_cascade` | Stable Cascade CLIP. |
+| `sd3` | SD3 CLIP stack. |
+| `stable_audio` | Stable Audio T5. |
+| `mochi` | Mochi T5. |
+| `pixart` | PixArt. |
+| `cosmos` | Cosmos T5. |
+| `lumina2` | Lumina-2 Gemma. |
+| `hidream` | HiDream. |
+| `chroma` | Chroma. |
+| `omnigen2` | OmniGen2. |
+| `qwen_image` | Qwen-Image. |
+| `hunyuan_image` | Hunyuan image. |
+| `ovis` | Ovis. |
+| `longcat_image` | LongCat image. Optional stub only. |
+| `cogvideox` | CogVideoX T5. |
+| `lens` | Lens. |
+| `pixeldit` | PixelDit. |
+| `ideogram4` | Ideogram. |
+| `boogu` | Boogu. |
+| `krea2` | Krea. |
+| `joyimage` | JoyImage Qwen3-VL. |
+| `mage` | Mage. |
+| `minimax` | MiniMax. Banned in this studio (US Excluded Territory). Do not pick. |
+
+#### `device`
+
+Type `COMBO`. Range / default: default.
+
+Where to load the encoder.
+
+**How it affects generation:** default uses GPU. cpu is a debug escape hatch.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `default` | Load on the Comfy compute device (GPU). Lab default. |
+| `cpu` | Force CPU. Much slower; only for debugging a CLIP load. |
+
+### `CLIPTextEncode` — CLIP Text Encode
+
+Turn a prompt string into CONDITIONING for the sampler.
+
+!!! warning "Lab notes"
+
+    The dim CLIP box after Queue is this string. Prompt Enhance nodes rewrite it when Enhance is on.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `clip` | in | `CLIP` | Matching family encoder. |
+| `text` | in | `STRING` | Often wired from Prompt Enhance so the widget is a preview. |
+| `CONDITIONING` | out | `CONDITIONING` | Positive or negative cond. |
+
+#### `text`
+
+Type `STRING`.
+
+Prompt encoded by CLIP.
+
+**How it affects generation:** Klein: sentences, subject → place → light → camera. Wan I2V: motion + one camera only. LTX: present-tense paragraph with audio interleaved. Distilled Klein quality lives here, not in CFG.
+
+### `CLIPVisionLoader` — Load CLIP Vision
+
+Load an image encoder for TRELLIS.2 conditioning.
+
+!!! warning "Lab notes"
+
+    Lab: dino_v3_vit_l.safetensors. Occupancy trellis.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `CLIP_VISION` | out | `CLIP_VISION` | Vision tower. |
+
+#### `clip_name`
+
+Type `STRING`.
+
+Vision checkpoint filename.
+
+**How it affects generation:** DINOv3 ViT-L is the TRELLIS.2 pair. A text CLIP will not work here.
+
+### `CheckpointLoaderSimple` — Load Checkpoint
+
+Load a single-file checkpoint that bundles MODEL + CLIP + VAE.
+
+!!! warning "Lab notes"
+
+    ACE-Step 1.5 turbo AIO (ace_step_1.5_turbo_aio.safetensors) on every music graph.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `MODEL` | out | `MODEL` | ACE denoiser (then ModelSamplingAuraFlow). |
+| `CLIP` | out | `CLIP` | ACE text encoder. |
+| `VAE` | out | `VAE` | ACE audio VAE. |
+
+#### `ckpt_name`
+
+Type `STRING`.
+
+Filename under checkpoints/.
+
+**How it affects generation:** Lab music is the turbo AIO. XL is opt-in via download-music --tier xl — swap only if you meant to.
+
+### `ConditioningZeroOut` — Conditioning Zero Out
+
+Replace a conditioning with zeros (unconditional / empty negative).
+
+!!! warning "Lab notes"
+
+    ACE graphs zero the negative so CFG 1.0 stays a true uncond skip.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `conditioning` | in | `CONDITIONING` | Usually an unused negative encode. |
+| `CONDITIONING` | out | `CONDITIONING` | Zeroed cond for KSampler.negative. |
+
+No widgets. Sockets only.
+
+### `EZAceStepPromptEnhance` — ACE-Step Prompt Enhance
+
+Rewrite ACE tags (genre first) and lyrics. Instrumental mode forces [inst].
+
+!!! warning "Lab notes"
+
+    Enhance off on authored album takes. Instrumental sanitizes lyrics into bracket cues.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `lyrics` | in | `STRING` | Optional lyrics override (EZRapLyrics). |
+| `tags` | out | `STRING` | Tags for the ACE encoder. |
+| `lyrics` | out | `STRING` | Lyrics / [inst] for the ACE encoder. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps authored tags/lyrics.
+
+#### `tags`
+
+Type `STRING`.
+
+Genre-first tags.
+
+**How it affects generation:** Keep vocal identity tags stable across an album. Drive-through is not rap-over-club.
+
+#### `lyrics`
+
+Type `STRING`.
+
+Sectioned lyrics.
+
+**How it affects generation:** Enhance off on catalog takes so exclusive verses stay pinned.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: false on albums.
+
+Run the rewriter.
+
+**How it affects generation:** On only when you typed a lazy hook and want the GGUF to expand it.
+
+#### `mode`
+
+Type `COMBO`.
+
+Vocal vs instrumental sanitizer.
+
+**How it affects generation:** instrumental forces no-vocals tags and [inst] lyrics.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `vocal` | Nill Bye / rap-draft / rap-full. |
+| `instrumental` | Drive-through EDM. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZAlbumPack` — Album Pack
+
+Write <Album>.m3u and <Album>.zip under albums/<Artist>/<Album>/.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `zip_path` | out | `STRING` | Zip path or empty on failure. |
+
+#### `artist`
+
+Type `STRING`.
+
+Artist folder.
+
+**How it affects generation:** Drive-through or Nill Bye.
+
+#### `album`
+
+Type `STRING`.
+
+Album folder display name.
+
+**How it affects generation:** Queue tracks first (or album-render). CPU only.
+
+### `EZAudioMetadata` — Audio Metadata
+
+Stamp artist/album/title tags and optional cover on saved audio.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio` | in | `AUDIO` | Pass-through AUDIO. |
+| `cover` | in | `IMAGE` | Optional. Unwired so App Queue does not require a file. |
+| `audio` | out | `AUDIO` | Same AUDIO; files on disk get tags. |
+
+#### `artist`
+
+Type `STRING`.
+
+ID3/Vorbis artist.
+
+**How it affects generation:** Nill Bye vs Drive-through.
+
+#### `album`
+
+Type `STRING`.
+
+Album title.
+
+**How it affects generation:** Must match the folder album-slug display name.
+
+#### `title`
+
+Type `STRING`.
+
+Track title.
+
+**How it affects generation:** Pairs with SaveAudio stem NN - Song Title.
+
+#### `track`
+
+Type `INT`. Range / default: 1–99.
+
+Track number.
+
+**How it affects generation:** Numbered takes 01–20.
+
+#### `tracktotal`
+
+Type `INT`.
+
+Album track count.
+
+**How it affects generation:** 15 or 20 depending on the album.
+
+#### `year`
+
+Type `INT`. Range / default: 2026.
+
+Tag year.
+
+**How it affects generation:** Does not affect audio.
+
+#### `art_mode`
+
+Type `COMBO`. Range / default: skip.
+
+Cover art policy.
+
+**How it affects generation:** skip on every audio Queue. generate is klein occupancy — later session. upload needs Cover image wired.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `skip` | Lab default. No cover required. |
+| `upload` | Use the Cover image socket. |
+| `generate` | Use cover.jpg from the album folder (klein session). |
+
+#### `prefix`
+
+Type `STRING`.
+
+SaveAudio stem to stamp.
+
+**How it affects generation:** Must match SaveAudio / SaveAudioMP3.
+
+### `EZContextJoin` — Context Join
+
+Pack labeled desk fields into one context STRING for rewriter nodes.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `a` | in | `STRING` | Logline. |
+| `b` | in | `STRING` | Script. |
+| `c` | in | `STRING` | Audio policy. |
+| `d` | in | `STRING` | Score. |
+| `context` | out | `STRING` | Labeled block for Enhance context. |
+
+#### `label_a`
+
+Type `STRING`. Range / default: Logline.
+
+Label for field A.
+
+**How it affects generation:** Empty values are omitted.
+
+#### `label_b`
+
+Type `STRING`. Range / default: Script.
+
+Label for field B.
+
+**How it affects generation:** Beat-sheet default Script.
+
+#### `label_c`
+
+Type `STRING`. Range / default: Audio policy.
+
+Label for field C.
+
+**How it affects generation:** Keeps no-score / world-SFX policy in every card rewrite.
+
+#### `label_d`
+
+Type `STRING`. Range / default: Score.
+
+Label for field D.
+
+**How it affects generation:** Optional.
+
+### `EZCreativeResearch` — Creative research
+
+Creative-process chat with optional web search and sequential research subagents. No UNET.
+
+!!! warning "Lab notes"
+
+    Occupancy llm. Handoff Prompt Forge. Fail-soft without a GGUF. Not Comfy Cloud's In-App Agent.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `reply` | out | `STRING` | Assistant reply / brief. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample question or Custom.
+
+**How it affects generation:** Custom uses the Message box.
+
+#### `prompt`
+
+Type `STRING`.
+
+Message.
+
+**How it affects generation:** One widget, then Queue. Not a streaming chat box.
+
+#### `mode`
+
+Type `COMBO`. Range / default: research.
+
+Chat vs planner+search.
+
+**How it affects generation:** research runs subagents. chat is a single turn.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `chat` | Single-turn chat. |
+| `research` | Planner + sequential subagents (lab). |
+
+#### `web_search`
+
+Type `BOOLEAN`. Range / default: true.
+
+Allow web search.
+
+**How it affects generation:** true uses the research MCP. Off stays on-box.
+
+#### `subagents`
+
+Type `INT`. Range / default: 1–3, lab 2.
+
+How many research subagents.
+
+**How it affects generation:** 2 is the lab default. 3 is slower.
+
+#### `history`
+
+Type `STRING`.
+
+Prior turns.
+
+**How it affects generation:** Paste if you continue a desk session.
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZDCCLoadGuideStill` — Load guide still
+
+Load clay/depth/canny/first/last from guides/<slug>/<shot_id>/. Fail-closed QC.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | out | `IMAGE` | Still. |
+| `mask` | out | `MASK` | Alpha. |
+| `metadata` | out | `STRING` | Shot JSON. |
+
+#### `slug`
+
+Type `STRING`. Range / default: go-see.
+
+Guide-pack slug.
+
+**How it affects generation:** Must exist under ${COMFY_OUTPUT_DIR}/guides/.
+
+#### `shot_id`
+
+Type `STRING`. Range / default: 12.
+
+Shot folder.
+
+**How it affects generation:** Matches blender-guide dump ids.
+
+#### `layer`
+
+Type `COMBO`. Range / default: first.
+
+Which PNG.
+
+**How it affects generation:** first/last are RGB plates. clay/depth/canny are guides. Depth is mist 0–1 (near=white).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `first` | First-frame RGB. |
+| `last` | Last-frame RGB. |
+| `clay` | Clay beauty. |
+| `depth` | Depth mist. |
+| `canny` | Canny edges. |
+
+### `EZDCCLoadGuideVideo` — Load guide video path
+
+Absolute clay.mp4 / depth.mp4 / canny.mp4 at 24 fps. Does not decode 120 frames.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `path` | out | `STRING` | Absolute mp4 path. |
+| `fps` | out | `INT` | 24. |
+
+#### `slug`
+
+Type `STRING`.
+
+Guide-pack slug.
+
+**How it affects generation:** Same as the still loader.
+
+#### `shot_id`
+
+Type `STRING`.
+
+Shot folder.
+
+**How it affects generation:** Same as the still loader.
+
+#### `layer`
+
+Type `COMBO`. Range / default: clay / depth / canny.
+
+Which mp4.
+
+**How it affects generation:** IC-LoRA envelopes wire depth.mp4 or canny.mp4.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `clay` | Clay mp4. |
+| `depth` | Depth mp4 (lab IC-LoRA). |
+| `canny` | Canny mp4. |
+
+### `EZDCCLoadStillPack` — Load still pack
+
+Load a blender-stills plate from guides/<slug>/stills/<plate>/.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | out | `IMAGE` | Plate. |
+| `mask` | out | `MASK` | Alpha. |
+| `metadata` | out | `STRING` | Pack JSON. |
+
+#### `slug`
+
+Type `STRING`. Range / default: go-see.
+
+Pack slug.
+
+**How it affects generation:** guides/<slug>/stills/.
+
+#### `plate`
+
+Type `STRING`. Range / default: mug.
+
+Plate id.
+
+**How it affects generation:** Lab TRELLIS mug uses plate=mug.
+
+#### `layer`
+
+Type `COMBO`. Range / default: first.
+
+Which layer.
+
+**How it affects generation:** first is the RGB hero. depth/canny/normal are workbench passes.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `first` | RGB hero. |
+| `rgb` | RGB alias. |
+| `depth` | Depth. |
+| `canny` | Canny. |
+| `normal` | Normals. |
+
+### `EZDCCOccupancyGate` — Occupancy gate
+
+Pass-through IMAGE that fail-closes on occupancy XOR. Does not start Compose.
+
+!!! warning "Lab notes"
+
+    Missing .occupancy.json passes. idle / blender-desk / llm-desk / mismatch fail.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Still to gate. |
+| `image` | out | `IMAGE` | Same still if occupancy matches. |
+
+#### `required_mode`
+
+Type `COMBO`.
+
+Heavy GPU mode that must already be entered.
+
+**How it affects generation:** klein / wan / ltx / trellis. Pick the family you are about to Queue.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `klein` | Klein 4B stills. |
+| `trellis` | TRELLIS.2. |
+| `wan` | Wan 5B. |
+| `ltx` | LTX-2.5. |
+
+### `EZDubIngest` — Dub ingest (file or URL)
+
+Extract audio from input/ or a URL. Queue refuses unless I have rights is on.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `job_id` | out | `STRING` | Job slug. |
+| `audio` | out | `AUDIO` | Short preview AUDIO (full wav is on disk). |
+
+#### `source`
+
+Type `COMBO`. Range / default: (none).
+
+File in Comfy input/.
+
+**How it affects generation:** Pick a file or leave (none) and use source_url.
+
+#### `have_rights`
+
+Type `BOOLEAN`. Range / default: false.
+
+Rights gate.
+
+**How it affects generation:** Queue refuses unless true. Not legal advice.
+
+#### `job_slug`
+
+Type `STRING`. Range / default: episode.
+
+Job folder name.
+
+**How it affects generation:** Sanitized slug under the dub jobstore.
+
+#### `source_url`
+
+Type `STRING`.
+
+Optional http(s) URL.
+
+**How it affects generation:** Empty unless you ingest from the network.
+
+### `EZDubRender` — Dub clone + mix
+
+Zero-shot clone, duration-lock, mix, SRT, disclosure sidecar.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `script` | in | `STRING` | Translation JSON. |
+| `job_id` | in | `STRING` | Job slug. |
+| `audio` | out | `AUDIO` | Mix (empty on analyze stage). |
+
+#### `engine`
+
+Type `COMBO`. Range / default: chatterbox-ml.
+
+Clone engine.
+
+**How it affects generation:** chatterbox-ml is the lab default. qwen3tts is opt-in.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `chatterbox-ml` | Lab default. |
+| `qwen3tts` | Opt-in Qwen3-TTS. |
+
+#### `keep_bed`
+
+Type `BOOLEAN`. Range / default: true.
+
+Keep source bed under the clone.
+
+**How it affects generation:** true duration-locks to the source (YouTube Languages).
+
+#### `spoken_disclosure`
+
+Type `BOOLEAN`. Range / default: false.
+
+Overlay a spoken bumper on the mix wav.
+
+**How it affects generation:** Off: mix starts on speech. YT wav stays source-timed either way.
+
+#### `speed`
+
+Type `FLOAT`. Range / default: 0.5–1.5, 1.0.
+
+Clone speaking rate.
+
+**How it affects generation:** Stay near 1.0 or the duration lock fights you.
+
+#### `cfg_weight`
+
+Type `FLOAT`. Range / default: −1.0 = auto.
+
+Clone CFG.
+
+**How it affects generation:** −1 auto. Lab auto 0 on EN→ES.
+
+#### `exaggeration`
+
+Type `FLOAT`. Range / default: 0.25–2.0, 0.5.
+
+Chatterbox exaggeration.
+
+**How it affects generation:** 0.5 is the lab default. Higher is cartoon-emotive.
+
+### `EZDubScript` — Dub transcript + translate
+
+Diarize + ASR + on-box GGUF translation. Widget JSON is the human edit surface.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `job_id` | in | `STRING` | From ingest. |
+| `script` | out | `STRING` | Translation JSON. |
+
+#### `prompt`
+
+Type `STRING`.
+
+Editable translation JSON.
+
+**How it affects generation:** Turn Enhance off to pin widget text after a human rewrite.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Rewrite translation via GGUF.
+
+**How it affects generation:** Off pins your edits.
+
+#### `target_language`
+
+Type `COMBO`. Range / default: es.
+
+Target ISO code.
+
+**How it affects generation:** es is the lab smoke. Clone CFG auto 0 on EN→ES.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `es` | Spanish (lab default target). |
+| `en` | English. |
+| `ar` | Arabic. |
+| `da` | Danish. |
+| `de` | German. |
+| `el` | Greek. |
+| `fi` | Finnish. |
+| `fr` | French. |
+| `he` | Hebrew. |
+| `hi` | Hindi. |
+| `it` | Italian. |
+| `ja` | Japanese. |
+| `ko` | Korean. |
+| `ms` | Malay. |
+| `nl` | Dutch. |
+| `no` | Norwegian. |
+| `pl` | Polish. |
+| `pt` | Portuguese. |
+| `ru` | Russian. |
+| `sv` | Swedish. |
+| `sw` | Swahili. |
+| `tr` | Turkish. |
+| `zh` | Chinese. |
+
+#### `source_language`
+
+Type `COMBO`. Range / default: auto.
+
+Source language.
+
+**How it affects generation:** auto detects. Pin en if ASR mis-detects.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `auto` | Detect. |
+| `es` | Spanish (lab default target). |
+| `en` | English. |
+| `ar` | Arabic. |
+| `da` | Danish. |
+| `de` | German. |
+| `el` | Greek. |
+| `fi` | Finnish. |
+| `fr` | French. |
+| `he` | Hebrew. |
+| `hi` | Hindi. |
+| `it` | Italian. |
+| `ja` | Japanese. |
+| `ko` | Korean. |
+| `ms` | Malay. |
+| `nl` | Dutch. |
+| `no` | Norwegian. |
+| `pl` | Polish. |
+| `pt` | Portuguese. |
+| `ru` | Russian. |
+| `sv` | Swedish. |
+| `sw` | Swahili. |
+| `tr` | Turkish. |
+| `zh` | Chinese. |
+
+#### `max_speakers`
+
+Type `INT`. Range / default: 0–12, 0 = auto.
+
+Diarize cap.
+
+**How it affects generation:** 0 lets the pipeline decide.
+
+#### `stage`
+
+Type `COMBO`. Range / default: all.
+
+Analyze vs render vs both.
+
+**How it affects generation:** all analyzes then clones. render skips ASR. analyze stops after JSON.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `all` | Analyze then clone (lab). |
+| `analyze` | ASR/translate only. |
+| `render` | Skip ASR; clone widget JSON. |
+
+### `EZFilmConcat` — Save 90s film (MP4)
+
+Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
+
+!!! warning "Lab notes"
+
+    Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `shot_01` | in | `VHS_FILENAMES` | Shot 01 MP4. |
+| `shot_02` | in | `VHS_FILENAMES` | Shot 02 MP4. |
+| `shot_03` | in | `VHS_FILENAMES` | Shot 03 MP4. |
+| `shot_04` | in | `VHS_FILENAMES` | Shot 04 MP4. |
+| `shot_05` | in | `VHS_FILENAMES` | Shot 05 MP4. |
+| `shot_06` | in | `VHS_FILENAMES` | Shot 06 MP4. |
+| `shot_07` | in | `VHS_FILENAMES` | Shot 07 MP4. |
+| `shot_08` | in | `VHS_FILENAMES` | Shot 08 MP4. |
+| `shot_09` | in | `VHS_FILENAMES` | Shot 09 MP4. |
+| `shot_10` | in | `VHS_FILENAMES` | Shot 10 MP4. |
+| `shot_11` | in | `VHS_FILENAMES` | Shot 11 MP4. |
+| `shot_12` | in | `VHS_FILENAMES` | Shot 12 MP4. |
+| `shot_13` | in | `VHS_FILENAMES` | Shot 13 MP4. |
+| `shot_14` | in | `VHS_FILENAMES` | Shot 14 MP4. |
+| `shot_15` | in | `VHS_FILENAMES` | Shot 15 MP4. |
+| `shot_16` | in | `VHS_FILENAMES` | Shot 16 MP4. |
+| `shot_17` | in | `VHS_FILENAMES` | Shot 17 MP4. |
+| `shot_18` | in | `VHS_FILENAMES` | Shot 18 MP4. |
+| `disclosure` | in | `STRING` | EZFilmDisclosure text. |
+| `path` | out | `STRING` | ez_<slug>_90s.mp4 path. |
+
+#### `film`
+
+Type `COMBO`.
+
+Film slug.
+
+**How it affects generation:** Picks output name and shot-map. Must match the graph.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `go-see` | Parkour 90s. |
+| `still-here` | Household morning 90s. |
+| `switchyard` | Night freight-yard 90s. |
+
+#### `cap_seconds`
+
+Type `FLOAT`. Range / default: 90.0 max.
+
+Hard duration cap.
+
+**How it affects generation:** Stay 90. Longer fights the product rule (no 90 s denoise; this is a stitch cap).
+
+#### `xfade_cs`
+
+Type `INT`. Range / default: 0–50; 10 = 0.10 s.
+
+Audio-only acrossfade in centiseconds.
+
+**How it affects generation:** 0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see. Picture stays cut-only so duration stays on picture.
+
+### `EZFilmDisclosure` — LTX AI-media disclosure
+
+Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `text` | out | `STRING` | Disclosure (+ optional extra). |
+
+#### `text`
+
+Type `STRING`.
+
+Optional extra line after the stock disclosure.
+
+**How it affects generation:** Empty = stock sentence only. Do not strip provenance.
+
+### `EZKleinPromptEnhance` — Klein Prompt Enhance
+
+Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
+
+!!! warning "Lab notes"
+
+    Enhance on for lazy CLIP printers; off for authored recipes. Style ignored when it would fight an I2V start frame (not used here). Occupancy llm for the GGUF, then klein for the UNET.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `prompt` | out | `STRING` | String CLIP actually encodes. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Lab sample prompt or Custom.
+
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy sentence or authored still prompt.
+
+**How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: on for lazy printers.
+
+Run the rewriter.
+
+**How it affects generation:** Off = encode the widget as-is (plus style suffix if set).
+
+#### `mode`
+
+Type `COMBO`. Range / default: t2i / edit / identity.
+
+System prompt flavor.
+
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `t2i` | New still. |
+| `edit` | Klein-edit / clay / tweak. |
+| `identity` | Camera-free identity bible. |
+
+#### `duration_hint`
+
+Type `STRING`.
+
+Framing hint (YouTube 16:9 still, Instagram 4:5, …).
+
+**How it affects generation:** Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference woven into the CLIP prompt.
+
+**How it affects generation:** none = off. Dropdown wins over style words already in the source. Hidden on I2V graphs.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id (graph stem).
+
+**How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
+
+### `EZKokoroTTS` — Kokoro TTS
+
+Two-host (plus optional announcer) TTS. Kokoro-82M stock voices by default.
+
+!!! warning "Lab notes"
+
+    Never ships celebrity WAVs. Empty clone refs fall back to Kokoro.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `script` | in | `STRING` | Labeled script. |
+| `audio` | out | `AUDIO` | Speech stem. |
+
+#### `speaker_a_voice`
+
+Type `COMBO`. Range / default: af_heart / af_bella.
+
+Kokoro voice A.
+
+**How it affects generation:** Stock voices only. Changing voice changes timbre, not the script.
+
+#### `speaker_b_voice`
+
+Type `COMBO`. Range / default: am_michael.
+
+Kokoro voice B.
+
+**How it affects generation:** Keep A/B distinct so the mix reads as two hosts.
+
+#### `announcer_voice`
+
+Type `COMBO`. Range / default: bm_george.
+
+Announcer voice.
+
+**How it affects generation:** Used when include_announcer is on.
+
+#### `include_announcer`
+
+Type `BOOLEAN`.
+
+Speak Announcer lines.
+
+**How it affects generation:** true on radio-drama; false on two-host podcast.
+
+#### `backend`
+
+Type `COMBO`. Range / default: kokoro.
+
+TTS engine.
+
+**How it affects generation:** kokoro is the lab default. chatterbox/qwen3tts need operator-owned refs.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `kokoro` | Kokoro-82M ONNX/CPU (lab). |
+| `chatterbox` | Opt-in clone. Empty ref falls back. |
+| `qwen3tts` | Opt-in clone. Empty ref falls back. |
+
+#### `speaker_a_ref`
+
+Type `STRING`.
+
+Optional clone reference path.
+
+**How it affects generation:** Leave empty. Do not paste celebrity WAVs.
+
+#### `speaker_b_ref`
+
+Type `STRING`.
+
+Optional clone reference path.
+
+**How it affects generation:** Leave empty.
+
+#### `speed`
+
+Type `FLOAT`. Range / default: 0.5–1.5, lab 1.0.
+
+Speaking rate.
+
+**How it affects generation:** 1.0 is natural. Faster shrinks the episode and can clip diction.
+
+### `EZLTXPromptEnhance` — LTX Prompt Enhance
+
+Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
+
+!!! warning "Lab notes"
+
+    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | out | `STRING` | Paragraph CLIP encodes. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps the textarea.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy sentence or authored LTX paragraph.
+
+**How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Run the rewriter.
+
+**How it affects generation:** Off keeps authored film/shot text pinned.
+
+#### `mode`
+
+Type `COMBO`.
+
+t2v vs i2v system prompt.
+
+**How it affects generation:** i2v when a start still is wired.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `t2v` | Text to AV. |
+| `i2v` | Start still owns look. |
+
+#### `duration_hint`
+
+Type `STRING`. Range / default: 5 seconds, 24 fps.
+
+Duration hint.
+
+**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+
+#### `audio_notes`
+
+Type `STRING`.
+
+World SFX / no-score policy.
+
+**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference. Ignored on I2V.
+
+**How it affects generation:** Start frame owns look.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZNegativePromptEnhance` — Negative Prompt Enhance
+
+Rewrite a negative CLIP seed so it does not fight the positive.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `prompt` | out | `STRING` | Negative string. |
+
+#### `prompt`
+
+Type `STRING`.
+
+Negative seed (artifacts, not style).
+
+**How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Rewrite using the positive as context.
+
+**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+
+#### `family`
+
+Type `COMBO`.
+
+Which negative family.
+
+**How it affects generation:** Must match the UNET on the canvas.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `klein` | Klein stills. |
+| `wan` | Wan silent. |
+| `ltx` | LTX AV. |
+
+### `EZPodcastDisclosure` — Podcast Disclosure
+
+Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `script` | in | `STRING` | Episode script. |
+| `script` | out | `STRING` | Disclosure + script. |
+
+No widgets. Sockets only.
+
+### `EZPodcastScript` — Podcast Script
+
+Draft Speaker A/B (and Announcer) lines via the on-box GGUF.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `script` | out | `STRING` | Labeled script for TTS. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps authored turns.
+
+#### `prompt`
+
+Type `STRING`.
+
+Speaker A/B script.
+
+**How it affects generation:** Keep hosts original. No celebrity refs.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: false on seeded graphs.
+
+Run the writer.
+
+**How it affects generation:** Off pins the canned lab script.
+
+#### `flavor`
+
+Type `COMBO`.
+
+Two-host vs radio drama.
+
+**How it affects generation:** radio_drama allows Announcer lines.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `podcast_two_host` | Two-host episode (lab podcast). |
+| `radio_drama` | Radio drama with announcer. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZPromptJoin` — Prompt Join
+
+Join a shared identity paragraph with a shot-specific camera line.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `identity` | in | `STRING` | World bible / character lock. |
+| `prompt` | out | `STRING` | Joined prompt for CLIP / Enhance. |
+
+#### `shot`
+
+Type `STRING`.
+
+Shot card (camera, room, action).
+
+**How it affects generation:** lock=view front-loads this so Klein sees a new camera in the same place.
+
+#### `inventory`
+
+Type `STRING`.
+
+Locked object list.
+
+**How it affects generation:** Keeps mugs/coats from mutating across a pack.
+
+#### `lock`
+
+Type `COMBO`. Range / default: view.
+
+What stays pinned.
+
+**How it affects generation:** view = new camera, same place (dream-house, storyboard). state = same camera, new light/grade (time-of-day, color-moods).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `view` | New camera, same world. |
+| `state` | Same framing, new light/grade/action. |
+
+### `EZRapLyrics` — Rap Lyrics
+
+Draft original rap lyrics via the on-box GGUF. Forbids living-MC names.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `context` | in | `STRING` | Optional. Ignored when Enhance is off. |
+| `lyrics` | out | `STRING` | Sectioned lyrics for ACE. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps authored bars.
+
+#### `lyrics`
+
+Type `STRING`.
+
+Sectioned lyrics.
+
+**How it affects generation:** Human rewrite required before any release. Catalog takes keep Enhance off.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: false on albums.
+
+Run the lyrics writer.
+
+**How it affects generation:** On only for a lazy draft. Off pins exclusive verses.
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZSamplePrompt` — Sample Prompt
+
+STRING source with a sample-prompt combo plus Custom textarea.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | out | `STRING` | Resolved prompt. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom uses the textarea as typed.
+
+#### `prompt`
+
+Type `STRING`.
+
+Custom textarea.
+
+**How it affects generation:** Ignored when a sample is selected.
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id (inspire/prompt-forge).
+
+**How it affects generation:** Leave as stamped.
+
+### `EZUnloadModels` — Unload models
+
+Pass-through IMAGE that unloads diffusion models first.
+
+!!! warning "Lab notes"
+
+    Keeps Klein 4B and LTX-2.5 from sitting in memory together on 90s one-click films.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Identity still. |
+| `image` | out | `IMAGE` | Same still after unload. |
+
+No widgets. Sockets only.
+
+### `EZWanPromptEnhance` — Wan Prompt Enhance
+
+Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | in | `STRING` | Optional. |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `prompt` | out | `STRING` | Motion string for CLIP. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps the textarea.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy motion sentence.
+
+**How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Run the rewriter.
+
+**How it affects generation:** Off on authored camera-verb graphs (orbit, push-in, gif-loop).
+
+#### `mode`
+
+Type `COMBO`.
+
+System flavor.
+
+**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace for those opt-in graphs.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `t2v` | Text to silent video. |
+| `i2v` | Start image owns look; prompt is motion. |
+| `flf` | First-last-frame. |
+| `vace` | VACE join. |
+
+#### `duration_hint`
+
+Type `STRING`. Range / default: 5 seconds, 24 fps.
+
+Duration/fps hint for the rewriter.
+
+**How it affects generation:** Does not change latent length — Wan22ImageToVideoLatent does.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference. Ignored on I2V.
+
+**How it affects generation:** Start frame owns look on I2V.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
+
+Allocate an ACE-Step audio latent for N seconds.
+
+!!! warning "Lab notes"
+
+    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `seconds` | in | `FLOAT` | Wired from Song Duration primitive on music graphs. |
+| `LATENT` | out | `LATENT` | Audio latent for KSampler. |
+
+#### `seconds`
+
+Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+
+Duration in seconds.
+
+**How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Takes per Queue.
+
+**How it affects generation:** Stay 1.
+
+### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
+
+Allocate a Klein / Flux.2 still latent (width × height × batch).
+
+!!! warning "Lab notes"
+
+    Draft 768×432 batch 2. Hero / LTX feeders 1280×704. Portrait 1024×1280 or 768×1280. 1280×720 is OK for thumbnails, not for LTX feeders.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `LATENT` | out | `LATENT` | Noise canvas for KSampler. |
+
+#### `width`
+
+Type `INT`. Range / default: lab 768 / 1280 / 1024 / 432….
+
+Latent pixel width.
+
+**How it affects generation:** Sets the still's width. Match the intended platform (16:9, 9:16, 1:1, 4:5).
+
+#### `height`
+
+Type `INT`.
+
+Latent pixel height.
+
+**How it affects generation:** 1280×704 is the LTX VAE grid (÷32). 1280×720 is not.
+
+#### `batch_size`
+
+Type `INT`. Range / default: draft 2; others 1.
+
+How many stills in one Queue.
+
+**How it affects generation:** Draft uses 2 for a cheap fork. Heroes stay 1.
+
+### `EmptyLTXVLatentVideo` — Empty LTX Latent Video
+
+Allocate a T2V LTX video latent (no start image).
+
+!!! warning "Lab notes"
+
+    Width/height must be ÷32. Length must be 1+8n (121 for ~5 s). ez_ltx_spatial snaps illegal values.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `LATENT` | out | `LATENT` | Video latent (then concat with audio latent). |
+
+#### `width`
+
+Type `INT`. Range / default: 1280 (landscape) / 768 (shorts).
+
+Frame width.
+
+**How it affects generation:** ÷32. 1280×720 will snap to 704.
+
+#### `height`
+
+Type `INT`. Range / default: 704 / 1280.
+
+Frame height.
+
+**How it affects generation:** 704 is the lab landscape printer.
+
+#### `length`
+
+Type `INT`. Range / default: 121 = 1+8n.
+
+Frame count.
+
+**How it affects generation:** 121 @ 24 fps ≈ 5.04 s. 120 is illegal on LTX (snaps to 121). Do not type 241.
+
+### `EmptyTrellis2LatentStructure` — Empty TRELLIS.2 Latent Structure
+
+Allocate a TRELLIS.2 structure latent (batch only).
+
+!!! warning "Lab notes"
+
+    Occupancy trellis. Unload Klein first.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `LATENT` | out | `LATENT` | Structure noise. |
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Meshes per Queue.
+
+**How it affects generation:** Stay 1 on GB10.
+
+### `ImageFromBatch` — Image From Batch
+
+Pick one frame out of a decoded video batch.
+
+!!! warning "Lab notes"
+
+    Last-frame savers: index 120 on 121-frame LTX (0-based last), 119 on 120-frame Wan shots.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded frame batch. |
+| `IMAGE` | out | `IMAGE` | Single frame. |
+
+#### `batch_index`
+
+Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
+
+0-based frame index.
+
+**How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
+
+#### `length`
+
+Type `INT`. Range / default: 1.
+
+How many frames to take.
+
+**How it affects generation:** Stay 1 (one still).
+
+### `ImageScale` — Upscale Image
+
+Resize a still to a target width/height.
+
+!!! warning "Lab notes"
+
+    dcc/klein/from-clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. |
+| `IMAGE` | out | `IMAGE` | Scaled still. |
+
+#### `upscale_method`
+
+Type `COMBO`. Range / default: lanczos.
+
+Resample filter.
+
+**How it affects generation:** lanczos is the lab plate scaler.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lanczos` | Lab clay-plate scaler. Sharp, good for stills. |
+| `nearest-exact` | Nearest neighbor. Blocky; pixel-art only. |
+| `bilinear` | Smooth bilinear. Softer than lanczos. |
+| `area` | Area filter. Downscales cleanly. |
+| `bicubic` | Bicubic. Softer than lanczos. |
+
+#### `width`
+
+Type `INT`.
+
+Target width.
+
+**How it affects generation:** Must match the plate (1280, 1024, 768).
+
+#### `height`
+
+Type `INT`.
+
+Target height.
+
+**How it affects generation:** 704 for LTX feeders; 1280 for 4:5 / 9:16.
+
+#### `crop`
+
+Type `COMBO`. Range / default: center.
+
+Crop mode.
+
+**How it affects generation:** center keeps the subject in frame when aspect changes.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `center` | Center crop after resize. Lab plates. |
+| `disabled` | No crop. May letterbox or stretch depending on the node. |
+
+### `KSampler` — KSampler
+
+Denoise a latent for N steps at a CFG, sampler, and scheduler.
+
+!!! warning "Lab notes"
+
+    Distilled Klein is CFG 1.0 / 4 steps / euler / simple. Raising CFG is not a quality knob. Wan 5B uses uni_pc and CFG 5. LTX distilled uses euler / simple / CFG 1.0 / 20 steps. ACE-Step uses 8 steps / CFG 1.0 / euler. TRELLIS uses 12 steps / CFG 7.5 / euler / normal.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `model` | in | `MODEL` | UNET / transformer after any ModelSampling* patch. |
+| `positive` | in | `CONDITIONING` | What to include (CLIP / ACE / LTX prompt). |
+| `negative` | in | `CONDITIONING` | What to avoid. Distilled Klein ignores this well — put constraints in the positive. |
+| `latent_image` | in | `LATENT` | Noise canvas or encoded start image / video / audio latent. |
+| `LATENT` | out | `LATENT` | Denoised latent for VAE decode. |
+
+#### `seed`
+
+Type `INT`. Range / default: 0 … 2^64-1; lab 42.
+
+Random seed for the noise tensor.
+
+**How it affects generation:** Same seed + same graph ≈ same picture or clip. Lab locks 42 on smokes so drafts are comparable.
+
+#### `control_after_generate`
+
+Type `COMBO`. Range / default: fixed (lab).
+
+What happens to seed after Queue.
+
+**How it affects generation:** fixed keeps iteration honest while you change the prompt.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `fixed` | Keep this seed on the next Queue. Lab default for reproducible stills and 5 s prints. |
+| `increment` | Add 1 after Queue. Use for a sequence of variations. |
+| `decrement` | Subtract 1 after Queue. |
+| `randomize` | Draw a new seed after Queue. Exploration only. |
+
+#### `steps`
+
+Type `INT`. Range / default: 1–10000; Klein distilled 4; LTX 20; Wan 20; ACE 8; TRELLIS 12.
+
+Denoising iterations.
+
+**How it affects generation:** More steps refine detail with diminishing returns. Distilled Klein is authored at 4 — raising steps is slower, not a quality knob. Do not raise LTX/Wan toward a 90 s denoise.
+
+#### `cfg`
+
+Type `FLOAT`. Range / default: 0–100; Klein/LTX/ACE 1.0; Wan 5; TRELLIS 7.5.
+
+Classifier-free guidance scale.
+
+**How it affects generation:** Distilled Klein is CFG 1.0 — raising CFG is the wrong quality lever (use the Positive prompt, resolution, or still-hero). Wan silent 5B uses CFG 5. TRELLIS structure uses 7.5. At CFG 1.0 Comfy skips the negative pass.
+
+#### `sampler_name`
+
+Type `COMBO`. Range / default: euler (most lab); uni_pc (Wan).
+
+ODE / SDE algorithm that removes noise.
+
+**How it affects generation:** euler is the lab still/AV/ACE default. uni_pc is the Wan 5B silent default. Ancestral/SDE samplers add extra randomness and weaken seed lock.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `euler` | First-order ODE. Lab default for Klein, LTX, ACE, and most stills. Fast and stable at CFG 1.0. |
+| `euler_cfg_pp` | Euler with CFG++. Rarely needed on distilled Klein (CFG is already 1.0). |
+| `euler_ancestral` | Adds ancestral noise each step. More variation; weaker exact seed lock. |
+| `euler_ancestral_cfg_pp` | Ancestral Euler with CFG++. |
+| `heun` | Second-order Heun. Slower, sometimes smoother; not a lab default. |
+| `heunpp2` | Higher-order Heun variant. |
+| `exp_heun_2_x0` | Exponential Heun (x0 prediction). |
+| `exp_heun_2_x0_sde` | Exponential Heun SDE. Extra stochasticity. |
+| `dpm_2` | DPM-Solver-2. Two function evals per step. |
+| `dpm_2_ancestral` | Ancestral DPM-2. |
+| `lms` | Linear multistep. Older; keep for experiments only. |
+| `dpm_fast` | Fast DPM. Coarse, good for previews. |
+| `dpm_adaptive` | Adaptive DPM. Step count is a hint, not a hard budget. |
+| `dpmpp_2s_ancestral` | DPM++ 2S ancestral. Common SD1.5 pick; not a Klein default. |
+| `dpmpp_2s_ancestral_cfg_pp` | DPM++ 2S ancestral with CFG++. |
+| `dpmpp_sde` | DPM++ SDE. Stochastic, slower. |
+| `dpmpp_sde_gpu` | DPM++ SDE on GPU noise. |
+| `dpmpp_2m` | DPM++ 2M. Smooth; often used on SD-family, not distilled Klein. |
+| `dpmpp_2m_cfg_pp` | DPM++ 2M with CFG++. |
+| `dpmpp_2m_sde` | DPM++ 2M SDE. |
+| `dpmpp_2m_sde_gpu` | DPM++ 2M SDE GPU noise. |
+| `dpmpp_2m_sde_heun` | DPM++ 2M SDE Heun. |
+| `dpmpp_2m_sde_heun_gpu` | DPM++ 2M SDE Heun GPU. |
+| `dpmpp_3m_sde` | DPM++ 3M SDE. |
+| `dpmpp_3m_sde_gpu` | DPM++ 3M SDE GPU. |
+| `ddpm` | Classic DDPM. Slow; do not use on 121-frame LTX. |
+| `lcm` | Latent Consistency. Needs an LCM-tuned model; not lab Klein/Wan/LTX. |
+| `ipndm` | iPNDM multistep. |
+| `ipndm_v` | iPNDM (v-prediction). |
+| `deis` | DEIS multistep. |
+| `res_multistep` | Res multistep. Some turbo recipes. |
+| `res_multistep_cfg_pp` | Res multistep CFG++. |
+| `res_multistep_ancestral` | Ancestral res multistep. |
+| `res_multistep_ancestral_cfg_pp` | Ancestral res multistep CFG++. |
+| `gradient_estimation` | Gradient-estimation sampler. |
+| `gradient_estimation_cfg_pp` | Gradient-estimation CFG++. |
+| `er_sde` | ER-SDE sampler. |
+| `seeds_2` | SEEDS-2. |
+| `seeds_3` | SEEDS-3. |
+| `sa_solver` | SA-Solver. |
+| `sa_solver_pece` | SA-Solver PECE. |
+| `ddim` | DDIM. Deterministic; not a lab default. |
+| `uni_pc` | UniPC. Lab Wan 5B silent graphs use this with CFG 5. |
+| `uni_pc_bh2` | UniPC BH2 variant. |
+
+#### `scheduler`
+
+Type `COMBO`. Range / default: simple (most lab); normal (TRELLIS).
+
+How sigmas are spaced across steps.
+
+**How it affects generation:** simple is even spacing and matches distilled Klein / LTX / ACE. normal is the TRELLIS pair. Do not copy karras from an SD1.5 recipe onto Klein.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `simple` | Even sigma spacing. Lab default for Klein, Wan, LTX, and ACE. |
+| `normal` | Linear timestep schedule. TRELLIS structure/texture stages use this. |
+| `karras` | Karras sigmas. Often sharper on SD-family; not the lab default. |
+| `exponential` | Exponential sigma decay. |
+| `sgm_uniform` | SGM uniform. SD3-family default; Wan uses ModelSamplingSD3 shift instead. |
+| `ddim_uniform` | Uniform DDIM schedule. |
+| `beta` | Beta-distribution timesteps. |
+| `linear_quadratic` | Linear then quadratic (Mochi-style). |
+| `kl_optimal` | KL-optimal sigma curve. |
+
+#### `denoise`
+
+Type `FLOAT`. Range / default: 0–1; lab 1.0.
+
+Fraction of the latent to replace with denoised signal.
+
+**How it affects generation:** 1.0 is full generation (T2I / T2V / ACE). Values below 1 keep structure from an encoded start image (Klein edit / clay). Lab I2V uses dedicated latent nodes, not denoise<1 on empty noise.
+
+### `LTXVAddGuide` — LTX Add Guide
+
+Pin a still onto a latent frame (first-last-frame).
+
+!!! warning "Lab notes"
+
+    ltx/flf-5s uses index 0 then -1 on the video latent before audio concat.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Cond in. |
+| `negative` | in | `CONDITIONING` | Cond in. |
+| `vae` | in | `VAE` | Video VAE. |
+| `latent` | in | `LATENT` | Video latent. |
+| `image` | in | `IMAGE` | Guide still. |
+| `positive` | out | `CONDITIONING` | Guided positive. |
+| `negative` | out | `CONDITIONING` | Guided negative. |
+| `latent` | out | `LATENT` | Latent with guide frame. |
+
+#### `frame_idx`
+
+Type `INT`. Range / default: 0 first / -1 last.
+
+Which frame to pin.
+
+**How it affects generation:** 0 is the first frame. -1 is the last. Values in between pin mid-shot.
+
+#### `strength`
+
+Type `FLOAT`. Range / default: 1.0.
+
+How hard to pin.
+
+**How it affects generation:** 1.0 locks the still. Lower lets motion drift off the guide.
+
+### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
+
+Decode LTX audio latent to AUDIO for the MP4 mux.
+
+!!! warning "Lab notes"
+
+    Skipped on ltx/a2v-5s (original wav is muxed).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | Audio latent. |
+| `audio_vae` | in | `VAE` | ltx-2.5-audio-vae-bf16. |
+| `Audio` | out | `AUDIO` | World bed / dialogue stem. |
+
+No widgets. Sockets only.
+
+### `LTXVAudioVAEEncode` — LTX Audio VAE Encode
+
+Encode a wav into the LTX audio latent (A2V freeze).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio` | in | `AUDIO` | LoadAudio wav. |
+| `audio_vae` | in | `VAE` | Audio VAE. |
+| `Latent` | out | `LATENT` | Frozen audio latent concatenated before sample. |
+
+No widgets. Sockets only.
+
+### `LTXVConcatAVLatent` — LTX Concat AV Latent
+
+Join video + audio latents into one joint AV latent for the sampler.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `video_latent` | in | `LATENT` | Video latent. |
+| `audio_latent` | in | `LATENT` | Empty or encoded audio latent. |
+| `latent` | out | `LATENT` | Joint AV latent. |
+
+No widgets. Sockets only.
+
+### `LTXVConditioning` — LTX Conditioning
+
+Stamp frame-rate onto LTX positive/negative cond.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Prompt cond. |
+| `negative` | in | `CONDITIONING` | Negative cond. |
+| `positive` | out | `CONDITIONING` | FPS-stamped positive. |
+| `negative` | out | `CONDITIONING` | FPS-stamped negative. |
+
+#### `frame_rate`
+
+Type `FLOAT`. Range / default: 24.0.
+
+Frames per second written into cond.
+
+**How it affects generation:** Must match VHS frame_rate (24). Mismatch makes motion too fast/slow.
+
+### `LTXVCropGuides` — LTX Crop Guides
+
+Crop guide metadata off the latent after FLF pins.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Guided cond. |
+| `negative` | in | `CONDITIONING` | Guided cond. |
+| `latent` | in | `LATENT` | Guided latent. |
+| `positive` | out | `CONDITIONING` | Clean cond. |
+| `negative` | out | `CONDITIONING` | Clean cond. |
+| `latent` | out | `LATENT` | Latent ready to concat with audio. |
+
+No widgets. Sockets only.
+
+### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
+
+Allocate a silent/world-audio latent matching video length.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio_vae` | in | `VAE` | Audio VAE (sets latent channels). |
+| `Latent` | out | `LATENT` | Empty audio latent. |
+
+#### `frames`
+
+Type `INT`. Range / default: 121.
+
+Must match video length.
+
+**How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
+
+#### `frame_rate`
+
+Type `FLOAT`. Range / default: 24.0.
+
+Audio timeline fps.
+
+**How it affects generation:** Keep 24 with the rest of the printer.
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Clips per Queue.
+
+**How it affects generation:** Stay 1.
+
+### `LTXVImgToVideo` — LTX Image to Video
+
+Condition LTX on a start image and allocate the video latent.
+
+!!! warning "Lab notes"
+
+    ÷32 spatial, length 1+8n. 1280×704×121 is the lab printer. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | LTX prompt cond. |
+| `negative` | in | `CONDITIONING` | Negative cond. |
+| `vae` | in | `VAE` | ltx-2.5-video-vae. |
+| `image` | in | `IMAGE` | Start still (Klein feeder). |
+| `positive` | out | `CONDITIONING` | Image-conditioned positive. |
+| `negative` | out | `CONDITIONING` | Image-conditioned negative. |
+| `latent` | out | `LATENT` | Video latent. |
+
+#### `width`
+
+Type `INT`. Range / default: 1280 / 768.
+
+Frame width.
+
+**How it affects generation:** Must be ÷32. 720p width is fine; height 720 is not.
+
+#### `height`
+
+Type `INT`. Range / default: 704 / 1280.
+
+Frame height.
+
+**How it affects generation:** 704 not 720. Shorts 1280.
+
+#### `length`
+
+Type `INT`. Range / default: 121.
+
+Frame count.
+
+**How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Clips per Queue.
+
+**How it affects generation:** Stay 1.
+
+### `LTXVModalityGuidance` — LTX Modality Guidance
+
+Couple audio and video during sampling (dialogue graphs).
+
+!!! warning "Lab notes"
+
+    ltx/dialogue-5s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `model` | in | `MODEL` | LTX UNET. |
+| `MODEL` | out | `MODEL` | Patched model. |
+
+#### `strength`
+
+Type `FLOAT`. Range / default: 3.0.
+
+A/V coupling strength.
+
+**How it affects generation:** Higher ties picture motion to the audio latent. Too high can freeze faces.
+
+#### `start`
+
+Type `FLOAT`. Range / default: 0–1, lab 0.
+
+Fraction of steps to start coupling.
+
+**How it affects generation:** 0 = from the first step.
+
+#### `end`
+
+Type `FLOAT`. Range / default: 0–1, lab 1.
+
+Fraction of steps to stop coupling.
+
+**How it affects generation:** 1 = through the last step.
+
+### `LTXVSeparateAVLatent` — LTX Separate AV Latent
+
+Split a joint AV latent after sampling.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `av_latent` | in | `LATENT` | KSampler output. |
+| `video_latent` | out | `LATENT` | Picture latent → VAEDecode. |
+| `audio_latent` | out | `LATENT` | Audio latent → LTXVAudioVAEDecode (not on a2v). |
+
+No widgets. Sockets only.
+
+### `LoadAudio` — Load Audio
+
+Load a wav/mp3 from input/.
+
+!!! warning "Lab notes"
+
+    ltx/a2v-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `AUDIO` | out | `AUDIO` | Waveform for LTXVAudioVAEEncode. |
+
+#### `audio`
+
+Type `STRING`.
+
+Filename in input/.
+
+**How it affects generation:** The original wav is muxed into the MP4 (no audio VAE decode on a2v).
+
+### `LoadImage` — Load Image
+
+Load a still from Comfy input/ (or upload).
+
+!!! warning "Lab notes"
+
+    I2V / edit graphs default example.png until you pick ez_still_*.png. App Mode shows Start image only when this node is wired.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `IMAGE` | out | `IMAGE` | RGB still. |
+| `MASK` | out | `MASK` | Alpha if present. |
+
+#### `image`
+
+Type `STRING`.
+
+Filename in input/.
+
+**How it affects generation:** Point at the Klein still you just saved (ez_still_draft_*.png, ez_character_*.png, first.png).
+
+#### `upload`
+
+Type `COMBO`. Range / default: image.
+
+Upload widget type.
+
+**How it affects generation:** Leave image. This is the choose-file control, not a generation knob.
+
+### `MarkdownNote` — Markdown Note
+
+Rendered markdown note (90s shot maps).
+
+#### `text`
+
+Type `STRING`.
+
+Markdown body.
+
+**How it affects generation:** Does not affect pixels. 90s films put the beat table here.
+
+### `MeshToFile3D` — Mesh to File 3D
+
+Write a GLB/mesh file.
+
+!!! warning "Lab notes"
+
+    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/from-klein-still writes assets/objects/_lab-mug/mesh.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `mesh` | in | `MESH` | Painted mesh. |
+| `model_3d` | out | `MODEL_3D` | File handle. |
+
+No widgets. Sockets only.
+
+### `ModelSamplingAuraFlow` — ModelSamplingAuraFlow
+
+Patch ACE-Step with AuraFlow sampling shift.
+
+!!! warning "Lab notes"
+
+    Every ACE graph uses shift 3.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `model` | in | `MODEL` | ACE checkpoint MODEL. |
+| `MODEL` | out | `MODEL` | Shifted ACE denoiser. |
+
+#### `shift`
+
+Type `FLOAT`. Range / default: 3 (lab ACE).
+
+AuraFlow shift.
+
+**How it affects generation:** 3 is the ACE-Step 1.5 lab value. Higher shift changes timing/attack of the beat.
+
+### `ModelSamplingSD3` — ModelSamplingSD3
+
+Patch a model with SD3-style flow-matching shift.
+
+!!! warning "Lab notes"
+
+    Wan 5B graphs use shift 8.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `model` | in | `MODEL` | Wan UNET. |
+| `MODEL` | out | `MODEL` | Shifted model for KSampler. |
+
+#### `shift`
+
+Type `FLOAT`. Range / default: 8 (lab Wan).
+
+Flow-matching shift.
+
+**How it affects generation:** 8 is the Wan 2.2 TI2V lab value. Changing it moves the noise schedule; do not copy SD3 defaults blindly.
+
+### `Note` — Note
+
+On-canvas operator note (not executed).
+
+!!! warning "Lab notes"
+
+    Every lab graph has one. Purpose, models, sampler, occupancy, run steps.
+
+#### `text`
+
+Type `STRING`.
+
+Markdown-ish operator note.
+
+**How it affects generation:** Does not affect pixels. Read it before Queue.
+
+### `PaintMesh` — Paint Mesh
+
+Apply voxel colors onto the mesh.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `mesh` | in | `MESH` | Shape mesh. |
+| `voxel_colors` | in | `VOXEL_COLORS` | Decoded colors. |
+| `mesh` | out | `MESH` | Painted mesh. |
+
+No widgets. Sockets only.
+
+### `PrimitiveNode` — Primitive
+
+A typed constant (string or float) with seed-style control.
+
+!!! warning "Lab notes"
+
+    Music Duration (FLOAT) and Prompt Forge Context (STRING). widgets[1] is always control_after_generate.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `value` | out | `FLOAT\|STRING` | Wired into duration / context / lyrics. |
+
+#### `value`
+
+Type `FLOAT|STRING`.
+
+The constant.
+
+**How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
+
+#### `control_after_generate`
+
+Type `COMBO`. Range / default: fixed.
+
+Whether the primitive mutates after Queue.
+
+**How it affects generation:** fixed keeps duration/context pinned.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `fixed` | Keep this seed on the next Queue. Lab default for reproducible stills and 5 s prints. |
+| `increment` | Add 1 after Queue. Use for a sequence of variations. |
+| `decrement` | Subtract 1 after Queue. |
+| `randomize` | Draw a new seed after Queue. Exploration only. |
+
+### `ReferenceLatent` — Reference Latent
+
+Pack an encoded image latent into positive conditioning (Klein edit).
+
+!!! warning "Lab notes"
+
+    character-tweak, clay, dream-house-clay, before-after, time-of-day edits. denoise on those KSamplers stays 1.0; the reference owns structure.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `conditioning` | in | `CONDITIONING` | Positive CLIP cond. |
+| `latent` | in | `LATENT` | VAE-encoded start still. |
+| `CONDITIONING` | out | `CONDITIONING` | Positive with reference latent attached. |
+
+No widgets. Sockets only.
+
+### `SaveAudio` — Save Audio
+
+Write a FLAC/wav master.
+
+!!! warning "Lab notes"
+
+    Music graphs pair this with SaveAudioMP3 and EZAudioMetadata. Stem mix uses ez_stem_mix.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio` | in | `AUDIO` | Decoded ACE or mix. |
+
+#### `filename_prefix`
+
+Type `STRING`.
+
+Save stem.
+
+**How it affects generation:** Album tracks use NN - Song Title. Tags come from EZAudioMetadata.
+
+### `SaveAudioMP3` — Save Audio (MP3)
+
+Write an MP3 copy of the same take.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio` | in | `AUDIO` | Same AUDIO as SaveAudio. |
+
+#### `filename_prefix`
+
+Type `STRING`.
+
+Save stem (match FLAC).
+
+**How it affects generation:** Same NN - Song Title as the FLAC.
+
+#### `quality`
+
+Type `COMBO`. Range / default: 320k.
+
+Bitrate preset.
+
+**How it affects generation:** 320k is the lab master. Lower bitrates are smaller and harsher on hats.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `320k` | Lab default. |
+| `192k` | Smaller, more artifacts. |
+| `128k` | Preview only. |
+
+### `SaveImage` — Save Image
+
+Write PNG stills under the output folder.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `images` | in | `IMAGE` | Decoded still or last-frame. |
+
+#### `filename_prefix`
+
+Type `STRING`.
+
+Save prefix.
+
+**How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
+
+### `TextEncodeAceStepAudio1.5` — ACE-Step 1.5 Text Encode
+
+Pack tags, lyrics, BPM, key, and duration into ACE conditioning.
+
+!!! warning "Lab notes"
+
+    15 widgets including control_after_generate after seed (see _ace_widgets_contract.py). Vocal graphs language=en; instrumental unknown. generate_audio_codes stays true.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `clip` | in | `CLIP` | ACE CLIP from the AIO checkpoint. |
+| `tags` | in | `STRING` | Often wired from EZAceStepPromptEnhance. |
+| `lyrics` | in | `STRING` | Wired lyrics / [inst]. |
+| `duration` | in | `FLOAT` | Same seconds as the empty latent. |
+| `CONDITIONING` | out | `CONDITIONING` | Positive for KSampler. |
+
+#### `tags`
+
+Type `STRING`.
+
+Genre-first tags, BPM last.
+
+**How it affects generation:** ACE reads tags as the arrangement. Keep dry-booth vocal tags on Nill Bye; Drive-through is warped bass, no rap vocal.
+
+#### `lyrics`
+
+Type `STRING`.
+
+Sectioned lyrics or [inst] cues.
+
+**How it affects generation:** Non-empty lines under a section are sung. Instrumental graphs must keep cues inside [brackets].
+
+#### `seed`
+
+Type `INT`.
+
+ACE encoder seed (audio-codes LLM).
+
+**How it affects generation:** Independent from KSampler seed. Lab locks it with the take.
+
+#### `control_after_generate`
+
+Type `COMBO`. Range / default: fixed.
+
+Seed control.
+
+**How it affects generation:** fixed on every lab take.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `fixed` | Keep this seed on the next Queue. Lab default for reproducible stills and 5 s prints. |
+| `increment` | Add 1 after Queue. Use for a sequence of variations. |
+| `decrement` | Subtract 1 after Queue. |
+| `randomize` | Draw a new seed after Queue. Exploration only. |
+
+#### `bpm`
+
+Type `INT`. Range / default: 10–300.
+
+Tempo written into the codes.
+
+**How it affects generation:** Must match the tags' BPM. Mismatch makes the vocal drift the grid.
+
+#### `duration`
+
+Type `FLOAT`.
+
+Seconds (duplicated on the latent).
+
+**How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
+
+#### `timesignature`
+
+Type `COMBO`. Range / default: 4.
+
+Beats per bar.
+
+**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `2` | 2/4. |
+| `3` | 3/4. |
+| `4` | Lab 4/4. |
+| `6` | 6/8. |
+
+#### `language`
+
+Type `COMBO`. Range / default: en / unknown.
+
+Lyric language.
+
+**How it affects generation:** en for sung English. unknown for instrumental (do not leave en on a no-vocal take).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `en` | English lyrics. Lab vocal graphs. |
+| `unknown` | No lyric language. Lab instrumental / Drive-through graphs. |
+| `ja` | Japanese. |
+| `zh` | Chinese. |
+| `yue` | Cantonese. |
+| `es` | Spanish. |
+| `de` | German. |
+| `fr` | French. |
+| `pt` | Portuguese. |
+| `ru` | Russian. |
+| `it` | Italian. |
+| `ko` | Korean. |
+| `ar` | Arabic. |
+| `hi` | Hindi. |
+| `id` | Indonesian. |
+| `vi` | Vietnamese. |
+| `th` | Thai. |
+| `tr` | Turkish. |
+| `pl` | Polish. |
+| `nl` | Dutch. |
+| `sv` | Swedish. |
+| `uk` | Ukrainian. |
+| `he` | Hebrew. |
+| `fa` | Persian. |
+| `cs` | Czech. |
+| `el` | Greek. |
+| `hu` | Hungarian. |
+| `ro` | Romanian. |
+| `fi` | Finnish. |
+| `da` | Danish. |
+| `no` | Norwegian. |
+| `ms` | Malay. |
+| `ta` | Tamil. |
+| `te` | Telugu. |
+| `bn` | Bengali. |
+| `ur` | Urdu. |
+| `pa` | Punjabi. |
+| `tl` | Tagalog. |
+| `sw` | Swahili. |
+| `az` | Azerbaijani. |
+| `bg` | Bulgarian. |
+| `ca` | Catalan. |
+| `hr` | Croatian. |
+| `ht` | Haitian Creole. |
+| `is` | Icelandic. |
+| `la` | Latin. |
+| `lt` | Lithuanian. |
+| `ne` | Nepali. |
+| `sa` | Sanskrit. |
+| `sk` | Slovak. |
+| `sr` | Serbian. |
+
+#### `keyscale`
+
+Type `COMBO`. Range / default: C minor.
+
+Musical key.
+
+**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `C major` | Major key of C. |
+| `C# major` | Major key of C#. |
+| `Db major` | Major key of Db. |
+| `D major` | Major key of D. |
+| `D# major` | Major key of D#. |
+| `Eb major` | Major key of Eb. |
+| `E major` | Major key of E. |
+| `F major` | Major key of F. |
+| `F# major` | Major key of F#. |
+| `Gb major` | Major key of Gb. |
+| `G major` | Major key of G. |
+| `G# major` | Major key of G#. |
+| `Ab major` | Major key of Ab. |
+| `A major` | Major key of A. |
+| `A# major` | Major key of A#. |
+| `Bb major` | Major key of Bb. |
+| `B major` | Major key of B. |
+| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C# minor` | Minor key of C#. |
+| `Db minor` | Minor key of Db. |
+| `D minor` | Minor key of D. |
+| `D# minor` | Minor key of D#. |
+| `Eb minor` | Minor key of Eb. |
+| `E minor` | Minor key of E. |
+| `F minor` | Minor key of F. |
+| `F# minor` | Minor key of F#. |
+| `Gb minor` | Minor key of Gb. |
+| `G minor` | Minor key of G. |
+| `G# minor` | Minor key of G#. |
+| `Ab minor` | Minor key of Ab. |
+| `A minor` | Minor key of A. |
+| `A# minor` | Minor key of A#. |
+| `Bb minor` | Minor key of Bb. |
+| `B minor` | Minor key of B. |
+
+#### `generate_audio_codes`
+
+Type `BOOLEAN`. Range / default: true.
+
+Run the ACE LLM that drafts audio codes.
+
+**How it affects generation:** true = higher quality, slower. Off only if you pass a reference timbre (lab graphs do not).
+
+#### `cfg_scale`
+
+Type `FLOAT`. Range / default: 2.0.
+
+Guidance inside audio-code generation.
+
+**How it affects generation:** 2.0 is the ACE default. Higher follows tags/lyrics more tightly and can sound rigid.
+
+#### `temperature`
+
+Type `FLOAT`. Range / default: 0.85.
+
+Sampling temperature for audio codes.
+
+**How it affects generation:** Lower = more deterministic. Higher = wilder fills.
+
+#### `top_p`
+
+Type `FLOAT`. Range / default: 0.9.
+
+Nucleus sampling.
+
+**How it affects generation:** 0.9 is the lab default.
+
+#### `top_k`
+
+Type `INT`. Range / default: 0 = off.
+
+Top-k token cap.
+
+**How it affects generation:** 0 disables top-k (lab).
+
+#### `min_p`
+
+Type `FLOAT`. Range / default: 0.0.
+
+Minimum probability floor.
+
+**How it affects generation:** 0.0 disables min-p (lab).
+
+### `Trellis2Conditioning` — TRELLIS.2 Conditioning
+
+Encode a still with CLIP Vision into TRELLIS positive/negative.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `clip_vision_model` | in | `CLIP_VISION` | DINOv3 ViT-L. |
+| `image` | in | `IMAGE` | Klein still. |
+| `positive` | out | `CONDITIONING` | Shape/texture positive. |
+| `negative` | out | `CONDITIONING` | Negative. |
+
+No widgets. Sockets only.
+
+### `Trellis2ShapeStage` — TRELLIS.2 Shape Stage
+
+Sample structure from a voxel latent.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Vision cond. |
+| `negative` | in | `CONDITIONING` | Negative. |
+| `voxel` | in | `LATENT` | Structure decode voxels. |
+| `positive` | out | `CONDITIONING` | Pass-through. |
+| `negative` | out | `CONDITIONING` | Pass-through. |
+| `LATENT` | out | `LATENT` | Shape latent. |
+
+No widgets. Sockets only.
+
+### `Trellis2TextureStage` — TRELLIS.2 Texture Stage
+
+Sample voxel colors for the mesh.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Cond. |
+| `negative` | in | `CONDITIONING` | Cond. |
+| `shape_latent` | in | `LATENT` | Shape. |
+| `positive` | out | `CONDITIONING` | Cond. |
+| `negative` | out | `CONDITIONING` | Cond. |
+| `LATENT` | out | `LATENT` | Texture latent. |
+
+No widgets. Sockets only.
+
+### `Trellis2UpsampleStage` — TRELLIS.2 Upsample Stage
+
+Upsample the shape latent toward 512.
+
+!!! warning "Lab notes"
+
+    Lab widget 512. download-3d --tier trellis2.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `positive` | in | `CONDITIONING` | Cond. |
+| `negative` | in | `CONDITIONING` | Cond. |
+| `shape_latent` | in | `LATENT` | Shape latent. |
+| `vae` | in | `VAE` | TRELLIS VAE. |
+| `positive` | out | `CONDITIONING` | Cond. |
+| `negative` | out | `CONDITIONING` | Cond. |
+| `LATENT` | out | `LATENT` | Upsampled shape. |
+
+#### `resolution`
+
+Type `COMBO`. Range / default: 512.
+
+Target structure resolution.
+
+**How it affects generation:** 512 is the lab INT8 mesh. Lower is faster and blockier.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `512` | Lab default. |
+| `256` | Faster, coarser. |
+
+### `UNETLoader` — Load Diffusion Model
+
+Load a standalone transformer/UNET from diffusion_models/.
+
+!!! warning "Lab notes"
+
+    Lab files: flux-2-klein-4b-fp8.safetensors, wan2.2_ti2v_5B_fp16.safetensors, ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors. weight_dtype stays default.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `MODEL` | out | `MODEL` | Denoiser weights. |
+
+#### `unet_name`
+
+Type `STRING`.
+
+Checkpoint filename under MODELS_DIR diffusion_models.
+
+**How it affects generation:** Wrong family = Queue error or a melted picture. Do not swap Klein 9B / FLUX.2-dev / MiniMax.
+
+#### `weight_dtype`
+
+Type `COMBO`. Range / default: default.
+
+Cast at load.
+
+**How it affects generation:** default keeps the file's dtype (Klein FP8, LTX INT8-convrot, Wan FP16).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `default` | Load weights as stored. Lab UNETLoader always uses this. |
+| `fp8_e4m3fn` | Cast to FP8 e4m3fn. Can save memory; may shift Klein/LTX quality. |
+| `fp8_e4m3fn_fast` | FP8 e4m3fn with fast optimizations. |
+| `fp8_e5m2` | Cast to FP8 e5m2. |
+
+### `VAEDecode` — VAE Decode
+
+Decode image/video latents to pixels.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | KSampler output (video or still). |
+| `vae` | in | `VAE` | Matching family VAE. |
+| `IMAGE` | out | `IMAGE` | Frames or still. |
+
+No widgets. Sockets only.
+
+### `VAEDecodeAudio` — VAE Decode Audio
+
+Decode an ACE audio latent to AUDIO.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | ACE KSampler output. |
+| `vae` | in | `VAE` | ACE VAE from the AIO checkpoint. |
+| `AUDIO` | out | `AUDIO` | Waveform for SaveAudio. |
+
+No widgets. Sockets only.
+
+### `VAEEncode` — VAE Encode
+
+Encode pixels to a latent (Klein edit / clay).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `pixels` | in | `IMAGE` | Start still. |
+| `vae` | in | `VAE` | flux2-vae. |
+| `LATENT` | out | `LATENT` | Reference latent. |
+
+No widgets. Sockets only.
+
+### `VAELoader` — Load VAE
+
+Load the autoencoder that maps pixels ↔ latents (and LTX audio).
+
+!!! warning "Lab notes"
+
+    Do not mix families: flux2-vae, wan2.2_vae, ltx-2.5-video-vae-bf16, ltx-2.5-audio-vae-bf16.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `VAE` | out | `VAE` | Encoder/decoder. |
+
+#### `vae_name`
+
+Type `STRING`.
+
+Filename under vae/.
+
+**How it affects generation:** Wrong VAE = color trash or a shape error.
+
+### `VHS_VideoCombine` — VHS Video Combine
+
+Encode frames (and optional audio) to MP4 or GIF.
+
+!!! warning "Lab notes"
+
+    Lab clips set save_output true. After Queue open the node for preview. GIF graphs use image/gif + pingpong.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `images` | in | `IMAGE` | Decoded frames. |
+| `audio` | in | `AUDIO` | LTX decoded audio or unused. |
+| `meta_batch` | in | `VHS_BatchManager` | Optional batch manager (unwired). |
+| `vae` | in | `VAE` | Optional (unwired). |
+| `Filenames` | out | `VHS_FILENAMES` | Path list for EZFilmConcat. |
+
+#### `frame_rate`
+
+Type `FLOAT`. Range / default: lab 24 (GIF 12/16).
+
+Output frames per second.
+
+**How it affects generation:** 24 fps is the lab motion/AV printer. GIF loops use 12. Changing fps without changing frame count changes duration.
+
+#### `loop_count`
+
+Type `INT`. Range / default: 0 = infinite in players that honor it.
+
+How many times the file loops.
+
+**How it affects generation:** 0 is the lab default (play once / player default).
+
+#### `filename_prefix`
+
+Type `STRING`.
+
+Save prefix under the output folder.
+
+**How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
+
+#### `format`
+
+Type `COMBO`.
+
+Container / codec.
+
+**How it affects generation:** video/h264-mp4 is every lab clip except wan/gif-loop (image/gif).
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `video/h264-mp4` | H.264 MP4. Lab default; save_output must stay true. |
+| `image/gif` | Animated GIF. wan/gif-loop only. |
+
+#### `pix_fmt`
+
+Type `COMBO`. Range / default: yuv420p.
+
+Pixel format for H.264.
+
+**How it affects generation:** yuv420p plays everywhere. Other formats can break QuickTime/YouTube.
+
+#### `crf`
+
+Type `INT`. Range / default: lab 18.
+
+H.264 constant-rate-factor. Lower is bigger/cleaner.
+
+**How it affects generation:** 18 is the lab visually-lossless-ish setting. Raising CRF shrinks files and adds blockiness.
+
+#### `save_metadata`
+
+Type `BOOLEAN`.
+
+Embed workflow JSON in the file.
+
+**How it affects generation:** true keeps provenance on the MP4.
+
+#### `trim_to_audio`
+
+Type `BOOLEAN`.
+
+Cut picture to audio length.
+
+**How it affects generation:** Lab false except when you mean to lock to a bed. ltx/a2v muxes the original wav instead.
+
+#### `pingpong`
+
+Type `BOOLEAN`.
+
+Play frames forward then reverse.
+
+**How it affects generation:** true on wan/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints.
+
+#### `save_output`
+
+Type `BOOLEAN`.
+
+Write the file to disk.
+
+**How it affects generation:** Lab video graphs require true. After Queue, open the node for the inline preview.
+
+### `VaeDecodeShapeTrellis` — TRELLIS Decode Shape
+
+Decode shape latent to a mesh.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | Shape latent. |
+| `vae` | in | `VAE` | VAE. |
+| `mesh` | out | `MESH` | Untextured mesh. |
+| `shape_subdivides` | out | `SHAPE_SUBDIVIDES` | Subdivision payload for texture decode. |
+
+No widgets. Sockets only.
+
+### `VaeDecodeStructureTrellis2` — TRELLIS.2 Decode Structure
+
+Decode structure latent to voxels.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | Structure latent. |
+| `vae` | in | `VAE` | TRELLIS VAE. |
+| `voxel` | out | `LATENT` | Voxel grid. |
+
+#### `resolution`
+
+Type `COMBO`. Range / default: 32.
+
+Voxel grid size.
+
+**How it affects generation:** 32 is the lab structure decode.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `32` | Lab default. |
+
+### `VaeDecodeTextureTrellis` — TRELLIS Decode Texture
+
+Decode texture latent to voxel colors.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | Texture latent. |
+| `vae` | in | `VAE` | VAE. |
+| `shape_subdivides` | in | `SHAPE_SUBDIVIDES` | From shape decode. |
+| `voxel_colors` | out | `VOXEL_COLORS` | Colors for PaintMesh. |
+
+No widgets. Sockets only.
+
+### `Wan22ImageToVideoLatent` — Wan 2.2 Image to Video Latent
+
+Build a Wan 5B I2V latent from a start image (or empty for T2V).
+
+!!! warning "Lab notes"
+
+    Smoke 832×480 × 121 frames. Shot graphs use 120 frames for concat. GIF 49 frames. VACE join 17 frames (1+8n).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `vae` | in | `VAE` | wan2.2_vae. |
+| `start_image` | in | `IMAGE` | Optional. T2V graphs leave LoadImage bypassed. |
+| `LATENT` | out | `LATENT` | Video latent for KSampler. |
+
+#### `width`
+
+Type `INT`. Range / default: 832 landscape / 480 portrait.
+
+Frame width.
+
+**How it affects generation:** 832×480 is the Wan 5B smoke size. Larger melts GB10.
+
+#### `height`
+
+Type `INT`.
+
+Frame height.
+
+**How it affects generation:** Swap for 9:16 shorts (480×832).
+
+#### `length`
+
+Type `INT`. Range / default: 121 smoke / 120 shot / 49 GIF / 17 VACE.
+
+Frame count.
+
+**How it affects generation:** Duration = length / fps. 121 @ 24 fps is the 5 s smoke. Shot graphs use 120 so concat-shots stays 5.00 s.
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Clips per Queue.
+
+**How it affects generation:** Stay 1 on GB10.

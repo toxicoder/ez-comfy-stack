@@ -19,7 +19,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 - **Picking a filename** instead of starting from a blank canvas
 - **Keeping** the [playbook](visual-generative-ai.md) a how-to, not a spreadsheet
 
-**Who this is for:** studio users after the first still-draft Queue.
+**Who this is for:** studio users after the first still-draft Queue. Node-by-node widgets: [Workflow details](create/workflows-index.md). Encyclopedia: [Workflow node parameters](reference/workflow-nodes.md).
 
 After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
@@ -115,15 +115,15 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 | Workflow | What it does |
 | --- | --- |
-| **inspire/prompt-forge** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX enhance preview (occupancy **llm**) |
-| **inspire/research-chat** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
-| **inspire/beat-sheet** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
+| **[inspire/prompt-forge](generated/workflows/inspire/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX enhance preview (occupancy **llm**) |
+| **[inspire/research-chat](generated/workflows/inspire/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
+| **[inspire/beat-sheet](generated/workflows/inspire/beat-sheet.md)** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
 
 ---
 
 ## Notes that apply to every lab graph
 
-Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **wan/gif-loop** emits `image/gif`.
+Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[wan/gif-loop](generated/workflows/wan/gif-loop.md)** emits `image/gif`.
 
 Optional Wan A14B is a Queue graph (`workflows/_lab/optional/wan/i2v-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 

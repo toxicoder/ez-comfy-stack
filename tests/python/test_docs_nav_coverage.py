@@ -5,11 +5,13 @@ Hermetic: stdlib. No MkDocs build.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 MKDOCS = ROOT / "mkdocs.yml"
 DOCS = ROOT / "docs"
+WORKFLOW_MANIFEST = DOCS / "generated" / "workflows" / "manifest.json"
 
 # Python / JS / CSS / hooks are not nav pages.
 SKIP_SUFFIXES = {".py", ".js", ".css"}
@@ -44,10 +46,34 @@ def _nav_targets(nav_text: str) -> set[str]:
     return targets
 
 
+def _workflow_manifest_paths() -> set[str]:
+    """Return generated workflow page paths from the generator manifest.
+
+    Returns:
+        Repo-relative docs paths listed in the manifest. Empty when the
+        generator has not been run yet.
+    """
+    if not WORKFLOW_MANIFEST.is_file():
+        return set()
+    payload = json.loads(WORKFLOW_MANIFEST.read_text(encoding="utf-8"))
+    paths: set[str] = set()
+    for row in payload.get("pages") or []:
+        if isinstance(row, dict):
+            path = row.get("path")
+            if isinstance(path, str) and path.endswith(".md"):
+                paths.add(path)
+    return paths
+
+
 def test_mkdocs_nav_lists_every_docs_markdown_page() -> None:
-    """Every docs/**/*.md page appears in nav (no orphan pages)."""
+    """Every docs/**/*.md page appears in nav (no orphan pages).
+
+    Generated workflow-details pages are injected at MkDocs ``on_config``
+    from ``docs/generated/workflows/manifest.json`` rather than 90+
+    hand-listed nav lines.
+    """
     nav = MKDOCS.read_text(encoding="utf-8")
-    listed = _nav_targets(nav)
+    listed = _nav_targets(nav) | _workflow_manifest_paths()
     pages = sorted(
         p.relative_to(DOCS).as_posix()
         for p in DOCS.rglob("*.md")
@@ -71,6 +97,8 @@ def test_nav_includes_planned_homes() -> None:
         "create/workflows-motion.md",
         "create/workflows-film.md",
         "create/workflows-audio.md",
+        "create/workflows-index.md",
+        "reference/workflow-nodes.md",
         "create/music-rap.md",
         "create/music-edm.md",
         "create/music-disclosure.md",

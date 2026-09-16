@@ -89,6 +89,30 @@ def test_on_config_stamps_edit_uri(hooks, monkeypatch: pytest.MonkeyPatch) -> No
     assert out["edit_uri"] == "edit/development/docs/"
 
 
+def test_on_config_injects_workflow_details_when_manifest_exists(hooks) -> None:
+    """Workflow details becomes a nested nav tree when the manifest is present."""
+    manifest = HOOKS_PATH.parent / "generated" / "workflows" / "manifest.json"
+    config = {
+        "edit_uri": "edit/main/docs/",
+        "nav": [
+            {
+                "Create": [
+                    {"Workflow details": "create/workflows-index.md"},
+                ]
+            }
+        ],
+    }
+    out = hooks.on_config(config)
+    details = out["nav"][0]["Create"][0]["Workflow details"]
+    if not manifest.is_file():
+        assert details == "create/workflows-index.md"
+        return
+    assert isinstance(details, list)
+    assert any(
+        isinstance(item, dict) and "Overview" in item for item in details
+    )
+
+
 def test_stamp_git_ref_rewrites_this_repo_only(
     hooks, monkeypatch: pytest.MonkeyPatch
 ) -> None:
