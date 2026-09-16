@@ -16,6 +16,7 @@ TABLES_JS = ROOT / "docs" / "javascripts" / "tables.js"
 PUBLISHED_JS = ROOT / "docs" / "javascripts" / "published.js"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 DOCS_STYLE = ROOT / "docs" / "contribute" / "docs-style.md"
+TROUBLE_DOCS_SITE = ROOT / "docs" / "operate" / "troubleshooting-docs-site.md"
 
 
 def _read(path: Path) -> str:
@@ -175,6 +176,32 @@ def test_extra_css_sticks_table_headers_under_tabs() -> None:
     ) is None
 
 
+def test_extra_css_floating_table_hscroll() -> None:
+    """H-scroll mirror is position:fixed under the navbar z-index, not sticky."""
+    css = _read(EXTRA_CSS)
+    assert re.search(
+        r"\.ez-table-hscroll\s*\{[^}]*position:\s*fixed",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.ez-table-hscroll\s*\{[^}]*z-index:\s*3\b",
+        css,
+        re.S,
+    )
+    assert re.search(
+        r"\.ez-table-hscroll\s*\{[^}]*overflow-x:\s*auto",
+        css,
+        re.S,
+    )
+    assert ".ez-table-hscroll__inner" in css
+    assert re.search(
+        r"\.ez-table-hscroll\s*\{[^}]*position:\s*sticky",
+        css,
+        re.S,
+    ) is None
+
+
 def test_tables_js_clamps_header_above_tail_rows() -> None:
     """tables.js measures .md-header and keeps last row + 25% of previous clear."""
     js = _read(TABLES_JS)
@@ -193,6 +220,20 @@ def test_tables_js_clamps_header_above_tail_rows() -> None:
     assert "resize" in js
 
 
+def test_tables_js_floating_hscroll_and_header_pan() -> None:
+    """Wide tall tables get a fixed h-scroll mirror; the pinned header pans with it."""
+    js = _read(TABLES_JS)
+    assert "ez-table-hscroll" in js
+    assert "ez-table-hscroll__inner" in js
+    assert "scrollWidth" in js
+    assert "clientWidth" in js
+    assert "scrollLeft" in js
+    assert "translateX" in js
+    assert "md-typeset__scrollwrap" in js
+    assert "thead.style.position" not in js
+    assert re.search(r"style\.position\s*=\s*['\"]sticky", js) is None
+
+
 def test_conventions_document_sticky_header() -> None:
     """Docs publish notes the sticky-tabs contract for later edits."""
     text = _read(CONVENTIONS)
@@ -206,6 +247,8 @@ def test_conventions_document_sticky_header() -> None:
     assert "0.25" in text or "25%" in text
     assert "overflow" in text.lower()
     assert "ez-table-pin" in text or "clone" in text.lower()
+    assert "ez-table-hscroll" in text
+    assert "scrollLeft" in text
     assert ".md-header" in text or "md-header" in text
     assert "ez-published-chip" in text
     assert "EZ_DOCS_PUBLISHED_AT" in text
@@ -223,6 +266,16 @@ def test_conventions_document_spark_lab_code_text() -> None:
     assert "1.55" in style
     assert "rgb(134, 183, 55)" in style
     assert "Roboto Mono" in style
+    assert "ez-table-hscroll" in style or "horizontal" in style.lower()
+    assert "tables.js" in style
+
+
+def test_troubleshooting_docs_site_covers_table_chrome() -> None:
+    """Docs-site troubleshooting names a hard-refresh when table JS is stale."""
+    text = _read(TROUBLE_DOCS_SITE)
+    assert "tables.js" in text
+    assert "hard-refresh" in text.lower() or "Hard-refresh" in text
+    assert "ez-table-hscroll" in text or "horizontal" in text.lower()
 
 
 def test_extra_css_styles_published_chip() -> None:
