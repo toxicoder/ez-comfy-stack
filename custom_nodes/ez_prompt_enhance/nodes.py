@@ -25,6 +25,7 @@ from .client import (
     join_prompt,
     load_system_prompt,
     style_ids,
+    with_cinema_system,
     with_context_system,
     with_style_system,
 )
@@ -220,6 +221,7 @@ def _run(
 
     user = _compose_user(original, duration_hint, audio_notes, ctx)
     system = load_system_prompt(system_name)
+    system = with_cinema_system(system, system_name, mode)
     system = with_context_system(system, ctx)
     if apply_style:
         instruction = format_style_instruction(style, flavor_for_system(system_name))
@@ -1245,6 +1247,7 @@ class EZNegativePromptEnhance:
                 _log(f"negative system prompt missing: {exc}")
                 system = ""
             if system:
+                system = with_cinema_system(system, f"negative_{fam}")
                 user = compose_negative_user(original, pos)
                 rewritten, reason = complete(
                     system,

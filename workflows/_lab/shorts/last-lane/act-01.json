@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level 24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens."
+        "A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean unmarked lens."
       ],
       "title": "Positive"
     },
@@ -442,7 +442,7 @@
       },
       "widgets_values": [
         "custom",
-        "A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level 24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens.",
+        "A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean unmarked lens.",
         false,
         "t2i",
         "YouTube 16:9 still",
@@ -543,7 +543,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## last-lane (night two-lane \u00b7 Gravel cone)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film last-lane --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level 24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel | The cone finds pale gravel | Gloves ease the wheel | A sage bush slides past |\n| 2 | Sage | Bugs tick the unmarked glass | The lane is only two ruts | A rise ahead |\n| 3 | Rise | The cone climbs | A crest, then more lane | Radio is only static hiss |\n| 4 | Static | No song, only hiss | Gloves do not reach a dial | A cattle-grid rumble, unmarked |\n| 5 | Grid | The grid ends | The lane straightens | A pale mile with no sign |\n| 6 | No sign | Empty of lettering, always | A jackrabbit-shadow only | The cone is the only light |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## last-lane (night two-lane \u00b7 Gravel cone)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film last-lane --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel | The cone finds pale gravel | Gloves ease the wheel | A sage bush slides past |\n| 2 | Sage | Bugs tick the unmarked glass | The lane is only two ruts | A rise ahead |\n| 3 | Rise | The cone climbs | A crest, then more lane | Radio is only static hiss |\n| 4 | Static | No song, only hiss | Gloves do not reach a dial | A cattle-grid rumble, unmarked |\n| 5 | Grid | The grid ends | The lane straightens | A pale mile with no sign |\n| 6 | No sign | Empty of lettering, always | A jackrabbit-shadow only | The cone is the only light |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "last-lane 90s shot map"
     },

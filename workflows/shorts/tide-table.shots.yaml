@@ -15,8 +15,9 @@ identity_enhance: true
 identity_look: |
   A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the
   lower third, wet grain and a blank painter coil on the thwart, looking out from a stone
-  hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for
-  YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+  hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline.
+  35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain,
+  clean unmarked lens.
 shots:
   - beat: 1
     shot: 1
@@ -31,9 +32,9 @@ shots:
     end_state: open cut between piles
     ltx_i2v: |
       The start image holds as the first frame. Hands untie the painter from a wet ring rope
-      ticks, metal click The camera tracks forward, no cut. The weathered unmarked skiff bow
-      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
-      open cut between piles. No music and no score.
+      ticks, metal click The camera tracks forward on a locked support, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold open cut between piles. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Hands untie the painter from a wet
       ring tracking, no cut, locked identity. Last frames hold open cut between piles.
@@ -50,9 +51,9 @@ shots:
     end_state: bow in the cut
     ltx_i2v: |
       The start image holds as the first frame. The skiff is pushed off the stone hull knock,
-      grit scrape The camera tracks forward, no cut. The weathered unmarked skiff bow stays in
-      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold bow in the
-      cut. No music and no score.
+      grit scrape The camera tracks forward on a locked support, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold bow in the cut. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff is pushed off the stone
       tracking, no cut, locked identity. Last frames hold bow in the cut.
@@ -69,9 +70,9 @@ shots:
     end_state: grey-pink channel
     ltx_i2v: |
       The start image holds as the first frame. The bow clears the last pile water splash,
-      wind The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold grey-pink
-      channel. No music and no score.
+      wind The camera tracks forward on a locked support, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold grey-pink channel. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow clears the last pile
       tracking, no cut, locked identity. Last frames hold grey-pink channel.
@@ -88,9 +89,9 @@ shots:
     end_state: unmarked spar ahead
     ltx_i2v: |
       The start image holds as the first frame. The skiff noses into slack water hull tick,
-      wind The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold unmarked spar ahead.
-      No music and no score.
+      wind The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      The weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty
+      of lettering. Last frames hold unmarked spar ahead. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff noses into slack water
       dolly in, no cut, locked identity. Last frames hold unmarked spar ahead.
@@ -107,9 +108,9 @@ shots:
     end_state: mid-channel light
     ltx_i2v: |
       The start image holds as the first frame. Oarlocks creak on a slow pull wood creak,
-      splash The camera dollies in, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold mid-channel
-      light. No music and no score.
+      splash The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      The weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty
+      of lettering. Last frames hold mid-channel light. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Oarlocks creak on a slow pull dolly
       in, no cut, locked identity. Last frames hold mid-channel light.
@@ -126,9 +127,9 @@ shots:
     end_state: tide-pool lip
     ltx_i2v: |
       The start image holds as the first frame. The bow aims at a dark pool water tick, cloth
-      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold tide-pool lip. No
-      music and no score.
+      The camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold tide-pool lip. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow aims at a dark pool dolly
       in, no cut, locked identity. Last frames hold tide-pool lip.
@@ -145,9 +146,9 @@ shots:
     end_state: green pool
     ltx_i2v: |
       The start image holds as the first frame. The hull kisses a rock shelf gravel scrape,
-      splash The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold green pool. No music
-      and no score.
+      splash The camera pans left on a locked tripod head, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold green pool. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hull kisses a rock shelf pan
       left, no cut, locked identity. Last frames hold green pool.
@@ -164,9 +165,9 @@ shots:
     end_state: pale crab-shadow (no face)
     ltx_i2v: |
       The start image holds as the first frame. A look down into unmarked weed water tick,
-      wind The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold pale crab-shadow (no
-      face). No music and no score.
+      wind The camera pans left on a locked tripod head, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold pale crab-shadow (no face). No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A look down into unmarked weed pan
       left, no cut, locked identity. Last frames hold pale crab-shadow (no face).
@@ -183,9 +184,9 @@ shots:
     end_state: next pool mouth
     ltx_i2v: |
       The start image holds as the first frame. The bow slides along the shelf hull knock,
-      grit The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold next pool mouth. No
-      music and no score.
+      grit The camera pans left on a locked tripod head, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold next pool mouth. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow slides along the shelf pan
       left, no cut, locked identity. Last frames hold next pool mouth.
@@ -202,9 +203,9 @@ shots:
     end_state: narrow slot
     ltx_i2v: |
       The start image holds as the first frame. The skiff tracks the wet granite wind, metal
-      tick The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold narrow slot. No
-      music and no score.
+      tick The camera pans right on a locked tripod head, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold narrow slot. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff tracks the wet granite pan
       right, no cut, locked identity. Last frames hold narrow slot.
@@ -221,9 +222,9 @@ shots:
     end_state: dark slot
     ltx_i2v: |
       The start image holds as the first frame. A drip from the gunwale water tick, cloth The
-      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold dark slot. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      dark slot. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A drip from the gunwale pan right,
       no cut, locked identity. Last frames hold dark slot.
@@ -240,9 +241,9 @@ shots:
     end_state: fog on the far lip
     ltx_i2v: |
       The start image holds as the first frame. The bow enters the slot hull scrape, splash
-      The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold fog on the far lip.
-      No music and no score.
+      The camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      fog on the far lip. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow enters the slot pan right,
       no cut, locked identity. Last frames hold fog on the far lip.
@@ -259,9 +260,9 @@ shots:
     end_state: pale fog wall
     ltx_i2v: |
       The start image holds as the first frame. Mist takes the far piles wind, water tick The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold pale fog wall. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      pale fog wall. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Mist takes the far piles fixed
       camera, no cut, locked identity. Last frames hold pale fog wall.
@@ -278,9 +279,9 @@ shots:
     end_state: one unmarked spar
     ltx_i2v: |
       The start image holds as the first frame. The bow holds a compass heading cloth, hull
-      knock The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold one unmarked
-      spar. No music and no score.
+      knock The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold one unmarked spar. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow holds a compass heading
       fixed camera, no cut, locked identity. Last frames hold one unmarked spar.
@@ -297,9 +298,9 @@ shots:
     end_state: open fog
     ltx_i2v: |
       The start image holds as the first frame. The spar slides past wood creak, splash The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold open fog. No music and no
-      score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      open fog. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The spar slides past fixed camera,
       no cut, locked identity. Last frames hold open fog.
@@ -316,9 +317,9 @@ shots:
     end_state: empty grey
     ltx_i2v: |
       The start image holds as the first frame. The hard vanishes astern wind, water tick The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold empty grey. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold empty
+      grey. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hard vanishes astern dolly out,
       no cut, locked identity. Last frames hold empty grey.
@@ -335,9 +336,9 @@ shots:
     end_state: a second spar
     ltx_i2v: |
       The start image holds as the first frame. A slow pull in the fog creak, splash The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold a second spar. No music and
-      no score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold a second
+      spar. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A slow pull in the fog dolly out, no
       cut, locked identity. Last frames hold a second spar.
@@ -354,9 +355,9 @@ shots:
     end_state: tide-table of rock
     ltx_i2v: |
       The start image holds as the first frame. The bow finds a wider pool hull tick, grit The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold tide-table of rock. No
-      music and no score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold tide-table
+      of rock. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow finds a wider pool dolly
       out, no cut, locked identity. Last frames hold tide-table of rock.
@@ -373,9 +374,9 @@ shots:
     end_state: flat rock
     ltx_i2v: |
       The start image holds as the first frame. The skiff grounds on a wet table gravel
-      scrape, splash The camera tracks forward, no cut. The weathered unmarked skiff bow stays
-      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold flat
-      rock. No music and no score.
+      scrape, splash The camera tracks forward on a locked support, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold flat rock. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff grounds on a wet table
       tracking, no cut, locked identity. Last frames hold flat rock.
@@ -392,9 +393,9 @@ shots:
     end_state: anemone-dark water
     ltx_i2v: |
       The start image holds as the first frame. Hands hold the thwart cloth, wood creak The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold anemone-dark water.
-      No music and no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      anemone-dark water. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Hands hold the thwart tracking, no
       cut, locked identity. Last frames hold anemone-dark water.
@@ -411,9 +412,9 @@ shots:
     end_state: higher table
     ltx_i2v: |
       The start image holds as the first frame. The bow points at a second table wind, water
-      tick The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold higher table.
-      No music and no score.
+      tick The camera tracks forward on a locked support, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold higher table. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow points at a second table
       tracking, no cut, locked identity. Last frames hold higher table.
@@ -430,9 +431,9 @@ shots:
     end_state: tiny shells
     ltx_i2v: |
       The start image holds as the first frame. A look into a clear unmarked pool water tick,
-      wind The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold tiny shells. No
-      music and no score.
+      wind The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      The weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty
+      of lettering. Last frames hold tiny shells. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A look into a clear unmarked pool
       dolly in, no cut, locked identity. Last frames hold tiny shells.
@@ -449,9 +450,9 @@ shots:
     end_state: pool center
     ltx_i2v: |
       The start image holds as the first frame. A drip rings the pool splash, tick The camera
-      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold pool center. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold pool center. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A drip rings the pool dolly in, no
       cut, locked identity. Last frames hold pool center.
@@ -468,9 +469,9 @@ shots:
     end_state: fog thinning
     ltx_i2v: |
       The start image holds as the first frame. The bow lifts on a swell hull knock, wind The
-      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold fog thinning. No music and
-      no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold fog thinning. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow lifts on a swell dolly in,
       no cut, locked identity. Last frames hold fog thinning.
@@ -487,9 +488,9 @@ shots:
     end_state: gold grain
     ltx_i2v: |
       The start image holds as the first frame. A pale sun bar finds the thwart wind, cloth
-      The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold gold grain. No music and no
-      score.
+      The camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      gold grain. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A pale sun bar finds the thwart pan
       left, no cut, locked identity. Last frames hold gold grain.
@@ -506,9 +507,9 @@ shots:
     end_state: bright lip
     ltx_i2v: |
       The start image holds as the first frame. Steam of cold water in sun steam, splash The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold bright lip. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold bright
+      lip. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Steam of cold water in sun pan left,
       no cut, locked identity. Last frames hold bright lip.
@@ -525,9 +526,9 @@ shots:
     end_state: deeper cut
     ltx_i2v: |
       The start image holds as the first frame. The skiff slides off the table gravel scrape,
-      hull tick The camera pans left, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold deeper cut. No
-      music and no score.
+      hull tick The camera pans left on a locked tripod head, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold deeper cut. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff slides off the table pan
       left, no cut, locked identity. Last frames hold deeper cut.
@@ -544,9 +545,9 @@ shots:
     end_state: distant unmarked spit
     ltx_i2v: |
       The start image holds as the first frame. The cut opens to a wider reach wind, splash
-      The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold distant unmarked
-      spit. No music and no score.
+      The camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      distant unmarked spit. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The cut opens to a wider reach pan
       right, no cut, locked identity. Last frames hold distant unmarked spit.
@@ -563,8 +564,9 @@ shots:
     end_state: spit closer
     ltx_i2v: |
       The start image holds as the first frame. A long pull creak, water tick The camera pans
-      right, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold spit closer. No music and no score.
+      right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold spit closer.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A long pull pan right, no cut,
       locked identity. Last frames hold spit closer.
@@ -581,9 +583,9 @@ shots:
     end_state: spit rocks
     ltx_i2v: |
       The start image holds as the first frame. The bow aims at the spit hull knock, grit The
-      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold spit rocks. No music and no
-      score.
+      camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      spit rocks. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow aims at the spit pan right,
       no cut, locked identity. Last frames hold spit rocks.
@@ -600,9 +602,9 @@ shots:
     end_state: driftwood unmarked
     ltx_i2v: |
       The start image holds as the first frame. The hull kisses spit gravel gravel scrape,
-      splash The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold driftwood
-      unmarked. No music and no score.
+      splash The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold driftwood unmarked. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hull kisses spit gravel fixed
       camera, no cut, locked identity. Last frames hold driftwood unmarked.
@@ -619,9 +621,9 @@ shots:
     end_state: far hard ghost
     ltx_i2v: |
       The start image holds as the first frame. A walk of the eye along the spit wind, cloth
-      The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold far hard ghost. No
-      music and no score.
+      The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold far hard ghost. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A walk of the eye along the spit
       fixed camera, no cut, locked identity. Last frames hold far hard ghost.
@@ -638,9 +640,9 @@ shots:
     end_state: fog lane home
     ltx_i2v: |
       The start image holds as the first frame. The bow turns for home hull tick, creak The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold fog lane home. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      fog lane home. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow turns for home fixed camera,
       no cut, locked identity. Last frames hold fog lane home.
@@ -657,9 +659,9 @@ shots:
     end_state: painter coil
     ltx_i2v: |
       The start image holds as the first frame. The skiff comes about in slack splash, wood
-      creak The camera dollies out, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold painter coil.
-      No music and no score.
+      creak The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      painter coil. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff comes about in slack dolly
       out, no cut, locked identity. Last frames hold painter coil.
@@ -676,9 +678,9 @@ shots:
     end_state: home bearing
     ltx_i2v: |
       The start image holds as the first frame. The coil sits wet on the thwart cloth, water
-      tick The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold home bearing. No
-      music and no score.
+      tick The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      home bearing. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The coil sits wet on the thwart
       dolly out, no cut, locked identity. Last frames hold home bearing.
@@ -695,9 +697,9 @@ shots:
     end_state: fog lane
     ltx_i2v: |
       The start image holds as the first frame. The bow takes the lane wind, hull knock The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold fog lane. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold fog lane.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow takes the lane dolly out, no
       cut, locked identity. Last frames hold fog lane.
@@ -714,9 +716,9 @@ shots:
     end_state: first pile
     ltx_i2v: |
       The start image holds as the first frame. Piles return as pale marks wind, water tick
-      The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold first pile. No music
-      and no score.
+      The camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      first pile. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Piles return as pale marks tracking,
       no cut, locked identity. Last frames hold first pile.
@@ -733,9 +735,9 @@ shots:
     end_state: second pile
     ltx_i2v: |
       The start image holds as the first frame. The pile slides past hull scrape, splash The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold second pile. No
-      music and no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      second pile. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The pile slides past tracking, no
       cut, locked identity. Last frames hold second pile.
@@ -752,9 +754,9 @@ shots:
     end_state: stone hard ghost
     ltx_i2v: |
       The start image holds as the first frame. The cut narrows creak, grit The camera tracks
-      forward, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold stone hard ghost. No music and no
-      score.
+      forward on a locked support, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold stone hard ghost. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The cut narrows tracking, no cut,
       locked identity. Last frames hold stone hard ghost.
@@ -771,9 +773,9 @@ shots:
     end_state: ring on the wall
     ltx_i2v: |
       The start image holds as the first frame. The hard is a grey bar ahead wind, splash The
-      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold ring on the wall. No music
-      and no score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold ring on the wall. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hard is a grey bar ahead dolly
       in, no cut, locked identity. Last frames hold ring on the wall.
@@ -790,9 +792,9 @@ shots:
     end_state: wet ring
     ltx_i2v: |
       The start image holds as the first frame. The bow aims at the ring hull tick, cloth The
-      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold wet ring. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold wet ring. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow aims at the ring dolly in,
       no cut, locked identity. Last frames hold wet ring.
@@ -809,9 +811,9 @@ shots:
     end_state: painter in hand
     ltx_i2v: |
       The start image holds as the first frame. The hull kisses stone gravel scrape, metal
-      click The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold painter in hand. No
-      music and no score.
+      click The camera dollies in on silent dolly wheels, tightening without zooming, no cut.
+      The weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty
+      of lettering. Last frames hold painter in hand. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hull kisses stone dolly in, no
       cut, locked identity. Last frames hold painter in hand.
@@ -828,9 +830,9 @@ shots:
     end_state: ring close
     ltx_i2v: |
       The start image holds as the first frame. Hands take the painter rope ticks, cloth The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold ring close. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold ring
+      close. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Hands take the painter pan left, no
       cut, locked identity. Last frames hold ring close.
@@ -847,9 +849,9 @@ shots:
     end_state: tied bow
     ltx_i2v: |
       The start image holds as the first frame. The hitch is made metal click, wood creak The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold tied bow. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold tied
+      bow. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hitch is made pan left, no cut,
       locked identity. Last frames hold tied bow.
@@ -866,9 +868,9 @@ shots:
     end_state: quiet hard
     ltx_i2v: |
       The start image holds as the first frame. The thwart holds still water tick, wind The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold quiet hard. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold quiet
+      hard. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The thwart holds still pan left, no
       cut, locked identity. Last frames hold quiet hard.
@@ -885,9 +887,9 @@ shots:
     end_state: wet grain
     ltx_i2v: |
       The start image holds as the first frame. The skiff rests against stone hull knock,
-      water tick The camera pans right, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold wet grain. No
-      music and no score.
+      water tick The camera pans right on a locked tripod head, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold wet grain. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff rests against stone pan
       right, no cut, locked identity. Last frames hold wet grain.
@@ -904,9 +906,9 @@ shots:
     end_state: empty channel
     ltx_i2v: |
       The start image holds as the first frame. A last look down the cut wind, splash The
-      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold empty channel. No music and
-      no score.
+      camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      empty channel. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A last look down the cut pan right,
       no cut, locked identity. Last frames hold empty channel.
@@ -923,9 +925,9 @@ shots:
     end_state: empty bow
     ltx_i2v: |
       The start image holds as the first frame. Hands leave the thwart cloth, creak The camera
-      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold empty bow. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold empty bow.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Hands leave the thwart pan right, no
       cut, locked identity. Last frames hold empty bow.
@@ -942,9 +944,9 @@ shots:
     end_state: gold thwart
     ltx_i2v: |
       The start image holds as the first frame. The unmarked bow sits in first real sun wind,
-      water tick The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold gold thwart.
-      No music and no score.
+      water tick The camera holds a locked-off tripod, zero drift, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold gold thwart. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The unmarked bow sits in first real
       sun fixed camera, no cut, locked identity. Last frames hold gold thwart.
@@ -961,9 +963,9 @@ shots:
     end_state: bright coil
     ltx_i2v: |
       The start image holds as the first frame. Steam lifts off wet wood steam, cloth The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold bright coil. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      bright coil. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Steam lifts off wet wood fixed
       camera, no cut, locked identity. Last frames hold bright coil.
@@ -980,9 +982,9 @@ shots:
     end_state: still water
     ltx_i2v: |
       The start image holds as the first frame. The camera holds the bow hull tick, grit The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold still water. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      still water. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The camera holds the bow fixed
       camera, no cut, locked identity. Last frames hold still water.
@@ -999,9 +1001,9 @@ shots:
     end_state: mirror cut
     ltx_i2v: |
       The start image holds as the first frame. Ripples die against stone splash, wind The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold mirror cut. No music and no
-      score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold mirror
+      cut. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Ripples die against stone dolly out,
       no cut, locked identity. Last frames hold mirror cut.
@@ -1018,9 +1020,9 @@ shots:
     end_state: open sky
     ltx_i2v: |
       The start image holds as the first frame. A gull-less empty sky wind, cloth The camera
-      dollies out, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold open sky. No music and no
-      score.
+      dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold open sky. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A gull-less empty sky dolly out, no
       cut, locked identity. Last frames hold open sky.
@@ -1037,9 +1039,9 @@ shots:
     end_state: home plate
     ltx_i2v: |
       The start image holds as the first frame. The bow and the hard together wood creak,
-      water tick The camera dollies out, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold home plate. No
-      music and no score.
+      water tick The camera dollies out on silent wheels, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold home plate. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow and the hard together dolly
       out, no cut, locked identity. Last frames hold home plate.
@@ -1056,9 +1058,9 @@ shots:
     end_state: dry stone
     ltx_i2v: |
       The start image holds as the first frame. The hard is dry above the ring grit, wind The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold dry stone. No music
-      and no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      dry stone. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hard is dry above the ring
       tracking, no cut, locked identity. Last frames hold dry stone.
@@ -1075,9 +1077,9 @@ shots:
     end_state: dark ring
     ltx_i2v: |
       The start image holds as the first frame. The painter drips once water tick, metal click
-      The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold dark ring. No music
-      and no score.
+      The camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      dark ring. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The painter drips once tracking, no
       cut, locked identity. Last frames hold dark ring.
@@ -1094,9 +1096,9 @@ shots:
     end_state: whole skiff
     ltx_i2v: |
       The start image holds as the first frame. The camera eases back cloth, hull knock The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold whole skiff. No
-      music and no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      whole skiff. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The camera eases back tracking, no
       cut, locked identity. Last frames hold whole skiff.
@@ -1113,9 +1115,9 @@ shots:
     end_state: skiff and hard
     ltx_i2v: |
       The start image holds as the first frame. The whole unmarked skiff in frame wind, splash
-      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold skiff and hard. No
-      music and no score.
+      The camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold skiff and hard. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The whole unmarked skiff in frame
       dolly in, no cut, locked identity. Last frames hold skiff and hard.
@@ -1132,9 +1134,9 @@ shots:
     end_state: bow grain
     ltx_i2v: |
       The start image holds as the first frame. A slow hold water tick, creak The camera
-      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold bow grain. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold bow grain. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A slow hold dolly in, no cut, locked
       identity. Last frames hold bow grain.
@@ -1151,9 +1153,9 @@ shots:
     end_state: warm grain
     ltx_i2v: |
       The start image holds as the first frame. Last light on the thwart steam, cloth The
-      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold warm grain. No music and no
-      score.
+      camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold warm grain. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Last light on the thwart dolly in,
       no cut, locked identity. Last frames hold warm grain.
@@ -1170,8 +1172,9 @@ shots:
     end_state: cool bow
     ltx_i2v: |
       The start image holds as the first frame. Sun leaves the cut wind, water tick The camera
-      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold cool bow. No music and no score.
+      pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold cool bow. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Sun leaves the cut pan left, no cut,
       locked identity. Last frames hold cool bow.
@@ -1188,8 +1191,9 @@ shots:
     end_state: dark painter
     ltx_i2v: |
       The start image holds as the first frame. The coil darkens cloth, hull tick The camera
-      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold dark painter. No music and no score.
+      pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold dark painter.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The coil darkens pan left, no cut,
       locked identity. Last frames hold dark painter.
@@ -1206,9 +1210,9 @@ shots:
     end_state: night-edge stone
     ltx_i2v: |
       The start image holds as the first frame. The ring is a black mark metal click, grit The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold night-edge stone. No music and
-      no score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      night-edge stone. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The ring is a black mark pan left,
       no cut, locked identity. Last frames hold night-edge stone.
@@ -1225,9 +1229,9 @@ shots:
     end_state: blue stone
     ltx_i2v: |
       The start image holds as the first frame. The hard goes blue wind, splash The camera
-      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold blue stone. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold blue
+      stone. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hard goes blue pan right, no
       cut, locked identity. Last frames hold blue stone.
@@ -1244,9 +1248,9 @@ shots:
     end_state: quiet hull
     ltx_i2v: |
       The start image holds as the first frame. One last drip water tick, creak The camera
-      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold quiet hull. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold quiet
+      hull. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. One last drip pan right, no cut,
       locked identity. Last frames hold quiet hull.
@@ -1263,9 +1267,9 @@ shots:
     end_state: still bow
     ltx_i2v: |
       The start image holds as the first frame. The camera holds cloth, hull knock The camera
-      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold still bow. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold still bow.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The camera holds pan right, no cut,
       locked identity. Last frames hold still bow.
@@ -1282,9 +1286,9 @@ shots:
     end_state: empty thwart
     ltx_i2v: |
       The start image holds as the first frame. No one in frame but the skiff wind, water tick
-      The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold empty thwart. No
-      music and no score.
+      The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff
+      bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames
+      hold empty thwart. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. No one in frame but the skiff fixed
       camera, no cut, locked identity. Last frames hold empty thwart.
@@ -1301,9 +1305,9 @@ shots:
     end_state: dark ribbon
     ltx_i2v: |
       The start image holds as the first frame. The cut is a dark ribbon splash, grit The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold dark ribbon. No music and
-      no score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      dark ribbon. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The cut is a dark ribbon fixed
       camera, no cut, locked identity. Last frames hold dark ribbon.
@@ -1320,9 +1324,9 @@ shots:
     end_state: warm wood
     ltx_i2v: |
       The start image holds as the first frame. The bow is the only warm wood wood creak,
-      cloth The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
-      lower third, wet thwart grain sharp, empty of lettering. Last frames hold warm wood. No
-      music and no score.
+      cloth The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold warm wood. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow is the only warm wood fixed
       camera, no cut, locked identity. Last frames hold warm wood.
@@ -1339,9 +1343,9 @@ shots:
     end_state: wet grain
     ltx_i2v: |
       The start image holds as the first frame. Grain of the thwart in close cloth, hull tick
-      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold wet grain. No music
-      and no score.
+      The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold wet
+      grain. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Grain of the thwart in close dolly
       out, no cut, locked identity. Last frames hold wet grain.
@@ -1358,9 +1362,9 @@ shots:
     end_state: scratch
     ltx_i2v: |
       The start image holds as the first frame. A hairline scratch, unmarked grit, water tick
-      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold scratch. No music
-      and no score.
+      The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      scratch. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A hairline scratch, unmarked dolly
       out, no cut, locked identity. Last frames hold scratch.
@@ -1377,9 +1381,9 @@ shots:
     end_state: scratch and coil
     ltx_i2v: |
       The start image holds as the first frame. The camera holds the scratch wind, creak The
-      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold scratch and coil. No music
-      and no score.
+      camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold scratch
+      and coil. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The camera holds the scratch dolly
       out, no cut, locked identity. Last frames hold scratch and coil.
@@ -1396,9 +1400,9 @@ shots:
     end_state: coil
     ltx_i2v: |
       The start image holds as the first frame. The blank painter coil fills the frame cloth,
-      rope ticks The camera tracks forward, no cut. The weathered unmarked skiff bow stays in
-      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold coil. No
-      music and no score.
+      rope ticks The camera tracks forward on a locked support, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold coil. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The blank painter coil fills the
       frame tracking, no cut, locked identity. Last frames hold coil.
@@ -1415,9 +1419,9 @@ shots:
     end_state: drip
     ltx_i2v: |
       The start image holds as the first frame. A drip from the coil water tick, splash The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold drip. No music and
-      no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      drip. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A drip from the coil tracking, no
       cut, locked identity. Last frames hold drip.
@@ -1434,9 +1438,9 @@ shots:
     end_state: stone splash
     ltx_i2v: |
       The start image holds as the first frame. The drip hits stone grit, metal click The
-      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold stone splash. No
-      music and no score.
+      camera tracks forward on a locked support, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      stone splash. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The drip hits stone tracking, no
       cut, locked identity. Last frames hold stone splash.
@@ -1453,9 +1457,9 @@ shots:
     end_state: quiet stone
     ltx_i2v: |
       The start image holds as the first frame. The splash dies water tick, wind The camera
-      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold quiet stone. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold quiet stone. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The splash dies dolly in, no cut,
       locked identity. Last frames hold quiet stone.
@@ -1472,9 +1476,9 @@ shots:
     end_state: empty hard
     ltx_i2v: |
       The start image holds as the first frame. The hard is empty grit, cloth The camera
-      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold empty hard. No music and no
-      score.
+      dollies in on silent dolly wheels, tightening without zooming, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold empty hard. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The hard is empty dolly in, no cut,
       locked identity. Last frames hold empty hard.
@@ -1491,9 +1495,9 @@ shots:
     end_state: dark shape
     ltx_i2v: |
       The start image holds as the first frame. The skiff is a dark shape hull knock, creak
-      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold dark shape. No music
-      and no score.
+      The camera dollies in on silent dolly wheels, tightening without zooming, no cut. The
+      weathered unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of
+      lettering. Last frames hold dark shape. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The skiff is a dark shape dolly in,
       no cut, locked identity. Last frames hold dark shape.
@@ -1510,8 +1514,9 @@ shots:
     end_state: black water
     ltx_i2v: |
       The start image holds as the first frame. Night takes the cut wind, splash The camera
-      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold black water. No music and no score.
+      pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold black water.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Night takes the cut pan left, no
       cut, locked identity. Last frames hold black water.
@@ -1528,9 +1533,9 @@ shots:
     end_state: silhouette
     ltx_i2v: |
       The start image holds as the first frame. The bow is a silhouette hull tick, cloth The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold silhouette. No music and no
-      score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      silhouette. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The bow is a silhouette pan left, no
       cut, locked identity. Last frames hold silhouette.
@@ -1547,8 +1552,9 @@ shots:
     end_state: silence
     ltx_i2v: |
       The start image holds as the first frame. A last hull knock wood creak, water tick The
-      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold silence. No music and no score.
+      camera pans left on a locked tripod head, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      silence. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A last hull knock pan left, no cut,
       locked identity. Last frames hold silence.
@@ -1565,9 +1571,9 @@ shots:
     end_state: waiting bow
     ltx_i2v: |
       The start image holds as the first frame. The unmarked skiff waits wind, cloth The
-      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold waiting bow. No music and
-      no score.
+      camera pans right on a locked tripod head, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      waiting bow. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The unmarked skiff waits pan right,
       no cut, locked identity. Last frames hold waiting bow.
@@ -1584,9 +1590,9 @@ shots:
     end_state: still coil
     ltx_i2v: |
       The start image holds as the first frame. No oar, no voice water tick, grit The camera
-      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
-      thwart grain sharp, empty of lettering. Last frames hold still coil. No music and no
-      score.
+      pans right on a locked tripod head, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold still
+      coil. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. No oar, no voice pan right, no cut,
       locked identity. Last frames hold still coil.
@@ -1603,9 +1609,9 @@ shots:
     end_state: still frame
     ltx_i2v: |
       The start image holds as the first frame. The camera holds until the frame is still hull
-      knock, creak The camera pans right, no cut. The weathered unmarked skiff bow stays in
-      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold still
-      frame. No music and no score.
+      knock, creak The camera pans right on a locked tripod head, no cut. The weathered
+      unmarked skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering.
+      Last frames hold still frame. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The camera holds until the frame is
       still pan right, no cut, locked identity. Last frames hold still frame.
@@ -1622,9 +1628,9 @@ shots:
     end_state: night plate
     ltx_i2v: |
       The start image holds as the first frame. Dawn is gone; the plate is night wind, water
-      tick The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold night plate. No
-      music and no score.
+      tick The camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked
+      skiff bow stays in the lower third, wet thwart grain sharp, empty of lettering. Last
+      frames hold night plate. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. Dawn is gone; the plate is night
       fixed camera, no cut, locked identity. Last frames hold night plate.
@@ -1641,9 +1647,9 @@ shots:
     end_state: glint
     ltx_i2v: |
       The start image holds as the first frame. The ring glints once metal click, cloth The
-      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
-      wet thwart grain sharp, empty of lettering. Last frames hold glint. No music and no
-      score.
+      camera holds a locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      glint. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The ring glints once fixed camera,
       no cut, locked identity. Last frames hold glint.
@@ -1659,9 +1665,10 @@ shots:
     audio_world: "grit, splash"
     end_state: dark ring
     ltx_i2v: |
-      The start image holds as the first frame. The glint dies grit, splash The camera stays
-      fixed, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
-      grain sharp, empty of lettering. Last frames hold dark ring. No music and no score.
+      The start image holds as the first frame. The glint dies grit, splash The camera holds a
+      locked-off tripod, zero drift, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold dark ring. No
+      music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The glint dies fixed camera, no cut,
       locked identity. Last frames hold dark ring.
@@ -1678,9 +1685,9 @@ shots:
     end_state: night bow
     ltx_i2v: |
       The start image holds as the first frame. The weathered unmarked bow in night hull tick,
-      wind The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold night bow. No music
-      and no score.
+      wind The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      night bow. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The weathered unmarked bow in night
       dolly out, no cut, locked identity. Last frames hold night bow.
@@ -1697,9 +1704,9 @@ shots:
     end_state: grain
     ltx_i2v: |
       The start image holds as the first frame. A final hold on wet grain cloth, water tick
-      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold grain. No music and
-      no score.
+      The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold grain.
+      No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. A final hold on wet grain dolly out,
       no cut, locked identity. Last frames hold grain.
@@ -1716,9 +1723,9 @@ shots:
     end_state: held bow
     ltx_i2v: |
       The start image holds as the first frame. The frame holds and does not cut wood creak,
-      grit The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
-      third, wet thwart grain sharp, empty of lettering. Last frames hold held bow. No music
-      and no score.
+      grit The camera dollies out on silent wheels, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      held bow. No music and no score.
     wan_i2v: |
       Third-person unmarked skiff bow in the lower third. The frame holds and does not cut
       dolly out, no cut, locked identity. Last frames hold held bow.

@@ -771,7 +771,7 @@ Lazy motion sentence.
 **This graph:** `An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-…`
 
 ```text
-An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. The camera dollies in slowly toward the wizard over five seconds. Photoreal, physically plausible light, natural materials, 24mm, YouTube 16:9.
+An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Rake amber sidelight along fabric and terrace grit, golden-hour amber rims. 24mm-equivalent wide. The camera dollies in slowly toward the wizard over five seconds. Photoreal, YouTube 16:9. No audio.
 ```
 
 #### `enhance`

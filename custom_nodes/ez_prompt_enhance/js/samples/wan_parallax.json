@@ -2,7 +2,7 @@
   {
     "id": "lab-parallax",
     "label": "Lab parallax",
-    "prompt": "Locked camera with a slight lateral slide so near objects drift against the far plane. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+    "prompt": "Locked camera, fixed camera with a slight lateral slide so near objects drift against the far plane. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
   },
   {
     "id": "slide-right",

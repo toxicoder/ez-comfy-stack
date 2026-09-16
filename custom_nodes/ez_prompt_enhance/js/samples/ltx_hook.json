@@ -2,7 +2,7 @@
   {
     "id": "cold-open",
     "label": "Cold open",
-    "prompt": "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score."
+    "prompt": "A five-second AV cold open. Camera snap-zooms to the start-image subject with fast present-tense energy, then holds. World SFX matching the start image. Unmarked surfaces. No music and no score."
   },
   {
     "id": "snap-in",

@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
+        "A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
       ],
       "title": "Positive"
     },
@@ -441,7 +441,7 @@
       },
       "widgets_values": [
         "custom",
-        "A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
+        "A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
         false,
         "identity",
         "YouTube 16:9 still",
@@ -542,7 +542,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## glasshouse (storm glasshouse \u00b7 Nave of glass)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film glasshouse --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Aisle | Palms left and right | The can pours again | Thunder is only rain louder |\n| 2 | Loud roof | The glass drums | A puddle races the flagstone | The can waits |\n| 3 | Wait | Storm light, green | A fern against the can | The fern drips on copper |\n| 4 | Drip on can | Copper darkens | A pour at the far bench | The bench is wet wood |\n| 5 | Wet wood | Pots in a row, unmarked | One pot overflows | The overflow runs to stone |\n| 6 | Runnel | The runnel finds the aisle | A walk with the can | The door at the end is glass |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## glasshouse (storm glasshouse \u00b7 Nave of glass)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film glasshouse --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person still inside a botanical glasshouse. An unmarked copper watering can sits on wet flagstone, rain already ticking the glass roof, unmarked palms and ferns, no readable signs. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Aisle | Palms left and right | The can pours again | Thunder is only rain louder |\n| 2 | Loud roof | The glass drums | A puddle races the flagstone | The can waits |\n| 3 | Wait | Storm light, green | A fern against the can | The fern drips on copper |\n| 4 | Drip on can | Copper darkens | A pour at the far bench | The bench is wet wood |\n| 5 | Wet wood | Pots in a row, unmarked | One pot overflows | The overflow runs to stone |\n| 6 | Runnel | The runnel finds the aisle | A walk with the can | The door at the end is glass |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "glasshouse 90s shot map"
     },

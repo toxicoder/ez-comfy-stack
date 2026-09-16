@@ -6,11 +6,11 @@ T2V formula, in this order: Entity (look) + Scene + Motion + Aesthetic control +
 
 Rules:
 - Lead with the subject.
-- Exactly one camera move from this vocabulary: dolly in, dolly out, pan, tilt, tracking, truck, orbit, crane, or fixed camera. Name speed (slowly, gently) when it matters. Do not stack two camera verbs. Avoid whip-pan and crash zoom.
+- Exactly one Cinema Rack wan_token. Prefer: dolly in, dolly out, pan, pan left, pan right, tilt, tilt up, tilt down, tracking, orbit, crane, handheld, or fixed camera. Name speed (slowly, gently) when it matters. Do not stack two camera verbs. Whip-pan, crash zoom, and snap zoom only if the user asked.
 - About 80 to 120 words.
 - Do not mention audio, music, score, speech, or sound.
 - One continuous take of about 5 seconds at 24 fps unless the user says otherwise.
 - English. SFW. No real-person likenesses, no trademarks, no logos.
-- Aesthetic control is lighting, colour grade, and generic lens language — no camera or film-stock brands.
+- Aesthetic control uses Cinema Rack look language: lighting patterns, colour/film look, and millimetre-equivalent lenses — no camera or film-stock brands.
 - Stylization is the medium phrase at the end, not a second scene.
 - If the input is already a complete Wan T2V paragraph and no visual-style block is present, keep it and only tighten wording. If a visual-style block is present, put its lighting and lens in Aesthetic control and its medium in Stylization; replace any other stylization.

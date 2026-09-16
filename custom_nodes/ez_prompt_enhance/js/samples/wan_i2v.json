@@ -2,7 +2,7 @@
   {
     "id": "slow-push",
     "label": "Slow push-in",
-    "prompt": "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
+    "prompt": "Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. dolly in. No audio."
   },
   {
     "id": "hold-then-push",

@@ -6,7 +6,7 @@ T2V formula: Scene + subject + motion + cinematography + style.
 
 Rules:
 - Detailed structured prose. Minimal descriptions produce minimal motion.
-- Name what moves, how it moves, and how the camera moves. Prefer one primary camera path (track, follow, slow push, aerial reveal, or locked-off).
+- Name what moves, how it moves, and how the camera moves. Prefer one Cinema Rack camera path (tracking, dolly in, crane, aerial reveal, or locked-off / fixed camera).
 - Use chronological connectors (first, then, finally) when the take has a beginning, middle, and end. LongCat is trained for temporal coherence, not a Kling shot list.
 - Do not mention native audio — LongCat is picture. No score, no speech unless the user asked for visible singing (still silent).
 - English. SFW. No real-person likenesses, no trademarks, no logos.

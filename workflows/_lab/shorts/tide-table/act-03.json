@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
+        "A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens."
       ],
       "title": "Positive"
     },
@@ -441,7 +441,7 @@
       },
       "widgets_values": [
         "custom",
-        "A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
+        "A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.",
         false,
         "identity",
         "YouTube 16:9 still",
@@ -542,7 +542,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## tide-table (dawn skiff \u00b7 Fog and spit)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film tide-table --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Lane | Piles return as pale marks | The pile slides past | The cut narrows |\n| 2 | Piles | The hard is a grey bar ahead | The bow aims at the ring | The hull kisses stone |\n| 3 | Tie | Hands take the painter | The hitch is made | The thwart holds still |\n| 4 | Quiet | The skiff rests against stone | A last look down the cut | Hands leave the thwart |\n| 5 | Hold | The unmarked bow sits in first real sun | Steam lifts off wet wood | The camera holds the bow |\n| 6 | Still water | Ripples die against stone | A gull-less empty sky | The bow and the hard together |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## tide-table (dawn skiff \u00b7 Fog and spit)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film tide-table --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the lower third, wet grain and a blank painter coil on the thwart, looking out from a stone hard toward a cut of unmarked piles and grey-pink water. Match a standing eyeline. 35mm-equivalent classic, framed for YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Lane | Piles return as pale marks | The pile slides past | The cut narrows |\n| 2 | Piles | The hard is a grey bar ahead | The bow aims at the ring | The hull kisses stone |\n| 3 | Tie | Hands take the painter | The hitch is made | The thwart holds still |\n| 4 | Quiet | The skiff rests against stone | A last look down the cut | Hands leave the thwart |\n| 5 | Hold | The unmarked bow sits in first real sun | Steam lifts off wet wood | The camera holds the bow |\n| 6 | Still water | Ripples die against stone | A gull-less empty sky | The bow and the hard together |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "tide-table 90s shot map"
     },

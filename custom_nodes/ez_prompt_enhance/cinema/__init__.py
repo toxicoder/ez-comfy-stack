@@ -728,3 +728,197 @@ def validate_id(value: str) -> bool:
         Whether the id is legal.
     """
     return bool(_ID_RE.fullmatch(value or ""))
+
+
+def wan_camera_tokens() -> tuple[str, ...]:
+    """Unique Wan camera tokens from the camera-movement axis.
+
+    Returns:
+        Tokens in first-seen catalog order. Empty when the axis is missing.
+    """
+    try:
+        rows = load_axis("camera_movement")
+    except KeyError:
+        return ()
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for row in rows:
+        token = str(row.get("wan_token") or "").strip()
+        if not token or token in seen:
+            continue
+        seen.add(token)
+        ordered.append(token)
+    return tuple(ordered)
+
+
+def recipe_axis_exemplars() -> dict[str, dict[str, Any]]:
+    """First recipe fill per axis (recipe file order).
+
+    Returns:
+        Axis id to technique dict. Axes the recipes never fill are omitted.
+    """
+    out: dict[str, dict[str, Any]] = {}
+    for recipe in load_recipes().values():
+        axes = recipe.get("axes") or {}
+        if not isinstance(axes, dict):
+            continue
+        for axis_id, raw_id in axes.items():
+            key = str(axis_id or "").strip()
+            if not key or key in out:
+                continue
+            entry = technique(str(raw_id or "").strip())
+            if entry is None:
+                continue
+            out[key] = entry
+    return out
+
+
+def _clip_clause(text: str, limit: int = 18) -> str:
+    """Keep an exemplar clause short enough for the 4B context.
+
+    Args:
+        text: Catalog clause.
+        limit: Maximum word count.
+
+    Returns:
+        Original text, or a truncated clause ending in an ellipsis.
+    """
+    cleaned = _collapse_spaces(text)
+    words = cleaned.split()
+    if len(words) <= limit:
+        return cleaned
+    return " ".join(words[:limit]).rstrip(".,;:") + "…"
+
+
+def addendum_kind(system_name: str = "", mode: str = "") -> str:
+    """Classify a Prompt Enhance stem/mode for the cinema addendum.
+
+    Args:
+        system_name: Prompt file stem (``klein_t2i``, ``negative_wan``, …).
+        mode: Optional node mode (``i2v``, ``iclora``, …).
+
+    Returns:
+        One of ``skip``, ``negative``, ``identity``, ``iclora``, ``i2v``,
+        ``wan``, ``ltx``, or ``still``.
+    """
+    name = (system_name or "").strip().lower()
+    mode_key = (mode or "").strip().lower()
+    if name.startswith("ace_"):
+        return "skip"
+    if name.startswith("negative"):
+        return "negative"
+    if "identity" in name:
+        return "identity"
+    if "iclora" in name or mode_key == "iclora":
+        return "iclora"
+    i2v_modes = {"i2v", "flf", "vace", "s2v", "vc"}
+    i2v_stems = ("_i2v", "_flf", "_vace", "_s2v", "_vc")
+    if mode_key in i2v_modes or any(tag in name for tag in i2v_stems) or name.startswith(
+        "dreamx"
+    ):
+        return "i2v"
+    if name.startswith("wan") or name.startswith("longcat"):
+        return "wan"
+    if name.startswith("ltx"):
+        return "ltx"
+    return "still"
+
+
+def cinema_language_addendum(system_name: str = "", mode: str = "") -> str:
+    """Compact Cinema Rack language block for Prompt Enhance.
+
+    Generated from live catalogs so labels, recipes, and Wan tokens cannot
+    drift. Exemplar clauses are truncated. ACE stems return empty.
+
+    Args:
+        system_name: Prompt file stem.
+        mode: Optional node mode.
+
+    Returns:
+        Addendum text, or empty for ACE.
+    """
+    kind = addendum_kind(system_name, mode)
+    if kind == "skip":
+        return ""
+    axes = load_axes()
+    labels = [str(axes[aid].get("label") or aid) for aid in axis_ids() if aid in axes]
+    recipe_labels = [
+        str(row.get("label") or row.get("id") or "").strip()
+        for row in load_recipes().values()
+    ]
+    recipe_labels = [item for item in recipe_labels if item]
+    lines = [
+        "Cinema Rack language (professional cinematography; no camera or film-stock brands):",
+        "Axes in splice order: " + "; ".join(labels) + ".",
+        (
+            "Write at most one idea per axis. Prefer catalog labels and clause "
+            "style: concrete physical action of light, lens, and support — not "
+            "tag soup such as cinematic, 8k, dramatic lighting."
+        ),
+        (
+            "When the user's intent matches a named recipe, use that package's "
+            "language adapted to their inventory. Never import a second location, "
+            "prop, or wardrobe from a recipe."
+        ),
+    ]
+    if recipe_labels:
+        lines.append("Recipes: " + "; ".join(recipe_labels) + ".")
+    exemplars = recipe_axis_exemplars()
+    example_lines: list[str] = []
+    for axis_id in axis_ids():
+        entry = exemplars.get(axis_id)
+        if entry is None:
+            continue
+        axis_label = str((axes.get(axis_id) or {}).get("label") or axis_id)
+        clause = _clip_clause(str(entry.get("clause") or ""))
+        if not clause:
+            continue
+        example_lines.append(f"- {axis_label}: {clause}")
+    if example_lines:
+        lines.append("Example clauses (adapt; do not copy scenery):")
+        lines.extend(example_lines)
+    if kind == "identity":
+        lines.append(
+            "Identity bible: lighting, color, weather, and genre only. No lens, "
+            "shot scale, camera move, or aspect unless the user named it."
+        )
+    elif kind == "iclora":
+        lines.append(
+            "IC-LoRA: look, materials, light, and atmosphere. The guide owns "
+            "blocking and camera path. Do not name depth, canny, or pose."
+        )
+    elif kind == "i2v":
+        lines.append(
+            "I2V / continuation: the start image owns look. Name motion and one "
+            "camera only. Do not restate clothing, architecture, or palette."
+        )
+    elif kind == "wan":
+        lines.append(
+            "Wan T2V: entity, scene, motion, aesthetic look axes, then exactly "
+            "one camera token. Silent — do not mention audio."
+        )
+    elif kind == "ltx":
+        lines.append(
+            "LTX: present tense. Interleave weather and optical audio with the "
+            "action. Named cuts in prose (hard cut, match cut) only if the user asked."
+        )
+    elif kind == "negative":
+        lines.append(
+            "Do not negate a named cinema technique that appears in the positive "
+            "(Rembrandt, dolly in, bleach-bypass, match cut, and other catalog labels)."
+        )
+    else:
+        lines.append(
+            "Stills: subject, then shot size, angle, lens, composition, lighting, "
+            "color, weather, genre. Freeze motion axes as locked mid-move. "
+            "Editing omitted on stills."
+        )
+    if kind in {"wan", "i2v"}:
+        tokens = wan_camera_tokens()
+        if tokens:
+            lines.append(
+                "Wan camera tokens (exactly one): "
+                + ", ".join(tokens)
+                + ". Whip-pan, crash zoom, and snap zoom only if the user asked."
+            )
+    return "\n".join(lines)

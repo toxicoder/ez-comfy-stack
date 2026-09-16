@@ -572,7 +572,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 ```
 
 #### `enhance`

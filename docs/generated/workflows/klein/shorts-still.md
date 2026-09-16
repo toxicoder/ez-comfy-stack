@@ -562,7 +562,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A photoreal still vertical still for Shorts. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical rooftop te…`
 
 ```text
-A photoreal still vertical still for Shorts. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Shot on a 35mm lens, framed for 9:16 with headroom for captions.
+A photoreal still vertical still for Shorts. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for 9:16 with headroom for captions.
 ```
 
 #### `enhance`

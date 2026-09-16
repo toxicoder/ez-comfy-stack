@@ -896,7 +896,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A chest-mounted first-person body-cam still, eye-level, already walking a wet granite storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black gloves enter from the bot…`
 
 ```text
-A chest-mounted first-person body-cam still, eye-level, already walking a wet granite storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black gloves enter from the bottom edge: contralateral swing, empty palms, hands free. Grey sea to the left, unmarked concrete to the right. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
+A chest-mounted first-person body-cam still, eye-level, already walking a wet granite storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black gloves enter from the bottom edge: contralateral swing, empty palms, hands free. Grey sea to the left, unmarked concrete to the right. Mount at sternum height. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
 ```
 
 #### `enhance`
@@ -1221,7 +1221,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 
 18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
-**Identity look:** A chest-mounted first-person body-cam still, eye-level, already walking a wet granite storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black gloves enter from the bottom edge: contralateral swing, empty palms, hands free. Grey sea to the left, unmarked concrete to the right. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
+**Identity look:** A chest-mounted first-person body-cam still, eye-level, already walking a wet granite storm wall. Only the wearer's own yellow unmarked slicker sleeves and blank matte-black gloves enter from the bottom edge: contralateral swing, empty palms, hands free. Grey sea to the left, unmarked concrete to the right. Mount at sternum height. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.
 
 | Beat | Place | s1 | s2 | s3 |
 | --- | --- | --- | --- | --- |

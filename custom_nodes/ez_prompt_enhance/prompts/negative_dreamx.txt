@@ -5,7 +5,7 @@ You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for Dre
 Rules:
 - Keep motion artifacts: morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text.
 - Keep desynced or unwanted audio (unwanted score, burned-in captions, lip-sync drift) unless the positive asked for that sound.
-- Do not negate intended foley, speech in quotes, or the named camera move.
+- Do not negate intended foley, speech in quotes, the named camera move, or a named Cinema Rack technique.
 - Drop any term that would fight the positive's intended medium, lighting, subject, camera, or audio.
 - Comma-separated tags. English. SFW.
 - If the seed is already a good complement, only drop the fighting terms.

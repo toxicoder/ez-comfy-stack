@@ -891,7 +891,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a …`
 
 ```text
-A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.
+A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for YouTube 16:9.
 ```
 
 #### `enhance`
@@ -1216,7 +1216,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 
 18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
-**Identity look:** A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Eye-level on a 35mm lens, framed for YouTube 16:9.
+**Identity look:** A photoreal third-person household morning still. One cream ceramic mug with a hairline chip on the rim sits on a honey-oak table in first light. White subway tile backsplash, one linen curtain at a single window. Unmarked kitchen, empty of lettering. The mug is sharp in the foreground. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for YouTube 16:9.
 
 | Beat | Place | s1 | s2 | s3 |
 | --- | --- | --- | --- | --- |

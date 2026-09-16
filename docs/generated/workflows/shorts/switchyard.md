@@ -888,10 +888,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Ey…`
+**This graph:** `A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Ma…`
 
 ```text
-A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
+A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
 ```
 
 #### `enhance`
@@ -1216,7 +1216,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 
 18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
-**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
+**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.
 
 | Beat | Place | s1 | s2 | s3 |
 | --- | --- | --- | --- | --- |

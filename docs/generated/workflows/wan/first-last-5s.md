@@ -310,7 +310,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or …` |
+| Motion / prompt | `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or…` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `Wan22ImageToVideoLatent` — Wan 2.2 Image to Video Latent
@@ -756,10 +756,10 @@ Lazy motion sentence.
 
 **How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
 
-**This graph:** `Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One …`
+**This graph:** `Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One…`
 
 ```text
-Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.
+Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. dolly in. No audio.
 ```
 
 #### `enhance`
@@ -780,7 +780,7 @@ System flavor.
 
 **How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace / s2v for those opt-in graphs.
 
-**This graph:** `flf`
+**This graph:** `i2v`
 
 **Other choices**
 

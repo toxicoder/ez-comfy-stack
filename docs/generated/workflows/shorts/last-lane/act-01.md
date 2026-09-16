@@ -895,7 +895,7 @@ Lazy sentence or authored still prompt.
 **This graph:** `A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel an…`
 
 ```text
-A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level 24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens.
+A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean unmarked lens.
 ```
 
 #### `enhance`
@@ -1220,7 +1220,7 @@ Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame c
 
 18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.
 
-**Identity look:** A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Eye-level 24mm lens, framed for YouTube 16:9, mild film grain, clean unmarked lens.
+**Identity look:** A dashboard first-person still at night on an unmarked two-lane. Dusty cracked dash, blank matte-black gloves on an unmarked wheel along the bottom edge, empty palms, headlight cone on pale gravel and sage. No vehicle badges, empty of lettering. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9, mild film grain, clean unmarked lens.
 
 | Beat | Place | s1 | s2 | s3 |
 | --- | --- | --- | --- | --- |

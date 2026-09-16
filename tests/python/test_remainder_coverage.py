@@ -1703,6 +1703,9 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
         else:
             sys.modules.pop("ez_common", None)
     assert client.with_style_system("sys", "none") == "sys"
+    assert client.with_cinema_system("sys", "ace_lyrics") == "sys"
+    cinema_sys = client.with_cinema_system("sys", "klein_t2i")
+    assert "Cinema Rack" in cinema_sys
     monkeypatch.setenv("EZ_LLM_N_THREADS", "nope")
     assert client._n_threads() == client.DEFAULT_N_THREADS
     monkeypatch.setenv("EZ_LLM_N_THREADS", "0")

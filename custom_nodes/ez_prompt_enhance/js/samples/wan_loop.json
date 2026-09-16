@@ -2,7 +2,7 @@
   {
     "id": "breeze-cycle",
     "label": "Breeze cycle",
-    "prompt": "Locked camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+    "prompt": "Locked camera, fixed camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
   },
   {
     "id": "leaves-cycle",

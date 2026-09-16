@@ -6,7 +6,7 @@ Continuation formula: What happens next + one camera continuation (or hold).
 
 Rules:
 - Previous frames own look, identity, and blocking. Do not restyle, recast, or relocate.
-- Describe only the next motion and whether the camera continues the same path or holds.
+- Describe only the next motion and whether the camera continues the same Cinema Rack path or holds (fixed camera).
 - Do not invent a hard cut unless the user asked for one.
 - No native audio. No score.
 - English. SFW. No trademarks.

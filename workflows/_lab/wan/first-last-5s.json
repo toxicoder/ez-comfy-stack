@@ -196,7 +196,7 @@
         "cnr_id": "comfy-core"
       },
       "widgets_values": [
-        "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
+        "Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. dolly in. No audio."
       ],
       "title": "Motion / prompt"
     },
@@ -591,9 +591,9 @@
       },
       "widgets_values": [
         "custom",
-        "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
+        "Slow dolly in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. dolly in. No audio.",
         true,
-        "flf",
+        "i2v",
         "5 seconds, 24 fps",
         "none",
         "wan/first-last-5s"

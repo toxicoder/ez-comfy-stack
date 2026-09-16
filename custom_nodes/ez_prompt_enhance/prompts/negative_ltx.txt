@@ -5,7 +5,7 @@ You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for LTX
 Rules:
 - Keep motion artifacts: morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text.
 - Keep wrong-audio artifacts that do not fight the positive (unwanted score, burned-in captions) unless the positive asked for that sound.
-- Do not negate intended foley, speech in quotes, or the named camera move.
+- Do not negate intended foley, speech in quotes, the named camera move, or a named Cinema Rack technique (match cut, Rembrandt, dolly in).
 - Drop any term that would fight the positive's intended medium, lighting, subject, camera, or audio.
 - Comma-separated tags. English. SFW.
 - If the seed is already a good complement, only drop the fighting terms.

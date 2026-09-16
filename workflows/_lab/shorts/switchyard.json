@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+        "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
       ],
       "title": "Positive"
     },
@@ -442,7 +442,7 @@
       },
       "widgets_values": [
         "custom",
-        "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.",
+        "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.",
         false,
         "identity",
         "YouTube 16:9 still",
@@ -543,7 +543,7 @@
         "Node name for S&R": "MarkdownNote"
       },
       "widgets_values": [
-        "## switchyard (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## switchyard (night freight yard)\n\nQueue **once**. Klein identity still \u2192 18 \u00d7 5.00s LTX AV prints (last-frame continuity) \u2192 **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames = 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional host stitch: `./scripts/utilities/concat-shots.sh --film switchyard --yes`.\n\n18 \u00d7 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. Play/download: overlay, `ez_*_90s.html`, or studio-ui `/watch/<slug>`.\n\n**Identity look:** A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Match a standing eyeline. 24mm-equivalent wide, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.\n\n| Beat | Place | s1 | s2 | s3 |\n| --- | --- | --- | --- | --- |\n| 1 | Gravel walk | rain walk | puddles | stop between cars |\n| 2 | Between cars | gloves on rail | coupling clank | look up |\n| 3 | Ladder | climb | continue | roof edge |\n| 4 | Roof walk | along cars | distant horn | look down |\n| 5 | Drop to gravel | splash | window glow | keep walking |\n| 6 | Lamp hold | stop | look down the string | quiet laugh |\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "switchyard 90s shot map"
     },

@@ -107,6 +107,9 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "sentences" in klein.lower()
     assert "inventory" in klein.lower()
     assert "visual-style" in klein.lower()
+    assert "shot size" in klein.lower()
+    assert "cinema rack" in klein.lower()
+    assert "rembrandt" in klein.lower() or "golden hour" in klein.lower()
     edit = client.load_system_prompt("klein_edit")
     assert "identity" in edit.lower()
     assert "massing" in edit.lower() or "do not add" in edit.lower()
@@ -117,10 +120,13 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "80" in wan_t2v and "120" in wan_t2v
     assert "audio" in wan_t2v.lower()
     assert "visual-style" in wan_t2v.lower()
+    assert "cinema rack" in wan_t2v.lower()
+    assert "pan left" in wan_t2v.lower() or "wan_token" in wan_t2v.lower()
     wan_i2v = client.load_system_prompt("wan_i2v")
     assert "Motion + Camera" in wan_i2v
     assert "audio" in wan_i2v.lower()
     assert "new objects" in wan_i2v.lower()
+    assert "fixed camera" in wan_i2v.lower()
     ltx_t2v = client.load_system_prompt("ltx_t2v")
     assert "present" in ltx_t2v.lower()
     assert "quotation" in ltx_t2v.lower()
