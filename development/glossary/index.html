@@ -1288,6 +1288,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#nodes-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4462,6 +4473,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#nodes-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nodes 2.0
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#workflow" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -5392,7 +5414,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 00:05 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T00:05:41+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 00:43 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T00:43:41+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -5565,8 +5587,12 @@
 <p><strong>Also called:</strong> <code>asset-bible</code></p>
 <p><strong>See also:</strong> <a href="#klein">Klein 4B</a> · <a href="#ltx">LTX-2.5</a> · <a href="#trellis">TRELLIS.2</a></p>
 <h3 id="comfyui">ComfyUI<a class="headerlink" href="#comfyui" title="Permanent link">&para;</a></h3>
-<p>You operate the host with manage.sh; you <em>use</em> the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files live under <code>_lab/&lt;lane&gt;/</code> and copy into <code>user/default/workflows/</code> on start. App Mode graphs land as <code>*.app.json</code> so they appear under Apps as well as Workflows. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
-<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#widget">widget</a> · <a href="#workflow">workflow</a> · <a href="#manage-sh">manage.sh</a></p>
+<p>You operate the host with manage.sh; you <em>use</em> the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files live under <code>_lab/&lt;lane&gt;/</code> and copy into <code>user/default/workflows/</code> on start. App Mode graphs land as <code>*.app.json</code> so they appear under Apps as well as Workflows. The canvas defaults to Nodes 2.0. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#widget">widget</a> · <a href="#workflow">workflow</a> · <a href="#manage-sh">manage.sh</a> · <a href="#nodes-2">Nodes 2.0</a></p>
+<h3 id="nodes-2">Nodes 2.0<a class="headerlink" href="#nodes-2" title="Permanent link">&para;</a></h3>
+<p>Nodes 2.0 draws nodes as Vue DOM instead of LiteGraph canvas. Lab graphs stamp <code>extra.workflowRendererVersion</code> as <code>Vue-corrected</code> (canonical coordinates; do not stamp <code>Vue</code> or the frontend shrinks the layout). <code>start</code> seeds <code>Comfy.VueNodes.Enabled</code> when that key is absent. Toggle from the Comfy logo menu or Settings. See <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
+<p><strong>Also called:</strong> <code>Vue nodes</code></p>
+<p><strong>See also:</strong> <a href="#comfyui">ComfyUI</a> · <a href="#workflow">workflow</a> · <a href="#widget">widget</a></p>
 <h3 id="workflow">workflow<a class="headerlink" href="#workflow" title="Permanent link">&para;</a></h3>
 <p>Host files live under <code>workflows/_lab/&lt;lane&gt;/</code>. The entrypoint copies them into Comfy (<code>*.app.json</code> when App Mode is the default view). Do not edit raw JSON for daily use; type on the canvas. Every lab graph includes a Note node. See <a href="../studio-workflows/">Workflow catalog</a> and <a href="../create/workflows-stills/">Still workflows</a>.</p>
 <p><strong>Also called:</strong> <code>node graph</code>, <code>lab graph</code></p>
