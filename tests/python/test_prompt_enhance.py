@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import types
@@ -205,17 +206,82 @@ def test_system_prompts_encode_model_rules() -> None:
     )
 
 
-def test_style_catalog_is_fifty_unique() -> None:
+_ALLOWED_STYLE_FAMILIES = frozenset(
+    {"photography", "illustration", "animation_3d", "fine_art", "genre"}
+)
+_FIRST_FIFTY_STYLE_IDS = (
+    "photorealistic",
+    "cinematic_film_still",
+    "documentary_photography",
+    "analog_35mm_film",
+    "analog_120_medium_format",
+    "polaroid_instant",
+    "golden_hour_photography",
+    "overcast_natural_light",
+    "studio_product_photography",
+    "editorial_fashion_photography",
+    "street_photography",
+    "architectural_photography",
+    "anime",
+    "manga_screentone",
+    "cartoon",
+    "western_comic_book",
+    "saturday_morning_cartoon",
+    "storybook_illustration",
+    "watercolor_illustration",
+    "gouache_illustration",
+    "ink_and_wash",
+    "colored_pencil",
+    "charcoal_sketch",
+    "line_art",
+    "cel_shaded",
+    "risograph_print",
+    "3d_feature_animation",
+    "pixar_like_3d",
+    "claymation",
+    "stop_motion",
+    "unreal_engine_cinematic",
+    "isometric_3d",
+    "low_poly",
+    "voxel",
+    "oil_painting",
+    "impressionist_painting",
+    "cubist",
+    "art_nouveau",
+    "ukiyo_e_woodblock",
+    "baroque_oil",
+    "digital_matte_painting",
+    "concept_art",
+    "cyberpunk",
+    "solarpunk",
+    "film_noir",
+    "1970s_grain",
+    "vaporwave",
+    "pixel_art",
+    "papercraft",
+    "blueprint_technical_drawing",
+)
+
+
+def test_style_catalog_is_unique() -> None:
     styles = client.load_styles()
-    assert len(styles) == 50
-    assert len(set(styles)) == 50
+    assert len(styles) == 150
+    assert len(set(styles)) == 150
     assert "none" not in styles
     ids = client.style_ids()
     assert ids[0] == "none"
-    assert len(ids) == 51
+    assert len(ids) == 151
+    assert tuple(list(styles)[:50]) == _FIRST_FIFTY_STYLE_IDS
+    labels: list[str] = []
+    medium_heads: list[str] = []
+    suffixes: list[str] = []
     for sid, entry in styles.items():
-        assert entry["label"].strip()
-        assert entry["family"].strip()
+        assert re.fullmatch(r"[a-z0-9][a-z0-9_]*", sid), sid
+        label = str(entry["label"]).strip()
+        assert label, sid
+        labels.append(label.casefold())
+        family = str(entry["family"]).strip()
+        assert family in _ALLOWED_STYLE_FAMILIES, sid
         for field in _STYLE_WOVEN_FIELDS:
             blob = str(entry[field]).strip()
             assert blob, sid
@@ -223,6 +289,10 @@ def test_style_catalog_is_fifty_unique() -> None:
             assert "no photoreal" not in lower
             for brand in _BANNED_STYLE_BRANDS:
                 assert brand not in lower, f"{sid}.{field} has {brand}"
+        head = str(entry["medium"]).split(".")[0].strip()
+        assert len(head) >= 8, sid
+        medium_heads.append(head.casefold())
+        suffixes.append(str(entry["suffix"]).strip().casefold())
         must = entry["must_include"]
         conflicts = entry["conflicts"]
         assert isinstance(must, list) and len(must) >= 2, sid
@@ -232,6 +302,9 @@ def test_style_catalog_is_fifty_unique() -> None:
             lower = str(phrase).lower()
             for brand in _BANNED_STYLE_BRANDS:
                 assert brand not in lower, f"{sid} must_include has {brand}"
+    assert len(labels) == len(set(labels))
+    assert len(medium_heads) == len(set(medium_heads))
+    assert len(suffixes) == len(set(suffixes))
     assert client.style_llm_block("none") == ""
     assert client.format_style_instruction("none", "klein") == ""
     assert client.style_suffix("photorealistic")
@@ -1493,7 +1566,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert ltx.INPUT_TYPES()["required"]["enhance"][1]["label_off"] == "Off"
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
-    assert len(styles) == 51
+    assert len(styles) == 151
     off = klein.run("A techno wizard.", False, "t2i", "YouTube 16:9 still")
     assert off["result"] == ("A techno wizard.",)
     assert off["ui"]["text"][0] == "A techno wizard."
