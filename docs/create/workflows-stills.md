@@ -30,7 +30,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 | **klein/identity-sheet** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
 | **klein/character-draft** | Character still 1024×1280, style dropdown, prefix `ez_character` |
 | **klein/character-tweak** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
-| **klein/talking-head** | Klein still → LTX A2V freeze smoke. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+| **klein/talking-head** | Klein still → LTX I2V talking smoke. Real freeze: **ltx/a2v-5s**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 Lane B Klein stills (same occupancy **klein**):
 

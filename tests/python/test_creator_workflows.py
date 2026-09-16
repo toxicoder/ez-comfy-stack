@@ -44,6 +44,11 @@ CREATORS = (
     ("ltx/weather-broll", "ez_weather_video", True),
     ("ltx/interior-ambience", "ez_interior_video", True),
     ("ltx/hook-av", "ez_hook_video", True),
+    ("ltx/dialogue-5s", "ez_ltx_dialogue", True),
+    ("ltx/multishot-5s", "ez_ltx_multishot", True),
+    ("ltx/product-hero", "ez_ltx_product", True),
+    ("ltx/flf-5s", "ez_ltx_flf", True),
+    ("ltx/a2v-5s", "ez_ltx_a2v", True),
     ("audio/podcast/audio-first", "ez_podcast_ep", False),
     ("audio/podcast/radio-drama", "ez_radio_ep", False),
     ("audio/music/rap-draft", "ez_rap_draft", False),
@@ -78,7 +83,9 @@ def test_creator_toolkit_files_and_prefixes() -> None:
                 assert str(node["widgets_values"]["filename_prefix"]).startswith("ez_")
                 assert "preview" in (node.get("title") or "").lower()
         if any(n.get("type") == "LTXVSeparateAVLatent" for n in graph["nodes"]):
-            assert any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"]), stem
+            has_decode = any(n.get("type") == "LTXVAudioVAEDecode" for n in graph["nodes"])
+            has_load_audio = any(n.get("type") == "LoadAudio" for n in graph["nodes"])
+            assert has_decode or has_load_audio, stem
             for node in vhs:
                 audio = next(i for i in node["inputs"] if i.get("name") == "audio")
                 assert audio.get("link") is not None, stem

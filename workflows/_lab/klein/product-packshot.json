@@ -629,7 +629,9 @@
       "lane": "produce",
       "occupancy": "klein",
       "enhance_off_identity": false,
-      "handoff": []
+      "handoff": [
+        "ltx/product-hero"
+      ]
     },
     "linearData": {
       "inputs": [

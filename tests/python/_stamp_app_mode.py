@@ -277,6 +277,7 @@ WIDGET_ORDER = (
     "speed",
     "cfg_weight",
     "exaggeration",
+    "audio",
     "image",
     "seed",
     "width",
@@ -306,6 +307,7 @@ GENERIC_LABELS = {
     "enhance": "Rewrite prompt",
     "seed": "Seed",
     "image": "Start image",
+    "audio": "Audio file",
     "artist": "Artist",
     "album": "Album",
     "title": "Title",
@@ -362,6 +364,10 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     ),
     "seed": "Fix to iterate; randomize to explore.",
     "image": "Start frame or reference still. Only shown when the LoadImage is wired.",
+    "audio": (
+        "Wav/mp3 already in COMFY_OUTPUT_DIR/input (container /inputs). "
+        "~5 s. Original waveform is muxed into the MP4."
+    ),
     "artist": "Album artist written into FLAC/MP3 tags.",
     "album": "Album title written into FLAC/MP3 tags.",
     "title": "Track title written into FLAC/MP3 tags.",
@@ -440,6 +446,16 @@ def _image_output_linked(node: Mapping[str, Any]) -> bool:
     return False
 
 
+def _audio_output_linked(node: Mapping[str, Any]) -> bool:
+    for out in node.get("outputs") or []:
+        name = str(out.get("name") or "").upper()
+        if name in {"AUDIO", "AUDIO_OUTPUT"} and out.get("links"):
+            return True
+        if str(out.get("type") or "").upper() == "AUDIO" and out.get("links"):
+            return True
+    return False
+
+
 def _input_linked(node: Mapping[str, Any], name: str) -> bool:
     for inp in node.get("inputs") or []:
         if not isinstance(inp, dict):
@@ -475,6 +491,8 @@ def display_label(
     title = str(node.get("title") or "").strip()
     title_l = title.lower()
     if ntype == "LoadImage" and name == "image":
+        return title or generic
+    if ntype == "LoadAudio" and name == "audio":
         return title or generic
     if ntype == "PrimitiveNode" and name in {"value", "seconds"}:
         if name == "seconds" or "duration" in title_l:
@@ -786,9 +804,10 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "klein",
         "wan/i2v-5s",
         "ltx/i2v-5s",
+        "ltx/flf-5s",
     ),
     "klein/thumbnail": _spec("produce", "klein"),
-    "klein/product-packshot": _spec("produce", "klein"),
+    "klein/product-packshot": _spec("produce", "klein", "ltx/product-hero"),
     "klein/ig-square": _spec("produce", "klein"),
     "klein/og-blog": _spec("produce", "klein"),
     "klein/banner-wide": _spec("produce", "klein"),
@@ -805,7 +824,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan/i2v-5s",
         "ltx/hook-av",
     ),
-    "klein/talking-head": _spec("produce", "ltx"),
+    "klein/talking-head": _spec("produce", "ltx", "ltx/a2v-5s"),
     "wan/i2v-5s": _spec(
         "produce", "wan", "ltx/i2v-5s"
     ),
@@ -830,6 +849,11 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "ltx/broll-ambient": _spec("produce", "ltx"),
     "ltx/weather-broll": _spec("produce", "ltx"),
     "ltx/interior-ambience": _spec("produce", "ltx"),
+    "ltx/dialogue-5s": _spec("produce", "ltx"),
+    "ltx/multishot-5s": _spec("produce", "ltx"),
+    "ltx/product-hero": _spec("produce", "ltx"),
+    "ltx/flf-5s": _spec("produce", "ltx"),
+    "ltx/a2v-5s": _spec("produce", "ltx"),
     "shorts/go-see": _spec(
         "film",
         "film",
@@ -1184,6 +1208,9 @@ def _collect_raw_inputs(
                 continue
             if _node_always(node) and _image_output_linked(node):
                 raw.append((nid, "image", node))
+        elif ntype == "LoadAudio":
+            if _node_always(node) and _audio_output_linked(node):
+                raw.append((nid, "audio", node))
         elif ntype == "UNETLoader" and spec.get("expose_unet"):
             raw.append((nid, "unet_name", node))
         elif ntype == "EZDubIngest":

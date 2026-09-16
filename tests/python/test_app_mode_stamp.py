@@ -252,6 +252,18 @@ def test_wired_edit_and_i2v_keep_image() -> None:
     assert "image" in clay
 
 
+def test_ltx_showcase_app_widgets() -> None:
+    flf = _load("ltx/flf-5s.json")
+    names = _widget_names(flf)
+    labels = _labels(flf)
+    assert names.count("image") == 2
+    assert "First frame" in labels
+    assert "Last frame" in labels
+    a2v = _load("ltx/a2v-5s.json")
+    assert "audio" in _widget_names(a2v)
+    assert any("audio" in label.lower() for label in _labels(a2v))
+
+
 def test_i2v_hides_style_t2v_keeps_it() -> None:
     i2v = _widget_names(_load("wan/i2v-5s.json"))
     assert "style" not in i2v

@@ -631,7 +631,8 @@
       "enhance_off_identity": false,
       "handoff": [
         "wan/i2v-5s",
-        "ltx/i2v-5s"
+        "ltx/i2v-5s",
+        "ltx/flf-5s"
       ]
     },
     "linearData": {

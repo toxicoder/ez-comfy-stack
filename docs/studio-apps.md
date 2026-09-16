@@ -11,7 +11,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - How App Mode relates to the node graph
 - Apps sidebar (`.app.json`) vs Workflows
 - Where operator Apps persist (`_user/`, rescue from `_lab/`)
-- Creator widgets: Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage only)
+- Creator widgets: Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage / LoadAudio)
 - Occupancy (one GB10 job) — chip at the top of the widget list
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still → motion → AV)
@@ -41,7 +41,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets: **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets: **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/flf-5s** exposes **First frame** and **Last frame**. **ltx/a2v-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). Each input is `[nodeId, widgetName, config?]` with an **integer** node id. ComfyUI frontend **1.49.6+** (the v0.34.6 pin) upgrades that to a live `graphId:nodeId:name` WidgetId at load. Do **not** persist `"11:prompt"` two-part ids — the frontend treats a colon as a subgraph locator and drops the widget, leaving App view with Run and occupancy but no Prompt. The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
@@ -113,6 +113,11 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 | **wan/gif-loop** | wan | 49-frame ping-pong GIF |
 | **ltx/i2v-5s** | ltx | AV 5 s, 1280×704 |
 | **ltx/hook-av** | ltx | AV cold open |
+| **ltx/dialogue-5s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
+| **ltx/multishot-5s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
+| **ltx/product-hero** | ltx | Packshot I2V orbit. Prefix `ez_ltx_product` |
+| **ltx/flf-5s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
+| **ltx/a2v-5s** | ltx | Freeze a ~5 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **klein/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). Klein stills may use 1280×720; LTX feeders stay **1280×704**.
@@ -144,7 +149,9 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | From | To |
 | --- | --- |
-| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) |
+| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) or FLF (`ltx/flf-5s`) |
+| Product packshot | `ltx/product-hero` |
+| Talking-head still | `ltx/a2v-5s` (real freeze; two-stage stays Templates) |
 | Spark Still | Platform Pack (`klein-platform-pack`) → Silent 5s / Hook AV |
 | Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
