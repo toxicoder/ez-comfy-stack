@@ -84,5 +84,4 @@ jobs:
           cache-from: |
             type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy:buildcache-arm64
             type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy:us-safe-studio-development
-            type=gha,scope=ez-comfy-arm64
           cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy:buildcache-arm64,mode=max,image-manifest=true,oci-mediatypes=true,compression=zstd

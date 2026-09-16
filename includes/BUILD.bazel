@@ -1,0 +1,12 @@
+"""Package purpose: MkDocs includes (command builder + glossary JSON)."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "includes",
+    srcs = glob(
+        ["*"],
+        allow_empty = True,
+        exclude = ["BUILD.bazel"],
+    ),
+)

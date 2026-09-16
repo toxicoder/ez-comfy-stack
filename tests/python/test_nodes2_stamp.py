@@ -12,6 +12,7 @@ from _lab_paths import (
     WORKFLOW_RENDERER_VERSION,
     apply_lab_identity,
     lab_graph_paths,
+    load_lab_graph,
     stamp_nodes2,
 )
 
@@ -55,7 +56,7 @@ def test_apply_lab_identity_stamps_nodes2() -> None:
 
 @pytest.mark.parametrize("path", _graphs(), ids=lambda p: str(p.relative_to(ROOT)))
 def test_lab_graph_is_nodes2(path: Path) -> None:
-    graph = json.loads(path.read_text(encoding="utf-8"))
+    graph = load_lab_graph(path)
     extra = graph.get("extra") or {}
     assert graph.get("version") == 0.4, path
     assert extra.get("workflowRendererVersion") == "Vue-corrected", path

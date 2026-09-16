@@ -246,3 +246,240 @@ def test_seed_clay_discovers_pack_and_refuses_models_dir(
         hl.seed_clay_to_input_dir(models / "input")
     assert hl.default_layout_path() == SCHEMA_YAML
     assert hl._cli(["seed-inputs", str(models / "blocked")]) == 1
+
+
+def test_layout_validation_branches() -> None:
+    with pytest.raises(hl.HouseLayoutError, match="mapping"):
+        hl.validate_layout([])
+    layout = hl.load_layout(SCHEMA_YAML)
+    with pytest.raises(hl.HouseLayoutError, match="missing required"):
+        hl.validate_layout({"schema": hl.SCHEMA_LAYOUT, "id": "lab-penthouse"})
+    layout["schema"] = "nope"
+    with pytest.raises(hl.HouseLayoutError, match="schema"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["kind"] = "object"
+    with pytest.raises(hl.HouseLayoutError, match="kind must be set"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["pipeline"] = "klein-trellis2"
+    with pytest.raises(hl.HouseLayoutError, match="bpy-primitive"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"] = []
+    with pytest.raises(hl.HouseLayoutError, match="rooms"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"] = "sofa"
+    with pytest.raises(hl.HouseLayoutError, match="props"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["hdri"] = 1
+    with pytest.raises(hl.HouseLayoutError, match="hdri"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["id"] = "Not-Slug"
+    with pytest.raises(hl.HouseLayoutError, match="slug"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["junk"] = list(range(20))
+    with pytest.raises(hl.HouseLayoutError, match="packed numeric"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["note"] = "base64" + ("A" * 200)
+    with pytest.raises(hl.HouseLayoutError, match="embedded base64"):
+        hl.validate_layout(layout)
+
+
+def test_kind_dirs_monkeypatch(monkeypatch: pytest.MonkeyPatch) -> None:
+    layout = hl.load_layout(SCHEMA_YAML)
+    monkeypatch.setattr(hl, "KIND_DIRS", {})
+    with pytest.raises(hl.HouseLayoutError, match="unknown kind"):
+        hl.validate_layout(layout)
+
+
+def test_room_prop_camera_field_errors() -> None:
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0] = "foyer"
+    with pytest.raises(hl.HouseLayoutError, match="must be a mapping"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0] = {"id": "foyer"}
+    with pytest.raises(hl.HouseLayoutError, match="missing"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0]["openings"] = "north"
+    with pytest.raises(hl.HouseLayoutError, match="openings"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0]["openings"] = ["up"]
+    with pytest.raises(hl.HouseLayoutError, match="unknown wall"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0]["id"] = "Foyer"
+    with pytest.raises(hl.HouseLayoutError, match="lowercase"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["rooms"][0]["id"] = ""
+    with pytest.raises(hl.HouseLayoutError, match="hyphenated id"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"][0] = "sofa"
+    with pytest.raises(hl.HouseLayoutError, match="must be a mapping"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"][0] = {"id": "sofa"}
+    with pytest.raises(hl.HouseLayoutError, match="missing"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"][0]["ref"] = "Not-Slug"
+    with pytest.raises(hl.HouseLayoutError, match="slug"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"][0]["pose"] = [0, True, 1]
+    with pytest.raises(hl.HouseLayoutError, match="numeric"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["props"][0]["ref"] = "mug-cobalt-chipped"
+    ok = hl.validate_layout(layout)
+    assert ok["props"][0]["ref"] == "mug-cobalt-chipped"
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0] = "tower"
+    with pytest.raises(hl.HouseLayoutError, match="must be a mapping"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0] = {"id": "01-tower"}
+    with pytest.raises(hl.HouseLayoutError, match="missing"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0]["id"] = "02-foyer"
+    with pytest.raises(hl.HouseLayoutError, match="place_10"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0]["lens_mm"] = True
+    with pytest.raises(hl.HouseLayoutError, match="lens_mm"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0]["lens_mm"] = 50
+    with pytest.raises(hl.HouseLayoutError, match="24 or 35"):
+        hl.validate_layout(layout)
+    layout = hl.load_layout(SCHEMA_YAML)
+    layout["cameras"][0]["label"] = "  "
+    with pytest.raises(hl.HouseLayoutError, match="label"):
+        hl.validate_layout(layout)
+
+
+def test_views_validation_and_parse_errors(tmp_path: Path) -> None:
+    with pytest.raises(hl.HouseLayoutError, match="mapping"):
+        hl.validate_views([])
+    with pytest.raises(hl.HouseLayoutError, match="schema"):
+        hl.validate_views({"schema": "nope", "id": "lab-penthouse"})
+    with pytest.raises(hl.HouseLayoutError, match="engine"):
+        hl.validate_views(
+            {
+                "schema": hl.SCHEMA_VIEWS,
+                "id": "lab-penthouse",
+                "engine": "godot",
+                "size": [1024, 1280],
+                "cameras": list(hl.PLACE_10_IDS),
+                "layers": ["clay"],
+            }
+        )
+    with pytest.raises(hl.HouseLayoutError, match="size"):
+        hl.validate_views(
+            {
+                "schema": hl.SCHEMA_VIEWS,
+                "id": "lab-penthouse",
+                "engine": "blender",
+                "size": [1280, 704],
+                "cameras": list(hl.PLACE_10_IDS),
+                "layers": ["clay"],
+            }
+        )
+    with pytest.raises(hl.HouseLayoutError, match="cameras"):
+        hl.validate_views(
+            {
+                "schema": hl.SCHEMA_VIEWS,
+                "id": "lab-penthouse",
+                "engine": "blender",
+                "size": [1024, 1280],
+                "cameras": ["01-tower"],
+                "layers": ["clay"],
+            }
+        )
+    with pytest.raises(hl.HouseLayoutError, match="layers"):
+        hl.validate_views(
+            {
+                "schema": hl.SCHEMA_VIEWS,
+                "id": "lab-penthouse",
+                "engine": "blender",
+                "size": [1024, 1280],
+                "cameras": list(hl.PLACE_10_IDS),
+                "layers": [1],
+            }
+        )
+    tabs = tmp_path / "tabs.yaml"
+    tabs.write_text("schema:\tbad\n", encoding="utf-8")
+    with pytest.raises(hl.HouseLayoutError):
+        hl.load_layout(tabs)
+    with pytest.raises(hl.HouseLayoutError):
+        hl.load_views(tabs)
+    text = hl.dump_asset_yaml("lab-penthouse")
+    assert "kind: set" in text
+    assert "lab-penthouse" in text
+
+
+def test_validate_views_dir_edges(tmp_path: Path) -> None:
+    missing = tmp_path / "nope"
+    with pytest.raises(hl.HouseLayoutError, match="not a directory"):
+        hl.validate_views_dir(missing)
+    dest = tmp_path / "pack"
+    dest.mkdir()
+    with pytest.raises(hl.HouseLayoutError, match="missing"):
+        hl.validate_views_dir(dest, require_glb=False)
+    hl.write_fixture_pack(dest, slug="lab-penthouse")
+    with pytest.raises(hl.HouseLayoutError, match="missing mesh"):
+        hl.validate_views_dir(dest)
+    import shutil
+
+    shutil.copy(SCHEMA_YAML, dest / "layout.yaml")
+    views = hl.validate_views_dir(dest, require_glb=False)
+    assert views["id"] == "lab-penthouse"
+    (dest / "views" / "01-tower.png").unlink()
+    with pytest.raises(hl.HouseLayoutError, match="missing clay"):
+        hl.validate_views_dir(dest, require_glb=False)
+    hl.write_fixture_pack(dest, slug="lab-penthouse")
+    (dest / "depth" / "01-tower.png").unlink()
+    with pytest.raises(hl.HouseLayoutError, match="missing depth"):
+        hl.validate_views_dir(dest, require_glb=False)
+    hl.write_fixture_pack(dest, slug="lab-penthouse")
+    from guide_pack import write_solid_png
+
+    write_solid_png(dest / "depth" / "01-tower.png", 8, 8, (1, 1, 1))
+    with pytest.raises(hl.HouseLayoutError, match="depth"):
+        hl.validate_views_dir(dest, require_glb=False)
+    hl.write_fixture_pack(dest, slug="lab-penthouse")
+    write_solid_png(dest / "ez_house_clay_01.png", 8, 8, (1, 1, 1))
+    with pytest.raises(hl.HouseLayoutError, match="ez_house_clay_01"):
+        hl.validate_views_dir(dest, require_glb=False)
+    hl.write_fixture_pack(dest, slug="lab-penthouse")
+    with pytest.raises(hl.HouseLayoutError, match="input dir"):
+        hl.validate_views_dir(
+            dest, require_glb=False, input_dir=tmp_path / "missing-input"
+        )
+    inp = tmp_path / "input"
+    hl.copy_clay_to_input_dir(dest, inp)
+    write_solid_png(inp / "ez_house_clay_01.png", 8, 8, (1, 1, 1))
+    with pytest.raises(hl.HouseLayoutError, match="input dir size"):
+        hl.validate_views_dir(dest, require_glb=False, input_dir=inp)
+
+
+def test_seed_clay_render_failure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def boom(*_a: object, **_k: object) -> None:
+        raise ValueError("render-fail")
+
+    monkeypatch.setattr(hl, "render_clay_plate", boom)
+    with pytest.raises(hl.HouseLayoutError, match="render-fail"):
+        hl.seed_clay_to_input_dir(tmp_path / "in", layout_path=SCHEMA_YAML)

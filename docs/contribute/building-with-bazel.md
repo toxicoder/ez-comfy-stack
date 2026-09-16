@@ -60,7 +60,7 @@ bazelisk run //scripts:run-utility -- download-limit status
 
 | Target | What it runs |
 | --- | --- |
-| `//:test-fast` | Split BATS + pytest 100% + Pyright + mypy + shell inventory |
+| `//:test-fast` | Split BATS + pytest 100% (all first-party Python) + Pyright + mypy + shell inventory |
 | `//:test` | test-fast + strict MkDocs |
 | `//:lint` | ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools) |
 | `//:validate` | Git-aware core + docs slices |
@@ -79,11 +79,11 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 
 | Job | When | What |
 | --- | --- | --- |
-| **bazel-core** | scripts/tests/docker/… or CI graph | `//:test-fast` then `//:lint --test_tag_filters=manual` |
-| **docs-and-render** | docs/** or CI graph | `//docs:docs` |
+| **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint` (shellcheck/shfmt/buildifier) |
+| **docs-and-render** | docs/** or CI graph | `docs/manage-docs.sh build` (no Bazel) |
 | **validate-gate** | always | `scripts/ci_check_only.sh` |
 
-Disk cache keys on `MODULE.bazel.lock` + `.bazelversion`.
+Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys include `github.job` plus `MODULE.bazel.lock` + `.bazelversion`.
 
 ## Safety
 

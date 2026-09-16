@@ -14,7 +14,8 @@
 #   No models in image (host MODELS_DIR). restart: "no" in compose.
 #
 # Layer cache contract (high-velocity dev + pull):
-#   Torch stage: COPY only core.sh + phase-venv-torch.sh (not common.sh / pins).
+#   Torch stage: bind-mount only core.sh + phase-venv-torch.sh (not common.sh / pins).
+#   Chatterbox helpers bind only in the nodes stage (not Comfy pip).
 #   Pin ARGs are declared in the stage that uses them (never ENV'd before torch).
 #   Runtime COPY --link: /opt/parts/venv (torch) then venv-extra then app, then ops.
 #   Phases: torch | comfy | nodes+finalize+package — torch layer survives node edits.
@@ -72,10 +73,11 @@ ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
 ENV TORCH_VERSION=${TORCH_VERSION} \
     TORCH_INDEX_URL=${TORCH_INDEX_URL}
 
-# Only torch-stable inputs — clone/link/strip helpers must not be COPYed here.
-COPY --chmod=755 install-comfy/core.sh install-comfy/phase-venv-torch.sh \
-    /opt/ez-comfy/install-comfy/
+# Bind (not COPY) so scripts are not stored as builder layers. File changes
+# still invalidate this RUN. Runtime stage COPYs install-comfy/ for cold install.
 RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=install-comfy/core.sh,target=/opt/ez-comfy/install-comfy/core.sh \
+    --mount=type=bind,source=install-comfy/phase-venv-torch.sh,target=/opt/ez-comfy/install-comfy/phase-venv-torch.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
       echo "[Dockerfile] phase venv + torch → /opt/comfy-prebuilt …"; \
       bash -euo pipefail -c '\
@@ -96,10 +98,11 @@ ARG EZ_COMFY_PREBUILD=1
 ARG COMFYUI_REF=v0.34.6
 ENV COMFYUI_REF=${COMFYUI_REF}
 
-COPY --chmod=755 install-comfy/common.sh install-comfy/phase-comfy.sh \
-    install-comfy/chatterbox-tts.sh \
-    /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=install-comfy/core.sh,target=/opt/ez-comfy/install-comfy/core.sh \
+    --mount=type=bind,source=install-comfy/common.sh,target=/opt/ez-comfy/install-comfy/common.sh \
+    --mount=type=bind,source=install-comfy/phase-venv-torch.sh,target=/opt/ez-comfy/install-comfy/phase-venv-torch.sh \
+    --mount=type=bind,source=install-comfy/phase-comfy.sh,target=/opt/ez-comfy/install-comfy/phase-comfy.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
       echo "[Dockerfile] phase comfy …"; \
       bash -euo pipefail -c '\
@@ -127,10 +130,15 @@ ENV COMFYUI_MANAGER_REF=${COMFYUI_MANAGER_REF} \
     COMFYUI_MAGCACHE_REF=${COMFYUI_MAGCACHE_REF} \
     COMFYUI_LTX_DIRECTOR_REF=${COMFYUI_LTX_DIRECTOR_REF}
 
-COPY --chmod=755 install-comfy/phase-nodes.sh install-comfy/phase-finalize.sh \
-    install-comfy/llama-cpp-cpu.sh install-comfy/chatterbox-tts.sh \
-    /opt/ez-comfy/install-comfy/
 RUN --mount=type=cache,target=/root/.cache/pip \
+    --mount=type=bind,source=install-comfy/core.sh,target=/opt/ez-comfy/install-comfy/core.sh \
+    --mount=type=bind,source=install-comfy/common.sh,target=/opt/ez-comfy/install-comfy/common.sh \
+    --mount=type=bind,source=install-comfy/phase-venv-torch.sh,target=/opt/ez-comfy/install-comfy/phase-venv-torch.sh \
+    --mount=type=bind,source=install-comfy/phase-comfy.sh,target=/opt/ez-comfy/install-comfy/phase-comfy.sh \
+    --mount=type=bind,source=install-comfy/phase-nodes.sh,target=/opt/ez-comfy/install-comfy/phase-nodes.sh \
+    --mount=type=bind,source=install-comfy/phase-finalize.sh,target=/opt/ez-comfy/install-comfy/phase-finalize.sh \
+    --mount=type=bind,source=install-comfy/llama-cpp-cpu.sh,target=/opt/ez-comfy/install-comfy/llama-cpp-cpu.sh \
+    --mount=type=bind,source=install-comfy/chatterbox-tts.sh,target=/opt/ez-comfy/install-comfy/chatterbox-tts.sh \
     if [ "${EZ_COMFY_PREBUILD}" = "1" ]; then \
       echo "[Dockerfile] phase nodes + finalize + package parts …"; \
       bash -euo pipefail -c '\
@@ -185,11 +193,9 @@ COPY --link --from=nodes /opt/parts/app /opt/comfy-prebuilt
 # Volatile ops scripts last — entrypoint/patch/orchestrator edits rebuild only thin layers
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
-COPY --chmod=644 patch_get_free_memory.py /opt/ez-comfy/
-COPY --chmod=644 patch_unified_memory_copy.py /opt/ez-comfy/
-COPY --chmod=644 patch_magcache_compat.py /opt/ez-comfy/
-COPY --chmod=644 patch_vhs_widget_inputs.py /opt/ez-comfy/
-COPY --chmod=644 seed_clay_inputs.py /opt/ez-comfy/
+COPY --chmod=644 patch_get_free_memory.py patch_unified_memory_copy.py \
+    patch_magcache_compat.py patch_vhs_widget_inputs.py seed_clay_inputs.py \
+    /opt/ez-comfy/
 # PYTHONPATH sitecustomize: optional torch.backends.python_native.triton disable
 COPY --chmod=644 pythonpath/ /opt/ez-comfy/pythonpath/
 

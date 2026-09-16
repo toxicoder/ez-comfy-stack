@@ -28,17 +28,7 @@ _BATS_COMMON = [
     "bats/test_helper.bash",
     "bats_runner.sh",
     ":bats_tool",
-    "//:ci_workflows",
-    "//:devcontainer",
-    "//config:policy",
-    "//custom_nodes:sources",
-    "//docker:sources",
-    "//scripts:ci_install_lint_tools",
     "//scripts:doc_sources",
-    "//scripts:validate",
-    "//studio-ui:sources",
-    "//tools:blender",
-    "//workflows:lab_graphs",
 ]
 
 bats_file_tests(

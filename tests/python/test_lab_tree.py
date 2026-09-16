@@ -12,11 +12,14 @@ from _lab_paths import (
     ALLOWED_LANES,
     LAB_ROOT,
     WF,
+    cached_lab_graph_map,
     lab_dest,
     lab_graph_paths,
     lab_json,
     lane_for_stem,
+    load_lab_graph,
 )
+from _audit_lab_graphs import audit_lab_graphs
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -41,7 +44,7 @@ def test_every_lab_graph_lives_under_allowed_lane() -> None:
         assert path.name.endswith(".json")
         assert not path.name.endswith("-lab-example.json")
         assert lane_for_stem(str(rel)) == lane
-        extra = json.loads(path.read_text(encoding="utf-8")).get("extra") or {}
+        extra = load_lab_graph(path).get("extra") or {}
         if extra.get("lab_rel"):
             assert extra["lab_rel"] == rel.with_suffix("").as_posix()
 
@@ -150,3 +153,14 @@ def test_lab_json_ambiguous_i2v() -> None:
     assert lab_json("wan/i2v-5s").parent.name == "wan"
     assert lab_json("ltx/i2v-5s").parent.name == "ltx"
     assert lab_json("still-draft").parent.name == "klein"
+
+
+def test_cached_lab_graphs_and_auditor() -> None:
+    cache = cached_lab_graph_map()
+    assert len(cache) >= 8
+    sample = next(iter(cache))
+    assert load_lab_graph(sample) is cache[sample]
+    other = cached_lab_graph_map(root=WF)
+    assert len(other) >= 8
+    count = audit_lab_graphs(LAB_ROOT)
+    assert count == len(cache)

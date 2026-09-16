@@ -9,7 +9,10 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from functools import lru_cache
 from typing import Any
+
+from _lab_paths import cached_lab_graph_rows
 
 ROOT = Path(__file__).resolve().parents[2]
 LAB = ROOT / "workflows" / "_lab"
@@ -59,8 +62,13 @@ def _lab_graphs() -> list[tuple[str, Path, dict[str, Any]]]:
     Returns:
         (lab_rel, path, data) rows.
     """
-    gen = _load_gen()
-    return gen.iter_lab_graphs(LAB)
+    return cached_lab_graph_rows()
+
+
+@lru_cache(maxsize=1)
+def _generated_pages() -> dict[str, str]:
+    """Generate docs once per process (write=False)."""
+    return _load_gen().generate(ROOT, write=False)
 
 
 def test_encyclopedia_covers_every_lab_node_type() -> None:
@@ -137,7 +145,7 @@ def test_combo_values_are_documented() -> None:
 def test_every_lab_graph_has_details_coverage() -> None:
     """Every _lab JSON id appears on a generated details page."""
     gen = _load_gen()
-    pages = gen.generate(ROOT, write=False)
+    pages = _generated_pages()
     blob = "\n".join(pages.values())
     missing: list[str] = []
     for lab_rel, path, _data in _lab_graphs():
@@ -154,7 +162,7 @@ def test_every_lab_graph_has_details_coverage() -> None:
 def test_details_page_lists_every_node_id() -> None:
     """Non-album pages name every node id from that JSON."""
     gen = _load_gen()
-    pages = gen.generate(ROOT, write=False)
+    pages = _generated_pages()
     missing: list[str] = []
     for lab_rel, path, data in _lab_graphs():
         rel_file = path.relative_to(LAB).as_posix()
@@ -174,7 +182,7 @@ def test_parameter_section_names_every_widget() -> None:
     """Bottom section includes every encyclopedia widget name for types used."""
     gen = _load_gen()
     enc = _load_nodes().encyclopedia()
-    pages = gen.generate(ROOT, write=False)
+    pages = _generated_pages()
     missing: list[str] = []
     for lab_rel, path, data in _lab_graphs():
         rel_file = path.relative_to(LAB).as_posix()

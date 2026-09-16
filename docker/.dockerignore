@@ -13,3 +13,6 @@
 !seed_clay_inputs.py
 !pythonpath/
 !pythonpath/**
+**/__pycache__/
+**/*.pyc
+**/*.pyo

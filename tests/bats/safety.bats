@@ -195,11 +195,15 @@ if missing:
     p && /^FROM / {exit}
     p {print}
   ' "${df}")"
-  # Instruction lines only — comments may mention files that must not be COPYed.
+  # Instruction lines only — comments may mention files that must not be bound.
   torch_copy="$(printf '%s\n' "${torch_stage}" | grep -E '^COPY ' || true)"
+  torch_bind="$(printf '%s\n' "${torch_stage}" | grep -E 'mount=type=bind' || true)"
   torch_pins="$(printf '%s\n' "${torch_stage}" | grep -E '^(ARG|ENV) ' || true)"
-  [[ "${torch_copy}" == *core.sh* ]]
-  [[ "${torch_copy}" == *phase-venv-torch* ]]
+  [[ "${torch_bind}" == *core.sh* ]]
+  [[ "${torch_bind}" == *phase-venv-torch* ]]
+  [[ "${torch_bind}" != *common.sh* ]]
+  [[ "${torch_bind}" != *phase-nodes* ]]
+  [[ "${torch_bind}" != *chatterbox-tts* ]]
   [[ "${torch_copy}" != *common.sh* ]]
   [[ "${torch_copy}" != *phase-nodes* ]]
   [[ "${torch_copy}" != *entrypoint* ]]
@@ -368,6 +372,9 @@ if missing:
   [ "$status" -eq 0 ]
   run grep -E 'cache-to:.*type=registry' "${REPO_ROOT}/.github/workflows/publish-image.yml"
   [ "$status" -eq 0 ]
+  # GHA cache is 10GB shared — do not probe it for multi-GB torch layers.
+  run grep -E 'type=gha' "${REPO_ROOT}/.github/workflows/publish-image.yml"
+  [ "$status" -ne 0 ]
 }
 
 @test "compose has mem_limit" {

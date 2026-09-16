@@ -82,13 +82,13 @@ sh_test(
     ],
 )
 
+# Pyright + mypy live in //tests:typecheck (//:test-fast). Keep the
+# individual lint targets for ad-hoc runs; do not double-run them in CI.
 test_suite(
     name = "all",
     tags = ["lint"],
     tests = [
         ":buildifier",
-        ":mypy",
-        ":pyright",
         ":shell",
         ":shfmt",
     ],

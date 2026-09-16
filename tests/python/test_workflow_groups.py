@@ -23,7 +23,7 @@ from _lab_layout import (  # noqa: E402
     group_overlap_hits,
     title_inset_hits,
 )
-from _lab_paths import lab_graph_paths  # noqa: E402
+from _lab_paths import lab_graph_paths, load_lab_graph  # noqa: E402
 
 
 def test_lab_group_y0_clears_default_node_row() -> None:
@@ -76,13 +76,13 @@ def _graphs() -> list[Path]:
 
 @pytest.mark.parametrize("path", _graphs(), ids=lambda p: str(p.relative_to(WF)))
 def test_group_title_bar_clears_member_nodes(path: Path) -> None:
-    graph = json.loads(path.read_text(encoding="utf-8"))
+    graph = load_lab_graph(path)
     hits = title_inset_hits(graph)
     assert hits == [], f"{path.name}: {hits} (need {GROUP_TITLE_INSET}px)"
 
 
 @pytest.mark.parametrize("path", _graphs(), ids=lambda p: str(p.relative_to(WF)))
 def test_groups_do_not_overlap(path: Path) -> None:
-    graph = json.loads(path.read_text(encoding="utf-8"))
+    graph = load_lab_graph(path)
     hits = group_overlap_hits(graph)
     assert hits == [], f"{path.name}: {hits}"

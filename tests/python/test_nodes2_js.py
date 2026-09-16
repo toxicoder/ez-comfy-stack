@@ -39,3 +39,14 @@ def test_ingest_js_drops_litegraph_node_widget() -> None:
     assert "node_widget" not in body
     assert 'addWidget("button"' in body
     assert "Upload media" in body
+
+
+def test_every_frontend_js_file_is_nodes2_safe() -> None:
+    files = sorted(CUSTOM.rglob("js/*.js")) + sorted(
+        (ROOT / "docs" / "javascripts").glob("*.js")
+    )
+    assert files, "expected custom-node and docs JS"
+    for path in files:
+        body = path.read_text(encoding="utf-8")
+        assert "node_widget" not in body, path
+        assert "onResize" not in body, path

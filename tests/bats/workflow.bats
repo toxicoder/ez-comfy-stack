@@ -103,10 +103,14 @@ lab_wf() {
   [[ -f ${shorts_yaml}/go-see.shots.yaml ]]
   run grep -R -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${dir}"
   [ "${status}" -ne 0 ]
-  while IFS= read -r wf; do
-    run python3 -c "import json,os; p='${wf}'; d=json.load(open(p)); assert d.get('id')==os.path.splitext(os.path.basename(p))[0]"
-    [ "${status}" -eq 0 ]
-  done < <(find "${lab}/shorts" -name '*.json')
+  run python3 -c "
+import json, os
+from pathlib import Path
+lab = Path('${lab}') / 'shorts'
+for wf in sorted(lab.glob('*.json')):
+    d = json.loads(wf.read_text(encoding='utf-8'))
+    assert d.get('id') == os.path.splitext(wf.name)[0], wf
+"
   wan="$(lab_wf wan/i2v-shot.json)"
   ltx="$(lab_wf ltx/i2v-shot.json)"
   run python3 -c "
@@ -131,14 +135,7 @@ for g in (w, l):
 }
 
 @test "lab workflows parse, name pattern, banned strings, no overlaps" {
-  local wf dir="${REPO_ROOT}/workflows"
-  local n=0
-  local -a files=()
-  while IFS= read -r wf; do
-    files+=("${wf}")
-  done < <(find "${dir}/_lab" -name '*.json' | sort)
-  [[ ${#files[@]} -ge 8 ]]
-
+  local dir="${REPO_ROOT}/workflows"
   for gone in \
     ltx-i2v-30s-lab-example.json \
     ltx-t2v-60s-lab-example.json \
@@ -153,42 +150,9 @@ for g in (w, l):
     dream-house-lab-example.json; do
     [[ ! -f ${dir}/${gone} ]]
   done
-
-  for wf in "${files[@]}"; do
-    n=$((n + 1))
-    run python3 -c "import json; json.load(open('${wf}'))"
-    [ "${status}" -eq 0 ]
-    run python3 -c "import json,os; p='${wf}'; d=json.load(open(p)); assert d.get('id')==os.path.splitext(os.path.basename(p))[0]"
-    [ "${status}" -eq 0 ]
-    run grep -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${wf}"
-    [ "${status}" -ne 0 ]
-    # DCC envelopes were not in the old top-level AABB glob; groups test still covers them.
-    # TRELLIS native stages stack vertically by design (shape under structure).
-    if [[ ${wf} == */_lab/dcc/* || ${wf} == */optional/klein/trellis2.json ]]; then
-      continue
-    fi
-    run python3 -c "
-import json
-pad = 20
-d = json.load(open('${wf}'))
-boxes = []
-for n in d['nodes']:
-    x, y = n['pos']
-    s = n.get('size', [200, 100])
-    if isinstance(s, dict):
-        w, h = float(s.get('0', 200)), float(s.get('1', 100))
-    else:
-        w, h = float(s[0]), float(s[1])
-    boxes.append((n['id'], n['type'], x - pad, y - pad, x + w + pad, y + h + pad))
-for i in range(len(boxes)):
-    for j in range(i + 1, len(boxes)):
-        a, b = boxes[i], boxes[j]
-        if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-            raise SystemExit(f'overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})')
-"
-    [ "${status}" -eq 0 ]
-  done
-  [[ ${n} -ge 8 ]]
+  run python3 "${REPO_ROOT}/tests/python/_audit_lab_graphs.py" "${REPO_ROOT}"
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"audited "* ]]
 }
 
 @test "suite lab graphs stamp App Mode linearData to live node ids" {

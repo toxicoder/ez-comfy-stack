@@ -2,9 +2,12 @@ name: ci
 
 on:
   push:
-    branches: [development, main, "feature/**", "fix/**", "chore/**"]
+    branches: [development, main]
   pull_request:
     branches: [development, main]
+
+permissions:
+  contents: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -35,6 +38,10 @@ jobs:
               - 'tools/**'
               - 'studio-ui/**'
               - 'workflows/**'
+              - 'docs/*.py'
+              - 'mypy.ini'
+              - 'pyrightconfig.json'
+              - '.devcontainer/tool-versions.env'
             docs:
               - 'docs/**'
               - 'mkdocs.yml'
@@ -76,9 +83,6 @@ jobs:
           bazelisk test //:test-fast --config=ci
           bazelisk test //:lint --config=ci --test_tag_filters=manual
 
-      - name: Bazel build of key targets
-        run: bazelisk build //:manage //:all --config=ci
-
   docs-and-render:
     needs: changes
     if: |
@@ -92,13 +96,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: |
-            docs/requirements.txt
-            tests/requirements.txt
-
-      - uses: ./.github/actions/setup-bazel
-        with:
-          install-lint-tools: "false"
+          cache-dependency-path: docs/requirements.txt
 
       - name: Install docs dependencies
         run: pip install -r docs/requirements.txt
@@ -106,7 +104,7 @@ jobs:
       - name: Docs (generate + strict MkDocs)
         env:
           NO_MKDOCS_2_WARNING: "1"
-        run: bazelisk run //docs:docs --config=ci
+        run: bash docs/manage-docs.sh build
 
   validate-gate:
     needs: [changes, bazel-core, docs-and-render]

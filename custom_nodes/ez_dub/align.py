@@ -129,11 +129,10 @@ def time_stretch(
             while cand <= hi:
                 corr = 0.0
                 i = 0
-                while i < overlap:
-                    src_i = prev_tail + i
-                    if src_i >= n:
-                        break
-                    corr += float(samples[src_i]) * float(samples[cand + i])
+                while i < overlap and prev_tail + i < n:
+                    corr += float(samples[prev_tail + i]) * float(
+                        samples[cand + i]
+                    )
                     i += 1
                 if corr > best_c:
                     best_c = corr

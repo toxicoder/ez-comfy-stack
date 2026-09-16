@@ -27,9 +27,8 @@ COMFYUI_VHS_REF="${COMFYUI_VHS_REF:-}"
 COMFYUI_OPENCUT_REF="${COMFYUI_OPENCUT_REF:-0.5.0}"
 COMFYUI_MAGCACHE_REF="${COMFYUI_MAGCACHE_REF:-47bdd2aca97e568087c4e92d2d2f0426bdce7a37}"
 COMFYUI_LTX_DIRECTOR_REF="${COMFYUI_LTX_DIRECTOR_REF:-a3c809c8b593a74c2ddcd6c1f83ad85ebebe3c64}"
-# Chatterbox V3 pin + clone extras (setuptools<82 for PerTh / pkg_resources).
-# shellcheck source=chatterbox-tts.sh disable=SC1091
-source "${_INSTALL_COMFY_COMMON_DIR}/chatterbox-tts.sh"
+# Chatterbox helpers live in chatterbox-tts.sh and are sourced from
+# phase-nodes.sh only — do not source them here (would bust the Comfy pip layer).
 
 #######################################
 # Path of the volume ComfyUI pin stamp.

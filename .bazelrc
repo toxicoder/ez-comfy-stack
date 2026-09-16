@@ -35,8 +35,6 @@ build:ci --noshow_progress
 build:ci --show_progress_rate_limit=5
 test:ci --test_output=errors
 test:ci --test_summary=detailed
-build:ci --remote_download_minimal
-test:ci --remote_download_minimal
 build:ci --jobs=HOST_CPUS
 build:ci --local_resources=memory=HOST_RAM*0.8
 test:ci --jobs=HOST_CPUS

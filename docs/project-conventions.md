@@ -244,9 +244,9 @@ flowchart TB
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `bazelisk test //:test-fast` (and `make coverage`) enforces:
-  - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
+  - **100% Python line coverage** on all first-party production packages (`custom_nodes`, `docker`, `docs`, `scripts/lib`, `studio-ui`, `tools`)
   - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
-  - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
+  - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (production-only references do not count)
   - Full BATS suite green
 - **Tests ship with production code** — same commit as the files under test
 - **Test shell style**: `tests/bats/*.bats`, `tests/bats/*.bash`, and `tests/*.sh` follow the Google Shell Style Guide where applicable (quoted `"${var}"`, `[[ … ]]`, Google-style helper comments in `test_helper.bash`, 2-space indent / shfmt for `.sh` runners)
@@ -261,9 +261,9 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Cov["bazelisk test //:test-fast"] --> Py["100% line · UM patches"]
+  Cov["bazelisk test //:test-fast"] --> Py["100% line · first-party Python"]
   Cov --> Pyright["Pyright standard + mypy · first-party Python"]
-  Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
+  Cov --> Shell["Every scripts/** + docker/** function<br/>invoked under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["bazelisk test //:lint"] --> SC["ShellCheck warnings = defects"]
   Lint --> Fmt["shfmt"]

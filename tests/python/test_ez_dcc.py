@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import builtins
+import importlib.util
 import inspect
 import json
 import shutil
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -416,3 +419,73 @@ def test_defaults_slug_shot_plate() -> None:
     assert still["shot_id"][1]["default"] == "12"
     pack = EZDCCLoadStillPack.INPUT_TYPES()["required"]
     assert pack["plate"][1]["default"] == "mug"
+    video = EZDCCLoadGuideVideo.INPUT_TYPES()["required"]
+    assert video["layer"][1]["default"] == "clay"
+    camera = EZDCCCameraJson.INPUT_TYPES()["required"]
+    assert camera["slug"][1]["default"] == "go-see"
+    preview = EZDCCPreviewGuideLayer.INPUT_TYPES()["required"]
+    assert preview["label"][1]["default"] == "guide"
+    gate = EZDCCOccupancyGate.INPUT_TYPES()["required"]
+    assert gate["required_mode"][1]["default"] == "klein"
+
+
+def test_occupancy_json_array_fail_closed(output_dir: Path) -> None:
+    (output_dir / ".occupancy.json").write_text("[]", encoding="utf-8")
+    with pytest.raises(OccupancyError, match="not a JSON object"):
+        EZDCCOccupancyGate().run(object(), "klein")
+
+
+def test_qc_require_file_missing(tmp_path: Path) -> None:
+    with pytest.raises(GuidePackError, match="missing"):
+        dcc_qc.require_file(tmp_path / "nope.png", label="first")
+
+
+def test_qc_load_from_path_spec_failures(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(importlib.util, "spec_from_file_location", lambda *_a, **_k: None)
+    with pytest.raises(ImportError, match="cannot load"):
+        dcc_qc._load_from_path(Path(__file__), "x")
+    monkeypatch.setattr(
+        importlib.util,
+        "spec_from_file_location",
+        lambda *_a, **_k: SimpleNamespace(loader=None),
+    )
+    with pytest.raises(ImportError, match="cannot load"):
+        dcc_qc._load_from_path(Path(__file__), "x")
+
+
+def test_qc_guide_pack_import_fallbacks(monkeypatch: pytest.MonkeyPatch) -> None:
+    orig_import = builtins.__import__
+
+    def fake_import(
+        name: str,
+        globals: object = None,
+        locals: object = None,
+        fromlist: object = (),
+        level: int = 0,
+    ) -> object:
+        if name == "guide_pack":
+            raise ImportError("forced")
+        return orig_import(name, globals, locals, fromlist, level)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    loaded = dcc_qc._load_guide_pack()
+    assert hasattr(loaded, "validate_pack")
+    orig_is_file = Path.is_file
+
+    def hide_lib(self: Path) -> bool:
+        if self.name == "guide_pack.py" and "scripts" in self.as_posix():
+            return False
+        return orig_is_file(self)
+
+    monkeypatch.setattr(Path, "is_file", hide_lib)
+    vendored = dcc_qc._load_guide_pack()
+    assert hasattr(vendored, "validate_pack")
+
+    def hide_both(self: Path) -> bool:
+        if self.name in {"guide_pack.py", "_guide_pack.py"}:
+            return False
+        return orig_is_file(self)
+
+    monkeypatch.setattr(Path, "is_file", hide_both)
+    with pytest.raises(ImportError, match="unavailable"):
+        dcc_qc._load_guide_pack()

@@ -15,6 +15,7 @@ _DOCS_COMMON_DATA = [
     "workflow_nodes.py",
     "requirements.txt",
     "//:mkdocs.yml",
+    "//includes",
     "//scripts:doc_sources",
 ] + glob(
     ["**/*.md"],

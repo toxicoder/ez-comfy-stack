@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+import io
 import json
 import sys
 from pathlib import Path
+
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 sys.path.insert(0, str(ROOT / "custom_nodes"))
@@ -186,3 +190,110 @@ def test_main_call_occupancy(tmp_path: Path, monkeypatch, capsys) -> None:
     assert mcp.main(["--call", "occupancy_status"]) == 0
     payload = json.loads(capsys.readouterr().out)
     assert payload["ok"] is True
+
+
+def test_ensure_custom_nodes_path_inserts() -> None:
+    custom = str(ROOT / "custom_nodes")
+    saved = sys.path[:]
+    try:
+        while custom in sys.path:
+            sys.path.remove(custom)
+        mcp._ensure_custom_nodes_path()
+        assert custom in sys.path
+    finally:
+        sys.path[:] = saved
+
+
+def test_occupancy_invalid_and_non_object(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    (tmp_path / ".occupancy.json").write_text("not-json", encoding="utf-8")
+    assert mcp.occupancy_status()["mode"] == "idle"
+    (tmp_path / ".occupancy.json").write_text("[1, 2]", encoding="utf-8")
+    assert mcp.occupancy_status()["mode"] == "idle"
+
+
+def test_lab_app_discovery_edges(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(mcp, "_lab_root", lambda: tmp_path / "missing-lab")
+    empty = mcp.call_tool("list_lab_apps", {})
+    assert empty["apps"] == []
+    lab = tmp_path / "lab" / "inspire"
+    lab.mkdir(parents=True)
+    (lab / "bad.json").write_text("{", encoding="utf-8")
+    (lab / "array.json").write_text("[1]", encoding="utf-8")
+    (lab / "extra-list.json").write_text(
+        json.dumps({"id": "x", "extra": [1, 2]}), encoding="utf-8"
+    )
+    (lab / "mode-list.json").write_text(
+        json.dumps(
+            {
+                "id": "y",
+                "extra": {
+                    "lab_app_mode": [1],
+                    "lab_mcp": [1],
+                    "lab_rel": "inspire/y",
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    (lab / "ok.json").write_text(
+        json.dumps(
+            {
+                "id": "ok",
+                "extra": {
+                    "lab_rel": "inspire/ok",
+                    "lab_app_mode": {"lane": "inspire", "occupancy": "llm"},
+                    "linearData": {
+                        "inputs": [
+                            "skip",
+                            ["only"],
+                            ["w", "Message"],
+                            ["w", "x", {"label": "Hi"}],
+                            ["w", "y", "not-dict"],
+                        ]
+                    },
+                    "lab_mcp": {"server": "research-mcp", "tools": ["chat"]},
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(mcp, "_lab_root", lambda: tmp_path / "lab")
+    monkeypatch.setattr(mcp, "_repo_root", lambda: tmp_path)
+    listed = mcp.call_tool("list_lab_apps", {})
+    ids = {row["id"] for row in listed["apps"]}
+    assert "inspire/ok" in ids
+    assert mcp._load_lab_graph("") is None
+    assert mcp._load_lab_graph("inspire/ok.json") is not None
+    assert mcp._load_lab_graph("_lab/inspire/ok") is not None
+    assert mcp._load_lab_graph("ok") is not None
+    assert mcp._load_lab_graph("bad") is None
+    assert mcp._load_lab_graph("array") is None
+    described = mcp.call_tool("describe_app", {"stem": "inspire/ok"})
+    assert described["ok"] is True
+    assert "Hi" in described["widgets"]
+    assert "Message" in described["widgets"]
+    extra_list = mcp.call_tool("describe_app", {"id": "inspire/extra-list"})
+    assert extra_list["ok"] is True
+    mode_list = mcp.call_tool("describe_app", {"stem": "inspire/mode-list"})
+    assert mode_list["ok"] is True
+    no_linear = mcp._linear_labels({"linearData": {"inputs": "nope"}})
+    assert no_linear == []
+
+
+def test_linear_labels_when_linear_not_dict() -> None:
+    assert mcp._linear_labels({"linearData": "nope"}) == []
+
+
+def test_serve_stdio_skips_non_object(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(sys, "stdin", io.StringIO("[1]\n\n"))
+    mcp.serve_stdio()
+    assert capsys.readouterr().out == ""
+    assert mcp.handle_rpc({"method": "nope"}) is None
+    assert mcp.main(["--call", "list_lab_apps", "{}"]) in {0, 1}
