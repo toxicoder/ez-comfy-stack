@@ -315,7 +315,7 @@ def test_rap_draft_and_full_wire_lyrics_writer() -> None:
 
 def test_podcast_ace_bed_reads_script_context() -> None:
     for rel in (
-        "audio/podcast/audio-first.json",
+        "audio/podcast/two-host-episode.json",
         "audio/podcast/radio-drama.json",
     ):
         graph = _load(lab_json(rel))

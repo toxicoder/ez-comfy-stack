@@ -54,8 +54,8 @@ EXEMPT = {
     "ltx/interior-ambience",
     "shorts/still-here",
     "shorts/switchyard",
-    "dcc/klein/from-clay",
-    "dcc/ltx/iclora-depth-5s",
+    "dcc/klein/clay-hero",
+    "dcc/ltx/depth-control-5s",
 }
 
 

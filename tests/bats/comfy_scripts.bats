@@ -652,13 +652,13 @@ teardown() {
   run lab_workflow_lane "shorts/go-see.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "shorts" ]
-  run lab_workflow_lane "dcc/klein/from-clay.json"
+  run lab_workflow_lane "dcc/klein/clay-hero.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "dcc" ]
-  run lab_workflow_lane "optional/wan/i2v-a14b.json"
+  run lab_workflow_lane "optional/wan/still-to-video-a14b.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "optional" ]
-  run lab_workflow_lane "audio/podcast/audio-first.json"
+  run lab_workflow_lane "audio/podcast/two-host-episode.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "audio" ]
   run lab_workflow_lane "audio/music/rap-draft.json"
@@ -707,8 +707,8 @@ teardown() {
   mkdir -p "${src}/_lab/dcc/klein" "${src}/_lab/optional/wan"
   echo '{}' >"${src}/_lab/klein/still-draft.json"
   echo '{}' >"${src}/_lab/shorts/go-see.json"
-  echo '{}' >"${src}/_lab/dcc/klein/from-clay.json"
-  echo '{}' >"${src}/_lab/optional/wan/i2v-a14b.json"
+  echo '{}' >"${src}/_lab/dcc/klein/clay-hero.json"
+  echo '{}' >"${src}/_lab/optional/wan/still-to-video-a14b.json"
   echo '{}' >"${src}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json"
   echo '{}' >"${src}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json"
   echo '{}' >"${src}/_user/keep-me.json"
@@ -723,8 +723,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/_lab/klein/still-draft.json ]]
   [[ -f ${dest}/_lab/shorts/go-see.json ]]
-  [[ -f ${dest}/_lab/dcc/klein/from-clay.json ]]
-  [[ -f ${dest}/_lab/optional/wan/i2v-a14b.json ]]
+  [[ -f ${dest}/_lab/dcc/klein/clay-hero.json ]]
+  [[ -f ${dest}/_lab/optional/wan/still-to-video-a14b.json ]]
   [[ -f ${dest}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json ]]
   [[ ! -f ${dest}/shorts/go-see.json ]]
@@ -757,8 +757,8 @@ teardown() {
   echo '{}' >"${src}/klein-still-hero-lab-example.json"
   echo '{}' >"${src}/audio/podcast-audio-first.json"
   echo '{}' >"${src}/shorts/go-see.json"
-  echo '{}' >"${src}/dcc/from-clay.json"
-  echo '{}' >"${src}/optional/i2v-a14b.json"
+  echo '{}' >"${src}/dcc/clay-hero.json"
+  echo '{}' >"${src}/optional/still-to-video-a14b.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
   run seed_legacy_lab_workflows "${src}" "${dest}/_lab"
   [ "${status}" -eq 0 ]
@@ -768,8 +768,8 @@ teardown() {
   [[ -f ${dest}/_lab/klein/klein-still-hero-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/podcast-audio-first.json ]]
   [[ -f ${dest}/_lab/shorts/go-see.json ]]
-  [[ -f ${dest}/_lab/dcc/from-clay.json ]]
-  [[ -f ${dest}/_lab/optional/i2v-a14b.json ]]
+  [[ -f ${dest}/_lab/dcc/clay-hero.json ]]
+  [[ -f ${dest}/_lab/optional/still-to-video-a14b.json ]]
   [[ ! -f ${dest}/klein/still-draft.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   [[ -d ${dest}/_user ]]

@@ -319,7 +319,7 @@ def test_apply_klein_high_swaps_when_base_listed() -> None:
 
 
 def test_apply_wan_does_not_change_frames_or_unet() -> None:
-    graph = copy.deepcopy(_load("wan/i2v-5s.json"))
+    graph = copy.deepcopy(_load("wan/still-to-video-5s.json"))
     unet_before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
     latent = next(
         n for n in graph["nodes"] if n.get("type") == "Wan22ImageToVideoLatent"
@@ -334,7 +334,7 @@ def test_apply_wan_does_not_change_frames_or_unet() -> None:
 
 
 def test_apply_ltx_does_not_change_length() -> None:
-    graph = copy.deepcopy(_load("ltx/i2v-5s.json"))
+    graph = copy.deepcopy(_load("ltx/still-to-video-5s.json"))
     video = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     before = list(video["widgets_values"])
     apply_to_graph(graph, QUALITY_HIGH)
@@ -344,7 +344,7 @@ def test_apply_ltx_does_not_change_length() -> None:
 
 
 def test_apply_a14b_is_noop() -> None:
-    graph = copy.deepcopy(_load("optional/wan/i2v-a14b.json"))
+    graph = copy.deepcopy(_load("optional/wan/still-to-video-a14b.json"))
     sampler_before = list(_sampler(graph)["widgets_values"])
     unets_before = [
         n["widgets_values"][0]

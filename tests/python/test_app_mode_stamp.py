@@ -52,7 +52,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
         lane="inspire",
         occupancy="klein",
         enhance_off_identity=False,
-        handoff=("klein/still-hero", "wan/i2v-5s"),
+        handoff=("klein/still-hero", "wan/still-to-video-5s"),
     )
     extra = stamped["extra"]
     assert extra["lab_profile"] == profile
@@ -66,7 +66,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert mode["enhance_off_identity"] is False
     assert mode["handoff"] == [
         "klein/still-hero",
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
     ]
     linear = extra["linearData"]
     by_id = {int(n["id"]): n for n in stamped["nodes"]}
@@ -84,7 +84,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
 
 
 def test_wan_video_stamp_resolves_vhs_output() -> None:
-    graph = _load("wan/i2v-5s.json")
+    graph = _load("wan/still-to-video-5s.json")
     stamped = stamp_app_mode(
         copy.deepcopy(graph),
         inputs=[
@@ -269,9 +269,9 @@ def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
     assert "image" not in hero
     thumb = _widget_names(_load("klein/thumbnail.json"))
     assert "image" not in thumb
-    t2v = _widget_names(_load("wan/t2v-5s.json"))
+    t2v = _widget_names(_load("wan/text-to-video-5s.json"))
     assert "image" not in t2v
-    flf = _widget_names(_load("wan/flf-5s.json"))
+    flf = _widget_names(_load("wan/first-last-5s.json"))
     assert flf.count("image") == 1
     vace = _widget_names(_load("wan/vace-join.json"))
     assert vace.count("image") == 1
@@ -280,32 +280,32 @@ def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
 def test_wired_edit_and_i2v_keep_image() -> None:
     tweak = _widget_names(_load("klein/character-tweak.json"))
     assert "image" in tweak
-    i2v = _widget_names(_load("wan/i2v-5s.json"))
+    i2v = _widget_names(_load("wan/still-to-video-5s.json"))
     assert "image" in i2v
-    clay = _widget_names(_load("dcc/klein/from-clay.json"))
+    clay = _widget_names(_load("dcc/klein/clay-hero.json"))
     assert "image" in clay
 
 
 def test_ltx_showcase_app_widgets() -> None:
-    flf = _load("ltx/flf-5s.json")
+    flf = _load("ltx/first-last-5s.json")
     names = _widget_names(flf)
     labels = _labels(flf)
     assert names.count("image") == 2
     assert "First frame" in labels
     assert "Last frame" in labels
-    a2v = _load("ltx/a2v-5s.json")
+    a2v = _load("ltx/audio-to-video-5s.json")
     assert "audio" in _widget_names(a2v)
     assert any("audio" in label.lower() for label in _labels(a2v))
 
 
 def test_i2v_hides_style_t2v_keeps_it() -> None:
-    i2v = _widget_names(_load("wan/i2v-5s.json"))
+    i2v = _widget_names(_load("wan/still-to-video-5s.json"))
     assert "style" not in i2v
-    ltx_i2v = _widget_names(_load("ltx/i2v-5s.json"))
+    ltx_i2v = _widget_names(_load("ltx/still-to-video-5s.json"))
     assert "style" not in ltx_i2v
-    t2v = _widget_names(_load("wan/t2v-5s.json"))
+    t2v = _widget_names(_load("wan/text-to-video-5s.json"))
     assert "style" in t2v
-    ltx_t2v = _widget_names(_load("ltx/t2v-5s.json"))
+    ltx_t2v = _widget_names(_load("ltx/text-to-video-5s.json"))
     assert "style" in ltx_t2v
     still = _widget_names(_load("klein/still-draft.json"))
     assert "style" in still
@@ -357,7 +357,7 @@ def test_music_exposes_duration_and_vocal_mode() -> None:
 
 
 def test_podcast_exposes_voices_and_hides_refs_and_bed_lyrics() -> None:
-    names = _widget_names(_load("audio/podcast/audio-first.json"))
+    names = _widget_names(_load("audio/podcast/two-host-episode.json"))
     assert "prompt" in names
     assert "tags" in names
     assert "seconds" in names
@@ -367,7 +367,7 @@ def test_podcast_exposes_voices_and_hides_refs_and_bed_lyrics() -> None:
     assert "lyrics" not in names
     assert "backend" not in names
     assert "speaker_a_ref" not in names
-    labels = _labels(_load("audio/podcast/audio-first.json"))
+    labels = _labels(_load("audio/podcast/two-host-episode.json"))
     assert "Script" in labels
     assert "Bed tags" in labels
     assert "Rewrite script" in labels

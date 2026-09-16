@@ -4,7 +4,7 @@ Not collected by pytest (leading underscore). Builders and tests import
 ``lab_json`` instead of hardcoding a folder.
 
 Ids are ``_lab``-relative paths without ``.json`` (``klein/still-draft``,
-``wan/i2v-5s``). Basenames may collide across lanes; pass the relative
+``wan/still-to-video-5s``). Basenames may collide across lanes; pass the relative
 id when they do.
 """
 
@@ -132,7 +132,7 @@ def lab_json(stem: str, *, root: Path | None = None) -> Path:
     """Return the unique ``_lab/**/<stem>.json`` path.
 
     ``stem`` may be a basename (``still-draft``), a file name, an old
-    leftover relative path, or a lab-relative id (``wan/i2v-5s``).
+    leftover relative path, or a lab-relative id (``wan/still-to-video-5s``).
     """
     text = str(stem).replace("\\", "/").lstrip("./")
     text = text.removeprefix("_lab/")

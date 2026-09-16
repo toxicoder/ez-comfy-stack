@@ -76,8 +76,8 @@ GIF_PREVIEW_BULLET = (
 
 CREATOR_STEMS = (
     "klein/shorts-still",
-    "wan/shorts-i2v",
-    "ltx/shorts-i2v",
+    "wan/shorts-still-5s",
+    "ltx/shorts-still-5s",
     "klein/thumbnail",
     "klein/product-packshot",
     "klein/before-after",
@@ -90,10 +90,10 @@ CREATOR_STEMS = (
 CREATOR_STEMS_V2 = (
     "klein/endcard-cta",
     "klein/quote-bg",
-    "klein/og-blog",
+    "klein/open-graph",
     "klein/podcast-cover",
     "klein/banner-wide",
-    "klein/ig-square",
+    "klein/instagram-square",
     "klein/hook-still",
     "klein/lower-third-bg",
     "klein/food-tabletop",
@@ -101,9 +101,9 @@ CREATOR_STEMS_V2 = (
     "klein/time-of-day",
     "klein/camera-angles",
     "klein/color-moods",
-    "wan/orbit-i2v",
-    "wan/push-in-i2v",
-    "wan/parallax-i2v",
+    "wan/orbit-still-5s",
+    "wan/push-in-still-5s",
+    "wan/parallax-still-5s",
     "wan/sticker-loop",
     "ltx/weather-broll",
     "ltx/interior-ambience",
@@ -299,12 +299,12 @@ def polish_video_graph(graph: dict, *, gif: bool = False) -> dict:
 
 def patch_existing_video_graphs() -> None:
     video_files = [
-        lab_json("wan/i2v-5s.json"),
-        lab_json("wan/t2v-5s.json"),
-        lab_json("wan/i2v-shot.json"),
-        lab_json("ltx/i2v-5s.json"),
-        lab_json("ltx/t2v-5s.json"),
-        lab_json("ltx/i2v-shot.json"),
+        lab_json("wan/still-to-video-5s.json"),
+        lab_json("wan/text-to-video-5s.json"),
+        lab_json("wan/still-to-shot.json"),
+        lab_json("ltx/still-to-video-5s.json"),
+        lab_json("ltx/text-to-video-5s.json"),
+        lab_json("ltx/still-to-shot.json"),
         lab_json("wan/gif-loop.json"),
     ]
     for path in video_files:
@@ -312,7 +312,7 @@ def patch_existing_video_graphs() -> None:
         gif = path.name.startswith("wan-gif")
         if path.name.startswith("ltx-"):
             wire_ltx_audio(graph)
-        if path.name == "ltx/i2v-shot.json":
+        if path.name == "ltx/still-to-shot.json":
             for node in graph["nodes"]:
                 ntype = node.get("type")
                 vals = node.get("widgets_values")
@@ -327,8 +327,8 @@ def patch_existing_video_graphs() -> None:
         normalize_enhance_widgets(graph)
         # Point shot notes at unified films
         if path.name in (
-            "wan/i2v-shot.json",
-            "ltx/i2v-shot.json",
+            "wan/still-to-shot.json",
+            "ltx/still-to-shot.json",
         ):
             note = next(n for n in graph["nodes"] if n.get("type") == "Note")
             text = note["widgets_values"][0]
@@ -420,7 +420,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict) -> str:
         "Unified graph: Queue **Identity (Klein)** once (LTX group starts bypassed).",
         "Then Ctrl+B to bypass Identity and enable **Shot print (LTX)**. Retarget LoadImage,",
         "Motion+Audio, and prefixes for each of 18 shots. Optional Wan rehearsal:",
-        "**wan/i2v-shot**.",
+        "**wan/still-to-shot**.",
         "",
         "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. Last frame of shot N is LoadImage of shot N+1.",
         f"Concat: `./scripts/utilities/concat-shots.sh --film {film} --yes`",
@@ -460,7 +460,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 1. Leave **Shot print (LTX)** bypassed (Ctrl+B). Queue **Identity (Klein)** → `ez_{slug}_identity_*.png`.
 2. Bypass Identity; enable Shot print. Set LoadImage to the identity PNG (shot 1) or previous `*_last`.
 3. Paste Motion + Audio from the on-canvas shot map. Set VHS prefix `ez_{slug}_bN_sM_ltx_video` and last-frame `ez_{slug}_bN_sM_last`. Queue **5.00s** AV.
-4. Repeat 18 times. Optional silent rehearsal: **wan/i2v-shot**.
+4. Repeat 18 times. Optional silent rehearsal: **wan/still-to-shot**.
 5. `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise. US-safe local pack only. No score.
@@ -603,7 +603,7 @@ def build_creator_toolkit() -> None:
     note = f"""## klein/shorts-still
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.
+Save prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
@@ -616,8 +616,8 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
     _dump(lab_json("klein/shorts-still.json"), g)
 
     # 2. Vertical Wan I2V
-    g = _load(lab_json("wan/i2v-5s.json"))
-    g["id"] = "wan/shorts-i2v"
+    g = _load(lab_json("wan/still-to-video-5s.json"))
+    g["id"] = "wan/shorts-still-5s"
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
     # width, height, length — keep 121 smoke length; vertical size
@@ -636,7 +636,7 @@ Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; r
     enh = _node(g, "EZWanPromptEnhance")
     enh["widgets_values"] = [motion, True, "i2v", "5 seconds, 24 fps, 9:16", "none"]
     _node(g, "CLIPTextEncode", "Motion / prompt")["widgets_values"] = [motion]
-    note = f"""## wan/shorts-i2v
+    note = f"""## wan/shorts-still-5s
 
 Vertical silent Wan 5B I2V for Shorts (~5 s @ 24 fps). Apache 2.0.
 LoadImage: `ez_shorts_still_*.png` (or example.png to smoke-test).
@@ -645,11 +645,11 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
 {PREVIEW_BULLET}
 """
     _set_note(g, note, "Wan 5B vertical 9:16 silent I2V ~5s")
-    _dump(lab_json("wan/shorts-i2v.json"), g)
+    _dump(lab_json("wan/shorts-still-5s.json"), g)
 
     # 3. Vertical LTX I2V AV
-    g = _load(lab_json("ltx/i2v-5s.json"))
-    g["id"] = "ltx/shorts-i2v"
+    g = _load(lab_json("ltx/still-to-video-5s.json"))
+    g["id"] = "ltx/shorts-still-5s"
     g["revision"] = 1
     wire_ltx_audio(g)
     # LTXVImgToVideo widgets include width/height/length
@@ -675,7 +675,7 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
             "Motion + audio",
         ):
             n["widgets_values"] = [prompt]
-    note = f"""## ltx/shorts-i2v
+    note = f"""## ltx/shorts-still-5s
 
 {LTX_CANVAS_PORTRAIT}
 
@@ -686,7 +686,7 @@ LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio mu
 Disclose AI-generated media; do not strip provenance; do not distill. No score.
 """
     _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~5s")
-    _dump(lab_json("ltx/shorts-i2v.json"), g)
+    _dump(lab_json("ltx/shorts-still-5s.json"), g)
 
     # 4. Thumbnail
     g = _load(lab_json("klein/still-hero.json"))
@@ -826,7 +826,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     _dump(lab_json("wan/bumper-loop.json"), g)
 
     # 9. LTX ambient B-roll
-    g = _load(lab_json("ltx/t2v-5s.json"))
+    g = _load(lab_json("ltx/text-to-video-5s.json"))
     g["id"] = "ltx/broll-ambient"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -1321,7 +1321,7 @@ def _wan_i2v(
     length: int = 121,
     enhance: bool = True,
 ) -> None:
-    g = _load(lab_json("wan/i2v-5s.json"))
+    g = _load(lab_json("wan/still-to-video-5s.json"))
     g["id"] = stem
     g["revision"] = 1
     lat = _node(g, "Wan22ImageToVideoLatent")
@@ -1386,7 +1386,7 @@ def _ltx_av(
     mode: str,
     audio_hint: str,
 ) -> None:
-    src = lab_json("ltx/i2v-5s.json") if mode == "i2v" else lab_json("ltx/t2v-5s.json")
+    src = lab_json("ltx/still-to-video-5s.json") if mode == "i2v" else lab_json("ltx/text-to-video-5s.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1448,7 +1448,7 @@ Keep the center empty of detail; add the quote in your editor.
         size_title="Size 1:1 quote background",
     )
     _klein_single(
-        stem="klein/og-blog",
+        stem="klein/open-graph",
         template="hero",
         size=(1216, 640),
         prefix="ez_og",
@@ -1456,7 +1456,7 @@ Keep the center empty of detail; add the quote in your editor.
             f"{identity} Wide blog / Open Graph hero. Subject left-weighted, quiet right third "
             "for a headline later. Clean of burned-in text. Photoreal still ~1.9:1."
         ),
-        note="""## klein/og-blog
+        note="""## klein/open-graph
 
 Blog / Open Graph hero (Klein 4B). Default 1216×640. Prefix `ez_og`.
 Leave space for a title overlay. No burned-in words.
@@ -1500,14 +1500,14 @@ Keep the upper band simple for a name overlay.
         size_title="Size wide banner 3:1",
     )
     _klein_single(
-        stem="klein/ig-square",
+        stem="klein/instagram-square",
         template="hero",
         size=(1024, 1024),
         prefix="ez_ig_square",
         prompt=(
             f"{identity} Instagram 1:1 square. Subject centered, warm key, unmarked surfaces."
         ),
-        note="""## klein/ig-square
+        note="""## klein/instagram-square
 
 Generic Instagram 1:1 still (Klein 4B). Default 1024×1024. Prefix `ez_ig_square`.
 Edit the prompt for any feed post.
@@ -1524,7 +1524,7 @@ Edit the prompt for any feed post.
         note="""## klein/hook-still
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
-Feed into **wan/shorts-i2v** or **ltx/hook-av**.
+Feed into **wan/shorts-still-5s** or **ltx/hook-av**.
 """,
         description="Klein 4B 9:16 Shorts hook still",
         size_title="Size 9:16 hook still",
@@ -1676,10 +1676,10 @@ Prefixes `ez_mood_01`…`04`. Change only grade / mood.
     )
 
     _wan_i2v(
-        stem="wan/orbit-i2v",
+        stem="wan/orbit-still-5s",
         prefix="ez_orbit_video",
         motion=WAN_ORBIT,
-        note=f"""## wan/orbit-i2v
+        note=f"""## wan/orbit-still-5s
 
 Silent Wan 5B I2V slow orbit (~5 s). LoadImage: packshot or still (`ez_packshot_*.png`).
 Prefix `ez_orbit_video`.
@@ -1690,13 +1690,13 @@ Prefix `ez_orbit_video`.
         enhance=False,
     )
     _wan_i2v(
-        stem="wan/push-in-i2v",
+        stem="wan/push-in-still-5s",
         prefix="ez_pushin_video",
         motion=(
             "Slow cinematic push-in toward the start-image subject. Keep identity locked. "
             "One continuous ~5 s take at 24 fps. No orbit, no cut."
         ),
-        note=f"""## wan/push-in-i2v
+        note=f"""## wan/push-in-still-5s
 
 Silent Wan 5B I2V hero push-in (~5 s). LoadImage: a still or thumbnail.
 Prefix `ez_pushin_video`.
@@ -1707,13 +1707,13 @@ Prefix `ez_pushin_video`.
         enhance=False,
     )
     _wan_i2v(
-        stem="wan/parallax-i2v",
+        stem="wan/parallax-still-5s",
         prefix="ez_parallax_video",
         motion=(
             "Subtle parallax from the start still. Foreground drifts a hair left, background holds. "
             "Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take."
         ),
-        note=f"""## wan/parallax-i2v
+        note=f"""## wan/parallax-still-5s
 
 Silent Wan 5B I2V subtle parallax (~5 s). LoadImage: a still.
 Prefix `ez_parallax_video`.

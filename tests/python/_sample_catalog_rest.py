@@ -1394,7 +1394,7 @@ def ltx_dialogue() -> list[dict[str, str]]:
         (
             "rain-line",
             "Rain line",
-            'A medium photoreal shot under an overhang. The wizard says, "Let the rain finish the take." Rain on glass under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot under an overhang. The wizard says, "Let the rain stem-mix the take." Rain on glass under the voice. Unmarked surfaces. No music and no score. Five seconds.',
         ),
         (
             "night-line",
@@ -2835,7 +2835,7 @@ def app_forge() -> list[dict[str, str]]:
         ("podcast", "Podcast desk", "podcast two-host local hour about keeping the master on the box."),
         ("rap-draft", "Rap draft", "rap draft boom-bap booth take, dry vocals, no autotune."),
         ("beat-sheet", "Beat sheet", "beat-sheet logline for a rooftop sprint, world SFX only."),
-        ("og-blog", "OG blog", "og-blog still of a teak desk and blank notebook, 1216x640."),
+        ("open-graph", "OG blog", "open-graph still of a teak desk and blank notebook, 1216x640."),
         ("character", "Character still", "character still of the techno wizard, 1024x1280, identity lock."),
         ("hook-still", "Hook still", "9:16 hook still of a wizard at a night rail, lanterns only."),
         ("a2v", "A2V freeze", "a2v freeze a 5s wav of rain on a terrace, picture follows audio."),
@@ -2862,7 +2862,7 @@ def beat_sheet_logline() -> list[dict[str, str]]:
         ("rain-hold", "Rain hold", "Hold under an overhang while tropical rain finishes the take."),
         ("night-rail", "Night rail", "A night rail look over an unmarked bay, lanterns only."),
         ("packshot-day", "Packshot day", "One unmarked object on stone, honest light, then a slow orbit."),
-        ("clay-finish", "Clay finish", "Finish a clay blocking as photoreal without moving the camera."),
+        ("clay-finish", "Clay stem-mix", "Finish a clay blocking as photoreal without moving the camera."),
         ("dialogue-one", "One line", "One spoken line on a terrace, world SFX under, no score."),
         ("loop-breeze", "Loop breeze", "A locked-camera breeze loop that can ping-pong."),
         ("a2v-listen", "A2V listen", "A still face listens to a loaded clip; picture follows audio."),

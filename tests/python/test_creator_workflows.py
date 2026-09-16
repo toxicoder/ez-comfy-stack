@@ -15,8 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 
 CREATORS = (
     ("klein/shorts-still", "ez_shorts_still", False),
-    ("wan/shorts-i2v", "ez_shorts_wan_video", True),
-    ("ltx/shorts-i2v", "ez_shorts_ltx_video", True),
+    ("wan/shorts-still-5s", "ez_shorts_wan_video", True),
+    ("ltx/shorts-still-5s", "ez_shorts_ltx_video", True),
     ("klein/thumbnail", "ez_thumbnail", False),
     ("klein/product-packshot", "ez_packshot", False),
     ("klein/before-after", "ez_before", False),
@@ -26,10 +26,10 @@ CREATORS = (
     ("klein/storyboard-6up", "ez_board_01", False),
     ("klein/endcard-cta", "ez_endcard", False),
     ("klein/quote-bg", "ez_quote_bg", False),
-    ("klein/og-blog", "ez_og", False),
+    ("klein/open-graph", "ez_og", False),
     ("klein/podcast-cover", "ez_podcast", False),
     ("klein/banner-wide", "ez_banner", False),
-    ("klein/ig-square", "ez_ig_square", False),
+    ("klein/instagram-square", "ez_ig_square", False),
     ("klein/hook-still", "ez_hook_still", False),
     ("klein/lower-third-bg", "ez_lowerthird", False),
     ("klein/food-tabletop", "ez_tabletop", False),
@@ -37,9 +37,9 @@ CREATORS = (
     ("klein/time-of-day", "ez_tod_01", False),
     ("klein/camera-angles", "ez_angle_wide", False),
     ("klein/color-moods", "ez_mood_01", False),
-    ("wan/orbit-i2v", "ez_orbit_video", True),
-    ("wan/push-in-i2v", "ez_pushin_video", True),
-    ("wan/parallax-i2v", "ez_parallax_video", True),
+    ("wan/orbit-still-5s", "ez_orbit_video", True),
+    ("wan/push-in-still-5s", "ez_pushin_video", True),
+    ("wan/parallax-still-5s", "ez_parallax_video", True),
     ("wan/sticker-loop", "ez_sticker", True),
     ("ltx/weather-broll", "ez_weather_video", True),
     ("ltx/interior-ambience", "ez_interior_video", True),
@@ -47,9 +47,9 @@ CREATORS = (
     ("ltx/dialogue-5s", "ez_ltx_dialogue", True),
     ("ltx/multishot-5s", "ez_ltx_multishot", True),
     ("ltx/product-hero", "ez_ltx_product", True),
-    ("ltx/flf-5s", "ez_ltx_flf", True),
-    ("ltx/a2v-5s", "ez_ltx_a2v", True),
-    ("audio/podcast/audio-first", "ez_podcast_ep", False),
+    ("ltx/first-last-5s", "ez_ltx_flf", True),
+    ("ltx/audio-to-video-5s", "ez_ltx_a2v", True),
+    ("audio/podcast/two-host-episode", "ez_podcast_ep", False),
     ("audio/podcast/radio-drama", "ez_radio_ep", False),
     ("audio/music/rap-draft", "ez_rap_draft", False),
     ("audio/music/rap-full", "ez_rap_full", False),
@@ -96,7 +96,7 @@ def test_vertical_shorts_sizes() -> None:
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][0] == 432
     assert latent["widgets_values"][1] == 768
-    wan = json.loads(lab_json("wan/shorts-i2v.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan/shorts-still-5s.json").read_text(encoding="utf-8"))
     wlat = next(n for n in wan["nodes"] if n.get("type") == "Wan22ImageToVideoLatent")
     assert wlat["widgets_values"][0] == 480
     assert wlat["widgets_values"][1] == 832

@@ -48,10 +48,10 @@ def test_pack_exports_node() -> None:
 
 
 def test_pick_template_heuristic() -> None:
-    assert pick_template("1:1 IG still of a mug", "auto") == "klein/ig-square"
-    assert pick_template("pinterest pin of a mug", "auto") == "klein/creator/pin-standard"
+    assert pick_template("1:1 IG still of a mug", "auto") == "klein/instagram-square"
+    assert pick_template("pinterest pin of a mug", "auto") == "klein/creator/pinterest-pin"
     assert pick_template("spotify canvas loop", "auto") == "wan/creator/spotify-canvas"
-    assert pick_template("silent 5s from a still", "auto") == "wan/i2v-5s"
+    assert pick_template("silent 5s from a still", "auto") == "wan/still-to-video-5s"
     assert pick_template("hello world", "auto") == "klein/still-draft"
     assert pick_template("anything", "klein/still-hero") == "klein/still-hero"
     with pytest.raises(ForgeError, match="unknown"):
@@ -170,7 +170,7 @@ def test_node_run_writes(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     packed = EZAppForge().run(
         prompt="1:1 IG still of a mug",
-        template="klein/ig-square",
+        template="klein/instagram-square",
         slug="node-mug",
         as_app=True,
         overwrite=False,
@@ -179,7 +179,7 @@ def test_node_run_writes(
     )
     path = packed["result"][0]
     assert Path(path).is_file()
-    assert packed["ui"]["template"][0] == "klein/ig-square"
+    assert packed["ui"]["template"][0] == "klein/instagram-square"
 
 
 def test_save_workflow_helper(
@@ -210,7 +210,7 @@ def test_helpers_stems_slugs_and_prompts() -> None:
     assert forge.load_lab_graph("") is None
     assert forge.load_lab_graph("still-draft") is not None
     assert forge._brief_has("", "") is False
-    assert forge._brief_has("ig-square still", "ig-square") is True
+    assert forge._brief_has("instagram-square still", "instagram-square") is True
     assert pick_template("x", "custom") == "klein/still-draft"
 
 
@@ -376,7 +376,7 @@ def test_parse_plan_and_llm_generate(
     assert forge.parse_plan("{not-json") is None
     assert forge.parse_plan("[1]") is None
     assert forge.parse_plan('{"template": }') is None
-    plan = forge.parse_plan('prefix {"template":"klein/ig-square","slug":"p","reason":"r"}')
+    plan = forge.parse_plan('prefix {"template":"klein/instagram-square","slug":"p","reason":"r"}')
     assert plan is not None
     monkeypatch.setattr(
         forge,
@@ -384,7 +384,7 @@ def test_parse_plan_and_llm_generate(
         lambda _s, _u: (
             json.dumps(
                 {
-                    "template": "klein/ig-square",
+                    "template": "klein/instagram-square",
                     "slug": "plan-mug",
                     "as_app": True,
                     "slots": {"prompt": "planned mug"},
@@ -396,7 +396,7 @@ def test_parse_plan_and_llm_generate(
     )
     result = generate_app("make a still", template="auto", use_llm=True)
     assert result.ok, result.error
-    assert result.template == "klein/ig-square"
+    assert result.template == "klein/instagram-square"
     assert result.slug == "plan-mug"
     monkeypatch.setattr(forge, "_complete", lambda _s, _u: ("", "llama.cpp unavailable"))
     fallback = generate_app(

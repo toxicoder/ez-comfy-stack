@@ -89,7 +89,7 @@ tags: [troubleshooting, comfyui, docker]
 | Start and runtime | [Troubleshooting — start and runtime](operate/troubleshooting-start-runtime.md) |
 | Models and workflows | [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md) |
 
-## Dub (localize)
+## Dub (clone-translate)
 
 Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixture that shipped a 64 s YT tone:
 

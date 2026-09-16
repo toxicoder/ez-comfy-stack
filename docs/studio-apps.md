@@ -41,7 +41,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets: **Quality** (Lab / Draft / High) first, then **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/flf-5s** exposes **First frame** and **Last frame**. **ltx/a2v-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets: **Quality** (Lab / Draft / High) first, then **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/first-last-5s** exposes **First frame** and **Last frame**. **ltx/audio-to-video-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 **Quality** is a workflow-global combo (`EZQuality`) stamped first in `linearData`. Lab leaves authored widgets. Draft is faster (fewer steps). High is slower (more steps; Klein base 4B + CFG 3.5 when `download-image --tier base` is on disk, otherwise extra distilled steps at CFG 1.0). It does not change size, length, CLIP, or VAE, and it is not `--tier quality`. Inspire desks (no UNET) still show the combo as a no-op.
@@ -109,24 +109,24 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 | **klein/still-daily** | klein | `ez_still_app` — click UNET to swap distilled / NVFP4 / base |
 | **klein/still-hero** | klein | `ez_still_hero` — 1280×704 LTX feeder |
 | **klein/thumbnail** | klein | `ez_thumbnail` 1280×720 |
-| **klein/ig-square** | klein | `ez_ig_square` 1:1 |
-| **klein/og-blog** | klein | `ez_og` 1216×640 |
+| **klein/instagram-square** | klein | `ez_ig_square` 1:1 |
+| **klein/open-graph** | klein | `ez_og` 1216×640 |
 | **klein/banner-wide** | klein | `ez_banner` ~3:1 |
 | **klein/shorts-still** | klein | `ez_shorts_still` 432×768 |
-| **wan/i2v-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
+| **wan/still-to-video-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
 | **wan/gif-loop** | wan | 49-frame ping-pong GIF |
-| **ltx/i2v-5s** | ltx | AV 5 s, 1280×704 |
+| **ltx/still-to-video-5s** | ltx | AV 5 s, 1280×704 |
 | **ltx/hook-av** | ltx | AV cold open |
 | **ltx/dialogue-5s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
 | **ltx/multishot-5s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
 | **ltx/product-hero** | ltx | Packshot I2V orbit. Prefix `ez_ltx_product` |
-| **ltx/flf-5s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
-| **ltx/a2v-5s** | ltx | Freeze a ~5 s wav; mux original audio. Prefix `ez_ltx_a2v` |
+| **ltx/first-last-5s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
+| **ltx/audio-to-video-5s** | ltx | Freeze a ~5 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **klein/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 
-Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/<lane>/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **klein/creator/ig-portrait** → **wan/creator/ig-story-loop** → **ltx/creator/ig-reel-lifestyle**. Klein stills may use 1280×720; LTX feeders stay **1280×704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
+Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/<lane>/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **klein/creator/instagram-portrait** → **wan/creator/instagram-story-loop** → **ltx/creator/instagram-reel-lifestyle**. Klein stills may use 1280×720; LTX feeders stay **1280×704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
 
-Audio Apps (`podcast-*`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/finish**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/shorts/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
+Audio Apps (`podcast-*`, `dub-*`, `audio/music/rap-draft`, `audio/music/rap-full`, **audio/stem-mix**) are occupancy **audio**. Catalog albums live under `_lab/audio/albums/<artist>/<album>/` with numbered tracks, `cover.json` (klein), and `album.json` (zip). Outputs are FLAC + MP3 tagged with artist/album/title; optional cover is in the tags. One-go: `./scripts/manage.sh album-render --album nill-bye/peer-review`. Mux a still for YouTube with `./scripts/manage.sh audio-still-video --audio FILE --image FILE` (host ffmpeg; compose may stay up). Film graphs under `_lab/shorts/` are occupancy **film**. DCC Apps live under `_lab/dcc/` (lane **dcc**). Clay-to-finish playbook: [Clay to finish](learn/clay-to-finish.md). Blender stills + video: [Blender creator suite](learn/blender-creator.md).
 
 ---
 
@@ -136,16 +136,16 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | App | Occupancy | What it does |
 | --- | --- | --- |
-| **dcc/klein/from-clay** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
-| **dcc/klein/from-clay-plates** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
-| **dcc/klein/from-canny** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
-| **dcc/ltx/iclora-depth-5s** | ltx | Union Control envelope, depth from `depth.mp4` |
-| **dcc/ltx/iclora-canny-5s** | ltx | Same envelope, canny from `canny.mp4` |
-| **dcc/ltx/iclora-depth-shorts** | ltx | Depth envelope at **768×1280** |
-| **dcc/wan/flf-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
-| **dcc/klein/from-guide-loader** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
-| **dcc/ltx/iclora-from-guide-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
-| **dcc/trellis/from-klein-still** | trellis | Still pack `mug` → TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
+| **dcc/klein/clay-hero** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
+| **dcc/klein/clay-plates** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
+| **dcc/klein/canny-hero** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
+| **dcc/ltx/depth-control-5s** | ltx | Union Control envelope, depth from `depth.mp4` |
+| **dcc/ltx/canny-control-5s** | ltx | Same envelope, canny from `canny.mp4` |
+| **dcc/ltx/depth-control-shorts** | ltx | Depth envelope at **768×1280** |
+| **dcc/wan/first-last-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
+| **dcc/klein/guide-still** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
+| **dcc/ltx/depth-from-loader** | ltx | Envelope from loaders. MagCache off. Prefix `ez_iclora_guide` |
+| **dcc/trellis/still-to-mesh** | trellis | Still pack `mug` → TRELLIS.2 INT8 under `assets/objects/_lab-mug/` |
 
 ---
 
@@ -153,9 +153,9 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | From | To |
 | --- | --- |
-| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) or FLF (`ltx/flf-5s`) |
+| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 5s (`ltx-i2v-5s`) or FLF (`ltx/first-last-5s`) |
 | Product packshot | `ltx/product-hero` |
-| Talking-head still | `ltx/a2v-5s` (real freeze; two-stage stays Templates) |
+| Talking-head still | `ltx/audio-to-video-5s` (real freeze; two-stage stays Templates) |
 | Spark Still | Platform Pack (`klein-platform-pack`) → Silent 5s / Hook AV |
 | Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
@@ -169,8 +169,8 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | Guide pack first+last | `wan-flf-from-guide` |
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
 | Clay dream-house | `start` (or `house-views` dump) → **klein/dream-house-clay** → same loop kit |
-| IG 4:5 (`klein/creator/ig-portrait`) | `wan/creator/ig-story-loop` → `ltx/creator/ig-reel-lifestyle` |
-| Shorts thumb (`klein/creator/yt-shorts-thumb`) | `wan/creator/zoom-punch` → `ltx/shorts-i2v` |
+| IG 4:5 (`klein/creator/instagram-portrait`) | `wan/creator/instagram-story-loop` → `ltx/creator/instagram-reel-lifestyle` |
+| Shorts thumb (`klein/creator/youtube-shorts-thumb`) | `wan/creator/zoom-punch` → `ltx/shorts-still-5s` |
 | Canvas still (`klein/creator/spotify-canvas-still`) | `wan/creator/spotify-canvas` (silent rebound) |
 | Twitch starting (`klein/creator/twitch-starting`) | `wan/creator/twitch-starting-loop` → `ltx/creator/twitch-starting-av` |
 

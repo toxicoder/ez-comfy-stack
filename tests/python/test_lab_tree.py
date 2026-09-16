@@ -27,8 +27,8 @@ ROOT = Path(__file__).resolve().parents[2]
 def test_rel_id_maps_old_stems() -> None:
     assert rel_id("klein-still-draft-lab-example") == "klein/still-draft"
     assert rel_id("klein-still-draft-lab-example.json") == "klein/still-draft"
-    assert rel_id("wan-i2v-5s-lab-example") == "wan/i2v-5s"
-    assert rel_id("ltx-i2v-5s-lab-example") == "ltx/i2v-5s"
+    assert rel_id("wan-i2v-5s-lab-example") == "wan/still-to-video-5s"
+    assert rel_id("ltx-i2v-5s-lab-example") == "ltx/still-to-video-5s"
     assert rel_id("klein/still-draft") == "klein/still-draft"
     assert rel_id("audio/music/rap-draft") == "audio/music/rap-draft"
     assert len(OLD_TO_REL) >= 60
@@ -149,9 +149,9 @@ def test_lab_dest_rejects_bad_subdir() -> None:
 
 def test_lab_json_ambiguous_i2v() -> None:
     with pytest.raises(FileNotFoundError, match="ambiguous"):
-        lab_json("i2v-5s")
-    assert lab_json("wan/i2v-5s").parent.name == "wan"
-    assert lab_json("ltx/i2v-5s").parent.name == "ltx"
+        lab_json("still-to-video-5s")
+    assert lab_json("wan/still-to-video-5s").parent.name == "wan"
+    assert lab_json("ltx/still-to-video-5s").parent.name == "ltx"
     assert lab_json("still-draft").parent.name == "klein"
 
 

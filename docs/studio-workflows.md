@@ -29,10 +29,10 @@ Sidebar tree after start:
 user/default/workflows/
   _lab/
     klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, creator/…
-    wan/       silent 5s, gif/bumper/sticker, flf, vace, shot, creator/…
-    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot, dialogue, multishot, product, FLF, A2V, creator/…
+    wan/       silent 5s, gif/bumper/sticker, first-last, vace, shot, creator/…
+    ltx/       AV 5s, hook, b-roll, shorts, first-last, audio-to-video, shot, creator/…
     shorts/    go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05 (7.5 min)
-    dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
+    dcc/       clay → print, plates, canny, depth/canny control, first-last from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast, dub, music/rap-draft, music/rap-full
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
@@ -52,8 +52,8 @@ flowchart TB
   Need --> Film["~90 s short"]
   Need --> Plate["Thumbnail / packshot / cover"]
   Still --> K["klein-still-draft or daily / hero"]
-  Motion --> W["wan-i2v-5s or shot"]
-  AV --> L["ltx-i2v-5s or shorts I2V"]
+  Motion --> W["wan/still-to-video-5s or shot"]
+  AV --> L["ltx/still-to-video-5s or shorts"]
   Loop --> G["wan-gif-loop or bumper-loop"]
   Film --> F["film-*-90s one-click"]
   Plate --> C["klein-thumbnail / packshot / cover"]
@@ -135,6 +135,6 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[wan/gif-loop](generated/workflows/wan/gif-loop.md)** emits `image/gif`.
 
-Optional Wan A14B is a Queue graph (`workflows/_lab/optional/wan/i2v-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
+Optional Wan A14B is a Queue graph (`workflows/_lab/optional/wan/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 Daily loop: [Still to motion to AV](visual-generative-ai.md). Prompt shapes: [Prompting](prompting.md).

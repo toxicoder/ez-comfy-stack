@@ -16,7 +16,7 @@ tags: [cinema, prompting, klein, wan, ltx, inspire]
 **What this enables**
 
 - Building a professional shot from dropdowns instead of remembering film grammar
-- Copying a family CLIP string into **klein/still-draft**, **wan/t2v-5s**, or **ltx/t2v-5s**
+- Copying a family CLIP string into **klein/still-draft**, **wan/text-to-video-5s**, or **ltx/text-to-video-5s**
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
@@ -80,7 +80,7 @@ Wan never emits two camera verbs. Do not also type `dolly in` in the subject.
 
 1. Queue **inspire/cinema-rack** (occupancy **llm**).
 2. Copy the Klein / Wan / LTX CLIP box.
-3. Paste into **klein/still-draft**, **wan/t2v-5s**, or **ltx/t2v-5s**. For I2V, set Family to `wan_i2v` / `ltx_i2v` first so look axes are already omitted.
+3. Paste into **klein/still-draft**, **wan/text-to-video-5s**, or **ltx/text-to-video-5s**. For I2V, set Family to `wan_i2v` / `ltx_i2v` first so look axes are already omitted.
 4. Optional: turn Enhance **off** on the destination if the rack string is already model-native.
 
 Safety impact: none. Prompt JSON + CPU node. No Docker, restart, or headroom change.

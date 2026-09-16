@@ -135,7 +135,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | Graph | Notes |
 | --- | --- |
 | `klein/still-draft.json` | Klein 4B 768×432, 4 steps, batch 2 |
-| `audio/dub/localize.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
+| `audio/dub/clone-translate.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
 | `audio/music/rap-draft.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `audio/music/rap-full.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `_lab/audio/albums/nill-bye/<album>/` | Nine Nill Bye albums (135 ACE-Step 180 s takes + `cover.json` + `album.json`). SaveAudio stem `NN - Song Title`. Catalog: [Local music](../music.md) |
@@ -144,17 +144,17 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `klein/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
 | `klein/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
 | `klein/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
-| `wan/i2v-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
-| `wan/t2v-5s.json` | Wan 5B T2V smoke |
-| `wan/i2v-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `wan/still-to-video-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
+| `wan/text-to-video-5s.json` | Wan 5B T2V smoke |
+| `wan/still-to-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
 | `wan/gif-loop.json` | Ping-pong GIF, 49 @ 12 fps |
-| `ltx/i2v-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
-| `ltx/t2v-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
-| `ltx/i2v-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `ltx/still-to-video-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
+| `ltx/text-to-video-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
+| `ltx/still-to-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
 | `_lab/shorts/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](../shorts.md)) |
 | `klein/shorts-still.json` | Vertical 9:16 Shorts still |
-| `wan/shorts-i2v.json` | Vertical silent Shorts I2V |
-| `ltx/shorts-i2v.json` | Vertical AV Shorts I2V |
+| `wan/shorts-still-5s.json` | Vertical silent Shorts I2V |
+| `ltx/shorts-still-5s.json` | Vertical AV Shorts I2V |
 | `klein/thumbnail.json` | YouTube thumbnail still |
 | `klein/product-packshot.json` | Product packshot 1:1 |
 | `klein/before-after.json` | Before/after still pair |
@@ -164,10 +164,10 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `klein/storyboard-6up.json` | Six storyboard frames |
 | `klein/endcard-cta.json` | End-card / CTA plate 16:9 |
 | `klein/quote-bg.json` | Quote-card background 1:1 |
-| `klein/og-blog.json` | Blog / OG hero |
+| `klein/open-graph.json` | Blog / OG hero |
 | `klein/podcast-cover.json` | Podcast cover 1:1 |
 | `klein/banner-wide.json` | Wide channel banner |
-| `klein/ig-square.json` | Instagram 1:1 still |
+| `klein/instagram-square.json` | Instagram 1:1 still |
 | `klein/hook-still.json` | 9:16 hook still |
 | `klein/lower-third-bg.json` | Lower-third-safe 16:9 |
 | `klein/food-tabletop.json` | Food tabletop 4:5 |
@@ -175,9 +175,9 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `klein/time-of-day.json` | Dawn / noon / dusk / night |
 | `klein/camera-angles.json` | Wide / medium / close |
 | `klein/color-moods.json` | Four color moods |
-| `wan/orbit-i2v.json` | Slow orbit I2V ~5 s |
-| `wan/push-in-i2v.json` | Hero push-in I2V ~5 s |
-| `wan/parallax-i2v.json` | Parallax I2V ~5 s |
+| `wan/orbit-still-5s.json` | Slow orbit I2V ~5 s |
+| `wan/push-in-still-5s.json` | Hero push-in I2V ~5 s |
+| `wan/parallax-still-5s.json` | Parallax I2V ~5 s |
 | `wan/sticker-loop.json` | Looping sticker MP4 |
 | `ltx/weather-broll.json` | Weather B-roll AV ~5 s |
 | `ltx/interior-ambience.json` | Interior ambience AV ~5 s |

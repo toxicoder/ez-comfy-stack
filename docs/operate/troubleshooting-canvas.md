@@ -32,8 +32,8 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | Start images vanished after `cleanup` | LoadImage files lived on the named volume | Put start frames in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). `cleanup` does not delete `COMFY_OUTPUT_DIR` |
 | LTX `einops` / divide by 45 | Width/height not ÷32 (720 or 1080) | Lab size is **1280×704**. `ez_ltx_spatial` auto-snaps; prefer typing 704 |
 | No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |
-| LTX MP4 has no sound | Missing audio VAE decode → VHS (or A2V freeze not on LoadAudio) | Re-open current **ltx/***. **ltx/a2v-5s** muxes **LoadAudio**, not `LTXVAudioVAEDecode` — pick `ez_a2v_bed.wav` in `/inputs` |
-| LTX AddGuide `combined AV latent is not supported` | First/last guides were wired after `LTXVConcatAVLatent` | Use **ltx/flf-5s**. Guides pin the **video** latent, then audio concat |
+| LTX MP4 has no sound | Missing audio VAE decode → VHS (or A2V freeze not on LoadAudio) | Re-open current **ltx/***. **ltx/audio-to-video-5s** muxes **LoadAudio**, not `LTXVAudioVAEDecode` — pick `ez_a2v_bed.wav` in `/inputs` |
+| LTX AddGuide `combined AV latent is not supported` | First/last guides were wired after `LTXVConcatAVLatent` | Use **ltx/first-last-5s**. Guides pin the **video** latent, then audio concat |
 | FLF last frame ignored | Second LoadImage unwired or bypassed | App widgets **First frame** and **Last frame** must both be set. Same aspect, 1280×704 |
 | Prompt box is read-only | A **Sample prompt** recipe is selected | Pick **Custom** in the Sample prompt dropdown. The last recipe stays in the box so you can edit it. |
 | Wan prompt has two camera verbs | Subject also named a dolly/pan, or Enhance invented a second move | Cinema Rack already emits one `wan_token`. Leave the move out of Subject. Family `wan_t2v` / `wan_i2v`. [Cinema Rack](../create/cinema-rack.md) |

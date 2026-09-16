@@ -2479,7 +2479,7 @@
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": [
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
         "ltx/hook-av"
       ]
     },

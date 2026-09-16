@@ -269,7 +269,7 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
     assert "shorts/go-see" in handoff
-    assert "dcc/klein/from-clay" in handoff
+    assert "dcc/klein/clay-hero" in handoff
     assert "klein/identity-sheet" in handoff
     assert "1280×720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob

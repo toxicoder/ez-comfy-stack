@@ -235,7 +235,7 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
         "",
         "Queue **once**. Klein identity still → 18 × 5.00s LTX AV prints (last-frame "
         "continuity) → **Save 90s film (MP4)**. Do not Queue a 90s denoise (121 frames "
-        "= 1+8n per shot). Optional silent rehearsal: **wan/i2v-shot**. Optional "
+        "= 1+8n per shot). Optional silent rehearsal: **wan/still-to-shot**. Optional "
         f"host stitch: `./scripts/utilities/concat-shots.sh --film {film} --yes`.",
         "",
         "18 × 121 frames @ 24 fps (LTX 1+8n) stitch under a 90.00s cap. US-safe local pack only. No score. "
@@ -283,7 +283,7 @@ LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-gene
 1. Queue **once**. Klein runs first; models unload; then 18 × 5.00s LTX prints chain last-frame → next start.
 2. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10) — expected, not a hang.
 3. The MP4 is already on disk at `${{COMFY_OUTPUT_DIR}}/ez_{slug}_90s.mp4` (act graphs write `ez_{slug}_actN_90s.mp4`). A **Film ready** overlay plays it. Copy off the Spark with scp.
-4. Optional single-shot iterate: **ltx/i2v-shot**. Optional silent rehearsal: **wan/i2v-shot**.
+4. Optional single-shot iterate: **ltx/still-to-shot**. Optional silent rehearsal: **wan/still-to-shot**.
 5. Spark-farm / host stitch fallback: `./scripts/utilities/concat-shots.sh --film {film} --yes`
 
 Do not Queue a 90s denoise (keep 121-frame / 1+8n widgets). US-safe local pack only. No score.

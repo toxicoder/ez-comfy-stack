@@ -36,9 +36,9 @@ def _load(stem: str) -> dict:
 
 
 def test_audio_first_podcast_graph() -> None:
-    graph = _load("audio/podcast/audio-first")
-    assert graph["id"] == "audio-first"
-    assert graph["extra"].get("lab_rel") == "audio/podcast/audio-first"
+    graph = _load("audio/podcast/two-host-episode")
+    assert graph["id"] == "two-host-episode"
+    assert graph["extra"].get("lab_rel") == "audio/podcast/two-host-episode"
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-podcast"
     assert extra["lab_note"].strip()
@@ -152,7 +152,7 @@ def _app_labels(graph: dict) -> list[str]:
 
 
 def test_podcast_apps_expose_voices_length_not_clone_refs() -> None:
-    audio = _load("audio/podcast/audio-first")
+    audio = _load("audio/podcast/two-host-episode")
     names = _app_names(audio)
     assert "speaker_a_voice" in names
     assert "speaker_b_voice" in names

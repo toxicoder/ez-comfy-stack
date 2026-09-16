@@ -84,7 +84,7 @@ flowchart LR
 | Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
 | Print + synced world audio | Groups **3–8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
 | Stitch + preview | Group **9. Publish 90s MP4** (left column) | `EZFilmConcat` (H.264 CRF 18 + AAC + YouTube loudnorm + faststart) | — |
-| Optional silent rehearsal | `workflows/_lab/wan/i2v-shot.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
+| Optional silent rehearsal | `workflows/_lab/wan/still-to-shot.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
 One-click film files:
 
@@ -106,7 +106,7 @@ Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch
 2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
-5. Optional silent rehearsal of one frame: **wan/i2v-shot**. Optional single-shot iterate: **ltx/i2v-shot**.
+5. Optional silent rehearsal of one frame: **wan/still-to-shot**. Optional single-shot iterate: **ltx/still-to-shot**.
    Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
    ```bash
@@ -161,7 +161,7 @@ ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is
 
 Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump → Klein look → Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
 
-Optional silent **first-last-frame** draft: `wan/flf-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `wan/i2v-5s` (`extra.lab_magcache`; never on LTX heroes).
+Optional silent **first-last-frame** draft: `wan/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `wan/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
 
 Post-concat restore (opt-in Apache SeedVR2-3B):
 
@@ -184,13 +184,13 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 
 ```bash
 ./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
-# load optional/wan/i2v-a14b — unload 5B first
+# load optional/wan/still-to-video-a14b — unload 5B first
 ./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
 # load workflows/_lab/optional/longcat-video.json (note, not 90s default)
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 
-Identity sheet: `klein/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein/talking-head` (I2V smoke) or **`ltx/a2v-5s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
+Identity sheet: `klein/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein/talking-head` (I2V smoke) or **`ltx/audio-to-video-5s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
 
 ```bash
 ./scripts/manage.sh stop
@@ -318,7 +318,7 @@ Identity owns every later I2V. Distilled LTX audio talks if the mix is only a pr
 1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
 2. Accept the still only if: chest-cam POV, only the wearer's own arms along the bottom edge, contralateral pump, blank gloves, hands free, **no second person in front of the camera**, no staff or pole, no handlebar, no circular mask, gap already in center.
 3. Re-roll identity (seed **42** is frozen in YAML — if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `klein/still-hero` off-graph, then paste the winning look back into YAML.
-4. Print b1s1–s3 with `ltx/i2v-shot` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
+4. Print b1s1–s3 with `ltx/still-to-shot` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
 5. `take-promote` winners. `film-resume` the rest.
 6. `./scripts/manage.sh film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00±0.10s.
 7. Listen on headphones. If you hear words, reprint that shot; do not “EQ the announcer out” unless you are on the stems path and dropping DX.
@@ -331,7 +331,7 @@ Optional salvage on a **locked** picture (not the lab default, not in the one-cl
 
 ## Spark farm
 
-The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **ltx/i2v-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
+The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **ltx/still-to-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 

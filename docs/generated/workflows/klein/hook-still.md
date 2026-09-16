@@ -30,7 +30,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ## klein/hook-still
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
-Feed into **wan/shorts-i2v** or **ltx/hook-av**.
+Feed into **wan/shorts-still-5s** or **ltx/hook-av**.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
@@ -515,13 +515,13 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## klein/hook-still First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`. Feed into **wan/shorts-i2v** or **ltx/hook-av**. Occupancy: klein — stop Wan, LTX, podcas…`
+**This graph:** `## klein/hook-still First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`. Feed into **wan/shorts-still-5s** or **ltx/hook-av**. Occupancy: klein — stop Wan, LTX, p…`
 
 ```text
 ## klein/hook-still
 
 First-frame Shorts hook still (Klein 4B). Default 432×768 (9:16). Prefix `ez_hook_still`.
-Feed into **wan/shorts-i2v** or **ltx/hook-av**.
+Feed into **wan/shorts-still-5s** or **ltx/hook-av**.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.

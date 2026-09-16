@@ -267,7 +267,7 @@ def build_still_app() -> dict:
 
 
 def build_gif_loop() -> dict:
-    graph = json.loads(lab_json("wan/i2v-5s.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("wan/still-to-video-5s.json").read_text(encoding="utf-8"))
     graph["id"] = "wan/gif-loop"
     graph["revision"] = 1
     lat = _node(graph, "Wan22ImageToVideoLatent")

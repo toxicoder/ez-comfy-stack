@@ -95,8 +95,8 @@ lab_wf() {
   [[ -f $(lab_wf shorts/go-see.json) ]]
   [[ -f $(lab_wf shorts/still-here.json) ]]
   [[ -f $(lab_wf shorts/switchyard.json) ]]
-  [[ -f $(lab_wf wan/i2v-shot.json) ]]
-  [[ -f $(lab_wf ltx/i2v-shot.json) ]]
+  [[ -f $(lab_wf wan/still-to-shot.json) ]]
+  [[ -f $(lab_wf ltx/still-to-shot.json) ]]
   [[ ! -f ${dir}/still-studio-lab-example.json ]]
   [[ ! -f ${dir}/wan-shot-lab-example.json ]]
   [[ ! -f ${shorts_yaml}/bridge-wan-lab-example.json ]]
@@ -111,8 +111,8 @@ for wf in sorted(lab.glob('*.json')):
     d = json.loads(wf.read_text(encoding='utf-8'))
     assert d.get('id') == os.path.splitext(wf.name)[0], wf
 "
-  wan="$(lab_wf wan/i2v-shot.json)"
-  ltx="$(lab_wf ltx/i2v-shot.json)"
+  wan="$(lab_wf wan/still-to-shot.json)"
+  ltx="$(lab_wf ltx/still-to-shot.json)"
   run python3 -c "
 import json
 w=json.load(open('${wan}'))
@@ -228,7 +228,7 @@ assert any(n.get('type')=='EZKleinPromptEnhance' and (n['widgets_values'][2] if 
 
 @test "wan lab graphs use 5B Apache weights, 121 frames, VHS" {
   local wf path i2v t2v shot
-  for wf in wan/i2v-5s.json wan/t2v-5s.json; do
+  for wf in wan/still-to-video-5s.json wan/text-to-video-5s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'wan2.2_ti2v_5B_fp16.safetensors' "${path}"
@@ -253,9 +253,9 @@ assert vhs[0]['widgets_values']['save_output'] is True
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf wan/i2v-5s.json)"
-  t2v="$(lab_wf wan/t2v-5s.json)"
-  shot="$(lab_wf wan/i2v-shot.json)"
+  i2v="$(lab_wf wan/still-to-video-5s.json)"
+  t2v="$(lab_wf wan/text-to-video-5s.json)"
+  shot="$(lab_wf wan/still-to-shot.json)"
   run grep -F 'ez_shot_01' "${shot}"
   [ "${status}" -eq 0 ]
   run grep -F 'Motion / prompt' "${i2v}"
@@ -290,7 +290,7 @@ assert 'score' not in tt.lower()
 
 @test "ltx hero graphs use 2.5 distilled pack, 121 frames, VHS, CLIP ltxv" {
   local wf path i2v t2v
-  for wf in ltx/i2v-5s.json ltx/t2v-5s.json; do
+  for wf in ltx/still-to-video-5s.json ltx/text-to-video-5s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' "${path}"
@@ -326,8 +326,8 @@ assert 'preview' in (vhs[0].get('title') or '').lower()
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf ltx/i2v-5s.json)"
-  t2v="$(lab_wf ltx/t2v-5s.json)"
+  i2v="$(lab_wf ltx/still-to-video-5s.json)"
+  t2v="$(lab_wf ltx/text-to-video-5s.json)"
   run python3 -c "
 import json
 d=json.load(open('${i2v}'))
@@ -368,16 +368,16 @@ for p in sorted((root / '_lab').rglob('*.json')):
         assert s not in blob, (p.name, s)
     seen.append(p.stem)
     rel = p.relative_to(root / '_lab').with_suffix('').as_posix()
-    if rel == 'wan/i2v-5s':
+    if rel == 'wan/still-to-video-5s':
         assert '121' in desc
-        assert 'wan/i2v-shot' in note
-    if rel == 'wan/t2v-5s':
+        assert 'wan/still-to-shot' in note
+    if rel == 'wan/text-to-video-5s':
         assert 'T2V' in desc
         assert 'bypassed' in note.lower()
-    if rel == 'wan/i2v-shot':
+    if rel == 'wan/still-to-shot':
         assert '120' in desc
         assert 'ez_shot_01' in note
-    if rel == 'ltx/i2v-shot':
+    if rel == 'ltx/still-to-shot':
         assert '121' in desc
     if rel == 'klein/still-draft':
         assert 'klein/still-hero' in note
@@ -427,8 +427,8 @@ assert video >= 7, video
   local wf
   for wf in \
     klein/shorts-still.json \
-    wan/shorts-i2v.json \
-    ltx/shorts-i2v.json \
+    wan/shorts-still-5s.json \
+    ltx/shorts-still-5s.json \
     klein/thumbnail.json \
     klein/product-packshot.json \
     klein/before-after.json \
@@ -438,10 +438,10 @@ assert video >= 7, video
     klein/storyboard-6up.json \
     klein/endcard-cta.json \
     klein/quote-bg.json \
-    klein/og-blog.json \
+    klein/open-graph.json \
     klein/podcast-cover.json \
     klein/banner-wide.json \
-    klein/ig-square.json \
+    klein/instagram-square.json \
     klein/hook-still.json \
     klein/lower-third-bg.json \
     klein/food-tabletop.json \
@@ -449,9 +449,9 @@ assert video >= 7, video
     klein/time-of-day.json \
     klein/camera-angles.json \
     klein/color-moods.json \
-    wan/orbit-i2v.json \
-    wan/push-in-i2v.json \
-    wan/parallax-i2v.json \
+    wan/orbit-still-5s.json \
+    wan/push-in-still-5s.json \
+    wan/parallax-still-5s.json \
     wan/sticker-loop.json \
     ltx/weather-broll.json \
     ltx/interior-ambience.json \
@@ -459,8 +459,8 @@ assert video >= 7, video
     ltx/dialogue-5s.json \
     ltx/multishot-5s.json \
     ltx/product-hero.json \
-    ltx/flf-5s.json \
-    ltx/a2v-5s.json; do
+    ltx/first-last-5s.json \
+    ltx/audio-to-video-5s.json; do
     [[ -f $(lab_wf "${wf}") ]]
   done
 }

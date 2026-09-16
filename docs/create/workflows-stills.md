@@ -30,7 +30,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 | **[klein/identity-sheet](../generated/workflows/klein/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
 | **[klein/character-draft](../generated/workflows/klein/character-draft.md)** | Character still 1024×1280, style dropdown, prefix `ez_character` |
 | **[klein/character-tweak](../generated/workflows/klein/character-tweak.md)** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
-| **[klein/talking-head](../generated/workflows/klein/talking-head.md)** | Klein still → LTX I2V talking smoke. Real freeze: **[ltx/a2v-5s](../generated/workflows/ltx/a2v-5s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+| **[klein/talking-head](../generated/workflows/klein/talking-head.md)** | Klein still → LTX I2V talking smoke. Real freeze: **[ltx/audio-to-video-5s](../generated/workflows/ltx/audio-to-video-5s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 Lane B Klein stills (same occupancy **klein**):
 
@@ -77,10 +77,10 @@ Pack 2 — stills and plates:
 | --- | --- |
 | **[klein/endcard-cta](../generated/workflows/klein/endcard-cta.md)** | End-card / CTA plate 16:9 |
 | **[klein/quote-bg](../generated/workflows/klein/quote-bg.md)** | Quote-card background 1:1 |
-| **[klein/og-blog](../generated/workflows/klein/og-blog.md)** | Blog / Open Graph hero |
+| **[klein/open-graph](../generated/workflows/klein/open-graph.md)** | Blog / Open Graph hero |
 | **[klein/podcast-cover](../generated/workflows/klein/podcast-cover.md)** | Podcast cover 1:1 |
 | **[klein/banner-wide](../generated/workflows/klein/banner-wide.md)** | Channel / LinkedIn banner ~3:1 |
-| **[klein/ig-square](../generated/workflows/klein/ig-square.md)** | Instagram 1:1 still |
+| **[klein/instagram-square](../generated/workflows/klein/instagram-square.md)** | Instagram 1:1 still |
 | **[klein/hook-still](../generated/workflows/klein/hook-still.md)** | 9:16 first-frame hook |
 | **[klein/lower-third-bg](../generated/workflows/klein/lower-third-bg.md)** | Lower-third-safe 16:9 plate |
 | **[klein/food-tabletop](../generated/workflows/klein/food-tabletop.md)** | Food / tabletop 4:5 |

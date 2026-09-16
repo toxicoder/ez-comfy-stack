@@ -217,7 +217,7 @@ def _set_wan_motion(graph: dict, motion: str, *, enhance: bool, hint: str) -> No
 
 
 def _wan_i2v(spec: Pack3Spec) -> None:
-    src = "wan/shorts-i2v.json" if spec.portrait else "wan/i2v-5s.json"
+    src = "wan/shorts-still-5s.json" if spec.portrait else "wan/still-to-video-5s.json"
     graph = cv._load(lab_json(src))
     graph["id"] = spec.rel
     graph["revision"] = 1

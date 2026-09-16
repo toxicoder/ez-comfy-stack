@@ -41,10 +41,10 @@ META_KEYS = (
 )
 PRINT_MODES = ("ltx", "dfr", "ltx-iclora-depth", "wan-flf", "dcc-final")
 IDENTITY_SEED = "42"
-LTX_PRINT_TEMPLATE = "ltx/i2v-5s.json"
+LTX_PRINT_TEMPLATE = "ltx/still-to-video-5s.json"
 DFR_TEMPLATE = "templates/ltx-2.5/t2v-i2v-two-stage-distilled"
-ICLORA_TEMPLATE = "dcc/ltx/iclora-depth-5s.json"
-WAN_FLF_TEMPLATE = "wan/flf-5s.json"
+ICLORA_TEMPLATE = "dcc/ltx/depth-control-5s.json"
+WAN_FLF_TEMPLATE = "wan/first-last-5s.json"
 DCC_FINAL_TEMPLATE = "dcc-final"
 AUDIO_POLICIES = ("world-only", "stems", "a2v-lock")
 SCORE_MODES = ("none", "acestep-instrumental")

@@ -4,11 +4,11 @@ Shape:
 {"template":"klein/still-draft","slug":"short-slug","as_app":true,"slots":{"prompt":"full CLIP or widget text"},"reason":"one line"}
 
 Rules:
-- template must be an id from the catalog (lab_rel such as klein/ig-square)
+- template must be an id from the catalog (lab_rel such as klein/instagram-square)
 - Do not invent node types, links, coordinates, or new occupancy
 - slots keys must be widget names on that template (prompt, seed, filename_prefix, style, …)
 - slug is lowercase [a-z0-9-], no slash
 - as_app is true unless the catalog default_view is graph (90s film)
 - No MiniMax, Kling, FLUX.2-dev, Klein 9B, Seedance, z_image_turbo
-- Prefer a matching plate (ig-square, thumbnail, wan/i2v-5s, ltx/i2v-5s) over a generic still
+- Prefer a matching plate (instagram-square, thumbnail, wan/still-to-video-5s, ltx/still-to-video-5s) over a generic still
 - No markdown, no commentary, JSON object only

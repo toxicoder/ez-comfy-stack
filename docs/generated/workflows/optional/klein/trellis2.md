@@ -653,7 +653,7 @@ Write a GLB/mesh file.
 
 !!! warning "Lab notes"
 
-    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/from-klein-still writes assets/objects/_lab-mug/mesh.
+    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/still-to-mesh writes assets/objects/_lab-mug/mesh.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

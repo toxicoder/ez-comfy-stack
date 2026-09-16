@@ -23,7 +23,7 @@ if str(CUSTOM) not in sys.path:
 
 from ez_dub.nodes import DISCLOSURE_TEXT, SEED_SCRIPT, SOURCE_NONE  # noqa: E402
 
-DUB_NOTE = f"""## audio/dub/localize
+DUB_NOTE = f"""## audio/dub/clone-translate
 
 US-safe multi-speaker clone-and-translate (YouTube / podcast localization). Occupancy **audio** — stop Klein / Wan / LTX first.
 
@@ -125,7 +125,7 @@ class Graph:
 
 
 def build_dub_localize() -> dict:
-    g = Graph("audio/dub/localize")
+    g = Graph("audio/dub/clone-translate")
     g.add(
         1,
         "EZDubIngest",
@@ -209,7 +209,7 @@ def build_dub_localize() -> dict:
 
 def main() -> None:
     graph = build_dub_localize()
-    path = lab_dest("audio/dub/localize", lane="audio")
+    path = lab_dest("audio/dub/clone-translate", lane="audio")
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
 

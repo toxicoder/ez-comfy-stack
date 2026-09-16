@@ -14,7 +14,7 @@ class Pack3Spec:
     """One creator-pack graph.
 
     Attributes:
-        rel: ``extra.lab_rel`` (``klein/creator/yt-channel-icon``).
+        rel: ``extra.lab_rel`` (``klein/creator/youtube-channel-icon``).
         kind: ``klein_single`` | ``klein_pack`` | ``wan_i2v`` | ``wan_loop`` | ``ltx_av``.
         group: Catalog section id.
         size: Width x height latent pixels.
@@ -151,7 +151,7 @@ def _w(
         handoff=handoff,
         enhance_pin=True,
         portrait=portrait,
-        template="wan/gif-loop" if loop else ("wan/shorts-i2v" if portrait else "wan/i2v-5s"),
+        template="wan/gif-loop" if loop else ("wan/shorts-still-5s" if portrait else "wan/still-to-video-5s"),
     )
 
 
@@ -173,7 +173,7 @@ def _l(
     portrait = h > w
     if catalog is None:
         catalog = "ltx_broll" if mode == "t2v" else "ltx_i2v"
-    src = "ltx/shorts-i2v" if portrait else ("ltx/t2v-5s" if mode == "t2v" else "ltx/i2v-5s")
+    src = "ltx/shorts-still-5s" if portrait else ("ltx/text-to-video-5s" if mode == "t2v" else "ltx/still-to-video-5s")
     return Pack3Spec(
         rel=f"ltx/creator/{stem}",
         kind="ltx_av",
@@ -255,7 +255,7 @@ _BRAND = (
 
 PACK3: tuple[Pack3Spec, ...] = (
     _k(
-        "yt-channel-icon",
+        "youtube-channel-icon",
         768,
         768,
         "ez_yt_icon",
@@ -265,7 +265,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "yt-channel-art",
+        "youtube-channel-art",
         1536,
         864,
         "ez_yt_art",
@@ -275,7 +275,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "yt-shorts-thumb",
+        "youtube-shorts-thumb",
         576,
         1024,
         "ez_yt_shorts_thumb",
@@ -285,7 +285,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         handoff=("wan/creator/zoom-punch",),
     ),
     _k(
-        "yt-community",
+        "youtube-community",
         1024,
         1024,
         "ez_yt_community",
@@ -295,7 +295,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "yt-chapter-card",
+        "youtube-chapter-card",
         1280,
         720,
         "ez_yt_chapter",
@@ -305,7 +305,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "yt-subscribe-plate",
+        "youtube-subscribe-plate",
         1280,
         720,
         "ez_yt_sub",
@@ -313,10 +313,10 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Subscribe-safe end plate 16:9",
         _CTA,
         template="hero",
-        handoff=("wan/creator/yt-subscribe-bump",),
+        handoff=("wan/creator/youtube-subscribe-bump",),
     ),
     _k(
-        "yt-end-screen",
+        "youtube-end-screen",
         1280,
         720,
         "ez_yt_endscreen",
@@ -324,20 +324,20 @@ PACK3: tuple[Pack3Spec, ...] = (
         "YouTube end-screen plate, left-weighted",
         _LEFT,
         template="hero",
-        handoff=("ltx/creator/yt-outro-av",),
+        handoff=("ltx/creator/youtube-outro-av",),
     ),
     _k(
-        "ig-portrait",
+        "instagram-portrait",
         1024,
         1280,
         "ez_ig_portrait",
         "instagram",
         "Instagram 4:5 feed still",
         "Instagram 4:5 portrait. Subject large, warm key. Empty of lettering.",
-        handoff=("wan/creator/ig-story-loop", "ltx/creator/ig-reel-lifestyle"),
+        handoff=("wan/creator/instagram-story-loop", "ltx/creator/instagram-reel-lifestyle"),
     ),
     _k(
-        "ig-landscape",
+        "instagram-landscape",
         1216,
         640,
         "ez_ig_land",
@@ -347,27 +347,27 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "ig-story",
+        "instagram-story",
         576,
         1024,
         "ez_ig_story",
         "instagram",
         "Instagram Story 9:16 with UI-safe edges",
         _UI_916,
-        handoff=("wan/creator/ig-story-loop",),
+        handoff=("wan/creator/instagram-story-loop",),
     ),
     _k(
-        "ig-reel-cover",
+        "instagram-reel-cover",
         576,
         1024,
         "ez_ig_reel",
         "instagram",
         "Instagram Reel cover, center-weighted for the grid crop",
         "Vertical 9:16 Reel cover. Subject centered vertically so a 3:4 grid crop keeps the face.",
-        handoff=("ltx/creator/ig-reel-lifestyle",),
+        handoff=("ltx/creator/instagram-reel-lifestyle",),
     ),
     _k(
-        "ig-highlight",
+        "instagram-highlight",
         768,
         768,
         "ez_ig_highlight",
@@ -377,7 +377,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "ig-profile",
+        "instagram-profile",
         768,
         768,
         "ez_ig_profile",
@@ -387,7 +387,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _pack(
-        "ig-carousel-5",
+        "instagram-carousel-5",
         1024,
         1280,
         "ez_ig_c01",
@@ -397,7 +397,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         handoff=("wan/creator/paper-flip",),
     ),
     _pack(
-        "ig-grid-3up",
+        "instagram-grid-3up",
         1024,
         1024,
         "ez_ig_g01",
@@ -406,17 +406,17 @@ PACK3: tuple[Pack3Spec, ...] = (
         _IG_GRID,
     ),
     _k(
-        "tt-cover",
+        "tiktok-cover",
         576,
         1024,
         "ez_tt_cover",
         "tiktok",
         "TikTok cover 9:16",
         _UI_916,
-        handoff=("wan/creator/tt-hook", "ltx/creator/tt-broll"),
+        handoff=("wan/creator/tiktok-hook", "ltx/creator/tiktok-broll"),
     ),
     _k(
-        "tt-shop",
+        "tiktok-shop",
         1024,
         1024,
         "ez_tt_shop",
@@ -460,7 +460,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "li-post",
+        "linkedin-post",
         1024,
         1024,
         "ez_li_post",
@@ -470,7 +470,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "li-landscape",
+        "linkedin-landscape",
         1216,
         640,
         "ez_li_land",
@@ -480,7 +480,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "li-banner",
+        "linkedin-banner",
         1536,
         384,
         "ez_li_banner",
@@ -490,7 +490,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _k(
-        "li-article",
+        "linkedin-article",
         1216,
         640,
         "ez_li_article",
@@ -500,7 +500,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _pack(
-        "li-carousel-5",
+        "linkedin-carousel-5",
         1024,
         1024,
         "ez_li_c01",
@@ -509,7 +509,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         _LI_CAROUSEL,
     ),
     _k(
-        "pin-standard",
+        "pinterest-pin",
         768,
         1152,
         "ez_pin",
@@ -518,7 +518,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Tall 2:3 pin. Subject in the upper two-thirds, quiet lower band. Empty of lettering.",
     ),
     _k(
-        "pin-story",
+        "pinterest-story",
         576,
         1024,
         "ez_pin_story",
@@ -527,7 +527,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         _UI_916,
     ),
     _k(
-        "fb-post",
+        "facebook-post",
         1216,
         640,
         "ez_fb_post",
@@ -844,7 +844,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         template="hero",
     ),
     _w(
-        "yt-subscribe-bump",
+        "youtube-subscribe-bump",
         832,
         480,
         "ez_yt_bump",
@@ -854,7 +854,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         loop=True,
     ),
     _w(
-        "ig-story-loop",
+        "instagram-story-loop",
         480,
         832,
         "ez_ig_loop",
@@ -862,17 +862,17 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Silent Instagram Story loop 9:16",
         "Locked-camera breeze in fabric and palms. Ping-pong friendly. No walk.",
         loop=True,
-        handoff=("ltx/creator/ig-reel-lifestyle",),
+        handoff=("ltx/creator/instagram-reel-lifestyle",),
     ),
     _w(
-        "tt-hook",
+        "tiktok-hook",
         480,
         832,
         "ez_tt_hook",
         "wan",
         "Silent TikTok hook punch 9:16",
         "Fast push-in toward the start-image face. One continuous take. No cut.",
-        handoff=("ltx/creator/tt-broll",),
+        handoff=("ltx/creator/tiktok-broll",),
     ),
     _w(
         "x-post-5s",
@@ -1045,7 +1045,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent 9:16 hook zoom punch",
         "Punch-in toward the start-image subject in the first second, then hold.",
-        handoff=("ltx/shorts-i2v",),
+        handoff=("ltx/shorts-still-5s",),
     ),
     _w(
         "screen-bg-loop",
@@ -1086,7 +1086,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "Slow pan left. Keep every object from the start image. No cut.",
     ),
     _l(
-        "yt-outro-av",
+        "youtube-outro-av",
         1280,
         704,
         "ez_yt_outro",
@@ -1098,7 +1098,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         audio="room tone, chair creak, no score",
     ),
     _l(
-        "ig-reel-lifestyle",
+        "instagram-reel-lifestyle",
         768,
         1280,
         "ez_ig_reel_av",
@@ -1108,7 +1108,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         audio="breeze, distant city, no score",
     ),
     _l(
-        "tt-broll",
+        "tiktok-broll",
         768,
         1280,
         "ez_tt_broll",

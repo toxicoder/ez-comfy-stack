@@ -1,7 +1,7 @@
 [
   {
     "id": "photoreal-finish",
-    "label": "Photoreal finish",
+    "label": "Photoreal stem-mix",
     "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still: physically plausible light, natural materials, unmarked surfaces empty of lettering. Do not redesign layout."
   },
   {

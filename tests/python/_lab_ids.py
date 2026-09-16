@@ -6,6 +6,74 @@ rename pass import ``OLD_TO_REL`` / ``rel_id``.
 
 from __future__ import annotations
 
+import re
+
+# Cryptic lab-relative id → slightly longer descriptive id.
+# Applied after OLD_TO_REL so *-lab-example stems resolve in one rel_id() call.
+REL_RENAMES: dict[str, str] = {
+    "wan/i2v-5s": "wan/still-to-video-5s",
+    "wan/t2v-5s": "wan/text-to-video-5s",
+    "wan/flf-5s": "wan/first-last-5s",
+    "wan/i2v-shot": "wan/still-to-shot",
+    "wan/shorts-i2v": "wan/shorts-still-5s",
+    "wan/orbit-i2v": "wan/orbit-still-5s",
+    "wan/parallax-i2v": "wan/parallax-still-5s",
+    "wan/push-in-i2v": "wan/push-in-still-5s",
+    "ltx/i2v-5s": "ltx/still-to-video-5s",
+    "ltx/t2v-5s": "ltx/text-to-video-5s",
+    "ltx/flf-5s": "ltx/first-last-5s",
+    "ltx/a2v-5s": "ltx/audio-to-video-5s",
+    "ltx/i2v-shot": "ltx/still-to-shot",
+    "ltx/shorts-i2v": "ltx/shorts-still-5s",
+    "optional/wan/i2v-a14b": "optional/wan/still-to-video-a14b",
+    "klein/ig-square": "klein/instagram-square",
+    "klein/og-blog": "klein/open-graph",
+    "klein/creator/yt-channel-icon": "klein/creator/youtube-channel-icon",
+    "klein/creator/yt-channel-art": "klein/creator/youtube-channel-art",
+    "klein/creator/yt-shorts-thumb": "klein/creator/youtube-shorts-thumb",
+    "klein/creator/yt-community": "klein/creator/youtube-community",
+    "klein/creator/yt-chapter-card": "klein/creator/youtube-chapter-card",
+    "klein/creator/yt-subscribe-plate": "klein/creator/youtube-subscribe-plate",
+    "klein/creator/yt-end-screen": "klein/creator/youtube-end-screen",
+    "klein/creator/ig-portrait": "klein/creator/instagram-portrait",
+    "klein/creator/ig-landscape": "klein/creator/instagram-landscape",
+    "klein/creator/ig-story": "klein/creator/instagram-story",
+    "klein/creator/ig-reel-cover": "klein/creator/instagram-reel-cover",
+    "klein/creator/ig-highlight": "klein/creator/instagram-highlight",
+    "klein/creator/ig-profile": "klein/creator/instagram-profile",
+    "klein/creator/ig-carousel-5": "klein/creator/instagram-carousel-5",
+    "klein/creator/ig-grid-3up": "klein/creator/instagram-grid-3up",
+    "klein/creator/tt-cover": "klein/creator/tiktok-cover",
+    "klein/creator/tt-shop": "klein/creator/tiktok-shop",
+    "klein/creator/li-post": "klein/creator/linkedin-post",
+    "klein/creator/li-landscape": "klein/creator/linkedin-landscape",
+    "klein/creator/li-banner": "klein/creator/linkedin-banner",
+    "klein/creator/li-article": "klein/creator/linkedin-article",
+    "klein/creator/li-carousel-5": "klein/creator/linkedin-carousel-5",
+    "klein/creator/pin-standard": "klein/creator/pinterest-pin",
+    "klein/creator/pin-story": "klein/creator/pinterest-story",
+    "klein/creator/fb-post": "klein/creator/facebook-post",
+    "wan/creator/yt-subscribe-bump": "wan/creator/youtube-subscribe-bump",
+    "wan/creator/ig-story-loop": "wan/creator/instagram-story-loop",
+    "wan/creator/tt-hook": "wan/creator/tiktok-hook",
+    "ltx/creator/yt-outro-av": "ltx/creator/youtube-outro-av",
+    "ltx/creator/ig-reel-lifestyle": "ltx/creator/instagram-reel-lifestyle",
+    "ltx/creator/tt-broll": "ltx/creator/tiktok-broll",
+    "dcc/klein/from-clay": "dcc/klein/clay-hero",
+    "dcc/klein/from-clay-plates": "dcc/klein/clay-plates",
+    "dcc/klein/from-canny": "dcc/klein/canny-hero",
+    "dcc/klein/from-guide-loader": "dcc/klein/guide-still",
+    "dcc/ltx/iclora-depth-5s": "dcc/ltx/depth-control-5s",
+    "dcc/ltx/iclora-canny-5s": "dcc/ltx/canny-control-5s",
+    "dcc/ltx/iclora-depth-shorts": "dcc/ltx/depth-control-shorts",
+    "dcc/ltx/iclora-from-guide-loader": "dcc/ltx/depth-from-loader",
+    "dcc/wan/flf-from-guide": "dcc/wan/first-last-from-guide",
+    "dcc/trellis/from-klein-still": "dcc/trellis/still-to-mesh",
+    "audio/dub/localize": "audio/dub/clone-translate",
+    "audio/finish": "audio/stem-mix",
+    "audio/podcast/audio-first": "audio/podcast/two-host-episode",
+}
+
 # Old unique stem (no .json) → _lab-relative id (no .json).
 OLD_TO_REL: dict[str, str] = {
     "klein-banner-wide-lab-example": "klein/banner-wide",
@@ -98,10 +166,58 @@ def rel_id(name: str) -> str:
     if text.endswith(".json"):
         text = text[: -len(".json")]
     if text in OLD_TO_REL:
-        return OLD_TO_REL[text]
-    basename = text.rsplit("/", 1)[-1]
-    if basename in OLD_TO_REL:
-        return OLD_TO_REL[basename]
+        text = OLD_TO_REL[text]
+    else:
+        basename = text.rsplit("/", 1)[-1]
+        if basename in OLD_TO_REL:
+            text = OLD_TO_REL[basename]
+    return REL_RENAMES.get(text, text)
+
+
+# Stems that are also English words. Full rels still rewrite; bare tokens do not.
+_GENERIC_STEMS = frozenset({"finish", "localize"})
+
+
+def stem_renames() -> dict[str, str]:
+    """File-stem map implied by ``REL_RENAMES`` (no hyphenated collisions).
+
+    Returns:
+        Old file stem → new file stem. Values agree when two lanes share a stem.
+        Generic English stems (``finish``, ``localize``) are omitted.
+    """
+    stems: dict[str, str] = {}
+    for old, new in REL_RENAMES.items():
+        old_stem = old.rsplit("/", 1)[-1]
+        new_stem = new.rsplit("/", 1)[-1]
+        if old_stem == new_stem or old_stem in _GENERIC_STEMS:
+            continue
+        previous = stems.get(old_stem)
+        if previous is not None and previous != new_stem:
+            raise ValueError(f"stem collision {old_stem}: {previous} vs {new_stem}")
+        stems[old_stem] = new_stem
+    return stems
+
+
+def rewrite_lab_names(text: str) -> str:
+    """Replace old lab-relative ids, then unique file stems, in ``text``.
+
+    Full rels go first so ``wan/i2v-5s`` becomes ``wan/still-to-video-5s``.
+    Stem tokens skip a leading hyphen so subgraph ``wan-i2v-5s`` and print
+    mode ``klein-from-clay`` stay put.
+
+    Arguments:
+        text: Source or JSON text.
+    Returns:
+        Rewritten text.
+    """
+    for old, new in sorted(REL_RENAMES.items(), key=lambda item: len(item[0]), reverse=True):
+        text = text.replace(old, new)
+    for old, new in sorted(stem_renames().items(), key=lambda item: len(item[0]), reverse=True):
+        text = re.sub(
+            rf"(?<![A-Za-z0-9_-]){re.escape(old)}(?![A-Za-z0-9_-])",
+            new,
+            text,
+        )
     return text
 
 

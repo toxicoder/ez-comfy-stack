@@ -608,7 +608,7 @@ def encyclopedia() -> dict[str, Any]:
         "LoadAudio": _n(
             "Load Audio",
             "Load a wav/mp3 from input/.",
-            lab="ltx/a2v-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
+            lab="ltx/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
             sockets=[_s("AUDIO", "AUDIO", "out", "Waveform for LTXVAudioVAEEncode.")],
             widgets=[_w("audio", index=0, desc="Filename in input/.", gen="The original wav is muxed into the MP4 (no audio VAE decode on a2v).")],
         ),
@@ -637,7 +637,7 @@ def encyclopedia() -> dict[str, Any]:
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
-            lab="dcc/klein/from-clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
+            lab="dcc/klein/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Scaled still."),
@@ -783,7 +783,7 @@ def encyclopedia() -> dict[str, Any]:
         "LTXVAudioVAEDecode": _n(
             "LTX Audio VAE Decode",
             "Decode LTX audio latent to AUDIO for the MP4 mux.",
-            lab="Skipped on ltx/a2v-5s (original wav is muxed).",
+            lab="Skipped on ltx/audio-to-video-5s (original wav is muxed).",
             origin="comfy-extras",
             sockets=[
                 _s("samples", "LATENT", "in", "Audio latent."),
@@ -818,7 +818,7 @@ def encyclopedia() -> dict[str, Any]:
         "LTXVAddGuide": _n(
             "LTX Add Guide",
             "Pin a still onto a latent frame (first-last-frame).",
-            lab="ltx/flf-5s uses index 0 then -1 on the video latent before audio concat.",
+            lab="ltx/first-last-5s uses index 0 then -1 on the video latent before audio concat.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "Cond in."),
@@ -1016,7 +1016,7 @@ def encyclopedia() -> dict[str, Any]:
         "MeshToFile3D": _n(
             "Mesh to File 3D",
             "Write a GLB/mesh file.",
-            lab="optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/from-klein-still writes assets/objects/_lab-mug/mesh.",
+            lab="optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/still-to-mesh writes assets/objects/_lab-mug/mesh.",
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "Painted mesh."),
@@ -1553,7 +1553,7 @@ def encyclopedia() -> dict[str, Any]:
         widgets=[
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample brief or Custom.", gen="Custom uses the Brief box."),
             _w("prompt", index=1, desc="Brief.", gen="What the new App should make. Template auto picks a lab graph."),
-            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin klein/ig-square to skip."),
+            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin klein/instagram-square to skip."),
             _w("slug", index=3, desc="Filename stem.", gen="Live _user/<slug>.app.json. Lowercase letters, digits, hyphen."),
             _w("as_app", index=4, typ="BOOLEAN", rng="true", desc="Write an App.", gen="true writes *.app.json for the Apps sidebar."),
             _w("overwrite", index=5, typ="BOOLEAN", rng="false", desc="Replace existing.", gen="false refuses an existing _user file."),

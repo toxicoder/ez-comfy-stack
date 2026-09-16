@@ -57,18 +57,18 @@ PIN_ENHANCE_OFF = frozenset(
         "ltx/dialogue-5s",
         "ltx/multishot-5s",
         "ltx/product-hero",
-        "ltx/flf-5s",
-        "ltx/a2v-5s",
+        "ltx/first-last-5s",
+        "ltx/audio-to-video-5s",
         "wan/gif-loop",
         "wan/bumper-loop",
         "wan/sticker-loop",
-        "wan/orbit-i2v",
-        "wan/push-in-i2v",
-        "wan/parallax-i2v",
-        "dcc/ltx/iclora-depth-5s",
-        "dcc/ltx/iclora-canny-5s",
-        "dcc/ltx/iclora-depth-shorts",
-        "audio/podcast/audio-first",
+        "wan/orbit-still-5s",
+        "wan/push-in-still-5s",
+        "wan/parallax-still-5s",
+        "dcc/ltx/depth-control-5s",
+        "dcc/ltx/canny-control-5s",
+        "dcc/ltx/depth-control-shorts",
+        "audio/podcast/two-host-episode",
         "audio/podcast/radio-drama",
         "audio/music/rap-draft",
         "audio/music/rap-full",
@@ -1255,21 +1255,21 @@ def enable_lab_graph(graph: dict[str, Any]) -> None:
 def main() -> None:
     klein(lab_json("klein/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
     klein(lab_json("klein/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    wan_i2v(lab_json("wan/i2v-5s.json"), WAN_I2V)
-    wan_t2v(lab_json("wan/t2v-5s.json"))
-    wan_i2v(lab_json("wan/i2v-shot.json"), GOSEE_WAN_I2V_01)
-    wan_i2v(lab_json("wan/flf-5s.json"), WAN_I2V)
+    wan_i2v(lab_json("wan/still-to-video-5s.json"), WAN_I2V)
+    wan_t2v(lab_json("wan/text-to-video-5s.json"))
+    wan_i2v(lab_json("wan/still-to-shot.json"), GOSEE_WAN_I2V_01)
+    wan_i2v(lab_json("wan/first-last-5s.json"), WAN_I2V)
     wan_i2v(lab_json("wan/vace-join.json"), WAN_VACE)
-    wan_i2v(lab_json("optional/wan/i2v-a14b.json"), WAN_I2V)
+    wan_i2v(lab_json("optional/wan/still-to-video-a14b.json"), WAN_I2V)
     ltx_i2v(
-        lab_json("ltx/i2v-5s.json"),
+        lab_json("ltx/still-to-video-5s.json"),
         LTX_I2V,
         LTX_AUDIO_HINT,
         "Motion / prompt",
     )
-    ltx_t2v(lab_json("ltx/t2v-5s.json"))
+    ltx_t2v(lab_json("ltx/text-to-video-5s.json"))
     ltx_i2v(
-        lab_json("ltx/i2v-shot.json"),
+        lab_json("ltx/still-to-shot.json"),
         GOSEE_LTX_I2V_01,
         LTX_AUDIO_HINT,
         "Motion + audio",
