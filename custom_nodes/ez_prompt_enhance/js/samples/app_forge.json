@@ -60,9 +60,9 @@
     "prompt": "beat-sheet logline for a rooftop sprint, world SFX only."
   },
   {
-    "id": "og-blog",
+    "id": "open-graph",
     "label": "OG blog",
-    "prompt": "og-blog still of a teak desk and blank notebook, 1216x640."
+    "prompt": "open-graph still of a teak desk and blank notebook, 1216x640."
   },
   {
     "id": "character",

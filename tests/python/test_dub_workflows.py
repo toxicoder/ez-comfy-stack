@@ -49,9 +49,9 @@ def _app_labels(graph: dict) -> list[str]:
 
 
 def test_dub_localize_graph() -> None:
-    graph = _load("audio/dub/localize")
-    assert graph["id"] == "localize"
-    assert graph["extra"].get("lab_rel") == "audio/dub/localize"
+    graph = _load("audio/dub/clone-translate")
+    assert graph["id"] == "clone-translate"
+    assert graph["extra"].get("lab_rel") == "audio/dub/clone-translate"
     extra = graph["extra"]
     assert extra["lab_profile"] == "us-safe-dub"
     assert extra["lab_app_mode"]["occupancy"] == "audio"
@@ -125,7 +125,7 @@ def test_dub_localize_graph() -> None:
 
 
 def test_ingest_widgets_values_stay_four_wide() -> None:
-    graph = _load("audio/dub/localize")
+    graph = _load("audio/dub/clone-translate")
     ingest = next(n for n in graph["nodes"] if n["type"] == "EZDubIngest")
     values = ingest["widgets_values"]
     assert len(values) == 4

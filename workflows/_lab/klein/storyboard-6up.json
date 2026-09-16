@@ -2301,8 +2301,8 @@
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": [
-        "wan/i2v-shot",
-        "ltx/i2v-shot"
+        "wan/still-to-shot",
+        "ltx/still-to-shot"
       ]
     },
     "linearData": {

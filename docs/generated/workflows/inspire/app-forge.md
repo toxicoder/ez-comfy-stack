@@ -40,7 +40,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
-   a lab id such as klein/ig-square.
+   a lab id such as klein/instagram-square.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
@@ -113,7 +113,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
-   a lab id such as klein/ig-square.
+   a lab id such as klein/instagram-square.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
@@ -163,7 +163,7 @@ Type `COMBO`. Range / default: auto.
 
 Lab graph to clone.
 
-**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/ig-square to skip.
+**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/instagram-square to skip.
 
 **This graph:** `auto`
 

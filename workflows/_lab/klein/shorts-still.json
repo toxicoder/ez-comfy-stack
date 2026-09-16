@@ -388,7 +388,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein/shorts-still\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein/shorts-still\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -668,7 +668,7 @@
         0
       ]
     },
-    "lab_note": "## klein/shorts-still\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein/shorts-still\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B vertical 9:16 Shorts still",
     "lab_app_mode": {
       "enabled": true,

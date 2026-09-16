@@ -381,7 +381,7 @@ Type `COMBO`. Range / default: auto.
 
 Lab graph to clone.
 
-**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/ig-square to skip.
+**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/instagram-square to skip.
 
 #### `slug`
 
@@ -3140,7 +3140,7 @@ Resize a still to a target width/height.
 
 !!! warning "Lab notes"
 
-    dcc/klein/from-clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
+    dcc/klein/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3346,7 +3346,7 @@ Pin a still onto a latent frame (first-last-frame).
 
 !!! warning "Lab notes"
 
-    ltx/flf-5s uses index 0 then -1 on the video latent before audio concat.
+    ltx/first-last-5s uses index 0 then -1 on the video latent before audio concat.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3381,7 +3381,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on ltx/a2v-5s (original wav is muxed).
+    Skipped on ltx/audio-to-video-5s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3587,7 +3587,7 @@ Load a wav/mp3 from input/.
 
 !!! warning "Lab notes"
 
-    ltx/a2v-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+    ltx/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3648,7 +3648,7 @@ Write a GLB/mesh file.
 
 !!! warning "Lab notes"
 
-    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/from-klein-still writes assets/objects/_lab-mug/mesh.
+    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/still-to-mesh writes assets/objects/_lab-mug/mesh.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

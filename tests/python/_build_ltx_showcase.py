@@ -269,7 +269,7 @@ def _polish_t2v(graph: dict, stem: str, prefix: str, prompt: str, audio: str, no
 
 
 def build_dialogue() -> None:
-    graph = _clone("ltx/t2v-5s", "ltx/dialogue-5s")
+    graph = _clone("ltx/text-to-video-5s", "ltx/dialogue-5s")
     _insert_modality(graph)
     note = f"""## ltx/dialogue-5s
 
@@ -297,7 +297,7 @@ Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 
 
 def build_multishot() -> None:
-    graph = _clone("ltx/t2v-5s", "ltx/multishot-5s")
+    graph = _clone("ltx/text-to-video-5s", "ltx/multishot-5s")
     note = f"""## ltx/multishot-5s
 
 {LTX_CANVAS}
@@ -322,7 +322,7 @@ LTX-2.5 distilled **native multishot** T2V (~5 s). Named cuts in one generation.
 
 
 def build_product() -> None:
-    graph = _clone("ltx/i2v-5s", "ltx/product-hero")
+    graph = _clone("ltx/still-to-video-5s", "ltx/product-hero")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     loader["widgets_values"] = ["example.png", "image"]
@@ -394,7 +394,7 @@ def _add_guide(title: str, pos: list[float], frame_idx: int) -> dict:
 
 
 def build_flf() -> None:
-    graph = _clone("ltx/t2v-5s", "ltx/flf-5s")
+    graph = _clone("ltx/text-to-video-5s", "ltx/first-last-5s")
     empty = _node(graph, "EmptyLTXVLatentVideo")
     pos_enc = _node(graph, "CLIPTextEncode", "Positive")
     neg_enc = _node(graph, "CLIPTextEncode", "Negative")
@@ -461,7 +461,7 @@ def build_flf() -> None:
 
     _set_prefix(graph, "ez_ltx_flf")
     _set_prompt(graph, LTX_FLF, mode="i2v", audio_hint=LTX_FLF_AUDIO, enhance=False)
-    note = f"""## ltx/flf-5s
+    note = f"""## ltx/first-last-5s
 
 {LTX_CANVAS}
 
@@ -475,11 +475,11 @@ Official FLF2V subgraph stays in Comfy **Templates → LTX-2.5**.
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 first-last-frame AV using core AddGuide nodes")
-    _dump("ltx/flf-5s", graph)
+    _dump("ltx/first-last-5s", graph)
 
 
 def build_a2v() -> None:
-    graph = _clone("ltx/i2v-5s", "ltx/a2v-5s")
+    graph = _clone("ltx/still-to-video-5s", "ltx/audio-to-video-5s")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     concat = _node(graph, "LTXVConcatAVLatent")
@@ -542,7 +542,7 @@ def build_a2v() -> None:
 
     _set_prefix(graph, "ez_ltx_a2v")
     _set_prompt(graph, LTX_A2V, mode="i2v", audio_hint=LTX_A2V_AUDIO, enhance=False)
-    note = f"""## ltx/a2v-5s
+    note = f"""## ltx/audio-to-video-5s
 
 {LTX_CANVAS}
 
@@ -558,7 +558,7 @@ Handoff from **klein/talking-head** or any Klein still. ACE-Step bed: stop/unloa
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 A2V freeze: encode bed, mux original waveform")
-    _dump("ltx/a2v-5s", graph)
+    _dump("ltx/audio-to-video-5s", graph)
 
 
 def patch_talking_head() -> None:
@@ -566,9 +566,9 @@ def patch_talking_head() -> None:
     graph = _load(path)
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
-    if "ltx/a2v-5s" not in note:
+    if "ltx/audio-to-video-5s" not in note:
         insert = (
-            "Real single-stage freeze is **ltx/a2v-5s** (LoadAudio + encode, mux original wav). "
+            "Real single-stage freeze is **ltx/audio-to-video-5s** (LoadAudio + encode, mux original wav). "
         )
         note = note.replace(
             "Official two-stage A2V lives in Comfy Templates → LTX-2.5.",

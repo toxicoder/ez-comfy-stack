@@ -63,7 +63,7 @@ That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does *
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
 Next: klein/identity-sheet, or export-guides if clay is required, then
-dcc/klein/from-clay.
+dcc/klein/clay-hero.
 
 Shot-card keys (defaults fail-closed):
 
@@ -113,7 +113,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
-   a lab id such as klein/ig-square.
+   a lab id such as klein/instagram-square.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10

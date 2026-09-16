@@ -1,6 +1,6 @@
 ---
 title: Local podcast
-description: US-safe audio-first episode and radio-drama lanes on one DGX Spark (Kokoro + native ACE-Step).
+description: US-safe two-host-episode episode and radio-drama lanes on one DGX Spark (Kokoro + native ACE-Step).
 tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 ---
 
@@ -8,7 +8,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 **What's on this page**
 
-- Option A (audio-first commercial episode) vs Option B (one-graph radio drama)
+- Option A (two-host-episode commercial episode) vs Option B (one-graph radio drama)
 - App Mode: script, bed/sting tags, length, Kokoro stock voices (refs stay graph-only)
 - Why TTS-Audio-Suite and OldTimeRadio are not vendored
 - Kokoro default on Spark; Chatterbox / Qwen3-TTS optional (`qwen3tts` is a complete snapshot, not weights-only)
@@ -35,9 +35,9 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is a separate graph.
 
-### Option A — audio-first commercial episode
+### Option A — two-host-episode commercial episode
 
-Graph: **audio/podcast/audio-first** (`extra.lab_profile` `us-safe-podcast`).
+Graph: **audio/podcast/two-host-episode** (`extra.lab_profile` `us-safe-podcast`).
 
 | Stage | What runs | Prefix |
 | --- | --- | --- |
@@ -92,7 +92,7 @@ Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity 
 
 ## Voice consent and invented characters
 
-Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`audio/dub/localize`), with a rights attestation on every Queue.
+Hosts are **original characters**, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is [Local dub](dub.md) (`audio/dub/clone-translate`), with a rights attestation on every Queue.
 
 ---
 
@@ -161,7 +161,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md))
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **audio/podcast/audio-first**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
+4. Load **audio/podcast/two-host-episode**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
 5. Load **klein/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 

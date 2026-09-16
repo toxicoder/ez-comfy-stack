@@ -825,7 +825,7 @@ def _node(graph: dict, ntype: str) -> dict:
 
 def build_cover(info: AlbumInfo) -> dict:
     """Klein 1024×1024 square still for one album cover."""
-    graph = json.loads(lab_json("klein/ig-square").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("klein/instagram-square").read_text(encoding="utf-8"))
     rel = album_rel(info["artist_slug"], info["slug"], "cover")
     apply_lab_identity(graph, rel)
     prefix = f"albums/{info['artist']}/{info['title']}/cover"

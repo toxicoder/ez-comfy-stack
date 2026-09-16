@@ -66,7 +66,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **klein/still-draft** → enter App Mode → Queue Spark Still → open **klein/still-hero** (same seed) → set **wan/i2v-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx/i2v-5s** for native audio. Showcase: **ltx/dialogue-5s** (quoted speech), **ltx/multishot-5s** (named cuts), **ltx/product-hero** (packshot), **ltx/flf-5s** (two stills), **ltx/a2v-5s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **klein/creator/yt-shorts-thumb** → **wan/creator/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **klein/still-draft** → enter App Mode → Queue Spark Still → open **klein/still-hero** (same seed) → set **wan/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx/still-to-video-5s** for native audio. Showcase: **ltx/dialogue-5s** (quoted speech), **ltx/multishot-5s** (named cuts), **ltx/product-hero** (packshot), **ltx/first-last-5s** (two stills), **ltx/audio-to-video-5s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **klein/creator/youtube-shorts-thumb** → **wan/creator/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -88,9 +88,9 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 
 1. Load **klein/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
-3. Load **wan/i2v-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx/i2v-5s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
-5. Short six-shot demo: Queue **wan/i2v-shot** six times (`ez_shot_01` … `06`) then:
+3. Load **wan/still-to-video-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **ltx/still-to-video-5s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
+5. Short six-shot demo: Queue **wan/still-to-shot** six times (`ez_shot_01` … `06`) then:
 
     ```bash
     ./scripts/utilities/concat-shots.sh --yes

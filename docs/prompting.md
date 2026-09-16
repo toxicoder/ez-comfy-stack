@@ -100,7 +100,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
 
 === "LTX-2.5 AV"
 
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **ltx/dialogue-5s** puts speech in `"quotes"`; **ltx/multishot-5s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **ltx/flf-5s** describes the transition between two stills; **ltx/a2v-5s** lets the loaded wav own timing.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **ltx/dialogue-5s** puts speech in `"quotes"`; **ltx/multishot-5s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **ltx/first-last-5s** describes the transition between two stills; **ltx/audio-to-video-5s** lets the loaded wav own timing.
 
     First-person body-cam (go-see): one signature stunt per 5 s; eye-level chest-cam; only the wearer's own sleeves and gloves along the bottom edge — never a person occupying the plate. Look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint. I2V describes motion from the start frame; do not restate a second body.
 
@@ -158,7 +158,7 @@ STRING out → CLIPTextEncode `text` input.
 | --- | --- |
 | 90s films and 7.5 min acts (identity + 18 LTX shots) | Baked `shots.yaml`; rewriter changes camera and foley |
 | Talking-head LTX I2V | A2V freeze recipe |
-| **ltx/dialogue-5s** / **multishot-5s** / **product-hero** / **flf-5s** / **a2v-5s** | Authored LTX-2.5 showcase; quoted speech, named cuts, freeze bed |
+| **ltx/dialogue-5s** / **multishot-5s** / **product-hero** / **first-last-5s** / **audio-to-video-5s** | Authored LTX-2.5 showcase; quoted speech, named cuts, freeze bed |
 | GIF / bumper / sticker loops | Ping-pong needs cyclic locked-camera motion |
 | Orbit / push-in / parallax I2V | The canned camera verb **is** the param |
 | IC-LoRA depth | Clay already locked camera |

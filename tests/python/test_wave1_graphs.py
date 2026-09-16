@@ -19,8 +19,8 @@ def test_app_mode_extra_on_lab_printers() -> None:
     for name in (
         "klein/still-draft.json",
         "klein/still-hero.json",
-        "wan/i2v-5s.json",
-        "ltx/i2v-5s.json",
+        "wan/still-to-video-5s.json",
+        "ltx/still-to-video-5s.json",
     ):
         extra = _load(name)["extra"]["lab_app_mode"]
         assert extra["enabled"] is True
@@ -59,22 +59,22 @@ def test_klein_i2v_feeders_are_1280x704() -> None:
 
 
 def test_magcache_draft_only() -> None:
-    wan = _load("wan/i2v-5s.json")
+    wan = _load("wan/still-to-video-5s.json")
     mag = wan["extra"]["lab_magcache"]
     assert mag["enabled"] is True
     assert mag["magcache_thresh"] == 0.04
     assert mag["magcache_K"] == 3
     assert mag["start_step"] == 2
-    ltx = _load("ltx/i2v-5s.json")
+    ltx = _load("ltx/still-to-video-5s.json")
     assert "lab_magcache" not in ltx.get("extra", {})
-    flf = _load("wan/flf-5s.json")
+    flf = _load("wan/first-last-5s.json")
     assert "lab_magcache" not in flf.get("extra", {})
     assert not any(n.get("type") == "MagCache" for n in ltx["nodes"])
 
 
 def test_fun_inp_flf_graph() -> None:
-    graph = _load("wan/flf-5s.json")
-    assert graph["id"] == "flf-5s"
+    graph = _load("wan/first-last-5s.json")
+    assert graph["id"] == "first-last-5s"
     titles = [n.get("title") for n in graph["nodes"]]
     assert "End frame (Fun InP)" in titles
     assert "fun-inp" in graph["extra"]["lab_note"]

@@ -19,7 +19,7 @@ from _lab_layout import (
 from _stamp_app_mode import stamp_suite_graph
 from _build_inspire_apps import _node
 
-NOTE = """## audio/finish
+NOTE = """## audio/stem-mix
 
 Picture-lock stem mix. Occupancy **audio** — stop Klein / Wan / LTX first. ACE-Step
 score is a later session if `score: acestep-instrumental`.
@@ -104,7 +104,7 @@ def build_audio_finish() -> dict:
         }
     )
     graph = {
-        "id": "finish",
+        "id": "stem-mix",
         "revision": 1,
         "last_node_id": save_id,
         "last_link_id": 0,
@@ -124,7 +124,7 @@ def build_audio_finish() -> dict:
         ],
         "config": {},
         "extra": {
-            "lab_profile": "audio/finish",
+            "lab_profile": "audio/stem-mix",
             "lab_note": NOTE,
             "lab_description": "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh.",
             "ds": {"scale": 1, "offset": [0, 0]},
@@ -138,7 +138,7 @@ def main() -> None:
     graph = build_audio_finish()
     stamp_suite_graph(graph)
     finalize_layout(graph)
-    dest = Path(__file__).resolve().parents[2] / "workflows" / "_lab" / "audio" / "finish.json"
+    dest = Path(__file__).resolve().parents[2] / "workflows" / "_lab" / "audio" / "stem-mix.json"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(__import__("json").dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {dest.relative_to(Path(__file__).resolve().parents[2])}")

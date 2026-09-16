@@ -21,7 +21,7 @@ tags: [app-forge, studio-mcp, inspire, workflows, mcp]
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
-Load **inspire/app-forge**. Type a **Brief**, leave **Template** on auto (or pin `klein/ig-square`), set **Slug**, Queue.
+Load **inspire/app-forge**. Type a **Brief**, leave **Template** on auto (or pin `klein/instagram-square`), set **Slug**, Queue.
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
@@ -51,7 +51,7 @@ The generator App is occupancy **llm** (nothing GPU unless `llm-desk` is the wri
 | Widget | Role |
 | --- | --- |
 | **Brief** | What the new App should make |
-| **Template** | `auto` or a lab id (`klein/still-draft`, `wan/i2v-5s`, …) |
+| **Template** | `auto` or a lab id (`klein/still-draft`, `wan/still-to-video-5s`, …) |
 | **Slug** | Live filename stem (`mug-ig`) |
 | **As app** | On writes `*.app.json` (Apps sidebar) |
 | **Overwrite** | Off refuses an existing `_user` file |
@@ -62,7 +62,7 @@ Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. 
 
 ## How auto picks
 
-When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square → `klein/ig-square`, silent / i2v → `wan/i2v-5s`, ltx / foley → `ltx/i2v-5s`, default `klein/still-draft`. It never invents node types.
+When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square → `klein/instagram-square`, silent / i2v → `wan/still-to-video-5s`, ltx / foley → `ltx/still-to-video-5s`, default `klein/still-draft`. It never invents node types.
 
 Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the in-tree analog: templates first, typed tools, no `execute_code`.
 

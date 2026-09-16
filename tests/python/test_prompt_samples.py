@@ -41,7 +41,7 @@ CAMERA_IP = (
 
 SKIP_SAMPLE_PREFIXES = (
     "audio/dub/",
-    "audio/finish",
+    "audio/stem-mix",
     "dcc/trellis/",
     "optional/klein/",
     "optional/longcat",

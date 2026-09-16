@@ -21,8 +21,8 @@ SHOWCASE = (
     ("ltx/dialogue-5s", "ez_ltx_dialogue", "t2v"),
     ("ltx/multishot-5s", "ez_ltx_multishot", "t2v"),
     ("ltx/product-hero", "ez_ltx_product", "i2v"),
-    ("ltx/flf-5s", "ez_ltx_flf", "flf"),
-    ("ltx/a2v-5s", "ez_ltx_a2v", "a2v"),
+    ("ltx/first-last-5s", "ez_ltx_flf", "flf"),
+    ("ltx/audio-to-video-5s", "ez_ltx_a2v", "a2v"),
 )
 
 
@@ -135,7 +135,7 @@ def test_product_hero_is_i2v_from_packshot() -> None:
 
 
 def test_flf_guides_video_latent_before_concat() -> None:
-    graph = _load("ltx/flf-5s.json")
+    graph = _load("ltx/first-last-5s.json")
     loaders = _by_type(graph, "LoadImage")
     assert len(loaders) == 2
     titles = {str(n.get("title") or "") for n in loaders}
@@ -166,7 +166,7 @@ def test_flf_guides_video_latent_before_concat() -> None:
 
 
 def test_a2v_muxes_original_audio_not_decode() -> None:
-    graph = _load("ltx/a2v-5s.json")
+    graph = _load("ltx/audio-to-video-5s.json")
     types = {n.get("type") for n in graph["nodes"]}
     assert "LoadAudio" in types
     assert "LTXVAudioVAEEncode" in types
@@ -218,4 +218,4 @@ def test_showcase_app_mode_integer_ids() -> None:
 def test_talking_head_note_points_at_real_a2v() -> None:
     graph = _load("klein/talking-head.json")
     note = graph["extra"]["lab_note"]
-    assert "ltx/a2v-5s" in note
+    assert "ltx/audio-to-video-5s" in note

@@ -311,7 +311,7 @@ stack_wait_for_port() {
 
 #######################################
 # Ignore SIGHUP for this process and children (inherited ignore).
-# Used by stack_start so docker pull / compose up -d can finish if SSH drops.
+# Used by stack_start so docker pull / compose up -d can stem-mix if SSH drops.
 # Does not install a systemd unit and does not change restart: "no".
 # Globals:
 #   None

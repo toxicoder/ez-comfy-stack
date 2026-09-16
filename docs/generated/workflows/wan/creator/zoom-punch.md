@@ -32,7 +32,7 @@ Occupancy **wan**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 Silent 9:16 hook zoom punch. Lab size **480×832**. Prefix `ez_punch`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: wan — stop LTX, podcast, music. One GB10 job.
-Handoff: **ltx/shorts-i2v**.
+Handoff: **ltx/shorts-still-5s**.
 After Queue, click **Save video (MP4) — open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.
 LoadImage defaults to example.png so Queue smokes.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -726,7 +726,7 @@ Markdown-ish operator note.
 Silent 9:16 hook zoom punch. Lab size **480×832**. Prefix `ez_punch`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: wan — stop LTX, podcast, music. One GB10 job.
-Handoff: **ltx/shorts-i2v**.
+Handoff: **ltx/shorts-still-5s**.
 After Queue, click **Save video (MP4) — open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.
 LoadImage defaults to example.png so Queue smokes.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.

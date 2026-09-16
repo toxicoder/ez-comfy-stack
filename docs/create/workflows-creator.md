@@ -28,33 +28,33 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/yt-channel-icon](../generated/workflows/klein/creator/yt-channel-icon.md)** | 768×768 | `ez_yt_icon` | YouTube channel icon, circle-safe 1:1 |
-| **[klein/creator/yt-channel-art](../generated/workflows/klein/creator/yt-channel-art.md)** | 1536×864 | `ez_yt_art` | YouTube channel art 16:9 with a mobile-safe center band |
-| **[klein/creator/yt-shorts-thumb](../generated/workflows/klein/creator/yt-shorts-thumb.md)** | 576×1024 | `ez_yt_shorts_thumb` | YouTube Shorts thumbnail 9:16 |
-| **[klein/creator/yt-community](../generated/workflows/klein/creator/yt-community.md)** | 1024×1024 | `ez_yt_community` | YouTube Community post 1:1 |
-| **[klein/creator/yt-chapter-card](../generated/workflows/klein/creator/yt-chapter-card.md)** | 1280×720 | `ez_yt_chapter` | YouTube chapter plate 16:9 |
-| **[klein/creator/yt-subscribe-plate](../generated/workflows/klein/creator/yt-subscribe-plate.md)** | 1280×720 | `ez_yt_sub` | Subscribe-safe end plate 16:9 |
-| **[klein/creator/yt-end-screen](../generated/workflows/klein/creator/yt-end-screen.md)** | 1280×720 | `ez_yt_endscreen` | YouTube end-screen plate, left-weighted |
+| **[klein/creator/youtube-channel-icon](../generated/workflows/klein/creator/youtube-channel-icon.md)** | 768×768 | `ez_yt_icon` | YouTube channel icon, circle-safe 1:1 |
+| **[klein/creator/youtube-channel-art](../generated/workflows/klein/creator/youtube-channel-art.md)** | 1536×864 | `ez_yt_art` | YouTube channel art 16:9 with a mobile-safe center band |
+| **[klein/creator/youtube-shorts-thumb](../generated/workflows/klein/creator/youtube-shorts-thumb.md)** | 576×1024 | `ez_yt_shorts_thumb` | YouTube Shorts thumbnail 9:16 |
+| **[klein/creator/youtube-community](../generated/workflows/klein/creator/youtube-community.md)** | 1024×1024 | `ez_yt_community` | YouTube Community post 1:1 |
+| **[klein/creator/youtube-chapter-card](../generated/workflows/klein/creator/youtube-chapter-card.md)** | 1280×720 | `ez_yt_chapter` | YouTube chapter plate 16:9 |
+| **[klein/creator/youtube-subscribe-plate](../generated/workflows/klein/creator/youtube-subscribe-plate.md)** | 1280×720 | `ez_yt_sub` | Subscribe-safe end plate 16:9 |
+| **[klein/creator/youtube-end-screen](../generated/workflows/klein/creator/youtube-end-screen.md)** | 1280×720 | `ez_yt_endscreen` | YouTube end-screen plate, left-weighted |
 
 ## Instagram
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/ig-portrait](../generated/workflows/klein/creator/ig-portrait.md)** | 1024×1280 | `ez_ig_portrait` | Instagram 4:5 feed still |
-| **[klein/creator/ig-landscape](../generated/workflows/klein/creator/ig-landscape.md)** | 1216×640 | `ez_ig_land` | Instagram landscape feed ~1.91:1 |
-| **[klein/creator/ig-story](../generated/workflows/klein/creator/ig-story.md)** | 576×1024 | `ez_ig_story` | Instagram Story 9:16 with UI-safe edges |
-| **[klein/creator/ig-reel-cover](../generated/workflows/klein/creator/ig-reel-cover.md)** | 576×1024 | `ez_ig_reel` | Instagram Reel cover, center-weighted for the grid crop |
-| **[klein/creator/ig-highlight](../generated/workflows/klein/creator/ig-highlight.md)** | 768×768 | `ez_ig_highlight` | Instagram Highlight cover, circle-safe |
-| **[klein/creator/ig-profile](../generated/workflows/klein/creator/ig-profile.md)** | 768×768 | `ez_ig_profile` | Instagram profile photo, circle-safe |
-| **[klein/creator/ig-carousel-5](../generated/workflows/klein/creator/ig-carousel-5.md)** | 1024×1280 | `ez_ig_c01` | Instagram 4:5 carousel, five slides |
-| **[klein/creator/ig-grid-3up](../generated/workflows/klein/creator/ig-grid-3up.md)** | 1024×1024 | `ez_ig_g01` | Instagram 1:1 three-tile grid row |
+| **[klein/creator/instagram-portrait](../generated/workflows/klein/creator/instagram-portrait.md)** | 1024×1280 | `ez_ig_portrait` | Instagram 4:5 feed still |
+| **[klein/creator/instagram-landscape](../generated/workflows/klein/creator/instagram-landscape.md)** | 1216×640 | `ez_ig_land` | Instagram landscape feed ~1.91:1 |
+| **[klein/creator/instagram-story](../generated/workflows/klein/creator/instagram-story.md)** | 576×1024 | `ez_ig_story` | Instagram Story 9:16 with UI-safe edges |
+| **[klein/creator/instagram-reel-cover](../generated/workflows/klein/creator/instagram-reel-cover.md)** | 576×1024 | `ez_ig_reel` | Instagram Reel cover, center-weighted for the grid crop |
+| **[klein/creator/instagram-highlight](../generated/workflows/klein/creator/instagram-highlight.md)** | 768×768 | `ez_ig_highlight` | Instagram Highlight cover, circle-safe |
+| **[klein/creator/instagram-profile](../generated/workflows/klein/creator/instagram-profile.md)** | 768×768 | `ez_ig_profile` | Instagram profile photo, circle-safe |
+| **[klein/creator/instagram-carousel-5](../generated/workflows/klein/creator/instagram-carousel-5.md)** | 1024×1280 | `ez_ig_c01` | Instagram 4:5 carousel, five slides |
+| **[klein/creator/instagram-grid-3up](../generated/workflows/klein/creator/instagram-grid-3up.md)** | 1024×1024 | `ez_ig_g01` | Instagram 1:1 three-tile grid row |
 
 ## TikTok
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/tt-cover](../generated/workflows/klein/creator/tt-cover.md)** | 576×1024 | `ez_tt_cover` | TikTok cover 9:16 |
-| **[klein/creator/tt-shop](../generated/workflows/klein/creator/tt-shop.md)** | 1024×1024 | `ez_tt_shop` | TikTok Shop packshot 1:1 |
+| **[klein/creator/tiktok-cover](../generated/workflows/klein/creator/tiktok-cover.md)** | 576×1024 | `ez_tt_cover` | TikTok cover 9:16 |
+| **[klein/creator/tiktok-shop](../generated/workflows/klein/creator/tiktok-shop.md)** | 1024×1024 | `ez_tt_shop` | TikTok Shop packshot 1:1 |
 
 ## X
 
@@ -68,24 +68,24 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/li-post](../generated/workflows/klein/creator/li-post.md)** | 1024×1024 | `ez_li_post` | LinkedIn square post 1:1 |
-| **[klein/creator/li-landscape](../generated/workflows/klein/creator/li-landscape.md)** | 1216×640 | `ez_li_land` | LinkedIn landscape post ~1.91:1 |
-| **[klein/creator/li-banner](../generated/workflows/klein/creator/li-banner.md)** | 1536×384 | `ez_li_banner` | LinkedIn personal banner 4:1 |
-| **[klein/creator/li-article](../generated/workflows/klein/creator/li-article.md)** | 1216×640 | `ez_li_article` | LinkedIn article cover ~1.91:1 |
-| **[klein/creator/li-carousel-5](../generated/workflows/klein/creator/li-carousel-5.md)** | 1024×1024 | `ez_li_c01` | LinkedIn document carousel, five squares |
+| **[klein/creator/linkedin-post](../generated/workflows/klein/creator/linkedin-post.md)** | 1024×1024 | `ez_li_post` | LinkedIn square post 1:1 |
+| **[klein/creator/linkedin-landscape](../generated/workflows/klein/creator/linkedin-landscape.md)** | 1216×640 | `ez_li_land` | LinkedIn landscape post ~1.91:1 |
+| **[klein/creator/linkedin-banner](../generated/workflows/klein/creator/linkedin-banner.md)** | 1536×384 | `ez_li_banner` | LinkedIn personal banner 4:1 |
+| **[klein/creator/linkedin-article](../generated/workflows/klein/creator/linkedin-article.md)** | 1216×640 | `ez_li_article` | LinkedIn article cover ~1.91:1 |
+| **[klein/creator/linkedin-carousel-5](../generated/workflows/klein/creator/linkedin-carousel-5.md)** | 1024×1024 | `ez_li_c01` | LinkedIn document carousel, five squares |
 
 ## Pinterest
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/pin-standard](../generated/workflows/klein/creator/pin-standard.md)** | 768×1152 | `ez_pin` | Pinterest standard pin 2:3 |
-| **[klein/creator/pin-story](../generated/workflows/klein/creator/pin-story.md)** | 576×1024 | `ez_pin_story` | Pinterest Idea Pin 9:16 |
+| **[klein/creator/pinterest-pin](../generated/workflows/klein/creator/pinterest-pin.md)** | 768×1152 | `ez_pin` | Pinterest standard pin 2:3 |
+| **[klein/creator/pinterest-story](../generated/workflows/klein/creator/pinterest-story.md)** | 576×1024 | `ez_pin_story` | Pinterest Idea Pin 9:16 |
 
 ## Facebook and Threads
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[klein/creator/fb-post](../generated/workflows/klein/creator/fb-post.md)** | 1216×640 | `ez_fb_post` | Facebook shared-image still ~1.91:1 |
+| **[klein/creator/facebook-post](../generated/workflows/klein/creator/facebook-post.md)** | 1216×640 | `ez_fb_post` | Facebook shared-image still ~1.91:1 |
 | **[klein/creator/threads-portrait](../generated/workflows/klein/creator/threads-portrait.md)** | 1024×1280 | `ez_threads` | Threads 4:5 still |
 
 ## Twitch / stream
@@ -155,9 +155,9 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[wan/creator/yt-subscribe-bump](../generated/workflows/wan/creator/yt-subscribe-bump.md)** | 832×480 | `ez_yt_bump` | Silent YouTube subscribe bumper loop |
-| **[wan/creator/ig-story-loop](../generated/workflows/wan/creator/ig-story-loop.md)** | 480×832 | `ez_ig_loop` | Silent Instagram Story loop 9:16 |
-| **[wan/creator/tt-hook](../generated/workflows/wan/creator/tt-hook.md)** | 480×832 | `ez_tt_hook` | Silent TikTok hook punch 9:16 |
+| **[wan/creator/youtube-subscribe-bump](../generated/workflows/wan/creator/youtube-subscribe-bump.md)** | 832×480 | `ez_yt_bump` | Silent YouTube subscribe bumper loop |
+| **[wan/creator/instagram-story-loop](../generated/workflows/wan/creator/instagram-story-loop.md)** | 480×832 | `ez_ig_loop` | Silent Instagram Story loop 9:16 |
+| **[wan/creator/tiktok-hook](../generated/workflows/wan/creator/tiktok-hook.md)** | 480×832 | `ez_tt_hook` | Silent TikTok hook punch 9:16 |
 | **[wan/creator/x-post-5s](../generated/workflows/wan/creator/x-post-5s.md)** | 832×480 | `ez_x_video` | Silent X clip ~5 s 16:9 |
 | **[wan/creator/twitch-starting-loop](../generated/workflows/wan/creator/twitch-starting-loop.md)** | 832×480 | `ez_tw_start_loop` | Silent starting-soon loop 16:9 |
 | **[wan/creator/twitch-brb-loop](../generated/workflows/wan/creator/twitch-brb-loop.md)** | 832×480 | `ez_tw_brb_loop` | Silent BRB loop 16:9 |
@@ -185,9 +185,9 @@ Safety impact: **none**. `restart: "no"`, headroom, and download-limit are uncha
 
 | Workflow | Size | Prefix | What it does |
 | --- | --- | --- | --- |
-| **[ltx/creator/yt-outro-av](../generated/workflows/ltx/creator/yt-outro-av.md)** | 1280×704 | `ez_yt_outro` | YouTube outro AV ~5 s with room tone |
-| **[ltx/creator/ig-reel-lifestyle](../generated/workflows/ltx/creator/ig-reel-lifestyle.md)** | 768×1280 | `ez_ig_reel_av` | Instagram lifestyle reel AV 9:16 |
-| **[ltx/creator/tt-broll](../generated/workflows/ltx/creator/tt-broll.md)** | 768×1280 | `ez_tt_broll` | TikTok B-roll AV 9:16 |
+| **[ltx/creator/youtube-outro-av](../generated/workflows/ltx/creator/youtube-outro-av.md)** | 1280×704 | `ez_yt_outro` | YouTube outro AV ~5 s with room tone |
+| **[ltx/creator/instagram-reel-lifestyle](../generated/workflows/ltx/creator/instagram-reel-lifestyle.md)** | 768×1280 | `ez_ig_reel_av` | Instagram lifestyle reel AV 9:16 |
+| **[ltx/creator/tiktok-broll](../generated/workflows/ltx/creator/tiktok-broll.md)** | 768×1280 | `ez_tt_broll` | TikTok B-roll AV 9:16 |
 | **[ltx/creator/twitch-starting-av](../generated/workflows/ltx/creator/twitch-starting-av.md)** | 1280×704 | `ez_tw_start_av` | Twitch starting-soon AV ~5 s |
 | **[ltx/creator/music-visual](../generated/workflows/ltx/creator/music-visual.md)** | 1280×704 | `ez_music_vis` | Light / particle visualizer bed AV ~5 s |
 | **[ltx/creator/recipe-pour](../generated/workflows/ltx/creator/recipe-pour.md)** | 768×1280 | `ez_pour` | Recipe pour AV 9:16 |

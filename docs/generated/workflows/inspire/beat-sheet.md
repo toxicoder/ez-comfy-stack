@@ -42,7 +42,7 @@ That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does *
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
 Next: klein/identity-sheet, or export-guides if clay is required, then
-dcc/klein/from-clay.
+dcc/klein/clay-hero.
 
 Shot-card keys (defaults fail-closed):
 
@@ -166,7 +166,7 @@ That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does *
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
 Next: klein/identity-sheet, or export-guides if clay is required, then
-dcc/klein/from-clay.
+dcc/klein/clay-hero.
 
 Shot-card keys (defaults fail-closed):
 

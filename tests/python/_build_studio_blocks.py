@@ -42,7 +42,7 @@ SPECS = (
         "wan-i2v-5s",
         WAN_UUID,
         "wan",
-        "wan/i2v-5s.json",
+        "wan/still-to-video-5s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -56,7 +56,7 @@ SPECS = (
         "ltx-av-5s",
         LTX_AV_UUID,
         "ltx",
-        "ltx/i2v-5s.json",
+        "ltx/still-to-video-5s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),
@@ -71,7 +71,7 @@ SPECS = (
         "ltx-film-shot",
         LTX_SHOT_UUID,
         "film",
-        "ltx/i2v-shot.json",
+        "ltx/still-to-shot.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),

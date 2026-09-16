@@ -60,7 +60,7 @@ def test_print_template_ltx_and_dfr() -> None:
     assert print_template("ltx") == LTX_PRINT_TEMPLATE
     assert print_template("dfr") == DFR_TEMPLATE
     assert print_template("ltx-iclora-depth") == ICLORA_TEMPLATE
-    assert print_template("wan-flf") == "wan/flf-5s.json"
+    assert print_template("wan-flf") == "wan/first-last-5s.json"
     assert print_template("dcc-final") == "dcc-final"
     assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
     try:
@@ -402,8 +402,8 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
-    wan = json.loads(lab_json("wan/i2v-shot.json").read_text(encoding="utf-8"))
-    ltx = json.loads(lab_json("ltx/i2v-shot.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("wan/still-to-shot.json").read_text(encoding="utf-8"))
+    ltx = json.loads(lab_json("ltx/still-to-shot.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]

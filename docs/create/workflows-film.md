@@ -33,8 +33,8 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 | **[shorts/glasshouse/act-01](../generated/workflows/shorts/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
 | **[shorts/last-lane/act-01](../generated/workflows/shorts/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
 | **[shorts/breakwater/act-01](../generated/workflows/shorts/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
-| **[wan/i2v-shot](../generated/workflows/wan/i2v-shot.md)** | Optional silent rehearsal / six-shot concat demo |
-| **[ltx/i2v-shot](../generated/workflows/ltx/i2v-shot.md)** | Generic 5.00 s AV print (non-film) |
+| **[wan/still-to-shot](../generated/workflows/wan/still-to-shot.md)** | Optional silent rehearsal / six-shot concat demo |
+| **[ltx/still-to-shot](../generated/workflows/ltx/still-to-shot.md)** | Generic 5.00 s AV print (non-film) |
 
 Act graphs (Queue in order, then `concat-shots.sh --film`): `shorts/tide-table/act-01` `shorts/tide-table/act-02` `shorts/tide-table/act-03` `shorts/tide-table/act-04` `shorts/tide-table/act-05` · `shorts/night-oven/act-01` `shorts/night-oven/act-02` `shorts/night-oven/act-03` `shorts/night-oven/act-04` `shorts/night-oven/act-05` · `shorts/glasshouse/act-01` `shorts/glasshouse/act-02` `shorts/glasshouse/act-03` `shorts/glasshouse/act-04` `shorts/glasshouse/act-05` · `shorts/last-lane/act-01` `shorts/last-lane/act-02` `shorts/last-lane/act-03` `shorts/last-lane/act-04` `shorts/last-lane/act-05` · `shorts/breakwater/act-01` `shorts/breakwater/act-02` `shorts/breakwater/act-03` `shorts/breakwater/act-04` `shorts/breakwater/act-05`.
 
@@ -46,17 +46,17 @@ Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave L
 
 | Workflow | What it does |
 | --- | --- |
-| **[dcc/klein/from-clay](../generated/workflows/dcc/klein/from-clay.md)** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
-| **[dcc/klein/from-clay-plates](../generated/workflows/dcc/klein/from-clay-plates.md)** | One clay still → four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
-| **[dcc/klein/from-canny](../generated/workflows/dcc/klein/from-canny.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
+| **[dcc/klein/clay-hero](../generated/workflows/dcc/klein/clay-hero.md)** | Klein 4B edit of a guide-pack `first.png`. Enhance **on**, seed **42**, **1280×704**. Prefix `ez_clay_hero`. Then `overlay-qc`. Occupancy: dump while Comfy is **down**. |
+| **[dcc/klein/clay-plates](../generated/workflows/dcc/klein/clay-plates.md)** | One clay still → four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
+| **[dcc/klein/canny-hero](../generated/workflows/dcc/klein/canny-hero.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
 | **[klein/dream-house-clay](../generated/workflows/klein/dream-house-clay.md)** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
-| **[dcc/ltx/iclora-depth-5s](../generated/workflows/dcc/ltx/iclora-depth-5s.md)** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
-| **[dcc/ltx/iclora-canny-5s](../generated/workflows/dcc/ltx/iclora-canny-5s.md)** | Same envelope; wire `canny.mp4`. |
-| **[dcc/ltx/iclora-depth-shorts](../generated/workflows/dcc/ltx/iclora-depth-shorts.md)** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
-| **[dcc/wan/flf-from-guide](../generated/workflows/dcc/wan/flf-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
-| **[dcc/klein/from-guide-loader](../generated/workflows/dcc/klein/from-guide-loader.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
-| **[dcc/ltx/iclora-from-guide-loader](../generated/workflows/dcc/ltx/iclora-from-guide-loader.md)** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **[dcc/trellis/from-klein-still](../generated/workflows/dcc/trellis/from-klein-still.md)** | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
-| **[audio/finish](../generated/workflows/audio/finish.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
+| **[dcc/ltx/depth-control-5s](../generated/workflows/dcc/ltx/depth-control-5s.md)** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+| **[dcc/ltx/canny-control-5s](../generated/workflows/dcc/ltx/canny-control-5s.md)** | Same envelope; wire `canny.mp4`. |
+| **[dcc/ltx/depth-control-shorts](../generated/workflows/dcc/ltx/depth-control-shorts.md)** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
+| **[dcc/wan/first-last-from-guide](../generated/workflows/dcc/wan/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
+| **[dcc/klein/guide-still](../generated/workflows/dcc/klein/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |
+| **[dcc/ltx/depth-from-loader](../generated/workflows/dcc/ltx/depth-from-loader.md)** | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
+| **[dcc/trellis/still-to-mesh](../generated/workflows/dcc/trellis/still-to-mesh.md)** | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. Occupancy **trellis**. |
+| **[audio/stem-mix](../generated/workflows/audio/stem-mix.md)** | Picture-lock stem mix desk. Occupancy **audio**. Host `stem-mix.sh` (duck −15 dB, YouTube loudnorm). |
 
 Operator loop: [DCC guide pack](../dcc-workflows.md). Stay on `:8188`: [Stay in Comfy after a Blender dump](../learn/comfy-first-blender.md). Playbook: [Clay to finish](../learn/clay-to-finish.md). Stills: [Blender creator suite](../learn/blender-creator.md).

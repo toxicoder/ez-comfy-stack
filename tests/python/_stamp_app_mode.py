@@ -856,7 +856,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "inspire",
         "klein",
         "klein/still-hero",
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
         "klein/platform-pack",
     ),
     "klein/identity-sheet": _spec(
@@ -865,8 +865,8 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein/storyboard-6up": _spec(
         "inspire",
         "klein",
-        "wan/i2v-shot",
-        "ltx/i2v-shot",
+        "wan/still-to-shot",
+        "ltx/still-to-shot",
     ),
     "klein/dream-house": _spec(
         "inspire",
@@ -891,20 +891,20 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein/color-moods": _spec("inspire", "klein"),
     "klein/time-of-day": _spec("inspire", "klein"),
     "klein/hook-still": _spec(
-        "inspire", "klein", "wan/shorts-i2v"
+        "inspire", "klein", "wan/shorts-still-5s"
     ),
     "klein/character-draft": _spec(
         "inspire",
         "klein",
         "klein/character-tweak",
         "klein/identity-sheet",
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
     ),
     "klein/character-tweak": _spec(
         "inspire",
         "klein",
         "klein/identity-sheet",
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
     ),
     "inspire/prompt-forge": _spec(
         "inspire",
@@ -937,7 +937,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "inspire",
         "none",
         "klein/identity-sheet",
-        "dcc/klein/from-clay",
+        "dcc/klein/clay-hero",
         "shorts/go-see",
         primitive_strings=True,
     ),
@@ -951,14 +951,14 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein/still-hero": _spec(
         "produce",
         "klein",
-        "wan/i2v-5s",
-        "ltx/i2v-5s",
-        "ltx/flf-5s",
+        "wan/still-to-video-5s",
+        "ltx/still-to-video-5s",
+        "ltx/first-last-5s",
     ),
     "klein/thumbnail": _spec("produce", "klein"),
     "klein/product-packshot": _spec("produce", "klein", "ltx/product-hero"),
-    "klein/ig-square": _spec("produce", "klein"),
-    "klein/og-blog": _spec("produce", "klein"),
+    "klein/instagram-square": _spec("produce", "klein"),
+    "klein/open-graph": _spec("produce", "klein"),
     "klein/banner-wide": _spec("produce", "klein"),
     "klein/podcast-cover": _spec("produce", "klein"),
     "klein/endcard-cta": _spec("produce", "klein"),
@@ -970,30 +970,30 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "klein/platform-pack": _spec(
         "produce",
         "klein",
-        "wan/i2v-5s",
+        "wan/still-to-video-5s",
         "ltx/hook-av",
     ),
-    "klein/talking-head": _spec("produce", "ltx", "ltx/a2v-5s"),
-    "wan/i2v-5s": _spec(
-        "produce", "wan", "ltx/i2v-5s"
+    "klein/talking-head": _spec("produce", "ltx", "ltx/audio-to-video-5s"),
+    "wan/still-to-video-5s": _spec(
+        "produce", "wan", "ltx/still-to-video-5s"
     ),
-    "wan/t2v-5s": _spec("produce", "wan"),
-    "wan/flf-5s": _spec("produce", "wan"),
+    "wan/text-to-video-5s": _spec("produce", "wan"),
+    "wan/first-last-5s": _spec("produce", "wan"),
     "wan/vace-join": _spec("produce", "wan"),
-    "wan/i2v-shot": _spec("produce", "wan"),
+    "wan/still-to-shot": _spec("produce", "wan"),
     "wan/gif-loop": _spec("produce", "wan"),
     "wan/bumper-loop": _spec("produce", "wan"),
     "wan/sticker-loop": _spec("produce", "wan"),
-    "wan/shorts-i2v": _spec(
-        "produce", "wan", "ltx/shorts-i2v"
+    "wan/shorts-still-5s": _spec(
+        "produce", "wan", "ltx/shorts-still-5s"
     ),
-    "wan/orbit-i2v": _spec("produce", "wan"),
-    "wan/push-in-i2v": _spec("produce", "wan"),
-    "wan/parallax-i2v": _spec("produce", "wan"),
-    "ltx/i2v-5s": _spec("produce", "ltx"),
-    "ltx/t2v-5s": _spec("produce", "ltx"),
-    "ltx/i2v-shot": _spec("produce", "ltx"),
-    "ltx/shorts-i2v": _spec("produce", "ltx"),
+    "wan/orbit-still-5s": _spec("produce", "wan"),
+    "wan/push-in-still-5s": _spec("produce", "wan"),
+    "wan/parallax-still-5s": _spec("produce", "wan"),
+    "ltx/still-to-video-5s": _spec("produce", "ltx"),
+    "ltx/text-to-video-5s": _spec("produce", "ltx"),
+    "ltx/still-to-shot": _spec("produce", "ltx"),
+    "ltx/shorts-still-5s": _spec("produce", "ltx"),
     "ltx/hook-av": _spec("produce", "ltx"),
     "ltx/broll-ambient": _spec("produce", "ltx"),
     "ltx/weather-broll": _spec("produce", "ltx"),
@@ -1001,8 +1001,8 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "ltx/dialogue-5s": _spec("produce", "ltx"),
     "ltx/multishot-5s": _spec("produce", "ltx"),
     "ltx/product-hero": _spec("produce", "ltx"),
-    "ltx/flf-5s": _spec("produce", "ltx"),
-    "ltx/a2v-5s": _spec("produce", "ltx"),
+    "ltx/first-last-5s": _spec("produce", "ltx"),
+    "ltx/audio-to-video-5s": _spec("produce", "ltx"),
     "shorts/go-see": _spec(
         "film",
         "film",
@@ -1041,71 +1041,71 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         )
         for act in range(1, 6)
     },
-    "audio/podcast/audio-first": _spec("audio", "audio"),
+    "audio/podcast/two-host-episode": _spec("audio", "audio"),
     "audio/podcast/radio-drama": _spec("audio", "audio"),
-    "audio/dub/localize": _spec("audio", "audio"),
+    "audio/dub/clone-translate": _spec("audio", "audio"),
     "audio/music/rap-draft": _spec("audio", "audio"),
     "audio/music/rap-full": _spec("audio", "audio"),
-    "dcc/klein/from-clay": _spec(
+    "dcc/klein/clay-hero": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/iclora-depth-5s",
-        "wan/i2v-5s",
+        "dcc/ltx/depth-control-5s",
+        "wan/still-to-video-5s",
     ),
-    "dcc/klein/from-canny": _spec(
+    "dcc/klein/canny-hero": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/iclora-canny-5s",
+        "dcc/ltx/canny-control-5s",
     ),
-    "dcc/klein/from-clay-plates": _spec(
+    "dcc/klein/clay-plates": _spec(
         "dcc",
         "klein",
-        "wan/i2v-5s",
-        "wan/shorts-i2v",
-        "dcc/ltx/iclora-depth-shorts",
+        "wan/still-to-video-5s",
+        "wan/shorts-still-5s",
+        "dcc/ltx/depth-control-shorts",
     ),
-    "dcc/ltx/iclora-depth-5s": _spec(
+    "dcc/ltx/depth-control-5s": _spec(
         "dcc",
         "ltx",
-        "audio/finish",
+        "audio/stem-mix",
     ),
-    "dcc/ltx/iclora-canny-5s": _spec(
+    "dcc/ltx/canny-control-5s": _spec(
         "dcc",
         "ltx",
-        "audio/finish",
+        "audio/stem-mix",
     ),
-    "dcc/ltx/iclora-depth-shorts": _spec(
+    "dcc/ltx/depth-control-shorts": _spec(
         "dcc",
         "ltx",
-        "audio/finish",
+        "audio/stem-mix",
     ),
-    "dcc/wan/flf-from-guide": _spec(
+    "dcc/wan/first-last-from-guide": _spec(
         "dcc",
         "wan",
-        "dcc/ltx/iclora-depth-5s",
+        "dcc/ltx/depth-control-5s",
     ),
-    "dcc/klein/from-guide-loader": _spec(
+    "dcc/klein/guide-still": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/iclora-from-guide-loader",
-        "dcc/trellis/from-klein-still",
+        "dcc/ltx/depth-from-loader",
+        "dcc/trellis/still-to-mesh",
     ),
-    "dcc/ltx/iclora-from-guide-loader": _spec(
+    "dcc/ltx/depth-from-loader": _spec(
         "dcc",
         "ltx",
-        "audio/finish",
+        "audio/stem-mix",
     ),
-    "dcc/trellis/from-klein-still": _spec(
+    "dcc/trellis/still-to-mesh": _spec(
         "dcc",
         "trellis",
         default_view="graph",
     ),
-    "audio/finish": _spec(
+    "audio/stem-mix": _spec(
         "audio",
         "audio",
         primitive_strings=True,
     ),
-    "optional/wan/i2v-a14b": _spec("produce", "wan", default_view="graph"),
+    "optional/wan/still-to-video-a14b": _spec("produce", "wan", default_view="graph"),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:
@@ -1145,15 +1145,15 @@ for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
 
 STUB_IDS = frozenset({"optional/longcat-video"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
-    "dcc/ltx/iclora-depth-5s": ("EZFilmDisclosure",),
-    "dcc/ltx/iclora-canny-5s": ("EZFilmDisclosure",),
-    "dcc/ltx/iclora-depth-shorts": ("EZFilmDisclosure",),
-    "dcc/ltx/iclora-from-guide-loader": (
+    "dcc/ltx/depth-control-5s": ("EZFilmDisclosure",),
+    "dcc/ltx/canny-control-5s": ("EZFilmDisclosure",),
+    "dcc/ltx/depth-control-shorts": ("EZFilmDisclosure",),
+    "dcc/ltx/depth-from-loader": (
         "EZFilmDisclosure",
         "EZDCCLoadGuideVideo",
     ),
-    "audio/finish": ("SaveAudio", "PrimitiveNode"),
-    "optional/wan/i2v-a14b": ("UNETLoader",),
+    "audio/stem-mix": ("SaveAudio", "PrimitiveNode"),
+    "optional/wan/still-to-video-a14b": ("UNETLoader",),
     "audio/podcast/radio-drama": ("UNETLoader", "VHS_VideoCombine"),
     "inspire/prompt-forge": (
         "EZKleinPromptEnhance",
@@ -1170,7 +1170,7 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     ),
     "inspire/research-chat": ("EZCreativeResearch",),
     "inspire/app-forge": ("EZAppForge",),
-    "wan/flf-5s": ("LoadImage",),
+    "wan/first-last-5s": ("LoadImage",),
     "wan/vace-join": ("LoadImage",),
 }
 

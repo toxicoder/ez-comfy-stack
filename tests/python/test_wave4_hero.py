@@ -28,9 +28,9 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 
 def test_a14b_hero_is_eight_step_magcache_off() -> None:
-    graph = json.loads(lab_json("optional/wan/i2v-a14b.json").read_text(encoding="utf-8"))
-    assert graph["id"] == "i2v-a14b"
-    assert graph["extra"].get("lab_rel") == "optional/wan/i2v-a14b"
+    graph = json.loads(lab_json("optional/wan/still-to-video-a14b.json").read_text(encoding="utf-8"))
+    assert graph["id"] == "still-to-video-a14b"
+    assert graph["extra"].get("lab_rel") == "optional/wan/still-to-video-a14b"
     assert graph["extra"]["lab_a14b"]["steps"] == 8
     assert graph["extra"]["lab_a14b"]["magcache"] is False
     assert "lab_magcache" not in graph["extra"]

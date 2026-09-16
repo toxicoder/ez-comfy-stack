@@ -101,7 +101,7 @@ def test_create_app_and_validate(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     created = mcp.call_tool(
         "create_app",
         {
-            "stem": "klein/ig-square",
+            "stem": "klein/instagram-square",
             "slug": "mcp-ig",
             "slots": {"prompt": "square mug still"},
         },

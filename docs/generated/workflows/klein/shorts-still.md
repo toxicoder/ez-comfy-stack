@@ -30,7 +30,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ## klein/shorts-still
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.
+Save prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
@@ -515,13 +515,13 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## klein/shorts-still Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16). Save prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**. Widgets: se…`
+**This graph:** `## klein/shorts-still Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16). Save prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**. W…`
 
 ```text
 ## klein/shorts-still
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **wan/shorts-i2v** or **ltx/shorts-i2v**.
+Save prefix: `ez_shorts_still`. Feed into **wan/shorts-still-5s** or **ltx/shorts-still-5s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.

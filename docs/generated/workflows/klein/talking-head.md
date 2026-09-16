@@ -30,7 +30,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ## klein/talking-head
 
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
-Real single-stage freeze is **ltx/a2v-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
+Real single-stage freeze is **ltx/audio-to-video-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
 Wan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280×704 (divisible by 32). Lab printers stay 5.00 s.
@@ -686,7 +686,7 @@ Markdown-ish operator note.
 ## klein/talking-head
 
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
-Real single-stage freeze is **ltx/a2v-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
+Real single-stage freeze is **ltx/audio-to-video-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
 Wan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280×704 (divisible by 32). Lab printers stay 5.00 s.
@@ -1082,7 +1082,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on ltx/a2v-5s (original wav is muxed).
+    Skipped on ltx/audio-to-video-5s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

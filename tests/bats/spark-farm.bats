@@ -88,8 +88,8 @@ teardown() {
   SEEDS="509201,509211"
   run cmd_run
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"wan/i2v-shot"* ]]
-  [[ "${output}" == *"ltx/i2v-shot"* ]]
+  [[ "${output}" == *"wan/still-to-shot"* ]]
+  [[ "${output}" == *"ltx/still-to-shot"* ]]
   [[ "${output}" == *"concat-shots"* ]]
   FILM=h3-go-see
   run cmd_run

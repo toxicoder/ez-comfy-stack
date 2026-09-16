@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build US-safe podcast lab graphs (audio-first + radio drama).
+"""Build US-safe podcast lab graphs (two-host-episode + radio drama).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -45,9 +45,9 @@ ACE_STING_TAGS = (
 ACE_NEG_TAGS = "vocals, singing, choir, rap"
 COVER_GRAPH = "klein/podcast-cover.json"
 
-AUDIO_NOTE_A = f"""## audio/podcast/audio-first
+AUDIO_NOTE_A = f"""## audio/podcast/two-host-episode
 
-US-safe audio-first episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+US-safe two-host-episode episode (Option A). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
 
 1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.
 2. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
@@ -176,7 +176,7 @@ def _sampler_widgets() -> list:
 
 
 def build_audio_first() -> dict:
-    g = Graph("audio/podcast/audio-first")
+    g = Graph("audio/podcast/two-host-episode")
     g.add(
         1,
         "CheckpointLoaderSimple",
@@ -338,7 +338,7 @@ def build_audio_first() -> dict:
         {
             "lab_profile": "us-safe-podcast",
             "lab_note": AUDIO_NOTE_A,
-            "lab_description": "US-safe audio-first episode: Kokoro TTS + ACE-Step instrumental bed + mix",
+            "lab_description": "US-safe two-host-episode episode: Kokoro TTS + ACE-Step instrumental bed + mix",
             "ds": {"scale": 1, "offset": [0, 0]},
             "groups": [
                 _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 900, "#3f789e"),
@@ -645,7 +645,7 @@ def build_radio_drama() -> dict:
 
 def main() -> None:
     graphs = {
-        "audio/podcast/audio-first.json": build_audio_first(),
+        "audio/podcast/two-host-episode.json": build_audio_first(),
         "audio/podcast/radio-drama.json": build_radio_drama(),
     }
     for name, graph in graphs.items():

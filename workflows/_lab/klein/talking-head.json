@@ -682,7 +682,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein/talking-head\n\nKlein still (LoadImage) \u2192 optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) \u2192 LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **ltx/a2v-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates \u2192 LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280\u00d7704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein/talking-head\n\nKlein still (LoadImage) \u2192 optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) \u2192 LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **ltx/audio-to-video-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates \u2192 LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280\u00d7704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -1121,7 +1121,7 @@
   "extra": {
     "lab_profile": "klein/talking-head",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## klein/talking-head\n\nKlein still (LoadImage) \u2192 optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) \u2192 LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **ltx/a2v-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates \u2192 LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280\u00d7704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein/talking-head\n\nKlein still (LoadImage) \u2192 optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) \u2192 LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.\nReal single-stage freeze is **ltx/audio-to-video-5s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates \u2192 LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.\nWan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v\nBanned lip-sync OSS packs stay out of this tree.\nCanvas is 1280\u00d7704 (divisible by 32). Lab printers stay 5.00 s.\nPrompt enhance is **off** (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "Talking-head: Klein still + LTX A2V freeze smoke. MagCache off. S2V opt-in.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
@@ -1132,7 +1132,7 @@
       "occupancy": "ltx",
       "enhance_off_identity": false,
       "handoff": [
-        "ltx/a2v-5s"
+        "ltx/audio-to-video-5s"
       ]
     },
     "lab_talking_head": {

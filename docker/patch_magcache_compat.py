@@ -10,7 +10,7 @@ MagCache ``nodes.py`` and ``nodes_calibration.py`` still do::
 ComfyUI v0.34.6 moved that helper to ``LTXBaseModel._precompute_freqs_cis``.
 The module-level import fails the whole pack: ``__init__.py`` imports
 calibration after ``nodes.py``, so wrapping only ``nodes.py`` still leaves
-Wan 5B MagCache (``wan/i2v-5s``) as IMPORT FAILED. Hero LTX
+Wan 5B MagCache (``wan/still-to-video-5s``) as IMPORT FAILED. Hero LTX
 graphs must not use MagCache.
 
 This rewrite wraps the import in every MagCache ``*.py`` that still has it,
