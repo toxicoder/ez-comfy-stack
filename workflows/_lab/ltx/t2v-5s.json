@@ -972,7 +972,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/t2v-5s"
+    "lab_rel": "ltx/t2v-5s",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

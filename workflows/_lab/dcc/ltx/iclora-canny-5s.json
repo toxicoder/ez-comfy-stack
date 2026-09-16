@@ -1227,7 +1227,8 @@
     "lab_optional_unwired": [
       "EZFilmDisclosure"
     ],
-    "lab_rel": "dcc/ltx/iclora-canny-5s"
+    "lab_rel": "dcc/ltx/iclora-canny-5s",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

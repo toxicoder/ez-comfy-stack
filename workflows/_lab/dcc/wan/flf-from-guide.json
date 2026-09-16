@@ -867,7 +867,8 @@
       "prefix": "ez_flf_guide",
       "magcache": false
     },
-    "lab_rel": "dcc/wan/flf-from-guide"
+    "lab_rel": "dcc/wan/flf-from-guide",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

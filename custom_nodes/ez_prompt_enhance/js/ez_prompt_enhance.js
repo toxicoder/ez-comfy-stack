@@ -50,9 +50,6 @@ function upsertWidget(node, name, text, multiline) {
 function populate(node, text, status) {
   upsertWidget(node, PREVIEW, text, true);
   upsertWidget(node, STATUS, status, false);
-  requestAnimationFrame(() => {
-    node.onResize?.(node.size);
-  });
 }
 
 app.registerExtension({

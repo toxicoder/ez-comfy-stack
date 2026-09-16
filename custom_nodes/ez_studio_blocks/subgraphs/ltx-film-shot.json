@@ -75,7 +75,8 @@
         "revision": 7,
         "config": {},
         "extra": {
-          "lab_occupancy": "film"
+          "lab_occupancy": "film",
+          "workflowRendererVersion": "Vue-corrected"
         },
         "groups": [],
         "inputs": [
@@ -1219,6 +1220,7 @@
   "version": 0.4,
   "extra": {
     "lab_occupancy": "film",
-    "lab_note": "Occupancy: film \u2014 stop everything else on that Spark. One GB10 job."
+    "lab_note": "Occupancy: film \u2014 stop everything else on that Spark. One GB10 job.",
+    "workflowRendererVersion": "Vue-corrected"
   }
 }

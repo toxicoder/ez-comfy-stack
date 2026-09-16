@@ -57,6 +57,8 @@ def test_blueprints_are_valid_subgraph_json() -> None:
         assert occ in json.dumps(sub.get("extra") or {})
         root = graph["nodes"][0]
         assert root["type"] == sub["id"]
+        assert (graph.get("extra") or {}).get("workflowRendererVersion") == "Vue-corrected"
+        assert (sub.get("extra") or {}).get("workflowRendererVersion") == "Vue-corrected"
         if path.stem.startswith("ltx"):
             assert "1280" in blob
             assert "720" not in blob or "1280x704" in blob

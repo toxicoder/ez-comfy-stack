@@ -612,7 +612,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/still-hero"
+    "lab_rel": "klein/still-hero",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -42,7 +42,7 @@ tags: [troubleshooting, comfyui, docker]
 
     ---
 
-    Missing Models, LTX 720, dub (duration-locked YT tone / `job_slug=True`), occupancy XOR, studio-ui `:8190` (not App Mode).
+    Missing Models, LTX 720, Nodes 2.0 layout, dub (duration-locked YT tone / `job_slug=True`), occupancy XOR, studio-ui `:8190` (not App Mode).
 
     [:octicons-arrow-right-24: Studio canvas](operate/troubleshooting-canvas.md)
 

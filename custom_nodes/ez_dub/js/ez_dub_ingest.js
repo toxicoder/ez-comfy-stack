@@ -58,9 +58,6 @@ app.registerExtension({
         }
       };
       const uploadWidget = this.addWidget("button", "upload", "", () => {
-        if (app.canvas) {
-          app.canvas.node_widget = null;
-        }
         fileInput.click();
       });
       uploadWidget.label = "Upload media";

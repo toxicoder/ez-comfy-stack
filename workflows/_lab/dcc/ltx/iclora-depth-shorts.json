@@ -1227,7 +1227,8 @@
     "lab_optional_unwired": [
       "EZFilmDisclosure"
     ],
-    "lab_rel": "dcc/ltx/iclora-depth-shorts"
+    "lab_rel": "dcc/ltx/iclora-depth-shorts",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

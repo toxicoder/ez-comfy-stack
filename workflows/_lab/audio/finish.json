@@ -341,7 +341,8 @@
       "PrimitiveNode",
       "SaveAudio"
     ],
-    "lab_rel": "audio/finish"
+    "lab_rel": "audio/finish",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

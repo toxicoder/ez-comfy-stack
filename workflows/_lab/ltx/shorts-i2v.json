@@ -1085,7 +1085,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/shorts-i2v"
+    "lab_rel": "ltx/shorts-i2v",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

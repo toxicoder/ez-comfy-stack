@@ -161,7 +161,8 @@
         2
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

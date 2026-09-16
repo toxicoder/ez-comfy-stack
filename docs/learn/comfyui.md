@@ -1,6 +1,6 @@
 ---
 title: ComfyUI basics
-description: Node graphs, widgets, Queue, seeds, and where PNG/MP4 files land in the US-safe studio.
+description: Node graphs, Nodes 2.0, widgets, Queue, seeds, and where PNG/MP4 files land in the US-safe studio.
 tags: [learn, comfyui, queue, workflow, studio]
 ---
 
@@ -9,6 +9,7 @@ tags: [learn, comfyui, queue, workflow, studio]
 **What's on this page**
 
 - Node graph vs App Mode (same JSON, creator widgets)
+- Nodes 2.0 (Vue renderer) as the default canvas
 - How lab workflows get onto the canvas (Workflows and Apps)
 - Queue, seed, widgets, Note node
 - Where outputs go, and what “Missing Models” actually means
@@ -36,6 +37,12 @@ flowchart LR
 ```
 
 Daily rule: **do not edit raw `_lab` JSON.** Open the graph, change widgets, Queue.
+
+### Nodes 2.0
+
+The studio canvas uses [Nodes 2.0](https://docs.comfy.org/interface/nodes-2) (Vue DOM nodes, not LiteGraph canvas drawing). `start` writes `Comfy.VueNodes.Enabled` and `Comfy.VueNodes.AutoScaleLayout` into `user/default/comfy.settings.json` **only when those keys are absent** — an operator who already toggled Nodes 2.0 off keeps that choice. Lab graphs stamp `extra.workflowRendererVersion` as **`Vue-corrected`** so coordinates stay LiteGraph-canonical; do **not** stamp `"Vue"` or the frontend shrinks the layout by 1.2×.
+
+Toggle from the Comfy logo menu or Settings. Classic LiteGraph still loads the same JSON.
 
 ### Graph and App
 

@@ -70,7 +70,8 @@
         "revision": 2,
         "config": {},
         "extra": {
-          "lab_occupancy": "wan"
+          "lab_occupancy": "wan",
+          "workflowRendererVersion": "Vue-corrected"
         },
         "groups": [
           {
@@ -836,6 +837,7 @@
   "version": 0.4,
   "extra": {
     "lab_occupancy": "wan",
-    "lab_note": "Occupancy: wan \u2014 stop LTX, podcast, music. One GB10 job."
+    "lab_note": "Occupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.",
+    "workflowRendererVersion": "Vue-corrected"
   }
 }

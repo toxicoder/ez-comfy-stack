@@ -831,7 +831,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "wan/sticker-loop"
+    "lab_rel": "wan/sticker-loop",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -740,7 +740,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/character-tweak"
+    "lab_rel": "klein/character-tweak",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

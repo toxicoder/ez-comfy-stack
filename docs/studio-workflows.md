@@ -12,6 +12,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 - **Sidebar tree** after `start`, plus the still vs motion vs AV decision
 - **Catalog children** for Klein stills, Wan/LTX motion, 90s/DCC film, and audio
 - **Notes** that apply to every seeded lab graph
+- Nodes 2.0 (`Vue-corrected`) as the default canvas for every seeded graph
 
 **What this enables**
 
@@ -20,7 +21,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue.
 
-After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas.
+After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
 Sidebar tree after start:
 

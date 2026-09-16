@@ -11,6 +11,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 - **Every pack** under `custom_nodes/` (`ez_common` … `ez_studio_blocks`)
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
 - **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, subgraphs
+- **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
 
 **What this enables**
@@ -179,7 +180,7 @@ Graph label `llm` means **nothing GPU** on the App occupancy chip unless `llm-de
 | `film` | everything else on that Spark |
 | `audio` | Klein / Wan / LTX session |
 
-This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md).
+This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
 
 ---
 

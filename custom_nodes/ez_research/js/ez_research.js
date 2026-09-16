@@ -45,9 +45,6 @@ function populate(node, text, sources, status) {
   upsertWidget(node, REPLY, text, true);
   upsertWidget(node, SOURCES, sources, true);
   upsertWidget(node, STATUS, status, false);
-  requestAnimationFrame(() => {
-    node.onResize?.(node.size);
-  });
 }
 
 app.registerExtension({

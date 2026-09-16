@@ -831,7 +831,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "wan/gif-loop"
+    "lab_rel": "wan/gif-loop",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

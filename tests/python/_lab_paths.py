@@ -29,6 +29,10 @@ ALLOWED_LANES = (
     "inspire",
 )
 
+# ComfyUI frontend ensureCorrectLayoutScale: "Vue" unprojects 1.2x (shrinks
+# LiteGraph coords). "Vue-corrected" keeps canonical geometry; Vue scales in CSS.
+WORKFLOW_RENDERER_VERSION = "Vue-corrected"
+
 
 def lab_graph_paths(root: Path | None = None) -> list[Path]:
     """Every ``*.json`` under ``workflows/_lab``."""
@@ -133,12 +137,37 @@ def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -
     return dest
 
 
+def stamp_nodes2(graph: dict[str, Any]) -> dict[str, Any]:
+    """Mark a Comfy graph as Nodes 2.0 with canonical LiteGraph coordinates.
+
+    Sets ``extra.workflowRendererVersion`` to ``Vue-corrected`` on the root
+    graph and on each ``definitions.subgraphs[]`` extra. Does not rewrite
+    node positions or sizes.
+
+    Arguments:
+        graph: Comfy workflow dict (mutated).
+    Returns:
+        ``graph``.
+    """
+    extra = graph.setdefault("extra", {})
+    extra["workflowRendererVersion"] = WORKFLOW_RENDERER_VERSION
+    definitions = graph.get("definitions")
+    if isinstance(definitions, dict):
+        for sub in definitions.get("subgraphs") or []:
+            if isinstance(sub, dict):
+                sub.setdefault("extra", {})["workflowRendererVersion"] = (
+                    WORKFLOW_RENDERER_VERSION
+                )
+    return graph
+
+
 def apply_lab_identity(graph: dict[str, Any], rel: str) -> dict[str, Any]:
     """Set ``id`` to the file stem and ``extra.lab_rel`` to the relative id."""
     clean = str(rel).removesuffix(".json")
     graph["id"] = Path(clean).name
     extra = graph.setdefault("extra", {})
     extra["lab_rel"] = clean
+    stamp_nodes2(graph)
     return graph
 
 

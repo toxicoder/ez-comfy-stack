@@ -2430,7 +2430,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/platform-pack"
+    "lab_rel": "klein/platform-pack",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

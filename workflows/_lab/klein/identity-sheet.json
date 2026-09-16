@@ -1293,7 +1293,8 @@
       "seed": 42,
       "enhance": true
     },
-    "lab_rel": "klein/identity-sheet"
+    "lab_rel": "klein/identity-sheet",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

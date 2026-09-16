@@ -1174,7 +1174,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/i2v-shot"
+    "lab_rel": "ltx/i2v-shot",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

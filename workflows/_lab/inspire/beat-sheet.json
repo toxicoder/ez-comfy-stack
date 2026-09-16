@@ -2149,7 +2149,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "inspire/beat-sheet"
+    "lab_rel": "inspire/beat-sheet",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

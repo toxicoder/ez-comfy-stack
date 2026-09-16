@@ -80,7 +80,8 @@
         "revision": 4,
         "config": {},
         "extra": {
-          "lab_occupancy": "klein"
+          "lab_occupancy": "klein",
+          "workflowRendererVersion": "Vue-corrected"
         },
         "groups": [],
         "inputs": [
@@ -627,6 +628,7 @@
   "version": 0.4,
   "extra": {
     "lab_occupancy": "klein",
-    "lab_note": "Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job."
+    "lab_note": "Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.",
+    "workflowRendererVersion": "Vue-corrected"
   }
 }

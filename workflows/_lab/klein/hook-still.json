@@ -623,7 +623,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/hook-still"
+    "lab_rel": "klein/hook-still",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

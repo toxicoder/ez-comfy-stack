@@ -51,7 +51,7 @@ flowchart TB
   Manage --> Docker
 ```
 
-Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`). Filenames drop lane prefixes and the old `-lab-example` suffix (`klein/still-draft.json`). Nested folders under a lane are allowed. Music catalogs nest as `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Tags carry artist/album/title; SaveAudio stem is `NN - Song Title`. Graph `id` is the file stem; `extra.lab_rel` is the unique `_lab`-relative id. Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` (plus `_user/_rescued/` for in-place lab edits) and must not be committed.
+Shipped Comfy graphs live under `workflows/_lab/<lane>/` (`klein`, `wan`, `ltx`, `shorts`, `dcc`, `optional`, `audio`, `inspire`). Filenames drop lane prefixes and the old `-lab-example` suffix (`klein/still-draft.json`). Nested folders under a lane are allowed. Music catalogs nest as `_lab/audio/albums/<artist>/<album-slug>/` with numbered tracks plus `cover.json` and `album.json`. Tags carry artist/album/title; SaveAudio stem is `NN - Song Title`. Graph `id` is the file stem; `extra.lab_rel` is the unique `_lab`-relative id; `extra.workflowRendererVersion` is `Vue-corrected` (Nodes 2.0 canonical coordinates — never stamp `"Vue"`). Shot YAML stays in `workflows/shorts/*.shots.yaml`. `workflows/_user/` is a local convention only — live private graphs are on `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/` (plus `_user/_rescued/` for in-place lab edits) and must not be committed.
 
 ## Shell style
 

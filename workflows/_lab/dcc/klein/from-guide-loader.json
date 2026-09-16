@@ -828,7 +828,8 @@
       "slug": "go-see",
       "shot_id": "12"
     },
-    "lab_rel": "dcc/klein/from-guide-loader"
+    "lab_rel": "dcc/klein/from-guide-loader",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -795,7 +795,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "wan/t2v-5s"
+    "lab_rel": "wan/t2v-5s",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }
