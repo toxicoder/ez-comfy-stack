@@ -1,6 +1,6 @@
 {
   "id": "longcat-video",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 5,
   "last_link_id": 2,
   "nodes": [
@@ -33,7 +33,7 @@
       "type": "EZSamplePrompt",
       "pos": [
         40,
-        480.0
+        512
       ],
       "size": [
         420,
@@ -67,8 +67,8 @@
       "id": 3,
       "type": "EZLongCatPromptEnhance",
       "pos": [
-        500,
-        480.0
+        508,
+        512
       ],
       "size": [
         420,
@@ -115,8 +115,8 @@
       "id": 4,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        960,
-        480.0
+        976,
+        512
       ],
       "size": [
         420,

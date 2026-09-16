@@ -106,7 +106,7 @@ flowchart LR
 | 4 | Latent length (seconds) | `EmptyAceStep1.5LatentAudio` | DURATION |
 | 15 | Rap lyrics | `EZRapLyrics` | PROMPT |
 | 5 | ez_rap_prompt | `EZAceStepPromptEnhance` | PROMPT |
-| 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | PROMPT |
+| 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | Ungrouped |
 | 7 | Negative (zero) | `ConditioningZeroOut` | PROMPT |
 | 8 | ACE sampler | `KSampler` | PROMPT |
 | 9 | ACE decode | `VAEDecodeAudio` | OUTPUT |

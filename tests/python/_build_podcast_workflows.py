@@ -12,7 +12,12 @@ import json
 import sys
 from pathlib import Path
 
-from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+from _lab_layout import (
+    GROUP_TITLE_INSET,
+    LAB_GROUP_Y0,
+    finalize_layout,
+    group as _group,
+)
 from _lab_paths import apply_lab_identity, lab_json
 from _stamp_app_mode import stamp_suite_graph
 from _wire_prompt_enhance import enable_lab_graph
@@ -69,19 +74,8 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
-    boxes: list[tuple[int, str, float, float, float, float]] = []
-    for n in graph["nodes"]:
-        x, y = n["pos"]
-        s = n.get("size", [200, 100])
-        if isinstance(s, dict):
-            w, h = float(s.get("0", 200)), float(s.get("1", 100))
-        else:
-            w, h = float(s[0]), float(s[1])
-        boxes.append((n["id"], n["type"], x - pad, y - pad, x + w + pad, y + h + pad))
-    for i, a in enumerate(boxes):
-        for b in boxes[i + 1 :]:
-            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-                raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
+    del pad
+    finalize_layout(graph)
 
 
 class Graph:
@@ -152,8 +146,7 @@ class Graph:
         apply_lab_identity(graph, self.graph_id)
         enable_lab_graph(graph)
         stamp_suite_graph(graph)
-        ensure_group_title_inset(graph)
-        _assert_no_overlap(graph)
+        finalize_layout(graph)
         return graph
 
 

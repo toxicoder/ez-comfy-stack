@@ -1,6 +1,6 @@
 {
   "id": "i2v-shot",
-  "revision": 3,
+  "revision": 5,
   "last_node_id": 19,
   "last_link_id": 20,
   "nodes": [
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        372
+        416
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        520
+        546
       ],
       "size": [
         320,
@@ -156,7 +156,7 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
+        948,
         280
       ],
       "size": [
@@ -204,8 +204,8 @@
       "id": 7,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        460
+        948,
+        512
       ],
       "size": [
         420,
@@ -253,7 +253,7 @@
       "type": "Wan22ImageToVideoLatent",
       "pos": [
         1420,
-        520
+        546
       ],
       "size": [
         280,
@@ -448,7 +448,7 @@
       "type": "SaveImage",
       "pos": [
         2080,
-        176
+        198
       ],
       "size": [
         280,
@@ -542,7 +542,7 @@
       "type": "Note",
       "pos": [
         40,
-        900
+        932
       ],
       "size": [
         960,
@@ -566,7 +566,7 @@
       "type": "ImageFromBatch",
       "pos": [
         2420,
-        560
+        586
       ],
       "size": [
         240,
@@ -607,7 +607,7 @@
       "type": "SaveImage",
       "pos": [
         2420,
-        680
+        738
       ],
       "size": [
         280,
@@ -676,8 +676,8 @@
       "id": 18,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        1420.0
+        480,
+        1424
       ],
       "size": [
         420,
@@ -897,9 +897,9 @@
       "title": "DRAFT Wan 5s",
       "bounding": [
         20,
-        20,
-        2760,
-        1300
+        24,
+        2740,
+        1372
       ],
       "color": "#3f789e",
       "font_size": 24,

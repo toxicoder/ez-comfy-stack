@@ -126,7 +126,7 @@ flowchart TB
 | 57 | Sampler 10 | `KSampler` | SHOT 10 study |
 | 58 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 59 | Save 10 | `SaveImage` | SHOT 10 study |
-| 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
 | 61 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference

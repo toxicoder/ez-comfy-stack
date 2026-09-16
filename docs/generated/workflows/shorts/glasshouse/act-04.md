@@ -91,7 +91,7 @@ flowchart TB
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | 1. Identity (Klein) |
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 1. Identity (Klein) |
 | 13 | Quality | `EZQuality` | Ungrouped |
-| 52 | glasshouse 90s shot map | `MarkdownNote` | Ungrouped |
+| 52 | glasshouse 90s shot map | `MarkdownNote` | 2. LTX models |
 | 50 | Unload models (pass IMAGE) | `EZUnloadModels` | 1. Identity (Klein) |
 | 100 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | 2. LTX models |
 | 101 | LTX-2.5 video VAE | `VAELoader` | 2. LTX models |
@@ -318,7 +318,7 @@ flowchart TB
 | 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 51 | Load previous act last frame | `LoadImage` | 1. Identity (Klein) |
-| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 2. LTX models |
 
 ## Node parameter reference
 

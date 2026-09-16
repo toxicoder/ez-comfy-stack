@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 from _creator_pack3 import PACK3, Pack3Spec
-from _lab_layout import LAB_GROUP_Y0, ensure_group_title_inset, group as _group
+from _lab_layout import LAB_GROUP_Y0, finalize_layout, group as _group
 from _lab_paths import LAB_ROOT, ROOT, apply_lab_identity, lab_dest, lab_json
 from _lab_theme import CREATOR_IDENTITY, I2V_LOCK, KLEIN_NEG_STILL
 from _stamp_app_mode import stamp_suite_graph
@@ -127,8 +127,7 @@ def _dump(path: Path, graph: dict) -> None:
     enable_lab_graph(graph)
     normalize_enhance_widgets(graph)
     stamp_suite_graph(graph)
-    ensure_group_title_inset(graph)
-    cv._assert_no_overlap(graph)
+    finalize_layout(graph)
     apply_lab_identity(graph, rel)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")

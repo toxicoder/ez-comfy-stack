@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_layout import node_overlap_hits
 from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,24 +24,7 @@ def test_film_graphs_carry_dfr_extra() -> None:
 
 
 def _overlap_hits(graph: dict) -> list[str]:
-    pad = 20
-    boxes: list[tuple[int, str, float, float, float, float]] = []
-    for node in graph["nodes"]:
-        x, y = node["pos"]
-        size = node.get("size", [200, 100])
-        if isinstance(size, dict):
-            width, height = float(size.get("0", 200)), float(size.get("1", 100))
-        else:
-            width, height = float(size[0]), float(size[1])
-        boxes.append(
-            (node["id"], node["type"], x - pad, y - pad, x + width + pad, y + height + pad)
-        )
-    hits: list[str] = []
-    for i, a in enumerate(boxes):
-        for b in boxes[i + 1 :]:
-            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-                hits.append(f"{a[0]}({a[1]}) vs {b[0]}({b[1]})")
-    return hits
+    return node_overlap_hits(graph)
 
 
 def test_a14b_hero_is_eight_step_magcache_off() -> None:

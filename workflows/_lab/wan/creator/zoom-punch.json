@@ -1,6 +1,6 @@
 {
   "id": "zoom-punch",
-  "revision": 1,
+  "revision": 3,
   "last_node_id": 17,
   "last_link_id": 18,
   "nodes": [
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        372
+        416
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        520
+        574
       ],
       "size": [
         320,
@@ -156,7 +156,7 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
+        948,
         280
       ],
       "size": [
@@ -204,8 +204,8 @@
       "id": 7,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        460
+        948,
+        512
       ],
       "size": [
         420,
@@ -253,7 +253,7 @@
       "type": "Wan22ImageToVideoLatent",
       "pos": [
         1420,
-        520
+        546
       ],
       "size": [
         280,
@@ -447,7 +447,7 @@
       "type": "SaveImage",
       "pos": [
         2080,
-        176
+        198
       ],
       "size": [
         280,
@@ -541,7 +541,7 @@
       "type": "Note",
       "pos": [
         40,
-        900
+        960
       ],
       "size": [
         960,
@@ -604,8 +604,8 @@
       "id": 16,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        1260.0
+        480,
+        1352
       ],
       "size": [
         420,
@@ -809,9 +809,9 @@
       "title": "Load models",
       "bounding": [
         20,
-        24.0,
+        24,
         400,
-        430
+        494
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -822,9 +822,9 @@
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
         20,
-        464.0,
-        400,
-        380
+        518,
+        360,
+        414
       ],
       "color": "#3f789e",
       "font_size": 24,

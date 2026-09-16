@@ -1,6 +1,6 @@
 {
   "id": "platform-pack",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 47,
   "last_link_id": 63,
   "nodes": [
@@ -48,7 +48,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -89,7 +89,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        412
       ],
       "size": [
         360,
@@ -127,7 +127,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        510
+        570
       ],
       "size": [
         420,
@@ -172,7 +172,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        970
+        1062
       ],
       "size": [
         420,
@@ -224,7 +224,7 @@
       "type": "Note",
       "pos": [
         40,
-        1150
+        1294
       ],
       "size": [
         420,
@@ -288,7 +288,7 @@
       "id": 11,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         80
       ],
       "size": [
@@ -335,7 +335,7 @@
       "id": 12,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
+        1396,
         80
       ],
       "size": [
@@ -370,7 +370,7 @@
       "id": 13,
       "type": "KSampler",
       "pos": [
-        1700,
+        1724,
         80
       ],
       "size": [
@@ -430,7 +430,7 @@
       "id": 14,
       "type": "VAEDecode",
       "pos": [
-        2060,
+        2092,
         80
       ],
       "size": [
@@ -472,7 +472,7 @@
       "id": 15,
       "type": "SaveImage",
       "pos": [
-        2340,
+        2380,
         80
       ],
       "size": [
@@ -503,7 +503,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        440
+        450
       ],
       "size": [
         420,
@@ -543,8 +543,8 @@
       "id": 17,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
-        440
+        988,
+        450
       ],
       "size": [
         360,
@@ -590,8 +590,8 @@
       "id": 18,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
-        440
+        1396,
+        450
       ],
       "size": [
         280,
@@ -625,8 +625,8 @@
       "id": 19,
       "type": "KSampler",
       "pos": [
-        1700,
-        440
+        1724,
+        450
       ],
       "size": [
         320,
@@ -685,8 +685,8 @@
       "id": 20,
       "type": "VAEDecode",
       "pos": [
-        2060,
-        440
+        2092,
+        450
       ],
       "size": [
         240,
@@ -727,8 +727,8 @@
       "id": 21,
       "type": "SaveImage",
       "pos": [
-        2340,
-        440
+        2380,
+        450
       ],
       "size": [
         280,
@@ -758,7 +758,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        800
+        820
       ],
       "size": [
         420,
@@ -798,8 +798,8 @@
       "id": 23,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
-        800
+        988,
+        820
       ],
       "size": [
         360,
@@ -845,8 +845,8 @@
       "id": 24,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
-        800
+        1396,
+        820
       ],
       "size": [
         280,
@@ -880,8 +880,8 @@
       "id": 25,
       "type": "KSampler",
       "pos": [
-        1700,
-        800
+        1724,
+        820
       ],
       "size": [
         320,
@@ -940,8 +940,8 @@
       "id": 26,
       "type": "VAEDecode",
       "pos": [
-        2060,
-        800
+        2092,
+        820
       ],
       "size": [
         240,
@@ -982,8 +982,8 @@
       "id": 27,
       "type": "SaveImage",
       "pos": [
-        2340,
-        800
+        2380,
+        820
       ],
       "size": [
         280,
@@ -1013,7 +1013,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1160
+        1304
       ],
       "size": [
         420,
@@ -1053,8 +1053,8 @@
       "id": 29,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
-        1160
+        988,
+        1304
       ],
       "size": [
         360,
@@ -1100,8 +1100,8 @@
       "id": 30,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
-        1160
+        1396,
+        1304
       ],
       "size": [
         280,
@@ -1135,8 +1135,8 @@
       "id": 31,
       "type": "KSampler",
       "pos": [
-        1700,
-        1160
+        1724,
+        1304
       ],
       "size": [
         320,
@@ -1195,8 +1195,8 @@
       "id": 32,
       "type": "VAEDecode",
       "pos": [
-        2060,
-        1160
+        2092,
+        1304
       ],
       "size": [
         240,
@@ -1237,8 +1237,8 @@
       "id": 33,
       "type": "SaveImage",
       "pos": [
-        2340,
-        1160
+        2380,
+        1304
       ],
       "size": [
         280,
@@ -1268,7 +1268,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1520
+        1674
       ],
       "size": [
         420,
@@ -1308,8 +1308,8 @@
       "id": 35,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
-        1520
+        988,
+        1674
       ],
       "size": [
         360,
@@ -1355,8 +1355,8 @@
       "id": 36,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
-        1520
+        1396,
+        1674
       ],
       "size": [
         280,
@@ -1390,8 +1390,8 @@
       "id": 37,
       "type": "KSampler",
       "pos": [
-        1700,
-        1520
+        1724,
+        1674
       ],
       "size": [
         320,
@@ -1450,8 +1450,8 @@
       "id": 38,
       "type": "VAEDecode",
       "pos": [
-        2060,
-        1520
+        2092,
+        1674
       ],
       "size": [
         240,
@@ -1492,8 +1492,8 @@
       "id": 39,
       "type": "SaveImage",
       "pos": [
-        2340,
-        1520
+        2380,
+        1674
       ],
       "size": [
         280,
@@ -1523,7 +1523,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1880
+        2044
       ],
       "size": [
         420,
@@ -1563,8 +1563,8 @@
       "id": 41,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
-        1880
+        988,
+        2044
       ],
       "size": [
         360,
@@ -1610,8 +1610,8 @@
       "id": 42,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        1380,
-        1880
+        1396,
+        2044
       ],
       "size": [
         280,
@@ -1645,8 +1645,8 @@
       "id": 43,
       "type": "KSampler",
       "pos": [
-        1700,
-        1880
+        1724,
+        2044
       ],
       "size": [
         320,
@@ -1705,8 +1705,8 @@
       "id": 44,
       "type": "VAEDecode",
       "pos": [
-        2060,
-        1880
+        2092,
+        2044
       ],
       "size": [
         240,
@@ -1747,8 +1747,8 @@
       "id": 45,
       "type": "SaveImage",
       "pos": [
-        2340,
-        1880
+        2380,
+        2044
       ],
       "size": [
         280,
@@ -1777,8 +1777,8 @@
       "id": 46,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        2170.0
+        480,
+        2296
       ],
       "size": [
         420,
@@ -2359,8 +2359,8 @@
       "bounding": [
         20,
         24,
-        430,
-        430
+        400,
+        490
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2371,9 +2371,9 @@
       "title": "PACK IDENTITY",
       "bounding": [
         20,
-        454,
+        514,
         460,
-        400
+        520
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2385,8 +2385,8 @@
       "bounding": [
         500,
         24,
-        2160,
-        340
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2397,9 +2397,9 @@
       "title": "SHOT ig",
       "bounding": [
         500,
-        384,
-        2160,
-        340
+        394,
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2410,9 +2410,9 @@
       "title": "SHOT portrait",
       "bounding": [
         500,
-        744,
-        2160,
-        340
+        764,
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2423,9 +2423,9 @@
       "title": "SHOT shorts",
       "bounding": [
         500,
-        1104,
-        2160,
-        340
+        1248,
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2436,9 +2436,9 @@
       "title": "SHOT og",
       "bounding": [
         500,
-        1464,
-        2160,
-        340
+        1618,
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2449,9 +2449,9 @@
       "title": "SHOT banner",
       "bounding": [
         500,
-        1824,
-        2160,
-        340
+        1988,
+        2180,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,

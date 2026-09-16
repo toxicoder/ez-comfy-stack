@@ -315,7 +315,7 @@ flowchart TB
 | 549 | Last frame | `ImageFromBatch` | 8. Beat 6 (3 × 5.00s LTX) |
 | 550 | Save last frame | `SaveImage` | 8. Beat 6 (3 × 5.00s LTX) |
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
-| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 9. Publish 90s MP4 |
 
 ## Node parameter reference
 

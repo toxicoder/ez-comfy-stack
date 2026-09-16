@@ -1,6 +1,6 @@
 {
   "id": "prompt-forge",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 10,
   "last_link_id": 12,
   "nodes": [
@@ -33,7 +33,7 @@
       "type": "EZSamplePrompt",
       "pos": [
         40,
-        496.0
+        540
       ],
       "size": [
         420,
@@ -72,8 +72,8 @@
       "id": 6,
       "type": "PrimitiveNode",
       "pos": [
-        500,
-        496.0
+        508,
+        540
       ],
       "size": [
         420,
@@ -115,7 +115,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        772.0
+        1060
       ],
       "size": [
         420,
@@ -165,8 +165,8 @@
       "id": 3,
       "type": "EZWanPromptEnhance",
       "pos": [
-        500,
-        772.0
+        508,
+        1060
       ],
       "size": [
         420,
@@ -216,8 +216,8 @@
       "id": 4,
       "type": "EZLTXPromptEnhance",
       "pos": [
-        960,
-        772.0
+        976,
+        1004
       ],
       "size": [
         420,
@@ -269,7 +269,7 @@
       "type": "EZZimagePromptEnhance",
       "pos": [
         40,
-        1228.0
+        1580
       ],
       "size": [
         420,
@@ -318,8 +318,8 @@
       "id": 8,
       "type": "EZLongCatPromptEnhance",
       "pos": [
-        500,
-        1228.0
+        508,
+        1580
       ],
       "size": [
         420,
@@ -369,8 +369,8 @@
       "id": 9,
       "type": "EZDreamXPromptEnhance",
       "pos": [
-        960,
-        1228.0
+        976,
+        1524
       ],
       "size": [
         420,
@@ -554,7 +554,7 @@
         20,
         24,
         1380,
-        416.0
+        460
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -565,9 +565,9 @@
       "title": "DESK",
       "bounding": [
         20,
-        440.0,
-        1380,
-        256.0
+        484,
+        928,
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -578,9 +578,9 @@
       "title": "KLEIN",
       "bounding": [
         20,
-        716.0,
+        1004,
         460,
-        356
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -590,10 +590,10 @@
       "id": 4,
       "title": "WAN",
       "bounding": [
-        480,
-        716.0,
+        488,
+        1004,
         460,
-        356
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -603,10 +603,10 @@
       "id": 5,
       "title": "LTX",
       "bounding": [
-        940,
-        716.0,
+        956,
+        948,
         460,
-        436
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -617,9 +617,9 @@
       "title": "Z-IMAGE",
       "bounding": [
         20,
-        1172.0,
+        1524,
         460,
-        336
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -629,10 +629,10 @@
       "id": 7,
       "title": "LONGCAT",
       "bounding": [
-        480,
-        1172.0,
+        488,
+        1524,
         460,
-        356
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -642,10 +642,10 @@
       "id": 8,
       "title": "DREAMX",
       "bounding": [
-        940,
-        1172.0,
+        956,
+        1468,
         460,
-        436
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,

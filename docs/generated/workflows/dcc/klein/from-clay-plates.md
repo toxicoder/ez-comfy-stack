@@ -100,7 +100,7 @@ flowchart TB
 | 34 | Sampler shorts | `KSampler` | SHOT shorts |
 | 35 | Decode shorts | `VAEDecode` | SHOT shorts |
 | 36 | Save shorts | `SaveImage` | SHOT shorts |
-| 37 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 37 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT shorts |
 | 38 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference

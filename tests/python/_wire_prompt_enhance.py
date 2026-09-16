@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from _lab_layout import finalize_layout, node_overlap_hits
 from _lab_paths import lab_json
 
 from _lab_theme import (
@@ -102,31 +103,8 @@ ENHANCE_H = 420
 
 
 def overlap_hits(graph: dict[str, Any]) -> list[str]:
-    pad = 20
-    boxes = []
-    for node in graph["nodes"]:
-        x, y = node["pos"]
-        size = node.get("size", [200, 100])
-        if isinstance(size, dict):
-            width, height = float(size.get("0", 200)), float(size.get("1", 100))
-        else:
-            width, height = float(size[0]), float(size[1])
-        boxes.append(
-            (
-                node["id"],
-                node["type"],
-                x - pad,
-                y - pad,
-                x + width + pad,
-                y + height + pad,
-            )
-        )
-    hits = []
-    for i, a in enumerate(boxes):
-        for b in boxes[i + 1 :]:
-            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-                hits.append(f"{a[0]}({a[1]}) vs {b[0]}({b[1]})")
-    return hits
+    """Return estimated Vue AABB overlap strings (shared lab layout contract)."""
+    return node_overlap_hits(graph)
 
 
 def next_ids(graph: dict[str, Any]) -> tuple[int, int]:
@@ -545,9 +523,7 @@ def _push_notes_clear(graph: dict[str, Any]) -> None:
 
 
 def save(path: Path, graph: dict[str, Any]) -> None:
-    hits = overlap_hits(graph)
-    if hits:
-        raise SystemExit(f"overlap in {path.name}: {hits}")
+    finalize_layout(graph)
     path.write_text(json.dumps(graph, indent=2, ensure_ascii=True) + "\n", encoding="utf-8")
 
 

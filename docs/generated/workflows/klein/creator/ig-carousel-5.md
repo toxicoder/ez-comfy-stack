@@ -94,7 +94,7 @@ flowchart TB
 | 36 | Sampler CLOSE | `KSampler` | SHOT CLOSE |
 | 37 | Decode CLOSE | `VAEDecode` | SHOT CLOSE |
 | 38 | Save CLOSE | `SaveImage` | SHOT CLOSE |
-| 39 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 39 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT CLOSE |
 | 40 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference

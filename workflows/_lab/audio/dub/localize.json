@@ -1,6 +1,6 @@
 {
   "id": "localize",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 7,
   "last_link_id": 5,
   "nodes": [
@@ -51,7 +51,7 @@
       "id": 2,
       "type": "EZDubScript",
       "pos": [
-        500,
+        508,
         80
       ],
       "size": [
@@ -96,7 +96,7 @@
       "type": "EZDubRender",
       "pos": [
         500,
-        480
+        512
       ],
       "size": [
         440,
@@ -176,7 +176,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1000,
-        200
+        422
       ],
       "size": [
         320,
@@ -207,7 +207,7 @@
       "type": "Note",
       "pos": [
         1000,
-        340
+        764
       ],
       "size": [
         420,
@@ -308,7 +308,7 @@
         20,
         24,
         460,
-        380
+        360
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -320,8 +320,8 @@
       "bounding": [
         480,
         24,
-        480,
-        780
+        488,
+        832
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -334,7 +334,7 @@
         980,
         24,
         460,
-        860
+        1264
       ],
       "color": "#3f789e",
       "font_size": 24,

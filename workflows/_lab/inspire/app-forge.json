@@ -1,6 +1,6 @@
 {
   "id": "app-forge",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 3,
   "last_link_id": 0,
   "nodes": [
@@ -33,7 +33,7 @@
       "type": "EZAppForge",
       "pos": [
         40,
-        516.0
+        560
       ],
       "size": [
         720,
@@ -106,7 +106,7 @@
         20,
         24,
         760,
-        436.0
+        480
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -117,9 +117,9 @@
       "title": "FORGE",
       "bounding": [
         20,
-        460.0,
+        504,
         760,
-        516.0
+        560
       ],
       "color": "#3f789e",
       "font_size": 24,
