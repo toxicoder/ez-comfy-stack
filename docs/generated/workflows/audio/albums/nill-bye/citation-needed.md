@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/citation-needed/01-citation-needed` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/02-p-hacking` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/03-null-result` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/04-expired-reagent` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/05-lab-safety` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/06-rumor-mill` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/07-gym-selfie` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/08-rented-drip` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/09-clout-diet` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/10-mood-forecast` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/11-algorithm` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/12-story-time` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/13-caption` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/14-energy-drink` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/15-campfire` | 15 | audio |
-| `audio/albums/nill-bye/citation-needed/album` | 2 | none |
-| `audio/albums/nill-bye/citation-needed/cover` | 13 | klein |
+| `audio/albums/nill-bye/citation-needed/01-citation-needed` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/02-p-hacking` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/03-null-result` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/04-expired-reagent` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/05-lab-safety` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/06-rumor-mill` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/07-gym-selfie` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/08-rented-drip` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/09-clout-diet` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/10-mood-forecast` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/11-algorithm` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/12-story-time` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/13-caption` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/14-energy-drink` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/15-campfire` | 16 | audio |
+| `audio/albums/nill-bye/citation-needed/album` | 3 | none |
+| `audio/albums/nill-bye/citation-needed/cover` | 14 | klein |
 
 ## `01-citation-needed`
 
@@ -530,6 +531,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Citation Needed` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-p-hacking`
 
@@ -960,6 +967,12 @@ yeah
 | 6 | `skip` |
 | 7 | `02 - P-Hacking` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-null-result`
 
 Catalog id `audio/albums/nill-bye/citation-needed/03-null-result`.
@@ -1388,6 +1401,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `03 - Null Result` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `04-expired-reagent`
 
@@ -1818,6 +1837,12 @@ yeah
 | 6 | `skip` |
 | 7 | `04 - Expired Reagent` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `05-lab-safety`
 
 Catalog id `audio/albums/nill-bye/citation-needed/05-lab-safety`.
@@ -2246,6 +2271,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `05 - Lab Safety` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `06-rumor-mill`
 
@@ -2676,6 +2707,12 @@ yeah
 | 6 | `skip` |
 | 7 | `06 - Rumor Mill` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `07-gym-selfie`
 
 Catalog id `audio/albums/nill-bye/citation-needed/07-gym-selfie`.
@@ -3104,6 +3141,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `07 - Gym Selfie` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `08-rented-drip`
 
@@ -3534,6 +3577,12 @@ yeah
 | 6 | `skip` |
 | 7 | `08 - Rented Drip` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `09-clout-diet`
 
 Catalog id `audio/albums/nill-bye/citation-needed/09-clout-diet`.
@@ -3962,6 +4011,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `09 - Clout Diet` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `10-mood-forecast`
 
@@ -4392,6 +4447,12 @@ yeah
 | 6 | `skip` |
 | 7 | `10 - Mood Forecast` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `11-algorithm`
 
 Catalog id `audio/albums/nill-bye/citation-needed/11-algorithm`.
@@ -4820,6 +4881,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `11 - Algorithm` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `12-story-time`
 
@@ -5268,6 +5335,12 @@ yeah
 | 6 | `skip` |
 | 7 | `12 - Story Time` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `13-caption`
 
 Catalog id `audio/albums/nill-bye/citation-needed/13-caption`.
@@ -5696,6 +5769,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `13 - Caption vs Data` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `14-energy-drink`
 
@@ -6126,6 +6205,12 @@ yeah
 | 6 | `skip` |
 | 7 | `14 - Energy Drink` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `15-campfire`
 
 Catalog id `audio/albums/nill-bye/citation-needed/15-campfire`.
@@ -6555,6 +6640,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Campfire Rumor` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/citation-needed/album`.
@@ -6568,6 +6659,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Citation Needed` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6676,6 +6773,12 @@ square album cover, graphic print, empty footnote, stacked papers, warm desk lam
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7878,6 +7981,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Caption vs Data` |
 | Album metadata | `14 - Energy Drink` |
 | Album metadata | `15 - Campfire Rumor` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

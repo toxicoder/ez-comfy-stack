@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/07-university-tab` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/11-census-question` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` | 15 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/album` | 2 | none |
-| `audio/albums/nill-bye/thirty-four-counts/cover` | 13 | klein |
+| `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/07-university-tab` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/11-census-question` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` | 16 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/album` | 3 | none |
+| `audio/albums/nill-bye/thirty-four-counts/cover` | 14 | klein |
 
 ## `01-thirty-four-counts`
 
@@ -533,6 +534,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Thirty Four Counts` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-one-eighty-seven`
 
@@ -978,6 +985,12 @@ cut
 | 6 | `skip` |
 | 7 | `02 - One Eighty Seven` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-eleven-seven-eighty`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty`.
@@ -1404,6 +1417,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - Eleven Seven Eighty` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-fake-electors`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/04-fake-electors`.
@@ -1826,6 +1845,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Fake Electors` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-bathroom-boxes`
 
@@ -2253,6 +2278,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - Bathroom Boxes` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-statement-of-worth`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth`.
@@ -2675,6 +2706,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Statement of Worth` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-university-tab`
 
@@ -3102,6 +3139,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - University Tab` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-ukraine-hold`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold`.
@@ -3524,6 +3567,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Ukraine Hold` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-travel-memo`
 
@@ -3951,6 +4000,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Travel Memo` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-zero-tolerance`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance`.
@@ -4373,6 +4428,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Zero Tolerance` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-census-question`
 
@@ -4800,6 +4861,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Census Question` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-paris-walkout`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout`.
@@ -5222,6 +5289,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Paris Walkout` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-emoluments-suite`
 
@@ -5649,6 +5722,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Emoluments Suite` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-seven-fifty`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty`.
@@ -6071,6 +6150,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Seven Fifty` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-carroll-tab`
 
@@ -6498,6 +6583,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Carroll Tab` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/album`.
@@ -6511,6 +6602,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Thirty Four Counts` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6619,6 +6716,12 @@ square album cover, graphic print, ledger book, tally marks, marble courthouse s
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7821,6 +7924,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Emoluments Suite` |
 | Album metadata | `14 - Seven Fifty` |
 | Album metadata | `15 - Carroll Tab` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

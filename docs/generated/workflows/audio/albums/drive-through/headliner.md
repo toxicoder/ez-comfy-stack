@@ -62,6 +62,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N15["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -83,23 +84,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/headliner/01-lantern-merge` | 14 | audio |
-| `audio/albums/drive-through/headliner/02-firefly-lane` | 14 | audio |
-| `audio/albums/drive-through/headliner/03-canopy-bounce` | 14 | audio |
-| `audio/albums/drive-through/headliner/04-grove-wreck` | 14 | audio |
-| `audio/albums/drive-through/headliner/05-moss-sub` | 14 | audio |
-| `audio/albums/drive-through/headliner/06-fern-stack` | 14 | audio |
-| `audio/albums/drive-through/headliner/07-pollen-kick` | 14 | audio |
-| `audio/albums/drive-through/headliner/08-cedar-growl` | 14 | audio |
-| `audio/albums/drive-through/headliner/09-moon-ramp` | 14 | audio |
-| `audio/albums/drive-through/headliner/10-trail-bounce` | 14 | audio |
-| `audio/albums/drive-through/headliner/11-dew-wreck` | 14 | audio |
-| `audio/albums/drive-through/headliner/12-sap-stack` | 14 | audio |
-| `audio/albums/drive-through/headliner/13-glade-split` | 14 | audio |
-| `audio/albums/drive-through/headliner/14-root-chest` | 14 | audio |
-| `audio/albums/drive-through/headliner/15-ember-crest` | 14 | audio |
-| `audio/albums/drive-through/headliner/album` | 2 | none |
-| `audio/albums/drive-through/headliner/cover` | 13 | klein |
+| `audio/albums/drive-through/headliner/01-lantern-merge` | 15 | audio |
+| `audio/albums/drive-through/headliner/02-firefly-lane` | 15 | audio |
+| `audio/albums/drive-through/headliner/03-canopy-bounce` | 15 | audio |
+| `audio/albums/drive-through/headliner/04-grove-wreck` | 15 | audio |
+| `audio/albums/drive-through/headliner/05-moss-sub` | 15 | audio |
+| `audio/albums/drive-through/headliner/06-fern-stack` | 15 | audio |
+| `audio/albums/drive-through/headliner/07-pollen-kick` | 15 | audio |
+| `audio/albums/drive-through/headliner/08-cedar-growl` | 15 | audio |
+| `audio/albums/drive-through/headliner/09-moon-ramp` | 15 | audio |
+| `audio/albums/drive-through/headliner/10-trail-bounce` | 15 | audio |
+| `audio/albums/drive-through/headliner/11-dew-wreck` | 15 | audio |
+| `audio/albums/drive-through/headliner/12-sap-stack` | 15 | audio |
+| `audio/albums/drive-through/headliner/13-glade-split` | 15 | audio |
+| `audio/albums/drive-through/headliner/14-root-chest` | 15 | audio |
+| `audio/albums/drive-through/headliner/15-ember-crest` | 15 | audio |
+| `audio/albums/drive-through/headliner/album` | 3 | none |
+| `audio/albums/drive-through/headliner/cover` | 14 | klein |
 
 ## `01-lantern-merge`
 
@@ -246,6 +247,12 @@ hybrid trap, warped bass, trap hats, chest sub, rave, instrumental, no vocals, n
 | 6 | `skip` |
 | 7 | `01 - Lantern Merge` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `02-firefly-lane`
 
 Catalog id `audio/albums/drive-through/headliner/02-firefly-lane`.
@@ -386,6 +393,12 @@ color bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `02 - Firefly Lane` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `03-canopy-bounce`
 
@@ -531,6 +544,12 @@ chest bass, warped bass, trap hats, body bass, rave, instrumental, no vocals, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `03 - Canopy Bounce` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `04-grove-wreck`
 
@@ -681,6 +700,12 @@ riddim, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no v
 | 6 | `skip` |
 | 7 | `04 - Grove Wreck` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `05-moss-sub`
 
 Catalog id `audio/albums/drive-through/headliner/05-moss-sub`.
@@ -825,6 +850,12 @@ dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, rolling 8
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `05 - Moss Sub` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `06-fern-stack`
 
@@ -974,6 +1005,12 @@ hybrid trap, warped bass, trap hats, stacked 808, rave, instrumental, no vocals,
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Fern Stack` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-pollen-kick`
 
@@ -1128,6 +1165,12 @@ drumstep, warped bass, trap hats, amen break, chest sub, rave, instrumental, no 
 | 6 | `skip` |
 | 7 | `07 - Pollen Kick` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-cedar-growl`
 
 Catalog id `audio/albums/drive-through/headliner/08-cedar-growl`.
@@ -1268,6 +1311,12 @@ tearout, warped bass, trap hats, bass growl, heavy sub, rave, instrumental, no v
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Cedar Growl` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-moon-ramp`
 
@@ -1413,6 +1462,12 @@ wave bass, warped bass, trap hats, chest 808, rave, instrumental, no vocals, no 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `09 - Moon Ramp` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `10-trail-bounce`
 
@@ -1562,6 +1617,12 @@ color bass, warped bass, trap hats, body bass, chest sub, rave, instrumental, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Trail Bounce` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-dew-wreck`
 
@@ -1720,6 +1781,12 @@ neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instr
 | 6 | `skip` |
 | 7 | `11 - Dew Wreck` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-sap-stack`
 
 Catalog id `audio/albums/drive-through/headliner/12-sap-stack`.
@@ -1868,6 +1935,12 @@ brostep, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Sap Stack` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-glade-split`
 
@@ -2021,6 +2094,12 @@ dirty dubstep, warped bass, trap hats, wobble bass, chest sub, rave, instrumenta
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `13 - Glade Split` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `14-root-chest`
 
@@ -2179,6 +2258,12 @@ chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, ins
 | 6 | `skip` |
 | 7 | `14 - Root Chest` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `15-ember-crest`
 
 Catalog id `audio/albums/drive-through/headliner/15-ember-crest`.
@@ -2332,6 +2417,12 @@ hybrid trap, warped bass, trap hats, heavy sub, rave, instrumental, no vocals, n
 | 6 | `skip` |
 | 7 | `15 - Ember Crest` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/headliner/album`.
@@ -2345,6 +2436,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Drive-through` |
 | 1 | `Headliner` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -2453,6 +2550,12 @@ square album cover, graphic print, forest canopy rave lights, no faces, warped b
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -3574,6 +3677,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Glade Split` |
 | Album metadata | `14 - Root Chest` |
 | Album metadata | `15 - Ember Crest` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

@@ -1,7 +1,7 @@
 {
   "id": "longcat-video",
   "revision": 1,
-  "last_node_id": 4,
+  "last_node_id": 5,
   "last_link_id": 2,
   "nodes": [
     {
@@ -149,6 +149,37 @@
         "longcat"
       ],
       "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 5,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -189,7 +220,10 @@
         0
       ]
     },
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

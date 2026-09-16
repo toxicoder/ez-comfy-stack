@@ -1,7 +1,7 @@
 {
   "id": "audio-first",
   "revision": 1,
-  "last_node_id": 15,
+  "last_node_id": 16,
   "last_link_id": 18,
   "nodes": [
     {
@@ -653,6 +653,37 @@
         "audio/podcast/audio-first"
       ],
       "title": "ez_podcast_bed enhance"
+    },
+    {
+      "id": 16,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -881,6 +912,14 @@
     "linearData": {
       "inputs": [
         [
+          16,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           2,
           "sample",
           {
@@ -984,7 +1023,10 @@
         13
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

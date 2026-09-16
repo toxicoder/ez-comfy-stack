@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/peer-review/01-lab-coat` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/02-peer-review` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/03-feels` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/04-fake-cool` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/05-hypothesis` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/06-control-group` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/07-sample-size` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/08-placebo` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/09-error-bars` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/10-lab-notebook` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/11-office-hours` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/12-grant-denied` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/13-contamination` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/14-double-blind` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/15-replicate` | 15 | audio |
-| `audio/albums/nill-bye/peer-review/album` | 2 | none |
-| `audio/albums/nill-bye/peer-review/cover` | 13 | klein |
+| `audio/albums/nill-bye/peer-review/01-lab-coat` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/02-peer-review` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/03-feels` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/04-fake-cool` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/05-hypothesis` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/06-control-group` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/07-sample-size` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/08-placebo` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/09-error-bars` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/10-lab-notebook` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/11-office-hours` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/12-grant-denied` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/13-contamination` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/14-double-blind` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/15-replicate` | 16 | audio |
+| `audio/albums/nill-bye/peer-review/album` | 3 | none |
+| `audio/albums/nill-bye/peer-review/cover` | 14 | klein |
 
 ## `01-lab-coat`
 
@@ -533,6 +534,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Lab Coat Lecture` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-peer-review`
 
@@ -975,6 +982,12 @@ cut
 | 6 | `skip` |
 | 7 | `02 - Peer Review` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-feels`
 
 Catalog id `audio/albums/nill-bye/peer-review/03-feels`.
@@ -1404,6 +1417,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - In His Feels` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-fake-cool`
 
 Catalog id `audio/albums/nill-bye/peer-review/04-fake-cool`.
@@ -1824,6 +1843,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Fake Cool` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-hypothesis`
 
@@ -2250,6 +2275,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `05 - Hypothesis vs Rumor` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `06-control-group`
 
@@ -2680,6 +2711,12 @@ yeah
 | 6 | `skip` |
 | 7 | `06 - Control Group` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `07-sample-size`
 
 Catalog id `audio/albums/nill-bye/peer-review/07-sample-size`.
@@ -3106,6 +3143,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Sample Size` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-placebo`
 
 Catalog id `audio/albums/nill-bye/peer-review/08-placebo`.
@@ -3526,6 +3569,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Placebo` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-error-bars`
 
@@ -3956,6 +4005,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Error Bars` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-lab-notebook`
 
 Catalog id `audio/albums/nill-bye/peer-review/10-lab-notebook`.
@@ -4381,6 +4436,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Lab Notebook` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-office-hours`
 
@@ -4810,6 +4871,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `11 - Office Hours` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `12-grant-denied`
 
@@ -5252,6 +5319,12 @@ cut
 | 6 | `skip` |
 | 7 | `12 - Grant Denied` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `13-contamination`
 
 Catalog id `audio/albums/nill-bye/peer-review/13-contamination`.
@@ -5672,6 +5745,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `13 - Contamination` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `14-double-blind`
 
@@ -6099,6 +6178,12 @@ yeah
 | 6 | `skip` |
 | 7 | `14 - Double Blind` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `15-replicate`
 
 Catalog id `audio/albums/nill-bye/peer-review/15-replicate`.
@@ -6519,6 +6604,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Replicate or Retract` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/peer-review/album`.
@@ -6532,6 +6623,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Peer Review` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6640,6 +6737,12 @@ square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7842,6 +7945,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Contamination` |
 | Album metadata | `14 - Double Blind` |
 | Album metadata | `15 - Replicate or Retract` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

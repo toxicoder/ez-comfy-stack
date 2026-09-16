@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/lone-star-tab/01-lone-star-tab` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/02-river-buoy` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/03-bus-receipt` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/04-guard-detail` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/05-chase-wreck` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/06-frequency-drop` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/07-permitless` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/08-trigger-clock` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/09-disaster-stamp` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/10-windmill-blame` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/11-yass-primary` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/12-hold-request` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/13-sharia-plank` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/15-demolish-hook` | 15 | audio |
-| `audio/albums/nill-bye/lone-star-tab/album` | 2 | none |
-| `audio/albums/nill-bye/lone-star-tab/cover` | 13 | klein |
+| `audio/albums/nill-bye/lone-star-tab/01-lone-star-tab` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/02-river-buoy` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/03-bus-receipt` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/04-guard-detail` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/05-chase-wreck` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/06-frequency-drop` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/07-permitless` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/08-trigger-clock` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/09-disaster-stamp` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/10-windmill-blame` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/11-yass-primary` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/12-hold-request` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/13-sharia-plank` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/15-demolish-hook` | 16 | audio |
+| `audio/albums/nill-bye/lone-star-tab/album` | 3 | none |
+| `audio/albums/nill-bye/lone-star-tab/cover` | 14 | klein |
 
 ## `01-lone-star-tab`
 
@@ -534,6 +535,12 @@ yeah
 | 6 | `skip` |
 | 7 | `01 - Lone Star Tab` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `02-river-buoy`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/02-river-buoy`.
@@ -959,6 +966,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `02 - River Buoy` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `03-bus-receipt`
 
@@ -1389,6 +1402,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - Bus Receipt` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-guard-detail`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/04-guard-detail`.
@@ -1814,6 +1833,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Guard Detail` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-chase-wreck`
 
@@ -2244,6 +2269,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - Chase Wreck` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-frequency-drop`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/06-frequency-drop`.
@@ -2669,6 +2700,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Frequency Drop` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-permitless`
 
@@ -3099,6 +3136,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Permitless` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-trigger-clock`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/08-trigger-clock`.
@@ -3524,6 +3567,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Trigger Clock` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-disaster-stamp`
 
@@ -3972,6 +4021,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Disaster Stamp` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-windmill-blame`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/10-windmill-blame`.
@@ -4397,6 +4452,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Windmill Blame` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-yass-primary`
 
@@ -4827,6 +4888,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Yass Primary` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-hold-request`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/12-hold-request`.
@@ -5252,6 +5319,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Hold Request` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-sharia-plank`
 
@@ -5682,6 +5755,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Sharia Plank` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-invasion-hymn`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn`.
@@ -6107,6 +6186,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Invasion Hymn` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-demolish-hook`
 
@@ -6537,6 +6622,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Demolish Hook` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/album`.
@@ -6550,6 +6641,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Lone Star Tab` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6658,6 +6755,12 @@ square album cover, graphic print, receipt roll, lone star outline, club light o
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7860,6 +7963,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Sharia Plank` |
 | Album metadata | `14 - Invasion Hymn` |
 | Album metadata | `15 - Demolish Hook` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

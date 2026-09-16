@@ -62,6 +62,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N15["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -83,28 +84,28 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/secret-homage/01-hush-lane` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/02-cipher-lock` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/03-ghost-dock` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/04-sealed-ramp` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/05-fog-vault` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/06-dummy-light` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/07-quiet-wreck` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/08-off-ledger` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/09-back-alley` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/10-cellar-kick` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/11-hidden-booth` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/12-coded-sub` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/13-shadow-coil` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/14-mute-pyro` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/15-unlisted-row` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/16-night-cipher` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/17-blank-stencil` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/18-blind-stamp` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/19-cold-cache` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/20-secret-homage` | 14 | audio |
-| `audio/albums/drive-through/secret-homage/album` | 2 | none |
-| `audio/albums/drive-through/secret-homage/cover` | 13 | klein |
+| `audio/albums/drive-through/secret-homage/01-hush-lane` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/02-cipher-lock` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/03-ghost-dock` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/04-sealed-ramp` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/05-fog-vault` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/06-dummy-light` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/07-quiet-wreck` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/08-off-ledger` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/09-back-alley` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/10-cellar-kick` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/11-hidden-booth` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/12-coded-sub` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/13-shadow-coil` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/14-mute-pyro` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/15-unlisted-row` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/16-night-cipher` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/17-blank-stencil` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/18-blind-stamp` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/19-cold-cache` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/20-secret-homage` | 15 | audio |
+| `audio/albums/drive-through/secret-homage/album` | 3 | none |
+| `audio/albums/drive-through/secret-homage/cover` | 14 | klein |
 
 ## `01-hush-lane`
 
@@ -246,6 +247,12 @@ dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumenta
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Hush Lane` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-cipher-lock`
 
@@ -392,6 +399,12 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 | 6 | `skip` |
 | 7 | `02 - Cipher Lock` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-ghost-dock`
 
 Catalog id `audio/albums/drive-through/secret-homage/03-ghost-dock`.
@@ -532,6 +545,12 @@ riddim, warped bass, trap hats, wobble bass, chest 808, rave, instrumental, no v
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `03 - Ghost Dock` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `04-sealed-ramp`
 
@@ -682,6 +701,12 @@ tearout, warped bass, trap hats, bass growl, dirty 808, rave, instrumental, no v
 | 6 | `skip` |
 | 7 | `04 - Sealed Ramp` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `05-fog-vault`
 
 Catalog id `audio/albums/drive-through/secret-homage/05-fog-vault`.
@@ -827,6 +852,12 @@ color bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no
 | 6 | `skip` |
 | 7 | `05 - Fog Vault` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-dummy-light`
 
 Catalog id `audio/albums/drive-through/secret-homage/06-dummy-light`.
@@ -967,6 +998,12 @@ hybrid trap, warped bass, trap hats, stacked 808, chest sub, rave, instrumental,
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Dummy Light` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-quiet-wreck`
 
@@ -1121,6 +1158,12 @@ dirty bass, warped bass, trap hats, low rumble, chest sub, rave, instrumental, n
 | 6 | `skip` |
 | 7 | `07 - Quiet Wreck` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-off-ledger`
 
 Catalog id `audio/albums/drive-through/secret-homage/08-off-ledger`.
@@ -1269,6 +1312,12 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Off Ledger` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-back-alley`
 
@@ -1423,6 +1472,12 @@ neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instr
 | 6 | `skip` |
 | 7 | `09 - Back Alley` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-cellar-kick`
 
 Catalog id `audio/albums/drive-through/secret-homage/10-cellar-kick`.
@@ -1563,6 +1618,12 @@ dirty dubstep, warped bass, trap hats, wobble bass, chest 808, rave, instrumenta
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Cellar Kick` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-hidden-booth`
 
@@ -1708,6 +1769,12 @@ hybrid trap, warped bass, trap hats, festival trap, trap 808, dirty bass, rave, 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `11 - Hidden Booth` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `12-coded-sub`
 
@@ -1857,6 +1924,12 @@ chest bass, warped bass, trap hats, dual-action pedal bass, heavy sub, dirty 808
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Coded Sub` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-shadow-coil`
 
@@ -2011,6 +2084,12 @@ neuro bass, warped bass, trap hats, reese bass, heavy sub, chest 808, rave, inst
 | 6 | `skip` |
 | 7 | `13 - Shadow Coil` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-mute-pyro`
 
 Catalog id `audio/albums/drive-through/secret-homage/14-mute-pyro`.
@@ -2151,6 +2230,12 @@ wave bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Mute Pyro` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-unlisted-row`
 
@@ -2305,6 +2390,12 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 | 6 | `skip` |
 | 7 | `15 - Unlisted Row` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `16-night-cipher`
 
 Catalog id `audio/albums/drive-through/secret-homage/16-night-cipher`.
@@ -2445,6 +2536,12 @@ wave bass, warped bass, trap hats, chest 808, low rumble, dirty bass, rave, inst
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `16 - Night Cipher` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `17-blank-stencil`
 
@@ -2595,6 +2692,12 @@ festival trap, warped bass, trap hats, trap 808, dirty bass, chest sub, rave, in
 | 6 | `skip` |
 | 7 | `17 - Blank Stencil` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `18-blind-stamp`
 
 Catalog id `audio/albums/drive-through/secret-homage/18-blind-stamp`.
@@ -2739,6 +2842,12 @@ riddim, warped bass, trap hats, wobble bass, heavy sub, chest 808, rave, instrum
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `18 - Blind Stamp` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `19-cold-cache`
 
@@ -2893,6 +3002,12 @@ hybrid trap, warped bass, trap hats, dirty 808, chest sub, trap bass, rave, inst
 | 6 | `skip` |
 | 7 | `19 - Cold Cache` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `20-secret-homage`
 
 Catalog id `audio/albums/drive-through/secret-homage/20-secret-homage`.
@@ -3034,6 +3149,12 @@ dirty dubstep, warped bass, trap hats, stacked 808, chest sub, rave, instrumenta
 | 6 | `skip` |
 | 7 | `20 - Secret Homage` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/secret-homage/album`.
@@ -3047,6 +3168,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Drive-through` |
 | 1 | `Secret Homage` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -3155,6 +3282,12 @@ square album cover, graphic print, hidden alley stencil, sealed ramp, fog vault,
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -4351,6 +4484,36 @@ SaveAudio stem to stamp.
 | Album metadata | `18 - Blind Stamp` |
 | Album metadata | `19 - Cold Cache` |
 | Album metadata | `20 - Secret Homage` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 22 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

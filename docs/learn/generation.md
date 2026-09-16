@@ -10,7 +10,7 @@ tags: [learn, diffusion, latent, vae, clip, comfyui]
 
 - The three-part engine: text encoder, denoiser, VAE
 - Latent size, frame counts, and the LTX ÷32 rule
-- Steps, CFG, and distilled Klein
+- Steps, CFG, distilled Klein, and the Quality combo
 - T2I / I2V / T2V / A2V in one table
 
 **What this enables**
@@ -66,7 +66,7 @@ Typing 720 or 1080 on an LTX widget is auto-snapped (704 / 1056) by `ez_ltx_spat
 
 ## Distilled Klein: CFG 1.0 / 4 steps
 
-Distilled Klein is **not** “turn CFG up for quality.” Quality is the **positive** prompt (and resolution/steps on the hero graph). FLUX-family models do not use negatives well — put constraints in the positive (“unmarked facades, empty of signage”).
+Distilled Klein is **not** “turn CFG up for quality.” Quality is the **positive** prompt (and resolution/steps on the hero graph), or the App **Quality** combo (Lab / Draft / High). High on distilled Klein without Klein base keeps CFG 1.0 and only adds steps. FLUX-family models do not use negatives well — put constraints in the positive (“unmarked facades, empty of signage”).
 
 Wan and LTX pin their own steps on the canvas. Change them on purpose; do not copy an SD1.5 recipe.
 

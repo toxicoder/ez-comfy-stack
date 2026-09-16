@@ -11,7 +11,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 - How App Mode relates to the node graph
 - Apps sidebar (`.app.json`) vs Workflows
 - Where operator Apps persist (`_user/`, rescue from `_lab/`)
-- Creator widgets: Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage / LoadAudio)
+- Creator widgets: Quality (Lab / Draft / High), Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage / LoadAudio)
 - Occupancy (one GB10 job) — chip at the top of the widget list
 - Lane A (Inspire) vs Lane B (Produce)
 - Handoff chains (still → motion → AV)
@@ -41,8 +41,10 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets: **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/flf-5s** exposes **First frame** and **Last frame**. **ltx/a2v-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets: **Quality** (Lab / Draft / High) first, then **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/flf-5s** exposes **First frame** and **Last frame**. **ltx/a2v-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
+
+**Quality** is a workflow-global combo (`EZQuality`) stamped first in `linearData`. Lab leaves authored widgets. Draft is faster (fewer steps). High is slower (more steps; Klein base 4B + CFG 3.5 when `download-image --tier base` is on disk, otherwise extra distilled steps at CFG 1.0). It does not change size, length, CLIP, or VAE, and it is not `--tier quality`. Inspire desks (no UNET) still show the combo as a no-op.
 
 Official persist is `extra.linearData` (`inputs` / `outputs`). Each input is `[nodeId, widgetName, config?]` with an **integer** node id. ComfyUI frontend **1.49.6+** (the v0.34.6 pin) upgrades that to a live `graphId:nodeId:name` WidgetId at load. Do **not** persist `"11:prompt"` two-part ids — the frontend treats a colon as a subgraph locator and drops the widget, leaving App view with Run and occupancy but no Prompt. The lab contract is `extra.lab_app_mode` (`lane`, `occupancy`, `handoff`, `frontend_min`). Do not require `extra.linearMode` — upstream does not write it.
 

@@ -1,7 +1,7 @@
 {
   "id": "music-visual",
   "revision": 1,
-  "last_node_id": 19,
+  "last_node_id": 20,
   "last_link_id": 24,
   "nodes": [
     {
@@ -792,6 +792,37 @@
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 20,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -992,6 +1023,14 @@
     "linearData": {
       "inputs": [
         [
+          20,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           17,
           "sample",
           {
@@ -1049,7 +1088,10 @@
     },
     "linearMode": true,
     "lab_rel": "ltx/creator/music-visual",
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

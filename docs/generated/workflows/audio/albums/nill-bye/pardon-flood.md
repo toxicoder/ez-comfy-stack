@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/pardon-flood/01-pardon-flood` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/03-gold-card` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/06-metro-surge` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/07-due-process` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/09-birthright-order` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/10-cook-firing` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/11-inspector-purge` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/12-law-firm-order` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/13-visa-ticket` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/14-shadow-docket` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` | 15 | audio |
-| `audio/albums/nill-bye/pardon-flood/album` | 2 | none |
-| `audio/albums/nill-bye/pardon-flood/cover` | 13 | klein |
+| `audio/albums/nill-bye/pardon-flood/01-pardon-flood` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/03-gold-card` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/06-metro-surge` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/07-due-process` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/09-birthright-order` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/10-cook-firing` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/11-inspector-purge` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/12-law-firm-order` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/13-visa-ticket` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/14-shadow-docket` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` | 16 | audio |
+| `audio/albums/nill-bye/pardon-flood/album` | 3 | none |
+| `audio/albums/nill-bye/pardon-flood/cover` | 14 | klein |
 
 ## `01-pardon-flood`
 
@@ -555,6 +556,12 @@ yeah
 | 6 | `skip` |
 | 7 | `01 - Pardon Flood` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `02-ieepa-wreck`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck`.
@@ -977,6 +984,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `02 - Ieepa Wreck` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `03-gold-card`
 
@@ -1404,6 +1417,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - Gold Card` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-memecoin-tab`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/04-memecoin-tab`.
@@ -1826,6 +1845,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Memecoin Tab` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-east-wing-wreck`
 
@@ -2253,6 +2278,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - East Wing Wreck` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-metro-surge`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/06-metro-surge`.
@@ -2675,6 +2706,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Metro Surge` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-due-process`
 
@@ -3102,6 +3139,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Due Process` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-kennedy-plaque`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque`.
@@ -3524,6 +3567,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Kennedy Plaque` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-birthright-order`
 
@@ -3951,6 +4000,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Birthright Order` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-cook-firing`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/10-cook-firing`.
@@ -4373,6 +4428,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Cook Firing` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-inspector-purge`
 
@@ -4800,6 +4861,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Inspector Purge` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-law-firm-order`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/12-law-firm-order`.
@@ -5222,6 +5289,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Law Firm Order` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-visa-ticket`
 
@@ -5649,6 +5722,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Visa Ticket` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-shadow-docket`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/14-shadow-docket`.
@@ -6071,6 +6150,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Shadow Docket` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-immunity-hymn`
 
@@ -6501,6 +6586,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Immunity Hymn` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/album`.
@@ -6514,6 +6605,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Pardon Flood` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6622,6 +6719,12 @@ square album cover, graphic print, flooded document stack, gold stamp, dark club
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7824,6 +7927,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Visa Ticket` |
 | Album metadata | `14 - Shadow Docket` |
 | Album metadata | `15 - Immunity Hymn` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

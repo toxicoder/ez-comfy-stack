@@ -53,60 +53,13 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ## Graph
 
 ```mermaid
-flowchart LR
-  N1["ACE-Step 1.5 turbo AIO"]
-  N2["ez_radio_script"]
-  N3["Disclosure bumper"]
-  N4["ez_radio_voice"]
-  N5["ez_radio_sting"]
-  N6["ez_radio_bed"]
-  N7["ACE negative"]
-  N8["Sting length"]
-  N9["Bed length"]
-  N10["Sting sampler"]
-  N11["Bed sampler"]
-  N12["Sting decode"]
-  N13["Bed decode"]
-  N14["Sting then bed"]
-  N15["Duck −15 dB"]
-  N16["48 kHz-class mix"]
-  N17["FLAC master"]
-  N18["MP3 320k"]
-  N19["Operator note"]
-  N30["Wan bumper (off)"]
-  N31["ez_radio_bumper preview (off)"]
-  N32["LTX hook (off)"]
-  N33["ez_radio_hook preview (off)"]
-  N34["ez_radio_sting enhance"]
-  N35["ez_radio_bed enhance"]
-  N1 --> N10
-  N1 --> N11
-  N1 --> N5
-  N1 --> N6
-  N1 --> N7
-  N1 --> N12
-  N1 --> N13
-  N2 --> N3
-  N2 --> N34
-  N2 --> N35
-  N3 --> N4
-  N4 --> N16
-  N5 --> N10
-  N6 --> N11
-  N7 --> N10
-  N7 --> N11
-  N8 --> N10
-  N9 --> N11
-  N10 --> N12
-  N11 --> N13
-  N12 --> N14
-  N13 --> N14
-  N14 --> N15
-  N15 --> N16
-  N16 --> N17
-  N16 --> N18
-  N34 --> N5
-  N35 --> N6
+flowchart TB
+  GMODEL["MODEL"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
+  GOUTPUT["OUTPUT"]
+  GWAN_BUMPER__off_["WAN BUMPER (off)"]
+  GLTX_HOOK__off_["LTX HOOK (off)"]
 ```
 
 ## Nodes on this graph
@@ -138,6 +91,7 @@ flowchart LR
 | 33 | ez_radio_hook preview (off) | `VHS_VideoCombine` | LTX HOOK (off) |
 | 34 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | Ungrouped |
 | 35 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | Ungrouped |
+| 36 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1237,3 +1191,33 @@ Sample-catalog id.
 **How it affects generation:** Leave as stamped.
 
 **This graph (all 2 instances):** `audio/podcast/radio-drama`
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

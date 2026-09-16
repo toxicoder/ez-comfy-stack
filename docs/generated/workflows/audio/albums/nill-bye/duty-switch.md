@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/duty-switch/01-duty-switch` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/02-article-one` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/03-for-cause-lock` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/04-ig-notice` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/05-counsel-stays` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/06-prevailing-wage` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/07-merits-syllabus` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/08-unofficial-sort` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/09-clemency-file` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/10-congress-the-wing` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/11-tie-the-island` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/12-decade-lines` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/14-open-quad` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` | 15 | audio |
-| `audio/albums/nill-bye/duty-switch/album` | 2 | none |
-| `audio/albums/nill-bye/duty-switch/cover` | 13 | klein |
+| `audio/albums/nill-bye/duty-switch/01-duty-switch` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/02-article-one` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/03-for-cause-lock` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/04-ig-notice` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/05-counsel-stays` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/06-prevailing-wage` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/07-merits-syllabus` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/08-unofficial-sort` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/09-clemency-file` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/10-congress-the-wing` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/11-tie-the-island` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/12-decade-lines` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/14-open-quad` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` | 16 | audio |
+| `audio/albums/nill-bye/duty-switch/album` | 3 | none |
+| `audio/albums/nill-bye/duty-switch/cover` | 14 | klein |
 
 ## `01-duty-switch`
 
@@ -552,6 +553,12 @@ yeah
 | 6 | `skip` |
 | 7 | `01 - Duty Switch` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `02-article-one`
 
 Catalog id `audio/albums/nill-bye/duty-switch/02-article-one`.
@@ -974,6 +981,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `02 - Article One` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `03-for-cause-lock`
 
@@ -1401,6 +1414,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - For-Cause Lock` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-ig-notice`
 
 Catalog id `audio/albums/nill-bye/duty-switch/04-ig-notice`.
@@ -1823,6 +1842,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Ig Notice` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-counsel-stays`
 
@@ -2250,6 +2275,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - Counsel Stays` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-prevailing-wage`
 
 Catalog id `audio/albums/nill-bye/duty-switch/06-prevailing-wage`.
@@ -2672,6 +2703,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Prevailing Wage` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-merits-syllabus`
 
@@ -3099,6 +3136,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Merits Syllabus` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-unofficial-sort`
 
 Catalog id `audio/albums/nill-bye/duty-switch/08-unofficial-sort`.
@@ -3521,6 +3564,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Unofficial Sort` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-clemency-file`
 
@@ -3948,6 +3997,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Clemency File` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-congress-the-wing`
 
 Catalog id `audio/albums/nill-bye/duty-switch/10-congress-the-wing`.
@@ -4370,6 +4425,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Congress the Wing` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-tie-the-island`
 
@@ -4797,6 +4858,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Tie the Island` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-decade-lines`
 
 Catalog id `audio/albums/nill-bye/duty-switch/12-decade-lines`.
@@ -5219,6 +5286,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Decade Lines` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-ratepayer-bus`
 
@@ -5646,6 +5719,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Ratepayer Bus` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-open-quad`
 
 Catalog id `audio/albums/nill-bye/duty-switch/14-open-quad`.
@@ -6068,6 +6147,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Open Quad` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-wrench-the-tap`
 
@@ -6498,6 +6583,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Wrench the Tap` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/duty-switch/album`.
@@ -6511,6 +6602,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Duty Switch` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6619,6 +6716,12 @@ square album cover, graphic print, breaker switch, statute book, club magenta on
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7821,6 +7924,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Ratepayer Bus` |
 | Album metadata | `14 - Open Quad` |
 | Album metadata | `15 - Wrench the Tap` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

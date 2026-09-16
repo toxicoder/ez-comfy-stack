@@ -247,6 +247,7 @@ def _graph_hides_sample(graph: Mapping[str, Any]) -> bool:
 # EZDubIngest: ``upload`` is an App button label only. Serialized node
 # widgets_values stay source, have_rights, job_slug, source_url (4-wide).
 WIDGET_ORDER = (
+    "quality",
     "source",
     "upload",
     "source_url",
@@ -335,6 +336,7 @@ WIDGET_HEIGHTS = {
     "history": 80,
 }
 GENERIC_LABELS = {
+    "quality": "Quality",
     "sample": "Sample prompt",
     "prompt": "Prompt",
     "template": "Template",
@@ -410,6 +412,10 @@ GENERIC_LABELS = {
     "spoken_disclosure": "Spoken disclosure",
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
+    "quality": (
+        "Lab default, Draft (faster), or High (slower). "
+        "Family-specific — not --tier."
+    ),
     "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
     "template": "auto picks a shipped lab graph. Pin a lab_rel to skip the picker.",
@@ -1548,6 +1554,16 @@ def _collect_raw_inputs(
     ]
 
 
+def _quality_input_specs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
+    """App Mode Quality combo, when EZQuality is on the graph."""
+    specs: list[InputSpec] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZQuality":
+            continue
+        specs.append(_input_spec(node["id"], "quality", spec, node=node))
+    return specs
+
+
 def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
     raw = _collect_raw_inputs(graph, spec)
@@ -1558,6 +1574,9 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
         inputs.append(
             _input_spec(nid, name, spec, node=node, collide=collide)
         )
+    quality = _quality_input_specs(graph, spec)
+    if quality:
+        inputs = quality + [item for item in inputs if _parse_input(item)[1] != "quality"]
     if spec.get("research_widgets") or spec.get("app_forge_widgets"):
         return inputs
     return order_app_inputs(inputs, graph)
@@ -1601,6 +1620,9 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
 
 def apply_lab_completeness_flags(graph: dict) -> dict:
     """Write lab_stub / lab_optional_unwired. Preserve other extra keys."""
+    from _wire_quality import ensure_quality_node
+
+    ensure_quality_node(graph)
     extra = graph.setdefault("extra", {})
     gid = str((graph.get("extra") or {}).get("lab_rel") or graph.get("id") or "")
     from _lab_ids import rel_id
@@ -1623,7 +1645,9 @@ def apply_lab_completeness_flags(graph: dict) -> dict:
 def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     from _lab_ids import rel_id
+    from _wire_quality import ensure_quality_node
 
+    ensure_quality_node(graph)
     extra = graph.get("extra") or {}
     key = rel_id(str(extra.get("lab_rel") or graph.get("id") or ""))
     spec = STAMP_SPECS.get(key)

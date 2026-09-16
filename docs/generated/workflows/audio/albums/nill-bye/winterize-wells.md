@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/winterize-wells/01-winterize-wells` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/02-registered-report` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/04-scif-only` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/05-hearing-first` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/06-keep-the-match` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/07-honest-census` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/08-paris-seat` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/09-qualified-divest` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/10-return-pdf` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/11-casework-screen` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/12-district-door` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/13-levy-in-code` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/15-one-college` | 15 | audio |
-| `audio/albums/nill-bye/winterize-wells/album` | 2 | none |
-| `audio/albums/nill-bye/winterize-wells/cover` | 13 | klein |
+| `audio/albums/nill-bye/winterize-wells/01-winterize-wells` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/02-registered-report` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/04-scif-only` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/05-hearing-first` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/06-keep-the-match` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/07-honest-census` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/08-paris-seat` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/09-qualified-divest` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/10-return-pdf` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/11-casework-screen` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/12-district-door` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/13-levy-in-code` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/15-one-college` | 16 | audio |
+| `audio/albums/nill-bye/winterize-wells/album` | 3 | none |
+| `audio/albums/nill-bye/winterize-wells/cover` | 14 | klein |
 
 ## `01-winterize-wells`
 
@@ -533,6 +534,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Winterize Wells` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-registered-report`
 
@@ -978,6 +985,12 @@ cut
 | 6 | `skip` |
 | 7 | `02 - Registered Report` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-named-uncertainty`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/03-named-uncertainty`.
@@ -1404,6 +1417,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - Named Uncertainty` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-scif-only`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/04-scif-only`.
@@ -1826,6 +1845,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Scif Only` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-hearing-first`
 
@@ -2253,6 +2278,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - Hearing First` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-keep-the-match`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/06-keep-the-match`.
@@ -2675,6 +2706,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Keep the Match` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-honest-census`
 
@@ -3102,6 +3139,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Honest Census` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-paris-seat`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/08-paris-seat`.
@@ -3524,6 +3567,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Paris Seat` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-qualified-divest`
 
@@ -3951,6 +4000,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Qualified Divest` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-return-pdf`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/10-return-pdf`.
@@ -4373,6 +4428,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Return Pdf` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-casework-screen`
 
@@ -4800,6 +4861,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Casework Screen` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-district-door`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/12-district-door`.
@@ -5222,6 +5289,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - District Door` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-levy-in-code`
 
@@ -5649,6 +5722,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Levy In Code` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-fourteenth-clause`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause`.
@@ -6071,6 +6150,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Fourteenth Clause` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-one-college`
 
@@ -6498,6 +6583,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - One College` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/album`.
@@ -6511,6 +6602,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Winterize Wells` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6619,6 +6716,12 @@ square album cover, graphic print, wellhead jacket, frost, measurement clipboard
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7821,6 +7924,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Levy In Code` |
 | Album metadata | `14 - Fourteenth Clause` |
 | Album metadata | `15 - One College` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

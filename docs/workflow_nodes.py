@@ -1483,6 +1483,28 @@ def encyclopedia() -> dict[str, Any]:
             _w("catalog", index=6, desc="Catalog id.", gen="Leave as stamped."),
         ],
     )
+    nodes["EZQuality"] = _n(
+        "Quality",
+        "Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.",
+        origin="ez_quality",
+        lab="Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.",
+        sockets=[_s("quality", "STRING", "out", "Selected quality id (lab, draft, high).")],
+        widgets=[
+            _w(
+                "quality",
+                index=0,
+                typ="COMBO",
+                rng="lab",
+                desc="Lab default, Draft (faster), or High (slower).",
+                gen="Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.",
+                choices=[
+                    ("lab", "Authored lab widgets. Default."),
+                    ("draft", "Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled."),
+                    ("high", "Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0."),
+                ],
+            ),
+        ],
+    )
     nodes["EZAppForge"] = _n(
         "App Forge",
         "Clone a shipped lab graph into live _user/ as a new App. No UNET.",

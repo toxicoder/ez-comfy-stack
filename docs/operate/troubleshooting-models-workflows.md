@@ -26,7 +26,9 @@ tags: [troubleshooting, models, workflows, comfyui, occupancy]
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | Disk full / leftover LTX-2.3 snapshot | Leftover weights, HF hub, Docker layers, or other inference caches | `./scripts/manage.sh disk-wizard --plan` (host-wide, read-only). stderr shows which root is scanning (`~/.cache`, `/tmp`, Docker `system df` can take a while; it is not hung). MODELS_DIR classes: `reap-models --plan` then `--apply --class superseded --quarantine --yes`. `cleanup` does **not** delete weights. |
-| I passed `--tier fast` expecting faster video | `--tier` is a **pack id** per downloader, not a quality ladder | Image `fast` is Klein 4B distilled stills. Wan video default is `--tier 5b`. Map: [Download tiers](../download-tiers.md) |
+| I passed `--tier fast` expecting faster video | `--tier` is a **pack id** per downloader, not a quality ladder | Image `fast` is Klein 4B distilled stills. Wan video default is `--tier 5b`. The App **Quality** combo is Lab / Draft / High on the open graph. Map: [Download tiers](../download-tiers.md) |
+| Quality **High** on Klein still Missing Models / no change | Klein base 4B is not on disk, so the overlay keeps distilled at CFG 1.0 | `./scripts/manage.sh download-image --tier base` then restart and re-open the App. Distilled High only raises steps to 8 |
+| Quality **High** on a 90s film is very slow | 18 × 5.00 s printers, each at 28 steps | Expected. Occupancy **film**. Use **Lab** or **Draft** to iterate; High is a final print |
 | I passed `--limit turbo` / thought `--limit` picked a model | `--limit` is **Mbps** (`auto` / `off` / integer) | Use `--tier` for the pack. [Download limit](../download-limit.md) |
 | Fun InP / SeedVR2 filled the box | Opt-in ~47 GB / ~15 GB packs | `reap-models --plan`; `--drop-pack` cannot eat shared VAE. Unload LTX before Fun InP. SeedVR2 is post-concat only |
 | `film-proxies` / NVENC preview refused | Compose still up | `./scripts/manage.sh stop` then retry. Proxies never rewrite masters |

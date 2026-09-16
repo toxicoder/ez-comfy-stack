@@ -1,6 +1,7 @@
 import { app } from "../../scripts/app.js";
 
 const LABELS = {
+  quality: "Quality",
   sample: "Sample prompt",
   prompt: "Prompt",
   web_search: "Web search",
