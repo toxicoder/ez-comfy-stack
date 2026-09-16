@@ -251,7 +251,9 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                     mode = "flf"
                 elif "vace" in graph_id or mode == "vace":
                     mode = "vace"
-                elif mode not in ("t2v", "i2v", "flf", "vace"):
+                elif "s2v" in graph_id or mode == "s2v":
+                    mode = "s2v"
+                elif mode not in ("t2v", "i2v", "flf", "vace", "s2v"):
                     mode = "t2v"
             node["widgets_values"] = [
                 sample or "custom",
@@ -273,11 +275,70 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
                 audio = values[4] if len(values) > 4 else ""
                 style = values[5] if len(values) > 5 else "none"
+            if mode not in ("t2v", "i2v", "iclora"):
+                mode = "t2v"
             node["widgets_values"] = [
                 sample or "custom",
                 prompt,
                 _as_enhance_flag(enhance),
                 mode,
+                hint,
+                audio,
+                style if style else "none",
+                cat or catalog,
+            ]
+        elif ntype == "EZLongCatPromptEnhance":
+            if len(values) >= 7:
+                sample, prompt, enhance, mode, hint, style, cat = values[:7]
+            else:
+                sample, cat = "custom", catalog
+                prompt = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                mode = values[2] if len(values) > 2 else "t2v"
+                hint = values[3] if len(values) > 3 else "5 seconds, 30 fps"
+                style = values[4] if len(values) > 4 else "none"
+            if mode not in ("t2v", "i2v", "vc"):
+                mode = "t2v"
+            node["widgets_values"] = [
+                sample or "custom",
+                prompt,
+                _as_enhance_flag(enhance),
+                mode,
+                hint,
+                style if style else "none",
+                cat or catalog,
+            ]
+        elif ntype == "EZZimagePromptEnhance":
+            if len(values) >= 6:
+                sample, prompt, enhance, hint, style, cat = values[:6]
+            else:
+                sample, cat = "custom", catalog
+                prompt = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                hint = values[2] if len(values) > 2 else "YouTube 16:9 still"
+                style = values[3] if len(values) > 3 else "none"
+            node["widgets_values"] = [
+                sample or "custom",
+                prompt,
+                _as_enhance_flag(enhance),
+                hint,
+                style if style else "none",
+                cat or catalog,
+            ]
+        elif ntype == "EZDreamXPromptEnhance":
+            if len(values) >= 7:
+                sample, prompt, enhance, hint, audio, style, cat = values[:7]
+            else:
+                sample, cat = "custom", catalog
+                prompt = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                hint = values[2] if len(values) > 2 else "5 seconds, 24 fps"
+                audio = values[3] if len(values) > 3 else ""
+                style = values[4] if len(values) > 4 else "none"
+            node["widgets_values"] = [
+                sample or "custom",
+                prompt,
+                _as_enhance_flag(enhance),
                 hint,
                 audio,
                 style if style else "none",
@@ -306,7 +367,7 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
             prompt = values[0] if values else ""
             enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
             family = values[2] if len(values) > 2 else "klein"
-            if family not in POS_ENHANCE_FAMILY.values():
+            if family not in NEGATIVE_FAMILY_IDS:
                 family = "klein"
             node["widgets_values"] = [prompt, enhance, family]
         elif ntype == "EZRapLyrics":
@@ -601,7 +662,11 @@ POS_ENHANCE_FAMILY = {
     "EZKleinPromptEnhance": "klein",
     "EZWanPromptEnhance": "wan",
     "EZLTXPromptEnhance": "ltx",
+    "EZZimagePromptEnhance": "zimage",
+    "EZLongCatPromptEnhance": "longcat",
+    "EZDreamXPromptEnhance": "dreamx",
 }
+NEGATIVE_FAMILY_IDS = frozenset((*POS_ENHANCE_FAMILY.values(), "s2v"))
 NEG_ENHANCE_H = 280
 
 
@@ -677,6 +742,13 @@ def _family_for_negative(
 ) -> str:
     if pos_enh is not None:
         mapped = POS_ENHANCE_FAMILY.get(str(pos_enh.get("type") or ""))
+        if mapped == "wan":
+            values = list(pos_enh.get("widgets_values") or [])
+            mode = values[3] if len(values) >= 7 else (
+                values[2] if len(values) > 2 else ""
+            )
+            if str(mode) == "s2v":
+                return "s2v"
         if mapped:
             return mapped
     occ = str((graph.get("extra") or {}).get("lab_occupancy") or "").lower()

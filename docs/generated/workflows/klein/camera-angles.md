@@ -826,3 +826,7 @@ Which negative family.
 | `klein` | Klein stills. |
 | `wan` | Wan silent. |
 | `ltx` | LTX AV. |
+| `zimage` | Z-Image Turbo (CFG 1; list is documentation). |
+| `longcat` | LongCat-Video. |
+| `dreamx` | DreamX-Creator AV. |
+| `s2v` | Wan S2V; wav owns speech. |

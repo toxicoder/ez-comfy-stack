@@ -928,6 +928,132 @@ Heavy GPU mode that must already be entered.
 | `wan` | Wan 5B. |
 | `ltx` | LTX-2.5. |
 
+### `EZDreamXPromptEnhance` — DreamX Prompt Enhance
+
+Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV).
+
+!!! warning "Lab notes"
+
+    First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs — Prompt Forge preview only.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | in | `STRING` | Optional. |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `prompt` | out | `STRING` | AV paragraph. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps the textarea.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy sentence or authored AV paragraph.
+
+**How it affects generation:** Do not restate the start-image look. Name motion and sound.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Run the rewriter.
+
+**How it affects generation:** Off pins the widget text.
+
+#### `duration_hint`
+
+Type `STRING`. Range / default: 5 seconds, 24 fps.
+
+Duration hint.
+
+**How it affects generation:** Lab takes are about 5 s at 24 fps.
+
+#### `audio_notes`
+
+Type `STRING`.
+
+World SFX / no-score policy.
+
+**How it affects generation:** Interleave with the action; do not dump a trailer.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference. Ignored (start image owns look).
+
+**How it affects generation:** Start frame owns look.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id.
+
+**How it affects generation:** Leave as stamped.
+
 ### `EZDubIngest` — Dub ingest (file or URL)
 
 Extract audio from input/ or a URL. Queue refuses unless I have rights is on.
@@ -1494,9 +1620,9 @@ Run the rewriter.
 
 Type `COMBO`.
 
-t2v vs i2v system prompt.
+t2v vs i2v vs iclora system prompt.
 
-**How it affects generation:** i2v when a start still is wired.
+**How it affects generation:** i2v when a start still is wired. iclora describes look, not the control type.
 
 **Other choices**
 
@@ -1504,6 +1630,7 @@ t2v vs i2v system prompt.
 | --- | --- |
 | `t2v` | Text to AV. |
 | `i2v` | Start still owns look. |
+| `iclora` | Union Control look/materials; guide owns blocking. |
 
 #### `duration_hint`
 
@@ -1528,6 +1655,140 @@ Type `COMBO`. Range / default: none.
 Look reference. Ignored on I2V.
 
 **How it affects generation:** Start frame owns look.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id.
+
+**How it affects generation:** Leave as stamped.
+
+### `EZLongCatPromptEnhance` — LongCat Prompt Enhance
+
+Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).
+
+!!! warning "Lab notes"
+
+    No native audio. Standard CFG ~4; distilled CFG 1 ignores negatives. Optional stub preview on optional/longcat-video.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | in | `STRING` | Optional. |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `prompt` | out | `STRING` | Motion string for CLIP. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps the textarea.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy motion sentence.
+
+**How it affects generation:** T2V is scene+motion+camera. I2V extends the still. vc continues previous frames.
+
+#### `enhance`
+
+Type `BOOLEAN`.
+
+Run the rewriter.
+
+**How it affects generation:** Off pins the widget text.
+
+#### `mode`
+
+Type `COMBO`.
+
+System flavor.
+
+**How it affects generation:** t2v on the stub. i2v / vc when start frames exist.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `t2v` | Text to video. |
+| `i2v` | Start image owns look. |
+| `vc` | Continue previous frames. |
+
+#### `duration_hint`
+
+Type `STRING`. Range / default: 5 seconds, 30 fps.
+
+Duration/fps hint for the rewriter.
+
+**How it affects generation:** Does not change latent length.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference. Ignored on I2V/vc.
+
+**How it affects generation:** Start frames own look on I2V/vc.
 
 **Other choices**
 
@@ -1633,6 +1894,10 @@ Which negative family.
 | `klein` | Klein stills. |
 | `wan` | Wan silent. |
 | `ltx` | LTX AV. |
+| `zimage` | Z-Image Turbo (CFG 1; list is documentation). |
+| `longcat` | LongCat-Video. |
+| `dreamx` | DreamX-Creator AV. |
+| `s2v` | Wan S2V; wav owns speech. |
 
 ### `EZPodcastDisclosure` — Podcast Disclosure
 
@@ -1868,7 +2133,7 @@ Type `COMBO`.
 
 System flavor.
 
-**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace for those opt-in graphs.
+**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace / s2v for those opt-in graphs.
 
 **Other choices**
 
@@ -1878,6 +2143,7 @@ System flavor.
 | `i2v` | Start image owns look; prompt is motion. |
 | `flf` | First-last-frame. |
 | `vace` | VACE join. |
+| `s2v` | Speech-to-video; wav owns lip-sync. |
 
 #### `duration_hint`
 
@@ -1958,6 +2224,124 @@ Type `STRING`.
 Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
+
+### `EZZimagePromptEnhance` — Z-Image Prompt Enhance
+
+Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B chat wrap).
+
+!!! warning "Lab notes"
+
+    Turbo ignores a separate negative CLIP. Exclusions stay in the positive. No z_image_turbo UNET on lab graphs.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | in | `STRING` | Optional override of the widget. |
+| `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `prompt` | out | `STRING` | String CLIP actually encodes. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Lab sample prompt or Custom.
+
+**How it affects generation:** Custom keeps the textarea.
+
+#### `prompt`
+
+Type `STRING`.
+
+Lazy sentence or authored still prompt.
+
+**How it affects generation:** When Enhance is on, the GGUF expands this into Z-Image sentences with in-prompt constraints.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: on.
+
+Run the rewriter.
+
+**How it affects generation:** Off = encode the widget as-is (plus style suffix if set).
+
+#### `duration_hint`
+
+Type `STRING`.
+
+Framing hint (YouTube 16:9 still, …).
+
+**How it affects generation:** Steers aspect language. Does not set the latent size.
+
+#### `style`
+
+Type `COMBO`. Range / default: none.
+
+Look reference woven into the CLIP prompt.
+
+**How it affects generation:** none = off. Dropdown wins over style words already in the source.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Do not weave a look reference into the CLIP prompt. |
+| `photorealistic` | Photoreal photograph, natural materials, physically plausible light. |
+| `cinematic_film_still` | Cinematic feature-film still, widescreen, motivated practicals. |
+| `documentary_photography` | Observational documentary photograph, available light. |
+| `analog_35mm_film` | Analog 35mm color-negative film grain and organic color. |
+| `analog_120_medium_format` | Medium-format 120 film, creamy tones, fine grain. |
+| `polaroid_instant` | Instant Polaroid print look, soft contrast, creamy highlights. |
+| `golden_hour_photography` | Golden-hour photograph, warm sidelight, long shadows. |
+| `overcast_natural_light` | Overcast natural light, soft sky-fill, open shadows. |
+| `studio_product_photography` | Studio product photograph, seamless backdrop, soft key. |
+| `editorial_fashion_photography` | Editorial fashion photograph, precise styling, magazine light. |
+| `street_photography` | Candid street photograph, mixed city light, layered depth. |
+| `architectural_photography` | Architectural photograph, corrected verticals, material texture. |
+| `anime` | Japanese anime still, clean cel color, sharp line. |
+| `manga_screentone` | Black-and-white manga ink and screentone. |
+| `cartoon` | Bold cartoon illustration, thick outline, flat color. |
+| `western_comic_book` | Western comic-book inks, Ben-Day dots, saturated print color. |
+| `saturday_morning_cartoon` | Saturday-morning cartoon cel, limited palette, painted background. |
+| `storybook_illustration` | Storybook illustration, soft paint, narrative composition. |
+| `watercolor_illustration` | Transparent watercolor on paper, wet-into-wet blooms. |
+| `gouache_illustration` | Opaque gouache painting, matte pigment, graphic shapes. |
+| `ink_and_wash` | Ink-and-wash drawing, black ink and grey washes. |
+| `colored_pencil` | Colored-pencil drawing, layered strokes, paper grain. |
+| `charcoal_sketch` | Charcoal sketch, vine blacks and kneaded-eraser lights. |
+| `line_art` | Clean black line art, minimal fill. |
+| `cel_shaded` | Cel-shaded illustration, hard shadow bands, graphic highlights. |
+| `risograph_print` | Risograph print, limited spot inks, grainy stipple. |
+| `3d_feature_animation` | 3D feature-animation still, rounded forms, physically based materials. |
+| `pixar_like_3d` | Stylized feature 3D, appealing proportions, soft GI. |
+| `claymation` | Claymation still, fingerprint clay, miniature set. |
+| `stop_motion` | Stop-motion puppet still, practical miniature set. |
+| `unreal_engine_cinematic` | Real-time cinematic 3D, sharp materials, cinematic camera. |
+| `isometric_3d` | Isometric 3D diorama, even light, readable volumes. |
+| `low_poly` | Low-poly 3D, faceted geometry, flat vertex color. |
+| `voxel` | Voxel art, cubic voxels, limited palette. |
+| `oil_painting` | Oil painting on canvas, visible brushwork, rich impasto. |
+| `impressionist_painting` | Impressionist oil, broken color, outdoor light. |
+| `cubist` | Cubist painting, faceted planes, simultaneous viewpoints. |
+| `art_nouveau` | Art Nouveau illustration, whiplash curves, botanical ornament. |
+| `ukiyo_e_woodblock` | Ukiyo-e woodblock print, mineral pigments, keyblock line. |
+| `baroque_oil` | Baroque oil, dramatic chiaroscuro, theatrical spotlight. |
+| `digital_matte_painting` | Digital matte painting, epic environment, atmospheric perspective. |
+| `concept_art` | Production concept art, readable design, cinematic key light. |
+| `cyberpunk` | Cyberpunk night, wet asphalt, neon magenta and cyan. |
+| `solarpunk` | Solarpunk day, greenery on architecture, warm sun. |
+| `film_noir` | Film-noir still, high-contrast black and white, hard key. |
+| `1970s_grain` | 1970s film still, warm print, heavy grain. |
+| `vaporwave` | Vaporwave still, pastel neon, chrome, VHS softness. |
+| `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
+| `papercraft` | Papercraft diorama, cut paper layers, studio light. |
+| `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+
+#### `catalog`
+
+Type `STRING`.
+
+Sample-catalog id (graph stem).
+
+**How it affects generation:** Internal. Leave as stamped.
 
 ### `EmptyAceStep1.5LatentAudio` — Empty ACE-Step 1.5 Latent Audio
 

@@ -455,7 +455,7 @@
     "aliases": ["Prompt Enhance"],
     "category": "Studio",
     "short": "In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.",
-    "long": "Klein/Wan/LTX Prompt Enhance defaults **on** for lazy CLIP printers and identity bibles you type. Seeded graphs pin it **off** for 90s films, talking-head, loops, camera-verb I2V, podcast scripts, and ACE tags/lyrics so the rewriter cannot mutate those inputs. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
+    "long": "Klein/Wan/LTX/Z-Image/LongCat/DreamX Prompt Enhance defaults **on** for lazy CLIP printers and identity bibles you type. Seeded graphs pin it **off** for 90s films, talking-head, loops, camera-verb I2V, podcast scripts, ACE tags/lyrics, and IC-LoRA so the rewriter cannot mutate those inputs. The CLIP prompt box is visible on the node; after Queue it is the encoded string. Fail-soft if the GGUF is missing. See [Prompting](prompting.md).",
     "see_also": ["enhance", "gguf", "qwen"]
   },
   {
@@ -1463,8 +1463,8 @@
     "aliases": ["Negative Prompt Enhance"],
     "category": "Studio",
     "short": "Rewrites the negative CLIP string with the positive as context. Klein stills.",
-    "long": "Stops canned `illustration` / `Pixar` negatives from fighting the intended look. Same on-box GGUF as positive Prompt Enhance. See [Prompting](prompting.md).",
-    "see_also": ["prompt-enhance", "klein", "clip"]
+    "long": "Stops canned `illustration` / `Pixar` negatives from fighting the intended look. Families: klein, wan, ltx, zimage, longcat, dreamx, s2v. Distilled CFG 1 models still emit a list; real exclusions belong in the positive. Same on-box GGUF as positive Prompt Enhance. See [Prompting](prompting.md).",
+    "see_also": ["prompt-enhance", "klein", "clip", "z-image", "longcat", "dreamx", "s2v"]
   },
   {
     "id": "blender",

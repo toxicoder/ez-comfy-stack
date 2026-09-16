@@ -776,7 +776,7 @@ Type `COMBO`.
 
 System flavor.
 
-**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace for those opt-in graphs.
+**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace / s2v for those opt-in graphs.
 
 **This graph:** `flf`
 
@@ -788,6 +788,7 @@ System flavor.
 | `i2v` | Start image owns look; prompt is motion. |
 | `flf` | First-last-frame. |
 | `vace` | VACE join. |
+| `s2v` | Speech-to-video; wav owns lip-sync. |
 
 #### `duration_hint`
 
@@ -925,3 +926,7 @@ Which negative family.
 | `klein` | Klein stills. |
 | `wan` | Wan silent. |
 | `ltx` | LTX AV. |
+| `zimage` | Z-Image Turbo (CFG 1; list is documentation). |
+| `longcat` | LongCat-Video. |
+| `dreamx` | DreamX-Creator AV. |
+| `s2v` | Wan S2V; wav owns speech. |

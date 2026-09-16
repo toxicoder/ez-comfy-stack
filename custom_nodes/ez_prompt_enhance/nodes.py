@@ -244,7 +244,7 @@ class EZWanPromptEnhance:
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
                 "enhance": _ENHANCE_BOOL,
-                "mode": (["t2v", "i2v", "flf", "vace"], {"default": "t2v"}),
+                "mode": (["t2v", "i2v", "flf", "vace", "s2v"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
                 "catalog": _CATALOG_INPUT,
@@ -260,10 +260,12 @@ class EZWanPromptEnhance:
     CATEGORY = "ez-comfy/prompt"
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Rewrites a lazy prompt for Wan 2.2 TI2V-5B. T2V is look+motion+one "
-        "camera move; I2V is motion+camera only; flf is Fun InP first-last; "
-        "vace is join/inpaint. No audio. Style is ignored on I2V/flf/vace. "
-        "Optional context is ignored when Enhance is off. Fail-soft without a GGUF."
+        "Rewrites a lazy prompt for Wan 2.2 TI2V-5B / A14B / Fun InP / VACE / "
+        "S2V. T2V is look+motion+one camera move; I2V is motion+camera only; "
+        "flf is Fun InP first-last; vace is join/inpaint; s2v is talking-head "
+        "(wav owns lip-sync). No audio except s2v. Style is ignored on "
+        "I2V/flf/vace/s2v. Optional context is ignored when Enhance is off. "
+        "Fail-soft without a GGUF."
     )
 
     def run(
@@ -283,6 +285,8 @@ class EZWanPromptEnhance:
             name = "wan_flf"
         elif mode == "vace":
             name = "wan_vace"
+        elif mode == "s2v":
+            name = "wan_s2v"
         else:
             name = "wan_t2v"
         return _run(
@@ -312,7 +316,7 @@ class EZLTXPromptEnhance:
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
                 "enhance": _ENHANCE_BOOL,
-                "mode": (["t2v", "i2v"], {"default": "t2v"}),
+                "mode": (["t2v", "i2v", "iclora"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "audio_notes": (
                     "STRING",
@@ -333,7 +337,8 @@ class EZLTXPromptEnhance:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Rewrites a lazy prompt for LTX-2.5. Flowing present-tense paragraph "
-        "with audio interleaved. Style is ignored on I2V. Optional context "
+        "with audio interleaved. iclora describes look/materials, not the "
+        "control type. Style is ignored on I2V. Optional context "
         "(identity/logline) is ignored when Enhance is off. Fail-soft without a GGUF."
     )
 
@@ -349,7 +354,12 @@ class EZLTXPromptEnhance:
         sample=CUSTOM,
         catalog="",
     ):
-        name = "ltx_i2v" if mode == "i2v" else "ltx_t2v"
+        if mode == "i2v":
+            name = "ltx_i2v"
+        elif mode == "iclora":
+            name = "ltx_iclora"
+        else:
+            name = "ltx_t2v"
         return _run(
             name,
             prompt,
@@ -644,6 +654,194 @@ class EZAceStepPromptEnhance:
         return _pack_ace(rewritten_tags, rewritten_lyrics, status)
 
 
+class EZZimagePromptEnhance:
+    """Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "sample": _sample_input("klein_t2i"),
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "enhance": _ENHANCE_BOOL,
+                "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
+                "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Rewrites a lazy prompt for Z-Image Turbo (Qwen3-4B chat wrap). "
+        "Turbo ignores a separate negative CLIP; exclusions stay in the "
+        "positive. Optional context is ignored when Enhance is off. "
+        "Fail-soft without a GGUF."
+    )
+
+    def run(
+        self,
+        prompt,
+        enhance,
+        duration_hint,
+        style=STYLE_NONE,
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
+        return _run(
+            "zimage_t2i",
+            prompt,
+            enhance,
+            duration_hint,
+            style=style,
+            mode="t2i",
+            context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZZimagePromptEnhance",
+        )
+
+
+class EZLongCatPromptEnhance:
+    """Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "sample": _sample_input("wan_t2v"),
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "enhance": _ENHANCE_BOOL,
+                "mode": (["t2v", "i2v", "vc"], {"default": "t2v"}),
+                "duration_hint": ("STRING", {"default": "5 seconds, 30 fps"}),
+                "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Rewrites a lazy prompt for LongCat-Video. T2V is scene+motion+"
+        "cinematography; I2V extends the still; vc continues previous frames. "
+        "No native audio. Style is ignored on I2V/vc. Optional context is "
+        "ignored when Enhance is off. Fail-soft without a GGUF."
+    )
+
+    def run(
+        self,
+        prompt,
+        enhance,
+        mode,
+        duration_hint,
+        style=STYLE_NONE,
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
+        if mode == "i2v":
+            name = "longcat_i2v"
+        elif mode == "vc":
+            name = "longcat_vc"
+        else:
+            name = "longcat_t2v"
+        return _run(
+            name,
+            prompt,
+            enhance,
+            duration_hint,
+            style=style,
+            mode=mode,
+            context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZLongCatPromptEnhance",
+        )
+
+
+class EZDreamXPromptEnhance:
+    """Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "sample": _sample_input("ltx_i2v"),
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "enhance": _ENHANCE_BOOL,
+                "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
+                "audio_notes": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
+            },
+            "optional": {
+                "context": _CONTEXT_INPUT,
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Rewrites a lazy prompt for DreamX-Creator. First frame owns look; "
+        "the paragraph is visual dynamics plus interleaved acoustic events. "
+        "Style is ignored (start image owns look). Optional context is "
+        "ignored when Enhance is off. Fail-soft without a GGUF."
+    )
+
+    def run(
+        self,
+        prompt,
+        enhance,
+        duration_hint,
+        audio_notes="",
+        style=STYLE_NONE,
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
+        return _run(
+            "dreamx_i2v",
+            prompt,
+            enhance,
+            duration_hint,
+            audio_notes,
+            style=style,
+            mode="i2v",
+            context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZDreamXPromptEnhance",
+        )
+
+
 class EZSamplePrompt:
     """STRING source with a sample-prompt combo plus Custom textarea."""
 
@@ -803,6 +1001,9 @@ NODE_CLASS_MAPPINGS = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
+    "EZZimagePromptEnhance": EZZimagePromptEnhance,
+    "EZLongCatPromptEnhance": EZLongCatPromptEnhance,
+    "EZDreamXPromptEnhance": EZDreamXPromptEnhance,
     "EZNegativePromptEnhance": EZNegativePromptEnhance,
     "EZPromptJoin": EZPromptJoin,
     "EZContextJoin": EZContextJoin,
@@ -815,6 +1016,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",
+    "EZZimagePromptEnhance": "Z-Image Prompt Enhance",
+    "EZLongCatPromptEnhance": "LongCat Prompt Enhance",
+    "EZDreamXPromptEnhance": "DreamX Prompt Enhance",
     "EZNegativePromptEnhance": "Negative Prompt Enhance",
     "EZPromptJoin": "Prompt Join",
     "EZContextJoin": "Context Join",

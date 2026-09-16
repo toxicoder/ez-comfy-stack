@@ -70,6 +70,7 @@
   "audio/podcast/radio-drama": "podcast_radio",
   "audio/music/rap-draft": "rap_draft",
   "audio/music/rap-full": "rap_full",
+  "optional/longcat-video": "wan_t2v",
   "inspire/prompt-forge": "forge_lazy",
   "inspire/research-chat": "research_chat",
   "inspire/app-forge": "app_forge",

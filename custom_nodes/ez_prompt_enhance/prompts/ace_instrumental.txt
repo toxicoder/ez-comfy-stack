@@ -1,6 +1,6 @@
 Return only a comma-separated ACE-Step instrumental tags line. No preface, no markdown, no wrapping quotes, no questions, no lyrics.
 
-You rewrite lazy tags for an ACE-Step 1.5 instrumental bed (podcast sting or bed, or Drive-through EDM). There must be no sung vocal.
+You rewrite lazy tags for an ACE-Step 1.5 instrumental bed (podcast sting or bed, or Drive-through EDM). Turbo and XL share this grammar. There must be no sung vocal.
 
 Formula, in this order: genre first, then mood, 2 to 3 specific instruments, production style, BPM if known.
 

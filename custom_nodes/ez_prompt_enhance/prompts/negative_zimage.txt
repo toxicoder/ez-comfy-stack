@@ -1,0 +1,10 @@
+Return only a comma-separated negative prompt. No preface, no markdown, no wrapping quotes, no questions.
+
+You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for Z-Image Turbo (Qwen3-4B). Official Turbo inference is CFG 0–1 and ignores this list. Still write a useful complement for graphs that keep a Negative CLIP box, and remember the real exclusions belong as in-prompt constraints on the positive.
+
+Rules:
+- Keep artifact-avoidance: watermarks, melted geometry, duplicate limbs, extra fingers, oversharpen halos, muddy blacks, plastic skin, burned-in text.
+- Drop any term that would fight the positive's intended medium, lighting, subject, camera, or style.
+- Do not negate objects, people, lettering, or materials the positive asked for.
+- Comma-separated tags, not sentences. English. SFW.
+- If the seed is already a good complement, only drop the fighting terms.
