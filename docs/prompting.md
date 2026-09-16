@@ -23,7 +23,7 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 
 - Writing (or pasting) a prompt that matches the encoder in front of you instead of SD1.5 tag soup
 - Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX / Z-Image / LongCat / DreamX
-- Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
+- Optional style dropdown (150 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
 - **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. [Cinema Rack](create/cinema-rack.md)
 
 !!! tip "Lab graphs already ship model-native prompts"
@@ -149,7 +149,7 @@ STRING out → CLIPTextEncode `text` input.
 
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
 2. Pick a **Sample prompt** (20 lab recipes) or **Custom** to type a lazy sentence (the canned paragraph stays until you pick a sample). **Enhance** defaults **on**.
-3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
+3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 150 ids, or `none`).
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 
 **Enhance defaults to true on the node** (a dragged node still rewrites). Seeded JSON pins it **off** when a rewrite would mutate structured input:

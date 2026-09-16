@@ -427,6 +427,106 @@ Look reference woven into the CLIP prompt.
 | `pixel_art` | Pixel art, limited palette, visible pixels, cluster shading. |
 | `papercraft` | Papercraft diorama, cut paper layers, studio light. |
 | `blueprint_technical_drawing` | Blueprint technical drawing, white line on cyan ground. |
+| `black_and_white_photography` | Black-and-white still photograph, silver-gelatin tonal scale. |
+| `infrared_false_color` | False-color infrared still, pale foliage, dark sky. |
+| `long_exposure_night` | Long-exposure night photograph, light trails, frozen ambient glow. |
+| `underwater_photography` | Submerged still through water, cyan-green falloff, caustic rays. |
+| `aerial_oblique` | Oblique aerial still from high altitude, wide ground coverage. |
+| `tilt_shift_miniature` | Tilt-shift still, miniaturized real scene, razor plane of focus. |
+| `double_exposure_film` | Double-exposure analog still, two scenes overlaid in one frame. |
+| `wet_plate_collodion` | Wet-plate collodion still, silvered highlights, uneven edges. |
+| `cyanotype_print` | Cyanotype print, Prussian-blue iron process on paper. |
+| `platinum_print` | Platinum-palladium contact print, matte noble-metal tones. |
+| `daguerreotype` | Daguerreotype plate, mirrored silver, razor-thin focal plane. |
+| `tintype` | Tintype ferrotype on dark lacquered metal. |
+| `pinhole_camera` | Pinhole-camera still, infinite depth, soft vignetting. |
+| `large_format_view_camera` | Large-format view-camera still, extreme resolving power. |
+| `macro_photography` | Macro still at life-size or greater, shallow plane on a tiny subject. |
+| `astrophotography` | Astrophotograph of night sky, tracked stars, deep black sky. |
+| `high_key_studio_portrait` | High-key studio sitter still, bright seamless, open shadows. |
+| `low_key_studio_portrait` | Low-key studio sitter still, face emerging from deep black. |
+| `newspaper_halftone` | Newspaper halftone photograph, coarse ink dots on newsprint. |
+| `cctv_security_still` | Security-camera still, wide-angle compression, surveillance color. |
+| `pastel_drawing` | Soft-pastel drawing on toned paper, chalk dust. |
+| `oil_pastel` | Oil-pastel drawing, waxy dense sticks on paper. |
+| `marker_illustration` | Alcohol-marker illustration, streaked fills on layout paper. |
+| `ballpoint_pen` | Ballpoint-pen drawing on notebook paper, hatching density. |
+| `crosshatch_pen_ink` | Crosshatched dip-pen and ink drawing on Bristol. |
+| `linocut_print` | Linocut relief print, carved gouge marks on paper. |
+| `woodcut_print` | Northern woodcut relief print, carved plank grain. |
+| `etching_intaglio` | Copper-plate etching, bitten line and plate tone. |
+| `stipple_illustration` | Stipple illustration built from ink dots only. |
+| `graffiti_mural` | Spray-paint graffiti mural on brick or concrete. |
+| `botanical_illustration` | Scientific botanical illustration on white vellum. |
+| `medical_illustration` | Didactic medical illustration, cutaways, clean anatomy. |
+| `fashion_croquis` | Fashion croquis, elongated figure, garment flats. |
+| `retro_travel_poster` | Mid-century travel poster, flat lithograph color. |
+| `pop_art_screenprint` | Pop-art screenprint, hard color flats, commercial-print dots. |
+| `manhwa_webtoon` | Full-color Korean webtoon still, soft painterly cells. |
+| `gongbi_meticulous` | Gongbi meticulous painting, fine-outline mineral color on silk. |
+| `illuminated_manuscript` | Medieval illuminated-manuscript miniature on vellum, gold leaf. |
+| `silhouette_cutout` | Black paper-cut silhouette on a pale field. |
+| `cloisonne_enamel` | Cloisonné enamel, metal cloisons holding vitreous color. |
+| `stained_glass` | Stained-glass window, lead cames, pot-metal color. |
+| `mosaic_tile` | Secular tesserae mosaic of stone and glass tiles. |
+| `pointillism` | Pointillist painting, discrete dots of pure pigment. |
+| `fauvism` | Fauvist painting, violent unmixed color, wild brush. |
+| `surrealism` | Surrealist painting, dream logic, precise impossible objects. |
+| `expressionism` | Expressionist painting, distorted form, emotional color. |
+| `abstract_expressionism` | Abstract-expressionist canvas, gestural drips, stained fields. |
+| `rococo` | Rococo painting, pastel silk, ornamental lightness. |
+| `neoclassical_oil` | Neoclassical oil, marble-smooth figures, civic clarity. |
+| `romantic_landscape` | Romantic landscape oil, sublime weather, tiny figures. |
+| `dutch_golden_age` | Dutch Golden Age oil, north-window light, quiet interior. |
+| `fresco_buon` | Buon fresco on wet plaster, mineral pigment locked in lime. |
+| `tempera_panel` | Egg-tempera on gessoed panel, fine hatch, matte finish. |
+| `byzantine_mosaic_icon` | Byzantine gold-ground mosaic icon, frontal sacred geometry. |
+| `art_deco` | Art Deco illustration, sunburst geometry, chrome and lacquer. |
+| `constructivist_poster` | Constructivist poster, diagonal photomontage, block geometry. |
+| `naive_folk_painting` | Naive folk painting, flat perspective, patterned interiors. |
+| `encaustic_wax` | Encaustic painting, fused beeswax and pigment. |
+| `photoreal_oil_painting` | Photoreal oil painting on canvas, brush and weave, not a camera capture. |
+| `pre_raphaelite` | Pre-Raphaelite oil, jewel color, botanical minuteness. |
+| `symbolism` | Symbolist painting, mythic hush, jeweled dusk. |
+| `bauhaus_graphic` | Bauhaus graphic, primary geometry, spare workshop color. |
+| `toon_shaded_3d` | Toon-shaded 3D, inked volume outlines on modeled forms. |
+| `early_cgi_scanline` | Early-1990s scanline CGI, plastic shaders, visible aliasing. |
+| `miniature_tabletop` | Painted tabletop wargame miniature on hobby basing. |
+| `interlocking_brick` | Interlocking-brick diorama, studded plastic bricks. |
+| `plush_toy` | Plush-toy still, stitched felt and pile fabric. |
+| `felt_craft` | Needle-felted wool sculpture, fuzzy fibers standing off the form. |
+| `origami` | Folded origami paper, visible crease pattern holding the form. |
+| `sand_animation` | Sand-on-glass animation still, grains pushed into form. |
+| `cutout_animation` | Hinged cutout-animation still, paper puppets on a painted board. |
+| `rotoscope` | Rotoscoped still, traced live-action with graphic paint-over. |
+| `porcelain_figurine` | Glazed porcelain figurine, kiln shine, collectible scale. |
+| `wood_carving` | Carved wood sculpture, chisel facets and open grain. |
+| `blown_glass` | Blown-glass sculpture, transparent color, furnace stretch. |
+| `ice_sculpture` | Carved ice sculpture, internal fractures, cold speculars. |
+| `neon_tube` | Bent neon-tube sculpture, glowing gas in glass. |
+| `painted_resin_miniature` | Hand-painted display resin figure, garage-kit scale. |
+| `inflatable_sculpture` | Inflatable vinyl sculpture, seams and gloss holding air. |
+| `paper_theater_2_5d` | 2.5D paper theater, layered flats with shallow parallax. |
+| `steampunk` | Brass-and-steam Victorian machine-age still. |
+| `dieselpunk` | Interwar dieselpunk still, riveted steel, wartime chrome. |
+| `cottagecore` | Cottagecore still, linen, wildflowers, hearth warmth. |
+| `dark_academia` | Dark-academia still, oak libraries, wool, lamplight. |
+| `synthwave` | Synthwave still, hot magenta-orange sunset grid. |
+| `gothic_horror` | Gothic-horror still, candlelit stone, deep umber dread. |
+| `high_fantasy` | High-fantasy painterly still, mythic armor, enchanted dusk. |
+| `western_dust` | Dust-bowl western still, hard sun on adobe and sage. |
+| `retrofuturism_1950s` | 1950s retrofuturist still, atomic-age chrome and aqua. |
+| `brutalist` | Brutalist concrete still, board-formed mass, overcast civic light. |
+| `memphis_design` | Memphis-Milano still, squiggle laminates, candy geometry. |
+| `y2k_gloss` | Y2K gloss still, iridescent plastics, icy chrome orbs. |
+| `vhs_tracking` | VHS tracking-error still, warped scanlines, chroma smear. |
+| `crt_scanlines` | CRT monitor still, RGB phosphor, visible scanlines. |
+| `glitch_art` | Datamosh glitch still, blocky codec tears across the frame. |
+| `holographic` | Holographic-foil still, rainbow diffraction on chrome. |
+| `bioluminescent` | Bioluminescent night still, living glow in deep-blue dark. |
+| `post_apocalyptic` | Post-apocalyptic still, rust, dust, broken concrete, sickly sun. |
+| `afrofuturism` | Afrofuturist still, diasporic ornament, cosmic metals, sunlit future. |
+| `psychedelic_1960s` | 1960s psychedelic still, molten contour, vibrating complementary color. |
 
 #### `catalog`
 
