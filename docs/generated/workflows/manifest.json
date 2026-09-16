@@ -109,6 +109,12 @@
       "kind": "graph"
     },
     {
+      "id": "inspire/cinema-rack",
+      "path": "generated/workflows/inspire/cinema-rack.md",
+      "lane": "inspire",
+      "kind": "graph"
+    },
+    {
       "id": "inspire/prompt-forge",
       "path": "generated/workflows/inspire/prompt-forge.md",
       "lane": "inspire",
@@ -565,6 +571,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 327,
-  "page_count": 95
+  "graph_count": 328,
+  "page_count": 96
 }

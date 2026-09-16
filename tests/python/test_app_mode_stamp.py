@@ -208,6 +208,19 @@ def test_research_chat_exposes_message_mode_search() -> None:
     assert len(labels) == len(set(labels)), labels
 
 
+def test_cinema_rack_exposes_subject_and_axes() -> None:
+    names = _widget_names(_load("inspire/cinema-rack.json"))
+    assert names[0] == "subject"
+    assert "recipe" in names
+    assert "camera_movement" in names
+    assert names.count("style") == 3
+    assert names.count("enhance") == 3
+    labels = _labels(_load("inspire/cinema-rack.json"))
+    assert labels[0] == "Subject"
+    assert "Camera move" in labels
+    assert len(labels) == len(set(labels)), labels
+
+
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names[:3] == ["sample", "prompt", "value"]

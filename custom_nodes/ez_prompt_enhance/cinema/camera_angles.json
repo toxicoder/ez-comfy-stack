@@ -1,0 +1,1967 @@
+[
+  {
+    "id": "ang_worm",
+    "label": "Worm's Eye",
+    "clause": "Plant the lens at dirt so the person becomes a tower, floorboards race toward a vanishing ceiling, and shoes are monuments.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_ground",
+    "label": "Ground Level",
+    "clause": "Set the lens on the ground plane so grit, weeds, and the first few inches of furniture own the foreground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_ankle",
+    "label": "Ankle Height",
+    "clause": "Ride at ankle height so socks, cuffs, and kicking dust are the closer story and faces are distant weather.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_hip",
+    "label": "Hip Height",
+    "clause": "Hold the lens at hip bone so belts, pockets, and swinging hands dominate, heads cut by the top edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_waist",
+    "label": "Waist Height",
+    "clause": "Place the lens at waist so tabletops, belt buckles, and midriffs are the horizon of the body.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_seated",
+    "label": "Seated Eyeline",
+    "clause": "Sit the lens at chair height so standing people loom and seated partners meet the lens honestly.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_tabletop",
+    "label": "Tabletop Height",
+    "clause": "Slide along tabletop height so plates, glasses, and elbows are mountains and faces rise beyond the spread.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_chest_cam",
+    "label": "Chest-Cam",
+    "clause": "Mount at sternum height so the wearer's chin may clip the top and the world becomes a barreling corridor.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "ang_eye",
+    "label": "Eye Level",
+    "clause": "Match a standing eyeline so the horizon cuts the ears and we meet the person as a peer.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_high_standing",
+    "label": "High Standing",
+    "clause": "Raise the lens a head above the person so the floor becomes a map and the crown becomes a dark oval.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_boom",
+    "label": "Boom",
+    "clause": "Boom the lens just above head height so hair partings and the tops of lamps enter, the floor falling away.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_bird",
+    "label": "Bird's Eye",
+    "clause": "Survey steeply from tree or mast height, keeping a sliver of horizon so the place becomes a model but not a plan.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_nadir",
+    "label": "Nadir",
+    "clause": "Point the lens straight at pavement so heads are disks and shadows are attached coins.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_zenith",
+    "label": "Zenith",
+    "clause": "Point the lens straight at the sky so a ceiling rose, weather, or canopy is the only map, no horizon at all.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_front",
+    "label": "Front",
+    "clause": "Face the person square so both ears hint at the edges and the gaze hits the glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_three_q_l",
+    "label": "Three-Quarter Left",
+    "clause": "Stand off the closer cheek so the distant ear hides and a window behind that shoulder blooms as a panel of sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_three_q_r",
+    "label": "Three-Quarter Right",
+    "clause": "Park beside the jawline so the closer shoulder leads like a prow and a corridor recedes behind the hidden ear.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_profile_l",
+    "label": "Profile Left",
+    "clause": "Turn to a full side view so the nose-to-nape silhouette cuts the pane and one eye becomes a single gleam.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_profile_r",
+    "label": "Profile Right",
+    "clause": "Hold the opposite side-on cut so the mouth's corner and the nape hairline are the only face that exists.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_three_q_back_l",
+    "label": "Three-Quarter Back Left",
+    "clause": "Work behind the closer scapula so the cheek becomes a sliver and the world they face is mostly withheld.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_three_q_back_r",
+    "label": "Three-Quarter Back Right",
+    "clause": "Hide behind the distant shoulder blade so we steal a slice of jaw and the view they own stays secret.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_behind",
+    "label": "Behind",
+    "clause": "Sit on the nape so we follow the back of the head, ears, and the world they walk into.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_ots_l",
+    "label": "OTS Left",
+    "clause": "Peek past a living shoulder so the distant face is nested in the crook of neck and cloth.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "ang_ots_r",
+    "label": "OTS Right",
+    "clause": "Rest the lens against a collar and scapula mass so the distant talker has to climb out of a dark wedge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ots"
+    ]
+  },
+  {
+    "id": "ang_pov",
+    "label": "Point of View",
+    "clause": "See as the person sees: their hands in the lower edge, the task or face they attend filling the center.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "ang_reverse_pov",
+    "label": "Reverse POV",
+    "clause": "Turn around on the point-of-view so we see the looker's own face reacting to what we just saw.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "ang_through_window",
+    "label": "Through Window",
+    "clause": "Shoot through glass so reflections of the street layer over the interior scene.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_foliage",
+    "label": "Through Foliage",
+    "clause": "Part leaves in the foreground field so the scene becomes a peephole of chlorophyll and sun flecks.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_fence",
+    "label": "Through Fence",
+    "clause": "Shoot through chain or palings so the world is striped and the person is caged by the occluder.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_under_table",
+    "label": "Under Table",
+    "clause": "Slide under a table so undersides of wood, knees, and hanging hands are the architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_over_furniture",
+    "label": "Over Furniture",
+    "clause": "Shoot over a sofa back or chair so upholstery becomes a foreground wall and faces sit in the remaining slot.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_dutch_mild",
+    "label": "Mild Dutch",
+    "clause": "Tip the horizon a few degrees so doorframes lean like a hint of unease while furniture still reads usable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "ang_dutch_heavy",
+    "label": "Heavy Dutch",
+    "clause": "Cant the world until floor becomes a slide and lamp posts cut the pane as diagonals.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "ang_dutch_snap",
+    "label": "Snap Dutch",
+    "clause": "Jolt the horizon off-level in one accent so the room feels struck, not gradually leaned.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "ang_level",
+    "label": "Level Horizon",
+    "clause": "Lock the horizon true so verticals of the tower stand and the floor becomes a reliable plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "ang_drone_45_orbit",
+    "label": "Drone 45 Orbit",
+    "clause": "Orbit at a forty-five-degree downward angle so the building turns as a faceted object against the bay.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_drone_topdown",
+    "label": "Drone Top-Down",
+    "clause": "Hover at altitude so rooftops, trees, and a tiny walker form a living map.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_drone_oblique",
+    "label": "Drone High Oblique",
+    "clause": "Hold a steep oblique so both facade and roof read, the place as a three-dimensional block.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_ridge_reveal",
+    "label": "Ridge Reveal",
+    "clause": "Rise over a ridge or parapet so the hidden plaza blooms into view past stone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_periscope",
+    "label": "Periscope",
+    "clause": "Peek over a wall or dashboard with a periscope optic so the body of the rig is hidden and only the distant table appears.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_helmet",
+    "label": "Helmet Cam",
+    "clause": "Ride inside a visor so the rim of the helmet becomes a dark arch and the next obstacle fills the center.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "ang_dash",
+    "label": "Dash Cam",
+    "clause": "Lock to a dashboard looking through the windscreen so wipers, hood, and the road's vanishing point own the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_cctv_corner",
+    "label": "CCTV High Corner",
+    "clause": "Park in a ceiling corner looking diagonally so the room becomes a wedge of floor, slightly cold and supervisory.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_low_hero",
+    "label": "Low Hero",
+    "clause": "Kneel so the figure towers, ceiling recedes, and the jawline becomes a cliff against sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_gods_eye",
+    "label": "God's Eye",
+    "clause": "Hold a plan view of a whole room or plaza as if a diagram, furniture readable as icons around a body.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_kanted_talk",
+    "label": "Kanted Conversation",
+    "clause": "Cant the two-shot of a conversation so both people share a tipped floor and the talk feels unstable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dutch"
+    ]
+  },
+  {
+    "id": "ang_sumo",
+    "label": "Sumo",
+    "clause": "Squat at belt-buckle height with a sense of weight, the torso a monument and the head against ceiling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_kneeling",
+    "label": "Kneeling",
+    "clause": "Kneel at a child's standing eyeline so adult hands hang huge and faces tilt into the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_balcony",
+    "label": "Balcony",
+    "clause": "Shoot from a balcony rail so the street becomes a drop and the railing becomes a closer-field bar.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_mezzanine",
+    "label": "Mezzanine",
+    "clause": "Stand on a mezzanine looking along the rail so the floor below becomes a theater of small people.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_through_blinds",
+    "label": "Through Blinds",
+    "clause": "Shoot through slats so the scene arrives in stripes of bright and denied.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_door_crack",
+    "label": "Door Crack",
+    "clause": "Peer through a barely open door so a slice of the next room is all we are allowed.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_crowd",
+    "label": "Crowd Gap",
+    "clause": "Steal a view through a gap in a crowd so shoulders are curtains and the distant event becomes a postage stamp.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_underwater_up",
+    "label": "Underwater Up",
+    "clause": "Aim from underwater so the surface becomes a bright ceiling of waves and legs are columns.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_orchestra_pit",
+    "label": "Orchestra Pit",
+    "clause": "Sit in a pit aiming at a stage lip so performers are giants above a dark well.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_rafters",
+    "label": "Rafters",
+    "clause": "Hang in the rafters so trusses and dust are the closer field and people below are small moving parts.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_fire_escape",
+    "label": "Fire Escape",
+    "clause": "Shoot from a fire-escape landing so iron stairs stripe the pane and the alley drops away.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_rooftop_edge",
+    "label": "Rooftop Edge",
+    "clause": "Stand at a rooftop lip looking along the cornice so the street becomes a thin canyon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_basement_stairs",
+    "label": "Basement Stairs",
+    "clause": "Aim up a basement stair so the doorway at the top becomes a bright rectangle of the world above.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_top_of_stairs",
+    "label": "Top of Stairs",
+    "clause": "Stand at the top aiming down the well so banisters recede and the landing becomes a destination.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_bottom_of_stairs",
+    "label": "Bottom of Stairs",
+    "clause": "Stand at the bottom aiming so the climber approaches as a silhouette against an upper window.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_ladder",
+    "label": "Ladder",
+    "clause": "Cling to a ladder so rungs are a grid and the climber's boots or the sky alternate as the prize.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_scaffold",
+    "label": "Scaffold",
+    "clause": "Ride scaffolding so pipes and couplings cage the facade being worked.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_dock_waterline",
+    "label": "Dock Waterline",
+    "clause": "Set the lens at the waterline of a dock so planks, reflections, and hulls share one plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_pool_edge",
+    "label": "Pool Edge",
+    "clause": "Rest at pool coping so water becomes a sheet in the lower pane and a figure stands on the distant lip.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_opposite_bank",
+    "label": "Opposite Bank",
+    "clause": "Shoot from the opposite bank so a river or road becomes a barrier and the person becomes a small distant event.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_cliff",
+    "label": "Cliff",
+    "clause": "Perch on a cliff so the drop is the foreground and the figure is tiny against geology.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_saddle",
+    "label": "Mountain Saddle",
+    "clause": "Sit in a mountain saddle so two valleys open on either side and a walker becomes a speck on the pass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_canyon_floor",
+    "label": "Canyon Floor",
+    "clause": "Stand on a canyon floor so walls rise like a slot and sky becomes a thin ribbon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_train_platform",
+    "label": "Train Platform",
+    "clause": "Hold a platform eyeline so the track pit becomes a trench and arriving cars fill the distant plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_bus_bench",
+    "label": "Bus Bench",
+    "clause": "Sit at bench height on a curb so passing wheels are huge and waiting legs share the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_counter",
+    "label": "Counter Height",
+    "clause": "Rest on a service counter so goods and elbows are the closer field and the clerk's torso rises beyond.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_one_way_glass",
+    "label": "One-Way Glass",
+    "clause": "Shoot through observation glass so the watched room becomes a diorama and a faint reflection of watchers ghosts the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_skylight",
+    "label": "Skylight",
+    "clause": "Aim through a skylight so the interior becomes a lit box seen through a roof aperture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_floor_grate",
+    "label": "Floor Grate",
+    "clause": "Aim through a grate so shoes and a slice of sky are checkered by metal.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_bookshelf_aisle",
+    "label": "Bookshelf Aisle",
+    "clause": "Stand in a stack aisle so unmarked spines wall both sides and a face waits at the vanishing point.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_under_umbrella",
+    "label": "Under Umbrella",
+    "clause": "Shoot from under an umbrella so fabric becomes a canopy and rain stitches the world beyond the rim.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_coat_hood",
+    "label": "Coat Hood",
+    "clause": "Ride inside a hood so fabric tunnels the view and the street becomes a bright oval.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pov"
+    ]
+  },
+  {
+    "id": "ang_wing_mirror",
+    "label": "Wing Mirror",
+    "clause": "Use a wing-mirror as the view so the world is reversed in a small glass and the road behind is the owner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_loading_dock",
+    "label": "Loading Dock",
+    "clause": "Stand at truck-bed height on a dock so bumpers, bays, and a worker's knees share the plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_clock_tower",
+    "label": "Clock Tower",
+    "clause": "Shoot from a tower opening so the square below becomes a diagram of paths and the clock mechanism may clip the edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_wheelchair",
+    "label": "Wheelchair Height",
+    "clause": "Ride at wheelchair height so doorknobs, tabletops, and standing thighs are the architecture of the room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_child_height",
+    "label": "Child Height",
+    "clause": "Stand at a small child's eyeline so tabletops are ceilings and adult faces require a tilt.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_lying_supine",
+    "label": "Supine",
+    "clause": "Lie on the back aiming so a face leaning over us is an eclipse against ceiling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_cabinet",
+    "label": "Cabinet",
+    "clause": "Shoot from inside a cabinet or fridge so the door-frame becomes a proscenium and the kitchen becomes a bright stage.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_back_seat",
+    "label": "Back Seat",
+    "clause": "Sit in a back seat aiming forward so headrests are columns and the driver's nape is the closer owner.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_handlebar",
+    "label": "Handlebar",
+    "clause": "Mount at handlebar height so grips, stem, and the rushing road are the whole world.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_across_street",
+    "label": "Across the Street",
+    "clause": "Hold from across the street so parked cars and a lane of asphalt are the moat before the doorway.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_loft",
+    "label": "Loft",
+    "clause": "Shoot from a loft or sleeping platform so the room below becomes a well and beams cut the upper pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_pulpit",
+    "label": "Pulpit",
+    "clause": "Stand at a pulpit looking out so pews recede as a congregation diagram.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_pew",
+    "label": "Pew",
+    "clause": "Sit in a pew aiming forward so heads and a distant speaker are the axis of the hall.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_ticket_booth",
+    "label": "Ticket Booth",
+    "clause": "Shoot from inside a booth so the window shelf, a speaking hole, and the queue beyond are the set.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_kitchen_pass",
+    "label": "Kitchen Pass",
+    "clause": "Aim through a pass-through so steam, plates, and the dining room are stacked in a rectangular slot.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_closet",
+    "label": "Closet",
+    "clause": "Shoot from inside a closet so hanging clothes are curtains and the bedroom becomes a bright crack.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_under_bed",
+    "label": "Under Bed",
+    "clause": "Slide under a bed so slats, dust, and shoes at the edge are the architecture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_catwalk",
+    "label": "Catwalk",
+    "clause": "Track an industrial catwalk so grate floor and a drop to machinery open on both sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_elevator_corner",
+    "label": "Elevator Corner",
+    "clause": "Park in an elevator corner so the door, floor indicator, and packed bodies are a box of reflections.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_doorbell",
+    "label": "Doorbell Height",
+    "clause": "Stand at doorbell height so the door fills the pane like a wall and a face will appear in the spyhole zone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_stair_landing",
+    "label": "Stair Landing",
+    "clause": "Occupy a landing so two flights split the pane, one rising, one falling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_between_cars",
+    "label": "Between Cars",
+    "clause": "Stand between parked cars so mirrors and flanks make a corridor toward a crosswalk.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_crane_basket",
+    "label": "Crane Basket",
+    "clause": "Ride a crane basket so the city becomes a drop and the rail of the basket becomes a closer bar.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_second_story",
+    "label": "Second Story",
+    "clause": "Shoot from a second-story window so pedestrians are half-scale and shop awnings are roofs.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_forehead",
+    "label": "Forehead Height",
+    "clause": "Raise just above the brow line so we aim slightly along the nose and the chest recedes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_calf",
+    "label": "Calf Height",
+    "clause": "Ride at calf height so boots, a dog's eye-line, and furniture undersides own the closer field.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_over_monitor",
+    "label": "Over Monitor",
+    "clause": "Shoot over a monitor lid so the screen's glow edges the chin of the person beyond.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_under_chin_up",
+    "label": "Under-Chin Up",
+    "clause": "Tilt from under the chin so the jaw becomes a cliff, nostrils a cave, and the ceiling a backdrop.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_behind_curtain",
+    "label": "Behind Curtain",
+    "clause": "Shoot through or from behind a curtain so fabric becomes a veil and the room becomes a muffled glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_rain_glass",
+    "label": "Rain Glass",
+    "clause": "Shoot through rained glass so drops and rivulets break the street into beads.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_through_glass_floor",
+    "label": "Glass Floor",
+    "clause": "Aim through a glass floor so the level below becomes a diorama underfoot.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_from_aisle",
+    "label": "Aisle",
+    "clause": "Stand in a center aisle so symmetry pulls to an altar, desk, or screen at the distant plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_from_wings",
+    "label": "Stage Wings",
+    "clause": "Peek from stage wings so black masking gives way to lamps and an audience as a dark sea.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_security_wedge",
+    "label": "Security Wedge",
+    "clause": "Hold a corner wedge like a security head, the room a surveyed diagram with no intimacy.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_drone_hover_front",
+    "label": "Drone Hover Front",
+    "clause": "Hover in front at mid altitude so the facade becomes a flat elevation, neither plan nor worm.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_drone_hover_rear",
+    "label": "Drone Hover Rear",
+    "clause": "Hover behind the building so service alleys, vents, and the unpretty back are the rear elevation.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_fpv_gap",
+    "label": "FPV Gap",
+    "clause": "Thread a gap as if a flying lens so a doorway or railing lashes the edges.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "drone"
+    ]
+  },
+  {
+    "id": "ang_over_steering",
+    "label": "Over Steering",
+    "clause": "Shoot over a steering wheel so the rim, dashboard, and the road ahead share the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_from_mezz_along",
+    "label": "Mezzanine Along",
+    "clause": "Slide along a mezzanine rail aiming the length so the floor below travels under a banister.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_balcony_opposite",
+    "label": "Opposite Balcony",
+    "clause": "Shoot from the balcony across a void so another balcony and its people are a diorama over air.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_from_altar",
+    "label": "Altar",
+    "clause": "Stand at an altar or dais aiming back so the hall becomes a receding vessel of seats.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_from_ditch",
+    "label": "Ditch",
+    "clause": "Sit in a ditch or gutter so the road becomes a wall and wheels pass at eye height.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_from_rooftop_across",
+    "label": "Rooftop Across",
+    "clause": "Shoot from a neighboring roof so chimneys and the target building are a skyline conversation.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_from_vent",
+    "label": "Vent",
+    "clause": "Aim through a vent so slats stripe a slice of the next room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_from_sunroof",
+    "label": "Sunroof",
+    "clause": "Aim through a sunroof so sky and passing branches are a moving ceiling.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_from_hatch",
+    "label": "Hatch",
+    "clause": "Pop a roof hatch so the first view becomes a ring of roof and then the sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_between_shelves",
+    "label": "Between Shelves",
+    "clause": "Squeeze so only a ribbon of a browsing face is allowed between two shelf edges.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  },
+  {
+    "id": "ang_from_pit_trap",
+    "label": "Service Pit",
+    "clause": "Aim from a service pit under a vehicle so undercarriage, oil, and boots at the rim are the sky.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_side_window_car",
+    "label": "Car Side Window",
+    "clause": "Shoot through an open car side window so the door frame becomes a proscenium and the street slides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "mount"
+    ]
+  },
+  {
+    "id": "ang_from_attic",
+    "label": "Attic",
+    "clause": "Shoot from attic boards so insulation, joists, and a knothole of the room below are the view.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "height"
+    ]
+  },
+  {
+    "id": "ang_from_marina",
+    "label": "Marina",
+    "clause": "Hold from a slip so masts make a forest and hulls are the foreground street.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_from_bridge_span",
+    "label": "Bridge Span",
+    "clause": "Stand mid-span so the road or river becomes a ribbon and railings stripe both sides.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "direction"
+    ]
+  },
+  {
+    "id": "ang_over_menu",
+    "label": "Over Menu",
+    "clause": "Shoot over an open menu so cardstock becomes a foreground wall and a waiter or guest sits in the remaining slot.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "occluder"
+    ]
+  }
+]

@@ -1,0 +1,2076 @@
+[
+  {
+    "id": "tim_shutter_180",
+    "label": "180 Shutter Natural",
+    "clause": "Shoot with a 180-degree shutter so strides and rain-needles read as natural cinema cadence.",
+    "still": "Mid-stride freeze with brief rain-needles, honest blur only on the moving foot.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter"
+    ]
+  },
+  {
+    "id": "tim_shutter_45",
+    "label": "45 Shutter Staccato",
+    "clause": "Chop the shutter to a 45-degree angle so fists become staccato chips and splashes sit like glass beads.",
+    "still": "Knuckles frozen as staccato chips, splash beads like glass, almost no smear.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_shutter_180",
+      "tim_shutter_360"
+    ],
+    "tags": [
+      "shutter",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_shutter_360",
+    "label": "360 Shutter Smear",
+    "clause": "Open the shutter toward a 360-degree smear so arms taffy across the plate while lamps stay readable cores.",
+    "still": "Arms smeared as taffy bands, lamps as steady cores, body dragged along the path.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_shutter_45"
+    ],
+    "tags": [
+      "shutter"
+    ]
+  },
+  {
+    "id": "tim_long_exposure_still",
+    "label": "Long Exposure Still",
+    "clause": "Expose for many seconds on a locked tripod so pedestrians ghost and window lamps burn as solid bricks.",
+    "still": "Ghosted pedestrians stacked over empty pavement, window lamps as solid bricks.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter",
+      "stilllife"
+    ]
+  },
+  {
+    "id": "tim_drag_shutter_night",
+    "label": "Dragging Shutter Night",
+    "clause": "Drag the shutter through nocturnal traffic so headlights paint ribbons and neon worms along the boulevard.",
+    "still": "Headlight ribbons and neon worms on wet asphalt, one sharp figure caught by a late pop.",
+    "wan_token": "",
+    "audio": "Tire hiss and distant horns smear with the light-ribbons.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter",
+      "night"
+    ]
+  },
+  {
+    "id": "tim_realtime",
+    "label": "Real Time",
+    "clause": "Play the scene in unwarped real time with a metronome gait and no speed change at all.",
+    "still": "A metronome-gait still, body honest, no speed artifact in cloth or hair.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_dream_slow",
+      "tim_panic_fast"
+    ],
+    "tags": [
+      "realtime"
+    ]
+  },
+  {
+    "id": "tim_slowmo_40",
+    "label": "Theatrical Linger",
+    "clause": "Let a waltz hang at a theatrical linger so skirts bloom like underwater bells around the dancers.",
+    "still": "Skirt panels blooming like underwater bells, dancers frozen mid-sway.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_slowmo_48",
+    "label": "Dreamy Sports Cadence",
+    "clause": "Stretch a jump at a dreamy sports cadence so turf pellets hover around the athlete's shoes.",
+    "still": "Athlete floating at the peak, turf pellets hovering around the shoes.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "sports"
+    ]
+  },
+  {
+    "id": "tim_slowmo_96",
+    "label": "Honey Pour Beauty",
+    "clause": "Pour a ribbon of honey at commercial beauty speed so it coils in air before the spoon.",
+    "still": "Honey ribbon coiled in air before the spoon, separate droplets hanging.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "beauty"
+    ]
+  },
+  {
+    "id": "tim_slowmo_120",
+    "label": "Action Review Speed",
+    "clause": "Replay a tackle at action-review speed so grass blades and spit hang in a readable arc.",
+    "still": "Tackle frozen, grass blades and spit in a readable arc off the mouthguard.",
+    "wan_token": "",
+    "audio": "The hit stretches into a long padded thud.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "sports"
+    ]
+  },
+  {
+    "id": "tim_slowmo_240",
+    "label": "Ultra Hang Casing",
+    "clause": "Hang a brass casing in air at ultra speed so rifling glints crawl along the metal.",
+    "still": "Brass casing hanging, rifling glints crawling along metal, smoke threads still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_speed_ramp_in",
+    "label": "Speed Ramp In",
+    "clause": "Speed-ramp into the hug so the run stays realtime then melts into a slow embrace.",
+    "still": "Melted mid-embrace after a run, coats still swinging from the deceleration.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_speed_ramp_out",
+    "label": "Speed Ramp Out",
+    "clause": "Speed-ramp out of the whisper so the slow lean snaps back to hallway pace.",
+    "still": "Lean frozen at the snap-back, a trailing heel implying hallway pace.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_timeslice",
+    "label": "Time Slice Slats",
+    "clause": "Time-slice the room as a stack of vertical slats, each slat a different instant of the same walk.",
+    "still": "Vertical slats of one walk, each strip a different instant across the hallway.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slice"
+    ]
+  },
+  {
+    "id": "tim_lapse_clouds",
+    "label": "Cloud Time Lapse",
+    "clause": "Time-lapse the sky so storm towers boil while terrace furniture stays planted.",
+    "still": "Storm towers boiled into streaks above planted terrace furniture.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_lapse_crowds",
+    "label": "Crowd Time Lapse",
+    "clause": "Time-lapse the plaza so crowds become ant-trails while the fountain holds its carved shape.",
+    "still": "Ant-trail crowds around a sharp fountain, plaza stone unmoved.",
+    "wan_token": "",
+    "audio": "Footsteps and voices compress into a rushing hive.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_lapse_night_to_day",
+    "label": "Night to Day Lapse",
+    "clause": "Time-lapse night into morning so streetlamps die and the east windows catch first fire.",
+    "still": "Streetlamps dying, east windows catching first fire, one plate of the changeover.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_hyperlapse",
+    "label": "Street Hyperlapse",
+    "clause": "Hyperlapse down the unmarked avenue, lockoffs stepping forward so architecture jumps closer each beat.",
+    "still": "One lockoff plate from a hyperlapse, avenue architecture jumped closer.",
+    "wan_token": "",
+    "audio": "City noise jumps in stepped bursts with each lockoff.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "hyper"
+    ]
+  },
+  {
+    "id": "tim_freeze_frame",
+    "label": "Freeze Frame",
+    "clause": "Freeze-frame the turn so the coat becomes a statue and the world waits on that beat.",
+    "still": "Coat as a statue, world waiting, freeze-frame hold on the turn.",
+    "wan_token": "",
+    "audio": "Diegetic noise collapses to a thin ringing hold.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_strobe"
+    ],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_orbit_freeze",
+    "label": "Orbit Freeze",
+    "clause": "Orbit a frozen figure so clothing and spray hang while the background travels around them.",
+    "still": "Clothing and spray hanging, background a traveling ring, figure frozen in the center.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "orbit"
+    ]
+  },
+  {
+    "id": "tim_stop_motion_stutter",
+    "label": "Stop Motion Stutter",
+    "clause": "Animate the body in stop-motion stutter so poses click from mark to mark with empty air between.",
+    "still": "One clicked pose, puppet-like joints, empty air implied between marks.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter",
+      "stopmo"
+    ]
+  },
+  {
+    "id": "tim_pixilation",
+    "label": "Pixilation",
+    "clause": "Pixilate live actors as if they were puppets, sliding them in tiny jumps across the curb.",
+    "still": "Live actor posed as a puppet mid-jump across the curb.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter",
+      "pixilation"
+    ]
+  },
+  {
+    "id": "tim_step_printed",
+    "label": "Step Printed",
+    "clause": "Step-print the dance so each gesture reprints two or three times before the next begins.",
+    "still": "A reprinted gesture, ghost copies of the hand beside the sharp one.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter"
+    ]
+  },
+  {
+    "id": "tim_overcrank",
+    "label": "Overcrank Silk",
+    "clause": "Overcrank the capture so playback turns tears and breath into silk threads.",
+    "still": "Tears as silk threads, breath as a visible veil across the cheek.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_undercrank"
+    ],
+    "tags": [
+      "overcrank"
+    ]
+  },
+  {
+    "id": "tim_undercrank",
+    "label": "Undercrank Chase",
+    "clause": "Undercrank the chase so legs bicycle in comic haste and dust pops in clumps.",
+    "still": "Legs mid-bicycle, dust in clumps, comic haste frozen.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_overcrank"
+    ],
+    "tags": [
+      "undercrank",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_silent_undercrank_comedy",
+    "label": "Silent Era Undercrank",
+    "clause": "Undercrank in silent-era comedy cadence so pratfalls chop and title-card gaps feel imminent.",
+    "still": "Pratfall chopped mid-spill, silent-era comedy cadence, title-card gap implied.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "undercrank",
+      "comedy"
+    ]
+  },
+  {
+    "id": "tim_dream_slow",
+    "label": "Dream Slow",
+    "clause": "Dream-slow the corridor so wallpaper breathes and footsteps take a year to land.",
+    "still": "Wallpaper mid-breath, one foot hovering, corridor like sleep.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_realtime",
+      "tim_panic_fast"
+    ],
+    "tags": [
+      "dream",
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_panic_fast",
+    "label": "Panic Fast",
+    "clause": "Panic-fast the search so drawers blur and the head snaps between hiding places.",
+    "still": "Head snapped toward an open drawer, blur of panic on the hands.",
+    "wan_token": "",
+    "audio": "Drawers rattle and breath snatches in clipped bursts.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_dream_slow"
+    ],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_match_on_action",
+    "label": "Match On Action Time",
+    "clause": "Carry match-on-action continuity so the pour begun in close finishes in the wide without a skip.",
+    "still": "Pour frozen spanning close and wide, continuity of the stream across sizes.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "continuity"
+    ]
+  },
+  {
+    "id": "tim_jumpcut_skip",
+    "label": "Jump Cut Time Skip",
+    "clause": "Jump-cut a time skip in the same setup so the person teleports a few feet as minutes vanish.",
+    "still": "Two poses ghosted in one plate, minutes vanished, same setup.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "jump",
+      "continuity"
+    ]
+  },
+  {
+    "id": "tim_montage_compress",
+    "label": "Montage Compression",
+    "clause": "Compress a workday into a montage of tools, clocks, and discarded cups.",
+    "still": "Tools, clocks, and discarded cups stacked as a workday emblem.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "montage"
+    ]
+  },
+  {
+    "id": "tim_lingering_hold",
+    "label": "Lingering Hold",
+    "clause": "Linger on the face after the news, holding past comfort until the blink finally comes.",
+    "still": "Face after the news, eyes wet, blink not yet arrived.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_beat_hold_then_move",
+    "label": "Beat Hold Then Move",
+    "clause": "Hold the beat locked, then let the body move only after the pause has hurt.",
+    "still": "Locked beat, body coiled, pause still hurting before any move.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_drop_frame_energy",
+    "label": "Drop Frame Energy",
+    "clause": "Drop-frame the party so energy skips and limbs arrive later than the torso.",
+    "still": "A limb lagging the torso, party lamps as skipped ticks.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_strobe",
+    "label": "Strobe Pops",
+    "clause": "Strobe the dance so bodies are a stack of white pops against black gaps.",
+    "still": "One white pop of a dancer, black around, strobe statue.",
+    "wan_token": "",
+    "audio": "Flash pops slap in a generator tick.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "tim_freeze_frame"
+    ],
+    "tags": [
+      "strobe",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_doubletime_walk",
+    "label": "Double Time Walk",
+    "clause": "Double-time the walk so the sidewalk eats itself and coats flap like flags.",
+    "still": "Coat flapping like a flag, sidewalk compressed, hurried walk freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "walk",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_halftime_fight",
+    "label": "Half Time Fight",
+    "clause": "Half-time the brawl so jawlines stretch toward the punch and saliva threads span the gap.",
+    "still": "Jawline stretched toward the punch, saliva threads spanning the gap.",
+    "wan_token": "",
+    "audio": "The blow lands as a stretched padded crack.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "fight",
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_clock_wipe_time",
+    "label": "Clock Wipe Time",
+    "clause": "Wipe hours with a clock-hand across the room so noon becomes evening in one rotation.",
+    "still": "Clock-hand wipe mid-rotation, noon on one side, evening lamps on the other.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "wipe",
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_day_for_night_temporal",
+    "label": "Hours Into Night",
+    "clause": "Keep rolling until daylight actually dies, letting hours\u2014not a grade\u2014turn the street to night.",
+    "still": "Last daylight dying on the street, lamps not yet sure, hours visible in the sky.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "night"
+    ]
+  },
+  {
+    "id": "tim_frozen_splash",
+    "label": "Frozen Splash",
+    "clause": "Freeze the splash as a glass crown, droplets hanging around the submerged heel.",
+    "still": "Glass-crown splash, droplets hanging around a submerged heel.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_hanging_fabric",
+    "label": "Hanging Fabric",
+    "clause": "Hang the fabric in air so a cloak becomes a frozen wave, folds readable as sculpture.",
+    "still": "Cloak as a frozen wave, folds as sculpture in mid-air.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "fabric"
+    ]
+  },
+  {
+    "id": "tim_bullet_hang_sparks",
+    "label": "Hanging Sparks",
+    "clause": "Hang sparks from an impact so embers sit like stars around the struck steel.",
+    "still": "Embers sitting like stars around struck steel, sparks hanging.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "fire"
+    ]
+  },
+  {
+    "id": "tim_shutter_90",
+    "label": "90 Shutter Crisp",
+    "clause": "Set a 90-degree shutter so bicycle spokes stay partly drawn and faces stay crisp.",
+    "still": "Partly drawn bicycle spokes, crisp face, moderate shutter drawing.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter"
+    ]
+  },
+  {
+    "id": "tim_open_shutter_spin",
+    "label": "Open Shutter Spin",
+    "clause": "Spin the dancer under an open shutter so the tutu becomes a ring of light.",
+    "still": "Tutu as a ring of light, dancer's face sharper than the spinning skirt.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter"
+    ]
+  },
+  {
+    "id": "tim_ghost_afterimage",
+    "label": "Afterimage Ghosts",
+    "clause": "Leave afterimage ghosts of the walker, four pale copies trailing the sharp body.",
+    "still": "Four pale copies trailing a sharp walker, afterimage ghosts on the path.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "shutter",
+      "ghost"
+    ]
+  },
+  {
+    "id": "tim_speed_ramp_impact",
+    "label": "Ramp At Impact",
+    "clause": "Ramp to slow at the impact so the vase shatters as a blooming map of shards.",
+    "still": "Vase as a blooming map of shards, ramp frozen at the impact.",
+    "wan_token": "",
+    "audio": "Ceramic crack blooms then hangs.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_speed_ramp_look",
+    "label": "Ramp On The Look",
+    "clause": "Ramp to slow on the glance, eyes finding the doorway while the room stays hurried.",
+    "still": "Eyes finding the doorway, room still hurried in the edges.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_mixed_speed_talk",
+    "label": "Mixed Speed Talk",
+    "clause": "Mix speeds in the talk: mouths realtime, hands slow, rain slower still.",
+    "still": "Mouth mid-word in realtime, hands lagged, rain as hanging coins.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp",
+      "dialogue"
+    ]
+  },
+  {
+    "id": "tim_slo_hair",
+    "label": "Slow Hair Strands",
+    "clause": "Slow the hair so each strand writes a separate curl against the window.",
+    "still": "Each hair strand a separate curl against the window, scalp sharp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "beauty"
+    ]
+  },
+  {
+    "id": "tim_slo_dust",
+    "label": "Slow Dust Motes",
+    "clause": "Slow the dust motes into a galaxy between the projector beam and the seat.",
+    "still": "Dust motes as a galaxy in the projector beam, seat empty and sharp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_slo_rain",
+    "label": "Slow Rain Coins",
+    "clause": "Slow the rain into fat coins that bounce on the cafe awning.",
+    "still": "Fat rain coins bouncing on the cafe awning, each drop a separate disc.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_slo_embers",
+    "label": "Slow Ember Climb",
+    "clause": "Slow the fireplace embers so each spark becomes a climbing insect of light.",
+    "still": "Sparks as climbing insects of light above the grate, logs sharp.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "fire"
+    ]
+  },
+  {
+    "id": "tim_slo_glass_break",
+    "label": "Slow Pane Map",
+    "clause": "Slow the pane as it maps into a spider then a rain of triangles.",
+    "still": "Pane mapped into a spider of cracks, triangles just beginning to fall.",
+    "wan_token": "",
+    "audio": "Glass ticks into a stretched crystalline rain.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_slo_dive",
+    "label": "Slow Dive Hang",
+    "clause": "Slow the dive so the body hangs above green water, fingers first to the surface.",
+    "still": "Body hanging above green water, fingers first, dive frozen.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_slo_breath",
+    "label": "Slow Breath Animal",
+    "clause": "Slow exhaled vapor into a rolling animal that hides the mouth.",
+    "still": "Exhaled vapor as a rolling animal hiding the mouth, eyes still clear.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_undercrank_alley",
+    "label": "Undercrank Alley",
+    "clause": "Undercrank the alley chase so trash leaps in clumps and corners arrive too soon.",
+    "still": "Trash leaping in clumps, alley corner arriving too soon, comic haste.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "undercrank",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_overcrank_tears",
+    "label": "Overcrank Tear Fall",
+    "clause": "Overcrank grief so a single tear takes a whole scene to leave the chin.",
+    "still": "A single tear leaving the chin, grief stretched, cheek wet.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "overcrank"
+    ]
+  },
+  {
+    "id": "tim_heartbeat_remap",
+    "label": "Heartbeat Remap",
+    "clause": "Remap time to a heartbeat, the room pulsing wider on each thump.",
+    "still": "Room pulsed wider on a thump, chest mid-beat, walls breathing.",
+    "wan_token": "",
+    "audio": "A close heartbeat thump paces the picture.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_hold_then_snap",
+    "label": "Hold Then Snap",
+    "clause": "Hold frozen, then snap back to realtime as the glass hits the floor.",
+    "still": "Glass an inch above the floor, hold-before-snap, shards not yet born.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_reverse_pour",
+    "label": "Reverse Pour",
+    "clause": "Reverse the pour so wine climbs back into the bottle.",
+    "still": "Wine climbing into the bottle, reverse pour frozen mid-ribbon.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reverse"
+    ]
+  },
+  {
+    "id": "tim_reverse_then_forward",
+    "label": "Reverse Then Forward",
+    "clause": "Reverse the collapse then slam forward through the same fall.",
+    "still": "Body at the hinge of reverse and forward, collapse neither finished nor undone.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "reverse"
+    ]
+  },
+  {
+    "id": "tim_loop_gesture",
+    "label": "Looped Gesture",
+    "clause": "Loop a small nod and tap until the gesture becomes a machine.",
+    "still": "Nod and tap frozen at the loop point, machine-like repeat implied.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "loop"
+    ]
+  },
+  {
+    "id": "tim_skip_strobe",
+    "label": "Skip Frame Strobe",
+    "clause": "Skip frames as a crude strobe, the runner appearing in new places without travel.",
+    "still": "Runner appearing in a new place without travel, skip-strobe statue.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "strobe",
+      "stutter"
+    ]
+  },
+  {
+    "id": "tim_two_frame_stutter",
+    "label": "Two Frame Stutter",
+    "clause": "Stutter on two-frame cycles so the laugh jitters like a broken toy.",
+    "still": "Laugh jittered like a broken toy, two-frame stutter on the mouth.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter"
+    ]
+  },
+  {
+    "id": "tim_three_two_cadence",
+    "label": "Three Two Cadence",
+    "clause": "Cadence the walk with a 3:2 pulldown hitch, film-video hybrid ticks in the stride.",
+    "still": "Walk with a 3:2 pulldown hitch frozen, hybrid ticks in the stride.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cadence"
+    ]
+  },
+  {
+    "id": "tim_cadence_24",
+    "label": "Twenty Four Cadence",
+    "clause": "Lock a 24-frame cadence so blinks and steps feel theatrical and heavy.",
+    "still": "Theatrical heavy blink, 24-frame cadence in the lashes.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cadence"
+    ]
+  },
+  {
+    "id": "tim_cadence_30",
+    "label": "Thirty Video Cadence",
+    "clause": "Lock a 30-frame video cadence so office fluorescents stop rolling and talk feels present.",
+    "still": "Office fluorescents clean, talk present, 30-frame video cadence in the face.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cadence"
+    ]
+  },
+  {
+    "id": "tim_cadence_60",
+    "label": "Sixty Sports Cadence",
+    "clause": "Lock a 60-frame sports cadence so a handshake is dissectible bone by bone.",
+    "still": "Handshake dissectible, 60-frame sports cadence in the grip.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "cadence",
+      "sports"
+    ]
+  },
+  {
+    "id": "tim_lapse_shadows",
+    "label": "Shadow Sundial Lapse",
+    "clause": "Time-lapse shadows so a sundial of the tower sweeps the plaza.",
+    "still": "Tower sundial shadow mid-sweep across the plaza stones.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_lapse_tide",
+    "label": "Tide Lapse",
+    "clause": "Time-lapse the tide so the pier legs drown and dry in breaths.",
+    "still": "Pier legs half-drowned, tide lapse frozen between drown and dry.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_lapse_scaffold",
+    "label": "Scaffold Lapse",
+    "clause": "Time-lapse scaffolding climbing the unmarked facade like a growing cage.",
+    "still": "Scaffolding as a growing cage on the unmarked facade, workers ghosted.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_lapse_stars",
+    "label": "Star Polyline Lapse",
+    "clause": "Time-lapse stars into polylines over a locked ridge.",
+    "still": "Star polylines over a locked ridge, earth sharp, sky stacked.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "night"
+    ]
+  },
+  {
+    "id": "tim_lapse_traffic",
+    "label": "Traffic Marrow Lapse",
+    "clause": "Time-lapse traffic into red and white marrow through the street grid.",
+    "still": "Red and white marrow of traffic through the grid, buildings unmoved.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_lapse_blossom",
+    "label": "Blossom Lapse",
+    "clause": "Time-lapse blossoms exploding then dropping on the tablecloth.",
+    "still": "Blossoms mid-explosion above the tablecloth, petals halfway to the wood.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_hyperlapse_stairs",
+    "label": "Stairwell Hyperlapse",
+    "clause": "Hyperlapse the stairwell, each landing a stepped lockoff higher in the well.",
+    "still": "One landing lockoff from a stairwell hyperlapse, well receding below.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hyper",
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_hyperlapse_market",
+    "label": "Market Hyperlapse",
+    "clause": "Hyperlapse the market aisle, stalls jumping, steam as dashes above the pots.",
+    "still": "Market stall jumped closer, steam as dashes above the pots.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hyper",
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_frozen_crowd_moment",
+    "label": "Crowd Freeze Courier",
+    "clause": "Freeze the crowd while one courier keeps moving through statues.",
+    "still": "Crowd as statues, one courier still moving through them.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_debris_hang",
+    "label": "Debris Mobile Hang",
+    "clause": "Hang explosion debris as a mobile of timber and paper above the street.",
+    "still": "Timber and paper as a hanging mobile, explosion debris paused.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_water_sheet_hang",
+    "label": "Water Sheet Hang",
+    "clause": "Hang a sheet of thrown water as a lens in front of the face.",
+    "still": "Thrown water as a hanging lens in front of the face, features refracted.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_confetti_hang",
+    "label": "Confetti Blizzard Hang",
+    "clause": "Hang confetti as a paused blizzard of color around the kiss.",
+    "still": "Confetti as a paused blizzard of color around the kiss.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_smoke_pause",
+    "label": "Smoke Column Pause",
+    "clause": "Pause a smoke column so the mushroom is sculpture above the ashtray.",
+    "still": "Smoke mushroom as sculpture above the ashtray, column paused.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_clock_hands_race",
+    "label": "Racing Clock Hands",
+    "clause": "Race the clock hands around the dial while the room stays still.",
+    "still": "Clock hands mid-race around the dial, room still, hours implied.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_page_calendar",
+    "label": "Calendar Flutter",
+    "clause": "Flutter calendar pages until the season in the window changes.",
+    "still": "Calendar page mid-flutter, window season already shifting.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_season_compress",
+    "label": "Season Compress",
+    "clause": "Compress seasons in the same orchard: blossom, leaf, fruit, then snow.",
+    "still": "Orchard showing blossom and snow in one plate, seasons compressed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_sunrise_compress",
+    "label": "Sunrise Compress",
+    "clause": "Compress sunrise so the east goes from ink to brass in seconds.",
+    "still": "East sky half ink and half brass, sunrise compressed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_sunset_compress",
+    "label": "Sunset Compress",
+    "clause": "Compress sunset so windows light from inside as the sky fails.",
+    "still": "Windows lighting from inside, sky failing, sunset compressed.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_magic_hour_stretch",
+    "label": "Magic Hour Stretch",
+    "clause": "Stretch magic hour so the peach band on the horizon refuses to die.",
+    "still": "Peach band on the horizon refusing to die, magic hour stretched.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_golden_to_blue",
+    "label": "Golden Into Blue",
+    "clause": "Run golden hour into blue hour in one accelerating sky.",
+    "still": "Sky split between golden hour and blue hour, accelerating changeover.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_blue_to_black",
+    "label": "Blue Into Blackout",
+    "clause": "Run blue hour into blackout as windows become the only map of the block.",
+    "still": "Blue hour dying, windows as the only map of the block.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "night"
+    ]
+  },
+  {
+    "id": "tim_memory_smear",
+    "label": "Memory Smear",
+    "clause": "Memory-smear the childhood kitchen, edges dragging like wet paint.",
+    "still": "Childhood kitchen with edges dragging like wet paint, memory smear.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dream"
+    ]
+  },
+  {
+    "id": "tim_nightmare_drop",
+    "label": "Nightmare Drop Frame",
+    "clause": "Nightmare drop-frame the hallway, doors teleporting closer each skipped beat.",
+    "still": "Hallway door teleporting closer, nightmare drop-frame freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter",
+      "dream"
+    ]
+  },
+  {
+    "id": "tim_dance_halftime",
+    "label": "Chorus Half Time",
+    "clause": "Half-time the chorus line so heels hang and sequins rain.",
+    "still": "Heels hanging, sequins raining, chorus line at half-time.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_dance_double",
+    "label": "Tap Double Time",
+    "clause": "Double-time the tap so the floor becomes a typewriter of shoes.",
+    "still": "Tap shoes as a typewriter on the floor, double-time freeze mid-strike.",
+    "wan_token": "",
+    "audio": "Taps chatter like a typewriter.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_super_slo_sports",
+    "label": "Super Slow Serve",
+    "clause": "Super-slow the serve so felt fuzz leaves the tennis ball in a halo.",
+    "still": "Felt fuzz leaving the tennis ball in a halo, serve at super-slow.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "sports"
+    ]
+  },
+  {
+    "id": "tim_wildlife_burst",
+    "label": "Bird Launch Burst",
+    "clause": "Burst-time a bird launch so every feather becomes a separate knife in the air.",
+    "still": "Every feather a separate knife in the air, bird launch burst.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_blink_hold",
+    "label": "Blink Hold",
+    "clause": "Hold through the blink so lashes meet and the world goes briefly private.",
+    "still": "Lashes meeting, world briefly private, blink hold.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_exhale_stretch",
+    "label": "Exhale Stretch",
+    "clause": "Stretch the exhale until shoulders drop a full scene later.",
+    "still": "Shoulders mid-drop, exhale stretched, chest still falling.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_elastic_impact",
+    "label": "Elastic Crash",
+    "clause": "Elastic-time the crash, metal blooming then snapping to wreck.",
+    "still": "Metal blooming at the elastic crash, not yet a wreck.",
+    "wan_token": "",
+    "audio": "Metal bloom then a delayed crunch.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_whoosh_skip",
+    "label": "Whoosh Skip Rooms",
+    "clause": "Whoosh-skip between rooms, the body already there, air still settling.",
+    "still": "Body already in the new room, air still settling from the whoosh-skip.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "jump"
+    ]
+  },
+  {
+    "id": "tim_axial_time_punch",
+    "label": "Axial Time Punch",
+    "clause": "Punch in axially while time slows, the eyes arriving later than the lens.",
+    "still": "Eyes arriving later than the lens, axial punch frozen mid-magnify.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_glass_hang_shards",
+    "label": "Shard Curtain Hang",
+    "clause": "Hang window shards as a glittering curtain the runner slides through.",
+    "still": "Window shards as a glittering curtain, runner sliding through.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_ribbon_hang",
+    "label": "Ribbon Ceremony Hang",
+    "clause": "Hang cut ribbon mid-ceremony, scissors still open on the taut strip.",
+    "still": "Cut ribbon hanging, scissors still open on the taut strip.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_powder_hang",
+    "label": "Festival Powder Hang",
+    "clause": "Hang colored powder from a festival strike as a frozen cloud.",
+    "still": "Colored powder as a frozen cloud, festival strike hanging.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_step_print_fight",
+    "label": "Step Printed Scuffle",
+    "clause": "Step-print the scuffle so each shove reprints, comic and brutal at once.",
+    "still": "Shove reprinted, ghost of the push beside the sharp scuffle.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stutter",
+      "fight"
+    ]
+  },
+  {
+    "id": "tim_pixilation_crosswalk",
+    "label": "Crosswalk Pixilation",
+    "clause": "Pixilate a crosswalk so people are chess pieces advancing a square at a time.",
+    "still": "People as chess pieces on the crosswalk, one square mid-advance.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pixilation"
+    ]
+  },
+  {
+    "id": "tim_stopmo_tabletop",
+    "label": "Tabletop Stop Motion",
+    "clause": "Stop-motion the tabletop meal, food rearranging between blinks of the diner.",
+    "still": "Food rearranged between blinks, tabletop stop-motion still.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stopmo"
+    ]
+  },
+  {
+    "id": "tim_gomotion_blur",
+    "label": "Blurred Stop Motion",
+    "clause": "Add captured blur to each stop-motion step so the puppet smears instead of popping.",
+    "still": "Puppet smeared on a captured step, stop-motion with blur not a pop.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "stopmo",
+      "stutter"
+    ]
+  },
+  {
+    "id": "tim_time_stack",
+    "label": "Doorway Time Stack",
+    "clause": "Stack many hours of the same doorway into one plate of overlapping occupants.",
+    "still": "Overlapping occupants in one doorway, hours stacked on a single plate.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "stilllife"
+    ]
+  },
+  {
+    "id": "tim_slit_scan",
+    "label": "Slit Scan Walker",
+    "clause": "Slit-scan the walker so the body becomes a stretched accordion of instants.",
+    "still": "Body as a stretched accordion of instants, slit-scan walker.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slice"
+    ]
+  },
+  {
+    "id": "tim_chrono_array",
+    "label": "Chrono Slice Fan",
+    "clause": "Array a chrono-slice of the jump as a fan of bodies around the peak.",
+    "still": "Fan of bodies around the jump peak, chrono-slice array.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slice",
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_silence_freeze",
+    "label": "Silence Freeze",
+    "clause": "Freeze the picture and drop the room to a thin ring, silence as time.",
+    "still": "Picture frozen, room implied silent, a thin ring of leftover air.",
+    "wan_token": "",
+    "audio": "Sound drops to a thin ringing hold.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_tick_jump",
+    "label": "Clock Tick Jump",
+    "clause": "Jump the scene on each clock tick, poses landing on the second hand.",
+    "still": "Pose landing on the second hand, clock-tick jump freeze.",
+    "wan_token": "",
+    "audio": "A loud tick on each pose jump.",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "jump",
+      "stutter"
+    ]
+  },
+  {
+    "id": "tim_rain_freeze_then_fall",
+    "label": "Rain Nails Then Fall",
+    "clause": "Freeze rain as nails, then let it fall all at once.",
+    "still": "Rain as hanging nails, not yet fallen, sky full of points.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "water"
+    ]
+  },
+  {
+    "id": "tim_fabric_settle",
+    "label": "Sheet Settle Stretch",
+    "clause": "Slow a dropped sheet until it takes a minute to find the floor.",
+    "still": "Dropped sheet halfway to the floor, settle stretched.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "fabric"
+    ]
+  },
+  {
+    "id": "tim_candle_hours",
+    "label": "Candle To Puddle",
+    "clause": "Time-lapse a candle to a puddle while the sitter never changes pose.",
+    "still": "Candle half-puddle, sitter unmoved, hours of wax in one plate.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse"
+    ]
+  },
+  {
+    "id": "tim_crowd_freeze_photo",
+    "label": "Shared Flash Instant",
+    "clause": "Freeze a plaza as if a photographer's flash stole one shared instant.",
+    "still": "Plaza frozen in a shared flash instant, every face mid-gesture.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze"
+    ]
+  },
+  {
+    "id": "tim_speed_ramp_door",
+    "label": "Doorway Speed Ramp",
+    "clause": "Ramp slow through the doorway, corridor realtime on both sides of the threshold.",
+    "still": "Threshold slow, corridor realtime implied on both sides.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "ramp"
+    ]
+  },
+  {
+    "id": "tim_undercrank_work",
+    "label": "Undercrank Labor",
+    "clause": "Undercrank labor so crates stack themselves in a hurry.",
+    "still": "Crates stacking themselves in a hurry, undercranked labor freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "undercrank"
+    ]
+  },
+  {
+    "id": "tim_overcrank_smoke",
+    "label": "Overcrank Smoke Architecture",
+    "clause": "Overcrank cigarette smoke into architecture above the table.",
+    "still": "Cigarette smoke as architecture above the table, overcranked veil.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "overcrank"
+    ]
+  },
+  {
+    "id": "tim_match_action_door",
+    "label": "Handle Turn Continuity",
+    "clause": "Match-on-action through a door so the handle turn is one continuous time.",
+    "still": "Handle mid-turn, continuous time across the doorway.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "continuity"
+    ]
+  },
+  {
+    "id": "tim_slo_punch_connect",
+    "label": "Glove Connect Slow",
+    "clause": "Slow the glove connecting so cheek flesh rolls in a wave from the impact.",
+    "still": "Cheek flesh rolling in a wave, glove connecting, impact slow.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "fight"
+    ]
+  },
+  {
+    "id": "tim_flashback_speed",
+    "label": "Flashback Cadence",
+    "clause": "Drop into a slightly undercranked flashback cadence, edges humming, present tense waiting.",
+    "still": "Slightly undercranked flashback still, edges humming, present waiting.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "dream",
+      "undercrank"
+    ]
+  },
+  {
+    "id": "tim_hold_on_exit",
+    "label": "Empty Frame After Exit",
+    "clause": "Hold on the empty room after the exit so time keeps moving without a person.",
+    "still": "Empty room after an exit, time still moving in dust and curtains.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_pre_enter_hold",
+    "label": "Empty Frame Before Enter",
+    "clause": "Hold on empty space until someone enters, time as waiting.",
+    "still": "Empty space waiting, pre-enter hold, doorway still unoccupied.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hold"
+    ]
+  },
+  {
+    "id": "tim_slo_cloak_settle",
+    "label": "Cloak Settle Slow",
+    "clause": "Slow a thrown cloak until it settles like weather on the shoulders.",
+    "still": "Thrown cloak settling like weather on the shoulders, slow fabric.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo",
+      "fabric"
+    ]
+  },
+  {
+    "id": "tim_undercrank_crowd_part",
+    "label": "Undercrank Crowd Part",
+    "clause": "Undercrank a crowd parting so bodies hop aside in clumps.",
+    "still": "Crowd hopped aside in clumps, undercranked parting freeze.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "undercrank",
+      "energy"
+    ]
+  },
+  {
+    "id": "tim_overcrank_flag",
+    "label": "Overcrank Flag Wave",
+    "clause": "Overcrank a flag so each ripple becomes a slow muscle across cloth.",
+    "still": "Flag ripple as a slow muscle across cloth, overcranked wave.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "overcrank",
+      "fabric"
+    ]
+  },
+  {
+    "id": "tim_strobe_walk",
+    "label": "Strobe Walk Pops",
+    "clause": "Strobe a walk so the figure becomes a dotted line of white statues down the hall.",
+    "still": "One white statue from a strobe walk, dotted line implied down the hall.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "strobe",
+      "walk"
+    ]
+  },
+  {
+    "id": "tim_timeslice_face",
+    "label": "Face Time Slice",
+    "clause": "Time-slice a turning face so one cheek is earlier than the other.",
+    "still": "Turning face with one cheek earlier than the other, time-slice close-up.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slice"
+    ]
+  },
+  {
+    "id": "tim_hyperlapse_bridge",
+    "label": "Bridge Hyperlapse",
+    "clause": "Hyperlapse across a bridge, lockoffs eating the span in steps.",
+    "still": "One lockoff on the span, bridge hyperlapse frozen mid-eat.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "hyper"
+    ]
+  },
+  {
+    "id": "tim_lapse_windows",
+    "label": "Window Lights Lapse",
+    "clause": "Time-lapse office windows as a random piano of lamps going on and off.",
+    "still": "Office windows as a random piano of lamps, some on, some off.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "lapse",
+      "night"
+    ]
+  },
+  {
+    "id": "tim_slo_paper_throw",
+    "label": "Slow Paper Storm",
+    "clause": "Slow thrown papers into a storm of pages around the desk.",
+    "still": "Thrown papers as a storm of pages around the desk, slow scatter.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "slowmo"
+    ]
+  },
+  {
+    "id": "tim_freeze_mid_stride",
+    "label": "Mid Stride Freeze",
+    "clause": "Freeze mid-stride, spray hanging, both feet off the ground for a beat.",
+    "still": "Mid-stride freeze, spray hanging, both feet off the ground.",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "freeze",
+      "walk"
+    ]
+  }
+]

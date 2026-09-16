@@ -1311,7 +1311,25 @@
     "category": "Studio",
     "short": "Inspire App that turns a research brief or lazy sentence into Klein/Wan/LTX prompts.",
     "long": "Shared Prompt box plus family-specific CLIP strings. Context from Research Chat is ignored when Enhance is off. Occupancy llm. See [ComfyUI Apps](studio-apps.md).",
-    "see_also": ["research-chat", "beat-sheet", "prompt-enhance"]
+    "see_also": ["research-chat", "beat-sheet", "prompt-enhance", "cinema-rack"]
+  },
+  {
+    "id": "cinema-rack",
+    "title": "Cinema Rack",
+    "aliases": ["Cinema Rack", "inspire/cinema-rack"],
+    "category": "Studio",
+    "short": "Inspire App that splices cinematography dropdowns into Klein, Wan, and LTX prompts.",
+    "long": "One pick per axis (shot size, angle, move, lens, light, color, time, optical, edit, weather, genre, viral). Deterministic — no LLM. Wan emits one camera verb. I2V drops look axes. Editing is omitted on stills. Occupancy llm. See [Cinema Rack](create/cinema-rack.md).",
+    "see_also": ["prompt-forge", "prompt-enhance", "technique-splice"]
+  },
+  {
+    "id": "technique-splice",
+    "title": "technique splice",
+    "aliases": ["technique splice", "cinema splice"],
+    "category": "Studio",
+    "short": "Composing one cinematography clause per axis into a single CLIP prompt.",
+    "long": "Cinema Rack concatenates present-tense clauses in cinematic order, freezes motion for Klein stills, and keeps a single Wan camera token. Conflicts drop the earlier splice-order pick. See [Cinema Rack](create/cinema-rack.md).",
+    "see_also": ["cinema-rack", "prompt-enhance"]
   },
   {
     "id": "beat-sheet",

@@ -429,6 +429,159 @@ SaveAudio stem to stamp.
 
 **How it affects generation:** Must match SaveAudio / SaveAudioMP3.
 
+### `EZCinemaRack` — Cinema Rack
+
+Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.
+
+!!! warning "Lab notes"
+
+    Deterministic. No LLM. Recipe fills empty axes. Wan emits one camera verb. I2V drops look. Editing omitted on stills. Style on downstream Enhance stays none.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `prompt` | out | `STRING` | Spliced prompt for CLIP / Enhance. |
+| `notes` | out | `STRING` | Dropped conflicts and Wan camera token. |
+
+#### `subject`
+
+Type `STRING`.
+
+Who or what is in the shot.
+
+**How it affects generation:** Front-loaded except on I2V (start image owns identity).
+
+#### `flavor`
+
+Type `COMBO`. Range / default: klein.
+
+Family renderer.
+
+**How it affects generation:** klein stills freeze motion axes. wan_t2v appends one camera token. i2v drops look.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `klein` | Still sentences. |
+| `klein_edit` | Edit still. |
+| `klein_identity` | Camera-free bible. |
+| `wan_t2v` | Look + one camera. |
+| `wan_i2v` | Motion + camera only. |
+| `ltx_t2v` | Present tense + foley. |
+| `ltx_i2v` | I2V AV; look dropped. |
+
+#### `recipe`
+
+Type `COMBO`. Range / default: none.
+
+Named splice.
+
+**How it affects generation:** Fills axes that are still none. Explicit picks win.
+
+#### `framing_shot_size`
+
+Type `COMBO`. Range / default: none.
+
+Shot size.
+
+**How it affects generation:** How much of the subject fills the frame. Catalog under generated/cinema.
+
+#### `camera_angles`
+
+Type `COMBO`. Range / default: none.
+
+Camera angle.
+
+**How it affects generation:** Height and subject-relative angle. Catalog under generated/cinema.
+
+#### `camera_movement`
+
+Type `COMBO`. Range / default: none.
+
+Camera move.
+
+**How it affects generation:** The single Wan camera verb. Catalog under generated/cinema.
+
+#### `lenses_optics`
+
+Type `COMBO`. Range / default: none.
+
+Lens and optic.
+
+**How it affects generation:** Focal length and optic character. Catalog under generated/cinema.
+
+#### `composition`
+
+Type `COMBO`. Range / default: none.
+
+Composition.
+
+**How it affects generation:** Where masses sit in the frame. Catalog under generated/cinema.
+
+#### `lighting`
+
+Type `COMBO`. Range / default: none.
+
+Lighting.
+
+**How it affects generation:** Key quality, direction, and motivation. Catalog under generated/cinema.
+
+#### `color_film_look`
+
+Type `COMBO`. Range / default: none.
+
+Color and film look.
+
+**How it affects generation:** Grade and photochemical grammar, no stock names. Catalog under generated/cinema.
+
+#### `time_motion`
+
+Type `COMBO`. Range / default: none.
+
+Time and motion.
+
+**How it affects generation:** Shutter and temporal grammar. Catalog under generated/cinema.
+
+#### `in_camera_optical`
+
+Type `COMBO`. Range / default: none.
+
+In-camera / optical.
+
+**How it affects generation:** Flare, zoom, and in-camera tricks. Catalog under generated/cinema.
+
+#### `editing_transitions`
+
+Type `COMBO`. Range / default: none.
+
+Editing.
+
+**How it affects generation:** Named cuts. Omitted on Klein stills. Catalog under generated/cinema.
+
+#### `atmosphere_weather`
+
+Type `COMBO`. Range / default: none.
+
+Atmosphere.
+
+**How it affects generation:** Air, precip, ground. LTX interleaves foley. Catalog under generated/cinema.
+
+#### `genre_looks`
+
+Type `COMBO`. Range / default: none.
+
+Genre grammar.
+
+**How it affects generation:** Genre lighting and texture, not a titled film. Catalog under generated/cinema.
+
+#### `viral_looks`
+
+Type `COMBO`. Range / default: none.
+
+Short-form hook.
+
+**How it affects generation:** Platform-agnostic hook grammar. Catalog under generated/cinema.
+
 ### `EZContextJoin` — Context Join
 
 Pack labeled desk fields into one context STRING for rewriter nodes.

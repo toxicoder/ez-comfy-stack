@@ -1,0 +1,272 @@
+[
+  {
+    "id": "rec_noir_push",
+    "label": "Noir interrogation",
+    "axes": {
+      "framing_shot_size": "size_cu",
+      "camera_angles": "ang_low_hero",
+      "camera_movement": "move_dolly_in",
+      "lenses_optics": "opt_35_classic",
+      "composition": "cmp_short_side",
+      "lighting": "lit_rembrandt",
+      "color_film_look": "col_bleach_bypass",
+      "atmosphere_weather": "atm_black_wet_night_neon",
+      "genre_looks": "gen_noir_venetian"
+    }
+  },
+  {
+    "id": "rec_locked_portrait",
+    "label": "Locked portrait",
+    "axes": {
+      "framing_shot_size": "size_mcu",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_85_portrait",
+      "composition": "cmp_center_punch",
+      "lighting": "lit_loop",
+      "color_film_look": "col_color_neg_warm"
+    }
+  },
+  {
+    "id": "rec_golden_wide",
+    "label": "Golden wide",
+    "axes": {
+      "framing_shot_size": "size_ews",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_slow_dolly_in",
+      "lenses_optics": "opt_24_wide",
+      "composition": "cmp_leading_road",
+      "lighting": "lit_golden_hour",
+      "color_film_look": "col_golden_amber",
+      "atmosphere_weather": "atm_clear_plaza"
+    }
+  },
+  {
+    "id": "rec_handheld_doc",
+    "label": "Handheld documentary",
+    "axes": {
+      "framing_shot_size": "size_ms",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_handheld_walk",
+      "lenses_optics": "opt_35_classic",
+      "lighting": "lit_window",
+      "color_film_look": "col_doc_available_mix",
+      "genre_looks": "gen_doc_available_street"
+    }
+  },
+  {
+    "id": "rec_vertical_hook",
+    "label": "Vertical hook",
+    "axes": {
+      "framing_shot_size": "size_mcu",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_snap_zoom_in",
+      "composition": "cmp_center_vertical",
+      "viral_looks": "vir_snap_push_hold"
+    }
+  },
+  {
+    "id": "rec_rain_track",
+    "label": "Rain track",
+    "axes": {
+      "camera_movement": "move_tracking_right",
+      "lenses_optics": "opt_35_classic",
+      "lighting": "lit_overcast_skyfill",
+      "atmosphere_weather": "atm_rain_bus_shelter",
+      "color_film_look": "col_black_wet_night"
+    }
+  },
+  {
+    "id": "rec_orbit_product",
+    "label": "Product orbit",
+    "axes": {
+      "framing_shot_size": "size_insert_prop",
+      "camera_movement": "move_slow_orbit_product",
+      "lenses_optics": "opt_product_85",
+      "lighting": "lit_clamshell",
+      "composition": "cmp_product_hero_center",
+      "color_film_look": "col_product_true"
+    }
+  },
+  {
+    "id": "rec_drone_reveal",
+    "label": "Drone reveal",
+    "axes": {
+      "framing_shot_size": "size_ews",
+      "camera_angles": "ang_drone_oblique",
+      "camera_movement": "move_drone_reveal_ridge",
+      "lenses_optics": "opt_drone_wide_rect",
+      "atmosphere_weather": "atm_clear_plaza"
+    }
+  },
+  {
+    "id": "rec_identity_night",
+    "label": "Night bible",
+    "axes": {
+      "lighting": "lit_practical_lamp",
+      "color_film_look": "col_night_for_night",
+      "atmosphere_weather": "atm_park_lamp_moisture",
+      "genre_looks": "gen_neo_noir_wet"
+    }
+  },
+  {
+    "id": "rec_western_noon",
+    "label": "Western noon",
+    "axes": {
+      "framing_shot_size": "size_cowboy",
+      "camera_angles": "ang_low_hero",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_50_normal",
+      "lighting": "lit_hard_noon",
+      "color_film_look": "col_western_dust_noon_color",
+      "genre_looks": "gen_western_dust_noon",
+      "atmosphere_weather": "atm_clear_plaza"
+    }
+  },
+  {
+    "id": "rec_slow_push_eyes",
+    "label": "Slow push to eyes",
+    "axes": {
+      "framing_shot_size": "size_cu",
+      "camera_movement": "move_slow_dolly_in",
+      "lenses_optics": "opt_85_portrait",
+      "composition": "cmp_eyes_on_third_cross",
+      "time_motion": "tim_shutter_180"
+    }
+  },
+  {
+    "id": "rec_fpv_dive",
+    "label": "FPV dive",
+    "axes": {
+      "camera_angles": "ang_nadir",
+      "camera_movement": "move_fpv_dive",
+      "viral_looks": "vir_fpv_dive_mark",
+      "time_motion": "tim_panic_fast"
+    }
+  },
+  {
+    "id": "rec_match_cut_ltx",
+    "label": "Match-cut AV",
+    "axes": {
+      "camera_movement": "move_locked_off",
+      "editing_transitions": "edt_match_cut",
+      "time_motion": "tim_realtime"
+    }
+  },
+  {
+    "id": "rec_fog_push",
+    "label": "Fog push",
+    "axes": {
+      "camera_movement": "move_fog_in",
+      "lighting": "lit_soft",
+      "atmosphere_weather": "atm_valley_fog_spire",
+      "color_film_look": "col_lifted_blacks_fog"
+    }
+  },
+  {
+    "id": "rec_bodycam_sprint",
+    "label": "Body-cam sprint",
+    "axes": {
+      "camera_angles": "ang_chest_cam",
+      "camera_movement": "move_bodycam_sprint",
+      "lenses_optics": "opt_bodycam_wide",
+      "genre_looks": "gen_bodycam_precinct"
+    }
+  },
+  {
+    "id": "rec_romcom_beauty",
+    "label": "Bounce beauty",
+    "axes": {
+      "framing_shot_size": "size_mcu",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_85_portrait",
+      "lighting": "lit_clamshell",
+      "color_film_look": "col_romcom_bounce_beauty",
+      "genre_looks": "gen_romcom_bounce"
+    }
+  },
+  {
+    "id": "rec_overcast_wide",
+    "label": "Overcast wide",
+    "axes": {
+      "framing_shot_size": "size_ews",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_24_wide",
+      "lighting": "lit_overcast_skyfill",
+      "color_film_look": "col_overcast_cyan",
+      "atmosphere_weather": "atm_heavy_overcast_mill"
+    }
+  },
+  {
+    "id": "rec_macro_pour",
+    "label": "Macro pour",
+    "axes": {
+      "camera_movement": "move_macro_push",
+      "lenses_optics": "opt_macro_extension",
+      "composition": "cmp_insert_hands_center",
+      "viral_looks": "vir_macro_pour"
+    }
+  },
+  {
+    "id": "rec_crane_reveal",
+    "label": "Crane reveal",
+    "axes": {
+      "framing_shot_size": "size_ews",
+      "camera_movement": "move_crane_reveal",
+      "lenses_optics": "opt_24_wide",
+      "composition": "cmp_frame_in_frame"
+    }
+  },
+  {
+    "id": "rec_split_diopter",
+    "label": "Split diopter two-plane",
+    "axes": {
+      "framing_shot_size": "size_ms",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_split_diopter",
+      "composition": "cmp_layers_three"
+    }
+  },
+  {
+    "id": "rec_night_practical_push",
+    "label": "Night practical push",
+    "axes": {
+      "camera_movement": "move_night_practical_push",
+      "lighting": "lit_practical_lamp",
+      "color_film_look": "col_night_for_night",
+      "atmosphere_weather": "atm_black_wet_night_neon"
+    }
+  },
+  {
+    "id": "rec_hyperlapse",
+    "label": "Hyperlapse path",
+    "axes": {
+      "camera_movement": "move_hyperlapse_walk",
+      "time_motion": "tim_hyperlapse",
+      "viral_looks": "vir_hyperlapse_block"
+    }
+  },
+  {
+    "id": "rec_talking_mcu",
+    "label": "Talking MCU",
+    "axes": {
+      "framing_shot_size": "size_mcu",
+      "camera_angles": "ang_eye",
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_50_normal",
+      "viral_looks": "vir_talking_mcu"
+    }
+  },
+  {
+    "id": "rec_anamorphic_night",
+    "label": "Anamorphic-class night",
+    "axes": {
+      "camera_movement": "move_locked_off",
+      "lenses_optics": "opt_anamorphic_class",
+      "in_camera_optical": "fx_cool_horizontal_streak",
+      "color_film_look": "col_neon_night",
+      "atmosphere_weather": "atm_black_wet_night_neon"
+    }
+  }
+]

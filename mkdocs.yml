@@ -109,6 +109,7 @@ nav:
   - Start:
       - Getting Started: getting-started.md
       - Prompting: prompting.md
+      - Cinema Rack: create/cinema-rack.md
       - Model licenses: licenses.md
       - FAQ: start/faq.md
       - When to use vs spark-lab: start/when-to-use-vs-spark-lab.md

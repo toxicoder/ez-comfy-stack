@@ -62,6 +62,7 @@ def test_list_lab_apps_includes_inspire() -> None:
     assert result["count"] >= 2
     ids = {row["id"] for row in result["apps"]}
     assert "inspire/prompt-forge" in ids
+    assert "inspire/cinema-rack" in ids
     assert "inspire/research-chat" in ids
     research = next(r for r in result["apps"] if r["id"] == "inspire/research-chat")
     assert research["lane"] == "inspire"

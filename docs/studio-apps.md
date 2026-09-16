@@ -91,6 +91,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein/character-draft** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
 | **klein/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
 | **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **inspire/cinema-rack** | No UNET. Pick cinematography axes (shot size, move, light, …) and splice Klein / Wan / LTX prompts. Occupancy **llm** (CPU GGUF). [Cinema Rack](create/cinema-rack.md) |
 | **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
 | **inspire/beat-sheet** | Script desk. Logline / script / audio policy / score pack into every card rewrite. 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 

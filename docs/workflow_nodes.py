@@ -1117,6 +1117,34 @@ def encyclopedia() -> dict[str, Any]:
             _w("label_d", index=3, rng="Score", desc="Label for field D.", gen="Optional."),
         ],
     )
+    nodes["EZCinemaRack"] = _n(
+        "Cinema Rack",
+        "Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.",
+        origin="ez_prompt_enhance",
+        lab="Deterministic. No LLM. Recipe fills empty axes. Wan emits one camera verb. I2V drops look. Editing omitted on stills. Style on downstream Enhance stays none.",
+        sockets=[
+            _s("prompt", "STRING", "out", "Spliced prompt for CLIP / Enhance."),
+            _s("notes", "STRING", "out", "Dropped conflicts and Wan camera token."),
+        ],
+        widgets=[
+            _w("subject", index=0, desc="Who or what is in the shot.", gen="Front-loaded except on I2V (start image owns identity)."),
+            _w("flavor", index=1, typ="COMBO", rng="klein", desc="Family renderer.", gen="klein stills freeze motion axes. wan_t2v appends one camera token. i2v drops look.", choices=[("klein", "Still sentences."), ("klein_edit", "Edit still."), ("klein_identity", "Camera-free bible."), ("wan_t2v", "Look + one camera."), ("wan_i2v", "Motion + camera only."), ("ltx_t2v", "Present tense + foley."), ("ltx_i2v", "I2V AV; look dropped.")]),
+            _w("recipe", index=2, typ="COMBO", rng="none", desc="Named splice.", gen="Fills axes that are still none. Explicit picks win."),
+            _w("framing_shot_size", index=3, typ="COMBO", rng="none", desc="Shot size.", gen="How much of the subject fills the frame. Catalog under generated/cinema."),
+            _w("camera_angles", index=4, typ="COMBO", rng="none", desc="Camera angle.", gen="Height and subject-relative angle. Catalog under generated/cinema."),
+            _w("camera_movement", index=5, typ="COMBO", rng="none", desc="Camera move.", gen="The single Wan camera verb. Catalog under generated/cinema."),
+            _w("lenses_optics", index=6, typ="COMBO", rng="none", desc="Lens and optic.", gen="Focal length and optic character. Catalog under generated/cinema."),
+            _w("composition", index=7, typ="COMBO", rng="none", desc="Composition.", gen="Where masses sit in the frame. Catalog under generated/cinema."),
+            _w("lighting", index=8, typ="COMBO", rng="none", desc="Lighting.", gen="Key quality, direction, and motivation. Catalog under generated/cinema."),
+            _w("color_film_look", index=9, typ="COMBO", rng="none", desc="Color and film look.", gen="Grade and photochemical grammar, no stock names. Catalog under generated/cinema."),
+            _w("time_motion", index=10, typ="COMBO", rng="none", desc="Time and motion.", gen="Shutter and temporal grammar. Catalog under generated/cinema."),
+            _w("in_camera_optical", index=11, typ="COMBO", rng="none", desc="In-camera / optical.", gen="Flare, zoom, and in-camera tricks. Catalog under generated/cinema."),
+            _w("editing_transitions", index=12, typ="COMBO", rng="none", desc="Editing.", gen="Named cuts. Omitted on Klein stills. Catalog under generated/cinema."),
+            _w("atmosphere_weather", index=13, typ="COMBO", rng="none", desc="Atmosphere.", gen="Air, precip, ground. LTX interleaves foley. Catalog under generated/cinema."),
+            _w("genre_looks", index=14, typ="COMBO", rng="none", desc="Genre grammar.", gen="Genre lighting and texture, not a titled film. Catalog under generated/cinema."),
+            _w("viral_looks", index=15, typ="COMBO", rng="none", desc="Short-form hook.", gen="Platform-agnostic hook grammar. Catalog under generated/cinema."),
+        ],
+    )
     nodes["EZSamplePrompt"] = _n(
         "Sample Prompt",
         "STRING source with a sample-prompt combo plus Custom textarea.",

@@ -27,6 +27,16 @@ from .client import (
     with_style_system,
 )
 from .client import _close_llm
+from .cinema import (
+    FLAVOR_KLEIN,
+    FLAVORS,
+    NONE as CINEMA_NONE,
+    WIDGET_AXIS_ORDER,
+    combo_ids,
+    format_notes,
+    recipe_combo_ids,
+    splice,
+)
 from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
 
 
@@ -736,6 +746,59 @@ class EZNegativePromptEnhance:
         return _pack(EnhanceResult(text, status))
 
 
+class EZCinemaRack:
+    """Pick one technique per cinematography axis and splice a CLIP string."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        required: dict = {
+            "subject": (
+                "STRING",
+                {
+                    "multiline": True,
+                    "default": "",
+                    "dynamicPrompts": False,
+                },
+            ),
+            "flavor": (list(FLAVORS), {"default": FLAVOR_KLEIN}),
+            "recipe": (recipe_combo_ids(), {"default": CINEMA_NONE}),
+        }
+        for axis_id in WIDGET_AXIS_ORDER:
+            required[axis_id] = (combo_ids(axis_id), {"default": CINEMA_NONE})
+        return {"required": required}
+
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("prompt", "notes")
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Splice one pick per cinematography axis into a Klein, Wan, or LTX "
+        "prompt. Recipe fills empty axes only. Wan emits one camera verb. "
+        "I2V drops look axes so the start image owns grade. Editing is omitted "
+        "on stills. No LLM."
+    )
+
+    def run(
+        self,
+        subject: object,
+        flavor: object = FLAVOR_KLEIN,
+        recipe: object = CINEMA_NONE,
+        **axes: object,
+    ) -> tuple[str, str]:
+        picks = {
+            axis_id: str(axes.get(axis_id, CINEMA_NONE) or CINEMA_NONE)
+            for axis_id in WIDGET_AXIS_ORDER
+        }
+        result = splice(
+            picks,
+            flavor=flavor if isinstance(flavor, str) else FLAVOR_KLEIN,
+            subject=subject if isinstance(subject, str) else str(subject or ""),
+            recipe=recipe if isinstance(recipe, str) else CINEMA_NONE,
+        )
+        return (result.text, format_notes(result))
+
+
 NODE_CLASS_MAPPINGS = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
@@ -745,6 +808,7 @@ NODE_CLASS_MAPPINGS = {
     "EZContextJoin": EZContextJoin,
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
     "EZSamplePrompt": EZSamplePrompt,
+    "EZCinemaRack": EZCinemaRack,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -756,4 +820,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EZContextJoin": "Context Join",
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",
     "EZSamplePrompt": "Sample Prompt",
+    "EZCinemaRack": "Cinema Rack",
 }

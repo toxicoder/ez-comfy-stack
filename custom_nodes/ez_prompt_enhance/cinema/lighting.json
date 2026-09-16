@@ -1,0 +1,2066 @@
+[
+  {
+    "id": "lit_rembrandt",
+    "label": "Rembrandt",
+    "clause": "Shape a key so a triangle of brightness sits on the shadow cheek and the eye in that well still gleams.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_loop",
+    "label": "Loop",
+    "clause": "Place the key to throw a small hook of nose shade onto the opposite cheek, both eyes open.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_butterfly",
+    "label": "Butterfly",
+    "clause": "Place a key on the lens axis above the eyes so a butterfly-shaped shade sits under the nose and both cheeks stay open.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_paramount",
+    "label": "Paramount",
+    "clause": "Drop a glamour key from slightly above the forehead with a scoop filling the eye sockets so cheekbones gleam and the upper lip wears a thin shade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_split",
+    "label": "Split",
+    "clause": "Put the key full side-on so one half of the face is lit and the other half falls to black, the nose as a border.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_broad",
+    "label": "Broad",
+    "clause": "Key the face-to-lens side so the larger visible cheek is bright and the distant cheek recedes into shade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_short",
+    "label": "Short",
+    "clause": "Key the averted side so the visible cheek is mostly shade and the smaller distant cheek is the bright one.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_clamshell",
+    "label": "Clamshell",
+    "clause": "Sandwich the face between an overhead key and a bounce from below so eye bags lift and catchlights sit in both upper and lower lids.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_beauty",
+    "label": "Beauty",
+    "clause": "Flood the face with even frontal glamour so texture minimizes, catchlights sit at ten-and-two, and the background stays a clean pale cyc.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_high_key",
+    "label": "High-Key",
+    "clause": "Lift almost all shadows so whites stay clean, the room feels bleached and airy, and contrast becomes a whisper.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_silhouette",
+      "lit_chiaroscuro",
+      "lit_low_key"
+    ],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_low_key",
+    "label": "Low-Key",
+    "clause": "Let most of the room fall to black so a small island of brightness carves the face and the rest is withheld.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_high_key",
+      "lit_silhouette",
+      "lit_chiaroscuro"
+    ],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_silhouette",
+    "label": "Silhouette",
+    "clause": "Back the person against a brighter field so the body becomes a cutout and facial features vanish into the shape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_high_key",
+      "lit_chiaroscuro",
+      "lit_low_key"
+    ],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_semi_sil",
+    "label": "Semi-Silhouette",
+    "clause": "Keep a hair of wrap on the cheek so the cutout body still has a hint of feature, not a pure black shape.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_chiaroscuro",
+    "label": "Chiaroscuro",
+    "clause": "Pit a single pool against deep dark so form emerges from black as if carved, midtones scarce.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_high_key",
+      "lit_silhouette",
+      "lit_low_key"
+    ],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_rim",
+    "label": "Rim",
+    "clause": "Run a thin bright outline around the figure so they separate from a dark field without lighting the face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_kicker",
+    "label": "Kicker",
+    "clause": "Throw a raking accent from behind-the-side so the jaw and neck have a stripe of glare.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_hair",
+    "label": "Hair Light",
+    "clause": "Place a source above and behind so hair becomes a halo of strands and sparkle, the face still keyed separately.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_edge",
+    "label": "Edge",
+    "clause": "Skim an edge along a shoulder or prop so a specular line draws the silhouette without filling the front.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_wrap",
+    "label": "Wrap",
+    "clause": "Let the key bend around the cheek so the terminator is gradual and pores stay readable into the shade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_window",
+    "label": "Window",
+    "clause": "Key from a visible window so the pane is the source, falloff marches across the room, and curtains shape the beam.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_practical_lamp",
+    "label": "Practical Lamp",
+    "clause": "Motivate the key from a visible lamp so the shade, bulb glow, and a pool on the table are the logic of the face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_neon",
+    "label": "Neon",
+    "clause": "Key or accent from neon tubes so skin picks up saturated contour and the tubes themselves are graphic lines in the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_fire",
+    "label": "Fire",
+    "clause": "Key from flame so the face flickers, orange on the closer plane, and shadows jump with the fire.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_screen",
+    "label": "Screen",
+    "clause": "Key from an unmarked display so the face is the color of the interface and the room around the glow dies.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_street",
+    "label": "Streetlamp",
+    "clause": "Key from a streetlamp so a pool falls from above-the-street, moths in the beam, pavement bright.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_moonlight",
+    "label": "Moonlight",
+    "clause": "Top-fill with silver-cyan so crushed blacks hold, roof edges gleam, and skin is porcelain rather than honey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_golden_hour"
+    ],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_overcast_skyfill",
+    "label": "Overcast Sky-Fill",
+    "clause": "Wrap the person in shadowless sky from an overcast dome so there is no sun disk and no attached shade on the ground.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_hard_noon"
+    ],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_hard_noon",
+    "label": "Hard Noon",
+    "clause": "Put the sun overhead so noses and chins throw short attached shade, pavement bleaches, and eye sockets go dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_overcast_skyfill"
+    ],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_golden_hour",
+    "label": "Golden Hour",
+    "clause": "Rake amber sidelight along brick and skin so long shadows stripe the street and highlights go honey.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [
+      "lit_moonlight"
+    ],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_blue_hour",
+    "label": "Blue Hour",
+    "clause": "Let residual sky cyan be the key while practicals just start to read, the world between sundown and full dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_tungsten_daylight_mix",
+    "label": "Tungsten-Daylight Mix",
+    "clause": "Mix interior tungsten pools with blue window so skin is two temperatures at once, a lamp winning the cheek and sky winning the wall.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_hard",
+    "label": "Hard Light",
+    "clause": "Cast a small-source key so pores cast crisp self-shadows and the nose throws a sharp-edged triangle on the cheek.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_soft",
+    "label": "Soft Light",
+    "clause": "Wrap a large source so transitions on the jaw melt and speculars on skin become broad pillows.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_book_light",
+    "label": "Book Light",
+    "clause": "Bounce a source into a diffusion frame so the face is wrapped by a second-generation glow with almost no specular bite.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_bounce",
+    "label": "Bounce",
+    "clause": "Redirect the key off a wall or card so the source becomes a surface, not a lamp, and shade is open.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_diffusion",
+    "label": "Diffusion",
+    "clause": "Put diffusion in the beam so the source size grows, lashes cast gentler shade, and hot spots bloom.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_grid",
+    "label": "Grid",
+    "clause": "Fit a grid so spill dies and the beam becomes a controlled oval on the face, walls staying dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_snoot",
+    "label": "Snoot",
+    "clause": "Snoot the source into a small circle so only an eye or a product highlight exists, the rest falling off.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_shaft",
+    "label": "Shaft",
+    "clause": "Cut a shaft through haze so a visible beam is architecture and motes travel inside it.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_volumetric",
+    "label": "Volumetric",
+    "clause": "Thicken the air with haze so every beam becomes a volume and the room is carved in light-solid.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_blinds_breakup",
+    "label": "Blinds Breakup",
+    "clause": "Let blinds throw bars across face and wall so the person is printed with the window's geometry.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_leaf_dapple",
+    "label": "Leaf Dapple",
+    "clause": "Let canopy holes dapple the person with moving coin-spots of sun and leaf-shaped shade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_water_caustics",
+    "label": "Water Caustics",
+    "clause": "Throw water caustics so wriggling bright veins crawl over face, tile, or hull.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_warm_key_cool_fill",
+    "label": "Warm Key Cool Fill",
+    "clause": "Key from an amber practical and fill the wells with window cyan so skin is honey on the key side and steel in the shade.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_motivated_mix",
+    "label": "Motivated Mix",
+    "clause": "Let every source on the face be justified by a visible lamp, window, or fire so nothing feels added.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_cameo",
+    "label": "Cameo",
+    "clause": "Light only the person against a dead-black field so they are a cameo and the room does not exist.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_limbo_white",
+    "label": "White Limbo",
+    "clause": "Surround with a seamless bright cyc so the person floats in tone, almost no horizon.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_noir_slash",
+    "label": "Noir Slash",
+    "clause": "Slash a barn-door bar across the eyes so the rest of the face is withheld in crime-story dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_cross_key",
+    "label": "Cross Key",
+    "clause": "Key two people from opposite sides so each is bright on the outer cheek and they share a dark middle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_top",
+    "label": "Top Light",
+    "clause": "Drop the key from directly above so eye sockets hollow, the nose becomes a sundial, and hair becomes a lid of brightness.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_underlight",
+    "label": "Underlight",
+    "clause": "Key from below so the brow ridges invert, the face becomes a mask, and ceilings catch the bounce.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_three_point",
+    "label": "Three-Point",
+    "clause": "Combine a key, a weaker fill, and a back edge so form, shade, and separation all read at once.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_one_point",
+    "label": "One-Point",
+    "clause": "Use a single source only so falloff is honest and the distant wall dies.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_back_halo",
+    "label": "Back Halo",
+    "clause": "Let a rear source bloom the hair into a luminous wreath while a whisper of front fill keeps the eyes.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_candle",
+    "label": "Candle",
+    "clause": "Key from a candle so the face becomes a small living island, flicker in the eyes, hands close to the flame.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_flashlight",
+    "label": "Flashlight",
+    "clause": "Key from a handheld torch so a bouncing disk of brightness hunts the room and the beam becomes a character.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_headlights",
+    "label": "Headlights",
+    "clause": "Key from vehicle headlights so the person is blasted from road level, long shadows thrown up a wall.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_signage",
+    "label": "Signage Glow",
+    "clause": "Let unmarked signage wash the face in saturated color so letters or shapes of the sign spill onto skin.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_fridge",
+    "label": "Fridge Glow",
+    "clause": "Open a fridge so the person is keyed by the cold interior, food silhouettes in the closer plane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_north_window",
+    "label": "North Window",
+    "clause": "Key from a north-facing window so the wrap is even and painterly, open shade without a sun patch.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_skylight_well",
+    "label": "Skylight Well",
+    "clause": "Key from a skylight well so a column of brightness hits the floor and faces enter or leave that column.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_ceiling_bounce",
+    "label": "Ceiling Bounce",
+    "clause": "Bounce the key off the ceiling so the room becomes a gentle downlight, eye sockets filled, lamps not visible as sources.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_wall_bounce",
+    "label": "Wall Bounce",
+    "clause": "Bounce off a side wall so the key arrives as a big vertical surface and one side of the nose is open.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_paper_lantern",
+    "label": "Paper Lantern",
+    "clause": "Key from a paper lantern so the source becomes a glowing orb in the pane and the wrap is omnidirectional and kind.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_bare_bulb",
+    "label": "Bare Bulb",
+    "clause": "Hang a bare bulb so it becomes a star in the pane, sharp shade, and the socket is part of the furniture.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_fresnel_spot",
+    "label": "Fresnel Spot",
+    "clause": "Spot with a fresnel so the beam has a crisp circle, barn-doorable edges, and theatrical falloff on the floor.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_projector_beam",
+    "label": "Projector Beam",
+    "clause": "Key from a projector so the face wears the image's color and dust lives in the throw.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_lightning",
+    "label": "Lightning",
+    "clause": "Light with a lightning flash so the scene becomes a single white instant, rain frozen, then implied dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_campfire",
+    "label": "Campfire",
+    "clause": "Circle a campfire so faces are orange islands in woods-dark, sparks rising through the pane.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_stove",
+    "label": "Stove",
+    "clause": "Key from a stove or burner so the cook's face is underlit by flame and pots throw copper bounce.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_vanity",
+    "label": "Vanity",
+    "clause": "Key from a bathroom vanity ring or strip so the mirror person is evenly frontal and tiles bounce white.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_interrogation",
+    "label": "Interrogation",
+    "clause": "Drop a single overhead practical so the table becomes a bright desk, faces sweat in a cone, corners of the room vanish.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_storefront",
+    "label": "Storefront Spill",
+    "clause": "Let a storefront spill onto the sidewalk so the person is half in shop-color and half in street dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_sunset_blinds",
+    "label": "Sunset Blinds",
+    "clause": "Let late sun through blinds so amber bars crawl the wall and the face is sliced by the same geometry.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_open_shade",
+    "label": "Open Shade",
+    "clause": "Stand the person in open shade so sky is the key, no sun patch, and color shifts slightly steel without going moonlit.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_desert_sun",
+    "label": "Desert Sun",
+    "clause": "Blast from a desert sun so bounce off sand fills from below, contrast is brutal, and squint is part of the face.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_forest_gloom",
+    "label": "Forest Gloom",
+    "clause": "Key a dim forest so trunks are dark columns, a clearing is the source, and moss eats bounce.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_underwater_blue",
+    "label": "Underwater Blue",
+    "clause": "Key underwater so caustics plus blue fill, the surface a bright lid, skin going cyan.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_night_window_ext",
+    "label": "Night Window Exterior",
+    "clause": "Shoot a person inside from outside after dark so the window becomes a diorama of tungsten and the street around it is black.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_fluorescent_office",
+    "label": "Fluorescent Office",
+    "clause": "Key from overhead office tubes so skin shifts slightly green-grey, ceiling tiles grid the bounce, and shadows are double.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_sodium_street",
+    "label": "Sodium Street",
+    "clause": "Bathe in sodium-vapor amber so the street is monochrome honey and other colors collapse.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_rain_wet_bounce",
+    "label": "Rain-Wet Bounce",
+    "clause": "Let wet pavement bounce sources back so faces get a second key from below and highlights streak.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_fog_street",
+    "label": "Fog Street",
+    "clause": "Mute sources with fog so each lamp becomes a glowing blob and the person appears as they enter a pool.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_smoke_volume",
+    "label": "Smoke Volume",
+    "clause": "Add smoke in layers so a doorway beam becomes a wall of brightness the person has to walk through.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_stained_glass",
+    "label": "Stained Glass",
+    "clause": "Key through stained glass so colored geometry paints the floor and the face wears patches of ruby and cobalt.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_aquarium",
+    "label": "Aquarium",
+    "clause": "Key from a tank so fish-shadows and a blue-green wash crawl the nearby cheek, the glass a practical.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_vending_glow",
+    "label": "Vending Glow",
+    "clause": "Key from a vending machine so the face is the color of the cabinet and rows of unmarked goods are the set.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_phone_key",
+    "label": "Phone Screen Key",
+    "clause": "Key from a phone screen so only the eyes and hands exist in a small rectangle of interface glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_laptop_key",
+    "label": "Laptop Key",
+    "clause": "Key from a laptop so the face is the page color, keyboard dim, and the room around the lid is gone.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_tv_flicker",
+    "label": "TV Flicker",
+    "clause": "Key from a television so the face pulses with scene changes and the sofa is an island in the dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_match_strike",
+    "label": "Match Strike",
+    "clause": "Light with a struck match so for a beat the face becomes a cave painting, then the flame settles in the fingers.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_oven",
+    "label": "Oven",
+    "clause": "Key from an open oven so the cook is underlit by the cavity, racks as bars, heat implied in the glow.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_silk_overhead",
+    "label": "Silk Overhead",
+    "clause": "Stretch a silk overhead so noon is tamed into a large even source, eyes open, ground shade still present but gentle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_neg_fill",
+    "label": "Negative Fill",
+    "clause": "Flag the fill side with black so the key stays, but the shadow cheek goes to velvet and cheekbone pops.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_rim_only",
+    "label": "Rim Only",
+    "clause": "Kill the key and keep only a rim so the person is an outline drawing against dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_beauty_hair",
+    "label": "Beauty and Hair",
+    "clause": "Combine even frontal beauty with a hair halo so fashion gloss and strand separation both read.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_split_kicker",
+    "label": "Split plus Kicker",
+    "clause": "Split the face and add a kicker on the dark side so the withheld cheek has a thin lifeline of edge.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_cool_key_warm_fill",
+    "label": "Cool Key Warm Fill",
+    "clause": "Key from a north sky and bounce a tungsten lamp into the shadow cheek so the lit plane is porcelain and the dark plane is candle.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_golden_rim_cool_shadow",
+    "label": "Golden Rim Cool Shadow",
+    "clause": "Rim with late-sun gold and let the front fill be blue shade so the outline is honey and the face is steel.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_blue_city_mix",
+    "label": "Blue Hour City Mix",
+    "clause": "Mix residual-sky cyan with shop practicals so the person is cyan on top and amber in the storefront spill.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_practicals_vs_blue_window",
+    "label": "Practicals vs Blue Window",
+    "clause": "Let table lamps win the faces while a blue window claims the back wall, two worlds in one room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_noon_bounce_fill",
+    "label": "Noon Bounce Fill",
+    "clause": "Keep overhead noon but bounce a card into the eye sockets so the brutal sun stays and the face remains readable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_overcast_practicals",
+    "label": "Overcast plus Practicals",
+    "clause": "Keep overcast sky-fill and add interior lamps so the room is even from the windows and honey from the fixtures.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_operating_room",
+    "label": "Operating Room",
+    "clause": "Flood from multiple overhead surgical sources so there are no hiding places, skin is clinical, steel specular.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_disco_breakup",
+    "label": "Mirror-Ball Breakup",
+    "clause": "Break the room with a mirror-ball so coins of light crawl walls and the dancer is spotted by moving dots.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_snow_bounce",
+    "label": "Snow Bounce",
+    "clause": "Let snow on the ground bounce sky back into faces so the undersides of brows are filled and the world is bright from below.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_hard_doorway_sun",
+    "label": "Doorway Sun",
+    "clause": "Let sun through a doorway so a rectangle of brightness becomes a solid on the floor and a person stepping through is ignited.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_skimming_side",
+    "label": "Skimming Side",
+    "clause": "Skim the key along the wall so texture of brick or plaster rakes and the person is half in that rake.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_beauty_fill_below",
+    "label": "Beauty Fill Below",
+    "clause": "Add a bounce just for beauty so eyelashes throw tiny shade upward and the under-eye is cleaned.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "pattern"
+    ]
+  },
+  {
+    "id": "lit_hair_and_edge",
+    "label": "Hair and Edge",
+    "clause": "Combine a hair halo with a shoulder edge so the whole outline is separated without lighting the shirt front.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_motivated_table_lamp",
+    "label": "Table-Lamp Key",
+    "clause": "Plant the key in a table lamp next to the person so the shade pattern prints on the wall and the closer cheek is the hot side.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_motivated_fireplace",
+    "label": "Fireplace Key",
+    "clause": "Key from a fireplace so the hearth is the source, faces orange toward it, backs going to room-dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_motivated_store",
+    "label": "Store Interior",
+    "clause": "Key from store-aisle overheads so rows of goods are the practicals and the person is shopper-lit, fluorescent and even.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_moon_through_trees",
+    "label": "Moon Through Trees",
+    "clause": "Let moonlight through trees so silver dapple moves on the face and the woods stay a black lace.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_overcast_beach",
+    "label": "Overcast Beach",
+    "clause": "Fill from overcast beach so sand becomes a giant bounce, sky is the key, and there is almost no eye-socket dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "time"
+    ]
+  },
+  {
+    "id": "lit_industrial_mix",
+    "label": "Industrial Mix",
+    "clause": "Mix greenish industrial tubes with a tungsten work lamp so the shed is two chemical colors.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_bathroom_mirror",
+    "label": "Bathroom Mirror",
+    "clause": "Key from a mirrored bathroom so the person is doubled, tiles specular, and the source is the vanity in the glass.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_car_interior_night",
+    "label": "Car Interior Night",
+    "clause": "Key a car interior after dark from dash glow and passing street pools so faces pulse as lamps go by.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_tent_diffusion",
+    "label": "Tent Diffusion",
+    "clause": "Surround with a diffusion tent so product or face is wrapped one-hundred-eighty degrees, speculars huge and polite.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_flagged_face",
+    "label": "Flagged Face",
+    "clause": "Flag the key so a barn-door or flag cuts the chest and only the face wears the beam.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_checkerboard_shadow",
+    "label": "Checkerboard Shadow",
+    "clause": "Throw a lattice or grate shadow so the body becomes a checkerboard of brightness and withheld squares.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_lace_curtain_breakup",
+    "label": "Lace Curtain",
+    "clause": "Let lace curtains print floral shade on the face so the window's fabric becomes a tattoo of light.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_water_reflection_up",
+    "label": "Water Bounce Up",
+    "clause": "Bounce a source off water so the ceiling and jaw get moving bright veins from below.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_amber_practical_pool",
+    "label": "Amber Practical Pool",
+    "clause": "Sit the person in a pool from an amber practical so they can step in or out of being lit, the rest of the room dead.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "motivated"
+    ]
+  },
+  {
+    "id": "lit_cyan_moon_edge",
+    "label": "Cyan Moon Edge",
+    "clause": "Put a cyan moon-edge on the profile so the outline is ice and the front of the face is almost unlit.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "edge"
+    ]
+  },
+  {
+    "id": "lit_dual_color_split",
+    "label": "Dual-Color Split",
+    "clause": "Split the face not only in brightness but in color, one cheek amber, the other cyan, the nose the border.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "color"
+    ]
+  },
+  {
+    "id": "lit_white_cyc_highkey",
+    "label": "White Cyc High-Key",
+    "clause": "Flood a white cyc so the person is almost shadowless, fashion-catalog bright, seams of clothes still readable.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_black_limbo_lowkey",
+    "label": "Black Limbo",
+    "clause": "Drop the surround to black so the person becomes a sculpted island, no set, only form.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "key"
+    ]
+  },
+  {
+    "id": "lit_rain_window_key",
+    "label": "Rain Window Key",
+    "clause": "Key from a rain-streaked window so the face wears moving rivulets of brightness and the pane is the source.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_welding_flash",
+    "label": "Welding Flash",
+    "clause": "Light with a welding flash so for a frame the shed is white, then the afterimage lives in the dark.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_headlamp_miner",
+    "label": "Headlamp",
+    "clause": "Key from a forehead lamp so the beam looks where the person looks, a disk of brightness on the task.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_porch_bug",
+    "label": "Porch Light",
+    "clause": "Key from a porch fixture so insects crowd the source, the face entering a yellow-white pool at the door.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_candle_multi",
+    "label": "Multi-Candle",
+    "clause": "Key from many candles so the table becomes a constellation of small sources, faces stitched from several directions.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "source"
+    ]
+  },
+  {
+    "id": "lit_venetian_bars",
+    "label": "Venetian Bars",
+    "clause": "Throw venetian slat-bars across a torso so the body becomes a musical staff of brightness, not a full window print on the wall.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_bounce_card_fill",
+    "label": "Bounce-Card Fill",
+    "clause": "Hold a white card just out of pane so the shadow cheek opens a stop without adding a second lamp in the set.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  },
+  {
+    "id": "lit_black_wrap",
+    "label": "Black Wrap",
+    "clause": "Wrap black around the key so spill dies on the walls and the face becomes a controlled island in a dark room.",
+    "still": "",
+    "wan_token": "",
+    "audio": "",
+    "still_ok": true,
+    "motion_ok": true,
+    "av_ok": true,
+    "conflicts": [],
+    "tags": [
+      "modifier"
+    ]
+  }
+]
