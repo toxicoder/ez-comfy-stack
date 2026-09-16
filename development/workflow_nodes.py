@@ -1029,7 +1029,7 @@ def encyclopedia() -> dict[str, Any]:
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the textarea."),
             _w("prompt", index=1, desc="Lazy motion sentence.", gen="I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent."),
             _w("enhance", index=2, typ="BOOLEAN", desc="Run the rewriter.", gen="Off on authored camera-verb graphs (orbit, push-in, gif-loop)."),
-            _w("mode", index=3, typ="COMBO", desc="System flavor.", gen="i2v is the smoke. t2v when LoadImage is bypassed. flf / vace for those opt-in graphs.", choices=[("t2v", "Text to silent video."), ("i2v", "Start image owns look; prompt is motion."), ("flf", "First-last-frame."), ("vace", "VACE join.")]),
+            _w("mode", index=3, typ="COMBO", desc="System flavor.", gen="i2v is the smoke. t2v when LoadImage is bypassed. flf / vace / s2v for those opt-in graphs.", choices=[("t2v", "Text to silent video."), ("i2v", "Start image owns look; prompt is motion."), ("flf", "First-last-frame."), ("vace", "VACE join."), ("s2v", "Speech-to-video; wav owns lip-sync.")]),
             _w("duration_hint", index=4, rng="5 seconds, 24 fps", desc="Duration/fps hint for the rewriter.", gen="Does not change latent length — Wan22ImageToVideoLatent does."),
             _w("style", index=5, typ="COMBO", rng="none", desc="Look reference. Ignored on I2V.", gen="Start frame owns look on I2V.", choices_from="styles"),
             _w("catalog", index=6, desc="Sample-catalog id.", gen="Leave as stamped."),
@@ -1045,7 +1045,7 @@ def encyclopedia() -> dict[str, Any]:
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the textarea."),
             _w("prompt", index=1, desc="Lazy sentence or authored LTX paragraph.", gen="I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in \"quotes\" only if you asked for speech."),
             _w("enhance", index=2, typ="BOOLEAN", desc="Run the rewriter.", gen="Off keeps authored film/shot text pinned."),
-            _w("mode", index=3, typ="COMBO", desc="t2v vs i2v system prompt.", gen="i2v when a start still is wired.", choices=[("t2v", "Text to AV."), ("i2v", "Start still owns look.")]),
+            _w("mode", index=3, typ="COMBO", desc="t2v vs i2v vs iclora system prompt.", gen="i2v when a start still is wired. iclora describes look, not the control type.", choices=[("t2v", "Text to AV."), ("i2v", "Start still owns look."), ("iclora", "Union Control look/materials; guide owns blocking.")]),
             _w("duration_hint", index=4, rng="5 seconds, 24 fps", desc="Duration hint.", gen="Does not set 121 frames — LTXVImgToVideo does."),
             _w("audio_notes", index=5, desc="World SFX / no-score policy.", gen="Lab 5 s printers ask for world SFX matching the start image, no score."),
             _w("style", index=6, typ="COMBO", rng="none", desc="Look reference. Ignored on I2V.", gen="Start frame owns look.", choices_from="styles"),
@@ -1063,7 +1063,66 @@ def encyclopedia() -> dict[str, Any]:
         widgets=[
             _w("prompt", index=0, desc="Negative seed (artifacts, not style).", gen="FLUX-family models do not use negatives well. Keep this short; put constraints in the positive."),
             _w("enhance", index=1, typ="BOOLEAN", desc="Rewrite using the positive as context.", gen="Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive."),
-            _w("family", index=2, typ="COMBO", desc="Which negative family.", gen="Must match the UNET on the canvas.", choices=[("klein", "Klein stills."), ("wan", "Wan silent."), ("ltx", "LTX AV.")]),
+            _w("family", index=2, typ="COMBO", desc="Which negative family.", gen="Must match the UNET on the canvas.", choices=[("klein", "Klein stills."), ("wan", "Wan silent."), ("ltx", "LTX AV."), ("zimage", "Z-Image Turbo (CFG 1; list is documentation)."), ("longcat", "LongCat-Video."), ("dreamx", "DreamX-Creator AV."), ("s2v", "Wan S2V; wav owns speech.")]),
+        ],
+    )
+    nodes["EZZimagePromptEnhance"] = _n(
+        "Z-Image Prompt Enhance",
+        "Rewrite a lazy still prompt for Z-Image Turbo (Qwen3-4B chat wrap).",
+        origin="ez_prompt_enhance",
+        lab="Turbo ignores a separate negative CLIP. Exclusions stay in the positive. No z_image_turbo UNET on lab graphs.",
+        sockets=[
+            _s("prompt", "STRING", "in", "Optional override of the widget."),
+            _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
+            _s("prompt", "STRING", "out", "String CLIP actually encodes."),
+        ],
+        widgets=[
+            _w("sample", index=0, typ="COMBO", rng="custom", desc="Lab sample prompt or Custom.", gen="Custom keeps the textarea."),
+            _w("prompt", index=1, desc="Lazy sentence or authored still prompt.", gen="When Enhance is on, the GGUF expands this into Z-Image sentences with in-prompt constraints."),
+            _w("enhance", index=2, typ="BOOLEAN", rng="on", desc="Run the rewriter.", gen="Off = encode the widget as-is (plus style suffix if set)."),
+            _w("duration_hint", index=3, desc="Framing hint (YouTube 16:9 still, …).", gen="Steers aspect language. Does not set the latent size."),
+            _w("style", index=4, typ="COMBO", rng="none", desc="Look reference woven into the CLIP prompt.", gen="none = off. Dropdown wins over style words already in the source.", choices_from="styles"),
+            _w("catalog", index=5, desc="Sample-catalog id (graph stem).", gen="Internal. Leave as stamped."),
+        ],
+    )
+    nodes["EZLongCatPromptEnhance"] = _n(
+        "LongCat Prompt Enhance",
+        "Rewrite a lazy prompt for LongCat-Video (T2V / I2V / continuation).",
+        origin="ez_prompt_enhance",
+        lab="No native audio. Standard CFG ~4; distilled CFG 1 ignores negatives. Optional stub preview on optional/longcat-video.",
+        sockets=[
+            _s("prompt", "STRING", "in", "Optional."),
+            _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
+            _s("prompt", "STRING", "out", "Motion string for CLIP."),
+        ],
+        widgets=[
+            _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the textarea."),
+            _w("prompt", index=1, desc="Lazy motion sentence.", gen="T2V is scene+motion+camera. I2V extends the still. vc continues previous frames."),
+            _w("enhance", index=2, typ="BOOLEAN", desc="Run the rewriter.", gen="Off pins the widget text."),
+            _w("mode", index=3, typ="COMBO", desc="System flavor.", gen="t2v on the stub. i2v / vc when start frames exist.", choices=[("t2v", "Text to video."), ("i2v", "Start image owns look."), ("vc", "Continue previous frames.")]),
+            _w("duration_hint", index=4, rng="5 seconds, 30 fps", desc="Duration/fps hint for the rewriter.", gen="Does not change latent length."),
+            _w("style", index=5, typ="COMBO", rng="none", desc="Look reference. Ignored on I2V/vc.", gen="Start frames own look on I2V/vc.", choices_from="styles"),
+            _w("catalog", index=6, desc="Sample-catalog id.", gen="Leave as stamped."),
+        ],
+    )
+    nodes["EZDreamXPromptEnhance"] = _n(
+        "DreamX Prompt Enhance",
+        "Rewrite a lazy first-frame+text prompt for DreamX-Creator (UMT5, joint AV).",
+        origin="ez_prompt_enhance",
+        lab="First frame owns look. Paragraph is visual dynamics plus interleaved acoustic events. No DreamX UNET on lab graphs — Prompt Forge preview only.",
+        sockets=[
+            _s("prompt", "STRING", "in", "Optional."),
+            _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
+            _s("prompt", "STRING", "out", "AV paragraph."),
+        ],
+        widgets=[
+            _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the textarea."),
+            _w("prompt", index=1, desc="Lazy sentence or authored AV paragraph.", gen="Do not restate the start-image look. Name motion and sound."),
+            _w("enhance", index=2, typ="BOOLEAN", desc="Run the rewriter.", gen="Off pins the widget text."),
+            _w("duration_hint", index=3, rng="5 seconds, 24 fps", desc="Duration hint.", gen="Lab takes are about 5 s at 24 fps."),
+            _w("audio_notes", index=4, desc="World SFX / no-score policy.", gen="Interleave with the action; do not dump a trailer."),
+            _w("style", index=5, typ="COMBO", rng="none", desc="Look reference. Ignored (start image owns look).", gen="Start frame owns look.", choices_from="styles"),
+            _w("catalog", index=6, desc="Sample-catalog id.", gen="Leave as stamped."),
         ],
     )
     nodes["EZAceStepPromptEnhance"] = _n(
