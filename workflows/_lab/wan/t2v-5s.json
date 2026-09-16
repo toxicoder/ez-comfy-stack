@@ -590,11 +590,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. The camera dollies in slowly toward the wizard over five seconds. Photoreal, physically plausible light, natural materials, 24mm, YouTube 16:9.",
         true,
         "t2v",
         "5 seconds, 24 fps",
-        "none"
+        "none",
+        "wan/t2v-5s"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -821,6 +823,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           15,
           "prompt",

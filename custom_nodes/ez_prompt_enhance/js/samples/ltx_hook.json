@@ -1,0 +1,102 @@
+[
+  {
+    "id": "cold-open",
+    "label": "Cold open",
+    "prompt": "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score."
+  },
+  {
+    "id": "snap-in",
+    "label": "Snap in",
+    "prompt": "The start image holds as the first frame. Camera snaps to the start-image subject with fast present-tense energy. A short aggressive push. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "drop-in",
+    "label": "Drop in",
+    "prompt": "The start image holds as the first frame. The frame drops in on the subject already in motion. Fast present-tense energy, then hold. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "turn-to-lens",
+    "label": "Turn to lens",
+    "prompt": "The start image holds as the first frame. The subject turns toward lens with bright eyes. Mouth closed. A short push-in. World SFX matching the start image. No speech. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "staff-flash",
+    "label": "Staff flash",
+    "prompt": "The start image holds as the first frame. Glyph rings flash once then settle. Hold then a short push. A glyph chime under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "cloak-snap",
+    "label": "Cloak snap",
+    "prompt": "The start image holds as the first frame. The cloak snaps in wind, then the frame holds. Fast energy, then hold. Wind matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "sprint-energy",
+    "label": "Sprint energy",
+    "prompt": "The start image holds as the first frame. Already-in-motion energy without leaving identity. Tracking energy, then hold. Footfalls and breath matching the start image. No speech. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "night-flash",
+    "label": "Night flash",
+    "prompt": "The start image holds as the first frame. Night practicals flare once. Snap energy, then hold. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rain-hit",
+    "label": "Rain hit",
+    "prompt": "The start image holds as the first frame. A rain sheet hits glass, then the subject holds. Snap energy, then hold. Rain matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "look-up",
+    "label": "Look up",
+    "prompt": "The start image holds as the first frame. The subject looks up fast, then holds. Mouth closed. Short push-in. World SFX matching the start image. No speech. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hands-free",
+    "label": "Hands free",
+    "prompt": "The start image holds as the first frame. Empty palms flash into frame, then settle. Snap energy, then hold. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "bay-reveal",
+    "label": "Bay reveal",
+    "prompt": "The start image holds as the first frame. A tiny pan reveals more bay, then holds. Fast pan, then hold. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "glyph-rise",
+    "label": "Glyph rise",
+    "prompt": "The start image holds as the first frame. Glyph motes rise once and settle. Hold. A glyph chime under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "wind-hit",
+    "label": "Wind hit",
+    "prompt": "The start image holds as the first frame. A wind hit pulls fabric, then settles. Snap, then hold. Wind matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "step-in",
+    "label": "Step in",
+    "prompt": "The start image holds as the first frame. One step into the lens, then hold. Short push with the step. A footfall under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "eye-catch",
+    "label": "Eye catch",
+    "prompt": "The start image holds as the first frame. Eyes catch the lens, then hold. Mouth closed. Short push-in. World SFX matching the start image. No speech. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "storm-open",
+    "label": "Storm open",
+    "prompt": "The start image holds as the first frame. Lightning far off, then the subject holds. Snap, then hold. Thunder far off under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "quiet-open",
+    "label": "Quiet open",
+    "prompt": "The start image holds as the first frame. Almost still, then one precise move. Hold, then a tiny push. Room tone matching the start image, then a tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "end-hold-hook",
+    "label": "End hold hook",
+    "prompt": "The start image holds as the first frame. Fast energy in the first seconds, last frames hold for the next shot. Snap then hold. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "vertical-energy",
+    "label": "Vertical energy",
+    "prompt": "The start image holds as the first frame. Vertical Shorts energy, subject large, then hold. Short push-in. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

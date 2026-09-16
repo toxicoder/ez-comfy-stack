@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nlog drum\ncamera up\nNill Bye tallying\n\n[verse]\nRake posed a gym selfie mid-rep\nLog drum knocking while he saved the step\nCamera up before the bar even moved\nI count the reps, you count the views\nShekere shake on a borrowed pump\nYour lats are a filter, your form is a dump\nNill Bye counting what the rack can prove\nHe smiles at a shutter he cannot move\nGuitar stab, the chalk is fake\nYou wanted a frame more than a break\nPose versus reps, the camera won\nGym selfie closed when the work's not done\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nYou curled a look for a story stack\nThen you racked the bar after one weak pack\nRake with a selfie before the sweat\nNill Bye logging the reps you forget\nLog drum low, the shutter clicks\nI want a set, you want a mix\nChalk on the hands, none on the bar\nYour pump is a costume, your form bizarre\nAfrobeat bounce, the plate is light\nYou lifted a lens, not a honest lift\nCamera before the work, that's the brand\nGym selfie dust on an unused stand\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nShekere ticks while you chase a angle\nI want a squat that can actually dangle\nNill Bye reading the unused rack\nRake still posing with a towel on his back\nGuitar stab, the rest is skipped\nYou sold a pump that the film had clipped\nReps unpaid, the selfie cashed\nI keep the count, you keep it mashed\nForm collapsed for a prettier crop\nThat's a gym selfie, not a drop\nPlate still cold, the shutter warm\nHe flexed a story, I flexed a form\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nRake at the mirror with the camera lit\nNill Bye posting the unpaid reps\nGym selfie first, the rack can idle\nYou wanted a like for a half-done plate\nLog drum fades, the chalk is dry\nI close the count, you ask me why\nShutter closed, the reps still due\nPose versus work, I pick the true\nAfrobeat out, the selfie wilts\nDo the set or lose the prize\nHe still hunting a flattering beam\nI rack the truth on a quieter team\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[outro]\nshutter closed\nreps unpaid\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/07-gym-selfie"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "afrobeat, log drum, guitar stab, shekere, male rap vocals, dry booth, no autotune, 110 bpm",
         "[intro]\nlog drum\ncamera up\nNill Bye tallying\n\n[verse]\nRake posed a gym selfie mid-rep\nLog drum knocking while he saved the step\nCamera up before the bar even moved\nI count the reps, you count the views\nShekere shake on a borrowed pump\nYour lats are a filter, your form is a dump\nNill Bye counting what the rack can prove\nHe smiles at a shutter he cannot move\nGuitar stab, the chalk is fake\nYou wanted a frame more than a break\nPose versus reps, the camera won\nGym selfie closed when the work's not done\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nYou curled a look for a story stack\nThen you racked the bar after one weak pack\nRake with a selfie before the sweat\nNill Bye logging the reps you forget\nLog drum low, the shutter clicks\nI want a set, you want a mix\nChalk on the hands, none on the bar\nYour pump is a costume, your form bizarre\nAfrobeat bounce, the plate is light\nYou lifted a lens, not a honest lift\nCamera before the work, that's the brand\nGym selfie dust on an unused stand\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nShekere ticks while you chase a angle\nI want a squat that can actually dangle\nNill Bye reading the unused rack\nRake still posing with a towel on his back\nGuitar stab, the rest is skipped\nYou sold a pump that the film had clipped\nReps unpaid, the selfie cashed\nI keep the count, you keep it mashed\nForm collapsed for a prettier crop\nThat's a gym selfie, not a drop\nPlate still cold, the shutter warm\nHe flexed a story, I flexed a form\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[verse]\nRake at the mirror with the camera lit\nNill Bye posting the unpaid reps\nGym selfie first, the rack can idle\nYou wanted a like for a half-done plate\nLog drum fades, the chalk is dry\nI close the count, you ask me why\nShutter closed, the reps still due\nPose versus work, I pick the true\nAfrobeat out, the selfie wilts\nDo the set or lose the prize\nHe still hunting a flattering beam\nI rack the truth on a quieter team\n\n[chorus]\nGym selfie\nCamera first, the reps can wait\nNill Bye on the counted set\nRake posed a plate for the bait\nAfrobeat truth, the shutter lied\nDo the work or lose the selfie\n\n[outro]\nshutter closed\nreps unpaid\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/07-gym-selfie"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

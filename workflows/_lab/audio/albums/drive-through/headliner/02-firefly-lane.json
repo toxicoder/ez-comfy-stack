@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "color bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
         "[drop - heavy color drop, trap 808 warp, chest wreck, grid 373 0]\n\n[inst - trap hats denser, color 808 sustain firefly, grid 373 1]\n\n[drop - harder stacked drop, chest color wreck, warped 808, grid 373 2]\n\n[drop - full send drop, dirty trap 808, formant wall, grid 373 3]\n\n[outro - kick holds, hats denser, color ride, grid 373 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/02-firefly-lane"
       ],
       "title": "ez_edm_prompt"
     },

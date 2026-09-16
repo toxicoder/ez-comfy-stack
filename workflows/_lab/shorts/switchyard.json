@@ -441,11 +441,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering.",
         false,
         "identity",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -1064,12 +1066,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The camera walks wet gravel between unmarked cars, rain ticking ballast. Breath sits in cold air under the lamp. Continuous walk, not a chase. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b1 s1 LTX I2V enhance"
     },
@@ -1650,12 +1654,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Breath fogs in cold air over puddles; generic lamps smear on black water. Rain, a distant coupling, and close breath continue. The camera keeps walking. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b1 s2 LTX I2V enhance"
     },
@@ -2236,12 +2242,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The walk stops between the first unmarked cars. Rain, gravel crunch dying out, breath. The camera holds the gap. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b1 s3 LTX I2V enhance"
     },
@@ -2822,12 +2830,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Between unmarked boxcars, gloves find a rusty ladder rail. Rain on steel and close breath. The camera eases toward the rail. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b2 s1 LTX I2V enhance"
     },
@@ -3408,12 +3418,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Gravel, puddles, then a coupling clank down the string of cars. Rain and breath sit under the metal. The camera holds the gap. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b2 s2 LTX I2V enhance"
     },
@@ -3994,12 +4006,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The view tilts up the ladder; the car stays unmarked, empty of lettering. Rain on steel and breath. Slow tilt, continuous take. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b2 s3 LTX I2V enhance"
     },
@@ -4580,12 +4594,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Gloves climb a generic boxcar ladder in the rain, rungs wet. Rungs, rain on steel, breath. The camera climbs with the hands. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b3 s1 LTX I2V enhance"
     },
@@ -5166,12 +5182,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The climb continues, gloves wet, the car still unmarked. Rungs, rain, breath. Camera keeps climbing. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b3 s2 LTX I2V enhance"
     },
@@ -5752,12 +5770,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Hands reach the roof edge in rain and wind. Wind, rain, breath. The camera arrives at the roof. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b3 s3 LTX I2V enhance"
     },
@@ -6338,12 +6358,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. A roof walk along the dark string of unmarked cars in rain. Rain, wind, breath. The camera walks the roof, slow. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b4 s1 LTX I2V enhance"
     },
@@ -6924,12 +6946,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. A distant generic horn answers far off the yard \u2014 not a carrier identity \u2014 while rain and breath stay close. The camera keeps the roof walk. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b4 s2 LTX I2V enhance"
     },
@@ -7510,12 +7534,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The roof walk ends; the view looks down. Wind, rain, breath. The camera holds the look-down. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b4 s3 LTX I2V enhance"
     },
@@ -8096,12 +8122,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Drop back to gravel, a puddle splash. Splash, gravel, rain, breath. The camera lands and walks. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b5 s1 LTX I2V enhance"
     },
@@ -8682,12 +8710,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Walk toward a yard-office window glow, the wall empty of lettering. Gravel, rain, breath. Continuous walk. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b5 s2 LTX I2V enhance"
     },
@@ -9268,12 +9298,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Window glow, still no readable sign, keep walking. Rain and breath. Continuous take. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b5 s3 LTX I2V enhance"
     },
@@ -9854,12 +9886,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Stop under a lamp. Rain ticks the lamp housing; breath steadies. The camera holds. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b6 s1 LTX I2V enhance"
     },
@@ -10440,12 +10474,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Look down the dark string of unmarked cars. Rain, distant metal, breath. Slow pan along the string. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b6 s2 LTX I2V enhance"
     },
@@ -11026,12 +11062,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. A quiet short laugh leaves the breath while rain keeps ticking the lamp. The camera holds the dark string of cars. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/switchyard"
       ],
       "title": "b6 s3 LTX I2V enhance"
     },
@@ -15543,6 +15581,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          11,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           11,
           "prompt",

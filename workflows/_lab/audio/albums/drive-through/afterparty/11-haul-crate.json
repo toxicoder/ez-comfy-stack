@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, festival trap, trap 808, dirty bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 170 bpm",
         "[drop - heavy hybrid drop, trap 808 wreck, warped crate, grid 521 0]\n\n[inst - trap hats roll, 808 slide, grid 521 1]\n\n[drop - harder growl drop, stacked trap bass, chest formant, grid 521 2]\n\n[inst - snare roll, chest 808 punch, grid 521 3]\n\n[drop - full send drop, chest 808 wall, hybrid warp, grid 521 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 521 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/11-haul-crate"
       ],
       "title": "ez_edm_prompt"
     },

@@ -460,11 +460,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Palms and unmarked glass towers recede toward a bright bay. Shot on a 24mm lens at eye level, framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.",
         true,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "klein/still-hero"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -637,6 +639,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           12,
           "prompt",

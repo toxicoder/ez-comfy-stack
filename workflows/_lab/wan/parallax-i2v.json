@@ -590,11 +590,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Subtle parallax from the start still. Foreground drifts a hair left, background holds. Locked framing, Ken Burns-like depth, identity locked. One continuous ~5 s take. Keep every object and surface from the start image; do not redesign.",
         false,
         "i2v",
         "5 seconds, 24 fps",
-        "none"
+        "none",
+        "wan/parallax-i2v"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -831,6 +833,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           15,
           "prompt",

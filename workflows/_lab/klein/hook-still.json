@@ -422,11 +422,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still vertical hook still for Shorts. First-frame energy: an original techno wizard fills the lower third mid-stride on a tropical rooftop terrace at golden hour. Tight 9:16, caption headroom at the top. Warm gold-cyan holographic glyph rings, empty of lettering.",
         true,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "klein/hook-still"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -650,6 +652,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          11,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           11,
           "prompt",

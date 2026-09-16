@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
         "[drop - heavy chest drop, trap sub wreck, warped 808, grid 443 0]\n\n[inst - trap hats denser, chest 808 hold, grid 443 1]\n\n[drop - harder chest drop, dual-action pedal bass, stacked 808 warp, grid 443 2]\n\n[inst - pedal 808 hold, hats roll, grid 443 3]\n\n[drop - full send drop, body chest wreck, trap warp, grid 443 4]\n\n[inst - hats denser, 808 punch, grid 443 5]\n\n[drop - harder stacked drop, trap 808 wreck, chest formant, grid 443 6]\n\n[drop - full send drop, chest sub wreck, warped pedal, grid 443 7]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 443 8]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/14-root-chest"
       ],
       "title": "ez_edm_prompt"
     },

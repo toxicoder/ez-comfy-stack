@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nrapid hats\ndark pads\nNill Bye calling roll\n\n[verse]\nState orders, not federal orders\nNo GI bill, no survivor guarantee at first\nAbbott put the Guard on a forever detail\nJobs paused, families on hold, pay late\nNill Bye calling roll on a quiet list\nTwelve to seventeen dead, none in a firefight\nSuicide, wreck, a negligent discharge\nA parking lot in San Antonio\nJoshua had a dream job waiting\nThe exemption never came\nYou deployed a kid and called it elite\nThe roster paid in quiet ways\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nBishop Evans went into the Rio\nTwo people in the current, he went after them\nAbbott's river policy said hold the bank\nThe soldier said hold the person\nNill Bye keeping Bishop on the detail\nThe House later named a benefit bill for him\nTroopers already had the half-million\nGuard families had to beg the same\nYou will pose with a C-17 of tin soldiers\nChicago-bound, riot shields, a caption\nEver ready, deploying now\nReady for a camera, late for a death benefit\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nDajuan, nineteen, a negligent round\nTraining and kit that did not match the speech\nAbbott likes the elite Texas National Guard slogan\nThe camps had pay problems and dirty water\nNill Bye mad at a detail with no care\nInvoluntary call-ups until the department blinked\nThousands sent home after the damage\nThe mission still hungry for bodies\nA soldier is not a sandbag\nA state order is not a career\nYou borrowed a life and underwrote it cheap\nThe trap kit cannot hide the roll\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nTexas Monthly asked where the soldiers went\nThe answer is a parking lot, a river, a barracks\nNill Bye posting the Guard detail\nAbbott still boarding planes for other cities\nA caption on a Globemaster is not a eulogy\nA shield is not a stipend\nI want the roster home\nYou want the roster in the shot\nSeventeen is not a rumor\nIt is a cost you will not read on a stump\nKeep the hats, lose the forever call-up\nThe detail already came due\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[outro]\nhats fade\nroll closed\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/04-guard-detail"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune, 145 bpm",
         "[intro]\nrapid hats\ndark pads\nNill Bye calling roll\n\n[verse]\nState orders, not federal orders\nNo GI bill, no survivor guarantee at first\nAbbott put the Guard on a forever detail\nJobs paused, families on hold, pay late\nNill Bye calling roll on a quiet list\nTwelve to seventeen dead, none in a firefight\nSuicide, wreck, a negligent discharge\nA parking lot in San Antonio\nJoshua had a dream job waiting\nThe exemption never came\nYou deployed a kid and called it elite\nThe roster paid in quiet ways\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nBishop Evans went into the Rio\nTwo people in the current, he went after them\nAbbott's river policy said hold the bank\nThe soldier said hold the person\nNill Bye keeping Bishop on the detail\nThe House later named a benefit bill for him\nTroopers already had the half-million\nGuard families had to beg the same\nYou will pose with a C-17 of tin soldiers\nChicago-bound, riot shields, a caption\nEver ready, deploying now\nReady for a camera, late for a death benefit\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nDajuan, nineteen, a negligent round\nTraining and kit that did not match the speech\nAbbott likes the elite Texas National Guard slogan\nThe camps had pay problems and dirty water\nNill Bye mad at a detail with no care\nInvoluntary call-ups until the department blinked\nThousands sent home after the damage\nThe mission still hungry for bodies\nA soldier is not a sandbag\nA state order is not a career\nYou borrowed a life and underwrote it cheap\nThe trap kit cannot hide the roll\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[verse]\nTexas Monthly asked where the soldiers went\nThe answer is a parking lot, a river, a barracks\nNill Bye posting the Guard detail\nAbbott still boarding planes for other cities\nA caption on a Globemaster is not a eulogy\nA shield is not a stipend\nI want the roster home\nYou want the roster in the shot\nSeventeen is not a rumor\nIt is a cost you will not read on a stump\nKeep the hats, lose the forever call-up\nThe detail already came due\n\n[chorus]\nGuard detail\nNill Bye on the state order\nAbbott sent them far from home\nSeventeen non-combat, some by their own hand\nBishop drowned on a rescue\nYour mission ate the roster\n\n[outro]\nhats fade\nroll closed\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/04-guard-detail"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

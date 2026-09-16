@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nmetronome\ncardiac tick\nNill Bye ticking\n\n[verse]\nSB eight, May twenty-twenty-one\nHeartbeat Act with a bounty clause\nAny stranger can file the suit\nVigilantes with a civil docket-fee\nAbbott signed a six week clock\nCardiac tick as a tripwire\nNill Bye pacing the clinic math\nMost people don't know yet\nJohns Hopkins counted extra births\nTen thousand that could not leave\nInfant deaths ticked with anomalies\nYour heartbeat bill wrote a body-tax\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nHB twelve-eighty pulled the trigger-ban\nAugust twenty-five, twenty-twenty-two\nFelony for the doctor, life on the table\nHundred-thousand civil on the side\nAbbott called it a major trophy\nPatients called it a delay-trap\nNill Bye reading Zurawski\nSupreme Court left the chill intact\nDallas mother, trisomy eighteen\nDistrict said go, high court said no\nShe left Texas to stay alive\nYour exception failed the emergency\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nProPublica counted the sepsis spike\nFifty percent after the six week clock\nMaternal hospital deaths jumped hard\nNation down, Texas up a third\nAbbott still selling the emergency clause\nDoctors wait until the chart is crashing\nNill Bye noting the delayed D-and-C\nFertility lost to a statute fog\nMangrum tried to clear the ER\nThe state appealed the oxygen\nA bounty is not a medical board\nYou outsourced care to a lawsuit\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nLife of the Mother Act came late\nAfter the obituaries made the case\nNill Bye still on the six week clock\nAbbott still posing with the heartbeat\nTravel is not a health plan\nA felony is not a bedside manner\nYou banned the procedure, kept the risk\nThen blamed the doctor for the pause\nI time the cardiac, you time the PACs\nSB eight is a snitch statute\nHB twelve-eighty is the cage\nYour clock runs out on the patient\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[outro]\ntick stop\nbounty cold\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/03-six-week-clock"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth, no autotune, 90 bpm",
         "[intro]\nmetronome\ncardiac tick\nNill Bye ticking\n\n[verse]\nSB eight, May twenty-twenty-one\nHeartbeat Act with a bounty clause\nAny stranger can file the suit\nVigilantes with a civil docket-fee\nAbbott signed a six week clock\nCardiac tick as a tripwire\nNill Bye pacing the clinic math\nMost people don't know yet\nJohns Hopkins counted extra births\nTen thousand that could not leave\nInfant deaths ticked with anomalies\nYour heartbeat bill wrote a body-tax\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nHB twelve-eighty pulled the trigger-ban\nAugust twenty-five, twenty-twenty-two\nFelony for the doctor, life on the table\nHundred-thousand civil on the side\nAbbott called it a major trophy\nPatients called it a delay-trap\nNill Bye reading Zurawski\nSupreme Court left the chill intact\nDallas mother, trisomy eighteen\nDistrict said go, high court said no\nShe left Texas to stay alive\nYour exception failed the emergency\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nProPublica counted the sepsis spike\nFifty percent after the six week clock\nMaternal hospital deaths jumped hard\nNation down, Texas up a third\nAbbott still selling the emergency clause\nDoctors wait until the chart is crashing\nNill Bye noting the delayed D-and-C\nFertility lost to a statute fog\nMangrum tried to clear the ER\nThe state appealed the oxygen\nA bounty is not a medical board\nYou outsourced care to a lawsuit\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[verse]\nLife of the Mother Act came late\nAfter the obituaries made the case\nNill Bye still on the six week clock\nAbbott still posing with the heartbeat\nTravel is not a health plan\nA felony is not a bedside manner\nYou banned the procedure, kept the risk\nThen blamed the doctor for the pause\nI time the cardiac, you time the PACs\nSB eight is a snitch statute\nHB twelve-eighty is the cage\nYour clock runs out on the patient\n\n[chorus]\nSix week clock\nNill Bye times the bounty\nAbbott signed the heartbeat\nPrivate suit, public scare\nDoctors freeze, mothers travel\nYour exception was a fog-bank\n\n[outro]\ntick stop\nbounty cold\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/03-six-week-clock"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

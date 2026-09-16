@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ngated pads\nrolling bass\nNill Bye arranging\n\n[verse]\nInvasion is a word with a legal weight\nHe hung it on a migration flow\nAbbott needed a hymn that licenses force\nSo a crossing became a campaign of occupation\nNill Bye arranging the gated pads\nWhen the numbers peaked, the word was a megaphone\nWhen the numbers fell, the word stayed\nA trance that cannot find the down button\nYou upgraded a headline into a wartime presser\nA noun upgraded so the stamp could widen\nRhetoric is a force multiplier\nIt multiplies troopers, not facts\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nLifted key, ugly lyric\nHands in the air for a phantom occupier\nAbbott still conducting the invasion hymn\nAfter the peak, after the White House flip\nNill Bye mad at a song that cannot end\nBecause ending would end the appropriation\nA hymn with no final cadence is a tool\nNot a description\nYou don't demobilize a feeling\nYou demobilize a unit\nThe feeling is cheaper to keep\nSo the pads keep lifting a false war\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nPeople at a river are not an army\nYou stacked the claim until it funded itself\nAbbott talks denial of smugglers as if the hymn did it\nHRW said the aim failed and the harms did not\nNill Bye filing the rhetoric\nA rolling bass under a stretched word\nWar language gets you Guard, wire, buoys, buses\nCensus language gets you process\nYou picked war\nThen you picked it again every month\nA pickup fill into a drop that never resolves\nBecause resolution is a budget cut\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nTrance wants a lift. You want a forever lift\nHands up for a crisis that prints\nNill Bye posting the invasion hymn\nAbbott still sure a noun can be a mission\nA noun is not a mission\nA crossing is not an occupation\nI want a fact, you want a choir\nI want a peak acknowledged as a peak\nKeep the pads, lose the war-paint\nThe hymn already told on the spend\nIt was never about a map of armies\nIt was about a map of appropriations\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[outro]\npads fade\nhymn holds\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/14-invasion-hymn"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth, no autotune, 138 bpm",
         "[intro]\ngated pads\nrolling bass\nNill Bye arranging\n\n[verse]\nInvasion is a word with a legal weight\nHe hung it on a migration flow\nAbbott needed a hymn that licenses force\nSo a crossing became a campaign of occupation\nNill Bye arranging the gated pads\nWhen the numbers peaked, the word was a megaphone\nWhen the numbers fell, the word stayed\nA trance that cannot find the down button\nYou upgraded a headline into a wartime presser\nA noun upgraded so the stamp could widen\nRhetoric is a force multiplier\nIt multiplies troopers, not facts\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nLifted key, ugly lyric\nHands in the air for a phantom occupier\nAbbott still conducting the invasion hymn\nAfter the peak, after the White House flip\nNill Bye mad at a song that cannot end\nBecause ending would end the appropriation\nA hymn with no final cadence is a tool\nNot a description\nYou don't demobilize a feeling\nYou demobilize a unit\nThe feeling is cheaper to keep\nSo the pads keep lifting a false war\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nPeople at a river are not an army\nYou stacked the claim until it funded itself\nAbbott talks denial of smugglers as if the hymn did it\nHRW said the aim failed and the harms did not\nNill Bye filing the rhetoric\nA rolling bass under a stretched word\nWar language gets you Guard, wire, buoys, buses\nCensus language gets you process\nYou picked war\nThen you picked it again every month\nA pickup fill into a drop that never resolves\nBecause resolution is a budget cut\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[verse]\nTrance wants a lift. You want a forever lift\nHands up for a crisis that prints\nNill Bye posting the invasion hymn\nAbbott still sure a noun can be a mission\nA noun is not a mission\nA crossing is not an occupation\nI want a fact, you want a choir\nI want a peak acknowledged as a peak\nKeep the pads, lose the war-paint\nThe hymn already told on the spend\nIt was never about a map of armies\nIt was about a map of appropriations\n\n[chorus]\nInvasion hymn\nNill Bye on the rhetoric\nAbbott sings a war into a crossing\nPeak years used as a forever verse\nA word stretched to fund a force\nYour trance is a recruitment tape\n\n[outro]\npads fade\nhymn holds\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/14-invasion-hymn"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

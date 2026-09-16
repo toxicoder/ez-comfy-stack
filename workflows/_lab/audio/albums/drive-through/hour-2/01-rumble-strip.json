@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
         "[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0]\n\n[inst - trap hats roll, 808 slide, grid 271 1]\n\n[drop - harder growl drop, dual-action pedal bass, stacked warp, grid 271 2]\n\n[inst - pedal 808 hold, hats denser, grid 271 3]\n\n[drop - full send drop, low rumble wreck, chest formant, grid 271 4]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 271 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/01-rumble-strip"
       ],
       "title": "ez_edm_prompt"
     },

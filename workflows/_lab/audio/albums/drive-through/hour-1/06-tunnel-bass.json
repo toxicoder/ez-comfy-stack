@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dirty bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy dirty drop, industrial 808 warp, formant wreck, grid 257 0]\n\n[drop - harder growl drop, dual-action pedal bass, chest punch, grid 257 1]\n\n[inst - trap hats roll, pedal 808 hold, grid 257 2]\n\n[drop - full send drop, chest sub wreck, warped rumble, grid 257 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 257 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/06-tunnel-bass"
       ],
       "title": "ez_edm_prompt"
     },

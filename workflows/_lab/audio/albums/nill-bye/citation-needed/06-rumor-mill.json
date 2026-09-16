@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nmetal percussion\nmill turning\nNill Bye weighing\n\n[verse]\nRake fed the rumor mill a boast\nMetal percussion on a gossip roast\nHopper full of a second-hand yarn\nI weigh the grain, you weigh the sale\nDistorted bass on a conveyor fib\nYou ground a whisper into a supply\nNill Bye weighing what the mill spat out\nHe smiles at a rumor he cannot route\nTurbine hums, the sprocket slips\nYour cool is a grind with no receipts\nIndustrial hop, the press is loud-ish\nMeasurement waits while the gossip rushes\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nYou poured a whisper into the hopper\nThen you danced when the rumor got proper\nRake at the mill with a borrowed crank\nNill Bye stopping the gear in a clank\nMetal on metal, the gossip thins\nI want a mass, you want a win's\nConveyor jammed on a recycled quote\nYou sold a grind as a measured blip\nRumor mill closed when the scale is true\nYour hopper empty, the sprocket chewed\nWeigh the grain or kill the press\nIndustrial truth, the rest is mess\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nTurbine rumor versus a weighed-out gram\nYou wanted a mill more than a exam\nNill Bye filing the measured grind\nRake still feeding the hopper blind\nDistorted bass, the gear is stripped\nYour gossip crop is a factory script\nSprocket stalls, the conveyor seizes\nI log a mass, you log a prize\nRumor mill is a mill, not a proofing\nYou ground a nothing into a roofing\nPress goes quiet, the hopper yawns\nHe still cranking for leftover dawns\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nRake at the jammed mill hatch\nNill Bye posting the weigh-in score\nGossip ground till the turbine seized\nYou wanted a legend the scale just teased\nIndustrial hop, the sprocket rusts\nI keep the mass, you keep the gusts\nHopper empty, the rumor starved\nYour mill ran hot and the claim got carved\nMetal percussion, the press is done\nMeasurement wins, the gossip's none\nHe still oiling a silent gear\nRumor mill closed, disappear\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[outro]\nmill jammed\nrumor weighed\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/06-rumor-mill"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry booth, no autotune, 108 bpm",
         "[intro]\nmetal percussion\nmill turning\nNill Bye weighing\n\n[verse]\nRake fed the rumor mill a boast\nMetal percussion on a gossip roast\nHopper full of a second-hand yarn\nI weigh the grain, you weigh the sale\nDistorted bass on a conveyor fib\nYou ground a whisper into a supply\nNill Bye weighing what the mill spat out\nHe smiles at a rumor he cannot route\nTurbine hums, the sprocket slips\nYour cool is a grind with no receipts\nIndustrial hop, the press is loud-ish\nMeasurement waits while the gossip rushes\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nYou poured a whisper into the hopper\nThen you danced when the rumor got proper\nRake at the mill with a borrowed crank\nNill Bye stopping the gear in a clank\nMetal on metal, the gossip thins\nI want a mass, you want a win's\nConveyor jammed on a recycled quote\nYou sold a grind as a measured blip\nRumor mill closed when the scale is true\nYour hopper empty, the sprocket chewed\nWeigh the grain or kill the press\nIndustrial truth, the rest is mess\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nTurbine rumor versus a weighed-out gram\nYou wanted a mill more than a exam\nNill Bye filing the measured grind\nRake still feeding the hopper blind\nDistorted bass, the gear is stripped\nYour gossip crop is a factory script\nSprocket stalls, the conveyor seizes\nI log a mass, you log a prize\nRumor mill is a mill, not a proofing\nYou ground a nothing into a roofing\nPress goes quiet, the hopper yawns\nHe still cranking for leftover dawns\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[verse]\nRake at the jammed mill hatch\nNill Bye posting the weigh-in score\nGossip ground till the turbine seized\nYou wanted a legend the scale just teased\nIndustrial hop, the sprocket rusts\nI keep the mass, you keep the gusts\nHopper empty, the rumor starved\nYour mill ran hot and the claim got carved\nMetal percussion, the press is done\nMeasurement wins, the gossip's none\nHe still oiling a silent gear\nRumor mill closed, disappear\n\n[chorus]\nRumor mill\nGossip ground till the hopper jammed\nNill Bye on the measured grind\nRake fed the mill and got slammed\nIndustrial truth, the sprocket stalls\nWeigh the claim or leave the mill\n\n[outro]\nmill jammed\nrumor weighed\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/06-rumor-mill"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

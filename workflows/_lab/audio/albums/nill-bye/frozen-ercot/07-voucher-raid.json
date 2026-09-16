@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nfiddle scrape\nNill Bye totaling\n\n[verse]\nJeff Yass wired ten million in\nPennsylvania money for a Texas raid\nAbbott spent it beating rural GOP\nMembers who would not loot the district\nNill Bye totaling the primary corpses\nHearst said his win rate near four-fifths\nBailes got buried in a TV flood\nBorder ads on a voucher errand\nYou called it school choice\nIt was a loyalty test with a checkbook\nRural districts bleed enrollment\nThe ESA follows the already-private kid\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nWho uses the account first?\nFamilies already in the pew school\nAbbott sold it as a rescue\nThe spreadsheet sold it as a subsidy\nNill Bye reading the invite list\nPublic campuses lose the unit funding\nA raid dressed as a parent bill of rights\nChristian schools first in line for the draw\nYou primary a Republican for the kids\nThen you steer the kids off the public roll\nThat is not a market, that is a transfer\nThe donor got the policy he bought\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nTwenty-three you lost a House vote\nSo you took the fight to the primary\nAbbott made the voucher the litmus\nEducation became a purge instrument\nNill Bye mad at a bought caucus\nCountry fiddle on a Capitol errand\nLocal boards gutted by a governor's PAC\nThen told they failed the children\nYou cannot starve a campus and praise it\nYou cannot raid it and call it choice\nESA is a pipe from the tax roll\nTo a sector that does not take every child\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nHinojosa ran on the public school\nYou ran on the Yass receipt\nNill Bye posting the voucher raid\nAbbott still calling it freedom\nFreedom for the campus that can select\nA bill for the kid who already left\nI want a school that must take the student\nYou want a ledger that can refuse\nTen million bought a legislature\nThe classroom paid the invoice\nKeep Yass's name on the caption\nThe raid should wear its funder\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[outro]\nfiddle rest\nESA open\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/07-voucher-raid"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autotune, 100 bpm",
         "[intro]\nfiddle scrape\nNill Bye totaling\n\n[verse]\nJeff Yass wired ten million in\nPennsylvania money for a Texas raid\nAbbott spent it beating rural GOP\nMembers who would not loot the district\nNill Bye totaling the primary corpses\nHearst said his win rate near four-fifths\nBailes got buried in a TV flood\nBorder ads on a voucher errand\nYou called it school choice\nIt was a loyalty test with a checkbook\nRural districts bleed enrollment\nThe ESA follows the already-private kid\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nWho uses the account first?\nFamilies already in the pew school\nAbbott sold it as a rescue\nThe spreadsheet sold it as a subsidy\nNill Bye reading the invite list\nPublic campuses lose the unit funding\nA raid dressed as a parent bill of rights\nChristian schools first in line for the draw\nYou primary a Republican for the kids\nThen you steer the kids off the public roll\nThat is not a market, that is a transfer\nThe donor got the policy he bought\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nTwenty-three you lost a House vote\nSo you took the fight to the primary\nAbbott made the voucher the litmus\nEducation became a purge instrument\nNill Bye mad at a bought caucus\nCountry fiddle on a Capitol errand\nLocal boards gutted by a governor's PAC\nThen told they failed the children\nYou cannot starve a campus and praise it\nYou cannot raid it and call it choice\nESA is a pipe from the tax roll\nTo a sector that does not take every child\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[verse]\nHinojosa ran on the public school\nYou ran on the Yass receipt\nNill Bye posting the voucher raid\nAbbott still calling it freedom\nFreedom for the campus that can select\nA bill for the kid who already left\nI want a school that must take the student\nYou want a ledger that can refuse\nTen million bought a legislature\nThe classroom paid the invoice\nKeep Yass's name on the caption\nThe raid should wear its funder\n\n[chorus]\nVoucher raid\nNill Bye on the ESA\nAbbott spent the out-of-state cash\nRural schools took the raid\nPublic dollars, private pews\nYour choice was a donor errand\n\n[outro]\nfiddle rest\nESA open\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/07-voucher-raid"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

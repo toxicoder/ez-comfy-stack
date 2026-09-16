@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chest bass, warped bass, trap hats, stacked 808, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
         "[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]\n\n[inst - trap hats denser, chest 808 hold, grid 571 1]\n\n[drop - full send drop, body chest wreck, warped 808, grid 571 2]\n\n[outro - kick holds, trap hats roll, chest ride, grid 571 3]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/18-asphalt-heart"
       ],
       "title": "ez_edm_prompt"
     },

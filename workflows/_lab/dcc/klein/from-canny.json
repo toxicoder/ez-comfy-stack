@@ -463,11 +463,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Keep the line-art silhouette, camera, and layout from the start image. Finish as a photoreal still inside those edges. Unmarked surfaces. Do not invent new geometry.",
         true,
         "edit",
         "YouTube 16:9 still from line art",
-        "none"
+        "none",
+        "dcc/klein/from-canny"
       ],
       "title": "Klein Prompt Enhance (edit)"
     },
@@ -755,6 +757,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           12,
           "prompt",

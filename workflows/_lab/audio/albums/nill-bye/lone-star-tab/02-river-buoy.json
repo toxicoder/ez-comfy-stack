@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ndistorted 808\nlaser hats\nNill Bye sounding\n\n[verse]\nEagle Pass, a string of orange buoys\nSaw-bladed, chained, a floating barrier\nAbbott planted a river buoy\nIn a channel that kills without help\nNill Bye sounding the current\nSeventy thousand rolls of concertina\nPeople snagged in wire, turned back to the current\nA barrier designed to injure the crossing\nWashington asked a court to pull them\nYou dared the feds to come get the chain\nRage hats on a cruelty gadget\nYour sovereignty is a snag-hook\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nThe Rio Grande is not a moat you own alone\nIt is a boundary with a treaty and a flow\nAbbott treated it like a prop table\nBuoys for the cameras, wire for the feet\nNill Bye mad at a floating barrier\nA child in the current does not parse jurisdiction\nYou wrote a presser on a drowning risk\nThen called the risk a feature\nDOJ filed, you appealed, the orange stayed\nA standoff as a product\nInjury is the metric you will not print\nThe river prints it anyway\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nConcertina on the bank like a thicket\nTroopers told to hold the line, not the person\nAbbott's memo: don't assist the crossing\nHold the line, not the person in the current\nNill Bye holding the cruelty gadget\nA policy written to make the river worse\nYou engineered a snag and called it security\nA saw-tooth is not a code-book\nA chain is not a hearing\nThe current was already the danger\nYou added teeth because the photo needed teeth\nRage drop, no mercy in the mix\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nCourts can yank a buoy\nThey cannot yank the intent\nNill Bye posting the river buoy\nAbbott still standing on the bank for the lens\nA floating wall that does not stop a presser\nIt stops a person who cannot swim the extra yard\nI want a border with a process\nYou want a border with a laceration\nOrange in the channel, red in the briefing\nKeep the distortion, lose the saw\nThe river was a river\nYou made it a trap\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[outro]\nhats ring\nchain stays\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/02-river-buoy"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 bpm",
         "[intro]\ndistorted 808\nlaser hats\nNill Bye sounding\n\n[verse]\nEagle Pass, a string of orange buoys\nSaw-bladed, chained, a floating barrier\nAbbott planted a river buoy\nIn a channel that kills without help\nNill Bye sounding the current\nSeventy thousand rolls of concertina\nPeople snagged in wire, turned back to the current\nA barrier designed to injure the crossing\nWashington asked a court to pull them\nYou dared the feds to come get the chain\nRage hats on a cruelty gadget\nYour sovereignty is a snag-hook\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nThe Rio Grande is not a moat you own alone\nIt is a boundary with a treaty and a flow\nAbbott treated it like a prop table\nBuoys for the cameras, wire for the feet\nNill Bye mad at a floating barrier\nA child in the current does not parse jurisdiction\nYou wrote a presser on a drowning risk\nThen called the risk a feature\nDOJ filed, you appealed, the orange stayed\nA standoff as a product\nInjury is the metric you will not print\nThe river prints it anyway\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nConcertina on the bank like a thicket\nTroopers told to hold the line, not the person\nAbbott's memo: don't assist the crossing\nHold the line, not the person in the current\nNill Bye holding the cruelty gadget\nA policy written to make the river worse\nYou engineered a snag and called it security\nA saw-tooth is not a code-book\nA chain is not a hearing\nThe current was already the danger\nYou added teeth because the photo needed teeth\nRage drop, no mercy in the mix\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[verse]\nCourts can yank a buoy\nThey cannot yank the intent\nNill Bye posting the river buoy\nAbbott still standing on the bank for the lens\nA floating wall that does not stop a presser\nIt stops a person who cannot swim the extra yard\nI want a border with a process\nYou want a border with a laceration\nOrange in the channel, red in the briefing\nKeep the distortion, lose the saw\nThe river was a river\nYou made it a trap\n\n[chorus]\nRiver buoy\nNill Bye on the floating wall\nAbbott put saw-teeth in the current\nRazor on the bank, orange in the channel\nDOJ sued, the river still cut\nYour deterrent is a snag\n\n[outro]\nhats ring\nchain stays\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/02-river-buoy"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

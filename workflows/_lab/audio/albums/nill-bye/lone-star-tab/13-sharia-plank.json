@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nreverse bass\nkick split\nNill Bye hearing\n\n[verse]\nSeptember ten, twenty-twenty-six, RNC in Dallas\nMidterm convention, a friendly chamber\nAbbott vowed to ban Sharia Law in Texas\nAs if a neighbor's faith were on the ballot\nNill Bye hearing the plank\nThe Constitution already does that job\nYou don't need a new ban to keep Texas code\nYou need a crowd that wants a villain\nHardstyle kick on a ghost threat\nA reverse bass under a phantom code\nTexas courts already apply Texas code\nYour plank is a scare looking for a section\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nSame night: common sense versus crazy\nA buffet of villains, one mic, one grin\nAbbott stacked land, elections, energy, fear\nA chamber that cheers a word more than a memo\nNill Bye mad at a plank with no case file\nShow the court where that word entered a judgment\nNot a chapel, not a basin, a holding\nYou brought a feeling and asked for a statute\nA screech lead on a hollow memo\nA split kick on a sentence that needs no partner\nBanning what is not in force is theater\nTheater that points at a neighbor\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nMuslim Texans already live under the code you run\nTaxes, traffic, contracts, the same penal title\nAbbott still needed a scare-word for the chamber\nBecause keeping Texas code does not cheer\nNill Bye filing the Sharia plank\nA hardstyle drop on a nothing-burger with a target\nYou chose a neighbor as the villain slot\nYou chose the smear because the chamber is easier than a memo\nA vow is cheap when the thing is already void\nSo the vow is not about the thing\nIt is about who hears their name in the villain slot\nThe kick already picked the target\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nConvention lights, a governor as a headliner\nKeep Texas red, help the national ticket\nNill Bye posting the Dallas mic\nAbbott still sure a slogan is a legal reform\nReform would name a case, a clause, a harm\nYou named a word and a mood\nI want a statute that does labor\nYou want a plank that does a crowd\nKeep the reverse bass, print the empty cite\nSharia is not on the docket\nYour fear is\nThe hall applauded the fear\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[outro]\nkick rest\nplank hollow\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/13-sharia-plank"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune, 150 bpm",
         "[intro]\nreverse bass\nkick split\nNill Bye hearing\n\n[verse]\nSeptember ten, twenty-twenty-six, RNC in Dallas\nMidterm convention, a friendly chamber\nAbbott vowed to ban Sharia Law in Texas\nAs if a neighbor's faith were on the ballot\nNill Bye hearing the plank\nThe Constitution already does that job\nYou don't need a new ban to keep Texas code\nYou need a crowd that wants a villain\nHardstyle kick on a ghost threat\nA reverse bass under a phantom code\nTexas courts already apply Texas code\nYour plank is a scare looking for a section\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nSame night: common sense versus crazy\nA buffet of villains, one mic, one grin\nAbbott stacked land, elections, energy, fear\nA chamber that cheers a word more than a memo\nNill Bye mad at a plank with no case file\nShow the court where that word entered a judgment\nNot a chapel, not a basin, a holding\nYou brought a feeling and asked for a statute\nA screech lead on a hollow memo\nA split kick on a sentence that needs no partner\nBanning what is not in force is theater\nTheater that points at a neighbor\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nMuslim Texans already live under the code you run\nTaxes, traffic, contracts, the same penal title\nAbbott still needed a scare-word for the chamber\nBecause keeping Texas code does not cheer\nNill Bye filing the Sharia plank\nA hardstyle drop on a nothing-burger with a target\nYou chose a neighbor as the villain slot\nYou chose the smear because the chamber is easier than a memo\nA vow is cheap when the thing is already void\nSo the vow is not about the thing\nIt is about who hears their name in the villain slot\nThe kick already picked the target\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[verse]\nConvention lights, a governor as a headliner\nKeep Texas red, help the national ticket\nNill Bye posting the Dallas mic\nAbbott still sure a slogan is a legal reform\nReform would name a case, a clause, a harm\nYou named a word and a mood\nI want a statute that does labor\nYou want a plank that does a crowd\nKeep the reverse bass, print the empty cite\nSharia is not on the docket\nYour fear is\nThe hall applauded the fear\n\n[chorus]\nSharia plank\nNill Bye on the Dallas mic\nAbbott vowed a ban in a convention hall\nA scare looking for a neighbor\nTexas code already runs the courts\nYour hardstyle is a smear\n\n[outro]\nkick rest\nplank hollow\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/13-sharia-plank"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

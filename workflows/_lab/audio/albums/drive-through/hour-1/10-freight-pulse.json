@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 176 bpm",
         "[drop - heavy amen drop, reese stack wreck, warped 808, grid 211 0]\n\n[inst - amen chops, trap hats 808 freight, grid 211 1]\n\n[drop - harder growl drop, double amen wreck, formant grind, grid 211 2]\n\n[inst - hats denser, reese hold, grid 211 3]\n\n[drop - full send drop, stacked amen wreck, warped chest sub, grid 211 4]\n\n[inst - snare roll, 808 punch, grid 211 5]\n\n[drop - harder warped drop, chest 808 wreck, reese wall, grid 211 6]\n\n[outro - kick holds, amen keep, reese ride, grid 211 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/10-freight-pulse"
       ],
       "title": "ez_edm_prompt"
     },

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\npixel lead\nNill Bye graphing\n\n[verse]\nMid-decade is not how the clock runs\nYou don't remap because a president asks\nAbbott did it anyway in twenty-five\nA Texas cartography for a national errand\nNill Bye graphing the pixel\nCourts circling the Voting Rights ghost\nCoalition districts cracked on purpose\nA majority squeezed into a fewer seats\nYou called it reflecting the vote\nIt was reflecting the request\nMultistate fight, same playbook\nThe map is a weapon with a legend\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nChiptune beep on a gerrymander\nEight-bit drums on a cracked precinct\nAbbott signed a mid decade map\nBefore the next census could argue\nNill Bye reading the shape files\nEarmuffs, spikes, a corridor through a city\nVoters moved on paper, not in trucks\nThat's the quiet raid\nYou need the House more than a principle\nSo the principle became the House\nDemocracy as a packing problem\nYour solution is a smaller opposition\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nLawsuits stacked in different circuits\nSame governor, same hurry\nAbbott says the people picked this\nThe people didn't pick the lines\nNill Bye mad at a cheat-code state\nA decade used to mean a decade\nNow it means whenever the boss texts\nRedistricting as a loyalty favor\nYou wrap it in population change\nThe change is the coalition you fear\nSo you draw them into a corner\nAnd call the corner a majority-minority trophy\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nTwenty-twenty-six ballots on a new sketch\nCandidates running through a maze you built\nNill Bye posting the mid decade map\nAbbott still calling it fair play\nFair is a census, not a text thread\nFair is a decade, not a season\nI want a line that follows a river\nYou want a line that follows a donor\nPixel by pixel, the state tilts\nA geometry that cannot lose\nKeep the chiptune, lose the honesty\nYour map is the quietest coup\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[outro]\npixels halt\nmaze holds\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/11-mid-decade-map"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 100 bpm",
         "[intro]\npixel lead\nNill Bye graphing\n\n[verse]\nMid-decade is not how the clock runs\nYou don't remap because a president asks\nAbbott did it anyway in twenty-five\nA Texas cartography for a national errand\nNill Bye graphing the pixel\nCourts circling the Voting Rights ghost\nCoalition districts cracked on purpose\nA majority squeezed into a fewer seats\nYou called it reflecting the vote\nIt was reflecting the request\nMultistate fight, same playbook\nThe map is a weapon with a legend\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nChiptune beep on a gerrymander\nEight-bit drums on a cracked precinct\nAbbott signed a mid decade map\nBefore the next census could argue\nNill Bye reading the shape files\nEarmuffs, spikes, a corridor through a city\nVoters moved on paper, not in trucks\nThat's the quiet raid\nYou need the House more than a principle\nSo the principle became the House\nDemocracy as a packing problem\nYour solution is a smaller opposition\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nLawsuits stacked in different circuits\nSame governor, same hurry\nAbbott says the people picked this\nThe people didn't pick the lines\nNill Bye mad at a cheat-code state\nA decade used to mean a decade\nNow it means whenever the boss texts\nRedistricting as a loyalty favor\nYou wrap it in population change\nThe change is the coalition you fear\nSo you draw them into a corner\nAnd call the corner a majority-minority trophy\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[verse]\nTwenty-twenty-six ballots on a new sketch\nCandidates running through a maze you built\nNill Bye posting the mid decade map\nAbbott still calling it fair play\nFair is a census, not a text thread\nFair is a decade, not a season\nI want a line that follows a river\nYou want a line that follows a donor\nPixel by pixel, the state tilts\nA geometry that cannot lose\nKeep the chiptune, lose the honesty\nYour map is the quietest coup\n\n[chorus]\nMid decade map\nNill Bye on the pixel\nAbbott redrew for the boss\nA census skip, a power grab\nDistricts snap to a partisan grid-file\nYour geometry is a cheat code\n\n[outro]\npixels halt\nmaze holds\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/11-mid-decade-map"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

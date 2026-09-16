@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nfestival 808\ncrowd-bed\nNill Bye sampling\n\n[verse]\nDallas, lights, a midterm chamber\nKeep Texas red, help the national ticket stay up\nAbbott reached for demolish\nNot defeat, not debate, demolish\nNill Bye sampling the closer\nA festival-trap 808 under a wrecking bar\nYou don't demolish a party in a republic\nYou beat it and still owe it a government\nThe hook is the tell: opposition as rubble\nCrazy as the only other option\nA binary that flatters the chamber\nAnd insults the half that isn't in it\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nCommon sense versus crazy is a children's slogan\nAdults have tradeoffs, numbers, wards, grids\nAbbott skipped the tradeoffs for a chant\nDemolish is easier than a levy cut that sticks\nNill Bye mad at a closer that wants rubble\nA state is not a demo site\nHinojosa is not debris\nA voter who splits a ticket is not crazy\nYou ran the hook because the dossier is heavy\nWards, wire, clocks, maps, raids, stamps\nA wrecking bar is lighter than a record\nSo you picked the bar\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nCrowd-bed, pyro in the adjectives\nA mainstage grin on a wrecking bar\nAbbott still mouthing demolish\nAs if a verb could be a platform\nNill Bye filing the convention closer\nA national slogan leaning on a state job\nYou have a state to run\nRunning it is the opposite of demolish\nA headliner can chant wreckage\nA governor has to keep the lights and the ward\nThe 808 does not mind the contradiction\nThe dossier does\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nFestival trap as a last take\nA closer that wants rubble more than a roll-call\nNill Bye posting the demolish hook\nAbbott still sure the hall is the state\nThe chamber is a box\nThe state has the people you want in rubble\nI want a contest, you want a demolition\nI want a record, you want a chant\nKeep the 808, print the verb\nDemolish is not governance\nIt is a hook\nAnd it already told on you\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[outro]\n808 stop\nhook rings\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/15-demolish-hook"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 150 bpm",
         "[intro]\nfestival 808\ncrowd-bed\nNill Bye sampling\n\n[verse]\nDallas, lights, a midterm chamber\nKeep Texas red, help the national ticket stay up\nAbbott reached for demolish\nNot defeat, not debate, demolish\nNill Bye sampling the closer\nA festival-trap 808 under a wrecking bar\nYou don't demolish a party in a republic\nYou beat it and still owe it a government\nThe hook is the tell: opposition as rubble\nCrazy as the only other option\nA binary that flatters the chamber\nAnd insults the half that isn't in it\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nCommon sense versus crazy is a children's slogan\nAdults have tradeoffs, numbers, wards, grids\nAbbott skipped the tradeoffs for a chant\nDemolish is easier than a levy cut that sticks\nNill Bye mad at a closer that wants rubble\nA state is not a demo site\nHinojosa is not debris\nA voter who splits a ticket is not crazy\nYou ran the hook because the dossier is heavy\nWards, wire, clocks, maps, raids, stamps\nA wrecking bar is lighter than a record\nSo you picked the bar\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nCrowd-bed, pyro in the adjectives\nA mainstage grin on a wrecking bar\nAbbott still mouthing demolish\nAs if a verb could be a platform\nNill Bye filing the convention closer\nA national slogan leaning on a state job\nYou have a state to run\nRunning it is the opposite of demolish\nA headliner can chant wreckage\nA governor has to keep the lights and the ward\nThe 808 does not mind the contradiction\nThe dossier does\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[verse]\nFestival trap as a last take\nA closer that wants rubble more than a roll-call\nNill Bye posting the demolish hook\nAbbott still sure the hall is the state\nThe chamber is a box\nThe state has the people you want in rubble\nI want a contest, you want a demolition\nI want a record, you want a chant\nKeep the 808, print the verb\nDemolish is not governance\nIt is a hook\nAnd it already told on you\n\n[chorus]\nDemolish hook\nNill Bye on the convention closer\nAbbott said demolish the Democrats\nCommon sense versus crazy as a binary\nA headliner who cannot share a state\nYour festival is a wrecking bar\n\n[outro]\n808 stop\nhook rings\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/15-demolish-hook"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

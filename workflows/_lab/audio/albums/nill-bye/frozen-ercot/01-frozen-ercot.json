@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nyeah\ngrid down\nNill Bye grid-gauging\n\n[verse]\nFebruary iced the whole ERCOT\nFour million in the darkroom\nTwo hundred seventy-seven ticks\nFrom a statewide collapse-risk\nFERC counted frozen gas\nFifty-eight percent of the trips-off\nWind took twenty-seven shares\nYou ran to Fox with a scapegoat-clip\nAbbott said the solar quit-shift\nPermian wells fell eighty-five points\nNill Bye gauging the outage-sheet\nYour weatherize was optional talk\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nUri wrote a hypothermia list\nHarris County topped the counties\nCarbon monoxide in the garages\nBoil-water for fourteen million taps\nPUC pinned nine thousand a megawatt\nGriddy bills hit the five-figure mark\nAbbott claimed the grid got a full fix\nThe exception form still lets plants duck\nNill Bye tracing the frequency sag\nYou sold a windmill as the culprit\nThermal plants iced at the intake\nYour presser was a blame-shift\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nTen years of freeze memos unread\nTwo-thousand-eleven already warned you\nMandatory winterize never landed\nUntil the body-count made the headline\nAbbott signed a weatherize bill late\nThen a loophole for the slow shops\nNill Bye filing the FERC mix\nGas carried the outage, not the turbine\nIsolated grid to dodge the feds\nThen you begged when the hertz fell\nFour days dark and the pumps died\nYour miracle state took a cold quiz\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nTwenty-twenty-six you called it flawless\nRadio grin on a five-year boast-tour\nNill Bye keeping the death ledger\nTwo-four-six is not a vibe\nAbbott still ducking the gas chart\nWindmills make a prettier villain\nThe isolated grid still sits alone\nNo neighbor to borrow a watt from\nYou weatherized the talking points\nNot the wells, not the flanges\nI run the numbers, you run Fox\nFrozen ERCOT is the whole thesis\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[outro]\nhertz up\nwells thaw\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/01-frozen-ercot"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "boom bap, hip-hop, dusty drums, vinyl crackle, sampled piano stab, male rap vocals, dry booth, no autotune, 88 bpm",
         "[intro]\nyeah\ngrid down\nNill Bye grid-gauging\n\n[verse]\nFebruary iced the whole ERCOT\nFour million in the darkroom\nTwo hundred seventy-seven ticks\nFrom a statewide collapse-risk\nFERC counted frozen gas\nFifty-eight percent of the trips-off\nWind took twenty-seven shares\nYou ran to Fox with a scapegoat-clip\nAbbott said the solar quit-shift\nPermian wells fell eighty-five points\nNill Bye gauging the outage-sheet\nYour weatherize was optional talk\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nUri wrote a hypothermia list\nHarris County topped the counties\nCarbon monoxide in the garages\nBoil-water for fourteen million taps\nPUC pinned nine thousand a megawatt\nGriddy bills hit the five-figure mark\nAbbott claimed the grid got a full fix\nThe exception form still lets plants duck\nNill Bye tracing the frequency sag\nYou sold a windmill as the culprit\nThermal plants iced at the intake\nYour presser was a blame-shift\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nTen years of freeze memos unread\nTwo-thousand-eleven already warned you\nMandatory winterize never landed\nUntil the body-count made the headline\nAbbott signed a weatherize bill late\nThen a loophole for the slow shops\nNill Bye filing the FERC mix\nGas carried the outage, not the turbine\nIsolated grid to dodge the feds\nThen you begged when the hertz fell\nFour days dark and the pumps died\nYour miracle state took a cold quiz\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[verse]\nTwenty-twenty-six you called it flawless\nRadio grin on a five-year boast-tour\nNill Bye keeping the death ledger\nTwo-four-six is not a vibe\nAbbott still ducking the gas chart\nWindmills make a prettier villain\nThe isolated grid still sits alone\nNo neighbor to borrow a watt from\nYou weatherized the talking points\nNot the wells, not the flanges\nI run the numbers, you run Fox\nFrozen ERCOT is the whole thesis\n\n[chorus]\nFrozen ERCOT\nNill Bye on the blackout\nAbbott blamed the windmill\nGas froze in the wellhead\nTwo-four-six on the docket\nYour grid failed the weather\n\n[outro]\nhertz up\nwells thaw\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/01-frozen-ercot"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

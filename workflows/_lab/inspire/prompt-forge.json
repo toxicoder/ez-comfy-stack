@@ -30,14 +30,14 @@
     },
     {
       "id": 5,
-      "type": "PrimitiveNode",
+      "type": "EZSamplePrompt",
       "pos": [
         40,
         456.0
       ],
       "size": [
         420,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 1,
@@ -45,25 +45,23 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "STRING",
+          "name": "prompt",
           "type": "STRING",
           "links": [
             1,
             2,
             3
           ],
-          "widget": {
-            "name": "value"
-          },
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "PrimitiveNode"
+        "Node name for S&R": "EZSamplePrompt"
       },
       "widgets_values": [
+        "custom",
         "A techno wizard on a sunny tropical city rooftop.",
-        "fixed"
+        "inspire/prompt-forge"
       ],
       "title": "Prompt"
     },
@@ -76,7 +74,7 @@
       ],
       "size": [
         420,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 2,
@@ -111,7 +109,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        672.0
+        732.0
       ],
       "size": [
         420,
@@ -147,11 +145,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A techno wizard on a sunny tropical city rooftop.",
         true,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "inspire/prompt-forge"
       ],
       "title": "Klein family"
     },
@@ -160,7 +160,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         500,
-        672.0
+        732.0
       ],
       "size": [
         420,
@@ -196,11 +196,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A techno wizard on a sunny tropical city rooftop.",
         true,
         "i2v",
         "5 seconds, 24 fps",
-        "none"
+        "none",
+        "inspire/prompt-forge"
       ],
       "title": "Wan family"
     },
@@ -209,7 +211,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960,
-        672.0
+        732.0
       ],
       "size": [
         420,
@@ -245,12 +247,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A techno wizard on a sunny tropical city rooftop.",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "rooftop wind, no score",
-        "none"
+        "none",
+        "inspire/prompt-forge"
       ],
       "title": "LTX family"
     }
@@ -326,7 +330,7 @@
         20,
         400.0,
         1380,
-        196.0
+        256.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -337,7 +341,7 @@
       "title": "KLEIN",
       "bounding": [
         20,
-        616.0,
+        676.0,
         460,
         356
       ],
@@ -350,7 +354,7 @@
       "title": "WAN",
       "bounding": [
         480,
-        616.0,
+        676.0,
         460,
         356
       ],
@@ -363,7 +367,7 @@
       "title": "LTX",
       "bounding": [
         940,
-        616.0,
+        676.0,
         460,
         436
       ],
@@ -401,9 +405,17 @@
       "inputs": [
         [
           5,
-          "value",
+          "sample",
           {
-            "description": "Lazy sentence. All three family rewriters read this.",
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          5,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
           }
@@ -476,6 +488,7 @@
         ]
       ],
       "outputs": [
+        5,
         2,
         3,
         4

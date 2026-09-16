@@ -27,6 +27,7 @@ from .client import (
     with_style_system,
 )
 from .client import _close_llm
+from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_labels
 
 
 _ENHANCE_BOOL = (
@@ -37,6 +38,11 @@ _CONTEXT_INPUT = (
     "STRING",
     {"forceInput": True, "dynamicPrompts": False},
 )
+_CATALOG_INPUT = ("STRING", {"default": "", "multiline": False})
+
+
+def _sample_input(catalog_id: str) -> tuple:
+    return (sample_labels(catalog_id), {"default": CUSTOM})
 
 
 def _as_bool(value: object) -> bool:
@@ -102,8 +108,17 @@ def _run(
     style: object = STYLE_NONE,
     mode: str = "",
     context: str = "",
+    sample: object = CUSTOM,
+    catalog: object = "",
+    node_type: str = "",
 ) -> dict:
-    original = prompt if isinstance(prompt, str) else str(prompt)
+    original = resolve_prompt(
+        catalog,
+        sample,
+        prompt,
+        node_type=node_type,
+        mode=mode,
+    )
     ctx = context if isinstance(context, str) else str(context or "")
     do_enhance = _as_bool(enhance)
     style = _style_id(style)
@@ -145,6 +160,7 @@ class EZKleinPromptEnhance:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_input("klein_t2i"),
                 "prompt": (
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
@@ -153,6 +169,7 @@ class EZKleinPromptEnhance:
                 "mode": (["t2i", "edit", "identity"], {"default": "t2i"}),
                 "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
             },
             "optional": {
                 "context": _CONTEXT_INPUT,
@@ -173,7 +190,17 @@ class EZKleinPromptEnhance:
         "a GGUF (run download-models)."
     )
 
-    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE, context=""):
+    def run(
+        self,
+        prompt,
+        enhance,
+        mode,
+        duration_hint,
+        style=STYLE_NONE,
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
         if mode == "edit":
             name = "klein_edit"
         elif mode == "identity":
@@ -188,6 +215,9 @@ class EZKleinPromptEnhance:
             style=style,
             mode=mode,
             context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZKleinPromptEnhance",
         )
 
 
@@ -198,6 +228,7 @@ class EZWanPromptEnhance:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_input("wan_t2v"),
                 "prompt": (
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
@@ -206,6 +237,7 @@ class EZWanPromptEnhance:
                 "mode": (["t2v", "i2v", "flf", "vace"], {"default": "t2v"}),
                 "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
             },
             "optional": {
                 "context": _CONTEXT_INPUT,
@@ -224,7 +256,17 @@ class EZWanPromptEnhance:
         "Optional context is ignored when Enhance is off. Fail-soft without a GGUF."
     )
 
-    def run(self, prompt, enhance, mode, duration_hint, style=STYLE_NONE, context=""):
+    def run(
+        self,
+        prompt,
+        enhance,
+        mode,
+        duration_hint,
+        style=STYLE_NONE,
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
         if mode == "i2v":
             name = "wan_i2v"
         elif mode == "flf":
@@ -241,6 +283,9 @@ class EZWanPromptEnhance:
             style=style,
             mode=mode,
             context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZWanPromptEnhance",
         )
 
 
@@ -251,6 +296,7 @@ class EZLTXPromptEnhance:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_input("ltx_t2v"),
                 "prompt": (
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
@@ -263,6 +309,7 @@ class EZLTXPromptEnhance:
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
                 "style": (style_ids(), {"default": STYLE_NONE}),
+                "catalog": _CATALOG_INPUT,
             },
             "optional": {
                 "context": _CONTEXT_INPUT,
@@ -289,6 +336,8 @@ class EZLTXPromptEnhance:
         audio_notes="",
         style=STYLE_NONE,
         context="",
+        sample=CUSTOM,
+        catalog="",
     ):
         name = "ltx_i2v" if mode == "i2v" else "ltx_t2v"
         return _run(
@@ -300,6 +349,9 @@ class EZLTXPromptEnhance:
             style=style,
             mode=mode,
             context=context,
+            sample=sample,
+            catalog=catalog,
+            node_type="EZLTXPromptEnhance",
         )
 
 
@@ -465,6 +517,7 @@ class EZAceStepPromptEnhance:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_input("rap_draft"),
                 "tags": (
                     "STRING",
                     {
@@ -479,6 +532,7 @@ class EZAceStepPromptEnhance:
                 ),
                 "enhance": _ENHANCE_BOOL,
                 "mode": (["vocal", "instrumental"], {"default": "vocal"}),
+                "catalog": _CATALOG_INPUT,
             },
             "optional": {
                 "context": _CONTEXT_INPUT,
@@ -497,9 +551,24 @@ class EZAceStepPromptEnhance:
         "Fail-soft without a GGUF."
     )
 
-    def run(self, tags, lyrics, enhance=True, mode="vocal", context=""):
-        original_tags = tags if isinstance(tags, str) else str(tags or "")
-        original_lyrics = lyrics if isinstance(lyrics, str) else str(lyrics or "")
+    def run(
+        self,
+        tags,
+        lyrics,
+        enhance=True,
+        mode="vocal",
+        context="",
+        sample=CUSTOM,
+        catalog="",
+    ):
+        original_tags, original_lyrics = resolve_ace_sample(
+            catalog,
+            sample,
+            tags,
+            lyrics,
+            node_type="EZAceStepPromptEnhance",
+            mode=mode,
+        )
         ctx = context if isinstance(context, str) else str(context or "")
         instrumental = mode == "instrumental"
         if not _as_bool(enhance):
@@ -563,6 +632,42 @@ class EZAceStepPromptEnhance:
                 sanitize_instrumental_lyrics(original_lyrics.strip() or "[inst]")
             )
         return _pack_ace(rewritten_tags, rewritten_lyrics, status)
+
+
+class EZSamplePrompt:
+    """STRING source with a sample-prompt combo plus Custom textarea."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "sample": _sample_input("forge_lazy"),
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "catalog": _CATALOG_INPUT,
+            }
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    DESCRIPTION = (
+        "Picks a lab sample prompt or Custom text. Wire into Prompt Enhance "
+        "or a desk field. Custom uses the textarea as typed."
+    )
+
+    def run(self, prompt, catalog="", sample=CUSTOM):
+        return (
+            resolve_prompt(
+                catalog,
+                sample,
+                prompt,
+                node_type="EZSamplePrompt",
+            ),
+        )
 
 
 class EZNegativePromptEnhance:
@@ -639,6 +744,7 @@ NODE_CLASS_MAPPINGS = {
     "EZPromptJoin": EZPromptJoin,
     "EZContextJoin": EZContextJoin,
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
+    "EZSamplePrompt": EZSamplePrompt,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -649,4 +755,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EZPromptJoin": "Prompt Join",
     "EZContextJoin": "Context Join",
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",
+    "EZSamplePrompt": "Sample Prompt",
 }

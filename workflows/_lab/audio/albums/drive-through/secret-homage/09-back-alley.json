@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
         "[drop - heavy neuro drop, reese 808 wreck, warped alley, grid 641 0]\n\n[inst - hats denser, reese hold, grid 641 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 641 2]\n\n[inst - trap hats roll, 808 punch, grid 641 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 641 4]\n\n[inst - snare roll, alley 808 punch, grid 641 5]\n\n[drop - harder growl drop, stacked reese wreck, alley grind, grid 641 6]\n\n[outro - kick holds, hats denser, reese ride, grid 641 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/secret-homage/09-back-alley"
       ],
       "title": "ez_edm_prompt"
     },

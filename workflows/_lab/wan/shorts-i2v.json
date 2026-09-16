@@ -590,11 +590,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Locked vertical framing for Shorts. Gentle subject motion. Camera holds, then a slow push-in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take at 24 fps. No audio.",
         true,
         "i2v",
         "5 seconds, 24 fps, 9:16",
-        "none"
+        "none",
+        "wan/shorts-i2v"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -833,6 +835,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           15,
           "prompt",

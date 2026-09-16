@@ -55,11 +55,13 @@
         "Node name for S&R": "EZCreativeResearch"
       },
       "widgets_values": [
+        "custom",
         "What lighting and camera language fits a night rooftop still of a techno wizard in a tropical city?",
         "research",
         true,
         2,
-        ""
+        "",
+        "inspire/research-chat"
       ],
       "title": "Creative research"
     }
@@ -130,6 +132,13 @@
     },
     "linearData": {
       "inputs": [
+        [
+          2,
+          "sample",
+          {
+            "label": "Sample prompt"
+          }
+        ],
         [
           2,
           "prompt",

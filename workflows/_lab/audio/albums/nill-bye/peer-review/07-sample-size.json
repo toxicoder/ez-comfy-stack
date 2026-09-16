@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nn equals one\nNill Bye counting\n\n[verse]\nRake built a study from a single night\nCalled it proof with the club in sight\nI want a stack that survives the week\nYou want a law from a Friday peek\nN of one, you crowned a king\nThat's a spike, that is not a thing\nBring a dozen, bring a year\nOne loud night is not a career\nI graph a miss that you want to forget\nYou graph a win on a borrowed bet\nNill Bye mad at a n of one\nHe brought a sample of one\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nYou graph a peak from a party set\nI graph the miss you want to forget\nGirls as data, nights as proof\nThat is a chart with a rotten roof\nI log repeats, you log a glow\nError fat on a borrowed lie, you know\nUnderpowered, oversold\nThat is the brand you tried to hold\nI ask for weeks, you send a clip\nI ask the miss, you send a sip\nNill Bye running the count again\nRake folding when the notes get thin\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nI ask the n, you send a crew\nI ask the miss, you send a view\nOne bar, one tale, one lucky streak\nThat is a child with a grown-man speak\nPower too low, the boast too tall\nYour whole paper is a highlight wall\nBring the raw file, drop the crown\nTiny-n science is upside down\nNill Bye talking from the count desk\nRake still picking through the wreck\nCut the slice, keep the set\nSmall-n drought, now pay the debt\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nRake at the small-n wall\nYou want a law from a Friday call\nI want a line that can hold a month\nYou want a caption, then you hunt\nHide the miss, the claim looks tall\nShow the miss, the claim looks small\nScience guy here with the full stack\nTiny-n king with a rumor pack\nNill Bye posting the count log\nHe still leaking through the fog\nn too small, the legend drops\nOne night never outlives the clocks\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[outro]\nn too small\nclaim too wide\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/peer-review/07-sample-size"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 92 bpm",
         "[intro]\nn equals one\nNill Bye counting\n\n[verse]\nRake built a study from a single night\nCalled it proof with the club in sight\nI want a stack that survives the week\nYou want a law from a Friday peek\nN of one, you crowned a king\nThat's a spike, that is not a thing\nBring a dozen, bring a year\nOne loud night is not a career\nI graph a miss that you want to forget\nYou graph a win on a borrowed bet\nNill Bye mad at a n of one\nHe brought a sample of one\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nYou graph a peak from a party set\nI graph the miss you want to forget\nGirls as data, nights as proof\nThat is a chart with a rotten roof\nI log repeats, you log a glow\nError fat on a borrowed lie, you know\nUnderpowered, oversold\nThat is the brand you tried to hold\nI ask for weeks, you send a clip\nI ask the miss, you send a sip\nNill Bye running the count again\nRake folding when the notes get thin\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nI ask the n, you send a crew\nI ask the miss, you send a view\nOne bar, one tale, one lucky streak\nThat is a child with a grown-man speak\nPower too low, the boast too tall\nYour whole paper is a highlight wall\nBring the raw file, drop the crown\nTiny-n science is upside down\nNill Bye talking from the count desk\nRake still picking through the wreck\nCut the slice, keep the set\nSmall-n drought, now pay the debt\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[verse]\nRake at the small-n wall\nYou want a law from a Friday call\nI want a line that can hold a month\nYou want a caption, then you hunt\nHide the miss, the claim looks tall\nShow the miss, the claim looks small\nScience guy here with the full stack\nTiny-n king with a rumor pack\nNill Bye posting the count log\nHe still leaking through the fog\nn too small, the legend drops\nOne night never outlives the clocks\n\n[chorus]\nSample size tiny\nYour claim too wide\nNill Bye on the count\nRake cannot hide\nOne night is not a study\nYour n is a buddy\n\n[outro]\nn too small\nclaim too wide\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/peer-review/07-sample-size"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nriser fake\nsnare tease\ndrop ducks\n\n[verse]\nRake rides a riser with no punch\nTalks a climax that never lands\nSnare roll climbing, the kick stays mute\nThat's a tease in a headliner stance\nI wait for the drop, you sell the wait\nYou sell a peak, then you duck the hit\nHats in a panic, the bass won't commit\nDummy cue flashing, the floor won't sit\nNill Bye counts the missing punch\nYour whole build is a dummy stunt\nMouth on a riser, the downbeat hides\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nYou count eight bars like a promise made\nThen you ghost when the kick should land\nHats keep rolling, the downbeat sleeps\nDark pad waiting while the promise leaks\nI want a punch that can move the floor\nYou want a riser and a cheaper roar\nDummy peak flashing in a cheap display\nThe floor is waiting, you fade away\nNill Bye clocks the dummy cue\nRake, your climax never came through\nBuild-up mouth with a mute debut\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nThe riser screams like a headline lie\nThen it dies when the kick should fly\nI came for a drop, you brought a tease\nYou sold a peak with a dummy lease\nHats still climbing, the bass still hid\nThat's a climax you never did\nFalse drop king on a borrowed thrill\nThe downbeat never paid the bill\nNill Bye reading the mute that stays\nRake on a riser that never pays\nTease, then stall, then a cheap goodbye\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nMorning comes, the tease looks small\nThe kick you promised never called\nHats still ticking, the dummy still queued\nRiser exhausted, the floor unmoved\nNill Bye files the fake climax\nRake packed a peak in a dummy pack\nBuild-up mouth, the downbeat ducked\nYour whole set was a riser stuck\nPut the tease back in the crate\nYour false drop cannot carry weight\nMute remains when the riser drains\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[outro]\nriser dies\nmute holds\ndummy filed\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/01-false-drop"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no autotune, 140 bpm",
         "[intro]\nriser fake\nsnare tease\ndrop ducks\n\n[verse]\nRake rides a riser with no punch\nTalks a climax that never lands\nSnare roll climbing, the kick stays mute\nThat's a tease in a headliner stance\nI wait for the drop, you sell the wait\nYou sell a peak, then you duck the hit\nHats in a panic, the bass won't commit\nDummy cue flashing, the floor won't sit\nNill Bye counts the missing punch\nYour whole build is a dummy stunt\nMouth on a riser, the downbeat hides\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nYou count eight bars like a promise made\nThen you ghost when the kick should land\nHats keep rolling, the downbeat sleeps\nDark pad waiting while the promise leaks\nI want a punch that can move the floor\nYou want a riser and a cheaper roar\nDummy peak flashing in a cheap display\nThe floor is waiting, you fade away\nNill Bye clocks the dummy cue\nRake, your climax never came through\nBuild-up mouth with a mute debut\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nThe riser screams like a headline lie\nThen it dies when the kick should fly\nI came for a drop, you brought a tease\nYou sold a peak with a dummy lease\nHats still climbing, the bass still hid\nThat's a climax you never did\nFalse drop king on a borrowed thrill\nThe downbeat never paid the bill\nNill Bye reading the mute that stays\nRake on a riser that never pays\nTease, then stall, then a cheap goodbye\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[verse]\nMorning comes, the tease looks small\nThe kick you promised never called\nHats still ticking, the dummy still queued\nRiser exhausted, the floor unmoved\nNill Bye files the fake climax\nRake packed a peak in a dummy pack\nBuild-up mouth, the downbeat ducked\nYour whole set was a riser stuck\nPut the tease back in the crate\nYour false drop cannot carry weight\nMute remains when the riser drains\n\n[chorus]\nFalse drop\nYou teased a climax\nNill Bye waits on mute\nRake sold a dummy\nBuild-up mouth, kick never lands\nYour peak was a dummy cue\n\n[outro]\nriser dies\nmute holds\ndummy filed\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/01-false-drop"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

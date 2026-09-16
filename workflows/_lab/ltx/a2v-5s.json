@@ -736,12 +736,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Five seconds.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "use the loaded clip; do not invent a score",
-        "none"
+        "none",
+        "ltx/a2v-5s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1084,6 +1086,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          19,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           19,
           "prompt",

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\njet hiss\nhaze thick\nstage missing\n\n[verse]\nRake hits the jet like a headline act\nTalks a set that the stage subtracts\nLaser hats cut a missing band\nI count the jets, you count the cheers\nI map the haze, you map the mirrors\nFog for a missing opening act\nDistorted bass on an empty track\nNill Bye staring through a rented plume\nYou smiling through a highlight fume\nShow the set or leave the floor\nHaze covering a missing encore\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou treat the haze like a body double\nThen you vanish when the jet is trouble\nI count the canisters, you count the stares\nHold the nozzle, don't sell the plume\nYour cool is vapor, mine is a tune\nTalk a set like a rented reel\nThen you crash out when the jet gets real\nNill Bye clocking what the haze keeps in\nRake with a name-tag spin\nShow the body or kill the jet\nThe jet is cheap and the haze falls flat\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou sell the haze like a limited drop\nThen you fold when the playlist pops\nI clock the jet, I clock the pose\nI clock a brand in borrowed clothes\nNill Bye reading a missing-set log\nRake looping a jet like a catalog\nSet is due, the merch is not\nYou wrapped a skip in a foggy shot\nKeep the jet, lose the alibi\nHats stay put, the boast walks\nHaze for a show that never starts\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou write the set like a product sheet\nThen you ask the jet for relief\nI hold the nozzle, you hold the bit\nI name the haze, you name the hit\nRage hats on a high-key play\nNill Bye mad at the costume jet\nRake at the end of a rented set\nYou want a throne for a rented pain\nPut the canister back on the tray\nThe jet don't score a vacant play\nJet cuts out, the file is closed\nYour soundtrack snapped on a haze close\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[outro]\njet off\nhaze clears\nstage denied\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/03-fog-machine"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 bpm",
         "[intro]\njet hiss\nhaze thick\nstage missing\n\n[verse]\nRake hits the jet like a headline act\nTalks a set that the stage subtracts\nLaser hats cut a missing band\nI count the jets, you count the cheers\nI map the haze, you map the mirrors\nFog for a missing opening act\nDistorted bass on an empty track\nNill Bye staring through a rented plume\nYou smiling through a highlight fume\nShow the set or leave the floor\nHaze covering a missing encore\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou treat the haze like a body double\nThen you vanish when the jet is trouble\nI count the canisters, you count the stares\nHold the nozzle, don't sell the plume\nYour cool is vapor, mine is a tune\nTalk a set like a rented reel\nThen you crash out when the jet gets real\nNill Bye clocking what the haze keeps in\nRake with a name-tag spin\nShow the body or kill the jet\nThe jet is cheap and the haze falls flat\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou sell the haze like a limited drop\nThen you fold when the playlist pops\nI clock the jet, I clock the pose\nI clock a brand in borrowed clothes\nNill Bye reading a missing-set log\nRake looping a jet like a catalog\nSet is due, the merch is not\nYou wrapped a skip in a foggy shot\nKeep the jet, lose the alibi\nHats stay put, the boast walks\nHaze for a show that never starts\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[verse]\nYou write the set like a product sheet\nThen you ask the jet for relief\nI hold the nozzle, you hold the bit\nI name the haze, you name the hit\nRage hats on a high-key play\nNill Bye mad at the costume jet\nRake at the end of a rented set\nYou want a throne for a rented pain\nPut the canister back on the tray\nThe jet don't score a vacant play\nJet cuts out, the file is closed\nYour soundtrack snapped on a haze close\n\n[chorus]\nFog machine\nThe stage is missing\nNill Bye reads the haze\nRake hides in the jet\nFog for a missing set\nHaze is your alibi\n\n[outro]\njet off\nhaze clears\nstage denied\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/03-fog-machine"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

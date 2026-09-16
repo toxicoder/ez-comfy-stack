@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nsquare lead\npretty type\nNill Bye tabling\n\n[verse]\nRake wrote a caption vs data fib\nSquare lead chirping while the numbers die\nPretty type on a ugly grid\nI want a cell, you want a id\n8-bit drums on a header boast\nYour caption is makeup, the table is a ghost\nNill Bye tabling what the sprite concealed\nHe smiles at a pixel the column repealed\nSpreadsheet open, the pretty type cracks\nYou wanted a nibble more than the facts\nCaption vs data, the header is mean\nChiptune truth on a ugly screen\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nYou framed a number in a candy font\nThen you folded when the column went blunt\nRake with a caption the cells refuse\nNill Bye reading the spreadsheet news\nSquare-wave beep, the sprite is cute\nI want a total, you want a loot\nUgly table, the pretty type lies\nYour 8-bit story is a cosmetic prize\nHeader honest, the caption wilts\nCaption vs data, pay the guilt\nPixel perfect, the sum is wrong\nI keep the grid, you keep the song\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nChiptune hops while you chase a sprite\nI want a column that can actually write\nNill Bye logging the makeup type\nRake still posting a decorative hype\n8-bit snare, the cell is blank\nYou wanted a caption more than a bank\nSpreadsheet waits, the pretty type folds\nThat's caption vs data, not a gold\nNibble spent, the header cools\nI keep the table, you keep the rules\nSquare lead out, the sprite is lapsed\nShow the cells, the caption is untrue\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nRake at the pretty type with a empty cell\nNill Bye posting the table as well\nCaption vs data, the font can idle\nYou wanted a sprite for a sold-out fate\nChiptune fades, the header lingers\nI close the sheet, you ask for praise\nUgly table beats a candy line\nPixel makeup will not redefine\n8-bit hush, the caption wilts\nShow the data, the story lies\nHe still hunting a prettier sum\nI file the type as a decorative crumb\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[outro]\npixels off\ntable wins\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/13-caption"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chiptune, square lead, 8-bit drums, male rap vocals, dry booth, no autotune, 100 bpm",
         "[intro]\nsquare lead\npretty type\nNill Bye tabling\n\n[verse]\nRake wrote a caption vs data fib\nSquare lead chirping while the numbers die\nPretty type on a ugly grid\nI want a cell, you want a id\n8-bit drums on a header boast\nYour caption is makeup, the table is a ghost\nNill Bye tabling what the sprite concealed\nHe smiles at a pixel the column repealed\nSpreadsheet open, the pretty type cracks\nYou wanted a nibble more than the facts\nCaption vs data, the header is mean\nChiptune truth on a ugly screen\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nYou framed a number in a candy font\nThen you folded when the column went blunt\nRake with a caption the cells refuse\nNill Bye reading the spreadsheet news\nSquare-wave beep, the sprite is cute\nI want a total, you want a loot\nUgly table, the pretty type lies\nYour 8-bit story is a cosmetic prize\nHeader honest, the caption wilts\nCaption vs data, pay the guilt\nPixel perfect, the sum is wrong\nI keep the grid, you keep the song\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nChiptune hops while you chase a sprite\nI want a column that can actually write\nNill Bye logging the makeup type\nRake still posting a decorative hype\n8-bit snare, the cell is blank\nYou wanted a caption more than a bank\nSpreadsheet waits, the pretty type folds\nThat's caption vs data, not a gold\nNibble spent, the header cools\nI keep the table, you keep the rules\nSquare lead out, the sprite is lapsed\nShow the cells, the caption is untrue\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[verse]\nRake at the pretty type with a empty cell\nNill Bye posting the table as well\nCaption vs data, the font can idle\nYou wanted a sprite for a sold-out fate\nChiptune fades, the header lingers\nI close the sheet, you ask for praise\nUgly table beats a candy line\nPixel makeup will not redefine\n8-bit hush, the caption wilts\nShow the data, the story lies\nHe still hunting a prettier sum\nI file the type as a decorative crumb\n\n[chorus]\nCaption vs data\nPretty type on an ugly table\nNill Bye on the spreadsheet\nRake sold a sprite as a fable\nChiptune beep, the header wins\nShow the cells or lose the caption\n\n[outro]\npixels off\ntable wins\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/13-caption"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

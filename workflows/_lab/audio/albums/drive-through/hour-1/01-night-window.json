@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, formant bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
         "[drop - heavy warped drop, hybrid trap 808 wreck, formant grind, grid 193 0]\n\n[inst - trap hats roll, 808 slide, grid 193 1]\n\n[drop - harder growl drop, chest sub warp, stacked reese, grid 193 2]\n\n[inst - snare roll, chest 808 punch, grid 193 3]\n\n[drop - full send drop, warped 808 wall, low rumble wreck, grid 193 4]\n\n[outro - kick holds, trap hats roll, warp bass ride, grid 193 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/01-night-window"
       ],
       "title": "ez_edm_prompt"
     },

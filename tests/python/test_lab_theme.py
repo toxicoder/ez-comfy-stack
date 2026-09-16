@@ -111,7 +111,8 @@ def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        return str(node["widgets_values"][0])
+        values = node["widgets_values"]
+        return str(values[1] if len(values) >= 7 else values[0])
 
     text = pos(draft)
     assert text == pos(hero)

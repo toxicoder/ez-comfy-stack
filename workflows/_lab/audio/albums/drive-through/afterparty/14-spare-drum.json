@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "brostep, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
         "[drop - heavy brostep drop, dual-action pedal bass, chest 808 warp, grid 547 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 547 1]\n\n[drop - harder stacked drop, 808 wall wreck, formant growl, grid 547 2]\n\n[inst - snare roll, chest 808, grid 547 3]\n\n[drop - full send drop, body bass wreck, pedal warp, grid 547 4]\n\n[outro - kick holds, hats denser, brostep ride, grid 547 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/14-spare-drum"
       ],
       "title": "ez_edm_prompt"
     },

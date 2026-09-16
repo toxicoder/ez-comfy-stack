@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "brostep, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
         "[drop - heavy brostep drop, chest trap 808, warped wreck, grid 433 0]\n\n[inst - trap hats denser, growl hold, grid 433 1]\n\n[drop - harder stacked drop, trap 808 wall, chest formant, grid 433 2]\n\n[inst - snare roll, 808 punch, grid 433 3]\n\n[drop - full send drop, body bass wreck, warped trap, grid 433 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest warp, grid 433 5]\n\n[outro - kick holds, hats denser, brostep ride, grid 433 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/12-sap-stack"
       ],
       "title": "ez_edm_prompt"
     },

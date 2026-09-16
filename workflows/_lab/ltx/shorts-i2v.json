@@ -780,12 +780,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame in vertical Shorts framing. World SFX matching the start image sit under a slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps, 9:16",
         "world SFX matching the start image, no score",
-        "none"
+        "none",
+        "ltx/shorts-i2v"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1102,6 +1104,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          19,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           19,
           "prompt",

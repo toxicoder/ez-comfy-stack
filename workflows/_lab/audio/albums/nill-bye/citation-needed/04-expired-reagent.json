@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nrhodes warm\ndate passed\nNill Bye dating\n\n[verse]\nRake pops a flask with a faded stamp\nTalks a high like he bottled the amp\nI read the stamp, the month is skewed\nYour whole brand is a leftover hymn\nSoft snare, warm bass, dry booth\nI hold the vial, you hold the spoof\nNill Bye mad at a dated sheen\nHe wilts when the numbers convene\nChemistry talk, a science tote\nOne of us measured, one of us bolted\nToss the bottle, keep the readout\nYour whole cool is a rented porch\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nYou name a night like a fresh solvent\nThen you crash when the clock is sound\nRhodes hum low, the boast is stale\nSad-boy mask on an expired yarn\nRake with a yellowed label hanging\nNill Bye clocking what the dates are cancelling\nBring a batch that survives the month\nYou want a caption, then you crest\nPrinted date on a dusty shelf\nExpired reagent, you bottled yourself\nShelf-life of drip is a short parade\nI dump the flask, you want it replayed\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nWarm bass under a cork gone dry\nYou sold a vintage that would not fly\nNill Bye reading the tiny print\nRake still sipping a ghost of a hint\nYellowed tape on a cloudy vial\nYour cool curdled after a while\nNeo-soul keys, the boast is dated\nI file the batch, you want it fated\nToss the reagent, keep the ledger\nPast-date drip is a borrowed treasure\nHe still pouring a week-old mix\nI stamp expired on the bag of tricks\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nRake at the dusty shelf once more\nNill Bye posting the expiry then\nCool past the printed date you hid\nA leftover song in a cloudy lid\nShelf-life gone, the flask is waste\nYou wanted a toast from a spoiled taste\nRhodes stay warm, the drip is over\nI cork the tale, you play the rover\nDate-stamp wins, the rumor curdles\nExpired reagent, pay the guilt\nHe still hunting a usable drop\nI close the cabinet, the selling halts\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[outro]\ndate passed\nflask tossed\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/04-expired-reagent"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotune, 84 bpm",
         "[intro]\nrhodes warm\ndate passed\nNill Bye dating\n\n[verse]\nRake pops a flask with a faded stamp\nTalks a high like he bottled the amp\nI read the stamp, the month is skewed\nYour whole brand is a leftover hymn\nSoft snare, warm bass, dry booth\nI hold the vial, you hold the spoof\nNill Bye mad at a dated sheen\nHe wilts when the numbers convene\nChemistry talk, a science tote\nOne of us measured, one of us bolted\nToss the bottle, keep the readout\nYour whole cool is a rented porch\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nYou name a night like a fresh solvent\nThen you crash when the clock is sound\nRhodes hum low, the boast is stale\nSad-boy mask on an expired yarn\nRake with a yellowed label hanging\nNill Bye clocking what the dates are cancelling\nBring a batch that survives the month\nYou want a caption, then you crest\nPrinted date on a dusty shelf\nExpired reagent, you bottled yourself\nShelf-life of drip is a short parade\nI dump the flask, you want it replayed\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nWarm bass under a cork gone dry\nYou sold a vintage that would not fly\nNill Bye reading the tiny print\nRake still sipping a ghost of a hint\nYellowed tape on a cloudy vial\nYour cool curdled after a while\nNeo-soul keys, the boast is dated\nI file the batch, you want it fated\nToss the reagent, keep the ledger\nPast-date drip is a borrowed treasure\nHe still pouring a week-old mix\nI stamp expired on the bag of tricks\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[verse]\nRake at the dusty shelf once more\nNill Bye posting the expiry then\nCool past the printed date you hid\nA leftover song in a cloudy lid\nShelf-life gone, the flask is waste\nYou wanted a toast from a spoiled taste\nRhodes stay warm, the drip is over\nI cork the tale, you play the rover\nDate-stamp wins, the rumor curdles\nExpired reagent, pay the guilt\nHe still hunting a usable drop\nI close the cabinet, the selling halts\n\n[chorus]\nExpired reagent\nYour cool is past date\nNill Bye reads the printed stamp\nRake showed up late\nShelf-life gone, the drip is stale\nNeo-soul truth, rumor in the bin\n\n[outro]\ndate passed\nflask tossed\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/04-expired-reagent"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

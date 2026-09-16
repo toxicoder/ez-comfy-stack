@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ngavel wood\nbrass hit\nNill Bye grading\n\n[verse]\nTwenty-twenty-three, the House impeached Paxton\nBribery cloud, office-as-a-favor\nAbbott did not lead the charge\nHe let the chamber do the messy labor\nNill Bye grading the gavel theater\nSenate trial, then an acquittal party\nSame man back at the docket-desk\nYou needed his machine more than a standard\nLater you boosted him for the Senate lane\nThe impeachment became a speed-bump\nA governor who won't police his AG\nIs a governor who likes the mess\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nThe House had the exhibits\nThe Senate had the votes\nAbbott had a calendar and a smile\nGavel theater with no second act\nNill Bye reading the journal\nImpeach, acquit, endorse, repeat\nYou call it the rule of coalition-math\nIt is the rule of the coalition\nPaxton primaried his impeachers\nYou primaried the voucher holdouts\nSame season, same donor weather\nEthics is a costume in Austin\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nBrass band for a civic circus\nTuba on a roll-call that folded\nAbbott clapped the process, not the verdict\nThen he needed Ken on the trail\nNill Bye mad at a rented spine\nYou outsourced integrity to a chamber\nThen ignored the chamber you liked less\nHouse work thrown in the gallery trash\nA sitting AG on a corruption docket\nStill the man you warm the mic for\nThat is not caution, that is a tell\nThe gavel was a prop in your set\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nTwenty-twenty-six you still share the ticket-ink\nPaxton in the Senate fight, you in the mansion\nNill Bye filing the split verdict\nAbbott still allergic to a clean break\nImpeachment without consequence is theater\nAcquittal without shame is a sequel\nYou kept the alliance and lost the standard\nTexas watched the whole farce\nI want a governor who can fire a scandal\nYou wanted a partner who can turn out votes\nGavel down, ethics out\nYour intermission never ended\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[outro]\ngavel rest\nbrass mute\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/05-gavel-theater"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, 112 bpm",
         "[intro]\ngavel wood\nbrass hit\nNill Bye grading\n\n[verse]\nTwenty-twenty-three, the House impeached Paxton\nBribery cloud, office-as-a-favor\nAbbott did not lead the charge\nHe let the chamber do the messy labor\nNill Bye grading the gavel theater\nSenate trial, then an acquittal party\nSame man back at the docket-desk\nYou needed his machine more than a standard\nLater you boosted him for the Senate lane\nThe impeachment became a speed-bump\nA governor who won't police his AG\nIs a governor who likes the mess\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nThe House had the exhibits\nThe Senate had the votes\nAbbott had a calendar and a smile\nGavel theater with no second act\nNill Bye reading the journal\nImpeach, acquit, endorse, repeat\nYou call it the rule of coalition-math\nIt is the rule of the coalition\nPaxton primaried his impeachers\nYou primaried the voucher holdouts\nSame season, same donor weather\nEthics is a costume in Austin\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nBrass band for a civic circus\nTuba on a roll-call that folded\nAbbott clapped the process, not the verdict\nThen he needed Ken on the trail\nNill Bye mad at a rented spine\nYou outsourced integrity to a chamber\nThen ignored the chamber you liked less\nHouse work thrown in the gallery trash\nA sitting AG on a corruption docket\nStill the man you warm the mic for\nThat is not caution, that is a tell\nThe gavel was a prop in your set\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[verse]\nTwenty-twenty-six you still share the ticket-ink\nPaxton in the Senate fight, you in the mansion\nNill Bye filing the split verdict\nAbbott still allergic to a clean break\nImpeachment without consequence is theater\nAcquittal without shame is a sequel\nYou kept the alliance and lost the standard\nTexas watched the whole farce\nI want a governor who can fire a scandal\nYou wanted a partner who can turn out votes\nGavel down, ethics out\nYour intermission never ended\n\n[chorus]\nGavel theater\nNill Bye on the roll-call\nAbbott watched the impeachment\nHouse said guilty enough\nSenate said go home Ken\nYour spine took an intermission\n\n[outro]\ngavel rest\nbrass mute\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/05-gavel-theater"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

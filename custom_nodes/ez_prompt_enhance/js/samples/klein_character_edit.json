@@ -1,0 +1,102 @@
+[
+  {
+    "id": "keep-change-named",
+    "label": "Change only what is named",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Change only what this prompt names."
+  },
+  {
+    "id": "turn-three-quarter",
+    "label": "Turn three-quarter",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Turn the body to a three-quarter view. Change only the turn."
+  },
+  {
+    "id": "swap-cloak",
+    "label": "Add storm cloak",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Add an unmarked charcoal storm-cloak with warm-gold lining over the existing coat. Change only the cloak."
+  },
+  {
+    "id": "rain-beads",
+    "label": "Rain on fabric",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Add rain beads on the coat and wet stone underfoot. Change only weather."
+  },
+  {
+    "id": "night-practicals",
+    "label": "Night practicals",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Shift to night with warm terrace lanterns. Change only the light."
+  },
+  {
+    "id": "sit-on-rail",
+    "label": "Sit on the rail",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Seat them on an unmarked terrace rail, same clothes. Change only the pose."
+  },
+  {
+    "id": "raise-staff",
+    "label": "Raise the staff",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Raise the compact unmarked data-staff so glyph rings bloom. Change only the gesture."
+  },
+  {
+    "id": "look-to-lens",
+    "label": "Look to lens",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Turn the head to look into lens, eyes bright. Change only the gaze."
+  },
+  {
+    "id": "dawn-rim",
+    "label": "Dawn rim",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Relight with first-light rim from camera left. Change only the light."
+  },
+  {
+    "id": "snow-dust",
+    "label": "Snow on shoulders",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Add light snow on shoulders and breath in cold air. Change only weather."
+  },
+  {
+    "id": "workshop-apron",
+    "label": "Add apron",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Add an unmarked leather apron over the coat. Change only the apron."
+  },
+  {
+    "id": "blank-gloves-off",
+    "label": "Bare hands",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Remove the gloves; empty palms, same pose. Change only the hands."
+  },
+  {
+    "id": "wind-snap",
+    "label": "Wind snap",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Pull the coat hem and hair in a hard side wind. Change only motion of cloth."
+  },
+  {
+    "id": "softer-grade",
+    "label": "Softer grade",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Soften contrast and warm the midtones. Change only the grade."
+  },
+  {
+    "id": "closer-crop",
+    "label": "Closer crop",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Crop to a medium close-up, same lens height. Change only framing."
+  },
+  {
+    "id": "profile-turn",
+    "label": "True profile",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Turn to a true profile. Change only the turn."
+  },
+  {
+    "id": "glyph-idle",
+    "label": "Idle glyph rings",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Dim the glyph rings to a faint idle. Change only the rings."
+  },
+  {
+    "id": "indoor-study",
+    "label": "Move indoors",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Place them in an unmarked teak study, same clothes. Change only the place."
+  },
+  {
+    "id": "sprint-mid",
+    "label": "Mid-stride",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Shift to a mid-stride running pose, empty palms. Change only the pose."
+  },
+  {
+    "id": "wet-cloak-open",
+    "label": "Open wet cloak",
+    "prompt": "Keep this character's face, wardrobe, and proportions. Open the storm-cloak so the lining shows, fabric wet. Change only the cloak."
+  }
+]

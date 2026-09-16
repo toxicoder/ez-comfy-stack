@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 168 bpm",
         "[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]\n\n[drop - harder dirty drop, dubstep wreck, chest 808 formant, grid 491 1]\n\n[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]\n\n[outro - kick holds, trap hats roll, growl ride, grid 491 3]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/07-chain-hook"
       ],
       "title": "ez_edm_prompt"
     },

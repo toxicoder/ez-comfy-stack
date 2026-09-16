@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nrhodes wash\nNill Bye noting\n\n[verse]\nGA-thirty-four, March twenty-twenty-one\nNo local mask, no local shot-rule\nAbbott opened Texas by executive pen\nThen forbade the cities from closing it back\nNill Bye noting the preemption\nSchool boards told to sit down\nBusinesses told they may not require\nA statewide shrug as a health plan\nYou called it personal responsibility\nIt was a gag on the mayor\nHospitals filled, the order held\nYour liberty stopped at the city limit inward\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nLocal authority used to mean home rule\nYou kept the emergency pen for yourself\nAbbott blocked the mask and kept the proclamation\nPower up, science down\nNill Bye reading the GA text\nEmployers muzzled on a simple screen\nCampuses told to host the unvaccinated\nAs if a dorm was a theory\nYou sued the locals who tried anyway\nA governor versus a superintendent\nThat is not humble government\nThat is a monopoly on the risk\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nNeo-soul on a public-health veto\nSoft keys, hard preemption\nAbbott smiled through the surge curves\nOpen Texas, closed debate\nNill Bye mad at a gagged city\nYou federalized nothing except the no\nThe yes was reserved for your office\nMask off as a brand, not a finding\nICUs don't take a presser as PPE\nTeachers bought their own filters\nYou bought a primary argument\nThe order was a culture win with a body-count\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nYears later the GA is the template\nPreempt first, study never\nNill Bye filing the mask order\nAbbott still allergic to a local yes\nA city that can zone a street\nCould not ask a rider to cover a face\nThat ratio is the whole tell\nYou trust the market until it wears a mask\nThen you become the nanny you mock\nA nanny for the owners, not the nurses\nGA-thirty-four is a power grab\nDressed as a freedom anthem\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[outro]\nrhodes out\norder holds\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/10-mask-order"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotune, 84 bpm",
         "[intro]\nrhodes wash\nNill Bye noting\n\n[verse]\nGA-thirty-four, March twenty-twenty-one\nNo local mask, no local shot-rule\nAbbott opened Texas by executive pen\nThen forbade the cities from closing it back\nNill Bye noting the preemption\nSchool boards told to sit down\nBusinesses told they may not require\nA statewide shrug as a health plan\nYou called it personal responsibility\nIt was a gag on the mayor\nHospitals filled, the order held\nYour liberty stopped at the city limit inward\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nLocal authority used to mean home rule\nYou kept the emergency pen for yourself\nAbbott blocked the mask and kept the proclamation\nPower up, science down\nNill Bye reading the GA text\nEmployers muzzled on a simple screen\nCampuses told to host the unvaccinated\nAs if a dorm was a theory\nYou sued the locals who tried anyway\nA governor versus a superintendent\nThat is not humble government\nThat is a monopoly on the risk\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nNeo-soul on a public-health veto\nSoft keys, hard preemption\nAbbott smiled through the surge curves\nOpen Texas, closed debate\nNill Bye mad at a gagged city\nYou federalized nothing except the no\nThe yes was reserved for your office\nMask off as a brand, not a finding\nICUs don't take a presser as PPE\nTeachers bought their own filters\nYou bought a primary argument\nThe order was a culture win with a body-count\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[verse]\nYears later the GA is the template\nPreempt first, study never\nNill Bye filing the mask order\nAbbott still allergic to a local yes\nA city that can zone a street\nCould not ask a rider to cover a face\nThat ratio is the whole tell\nYou trust the market until it wears a mask\nThen you become the nanny you mock\nA nanny for the owners, not the nurses\nGA-thirty-four is a power grab\nDressed as a freedom anthem\n\n[chorus]\nMask order\nNill Bye on GA-thirty-four\nAbbott banned the local rule\nMayors stripped, campuses open\nA virus with a press secretary\nYour freedom was a gag on the city\n\n[outro]\nrhodes out\norder holds\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/10-mask-order"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

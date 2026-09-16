@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\n808\nsample spoiled\nNill Bye bagging\n\n[verse]\nRake cracked the seal with a borrowed car\nTalked a clean run from a dirty jar\nClub air swam in the sample jar\nNow the blank is a crowded bar\nI want a blank that can hold the night\nYou want a flex with a cloudy sight\nPipette down, your story up\nCross-talk swimming in the loving cup\nNill Bye bagging what you spoil\nHe still posing in the dirty oil\nLid off, the night fell in\nThat's not a result, that's a mix-in\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nYou sneezed a rumor on the clean bench\nCalled it signal, I called it stench\nGlove torn open, the chain got wet\nYour control vial is a social net\nI swab the rim, it sings a club\nYou swab the flex and you call it love\nNill Bye clocking the dirty peak\nRake still dancing on a leaked technique\nBackground high, the target gone\nYou imported a party and you called it dawn\nBag it, tag it, toss the lot\nA spoiled run is not a plot\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nCarryover from the last loud night\nStuck in the line like a parasite\nI flush the system, you flush the tale\nI want a blank, you want a grail\nFingerprint on the inner wall\nYour whole dataset is a mosh-pit hall\nNill Bye filing the spoiled sheet\nRake still calling the mix-in sweet\nOpen tube, open mouth, open lie\nYou let the room in, then you asked why\nSterile field, you brought a parade\nContamination is the mess you made\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nMorning QC, the blank is loud\nSomebody's cologne in a number cloud\nI want a seal that can hold a week\nYou want a caption on a dirty streak\nNill Bye out when the swab is done\nRake still claiming the spoiled run\nFile the leak, keep the note\nDirty science is a joke you wrote\nSeal the lid or leave the spit\nA clean blank is the whole of it\nQC screaming, the blank too loud\nYou threw a party in a number cloud\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[outro]\nhats off\nsample tossed\nswab done\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/peer-review/13-contamination"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm",
         "[intro]\n808\nsample spoiled\nNill Bye bagging\n\n[verse]\nRake cracked the seal with a borrowed car\nTalked a clean run from a dirty jar\nClub air swam in the sample jar\nNow the blank is a crowded bar\nI want a blank that can hold the night\nYou want a flex with a cloudy sight\nPipette down, your story up\nCross-talk swimming in the loving cup\nNill Bye bagging what you spoil\nHe still posing in the dirty oil\nLid off, the night fell in\nThat's not a result, that's a mix-in\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nYou sneezed a rumor on the clean bench\nCalled it signal, I called it stench\nGlove torn open, the chain got wet\nYour control vial is a social net\nI swab the rim, it sings a club\nYou swab the flex and you call it love\nNill Bye clocking the dirty peak\nRake still dancing on a leaked technique\nBackground high, the target gone\nYou imported a party and you called it dawn\nBag it, tag it, toss the lot\nA spoiled run is not a plot\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nCarryover from the last loud night\nStuck in the line like a parasite\nI flush the system, you flush the tale\nI want a blank, you want a grail\nFingerprint on the inner wall\nYour whole dataset is a mosh-pit hall\nNill Bye filing the spoiled sheet\nRake still calling the mix-in sweet\nOpen tube, open mouth, open lie\nYou let the room in, then you asked why\nSterile field, you brought a parade\nContamination is the mess you made\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[verse]\nMorning QC, the blank is loud\nSomebody's cologne in a number cloud\nI want a seal that can hold a week\nYou want a caption on a dirty streak\nNill Bye out when the swab is done\nRake still claiming the spoiled run\nFile the leak, keep the note\nDirty science is a joke you wrote\nSeal the lid or leave the spit\nA clean blank is the whole of it\nQC screaming, the blank too loud\nYou threw a party in a number cloud\n\n[chorus]\nTalk that leak talk\nThat ain't sterile\nNill Bye on the swab\nRake on a fable\nDirty sample, empty booth\nYour leak is a cheap ad\n\n[outro]\nhats off\nsample tossed\nswab done\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/peer-review/13-contamination"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "wave bass, warped bass, trap hats, chest 808, low rumble, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
         "[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]\n\n[inst - trap hats denser, wave 808 sustain splice, grid 523 1]\n\n[drop - harder growl drop, chest 808 wall, formant fold, grid 523 2]\n\n[drop - full send drop, low swell wreck, wave warp, grid 523 3]\n\n[outro - kick holds, hats denser, wave ride, grid 523 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/12-night-splice"
       ],
       "title": "ez_edm_prompt"
     },

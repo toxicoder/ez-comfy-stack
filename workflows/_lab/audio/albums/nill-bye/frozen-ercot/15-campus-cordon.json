@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nlive kit\nguitar stomp\nNill Bye watching\n\n[verse]\nApril on the Forty Acres\nStudents on the lawn with a Gaza sign\nAbbott sent DPS into the quad\nArrests as a photo for the base\nNill Bye watching the campus cordon\nA university is not a border sector\nYou treated a sit-in like a cartel\nZip-ties on a public forum\nThen a statute to limit the next gathering\nSpeech as a permit you can starve\nTime, place, manner with a boot\nYour law-and-order is a muzzle\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nRap-rock stomp on a quad that flinched\nOverdriven guitar, crowd of badges\nAbbott needed a campus villain\nProtestors drew the assignment\nNill Bye mad at a helmeted governor\nYou cannot preach the First and fear a chant\nA public campus is the whole point\nOf a state that brags about liberty\nYou sent troopers instead of a dean\nThen wrote a limit so the dean wouldn't have to\nThat is not safety, that is a preemption\nThe cordon is the policy\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nEncampments elsewhere got negotiation\nAustin got a formation\nAbbott clapped the arrests\nAs if a GPA were a threat-level\nNill Bye filing the after-bills\nDemonstration zones, shorter clocks, easier bans\nYou learned from the GA veto\nLocal yes is the enemy\nA regent board already bent your way\nStill you wanted the trooper in the shot\nOptics over the forum\nThe helmet photographs better than a hearing\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nYears on, the cordon is a habit\nA helmet looking for a next assignment\nNill Bye posting the campus cordon\nAbbott still posing with a riot shield\nA student with a sign is not an invasion\nA chant is not a crossing\nI want a quad, you want a perimeter\nI want an argument, you want a booking\nKeep the stomp, lose the zip-tie\nThe Forty Acres is not your stage\nTroopers don't grade a seminar\nYour order failed the forum\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[outro]\nstomp stops\nquad open\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/15-campus-cordon"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry booth, no autotune, 168 bpm",
         "[intro]\nlive kit\nguitar stomp\nNill Bye watching\n\n[verse]\nApril on the Forty Acres\nStudents on the lawn with a Gaza sign\nAbbott sent DPS into the quad\nArrests as a photo for the base\nNill Bye watching the campus cordon\nA university is not a border sector\nYou treated a sit-in like a cartel\nZip-ties on a public forum\nThen a statute to limit the next gathering\nSpeech as a permit you can starve\nTime, place, manner with a boot\nYour law-and-order is a muzzle\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nRap-rock stomp on a quad that flinched\nOverdriven guitar, crowd of badges\nAbbott needed a campus villain\nProtestors drew the assignment\nNill Bye mad at a helmeted governor\nYou cannot preach the First and fear a chant\nA public campus is the whole point\nOf a state that brags about liberty\nYou sent troopers instead of a dean\nThen wrote a limit so the dean wouldn't have to\nThat is not safety, that is a preemption\nThe cordon is the policy\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nEncampments elsewhere got negotiation\nAustin got a formation\nAbbott clapped the arrests\nAs if a GPA were a threat-level\nNill Bye filing the after-bills\nDemonstration zones, shorter clocks, easier bans\nYou learned from the GA veto\nLocal yes is the enemy\nA regent board already bent your way\nStill you wanted the trooper in the shot\nOptics over the forum\nThe helmet photographs better than a hearing\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[verse]\nYears on, the cordon is a habit\nA helmet looking for a next assignment\nNill Bye posting the campus cordon\nAbbott still posing with a riot shield\nA student with a sign is not an invasion\nA chant is not a crossing\nI want a quad, you want a perimeter\nI want an argument, you want a booking\nKeep the stomp, lose the zip-tie\nThe Forty Acres is not your stage\nTroopers don't grade a seminar\nYour order failed the forum\n\n[chorus]\nCampus cordon\nNill Bye on the quad\nAbbott sent the troopers in\nUT Austin, spring twenty-four\nSpeech limited after the zip-ties\nYour order is a riot helmet\n\n[outro]\nstomp stops\nquad open\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/15-campus-cordon"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

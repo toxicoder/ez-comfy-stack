@@ -88,9 +88,11 @@
         "Node name for S&R": "EZPodcastScript"
       },
       "widgets_values": [
+        "custom",
         "Announcer: Tonight on the machine-only hour: a story that never left the rack.\nSpeaker A: The transmitter light is steady. We do not borrow a voice from the wire.\nSpeaker B: If the card goes dark, the play ends. That is the bargain.\nSpeaker A: Then say the line like you mean the cut, not the cloud.\nSpeaker B: Cue the bed. Keep it instrumental. We own the silence between words.\nAnnouncer: End of scene. The hosts are invented. The mix is local.",
         false,
-        "radio_drama"
+        "radio_drama",
+        "audio/podcast/radio-drama"
       ],
       "title": "ez_radio_script"
     },
@@ -1019,10 +1021,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "short instrumental sting, analog keys hit, no vocals, instrumental",
         "",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/podcast/radio-drama"
       ],
       "title": "ez_radio_sting enhance"
     },
@@ -1069,10 +1073,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
         "",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/podcast/radio-drama"
       ],
       "title": "ez_radio_bed enhance"
     }
@@ -1424,6 +1430,30 @@
     },
     "linearData": {
       "inputs": [
+        [
+          2,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Script sample"
+          }
+        ],
+        [
+          34,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sting sample"
+          }
+        ],
+        [
+          35,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Bed sample"
+          }
+        ],
         [
           2,
           "prompt",

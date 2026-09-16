@@ -26,10 +26,36 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZLTXPromptEnhance,
     EZNegativePromptEnhance,
     EZPromptJoin,
+    EZSamplePrompt,
     EZWanPromptEnhance,
     NODE_CLASS_MAPPINGS,
     sanitize_instrumental_lyrics,
 )
+from ez_prompt_enhance.samples import CUSTOM as SAMPLE_CUSTOM  # noqa: E402
+
+
+def _enh_prompt(values: list) -> str:
+    if len(values) >= 7:
+        return str(values[1])
+    return str(values[0])
+
+
+def _enh_flag(values: list) -> object:
+    if len(values) >= 7:
+        return values[2]
+    return values[1]
+
+
+def _enh_mode(values: list) -> object:
+    if len(values) >= 7:
+        return values[3]
+    return values[2]
+
+
+def _enh_style(values: list) -> object:
+    if len(values) >= 7:
+        return values[5] if len(values) == 7 else values[-2]
+    return values[-1]
 
 
 def _no_network_pip(args: list[str]) -> subprocess.CompletedProcess[str]:
@@ -1103,18 +1129,18 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     hero = json.loads(lab_json("klein/still-hero.json").read_text(encoding="utf-8"))
     klein_d = next(n for n in draft["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     klein_h = next(n for n in hero["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert klein_d["widgets_values"][0] == klein_h["widgets_values"][0]
-    assert klein_d["widgets_values"][1] is True
-    assert klein_h["widgets_values"][1] is True
-    assert klein_d["widgets_values"][-1] == "none"
+    assert _enh_prompt(klein_d["widgets_values"]) == _enh_prompt(klein_h["widgets_values"])
+    assert _enh_flag(klein_d["widgets_values"]) is True
+    assert _enh_flag(klein_h["widgets_values"]) is True
+    assert klein_d["widgets_values"][0] == SAMPLE_CUSTOM
     wan_t = json.loads(lab_json("wan/t2v-5s.json").read_text(encoding="utf-8"))
     wan_i = json.loads(lab_json("wan/i2v-5s.json").read_text(encoding="utf-8"))
     ltx_t = json.loads(lab_json("ltx/t2v-5s.json").read_text(encoding="utf-8"))
     ltx_i = json.loads(lab_json("ltx/i2v-5s.json").read_text(encoding="utf-8"))
-    wan_tp = next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
-    wan_ip = next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"][0]
-    ltx_tp = next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"][0]
-    ltx_ip = next(n for n in ltx_i["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"][0]
+    wan_tp = _enh_prompt(next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"])
+    wan_ip = _enh_prompt(next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"])
+    ltx_tp = _enh_prompt(next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"])
+    ltx_ip = _enh_prompt(next(n for n in ltx_i["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"])
     assert "dollies" in wan_tp.lower() or "dolly" in wan_tp.lower()
     assert "score" not in wan_tp.lower()
     assert "start-image" in wan_ip.lower() or "start image" in wan_ip.lower()
@@ -1179,17 +1205,17 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     gif = json.loads(lab_json("wan/gif-loop.json").read_text(encoding="utf-8"))
     house = json.loads(lab_json("klein/dream-house.json").read_text(encoding="utf-8"))
     klein = next(n for n in still["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert klein["widgets_values"][1] is True
-    assert klein["widgets_values"][-1] == "none"
-    assert "photoreal still" in klein["widgets_values"][0]
-    assert "techno wizard" in klein["widgets_values"][0]
+    assert _enh_flag(klein["widgets_values"]) is True
+    assert klein["widgets_values"][0] == SAMPLE_CUSTOM
+    assert "photoreal still" in _enh_prompt(klein["widgets_values"])
+    assert "techno wizard" in _enh_prompt(klein["widgets_values"])
     wan = next(n for n in gif["nodes"] if n.get("type") == "EZWanPromptEnhance")
-    assert wan["widgets_values"][2] == "i2v"
-    motion = wan["widgets_values"][0].lower()
+    assert _enh_mode(wan["widgets_values"]) == "i2v"
+    motion = _enh_prompt(wan["widgets_values"]).lower()
     assert "dolly" not in motion
     assert "walk" not in motion
     ident = next(n for n in house["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    ident_text = ident["widgets_values"][0]
+    ident_text = _enh_prompt(ident["widgets_values"])
     ident_l = ident_text.lower()
     assert "photoreal still" in ident_l
     assert "warm-glass" in ident_l
@@ -1213,10 +1239,10 @@ def test_app_lab_graphs_wire_join_and_enhance() -> None:
     assert "cabin" not in ident_l
     assert "lake" not in ident_l
     assert "no logos, no text" not in ident_text
-    assert ident["widgets_values"][1] is True
-    assert ident["widgets_values"][2] == "identity"
-    assert ident["widgets_values"][3] == "Instagram 4:5 still"
-    assert ident["widgets_values"][4] == "none"
+    assert _enh_flag(ident["widgets_values"]) is True
+    assert _enh_mode(ident["widgets_values"]) == "identity"
+    assert ident["widgets_values"][4] == "Instagram 4:5 still"
+    assert ident["widgets_values"][5] == "none"
     joins = [n for n in house["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == 10
     join_titles = [n["title"] for n in sorted(joins, key=lambda n: n["id"])]
@@ -1395,6 +1421,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZPromptJoin",
         "EZAceStepPromptEnhance",
         "EZContextJoin",
+        "EZSamplePrompt",
     }
     klein = EZKleinPromptEnhance()
     wan = EZWanPromptEnhance()
@@ -1596,11 +1623,20 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
             ntype = node.get("type")
             if ntype in enhance_types:
                 values = node.get("widgets_values") or []
-                flag = values[1] if ntype != "EZAceStepPromptEnhance" else (
-                    values[2] if len(values) > 2 else True
-                )
-                if ntype == "EZAceStepPromptEnhance":
-                    flag = values[2] if len(values) > 2 else True
+                if ntype == "EZNegativePromptEnhance":
+                    flag = values[1] if len(values) > 1 else True
+                elif ntype == "EZAceStepPromptEnhance":
+                    flag = (
+                        values[3]
+                        if len(values) >= 6
+                        else values[2] if len(values) > 2 else True
+                    )
+                else:
+                    flag = (
+                        values[2]
+                        if len(values) >= 4
+                        else values[1] if len(values) > 1 else True
+                    )
                 if pin_off:
                     if flag is not False:
                         missing.append(

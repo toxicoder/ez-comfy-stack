@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dirty bass, warped bass, trap hats, chest sub, stacked 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy dirty drop, chest 808 warp, brake wreck, grid 457 0]\n\n[inst - trap hats roll, 808 slide, grid 457 1]\n\n[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]\n\n[inst - snare roll, chest 808 punch, grid 457 3]\n\n[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 457 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/01-brake-fade"
       ],
       "title": "ez_edm_prompt"
     },

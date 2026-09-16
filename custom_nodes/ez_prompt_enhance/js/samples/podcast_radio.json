@@ -1,0 +1,102 @@
+[
+  {
+    "id": "machine-only",
+    "label": "Machine-only hour",
+    "prompt": "Announcer: Tonight on the machine-only hour: a story that never left the rack.\nSpeaker A: The transmitter light is steady. We do not borrow a voice from the wire.\nSpeaker B: If the card goes dark, the play ends. That is the bargain.\nSpeaker A: Then say the line like you mean the cut, not the cloud.\nSpeaker B: Cue the bed. Keep it instrumental. We own the silence between words.\nAnnouncer: End of scene. The hosts are invented. The mix is local."
+  },
+  {
+    "id": "transmitter",
+    "label": "Transmitter light",
+    "prompt": "Announcer: The transmitter light is steady.\nSpeaker A: We do not borrow a voice from the wire.\nSpeaker B: If the card goes dark, the play ends.\nAnnouncer: End of scene. The hosts are invented. The mix is local."
+  },
+  {
+    "id": "bargain",
+    "label": "The bargain",
+    "prompt": "Announcer: Tonight, the bargain.\nSpeaker A: If the card dies, the play dies.\nSpeaker B: Say the line like you mean the cut.\nAnnouncer: The hosts are invented. The mix is local."
+  },
+  {
+    "id": "instrumental",
+    "label": "Keep it instrumental",
+    "prompt": "Announcer: Cue the bed.\nSpeaker A: Keep it instrumental.\nSpeaker B: We own the silence between words.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "rack",
+    "label": "Never left the rack",
+    "prompt": "Announcer: A story that never left the rack.\nSpeaker A: The light is steady.\nSpeaker B: We do not lease a throat.\nAnnouncer: The mix is local."
+  },
+  {
+    "id": "wire",
+    "label": "Not the wire",
+    "prompt": "Announcer: Not the wire.\nSpeaker A: Not the cloud.\nSpeaker B: The cut.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "rain-play",
+    "label": "Rain play",
+    "prompt": "Announcer: Rain on the glass.\nSpeaker A: The booth is a closet.\nSpeaker B: The play still holds.\nAnnouncer: The hosts are invented."
+  },
+  {
+    "id": "night-play",
+    "label": "Night play",
+    "prompt": "Announcer: Night desk.\nSpeaker A: One lamp.\nSpeaker B: One hour.\nAnnouncer: The mix is local."
+  },
+  {
+    "id": "fan",
+    "label": "Fan in the hall",
+    "prompt": "Announcer: Fan in the hall.\nSpeaker A: That is the room.\nSpeaker B: Do not fake a hall.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "no-borrow",
+    "label": "Do not borrow",
+    "prompt": "Announcer: Do not borrow a voice.\nSpeaker A: We invent the hosts.\nSpeaker B: We say so.\nAnnouncer: The mix is local."
+  },
+  {
+    "id": "cut-not-cloud",
+    "label": "Cut, not cloud",
+    "prompt": "Announcer: Say it like you mean the cut, not the cloud.\nSpeaker A: The line is the work.\nSpeaker B: The bed stays instrumental.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "steady",
+    "label": "Light steady",
+    "prompt": "Announcer: Light steady.\nSpeaker A: Card hot.\nSpeaker B: Play live on the box.\nAnnouncer: The hosts are invented."
+  },
+  {
+    "id": "silence",
+    "label": "Own silence",
+    "prompt": "Announcer: Own the silence.\nSpeaker A: Do not rent a swell.\nSpeaker B: Let the street sit.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "closet",
+    "label": "Closet stage",
+    "prompt": "Announcer: The stage is a closet.\nSpeaker A: That is enough.\nSpeaker B: The line has to carry.\nAnnouncer: The mix is local."
+  },
+  {
+    "id": "bargain-two",
+    "label": "Bargain two",
+    "prompt": "Announcer: The bargain holds.\nSpeaker A: Local weights.\nSpeaker B: Local cut.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "no-wire",
+    "label": "No wire in",
+    "prompt": "Announcer: No wire in.\nSpeaker A: No wire out.\nSpeaker B: If it airs, it aired from here.\nAnnouncer: The hosts are invented."
+  },
+  {
+    "id": "cue-bed",
+    "label": "Cue bed",
+    "prompt": "Announcer: Cue the bed.\nSpeaker A: Instrumental only.\nSpeaker B: Then the line.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "dark",
+    "label": "If it goes dark",
+    "prompt": "Announcer: If the card goes dark.\nSpeaker A: The play ends.\nSpeaker B: That is the honest end.\nAnnouncer: The mix is local."
+  },
+  {
+    "id": "invented",
+    "label": "Hosts invented",
+    "prompt": "Announcer: The hosts are invented.\nSpeaker A: Not recordings of real people.\nSpeaker B: We say the bumper because it is true.\nAnnouncer: End of scene."
+  },
+  {
+    "id": "end-scene",
+    "label": "End of scene",
+    "prompt": "Announcer: End of scene.\nSpeaker A: Hold the last line.\nSpeaker B: Then cut.\nAnnouncer: The mix is local."
+  }
+]

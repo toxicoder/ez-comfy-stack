@@ -508,17 +508,25 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert klein_sampler["widgets_values"][0] == 42
         assert klein_sampler["widgets_values"][3] == 1.0
         enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert enhance["widgets_values"][0] == parsed["identity"]
-        assert all(n["widgets_values"][1] is False for n in ltx_enh)
-        assert enhance["widgets_values"][1] is False
+        ev = enhance["widgets_values"]
+        ident = ev[1] if len(ev) >= 7 else ev[0]
+        eflag = ev[2] if len(ev) >= 7 else ev[1]
+        emode = ev[3] if len(ev) >= 7 else ev[2]
+        assert ident == parsed["identity"]
+        assert all(
+            (n["widgets_values"][2] if len(n["widgets_values"]) >= 8 else n["widgets_values"][1])
+            is False
+            for n in ltx_enh
+        )
+        assert eflag is False
         neg_enh = [n for n in graph["nodes"] if n.get("type") == "EZNegativePromptEnhance"]
         assert len(neg_enh) >= 2
         assert all(n["widgets_values"][1] is False for n in neg_enh)
         if film == "go-see":
-            assert enhance["widgets_values"][2] == "t2i"
-            assert "staff" not in str(enhance["widgets_values"][0]).lower()
+            assert emode == "t2i"
+            assert "staff" not in str(ident).lower()
         else:
-            assert enhance["widgets_values"][2] == "identity"
+            assert emode == "identity"
         ltx_pos = [
             n
             for n in graph["nodes"]

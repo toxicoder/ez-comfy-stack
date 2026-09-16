@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
         "[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0]\n\n[inst - trap hats roll, 808 punch hold, grid 337 1]\n\n[drop - harder growl drop, stacked chest 808, formant wall, grid 337 2]\n\n[inst - snare roll, chest sub hold, grid 337 3]\n\n[drop - full send drop, low 808 wreck, warped chest, grid 337 4]\n\n[outro - kick holds, hats denser, chest ride, grid 337 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/11-bounce-booth"
       ],
       "title": "ez_edm_prompt"
     },

@@ -106,10 +106,17 @@ def _assert_shared(
     mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
     assert mp3["widgets_values"][0] == prefix
     ace = next(n for n in graph["nodes"] if n["type"] == "EZAceStepPromptEnhance")
-    assert ace["widgets_values"][2] is False
-    assert ace["widgets_values"][3] == ace_mode
-    if tags is not None:
-        assert ace["widgets_values"][0] == tags
+    ace_w = ace["widgets_values"]
+    if len(ace_w) >= 6:
+        assert ace_w[3] is False
+        assert ace_w[4] == ace_mode
+        if tags is not None:
+            assert ace_w[1] == tags
+    else:
+        assert ace_w[2] is False
+        assert ace_w[3] == ace_mode
+        if tags is not None:
+            assert ace_w[0] == tags
         assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
     assert "klein/thumbnail" in extra["lab_note"]

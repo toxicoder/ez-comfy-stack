@@ -1,0 +1,102 @@
+[
+  {
+    "id": "slow-push",
+    "label": "Slow push-in",
+    "prompt": "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
+  },
+  {
+    "id": "hold-then-push",
+    "label": "Hold then push",
+    "prompt": "The frame holds, then a slow push-in begins. Gentle motion in fabric or foliage. The camera holds, then dollies in. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "gentle-pan-right",
+    "label": "Gentle pan right",
+    "prompt": "Gentle motion in fabric or leaves. The camera pans right slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "gentle-pan-left",
+    "label": "Gentle pan left",
+    "prompt": "Gentle motion in fabric or leaves. The camera pans left slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "track-right",
+    "label": "Track right",
+    "prompt": "Gentle subject sway, fabric hush. The camera tracks a few degrees right. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "track-left",
+    "label": "Track left",
+    "prompt": "Gentle subject sway, fabric hush. The camera tracks a few degrees left. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "dolly-out",
+    "label": "Slow dolly out",
+    "prompt": "Gentle motion in fabric or foliage. The camera dollies out slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "fixed-breeze",
+    "label": "Fixed breeze",
+    "prompt": "Locked framing. Gentle cyclic breeze in fabric or leaves. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-lights",
+    "label": "Push with lights",
+    "prompt": "Lights shimmer then settle. Gentle fabric motion. The camera dollies in slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "rain-hold",
+    "label": "Rain hold",
+    "prompt": "Rain beads on fabric. Gentle head motion only. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "wind-pan",
+    "label": "Wind pan",
+    "prompt": "A harder breeze pulls coat hem and hair. The camera pans right slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "breath-push",
+    "label": "Breath push",
+    "prompt": "Subtle breath and fabric hush. The camera dollies in slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "look-off",
+    "label": "Look off then back",
+    "prompt": "The subject glances off-frame then back. Gentle fabric. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "staff-idle",
+    "label": "Idle staff motes",
+    "prompt": "Glyph motes drift and settle. Gentle fabric. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "track-forward",
+    "label": "Track forward",
+    "prompt": "Gentle stride energy without leaving the start pose far. The camera tracks forward slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "settle-push",
+    "label": "Settle then push",
+    "prompt": "Motion settles, then a slow push-in. The camera dollies in slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "parallax-slide",
+    "label": "Slight slide",
+    "prompt": "Near fabric drifts against the far plane. The camera slides a few degrees laterally. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "night-hold",
+    "label": "Night hold",
+    "prompt": "Practicals shimmer. Gentle fabric. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "dawn-push",
+    "label": "Dawn push",
+    "prompt": "Light warms a degree. Gentle fabric. The camera dollies in slowly. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "storm-cloak",
+    "label": "Cloak stream",
+    "prompt": "Cloak lining streams then settles. The camera holds a fixed camera. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  }
+]

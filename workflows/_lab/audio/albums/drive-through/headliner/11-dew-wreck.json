@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
         "[drop - heavy neuro drop, reese trap 808, chest warp wreck, grid 431 0]\n\n[inst - amen chops, trap hats 808 dew, grid 431 1]\n\n[drop - harder stacked drop, chest reese wreck, warped 808, grid 431 2]\n\n[inst - hats denser, reese hold, grid 431 3]\n\n[drop - full send drop, trap 808 wreck, chest formant, grid 431 4]\n\n[inst - snare roll, 808 punch, grid 431 5]\n\n[drop - harder growl drop, stacked neuro 808 wreck, trap warp, grid 431 6]\n\n[drop - full send drop, body reese wreck, chest 808, grid 431 7]\n\n[outro - kick holds, amen keep, reese ride, grid 431 8]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/11-dew-wreck"
       ],
       "title": "ez_edm_prompt"
     },

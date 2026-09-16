@@ -780,12 +780,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "soft tabletop room tone, a glass tick, fabric hush, no score",
-        "none"
+        "none",
+        "ltx/product-hero"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1102,6 +1104,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          19,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           19,
           "prompt",

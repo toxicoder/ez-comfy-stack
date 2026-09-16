@@ -852,12 +852,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "world SFX matching the start image, no score",
-        "none"
+        "none",
+        "dcc/ltx/iclora-depth-5s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1223,6 +1225,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          21,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           21,
           "prompt",

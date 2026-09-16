@@ -1,0 +1,102 @@
+[
+  {
+    "id": "approve-first",
+    "label": "Approve before UNET",
+    "prompt": "One-line premise. Approve before any UNET."
+  },
+  {
+    "id": "rooftop-sprint",
+    "label": "Rooftop sprint",
+    "prompt": "A first-person rooftop sprint across a tropical city, one gap at a time, no speech."
+  },
+  {
+    "id": "mug-morning",
+    "label": "Mug morning",
+    "prompt": "A third-person morning around one chipped cream mug in an unmarked kitchen."
+  },
+  {
+    "id": "yard-walk",
+    "label": "Yard walk",
+    "prompt": "A night walk through an unmarked freight yard in rain, not a chase."
+  },
+  {
+    "id": "local-hour",
+    "label": "Local hour",
+    "prompt": "Two hosts keep a local hour on one box; if the card dies the show dies."
+  },
+  {
+    "id": "staff-work",
+    "label": "Staff work",
+    "prompt": "A techno wizard finishes one tool on a teak bench before the street wakes."
+  },
+  {
+    "id": "ferry-dusk",
+    "label": "Ferry dusk",
+    "prompt": "A short crossing on an unmarked ferry at dusk, world SFX only."
+  },
+  {
+    "id": "greenhouse",
+    "label": "Greenhouse walk",
+    "prompt": "A walk down an unmarked greenhouse aisle, drip and leaf, no score."
+  },
+  {
+    "id": "ridge-dawn",
+    "label": "Ridge dawn",
+    "prompt": "A dawn walk on a high unmarked switchback, one job, then stop."
+  },
+  {
+    "id": "library",
+    "label": "Library hush",
+    "prompt": "A quiet pass between unmarked stacks, paper hush, no speech."
+  },
+  {
+    "id": "rain-hold",
+    "label": "Rain hold",
+    "prompt": "Hold under an overhang while tropical rain finishes the take."
+  },
+  {
+    "id": "night-rail",
+    "label": "Night rail",
+    "prompt": "A night rail look over an unmarked bay, lanterns only."
+  },
+  {
+    "id": "packshot-day",
+    "label": "Packshot day",
+    "prompt": "One unmarked object on stone, honest light, then a slow orbit."
+  },
+  {
+    "id": "clay-finish",
+    "label": "Clay finish",
+    "prompt": "Finish a clay blocking as photoreal without moving the camera."
+  },
+  {
+    "id": "dialogue-one",
+    "label": "One line",
+    "prompt": "One spoken line on a terrace, world SFX under, no score."
+  },
+  {
+    "id": "loop-breeze",
+    "label": "Loop breeze",
+    "prompt": "A locked-camera breeze loop that can ping-pong."
+  },
+  {
+    "id": "a2v-listen",
+    "label": "A2V listen",
+    "prompt": "A still face listens to a loaded clip; picture follows audio."
+  },
+  {
+    "id": "concourse",
+    "label": "Concourse stride",
+    "prompt": "A mid-stride cross of an unmarked concourse, one camera."
+  },
+  {
+    "id": "storm-cloak",
+    "label": "Storm cloak",
+    "prompt": "Wind on a rooftop, cloak lining, then hold the last frame."
+  },
+  {
+    "id": "cut-local",
+    "label": "Cut stays local",
+    "prompt": "A studio hour about keeping the master on the box in front of us."
+  }
+]

@@ -63,6 +63,13 @@ def _log(message: str) -> None:
     print(f"[ez_podcast] {message}", file=sys.stderr)
 
 
+def _sample_combo() -> tuple:
+    _ensure_lab_custom_nodes_path()
+    from ez_prompt_enhance.samples import CUSTOM, sample_labels
+
+    return (sample_labels("podcast_two_host"), {"default": CUSTOM})
+
+
 def _ensure_lab_custom_nodes_path() -> None:
     """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
 
@@ -275,6 +282,7 @@ class EZPodcastScript:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_combo(),
                 "prompt": (
                     "STRING",
                     {
@@ -288,6 +296,7 @@ class EZPodcastScript:
                     {"default": True, "label_on": "On", "label_off": "Off"},
                 ),
                 "flavor": ([FLAVOR_PODCAST, FLAVOR_RADIO], {"default": FLAVOR_PODCAST}),
+                "catalog": ("STRING", {"default": "", "multiline": False}),
             },
             "optional": {
                 "context": (
@@ -309,8 +318,25 @@ class EZPodcastScript:
         "can run in the same Queue."
     )
 
-    def run(self, prompt, enhance, flavor=FLAVOR_PODCAST, context=""):
-        original = prompt if isinstance(prompt, str) else str(prompt)
+    def run(
+        self,
+        prompt,
+        enhance,
+        flavor=FLAVOR_PODCAST,
+        context="",
+        sample="custom",
+        catalog="",
+    ):
+        _ensure_lab_custom_nodes_path()
+        from ez_prompt_enhance.samples import resolve_prompt
+
+        original = resolve_prompt(
+            catalog,
+            sample,
+            prompt,
+            node_type="EZPodcastScript",
+            mode=flavor if isinstance(flavor, str) else FLAVOR_PODCAST,
+        )
         ctx = context if isinstance(context, str) else str(context or "")
         name = flavor if flavor in FLAVORS else FLAVOR_PODCAST
         if not _as_bool(enhance):

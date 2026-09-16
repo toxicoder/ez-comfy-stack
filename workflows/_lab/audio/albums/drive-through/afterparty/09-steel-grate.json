@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
         "[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]\n\n[inst - amen chops, trap hats 808 grate, grid 503 1]\n\n[drop - harder growl drop, reese stack, chest 808, grid 503 2]\n\n[inst - hats denser, reese hold, grid 503 3]\n\n[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]\n\n[inst - snare roll, chest 808 punch, grid 503 5]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 503 6]\n\n[drop - full send drop, low rumble wreck, reese wall, grid 503 7]\n\n[outro - kick holds, amen keep, reese ride, grid 503 8]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/09-steel-grate"
       ],
       "title": "ez_edm_prompt"
     },

@@ -30,14 +30,14 @@
     },
     {
       "id": 2,
-      "type": "PrimitiveNode",
+      "type": "EZSamplePrompt",
       "pos": [
         40.0,
         616.0
       ],
       "size": [
         420.0,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 1,
@@ -45,23 +45,21 @@
       "inputs": [],
       "outputs": [
         {
-          "name": "STRING",
+          "name": "prompt",
           "type": "STRING",
           "links": [
             1
           ],
-          "widget": {
-            "name": "value"
-          },
           "slot_index": 0
         }
       ],
       "properties": {
-        "Node name for S&R": "PrimitiveNode"
+        "Node name for S&R": "EZSamplePrompt"
       },
       "widgets_values": [
+        "custom",
         "One-line premise. Approve before any UNET.",
-        "fixed"
+        "inspire/beat-sheet"
       ],
       "title": "Logline"
     },
@@ -74,7 +72,7 @@
       ],
       "size": [
         420.0,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 2,
@@ -111,7 +109,7 @@
       ],
       "size": [
         420.0,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 3,
@@ -166,7 +164,7 @@
       ],
       "size": [
         420.0,
-        140.0
+        200.0
       ],
       "flags": {},
       "order": 4,
@@ -199,7 +197,7 @@
       "type": "EZContextJoin",
       "pos": [
         40.0,
-        804.0
+        864.0
       ],
       "size": [
         420.0,
@@ -273,7 +271,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        1040.0
+        1100.0
       ],
       "size": [
         420.0,
@@ -310,7 +308,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        1250.0
+        1310.0
       ],
       "size": [
         420.0,
@@ -354,12 +352,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 1 enter LTX enhance"
     },
@@ -368,7 +368,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        1040.0
+        1100.0
       ],
       "size": [
         420.0,
@@ -405,7 +405,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        1250.0
+        1310.0
       ],
       "size": [
         420.0,
@@ -449,12 +449,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 1 traverse LTX enhance"
     },
@@ -463,7 +465,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        1040.0
+        1100.0
       ],
       "size": [
         420.0,
@@ -500,7 +502,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        1250.0
+        1310.0
       ],
       "size": [
         420.0,
@@ -544,12 +546,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 1 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 1 exit LTX enhance"
     },
@@ -558,7 +562,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        1626.0
+        1686.0
       ],
       "size": [
         420.0,
@@ -595,7 +599,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        1836.0
+        1896.0
       ],
       "size": [
         420.0,
@@ -639,12 +643,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 2 enter LTX enhance"
     },
@@ -653,7 +659,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        1626.0
+        1686.0
       ],
       "size": [
         420.0,
@@ -690,7 +696,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        1836.0
+        1896.0
       ],
       "size": [
         420.0,
@@ -734,12 +740,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 2 traverse LTX enhance"
     },
@@ -748,7 +756,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        1626.0
+        1686.0
       ],
       "size": [
         420.0,
@@ -785,7 +793,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        1836.0
+        1896.0
       ],
       "size": [
         420.0,
@@ -829,12 +837,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 2 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 2 exit LTX enhance"
     },
@@ -843,7 +853,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        2212.0
+        2272.0
       ],
       "size": [
         420.0,
@@ -880,7 +890,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        2422.0
+        2482.0
       ],
       "size": [
         420.0,
@@ -924,12 +934,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 3 enter LTX enhance"
     },
@@ -938,7 +950,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        2212.0
+        2272.0
       ],
       "size": [
         420.0,
@@ -975,7 +987,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        2422.0
+        2482.0
       ],
       "size": [
         420.0,
@@ -1019,12 +1031,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 3 traverse LTX enhance"
     },
@@ -1033,7 +1047,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        2212.0
+        2272.0
       ],
       "size": [
         420.0,
@@ -1070,7 +1084,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        2422.0
+        2482.0
       ],
       "size": [
         420.0,
@@ -1114,12 +1128,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 3 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 3 exit LTX enhance"
     },
@@ -1128,7 +1144,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        2798.0
+        2858.0
       ],
       "size": [
         420.0,
@@ -1165,7 +1181,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        3008.0
+        3068.0
       ],
       "size": [
         420.0,
@@ -1209,12 +1225,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 4 enter LTX enhance"
     },
@@ -1223,7 +1241,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        2798.0
+        2858.0
       ],
       "size": [
         420.0,
@@ -1260,7 +1278,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        3008.0
+        3068.0
       ],
       "size": [
         420.0,
@@ -1304,12 +1322,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 4 traverse LTX enhance"
     },
@@ -1318,7 +1338,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        2798.0
+        2858.0
       ],
       "size": [
         420.0,
@@ -1355,7 +1375,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        3008.0
+        3068.0
       ],
       "size": [
         420.0,
@@ -1399,12 +1419,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 4 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 4 exit LTX enhance"
     },
@@ -1413,7 +1435,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        3384.0
+        3444.0
       ],
       "size": [
         420.0,
@@ -1450,7 +1472,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        3594.0
+        3654.0
       ],
       "size": [
         420.0,
@@ -1494,12 +1516,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 5 enter LTX enhance"
     },
@@ -1508,7 +1532,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        3384.0
+        3444.0
       ],
       "size": [
         420.0,
@@ -1545,7 +1569,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        3594.0
+        3654.0
       ],
       "size": [
         420.0,
@@ -1589,12 +1613,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 5 traverse LTX enhance"
     },
@@ -1603,7 +1629,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        3384.0
+        3444.0
       ],
       "size": [
         420.0,
@@ -1640,7 +1666,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        3594.0
+        3654.0
       ],
       "size": [
         420.0,
@@ -1684,12 +1710,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 5 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 5 exit LTX enhance"
     },
@@ -1698,7 +1726,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40.0,
-        3970.0
+        4030.0
       ],
       "size": [
         420.0,
@@ -1735,7 +1763,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40.0,
-        4180.0
+        4240.0
       ],
       "size": [
         420.0,
@@ -1779,12 +1807,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "enter beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 6 enter LTX enhance"
     },
@@ -1793,7 +1823,7 @@
       "type": "PrimitiveNode",
       "pos": [
         500.0,
-        3970.0
+        4030.0
       ],
       "size": [
         420.0,
@@ -1830,7 +1860,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         500.0,
-        4180.0
+        4240.0
       ],
       "size": [
         420.0,
@@ -1874,12 +1904,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "traverse beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 6 traverse LTX enhance"
     },
@@ -1888,7 +1920,7 @@
       "type": "PrimitiveNode",
       "pos": [
         960.0,
-        3970.0
+        4030.0
       ],
       "size": [
         420.0,
@@ -1925,7 +1957,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         960.0,
-        4180.0
+        4240.0
       ],
       "size": [
         420.0,
@@ -1969,12 +2001,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "exit beat 6 \u2014 action | camera | world SFX | dialogue",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "inspire/beat-sheet"
       ],
       "title": "Beat 6 exit LTX enhance"
     }
@@ -2466,7 +2500,7 @@
         20,
         560.0,
         1380,
-        404.0
+        464.0
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2477,7 +2511,7 @@
       "title": "BEAT 1",
       "bounding": [
         20,
-        984.0,
+        1044.0,
         1380,
         566.0
       ],
@@ -2490,7 +2524,7 @@
       "title": "BEAT 2",
       "bounding": [
         20,
-        1570.0,
+        1630.0,
         1380,
         566.0
       ],
@@ -2503,7 +2537,7 @@
       "title": "BEAT 3",
       "bounding": [
         20,
-        2156.0,
+        2216.0,
         1380,
         566.0
       ],
@@ -2516,7 +2550,7 @@
       "title": "BEAT 4",
       "bounding": [
         20,
-        2742.0,
+        2802.0,
         1380,
         566.0
       ],
@@ -2529,7 +2563,7 @@
       "title": "BEAT 5",
       "bounding": [
         20,
-        3328.0,
+        3388.0,
         1380,
         566.0
       ],
@@ -2542,7 +2576,7 @@
       "title": "BEAT 6",
       "bounding": [
         20,
-        3914.0,
+        3974.0,
         1380,
         566.0
       ],
@@ -2582,11 +2616,19 @@
       "inputs": [
         [
           2,
-          "value",
+          "sample",
           {
-            "description": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          2,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Logline",
-            "height": 72
+            "height": 140
           }
         ],
         [
@@ -2780,7 +2822,6 @@
         ]
       ],
       "outputs": [
-        2,
         3,
         4,
         5,

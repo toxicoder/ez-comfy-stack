@@ -596,11 +596,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
         true,
         "flf",
         "5 seconds, 24 fps",
-        "none"
+        "none",
+        "dcc/wan/flf-from-guide"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -875,6 +877,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           15,
           "prompt",

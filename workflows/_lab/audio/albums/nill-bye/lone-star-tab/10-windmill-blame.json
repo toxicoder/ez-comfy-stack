@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nwobble bass\nhalf-time snare\nNill Bye fact-checking\n\n[verse]\nDay after Uri, the clip went national\nWind and solar got shut down, he said\nAbbott needed a villain that photographs\nA turbine is prettier than a frozen separator\nNill Bye fact-checking the mix\nFERC: freezing plus fuel, three-quarters of the trips\nGas the majority of the failed units\nWind a share, not the story\nUT later: Permian gas production cratered\nEighty-five percent down in the basin\nYou cannot wobble that into a Green Deal fable\nThe wellhead already testified\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nLocal TV he admitted everything tripped\nThen Fox got a simpler script\nAbbott ran the simpler script\nBecause a frozen gas field is an own-goal\nNill Bye mad at a scapegoat bass-riff\nCall it windmill blame, keep the low-end dirty\nYou sold a culture war as a generation mix\nWhile thermal plants iced at the intake filters\nFour component types, two-thirds of ERCOT's outages\nProtect those, skip the scapegoat\nA half-time snare on a lie that traveled\nThe turbine was the costume\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nTwenty-twenty-six radio: the grid works flawlessly\nA sequel to everything that needed to be done was done\nAbbott still allergic to the gas chart\nStill fluent in the blade\nNill Bye filing the windmill blame\nYou can weatherize a talking point in a day\nA well takes a statute and a inspector\nYou picked the day\nWobble bass under a scapegoat\nThe drop is the moment the facts arrive\nThey arrived. You kept dancing\nThe clip still pays in primary season\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nA turbine that ices is a maintenance note\nA governor who ices the record is a method\nNill Bye posting the Fox mix-up\nAbbott still sure the blade did the murder\nMurder is a word for the freeze, not the farm\nHypothermia does not care what you blamed\nI want the wellhead on the slide\nYou want the windmill in the chyron\nKeep the wobble, lose the fable\nThe mix already named the majority fuel\nIt was not a pinwheel\nIt was the brand you run on\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[outro]\nwobble out\nmix stands\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/10-windmill-blame"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune, 140 bpm",
         "[intro]\nwobble bass\nhalf-time snare\nNill Bye fact-checking\n\n[verse]\nDay after Uri, the clip went national\nWind and solar got shut down, he said\nAbbott needed a villain that photographs\nA turbine is prettier than a frozen separator\nNill Bye fact-checking the mix\nFERC: freezing plus fuel, three-quarters of the trips\nGas the majority of the failed units\nWind a share, not the story\nUT later: Permian gas production cratered\nEighty-five percent down in the basin\nYou cannot wobble that into a Green Deal fable\nThe wellhead already testified\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nLocal TV he admitted everything tripped\nThen Fox got a simpler script\nAbbott ran the simpler script\nBecause a frozen gas field is an own-goal\nNill Bye mad at a scapegoat bass-riff\nCall it windmill blame, keep the low-end dirty\nYou sold a culture war as a generation mix\nWhile thermal plants iced at the intake filters\nFour component types, two-thirds of ERCOT's outages\nProtect those, skip the scapegoat\nA half-time snare on a lie that traveled\nThe turbine was the costume\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nTwenty-twenty-six radio: the grid works flawlessly\nA sequel to everything that needed to be done was done\nAbbott still allergic to the gas chart\nStill fluent in the blade\nNill Bye filing the windmill blame\nYou can weatherize a talking point in a day\nA well takes a statute and a inspector\nYou picked the day\nWobble bass under a scapegoat\nThe drop is the moment the facts arrive\nThey arrived. You kept dancing\nThe clip still pays in primary season\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[verse]\nA turbine that ices is a maintenance note\nA governor who ices the record is a method\nNill Bye posting the Fox mix-up\nAbbott still sure the blade did the murder\nMurder is a word for the freeze, not the farm\nHypothermia does not care what you blamed\nI want the wellhead on the slide\nYou want the windmill in the chyron\nKeep the wobble, lose the fable\nThe mix already named the majority fuel\nIt was not a pinwheel\nIt was the brand you run on\n\n[chorus]\nWindmill blame\nNill Bye on the Fox clip\nAbbott said the solar quit\nGas wells iced, coal tripped, nukes derated\nA scapegoat with a pretty blade\nYour wobble is a talking point\n\n[outro]\nwobble out\nmix stands\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/10-windmill-blame"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

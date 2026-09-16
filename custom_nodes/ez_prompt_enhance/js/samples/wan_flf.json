@@ -1,0 +1,102 @@
+[
+  {
+    "id": "hold-travel",
+    "label": "Hold then travel",
+    "prompt": "Hold identity from the first still and travel toward the last-frame pose. One continuous take. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "step-through",
+    "label": "Step through",
+    "prompt": "The wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "slow-turn",
+    "label": "Slow turn",
+    "prompt": "A slow turn from the first still into the last-frame pose. Fabric hush. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "staff-bloom",
+    "label": "Staff bloom",
+    "prompt": "Glyph rings bloom from the staff while the body travels to the last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "cloak-open",
+    "label": "Cloak opens",
+    "prompt": "The cloak opens on the travel toward the last still. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "rail-walk",
+    "label": "Rail walk",
+    "prompt": "A short walk along the rail from first to last still. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "sit-to-stand",
+    "label": "Sit to stand",
+    "prompt": "Rise from the first pose into the last-frame stand. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "stand-to-sit",
+    "label": "Stand to sit",
+    "prompt": "Settle from the first stand into the last-frame sit. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "look-off-on",
+    "label": "Look off then on",
+    "prompt": "Gaze travels off-frame then lands in the last still. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "weather-shift",
+    "label": "Weather shift",
+    "prompt": "Light and weather ease from the first still toward the last. Body travel small. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "push-with-body",
+    "label": "Push with body",
+    "prompt": "Camera eases in as the body travels to the last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "dolly-out-land",
+    "label": "Dolly out land",
+    "prompt": "Camera eases out as the last pose lands. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "pan-link",
+    "label": "Pan link",
+    "prompt": "A slow pan links first still to last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "track-link",
+    "label": "Track link",
+    "prompt": "A short track links first still to last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "fixed-morph-no",
+    "label": "Fixed body travel",
+    "prompt": "Fixed camera. The body travels to the last pose without a cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "hands-staff",
+    "label": "Hands to staff",
+    "prompt": "Hands travel to the staff as the last pose lands. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "wind-build",
+    "label": "Wind build",
+    "prompt": "Wind builds from first still to last. Fabric only plus small body travel. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "night-to-dawn",
+    "label": "Night toward dawn",
+    "prompt": "Light eases warmer while the body travels to the last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "indoor-cross",
+    "label": "Indoor cross",
+    "prompt": "A short indoor cross from first still to last pose. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  },
+  {
+    "id": "last-frame-land",
+    "label": "Land the last frame",
+    "prompt": "Ease into the last-frame pose and hold the last frames still. No cut. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No audio."
+  }
+]

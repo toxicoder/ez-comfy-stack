@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 176 bpm",
         "[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0]\n\n[inst - hats denser, reese hold, grid 541 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 541 2]\n\n[inst - trap hats roll, 808 punch, grid 541 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 541 4]\n\n[drop - harder growl drop, stacked reese wreck, torque grind, grid 541 5]\n\n[outro - kick holds, trap hats roll, reese ride, grid 541 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/13-torque-bay"
       ],
       "title": "ez_edm_prompt"
     },

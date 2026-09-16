@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
         "[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]\n\n[inst - amen chops, trap hats 808 liquid, grid 307 1]\n\n[drop - harder growl drop, reese stack, chest formant, grid 307 2]\n\n[inst - hats denser, reese hold, grid 307 3]\n\n[drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 307 5]\n\n[outro - kick holds, amen keep, reese ride, grid 307 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/06-liquid-grade"
       ],
       "title": "ez_edm_prompt"
     },

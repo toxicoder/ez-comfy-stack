@@ -1,0 +1,102 @@
+[
+  {
+    "id": "dead-sprint-gap",
+    "label": "Dead sprint at the gap",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, left glove hip-to-chest, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the left and right frame edges. Tiny floating warm-gold rune motes hover near the wrists only. Unmarked palm trees and glass towers rush toward a bright bay beyond the gap. Late-sun rim light, fabric weave and stone grit, mild film grain. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "gap-center",
+    "label": "Gap fills center",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. The rooftop gap already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "bay-beyond",
+    "label": "Bay beyond the gap",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Unmarked palms and glass towers rush toward a bright bay beyond the gap. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "left-pump",
+    "label": "Left glove pump",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Left glove hip-to-chest on the contralateral pump. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "cloak-stream",
+    "label": "Cloak streams",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. The storm-cloak streams at the left and right frame edges. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "rune-wrists",
+    "label": "Rune motes at wrists",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Tiny floating warm-gold rune motes hover near the wrists only. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "wet-stone",
+    "label": "Wet stone grit",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Late-sun rim light, fabric weave and stone grit. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "night-sprint",
+    "label": "Night sprint",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Night practicals, still a dead sprint, empty palms. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "rain-sprint",
+    "label": "Rain sprint",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Rain beads on ink-black sleeves, still a dead sprint. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "dawn-sprint",
+    "label": "Dawn sprint",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. First light, still a dead sprint at the gap. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "maglev",
+    "label": "Maglev grating",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Already at a dead sprint across unmarked grating toward a skybridge gap. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "garden-glass",
+    "label": "Garden glass",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Already at a dead sprint along unmarked hanging-garden glass. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "causeway",
+    "label": "Storm causeway",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Already at a dead sprint on a wet unmarked causeway. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "ridge",
+    "label": "Ridge sprint",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Already at a dead sprint on a coastal jungle ridge. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "overlook",
+    "label": "Overlook sprint",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Already at a dead sprint toward a warm-night bay overlook rail. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "hands-free",
+    "label": "Hands free",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Empty palms, hands free, no carried object. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "no-face",
+    "label": "No wearer face",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. No wearer face, only sleeves and gloves along the bottom edge. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "barrel",
+    "label": "Slight barrel",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Wide 24mm body-cam, slight barrel, bare frame edges. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "plant-last",
+    "label": "Readable plant",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Last frame still a sprint, landing readable for the next i2v. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  },
+  {
+    "id": "wordless",
+    "label": "Wordless plate",
+    "prompt": "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint. Silent mouth implied, empty of lettering, clean unmarked lens. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the edges. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering."
+  }
+]

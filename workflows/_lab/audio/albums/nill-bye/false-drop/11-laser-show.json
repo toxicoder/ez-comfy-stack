@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nscanner on\ngobo fake\nlogos floating\n\n[verse]\nRake draws a logo in a rented beam\nTalks a set list he never schemed\nScanner climbing on a fake gobo\nAnalog bass on a rumor garnish\nI ask for a song, you send a gobo\nYou send a haze and you call it promo\nClap on two, the paper won't stick\nThat's a king with a logo stencil\nNill Bye reading a blank-set menu\nYour whole laser is costume tinsel\nBeams look busy, the song stays hidden\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nYou name a brand like a tunnel badge\nThen you freeze when I ask who played\nElectro ticking, the scanner stays parked\nClap underneath on a story borrowed\nI want a list that can close the set\nYou want a beam with a rumor net\nLaser king on a looped projector\nNo paper trail, just a flying vector\nNill Bye marking the empty truss\nRake riding beams like a stolen plus\nLogo looks busy, the song still drifts\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nBeam left, beam right, still no song\nYour legend lives in a gobo you hung\nI clock the scanner, I clock the truss\nI clock a flex with a missing chorus\nNill Bye filing a no-set binder\nRake still selling a beam as mural\nGhost logo dressed as a flyer\nThe haze runs out, and so do the captions\nHold the scanner or drop the logo\nYour show never sat in the rafter\nEmpty in the middle, the boast looks airy\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nMorning comes, the beam is dim\nSong never came, the rumor rusted\nHats go even, the gobo gets crated\nNo list logged, the boast was dusted\nNill Bye tagging a ghosted scanner\nRake still calling it a banner\nLaser king with a rented logo\nThe file never paid the truss\nFile the beam, keep the haze\nHaze rumor is a party stencil\nScanner dead, the booth stays still\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[outro]\nbeams off\nlogos fade\npaper none\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/11-laser-show"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no autotune, 128 bpm",
         "[intro]\nscanner on\ngobo fake\nlogos floating\n\n[verse]\nRake draws a logo in a rented beam\nTalks a set list he never schemed\nScanner climbing on a fake gobo\nAnalog bass on a rumor garnish\nI ask for a song, you send a gobo\nYou send a haze and you call it promo\nClap on two, the paper won't stick\nThat's a king with a logo stencil\nNill Bye reading a blank-set menu\nYour whole laser is costume tinsel\nBeams look busy, the song stays hidden\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nYou name a brand like a tunnel badge\nThen you freeze when I ask who played\nElectro ticking, the scanner stays parked\nClap underneath on a story borrowed\nI want a list that can close the set\nYou want a beam with a rumor net\nLaser king on a looped projector\nNo paper trail, just a flying vector\nNill Bye marking the empty truss\nRake riding beams like a stolen plus\nLogo looks busy, the song still drifts\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nBeam left, beam right, still no song\nYour legend lives in a gobo you hung\nI clock the scanner, I clock the truss\nI clock a flex with a missing chorus\nNill Bye filing a no-set binder\nRake still selling a beam as mural\nGhost logo dressed as a flyer\nThe haze runs out, and so do the captions\nHold the scanner or drop the logo\nYour show never sat in the rafter\nEmpty in the middle, the boast looks airy\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[verse]\nMorning comes, the beam is dim\nSong never came, the rumor rusted\nHats go even, the gobo gets crated\nNo list logged, the boast was dusted\nNill Bye tagging a ghosted scanner\nRake still calling it a banner\nLaser king with a rented logo\nThe file never paid the truss\nFile the beam, keep the haze\nHaze rumor is a party stencil\nScanner dead, the booth stays still\n\n[chorus]\nLaser show\nLights, no paper\nNill Bye wants a set list\nRake draws logos in haze\nBeams without a song\nYour show is a scanner\n\n[outro]\nbeams off\nlogos fade\npaper none\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/11-laser-show"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

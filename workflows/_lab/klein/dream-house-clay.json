@@ -183,11 +183,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of one full-floor warm-glass crown penthouse on a very tall unmarked tropical coastal tower in a dense city of unmarked glass skyscrapers, a bright bay only as a distant slot between towers. A wide wraparound terrace sits outside a three-bay black-framed glass wall. Teak floors, pale stone, coral-teal edge light. Lounge at the glass with one sand linen sofa facing the towers. Kitchen island faces a solid teak cook wall. Dining faces an interior stone wall. Master bedroom faces the headboard wall. Bath is an interior wet room with frosted glass. Study faces a teak shelf wall. Warm teak terrace lanterns and low path lights. Palms on the terrace. Unmarked home, empty of lettering.",
         true,
         "identity",
         "Instagram 4:5 still",
-        "none"
+        "none",
+        "klein/dream-house-clay"
       ],
       "title": "HOUSE IDENTITY"
     },
@@ -5079,6 +5081,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          4,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           4,
           "prompt",

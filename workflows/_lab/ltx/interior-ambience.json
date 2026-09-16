@@ -699,12 +699,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds.",
         true,
         "t2v",
         "5 seconds, 24 fps",
         "kettle, house creak, no score",
-        "none"
+        "none",
+        "ltx/interior-ambience"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -989,6 +991,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

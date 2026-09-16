@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm",
         "[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0]\n\n[drop - harder growl drop, rolling 808 wall, formant crush, grid 277 1]\n\n[inst - trap hats denser, wobble sustain, grid 277 2]\n\n[inst - snare roll, chest 808, grid 277 3]\n\n[inst - 808 triplets, riddim growl hold, grid 277 4]\n\n[drop - full send drop, warped sub stack, riddim wreck, grid 277 5]\n\n[outro - kick holds, hats denser, wobble ride, grid 277 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/02-low-lane"
       ],
       "title": "ez_edm_prompt"
     },

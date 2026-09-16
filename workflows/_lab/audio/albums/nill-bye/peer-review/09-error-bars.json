@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nyeah\nwide bars\nNill Bye plotting\n\n[verse]\nRake talks sure like the bar is thin\nError huge on a tiny peak, kid, grin\nFeelings loud till the daylight's done\nHold the bar or drop the king, son\nConfidence is a measured gate\nYours is a vibe with a party date\nI add the whiskers, the peak looks small\nYou hide the spread and you walk the hall\nNill Bye plotting what the notes imply\nOne-dot swagger, a borrowed lie\nClub-talk confidence, science none\nYour interval swallowed the sun\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nYou plot a point like a trophy pin\nThen you fold when the whiskers walk in\nI log the miss, you log the glow\nInterval fat, your story slow\nBring the spread or sit this out\nSure-mouth science is a rumor route\nI ask the range, you send a pose\nI ask the miss, you send a rose\nNill Bye talking from the plot desk\nRake folding when the notes get terse\nFile the miss, don't file the king\nError bars are the whole thing\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nLeft whisker scraping the floor\nRight whisker kicking the door\nYour little spike sits in the middle\nLike a rumor wearing a riddle\nI ask the band, you send a pose\nI ask the miss, you send a toast\nConfidence dressed as a vibe you sold\nInterval fat and the story old\nNill Bye posting the interval\nRake still picking through the fall\nCut the swagger, keep the range\nNumbers change, you look strange\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nRake at the wide-bar wall\nTalks a peak like he measured it all\nI draw the whiskers left and right\nYour little spike disappears in the night\nConfidence band like a canyon lid\nYou sold a point that the error hid\nNill Bye out, now the numbers change\nHe still hunting a tighter range\nShow the bars or lose the mic\nSure is a vibe, not a CI hike\nSpread on the page, the swagger thins\nError bars ate your wins\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[outro]\nbars too wide\nspread on file\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/peer-review/09-error-bars"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
         "[intro]\nyeah\nwide bars\nNill Bye plotting\n\n[verse]\nRake talks sure like the bar is thin\nError huge on a tiny peak, kid, grin\nFeelings loud till the daylight's done\nHold the bar or drop the king, son\nConfidence is a measured gate\nYours is a vibe with a party date\nI add the whiskers, the peak looks small\nYou hide the spread and you walk the hall\nNill Bye plotting what the notes imply\nOne-dot swagger, a borrowed lie\nClub-talk confidence, science none\nYour interval swallowed the sun\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nYou plot a point like a trophy pin\nThen you fold when the whiskers walk in\nI log the miss, you log the glow\nInterval fat, your story slow\nBring the spread or sit this out\nSure-mouth science is a rumor route\nI ask the range, you send a pose\nI ask the miss, you send a rose\nNill Bye talking from the plot desk\nRake folding when the notes get terse\nFile the miss, don't file the king\nError bars are the whole thing\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nLeft whisker scraping the floor\nRight whisker kicking the door\nYour little spike sits in the middle\nLike a rumor wearing a riddle\nI ask the band, you send a pose\nI ask the miss, you send a toast\nConfidence dressed as a vibe you sold\nInterval fat and the story old\nNill Bye posting the interval\nRake still picking through the fall\nCut the swagger, keep the range\nNumbers change, you look strange\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[verse]\nRake at the wide-bar wall\nTalks a peak like he measured it all\nI draw the whiskers left and right\nYour little spike disappears in the night\nConfidence band like a canyon lid\nYou sold a point that the error hid\nNill Bye out, now the numbers change\nHe still hunting a tighter range\nShow the bars or lose the mic\nSure is a vibe, not a CI hike\nSpread on the page, the swagger thins\nError bars ate your wins\n\n[chorus]\nError bars wide\nYour swagger tight\nNill Bye on the spread\nRake lost the night\nTalk that sure, show the spread\nThe whiskers read, the boast is dead\n\n[outro]\nbars too wide\nspread on file\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/peer-review/09-error-bars"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

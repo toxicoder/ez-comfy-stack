@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "color bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]\n\n[inst - trap hats roll, 808 punch hold, grid 557 1]\n\n[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]\n\n[inst - snare roll, chest 808, grid 557 3]\n\n[drop - full send drop, body bass wreck, color warp, grid 557 4]\n\n[drop - harder stacked drop, chest sub wreck, warped 808 wall, grid 557 5]\n\n[outro - kick holds, hats denser, color ride, grid 557 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/15-oil-pan"
       ],
       "title": "ez_edm_prompt"
     },

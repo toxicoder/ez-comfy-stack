@@ -23,6 +23,17 @@ def test_preview_js_sets_widget_value_without_requiring_input_el() -> None:
         assert "onResize" not in body, path
 
 
+def test_sample_picker_js_is_nodes2_safe() -> None:
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "bindSamplePicker" in body
+    assert "widget.value = text" in body
+    assert "if (widget.inputEl)" in body
+    assert "onResize" not in body
+    assert "node_widget" not in body
+
+
 def test_ingest_js_drops_litegraph_node_widget() -> None:
     body = INGEST_JS.read_text(encoding="utf-8")
     assert "node_widget" not in body

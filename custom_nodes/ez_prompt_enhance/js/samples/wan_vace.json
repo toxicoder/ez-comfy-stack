@@ -1,0 +1,102 @@
+[
+  {
+    "id": "join-ab",
+    "label": "Join A to B",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "hold-wardrobe",
+    "label": "Hold wardrobe",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Hold wardrobe and set. Travel toward Shot B first frame. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "short-join",
+    "label": "Short join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. A short 17-frame join. No redesign. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "fabric-bridge",
+    "label": "Fabric bridge",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Fabric motion bridges Shot A last frame to Shot B first frame. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "light-bridge",
+    "label": "Light bridge",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Light eases while identity holds across the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "staff-bridge",
+    "label": "Staff bridge",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Staff and glyph rings hold while the join travels. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "cloak-bridge",
+    "label": "Cloak bridge",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Cloak motion bridges the two stills. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "head-turn",
+    "label": "Head turn join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. A small head turn bridges A to B. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "step-join",
+    "label": "Step join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. One step bridges A last frame to B first frame. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "pan-join",
+    "label": "Pan join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. A few degrees of pan during the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "push-join",
+    "label": "Push join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. A tiny push-in during the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "fixed-join",
+    "label": "Fixed join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Fixed camera. Identity holds across the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "weather-join",
+    "label": "Weather join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Weather eases; identity holds. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "indoor-join",
+    "label": "Indoor join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Indoor practicals hold across the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "night-join",
+    "label": "Night join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Night practicals hold across the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "dawn-join",
+    "label": "Dawn join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Dawn light eases across the join. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "crowd-far",
+    "label": "Far crowd join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Far motion only; identity locked. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "hands-join",
+    "label": "Hands join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Hands travel slightly; identity locked. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "settle-join",
+    "label": "Settle join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Motion settles as Shot B lands. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  },
+  {
+    "id": "lock-set",
+    "label": "Lock set join",
+    "prompt": "Hold identity from Shot A last frame and travel toward Shot B first frame. Keep every object and surface. Travel toward Shot B. One continuous 17-frame join at 24 fps. Keep wardrobe and set locked. Do not redesign."
+  }
+]

@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chest bass, warped bass, trap hats, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
         "[drop - heavy chest drop, trap 808 warp, canopy wreck, grid 379 0]\n\n[inst - trap hats roll, chest 808 hold, grid 379 1]\n\n[drop - harder growl drop, stacked body 808, warped chest, grid 379 2]\n\n[inst - snare roll, 808 punch, grid 379 3]\n\n[drop - full send drop, chest bass wreck, trap warp, grid 379 4]\n\n[outro - kick holds, trap hats roll, chest ride, grid 379 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/03-canopy-bounce"
       ],
       "title": "ez_edm_prompt"
     },

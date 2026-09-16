@@ -780,12 +780,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits under the voice. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "room tone matching the start image, modest speech, no score",
-        "none"
+        "none",
+        "klein/talking-head"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1111,6 +1113,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          19,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           19,
           "prompt",

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nsupersaw\npitched chords\nNill Bye watching Dobbs\n\n[verse]\nHB twelve-eighty sat armed in twenty-one\nHuman Life Protection Act, a sleeper\nAbbott signed a trigger clock\nNot a bounty, a cage\nNill Bye watching Dobbs become a date\nJuly twenty-six judgment, plus thirty\nAugust twenty-five the felony went live\nFuture-bass swell on a criminal statute\nA doctor looking at a hundred thousand civil\nAnd a possible life term\nThat is not a heartbeat civil suit\nThat is the second clock, the louder one\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nSB eight was the snitch. This is the cell\nTwo machines, one governor, one year\nAbbott got the civil bounty and the criminal cage\nA belt and a bolt\nNill Bye mad at a delay that was the point\nWrite it before the Court moves\nLet the Court pull the pin\nThen shrug like the physics did it\nA trigger is a coward's favorite tool\nYou get the ban without the signing-day photo of the cage\nThe photo already ran on the civil statute\nThe cage arrived by calendar\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nExceptions on paper, chill in the ward\nReasonable medical judgment until the AG tweets\nAbbott still reciting the emergency clause\nThe trigger does not care about the clause\nNill Bye filing twelve-eighty\nA pitched chord on a felony\nYou can dress a bomb as a delayed enactment\nIt still detonates on a clinic\nProviders left, remaining ones lawyer-up first\nCare second if the chart is screaming\nThat lag is the statute working as designed\nA time bomb with a legislative caption\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nFuture bass, pretty swell, ugly payload\nThe saw is bright, the clause is dark\nNill Bye posting the trigger clock\nAbbott still calling it protection\nProtection that threatens the person with the scalpel\nUntil the patient is close enough to dying\nI want a doctor unafraid of the code\nYou want a code the doctor is afraid of\nKeep the chords, lose the sleeper\nThirty days was not mercy\nIt was a fuse\nThe judgment lit it\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[outro]\nsaw fades\ncage holds\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/08-trigger-clock"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry booth, no autotune, 148 bpm",
         "[intro]\nsupersaw\npitched chords\nNill Bye watching Dobbs\n\n[verse]\nHB twelve-eighty sat armed in twenty-one\nHuman Life Protection Act, a sleeper\nAbbott signed a trigger clock\nNot a bounty, a cage\nNill Bye watching Dobbs become a date\nJuly twenty-six judgment, plus thirty\nAugust twenty-five the felony went live\nFuture-bass swell on a criminal statute\nA doctor looking at a hundred thousand civil\nAnd a possible life term\nThat is not a heartbeat civil suit\nThat is the second clock, the louder one\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nSB eight was the snitch. This is the cell\nTwo machines, one governor, one year\nAbbott got the civil bounty and the criminal cage\nA belt and a bolt\nNill Bye mad at a delay that was the point\nWrite it before the Court moves\nLet the Court pull the pin\nThen shrug like the physics did it\nA trigger is a coward's favorite tool\nYou get the ban without the signing-day photo of the cage\nThe photo already ran on the civil statute\nThe cage arrived by calendar\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nExceptions on paper, chill in the ward\nReasonable medical judgment until the AG tweets\nAbbott still reciting the emergency clause\nThe trigger does not care about the clause\nNill Bye filing twelve-eighty\nA pitched chord on a felony\nYou can dress a bomb as a delayed enactment\nIt still detonates on a clinic\nProviders left, remaining ones lawyer-up first\nCare second if the chart is screaming\nThat lag is the statute working as designed\nA time bomb with a legislative caption\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[verse]\nFuture bass, pretty swell, ugly payload\nThe saw is bright, the clause is dark\nNill Bye posting the trigger clock\nAbbott still calling it protection\nProtection that threatens the person with the scalpel\nUntil the patient is close enough to dying\nI want a doctor unafraid of the code\nYou want a code the doctor is afraid of\nKeep the chords, lose the sleeper\nThirty days was not mercy\nIt was a fuse\nThe judgment lit it\n\n[chorus]\nTrigger clock\nNill Bye on twelve-eighty\nAbbott hid a felony in a delay\nThirty days after the opinion became judgment\nLife in prison for a doctor\nYour ban was a time bomb\n\n[outro]\nsaw fades\ncage holds\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/08-trigger-clock"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

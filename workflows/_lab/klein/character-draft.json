@@ -422,11 +422,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         true,
         "t2i",
         "Instagram 4:5 character still",
-        "none"
+        "none",
+        "klein/character-draft"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -599,6 +601,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          11,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           11,
           "prompt",

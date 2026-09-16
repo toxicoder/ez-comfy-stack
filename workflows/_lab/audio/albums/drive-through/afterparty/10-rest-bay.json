@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
         "[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 509 1]\n\n[drop - harder growl drop, stacked 808 wall, chest formant, grid 509 2]\n\n[inst - snare roll, chest 808, grid 509 3]\n\n[drop - full send drop, body chest wreck, pedal warp, grid 509 4]\n\n[drop - harder stacked drop, low 808 wreck, trap growl, grid 509 5]\n\n[outro - kick holds, hats denser, pedal ride, grid 509 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/10-rest-bay"
       ],
       "title": "ez_edm_prompt"
     },

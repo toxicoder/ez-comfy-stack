@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nhands lifted\npads gated\nnumbers flat\n\n[verse]\nRake throws his hands like a headline\nTalks a lift that he never signed\nPickup racing, the numbers stay flat\nGated pads humming on a rumor vat\nI wait for the rise after the fill\nYou loop the hands and you call it skill\nHats in a hurry, the lift won't click\nThat's a king with a ghost in the pad\nNill Bye counting the missing rise\nYour whole pickup is a rumor plateau\nHands up, then a cheaper hush\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nYou name a lift like a vintage crest\nThen you freeze when I ask who logged the rest\nTrance ticking, the pads stay gated\nRolling bass on a story fated\nI want a rise that can close the phrase\nYou want a hand with a rumor glaze\nUplift king on a looped plateau\nNo number move, just a flying halo\nNill Bye marking the empty lift\nRake riding hands like a stolen drift\nPickup looks busy, the numbers still lag\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nHand left, hand right, still no altitude\nYour legend lives in a pickup salute\nI clock the pad, I clock the plateau\nI clock a flex with a missing halo\nNill Bye filing a no-lift binder\nRake still selling a pickup as mural\nGhost rise dressed as a flyer\nThe pad runs out, and so do the captions\nHold the hands or drop the logo\nYour rumor never sat in the rafter\nEmpty in the middle, the boast looks gated\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nMorning comes, the pickup is dim\nLift never came, the rumor rusted\nHats go even, the hands get crated\nNo rise logged, the boast was dusted\nNill Bye tagging a ghosted pad\nRake still calling it a fad\nTrance king with a rented lift\nThe number never paid the truss\nFile the pickup, keep the haze\nHands-up rumor is a party stencil\nPads dead, the booth stays still\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[outro]\nhands drop\npads gate\nlift denied\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/15-uplift-rumor"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth, no autotune, 138 bpm",
         "[intro]\nhands lifted\npads gated\nnumbers flat\n\n[verse]\nRake throws his hands like a headline\nTalks a lift that he never signed\nPickup racing, the numbers stay flat\nGated pads humming on a rumor vat\nI wait for the rise after the fill\nYou loop the hands and you call it skill\nHats in a hurry, the lift won't click\nThat's a king with a ghost in the pad\nNill Bye counting the missing rise\nYour whole pickup is a rumor plateau\nHands up, then a cheaper hush\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nYou name a lift like a vintage crest\nThen you freeze when I ask who logged the rest\nTrance ticking, the pads stay gated\nRolling bass on a story fated\nI want a rise that can close the phrase\nYou want a hand with a rumor glaze\nUplift king on a looped plateau\nNo number move, just a flying halo\nNill Bye marking the empty lift\nRake riding hands like a stolen drift\nPickup looks busy, the numbers still lag\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nHand left, hand right, still no altitude\nYour legend lives in a pickup salute\nI clock the pad, I clock the plateau\nI clock a flex with a missing halo\nNill Bye filing a no-lift binder\nRake still selling a pickup as mural\nGhost rise dressed as a flyer\nThe pad runs out, and so do the captions\nHold the hands or drop the logo\nYour rumor never sat in the rafter\nEmpty in the middle, the boast looks gated\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[verse]\nMorning comes, the pickup is dim\nLift never came, the rumor rusted\nHats go even, the hands get crated\nNo rise logged, the boast was dusted\nNill Bye tagging a ghosted pad\nRake still calling it a fad\nTrance king with a rented lift\nThe number never paid the truss\nFile the pickup, keep the haze\nHands-up rumor is a party stencil\nPads dead, the booth stays still\n\n[chorus]\nUplifting rumor\nHands up, numbers flat\nNill Bye waits for lift\nRake sells a pickup\nPads gated, no rise\nYour rumor never lifts\n\n[outro]\nhands drop\npads gate\nlift denied\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/15-uplift-rumor"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

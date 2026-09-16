@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy brostep drop, growl wreck, warped 808, grid 311 0]\n\n[inst - metal hats roll, growl sustain, grid 311 1]\n\n[drop - harder formant drop, sub crush, chest 808, grid 311 2]\n\n[inst - trap hats denser, wobble hold, grid 311 3]\n\n[drop - full send drop, brostep wreck, stacked growl, grid 311 4]\n\n[inst - snare roll, bass growl hold, grid 311 5]\n\n[drop - harder warped drop, stacked 808 wreck, mid growl, grid 311 6]\n\n[outro - kick holds, hats denser, growl ride, grid 311 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/07-jump-bay"
       ],
       "title": "ez_edm_prompt"
     },

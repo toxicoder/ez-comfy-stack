@@ -1,0 +1,102 @@
+[
+  {
+    "id": "slow-orbit-right",
+    "label": "Slow orbit right",
+    "prompt": "Slow orbit around the start-image subject. Camera arcs a few degrees right while keeping the product or hero identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-left",
+    "label": "Slow orbit left",
+    "prompt": "Camera arcs a few degrees left. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-product",
+    "label": "Product orbit",
+    "prompt": "Slow orbit around a tabletop product. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-hero",
+    "label": "Hero orbit",
+    "prompt": "Slow orbit around the hero identity. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-still-feet",
+    "label": "Feet locked",
+    "prompt": "Orbit a few degrees; feet planted. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-lights",
+    "label": "Lights hold",
+    "prompt": "Orbit; practicals hold. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-fabric",
+    "label": "Fabric hush",
+    "prompt": "Orbit; fabric hush only. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-staff",
+    "label": "Staff center",
+    "prompt": "Orbit with the staff as center. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-mug",
+    "label": "Mug orbit",
+    "prompt": "Orbit a mug on a table. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-tight",
+    "label": "Tight orbit",
+    "prompt": "A very small orbit arc. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-wide",
+    "label": "Wider arc",
+    "prompt": "A slightly wider orbit, still one take. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-night",
+    "label": "Night orbit",
+    "prompt": "Orbit under night practicals. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-dawn",
+    "label": "Dawn orbit",
+    "prompt": "Orbit in first light. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-rain",
+    "label": "Rain orbit",
+    "prompt": "Orbit; rain beads hold. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-indoor",
+    "label": "Indoor orbit",
+    "prompt": "Orbit in an unmarked room. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-terrace",
+    "label": "Terrace orbit",
+    "prompt": "Orbit on a terrace. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-settle",
+    "label": "Settle at end",
+    "prompt": "Orbit then settle. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-no-cut",
+    "label": "No-cut orbit",
+    "prompt": "One continuous orbit, no cuts. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-identity",
+    "label": "Identity lock",
+    "prompt": "Orbit; identity locked hard. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  },
+  {
+    "id": "orbit-table",
+    "label": "Table orbit",
+    "prompt": "Orbit a tabletop set. Keep the start-image subject locked. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous ~5 s take, no cuts."
+  }
+]

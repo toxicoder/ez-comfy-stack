@@ -1,0 +1,102 @@
+[
+  {
+    "id": "photoreal-finish",
+    "label": "Photoreal finish",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still: physically plausible light, natural materials, unmarked surfaces empty of lettering. Do not redesign layout."
+  },
+  {
+    "id": "golden-hour-restyle",
+    "label": "Golden-hour restyle",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still at golden hour: warm sidelight, natural materials, unmarked surfaces empty of lettering. Do not redesign layout."
+  },
+  {
+    "id": "night-practicals",
+    "label": "Night practicals",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal night interior with warm practicals and cool windows. Unmarked surfaces. Do not redesign layout."
+  },
+  {
+    "id": "overcast-rain",
+    "label": "Overcast rain",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal overcast still with wet stone and rain on glass. Unmarked surfaces. Do not redesign layout."
+  },
+  {
+    "id": "dawn-cool",
+    "label": "Dawn cool",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still in first light, cool air, long shadows. Unmarked surfaces. Do not redesign layout."
+  },
+  {
+    "id": "teak-and-linen",
+    "label": "Teak and linen",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish materials as teak, pale stone, and sand linen. Photoreal, unmarked. Do not redesign layout."
+  },
+  {
+    "id": "rammed-earth",
+    "label": "Rammed earth",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as rammed earth, limewash, and linen. Photoreal, unmarked. Do not redesign layout."
+  },
+  {
+    "id": "brick-loft",
+    "label": "Brick loft",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as sealed brick, steel sash, and charcoal linen. Photoreal, unmarked. Do not redesign layout."
+  },
+  {
+    "id": "snow-window",
+    "label": "Snow at the glass",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal winter interior, snow at the glass, wool and timber. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "harbor-haze",
+    "label": "Harbor haze",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still with harbor haze beyond the glass, cool-teal edge light. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "cinematic-contrast",
+    "label": "Cinematic contrast",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal cinematic still, motivated practicals, rich shadows. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "soft-north",
+    "label": "Soft north light",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still in soft north window light, paper and wood. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "tropical-noon",
+    "label": "Tropical noon",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still in hard tropical noon, palm shadow, stone grit. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "fog-morning",
+    "label": "Fog morning",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still in morning fog, low contrast, wet decks. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "warm-tungsten",
+    "label": "Warm tungsten",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still under warm tungsten practicals, no daylight. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "limewash-coast",
+    "label": "Limewash coast",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as limewash, pale plaster, and linen with a coastal grade. Photoreal, unmarked. Do not redesign layout."
+  },
+  {
+    "id": "dark-timber",
+    "label": "Dark timber",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as dark timber, wool, and cool glass. Photoreal, unmarked. Do not redesign layout."
+  },
+  {
+    "id": "canny-inside",
+    "label": "Inside the edges",
+    "prompt": "Keep the line-art silhouette, camera, and layout from the start image. Finish as a photoreal still inside those edges. Unmarked surfaces. Do not invent new geometry."
+  },
+  {
+    "id": "dusk-coral",
+    "label": "Dusk coral-teal",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal dusk still with coral-teal edge light and teak. Unmarked. Do not redesign layout."
+  },
+  {
+    "id": "museum-day",
+    "label": "Museum daylight",
+    "prompt": "Keep the clay blocking, camera, and silhouette from the start image. Finish as a photoreal still in even museum daylight, honest materials, no drama grade. Unmarked. Do not redesign layout."
+  }
+]

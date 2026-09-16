@@ -460,11 +460,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A bold YouTube thumbnail still, 16:9. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams fills the frame on a tropical rooftop terrace at golden hour. High contrast key light, clear subject separation, warm gold-cyan holographic glyph rings and a compact unmarked data-staff, empty of lettering. Photoreal still, eye-catching, clean of burned-in words.",
         true,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "klein/thumbnail"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -633,6 +635,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           12,
           "prompt",
