@@ -57,7 +57,8 @@
 @media (prefers-reduced-motion: reduce) {
   .md-header .md-header__title,
   .md-header .md-tabs__item,
-  .md-header .md-tabs__link {
+  .md-header .md-tabs__link,
+  .ez-table-hscroll {
     transition: none;
   }
 }
@@ -66,7 +67,10 @@
    3, below .md-header at 4). Do not position:sticky thead/th — Material
    html { overflow-x: hidden } plus display:inline-block tables prevent
    Chromium from pinning cells, and a sticky top offsets thead into the
-   body rows. Do not hide header controls. */
+   body rows. Do not hide header controls.
+   Wide tables taller than the viewport: the native wrap bar sits at wrap
+   bottom (off-screen). .ez-table-hscroll is a position:fixed mirror, not
+   sticky (same Chromium trap). The wrap stays the real scrollport. */
 .ez-table-pin {
   position: fixed;
   z-index: 3;
@@ -75,6 +79,21 @@
   isolation: isolate;
   background-color: var(--md-default-bg-color);
   box-shadow: 0 1px 0 var(--md-default-fg-color--lightest);
+}
+
+.ez-table-hscroll {
+  position: fixed;
+  z-index: 3;
+  height: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: var(--md-default-bg-color);
+  pointer-events: auto;
+  touch-action: pan-x;
+}
+
+.ez-table-hscroll__inner {
+  height: 1px;
 }
 
 .ez-table-pin table,
