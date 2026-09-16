@@ -27,6 +27,8 @@ setup() {
   source "${REPO_ROOT}/scripts/lib/safety.sh"
   # shellcheck disable=SC1091
   source "${REPO_ROOT}/scripts/lib/compose.sh"
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/lib/blender_host.sh"
 }
 
 teardown() {
@@ -1163,4 +1165,52 @@ exit 0
   [ "${output}" = "unknown" ]
   run stack_attention_backend
   [ "${output}" = "unknown" ]
+}
+
+@test "blender_host: candidates BLENDER_BIN well-known missing hint" {
+  export HOME="${TEST_TMP_DIR}/home"
+  mkdir -p "${HOME}"
+  unset BLENDER_BIN
+  export PATH="${TEST_TMP_DIR}/empty:/usr/bin:/bin"
+  mkdir -p "${TEST_TMP_DIR}/empty"
+  run blender_host_candidates
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"${HOME}/.local/bin/blender"* ]]
+  [[ "${output}" != *"/opt/blender/blender"* ]]
+  unset LAB_HERMETIC
+  run blender_host_candidates
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"/opt/blender/blender"* ]]
+  [[ "${output}" == *"/usr/bin/blender"* ]]
+  export LAB_HERMETIC=1
+  run blender_host_bin
+  [ "${status}" -eq 1 ]
+  run print_blender_host_hint
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"not on PATH"* ]]
+  [[ "${output}" == *"blender-install"* ]]
+  [[ "${output}" == *"apt-get install -y blender"* ]]
+  [[ "${output}" == *"does not install Blender"* ]]
+  run require_blender
+  [ "${status}" -eq 1 ]
+  [[ "${output}" == *"blender-install"* ]]
+
+  local off="${TEST_TMP_DIR}/offpath/blender"
+  mkdir -p "$(dirname "${off}")"
+  printf '%s\n' '#!/usr/bin/env bash' 'exit 0' >"${off}"
+  chmod +x "${off}"
+  export BLENDER_BIN="${off}"
+  run blender_host_bin
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${off}" ]
+  run require_blender
+  [ "${status}" -eq 0 ]
+
+  unset BLENDER_BIN
+  mkdir -p "${HOME}/.local/bin"
+  printf '%s\n' '#!/usr/bin/env bash' 'exit 0' >"${HOME}/.local/bin/blender"
+  chmod +x "${HOME}/.local/bin/blender"
+  run blender_host_bin
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${HOME}/.local/bin/blender" ]
 }

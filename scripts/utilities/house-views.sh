@@ -30,6 +30,8 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 source "${REPO_ROOT}/scripts/lib/compose.sh"
 # shellcheck source=../lib/occupancy.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/occupancy.sh"
+# shellcheck source=../lib/blender_host.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/blender_host.sh"
 
 ENGINE="blender"
 SLUG=""
@@ -257,26 +259,6 @@ default_layout() {
 }
 
 #######################################
-# Fail unless host blender is on PATH.
-# Globals:
-#   PATH
-# Arguments:
-#   None
-# Outputs:
-#   Install hint on stderr when missing
-# Returns:
-#   0 present; 1 missing
-#######################################
-require_blender() {
-  if ! command -v blender >/dev/null 2>&1; then
-    err "blender not on PATH. Host install only — never in docker/Dockerfile."
-    err "No Blender → use klein/dream-house (T2I). See docs/blender-gb10-sidecar.md"
-    return 1
-  fi
-  return 0
-}
-
-#######################################
 # Instagram 4:5 still size (not the LTX 1280x704 pack).
 # Globals:
 #   WIDTH, HEIGHT
@@ -348,7 +330,7 @@ cmd_run() {
   fi
   require_ig_size || return 1
   require_blender || return 1
-  local dest layout input
+  local dest layout input bin=""
   dest="${OUT_DIR:-$(default_out_dir)}"
   layout="${LAYOUT:-$(default_layout)}"
   if [[ ! -f ${layout} ]]; then
@@ -357,7 +339,8 @@ cmd_run() {
   fi
   mkdir -p "${dest}"
   input="${INPUT_DIR:-$(default_input_dir)}"
-  local -a bcmd=(blender --background --python "${REPO_ROOT}/tools/blender/export_house_views.py" --)
+  bin="$(blender_host_bin)" || return 1
+  local -a bcmd=("${bin}" --background --python "${REPO_ROOT}/tools/blender/export_house_views.py" --)
   bcmd+=(--out "${dest}" --layout "${layout}" --slug "${SLUG}" --engine "${ENGINE}")
   bcmd+=(--width "${WIDTH}" --height "${HEIGHT}" --input-dir "${input}")
   log "dumping house views → ${dest}"

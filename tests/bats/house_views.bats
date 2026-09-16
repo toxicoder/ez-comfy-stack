@@ -38,6 +38,9 @@ teardown() {
 
 @test "house-views missing blender and size refuse" {
   rm -f "${TEST_TMP_DIR}/compose_running"
+  export HOME="${TEST_TMP_DIR}/home"
+  mkdir -p "${HOME}"
+  unset BLENDER_BIN
   export PATH="${TEST_TMP_DIR}/bin:/usr/bin:/bin"
   SLUG=lab-penthouse
   WIDTH=1280
@@ -56,9 +59,12 @@ teardown() {
   run require_blender
   [ "${status}" -eq 1 ]
   [[ "${output}" == *"not on PATH"* ]]
+  [[ "${output}" == *"blender-install"* ]]
+  [[ "${output}" == *"apt-get install -y blender"* ]]
   run cmd_run
   [ "${status}" -eq 1 ]
   [[ "${output}" == *"not on PATH"* ]]
+  [[ "${output}" == *"blender-install"* ]]
 }
 
 @test "house-views parse_args default_out_dir" {

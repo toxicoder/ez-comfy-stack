@@ -108,14 +108,55 @@ def _run_occupancy_enter(mode: str, yes: bool) -> dict[str, Any]:
     }
 
 
+def _is_executable(path: Path) -> bool:
+    """True when path is a regular executable file."""
+    try:
+        return path.is_file() and os.access(path, os.X_OK)
+    except OSError:
+        return False
+
+
+def _well_known_blender_paths() -> tuple[Path, ...]:
+    """Host locations besides PATH (never the Comfy image)."""
+    home = Path.home()
+    paths: list[Path] = [
+        home / ".local" / "bin" / "blender",
+        home / ".local" / "opt" / "blender" / "blender",
+    ]
+    if os.environ.get("LAB_HERMETIC") != "1":
+        paths.extend(
+            (
+                Path("/usr/bin/blender"),
+                Path("/usr/local/bin/blender"),
+                Path("/snap/bin/blender"),
+                Path("/opt/blender/blender"),
+            )
+        )
+    return tuple(paths)
+
+
 def _blender_bin() -> str | None:
-    return shutil.which("blender")
+    override = os.environ.get("BLENDER_BIN", "").strip()
+    if override:
+        cand = Path(override)
+        if _is_executable(cand):
+            return str(cand)
+    which = shutil.which("blender")
+    if which:
+        return which
+    for cand in _well_known_blender_paths():
+        if _is_executable(cand):
+            return str(cand)
+    return None
 
 
 def _run_blender(script: str, blend: str | None = None) -> dict[str, Any]:
     binary = _blender_bin()
     if binary is None:
-        return {"ok": False, "error": "blender not on PATH"}
+        return {
+            "ok": False,
+            "error": "blender not on PATH. ./scripts/manage.sh blender-install",
+        }
     cmd = [binary, "--background"]
     if blend:
         cmd.append(blend)

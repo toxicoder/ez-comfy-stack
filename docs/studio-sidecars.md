@@ -37,7 +37,7 @@ flowchart TB
 
 | Sidecar | Where it runs | License | In image? |
 | --- | --- | --- | --- |
-| Blender | Host binary on `PATH` | Blender's own | **No** — [Blender GB10 sidecar](blender-gb10-sidecar.md) |
+| Blender | Host binary (`PATH` / `BLENDER_BIN` / `blender-install`) | Blender's own | **No** — [Blender GB10 sidecar](blender-gb10-sidecar.md) |
 | SuperSplat | Host static viewer | MIT | **No** — [Splat sidecar](splat-sidecar.md) |
 | TRELLIS.2 native | Comfy after `download-3d` | MIT | Weights on `MODELS_DIR` only. No nvdiffrast |
 | DA3-BASE | Comfy after `download-3d` | Apache 2.0 | Weights on `MODELS_DIR` only. DA3-LARGE refused |
@@ -48,6 +48,7 @@ Never `pip install nvdiffrast` / `nvdiffrec`. Never vendor Inria 3DGS or Pixal3D
 Generated meshes, previews, and scene instances are **outputs** in the [Asset Bible](asset-bible.md) under `COMFY_OUTPUT_DIR/assets/` — never in `MODELS_DIR` or `guides/`.
 
 ```bash
+./scripts/manage.sh blender-install              # once; never in Dockerfile
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh download-3d --tier trellis2   # or da3-base | all
 ./scripts/manage.sh blender                      # Workbench; dies if Comfy is heavy

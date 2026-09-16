@@ -43,6 +43,7 @@ App occupancy keys (`none` / `llm` / `klein` / …) on Prompt Forge and research
 
 ```bash
 ./scripts/manage.sh occupancy status
+./scripts/manage.sh blender-install   # once; occupancy does not install Blender
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender -- --background
 ./scripts/manage.sh occupancy enter llm-desk --yes

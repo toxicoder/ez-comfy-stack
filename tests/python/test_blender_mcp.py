@@ -137,15 +137,62 @@ def test_main_list_tools_and_call(tmp_path: Path, monkeypatch, capsys) -> None:
     assert mcp.main(["--call"]) == 1
 
 
+def test_blender_bin_honors_blender_bin_and_well_known(
+    tmp_path: Path, monkeypatch
+) -> None:
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    monkeypatch.delenv("BLENDER_BIN", raising=False)
+    monkeypatch.setenv("PATH", str(empty))
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("LAB_HERMETIC", "1")
+    (tmp_path / "home").mkdir()
+    assert mcp._blender_bin() is None
+
+    off = tmp_path / "offpath" / "blender"
+    off.parent.mkdir()
+    off.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+    off.chmod(0o755)
+    monkeypatch.setenv("BLENDER_BIN", str(off))
+    assert mcp._blender_bin() == str(off)
+
+    monkeypatch.delenv("BLENDER_BIN", raising=False)
+    local_bin = tmp_path / "home" / ".local" / "bin" / "blender"
+    local_bin.parent.mkdir(parents=True)
+    local_bin.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+    local_bin.chmod(0o755)
+    assert mcp._blender_bin() == str(local_bin)
+
+
+def test_well_known_blender_paths_skip_system_when_hermetic(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.delenv("LAB_HERMETIC", raising=False)
+    live = {str(p) for p in mcp._well_known_blender_paths()}
+    assert "/usr/bin/blender" in live
+    assert "/opt/blender/blender" in live
+    monkeypatch.setenv("LAB_HERMETIC", "1")
+    hermetic = {str(p) for p in mcp._well_known_blender_paths()}
+    assert "/usr/bin/blender" not in hermetic
+    assert str(tmp_path / "home" / ".local" / "bin" / "blender") in hermetic
+
+
 def test_bpy_tools_fail_without_blender(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     monkeypatch.setenv("PATH", str(tmp_path / "bin"))
+    monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("LAB_HERMETIC", "1")
+    monkeypatch.delenv("BLENDER_BIN", raising=False)
     (tmp_path / "bin").mkdir()
+    (tmp_path / "home").mkdir()
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "blender-desk", "parked": True, "compose": True}),
         encoding="utf-8",
     )
-    assert mcp.call_tool("scene_info", {})["ok"] is False
+    missed = mcp.call_tool("scene_info", {})
+    assert missed["ok"] is False
+    assert "blender-install" in missed["error"]
     assert mcp.call_tool("set_camera", {"location": [0, 1, 2]})["ok"] is False
     assert mcp.call_tool("keyframe_object", {"name": "Cube"})["ok"] is False
     cube = mcp.call_tool("create_primitive", {"kind": "cube", "name": "box"})

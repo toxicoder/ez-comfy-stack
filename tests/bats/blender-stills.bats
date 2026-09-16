@@ -34,6 +34,9 @@ teardown() {
 
 @test "blender-stills missing blender and size refuse" {
   rm -f "${TEST_TMP_DIR}/compose_running"
+  export HOME="${TEST_TMP_DIR}/home"
+  mkdir -p "${HOME}"
+  unset BLENDER_BIN
   export PATH="${TEST_TMP_DIR}/bin:/usr/bin:/bin"
   FILM=go-see
   PLATE=mug
@@ -49,6 +52,7 @@ teardown() {
   run require_blender
   [ "${status}" -eq 1 ]
   [[ "${output}" == *"not on PATH"* ]]
+  [[ "${output}" == *"blender-install"* ]]
   run cmd_run
   [ "${status}" -eq 1 ]
   [[ "${output}" == *"not on PATH"* ]]

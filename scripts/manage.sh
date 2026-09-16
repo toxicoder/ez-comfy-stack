@@ -369,6 +369,7 @@ Commands:
   research-mcp      In-tree research MCP (chat, web search, lab-app list; CPU GGUF)
   blender-llm       Optional host Qwen3-4B CPU client; Path D if llama.cpp missing
   blender           Host Blender sidecar (Workbench in blender-desk; dies if Comfy is heavy)
+  blender-install   Host apt install of Ubuntu blender (never in Dockerfile)
   export-guides     Dump a 1280x704 (or 768x1280) / 120f guide pack (dies if Comfy is heavy)
                     --print ltx-iclora-depth|ltx-iclora-canny|wan-flf. Dumps clay+depth+canny.
   blender-stills    Dump a single-frame clay/depth/canny still (dies if Comfy is heavy)
@@ -1567,6 +1568,14 @@ cmd_blender() {
   bash "${REPO_ROOT}/scripts/utilities/blender.sh" "$@"
 }
 
+# @command blender-install
+#######################################
+# Host apt install of Ubuntu blender (never in docker/Dockerfile).
+#######################################
+cmd_blender_install() {
+  bash "${REPO_ROOT}/scripts/utilities/blender-install.sh" "$@"
+}
+
 # @command export-guides
 #######################################
 # Occupancy-gated Blender guide-pack dump (P0). Godot is P2.
@@ -1835,6 +1844,7 @@ main() {
     research-mcp) cmd_research_mcp "$@" ;;
     blender-llm) cmd_blender_llm "$@" ;;
     blender) cmd_blender "$@" ;;
+    blender-install) cmd_blender_install "$@" ;;
     export-guides) cmd_export_guides "$@" ;;
     blender-stills) cmd_blender_stills "$@" ;;
     house-views) cmd_house_views "$@" ;;

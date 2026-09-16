@@ -55,10 +55,11 @@ TRELLIS.2 is a hero-piece tool, not a walkable house. Do not TRELLIS a full-scen
 
 `manage.sh start` seeds `ez_house_clay_01.png` … `10.png` into `${COMFY_OUTPUT_DIR}/input` (container `/inputs`) so LoadImage can Queue. If a `house-views` pack already exists it is copied; otherwise the shipped `schemas/house_layout.yaml` cameras are rendered (no Blender). Reload the App if it was open before seed.
 
-Optional Workbench dump (higher quality) — stop Comfy first:
+Optional Workbench dump (higher quality) — host Blender, then park or stop Comfy:
 
 ```bash
-./scripts/manage.sh stop
+./scripts/manage.sh blender-install
+./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh house-views --slug lab-penthouse
 # optional: --layout /path/to/house_layout.yaml
 ./scripts/manage.sh start   # type yes
