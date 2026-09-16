@@ -85,6 +85,8 @@ def _reset_llama(monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
         samp.load_index.cache_clear()
     if hasattr(samp.load_catalog, "cache_clear"):
         samp.load_catalog.cache_clear()
+    if hasattr(samp._sample_combo_labels_cached, "cache_clear"):
+        samp._sample_combo_labels_cached.cache_clear()
 
 
 def _load_docs(name: str, path: Path) -> Any:
@@ -536,6 +538,7 @@ def test_samples_edge_catalogs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setattr(samp, "SAMPLES_DIR", tmp_path)
     samp.load_index.cache_clear()
     samp.load_catalog.cache_clear()
+    samp._sample_combo_labels_cached.cache_clear()
     assert samp._as_str(None) == ""
     assert samp.load_index() == {}
     (tmp_path / "index.json").write_text("[]", encoding="utf-8")
@@ -586,9 +589,16 @@ def test_samples_edge_catalogs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) 
     assert samp.resolve_ace_sample("klein_t2i", "missing", "t", "l") == ("t", "l")
     dump = samp.catalog_payload("klein_t2i")
     assert dump[-1]["lyrics"] == "bars"
+    samp._sample_combo_labels_cached.cache_clear()
+    combo = samp.sample_combo_labels("klein_t2i")
+    assert combo[-1] == samp.CUSTOM
+    assert "Two" in combo
+    assert samp.sample_combo_labels("")[-1] == samp.CUSTOM
     monkeypatch.setattr(samp, "SAMPLES_DIR", tmp_path / "missing-dir")
     samp.load_catalog.cache_clear()
+    samp._sample_combo_labels_cached.cache_clear()
     assert samp.list_catalog_ids() == ()
+    assert samp.sample_combo_labels("klein_t2i") == [samp.CUSTOM]
     samp.load_index.cache_clear()
     assert samp.resolve_catalog("", lab_rel="klein_t2i") == ""
     monkeypatch.setattr(samp, "SAMPLES_DIR", tmp_path)
@@ -1726,6 +1736,8 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     )
     labels = samp.sample_labels("any")
     assert samp.CUSTOM in labels
+    samp._sample_combo_labels_cached.cache_clear()
+    assert samp.CUSTOM in samp.sample_combo_labels("any")
     assert research_nodes._as_bool(object()) is False
     assert pipeline.parse_planner_queries("{not json}", "fb", 2) == ["fb"]
     assert pipeline._as_bool(1.5) is True

@@ -24,6 +24,7 @@ from ez_prompt_enhance.samples import (  # noqa: E402
     resolve_ace_sample,
     resolve_catalog,
     resolve_prompt,
+    sample_combo_labels,
     sample_labels,
 )
 
@@ -159,6 +160,47 @@ def test_klein_t2i_sample_one_matches_lab_canned() -> None:
 
     first = load_catalog("klein_t2i")[0]
     assert first.prompt == KLEIN_STILL
+
+
+def test_klein_sample_combo_accepts_place_catalog_labels() -> None:
+    """Comfy validates sample against INPUT_TYPES, not the JS-filtered dropdown.
+
+    HOUSE IDENTITY on klein/dream-house uses klein_place (Cliff villa). The
+    Python combo used to be klein_t2i only, so Queue failed with
+    'The value Cliff villa for HOUSE IDENTITY's sample is not available.'
+    """
+    from ez_prompt_enhance.nodes import EZAceStepPromptEnhance, EZKleinPromptEnhance
+
+    place = sample_labels("klein_place")
+    t2i = sample_labels("klein_t2i")
+    assert "Cliff villa" in place
+    assert "Cliff villa" not in t2i
+    assert len(place) == SAMPLE_COUNT + 1
+    assert place[-1] == SAMPLE_CUSTOM
+
+    klein_combo = EZKleinPromptEnhance.INPUT_TYPES()["required"]["sample"]
+    labels, opts = klein_combo
+    assert opts["default"] == SAMPLE_CUSTOM
+    assert labels[-1] == SAMPLE_CUSTOM
+    assert "Cliff villa" in labels
+    assert t2i[0] in labels
+    union = sample_combo_labels("klein_t2i")
+    assert union == labels
+    assert union.index(t2i[0]) < union.index("Cliff villa")
+
+    ace_labels = EZAceStepPromptEnhance.INPUT_TYPES()["required"]["sample"][0]
+    rap_full = load_catalog("rap_full")[0].label
+    assert rap_full in ace_labels
+
+    cliff = resolve_prompt(
+        "klein/dream-house",
+        "Cliff villa",
+        "stale textarea",
+        node_type="EZKleinPromptEnhance",
+        mode="identity",
+    )
+    assert "cliff villa" in cliff.lower()
+    assert cliff != "stale textarea"
 
 
 def test_enhance_node_sample_overrides_textarea() -> None:

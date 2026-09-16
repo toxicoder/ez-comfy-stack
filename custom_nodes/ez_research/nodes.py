@@ -9,7 +9,7 @@ _root = str(Path(__file__).resolve().parent.parent)
 if _root not in sys.path:
     sys.path.insert(0, _root)
 
-from ez_prompt_enhance.samples import CUSTOM, resolve_prompt, sample_labels
+from ez_prompt_enhance.samples import CUSTOM, resolve_prompt, sample_combo_labels
 
 from .pipeline import ResearchResult, run_chat, run_research, write_brief
 
@@ -52,7 +52,7 @@ class EZCreativeResearch:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
-                "sample": (sample_labels("research_chat"), {"default": CUSTOM}),
+                "sample": (sample_combo_labels("research_chat"), {"default": CUSTOM}),
                 "prompt": (
                     "STRING",
                     {

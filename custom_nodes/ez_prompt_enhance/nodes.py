@@ -27,7 +27,7 @@ from .client import (
     with_style_system,
 )
 from .client import _close_llm
-from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_labels
+from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
 
 
 _ENHANCE_BOOL = (
@@ -42,7 +42,7 @@ _CATALOG_INPUT = ("STRING", {"default": "", "multiline": False})
 
 
 def _sample_input(catalog_id: str) -> tuple:
-    return (sample_labels(catalog_id), {"default": CUSTOM})
+    return (sample_combo_labels(catalog_id), {"default": CUSTOM})
 
 
 def _as_bool(value: object) -> bool:
