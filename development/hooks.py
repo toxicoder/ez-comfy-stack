@@ -4,6 +4,8 @@ Branch-aware site artifacts (mike aliases ``latest`` / ``development``):
 
 - ``on_config`` sets ``edit_uri`` to the long-lived git ref for the alias
   (``edit/main/docs/`` or ``edit/development/docs/``).
+- ``on_config`` injects generated workflow-details pages into nav from
+  ``docs/generated/workflows/manifest.json`` (nested under Workflow details).
 - ``on_page_markdown`` rewrites this-repo GitHub ``blob``/``tree`` links so
   source links match the same ref. Optional override: ``EZ_DOCS_GIT_REF``.
 - ``on_page_markdown`` / ``on_post_page`` also replace the operator token
@@ -27,6 +29,7 @@ from __future__ import annotations
 
 import html
 import importlib.util
+import json
 import os
 import re
 import subprocess
@@ -327,8 +330,51 @@ def docs_git_ref() -> str:
     return "main"
 
 
+def _workflow_docs_mod() -> Any:
+    """Load docs/generate_workflow_docs.py once.
+
+    Returns:
+        The workflow-docs generator module.
+    """
+    path = Path(__file__).resolve().parent / "generate_workflow_docs.py"
+    spec = importlib.util.spec_from_file_location("ez_docs_workflow_gen", path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load workflow docs generator from {path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["ez_docs_workflow_gen"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def inject_workflow_nav(config: dict[str, Any]) -> dict[str, Any]:
+    """Nest generated workflow pages under Create → Workflow details.
+
+    Reads ``docs/generated/workflows/manifest.json``. No-op when the
+    manifest is missing or ``nav`` is not a list.
+
+    Args:
+        config: MkDocs config mapping (mutated in place).
+
+    Returns:
+        The same config mapping.
+    """
+    manifest = Path(__file__).resolve().parent / "generated" / "workflows" / "manifest.json"
+    nav = config.get("nav")
+    if not manifest.is_file() or not isinstance(nav, list):
+        return config
+    try:
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return config
+    pages = payload.get("pages")
+    if not isinstance(pages, list):
+        return config
+    config["nav"] = _workflow_docs_mod().inject_nav(nav, pages)
+    return config
+
+
 def on_config(config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
-    """Stamp ``edit_uri`` for the active docs git ref.
+    """Stamp ``edit_uri`` and inject generated workflow nav.
 
     Args:
         config: MkDocs config mapping (mutated in place).
@@ -336,11 +382,12 @@ def on_config(config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
 
     Returns:
         The same config mapping with ``edit_uri`` set to
-        ``edit/<ref>/docs/``.
+        ``edit/<ref>/docs/`` and workflow-details children when the
+        generator manifest exists.
     """
     del kwargs
     config["edit_uri"] = f"edit/{docs_git_ref()}/docs/"
-    return config
+    return inject_workflow_nav(config)
 
 
 def stamp_git_ref(text: str, ref: str | None = None) -> str:
