@@ -1007,7 +1007,7 @@ def encyclopedia() -> dict[str, Any]:
             _s("prompt", "STRING", "out", "String CLIP actually encodes."),
         ],
         widgets=[
-            _w("sample", index=0, typ="COMBO", rng="custom", desc="Lab sample prompt or Custom.", gen="Custom keeps the textarea. Picking a sample fills and locks the Prompt."),
+            _w("sample", index=0, typ="COMBO", rng="custom", desc="Lab sample prompt or Custom.", gen="Custom keeps the textarea. Picking a sample fills and locks the Prompt. Python combo is the union of every catalog so Comfy accepts place recipes (Cliff villa on dream-house); JS still filters the App dropdown to this graph."),
             _w("prompt", index=1, desc="Lazy sentence or authored still prompt.", gen="When Enhance is on, the GGUF expands this into Klein-native sentences."),
             _w("enhance", index=2, typ="BOOLEAN", rng="on for lazy printers", desc="Run the rewriter.", gen="Off = encode the widget as-is (plus style suffix if set)."),
             _w("mode", index=3, typ="COMBO", rng="t2i / edit / identity", desc="System prompt flavor.", gen="t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).", choices=[("t2i", "New still."), ("edit", "Klein-edit / clay / tweak."), ("identity", "Camera-free identity bible.")]),
