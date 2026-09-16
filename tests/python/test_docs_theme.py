@@ -234,6 +234,35 @@ def test_tables_js_floating_hscroll_and_header_pan() -> None:
     assert re.search(r"style\.position\s*=\s*['\"]sticky", js) is None
 
 
+def test_tables_js_releases_pin_when_table_leaves_viewport() -> None:
+    """Cloned header and h-scroll hide once the table is fully past the navbar."""
+    js = _read(TABLES_JS)
+    assert re.search(r"function\s+inStickyBand\s*\(", js)
+    assert js.count("inStickyBand(") >= 3
+    pin_fn = re.search(
+        r"function\s+pinTable\s*\([^)]*\)\s*\{",
+        js,
+    )
+    hscroll_fn = re.search(
+        r"function\s+needsHScroll\s*\([^)]*\)\s*\{",
+        js,
+    )
+    assert pin_fn is not None
+    assert hscroll_fn is not None
+    pin_start = pin_fn.start()
+    hscroll_start = hscroll_fn.start()
+    pin_body = js[pin_start:hscroll_start] if pin_start < hscroll_start else js[pin_start:]
+    assert "inStickyBand(" in pin_body
+    assert "overlay.hidden" in pin_body
+    assert re.search(
+        r"desired\s*\+\s*theadH\s*<=\s*pin|theadH\s*\+\s*desired\s*<=\s*pin",
+        pin_body,
+    )
+    needs_end = js.find("function placeHScroll", hscroll_start)
+    needs_body = js[hscroll_start:needs_end] if needs_end > hscroll_start else js[hscroll_start:]
+    assert "inStickyBand(" in needs_body
+
+
 def test_conventions_document_sticky_header() -> None:
     """Docs publish notes the sticky-tabs contract for later edits."""
     text = _read(CONVENTIONS)
@@ -249,6 +278,7 @@ def test_conventions_document_sticky_header() -> None:
     assert "ez-table-pin" in text or "clone" in text.lower()
     assert "ez-table-hscroll" in text
     assert "scrollLeft" in text
+    assert "inStickyBand" in text or "scrolled past" in text.lower()
     assert ".md-header" in text or "md-header" in text
     assert "ez-published-chip" in text
     assert "EZ_DOCS_PUBLISHED_AT" in text
@@ -276,6 +306,7 @@ def test_troubleshooting_docs_site_covers_table_chrome() -> None:
     assert "tables.js" in text
     assert "hard-refresh" in text.lower() or "Hard-refresh" in text
     assert "ez-table-hscroll" in text or "horizontal" in text.lower()
+    assert "scrolled past" in text.lower()
 
 
 def test_extra_css_styles_published_chip() -> None:

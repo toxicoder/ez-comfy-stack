@@ -1,6 +1,9 @@
 /**
  * Pin markdown table headers under the Material navbar, then release so
- * the last body row and 25% of the previous row stay visible.
+ * the last body row and 25% of the previous row stay visible. Hide the pin
+ * (and the h-scroll mirror) once the table is fully above the navbar or
+ * below the viewport — a position:fixed clone with a negative top can be
+ * clamped back into view under html { overflow-x: hidden }.
  *
  * When a table is wider than the article and taller than the viewport,
  * the native wrap scrollbar sits off-screen at the wrap bottom. A cloned
@@ -58,6 +61,16 @@
    */
   function scrollWrap(table) {
     return table.closest(".md-typeset__scrollwrap") || table;
+  }
+
+  /**
+   * Whether a table or wrap still intersects the band below the navbar.
+   * @param {DOMRect} rect
+   * @param {number} pin
+   * @returns {boolean}
+   */
+  function inStickyBand(rect, pin) {
+    return rect.bottom > pin && rect.top < window.innerHeight;
   }
 
   /**
@@ -174,21 +187,31 @@
       overlay.hidden = true;
       return;
     }
-    var naturalTop = thead.getBoundingClientRect().top;
+    var tableRect = table.getBoundingClientRect();
+    if (!inStickyBand(tableRect, pin)) {
+      overlay.hidden = true;
+      return;
+    }
+    var theadRect = thead.getBoundingClientRect();
+    var theadH = theadRect.height;
+    var naturalTop = theadRect.top;
     var desired = clampTop(table, thead, pin);
     var dy = desired - naturalTop;
     if (dy <= 0.5) {
       overlay.hidden = true;
       return;
     }
+    if (desired + theadH <= pin) {
+      overlay.hidden = true;
+      return;
+    }
     var wrap = scrollWrap(table);
     var wrapRect = wrap.getBoundingClientRect();
-    var tableRect = table.getBoundingClientRect();
     overlay.hidden = false;
     overlay.style.top = desired + "px";
     overlay.style.left = wrapRect.left + "px";
     overlay.style.width = Math.max(0, wrapRect.width) + "px";
-    overlay.style.height = thead.getBoundingClientRect().height + 1 + "px";
+    overlay.style.height = theadH + 1 + "px";
     fillOverlay(overlay, thead);
     var inner = overlay.querySelector("table");
     if (inner) {
@@ -244,10 +267,10 @@
       return false;
     }
     var rect = wrap.getBoundingClientRect();
-    var vh = window.innerHeight;
-    if (rect.top >= vh || rect.bottom <= pin) {
+    if (!inStickyBand(rect, pin)) {
       return false;
     }
+    var vh = window.innerHeight;
     if (rect.bottom <= vh && rect.bottom > 0) {
       return false;
     }
