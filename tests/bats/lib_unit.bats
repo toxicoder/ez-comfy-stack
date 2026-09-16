@@ -700,7 +700,7 @@ n=$(cat "${TEST_TMP_DIR}/hf_n" 2>/dev/null || echo 0)
 n=$((n + 1))
 echo "${n}" >"${TEST_TMP_DIR}/hf_n"
 if [[ ${n} -eq 1 ]]; then
-  sleep 30
+  sleep 3
   exit 1
 fi
 prev=""

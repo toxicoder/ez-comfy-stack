@@ -9,15 +9,15 @@ tags: [testing, coverage, mkdocs, mike, contributing]
 **What's on this page**
 
 - **Bazel / Make targets** — `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
-- **100% Python gate** — UM patches + `ez_ltx_spatial` (not the shell generator)
-- **Shell function inventory**
+- **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
+- **Shell function inventory** (invoked by a test, not only named)
 - **`deploy-docs.yml` + mike** — `main` → `latest`, `development` → `development`
 - **`bazelisk run //docs:docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` then `mkdocs build --strict`
 
 **What this enables**
 
 - **Running** the same gates CI uses before a docs PR
-- **Knowing** the coverage number is **not** “every Python file in the repo”
+- **Knowing** the 100% gate is every first-party production Python module, with GPU/bpy/network branches covered by hermetic fakes
 - **Publishing** versioned docs without upgrading MkDocs 2.x
 
 Style: [Docs style](docs-style.md). Root workflow: [Contributing](contributing.md).
@@ -43,7 +43,7 @@ Makefile shims call Bazelisk when present. Canonical commands: [Building with Ba
 | --- | --- |
 | **`bazelisk test //:test-fast`** / **`make test`** | BATS + Python + Pyright + mypy |
 | **`make coverage`** | Same as `//:test-fast` via Bazel, else `tests/coverage.sh` |
-| **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier + Pyright + mypy |
+| **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier (Pyright + mypy live in `//:test-fast`) |
 | **`make typecheck`** | Pyright (Pylance) + mypy |
 | **`bazelisk run //docs:docs`** | generators then `NO_MKDOCS_2_WARNING=1 mkdocs build --strict` |
 | **`bazelisk run //:fix`** | buildifier + `shfmt -w` |
@@ -57,24 +57,24 @@ Pyright errors and mypy errors are **defects**. Do not skip the gate.
 
 ## 100% Python gate
 
-`make coverage` / `make python` fail-under **100** on:
+`make coverage` / `tests/run_pytest.sh` fail-under **100** on every first-party production package:
 
-- `patch_get_free_memory`
-- `patch_unified_memory_copy`
-- `patch_magcache_compat`
-- `patch_vhs_widget_inputs`
-- `seed_clay_inputs`
-- **`ez_ltx_spatial`**
+- `custom_nodes`
+- `docker` (UM patches, `seed_clay_inputs`, `pythonpath/sitecustomize`)
+- `docs` generators and hooks
+- `scripts/lib`
+- `studio-ui`
+- `tools` (Blender exporters; `bpy` is faked)
 
-That is **UM / MagCache / VHS widgetInputs / clay seed / LTX spatial** — **not** `docs/generate_shell_docs.py` and not the rest of `custom_nodes/`. The shell generator is exercised by pytest (`tests/python/test_generate_shell_docs.py`) without a 100% line gate.
+Vendored `custom_nodes/ez_dcc/_guide_pack.py` is included (same tests as `scripts/lib/guide_pack.py`). GPU loaders, llama.cpp, and host Blender are exercised with `sys.modules` fakes — tests stay hermetic.
 
-`PYTHONPATH=docker:custom_nodes`.
+`PYTHONPATH=docker:docker/pythonpath:custom_nodes:scripts/lib:studio-ui:docs:tools`.
 
 ---
 
 ## Shell function inventory
 
-Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (strict; production-only refs do not count). Entrypoint `main` is skipped. New library functions ship with BATS/pytest in the **same commit**.
+Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (strict; a comment that only names the function does not count). Entrypoint `main` is skipped. New library functions ship with BATS/pytest in the **same commit**. kcov remains optional and non-fatal.
 
 ---
 

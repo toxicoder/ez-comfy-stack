@@ -2,7 +2,7 @@
 #
 # ## run_pytest
 #
-# Hermetic pytest + 100% coverage gate on Spark patches.
+# Hermetic pytest + 100% coverage gate on first-party production Python.
 #
 # Usage:
 #   bash tests/run_pytest.sh
@@ -17,16 +17,16 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/repo_root.sh"
 ROOT="$(tests_repo_root)"
 cd "${ROOT}"
 
-export PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${ROOT}/docker:${ROOT}/docker/pythonpath:${ROOT}/custom_nodes:${ROOT}/scripts/lib:${ROOT}/studio-ui:${ROOT}/docs:${ROOT}/tools:${ROOT}/tools/blender${PYTHONPATH:+:${PYTHONPATH}}"
 
 if python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
   python3 -m pytest tests/python -q \
-    --cov=patch_get_free_memory \
-    --cov=patch_unified_memory_copy \
-    --cov=patch_magcache_compat \
-    --cov=patch_vhs_widget_inputs \
-    --cov=seed_clay_inputs \
-    --cov=ez_ltx_spatial \
+    --cov=custom_nodes \
+    --cov=docker \
+    --cov=docs \
+    --cov=scripts/lib \
+    --cov=studio-ui \
+    --cov=tools \
     --cov-report=term-missing \
     --cov-fail-under=100
 else

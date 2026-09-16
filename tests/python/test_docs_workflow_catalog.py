@@ -8,6 +8,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_paths import load_lab_graph
+
 ROOT = Path(__file__).resolve().parents[2]
 LAB = ROOT / "workflows" / "_lab"
 DOCS = ROOT / "docs"
@@ -32,7 +34,7 @@ def _graph_id(path: Path) -> str:
     Returns:
         Catalog id such as ``klein/still-draft``.
     """
-    extra = json.loads(path.read_text(encoding="utf-8")).get("extra") or {}
+    extra = load_lab_graph(path).get("extra") or {}
     lab_rel = extra.get("lab_rel")
     if isinstance(lab_rel, str) and lab_rel.strip():
         return lab_rel.strip()

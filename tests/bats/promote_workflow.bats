@@ -16,8 +16,24 @@ teardown() {
   teardown_repo_env
 }
 
-# Named for coverage inventory: promote_usage promote_lane_ok
-# promote_refuse_banned promote_run
+@test "promote_workflow helpers usage lane_ok refuse_banned" {
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
+  run promote_usage
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Usage:"* ]]
+  run promote_lane_ok klein
+  [ "${status}" -eq 0 ]
+  run promote_lane_ok nope
+  [ "${status}" -ne 0 ]
+  local src="${TEST_TMP_DIR}/ok.json"
+  printf '%s\n' '{"id":"ok"}' >"${src}"
+  run promote_refuse_banned "${src}"
+  [ "${status}" -eq 0 ]
+  printf '%s\n' '{"id":"x","note":"MiniMax"}' >"${src}"
+  run promote_refuse_banned "${src}"
+  [ "${status}" -ne 0 ]
+}
 
 @test "promote_workflow refuses banned strings bad id and bad lane" {
   local src sh

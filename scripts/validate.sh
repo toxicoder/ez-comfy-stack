@@ -125,6 +125,10 @@ path_matches_bazel_core() {
   [[ ${path} == tools/* ]] && return 0
   [[ ${path} == studio-ui/* ]] && return 0
   [[ ${path} == workflows/* ]] && return 0
+  [[ ${path} == docs/*.py ]] && return 0
+  [[ ${path} == mypy.ini ]] && return 0
+  [[ ${path} == pyrightconfig.json ]] && return 0
+  [[ ${path} == .devcontainer/tool-versions.env ]] && return 0
   return 1
 }
 
@@ -360,7 +364,7 @@ run_docs_slice() {
   need_bazel
   echo "==> validate: docs (generate + strict MkDocs)"
   "${BAZEL}" run //docs:docs
-  "${BAZEL}" test //docs:test_mkdocs_build --test_tag_filters=manual
+  "${BAZEL}" test //docs:test_mkdocs_build
 }
 
 #######################################
@@ -380,8 +384,12 @@ main() {
   fi
 
   resolve_slices
-  run_core_slice
-  if [[ ${RUN_DOCS} -eq 1 || ${RUN_ALL} -eq 1 ]]; then
+  if [[ ${RUN_BAZEL_CORE} -eq 1 || ${RUN_BAZEL_CORE} == "true" ]]; then
+    run_core_slice
+  else
+    echo "validate: skip core (unchanged bazel-core paths)"
+  fi
+  if [[ ${RUN_DOCS} -eq 1 || ${RUN_DOCS} == "true" || ${RUN_ALL} -eq 1 ]]; then
     run_docs_slice
     check_generated_artifacts
   fi

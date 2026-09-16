@@ -109,22 +109,34 @@ run_mypy() {
 #######################################
 main() {
   local fail=0
+  local py_status=0
+  local my_status=0
 
-  echo "=== Pyright (Pylance) ==="
   if ! require_pyright; then
     fail=1
-  elif ! run_pyright "$@"; then
-    fail=1
   fi
-
-  echo "=== mypy ==="
   if ! require_mypy; then
     fail=1
-  elif ! run_mypy; then
-    fail=1
+  fi
+  if [[ ${fail} -ne 0 ]]; then
+    return 1
   fi
 
-  if [[ ${fail} -ne 0 ]]; then
+  echo "=== Pyright (Pylance) ==="
+  echo "=== mypy ==="
+  # Separate caches so the two checkers can run concurrently.
+  (
+    run_pyright "$@"
+  ) &
+  local py_pid=$!
+  (
+    export MYPY_CACHE_DIR="${ROOT}/.mypy_cache"
+    run_mypy
+  ) &
+  local my_pid=$!
+  wait "${py_pid}" || py_status=$?
+  wait "${my_pid}" || my_status=$?
+  if [[ ${py_status} -ne 0 || ${my_status} -ne 0 ]]; then
     return 1
   fi
 }

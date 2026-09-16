@@ -81,13 +81,14 @@ def _log(message: str) -> None:
 
 
 def _ip_blocked(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    # Judge the inner IPv4. CPython 3.12 marks ::ffff:0:0/96 reserved; 3.13 does not.
+    mapped = getattr(ip, "ipv4_mapped", None)
+    if mapped is not None:
+        return _ip_blocked(mapped)
     if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_multicast:
         return True
     if ip.is_reserved or ip.is_unspecified:
         return True
-    mapped = getattr(ip, "ipv4_mapped", None)
-    if mapped is not None:
-        return _ip_blocked(mapped)
     return any(ip in net for net in _PRIVATE_NETS)
 
 

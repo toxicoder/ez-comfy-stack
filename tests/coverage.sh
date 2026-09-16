@@ -5,7 +5,7 @@
 # Enforce project coverage gates for CI (`make coverage`) and local pre-merge.
 #
 # Gates:
-#   1. Python — pytest-cov on Spark patches + seed_clay_inputs + ez_ltx_spatial with --cov-fail-under=100
+#   1. Python — pytest-cov on all first-party production packages with --cov-fail-under=100
 #   2. Pyright (Pylance) + mypy — first-party Python typecheck (tests/typecheck.sh)
 #   3. Shell function inventory — every function under scripts/ and docker/**/*.sh
 #      must be named under tests/ (strict; production-only refs do not count)

@@ -5,6 +5,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
 
@@ -52,3 +54,43 @@ def test_cli_keep_set() -> None:
     assert mm._cli(["--manifest", str(MANIFEST), "json"]) == 0  # noqa: SLF001
     assert mm._cli(["--manifest", str(MANIFEST), "pack", "ltx-2.5"]) == 0  # noqa: SLF001
     assert mm._cli(["--manifest", str(MANIFEST), "pack", "nope"]) == 1  # noqa: SLF001
+
+
+def test_load_manifest_skips_orphan_lines(tmp_path: Path) -> None:
+    path = tmp_path / "man.yaml"
+    path.write_text(
+        "\n".join(
+            [
+                "schema: 1",
+                "refuse:",
+                "  - BannedTok",
+                "  not-a-token",
+                "packs:",
+                "  orphan line without colon",
+                "  demo:",
+                "    default: true",
+                "    retired: false",
+                "    min_gb: 2",
+                "    tier_dir: demo",
+                "    cmd: 'echo'",
+                "    cleanup: ''",
+                "    files:",
+                "      - keep-me.safetensors",
+                "    shares:",
+                "      - share-me.safetensors",
+                "    extra: leftover",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    man = mm.load_manifest(path)
+    assert man["refuse"] == ["BannedTok"]
+    pack = man["packs"]["demo"]
+    assert pack["default"] is True
+    assert pack["min_gb"] == 2
+    assert pack["files"] == ["keep-me.safetensors"]
+    assert pack["shares"] == ["share-me.safetensors"]
+    assert pack["cmd"] == "echo"
+    assert mm.keep_set(man) == {"keep-me.safetensors"}
+    assert mm.default_keep_set(man) == {"keep-me.safetensors"}

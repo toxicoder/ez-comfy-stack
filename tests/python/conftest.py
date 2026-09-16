@@ -16,7 +16,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 DOCKER = ROOT / "docker"
 CUSTOM = ROOT / "custom_nodes"
-if str(DOCKER) not in sys.path:
-    sys.path.insert(0, str(DOCKER))
-if str(CUSTOM) not in sys.path:
-    sys.path.insert(0, str(CUSTOM))
+_EXTRA_PATHS = (
+    DOCKER,
+    DOCKER / "pythonpath",
+    CUSTOM,
+    ROOT / "scripts" / "lib",
+    ROOT / "studio-ui",
+    ROOT / "docs",
+    ROOT / "tools",
+    ROOT / "tools" / "blender",
+)
+for _path in reversed(_EXTRA_PATHS):
+    text = str(_path)
+    if text not in sys.path:
+        sys.path.insert(0, text)

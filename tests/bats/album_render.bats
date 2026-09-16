@@ -15,8 +15,21 @@ teardown() {
   teardown_repo_env
 }
 
-# Named for coverage inventory: cmd_help album_dir comfy_up comfy_free
-# comfy_post_prompt comfy_wait_history pack_only main cmd_album_render
+@test "album_render helpers comfy_up comfy_free pack_only cmd_album_render" {
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/utilities/album-render.sh"
+  install_mock_bin curl 'exit 0'
+  run comfy_up
+  [ "${status}" -eq 0 ]
+  run comfy_free
+  [ "${status}" -eq 0 ]
+  run pack_only "nill-bye/peer-review"
+  [ "${status}" -ne 0 ]
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/manage.sh"
+  run cmd_album_render --help
+  [ "${status}" -eq 0 ]
+}
 
 @test "album_render help status dry-run and missing album" {
   local sh

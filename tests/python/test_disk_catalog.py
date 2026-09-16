@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import io
 import json
+import os
 import sys
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -256,3 +259,204 @@ def test_walk_roots_to_stdout_skips_missing(
     assert n == 1
     assert "Scanning" in captured.err
     assert json.loads(captured.out.splitlines()[0])["path"].endswith("a.bin")
+
+
+def test_load_catalog_skips_and_rejects(tmp_path: Path) -> None:
+    good = tmp_path / "ok.yaml"
+    good.write_text(
+        "\n".join(
+            [
+                "schema: 1",
+                "other:",
+                "  ignored: true",
+                "signatures:",
+                "  stray line without colon",
+                "  demo:",
+                "    risk: safe",
+                "    reclaim: delete",
+                "    leftover_weight:",
+                "    what: demo",
+                "    why: test",
+                "    leftover_when: always",
+                "    match_suffix:",
+                "      - \".tmp\"",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    cat = dc.load_catalog(good)
+    assert cat["signatures"]["demo"]["leftover_weight"] == 0
+    bad_risk = tmp_path / "risk.yaml"
+    bad_risk.write_text(
+        "schema: 1\nsignatures:\n  demo:\n    risk: exploding\n    reclaim: delete\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="bad risk"):
+        dc.load_catalog(bad_risk)
+    bad_reclaim = tmp_path / "reclaim.yaml"
+    bad_reclaim.write_text(
+        "schema: 1\nsignatures:\n  demo:\n    risk: safe\n    reclaim: shred\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="bad reclaim"):
+        dc.load_catalog(bad_reclaim)
+
+
+def test_rank_score_zero_penalty(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(dc.RISK_PENALTY, "safe", 0)
+    assert dc.rank_score(100, 10, "safe") == 250.0
+
+
+def test_path_matches_keep_prefix_basename() -> None:
+    keep_sig = {"match_keep_set": True}
+    assert dc._path_matches("/mnt/models/keep.bin", keep_sig, {"keep.bin"}, []) is True
+    assert dc._path_matches("/mnt/models/other.bin", keep_sig, {"keep.bin"}, []) is False
+    cat = dc.load_catalog(CATALOG)
+    core = dc.classify_path("/tmp/core", cat, size_bytes=12)
+    assert core["id"] == "core-dump"
+    dotted = dc.classify_path("/tmp/core.1234", cat, size_bytes=12)
+    assert dotted["id"] == "core-dump"
+
+
+def test_classify_dangling_and_unknown() -> None:
+    cat = {
+        "signatures": {
+            "dangling-symlink": {
+                **dc._empty_sig(),
+                "match_suffix": [".lnk"],
+                "match_broken_symlink": False,
+            },
+            "keep-set-weight": {
+                **dc._empty_sig(),
+                "match_suffix": [".safetensors"],
+                "match_keep_set": False,
+            },
+        }
+    }
+    dangling = dc.classify_path("/x/a.lnk", cat, broken_symlink=True)
+    assert dangling["id"] == "dangling-symlink"
+    skipped = dc.classify_path("/x/a.lnk", cat, broken_symlink=False)
+    assert skipped["id"] == "unknown"
+    keep_skip = dc.classify_path("/x/foo.safetensors", cat, keep_set=set())
+    assert keep_skip["id"] == "unknown"
+    live = dc.load_catalog(CATALOG)
+    broken = dc.classify_path("/mnt/models/missing", live, broken_symlink=True)
+    assert broken["id"] == "dangling-symlink"
+
+
+def test_walk_error_and_depth_edges(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    assert list(dc.walk_root_files(str(tmp_path / "missing"), max_depth=6)) == []
+    assert list(dc.walk_root_files(str(tmp_path), max_depth=0)) == []
+    blocked = tmp_path / "blocked"
+    blocked.mkdir()
+    (blocked / "x.bin").write_text("x", encoding="utf-8")
+    real_scandir = os.scandir
+
+    def wrapped(path: str) -> Any:
+        if Path(path).name == "blocked":
+            raise OSError("perm")
+        return real_scandir(path)
+
+    monkeypatch.setattr(os, "scandir", wrapped)
+    rows = list(dc.walk_root_files(str(tmp_path), max_depth=3))
+    assert not any("blocked" in r["path"] for r in rows)
+
+    class Boom:
+        name = "x"
+        path = str(tmp_path / "x")
+
+        def is_symlink(self) -> bool:
+            raise OSError("stat")
+
+    class CM:
+        def __iter__(self) -> Any:
+            return iter([Boom()])
+
+        def __enter__(self) -> CM:
+            return self
+
+        def __exit__(self, *_a: object) -> None:
+            return None
+
+    monkeypatch.setattr(os, "scandir", lambda _p: CM())
+    assert list(dc.walk_root_files(str(tmp_path), max_depth=2)) == []
+
+    monkeypatch.setattr(os, "scandir", real_scandir)
+    boom = tmp_path / "boom.bin"
+    boom.write_text("x", encoding="utf-8")
+    real_size = os.path.getsize
+
+    def size_wrapped(path: str) -> int:
+        if str(path).endswith("boom.bin"):
+            raise OSError("size")
+        return int(real_size(path))
+
+    monkeypatch.setattr(os.path, "getsize", size_wrapped)
+    row = dc._file_row(str(boom))
+    assert row["size_bytes"] == 0
+
+
+def test_walk_progress_interval_zero_and_heartbeat(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    (tmp_path / "a.bin").write_text("a", encoding="utf-8")
+    (tmp_path / "b.bin").write_text("b", encoding="utf-8")
+    monkeypatch.setenv("DISK_WIZARD_PROGRESS_INTERVAL", "0")
+    n = dc.walk_roots_to_stdout([str(tmp_path)], 2)
+    assert n == 2
+    capsys.readouterr()
+    monkeypatch.setenv("DISK_WIZARD_PROGRESS_INTERVAL", "0.0001")
+    monkeypatch.setattr(dc, "WALK_PROGRESS_EVERY", 1)
+    n2 = dc.walk_roots_to_stdout([str(tmp_path)], 2)
+    assert n2 == 2
+    err = capsys.readouterr().err
+    assert "still scanning" in err
+
+
+def test_cli_rank_and_keep_refuse(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    lib = str(ROOT / "scripts" / "lib")
+    saved = sys.path[:]
+    try:
+        while lib in sys.path:
+            sys.path.remove(lib)
+        keep, refuse = dc._load_keep_refuse(MANIFEST)
+    finally:
+        sys.path[:] = saved
+    assert keep
+    assert refuse
+    payload = (
+        "\n"
+        + json.dumps({"path": "/mnt/models/x.incomplete", "size_bytes": 10})
+        + "\n"
+    )
+    monkeypatch.setattr(sys, "stdin", io.StringIO(payload))
+    assert dc._cli(["--catalog", str(CATALOG), "--manifest", str(MANIFEST), "rank"]) == 0
+    ranked = json.loads(capsys.readouterr().out)
+    assert ranked[0]["id"] == "hf-incomplete"
+    monkeypatch.setattr(
+        sys,
+        "stdin",
+        io.StringIO(json.dumps({"path": str(tmp_path / "core"), "size_bytes": 1}) + "\n"),
+    )
+    assert (
+        dc._cli(
+            [
+                "--catalog",
+                str(CATALOG),
+                "classify",
+                "--path",
+                str(tmp_path / "core"),
+                "--size",
+                "1",
+                "--broken-symlink",
+            ]
+        )
+        == 0
+    )

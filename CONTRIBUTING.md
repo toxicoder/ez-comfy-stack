@@ -52,7 +52,7 @@ flowchart LR
 ## PR checklist
 
 - [ ] Tests updated in the same commits as the code they exercise
-- [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% gate + Pyright + mypy)
+- [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% first-party Python + Pyright + mypy)
 - [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
 - [ ] `bazelisk run //docs:docs` (mkdocs strict)
 - [ ] Safety impact called out if Docker/resources/download-limit changed

@@ -111,9 +111,8 @@ install_release_bins() {
 }
 
 run_root apt-get update -qq
-run_root apt-get install -y -qq shellcheck bats curl ca-certificates python3-pip
+run_root apt-get install -y -qq shellcheck curl ca-certificates python3-pip
 
-python3 -m pip install --upgrade pip
 pip install -r "${REPO_ROOT}/tests/requirements.txt"
 
 if [[ ${LINT_BINS_CACHE_HIT:-} == "true" ]] &&

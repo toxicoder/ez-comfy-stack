@@ -32,6 +32,12 @@ def _workflow_json() -> list[Path]:
     return files
 
 
+def _load(path: Path) -> dict:
+    from _lab_paths import load_lab_graph
+
+    return load_lab_graph(path)
+
+
 def _spatial_nodes(graph: dict) -> list[dict]:
     return [n for n in graph["nodes"] if n.get("type") in LTX_SPATIAL_TYPES]
 
@@ -40,7 +46,7 @@ def test_ltx_spatial_dims_are_vae_aligned() -> None:
     hits: list[str] = []
     found = 0
     for path in _workflow_json():
-        graph = json.loads(path.read_text(encoding="utf-8"))
+        graph = _load(path)
         rel = path.relative_to(ROOT)
         for node in _spatial_nodes(graph):
             found += 1
@@ -59,7 +65,7 @@ def test_ltx_lab_defaults_are_1280x704_or_portrait_768x1280() -> None:
     seen_portrait = False
     seen_landscape = False
     for path in _workflow_json():
-        graph = json.loads(path.read_text(encoding="utf-8"))
+        graph = _load(path)
         for node in _spatial_nodes(graph):
             size = (int(node["widgets_values"][0]), int(node["widgets_values"][1]))
             if path.stem in PORTRAIT_STEMS:
@@ -75,7 +81,7 @@ def test_ltx_lab_defaults_are_1280x704_or_portrait_768x1280() -> None:
 def test_ltx_operator_notes_state_div32_canvas() -> None:
     missing: list[str] = []
     for path in _workflow_json():
-        graph = json.loads(path.read_text(encoding="utf-8"))
+        graph = _load(path)
         if not _spatial_nodes(graph):
             continue
         note = graph.get("extra", {}).get("lab_note") or ""

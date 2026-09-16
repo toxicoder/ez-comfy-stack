@@ -251,6 +251,12 @@ def test_lora_shim_reads_sys_modules(monkeypatch: pytest.MonkeyPatch) -> None:
     assert lora.LoRACompatibleLinear is Linear
 
 
+def test_lora_shim_noop_when_module_missing(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delitem(sys.modules, "diffusers.models.lora", raising=False)
+    mod = _load_sitecustomize(monkeypatch)
+    assert mod.apply_lab_lora_linear_shim() is None
+
+
 def test_lora_shim_noop_without_torch(monkeypatch: pytest.MonkeyPatch) -> None:
     for name in list(sys.modules):
         if name == "torch" or name.startswith("torch."):
@@ -295,3 +301,237 @@ def test_register_applies_already_imported_modules(
     mod.register_lab_tts_compat_hooks()
     assert getattr(cuda.sdp_kernel, "_lab_sdpa_shim", False)
     assert lora.LoRACompatibleLinear is Linear
+
+
+def test_sdp_shim_noop_when_sdpa_kernel_not_callable(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    attn = types.ModuleType("torch.nn.attention")
+    attn.SDPBackend = _SDPBackend  # type: ignore[attr-defined]
+    attn.sdpa_kernel = "not-callable"  # type: ignore[attr-defined]
+    nn_mod = types.ModuleType("torch.nn")
+    nn_mod.attention = attn  # type: ignore[attr-defined]
+    torch_mod = types.ModuleType("torch")
+    torch_mod.nn = nn_mod  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "torch", torch_mod)
+    monkeypatch.setitem(sys.modules, "torch.nn", nn_mod)
+    monkeypatch.setitem(sys.modules, "torch.nn.attention", attn)
+    cuda = types.ModuleType("torch.backends.cuda")
+
+    def _stock() -> None:
+        return None
+
+    cuda.sdp_kernel = _stock  # type: ignore[attr-defined]
+    mod = _load_sitecustomize(monkeypatch)
+    mod.apply_lab_sdp_kernel_shim(cuda)
+    assert cuda.sdp_kernel is _stock
+
+
+def test_lora_shim_noop_when_linear_missing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    nn_mod = types.ModuleType("torch.nn")
+    torch_mod = types.ModuleType("torch")
+    torch_mod.nn = nn_mod  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "torch", torch_mod)
+    monkeypatch.setitem(sys.modules, "torch.nn", nn_mod)
+    lora = types.ModuleType("diffusers.models.lora")
+    sentinel = object()
+    lora.LoRACompatibleLinear = sentinel  # type: ignore[attr-defined]
+    mod = _load_sitecustomize(monkeypatch)
+    mod.apply_lab_lora_linear_shim(lora)
+    assert lora.LoRACompatibleLinear is sentinel
+
+
+def test_finder_skips_when_busy_or_unarmed(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    mod = _load_sitecustomize(monkeypatch)
+    finder = mod._LAB_COMPAT_FINDER
+    assert finder is not None
+    finder._finding = True
+    assert finder.find_spec("torch.backends.cuda") is None
+    finder._finding = False
+    assert finder.find_spec("os") is None
+
+
+def test_finder_returns_none_without_loader(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import importlib.machinery
+
+    mod = _load_sitecustomize(monkeypatch)
+    finder = mod._LAB_COMPAT_FINDER
+    assert finder is not None
+    finder._armed.add("torch.backends.cuda")
+
+    class _NoSpecFinder:  # pyright: ignore[reportUnusedClass]
+        pass
+
+    class _EmptyFinder:
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None = None,
+            target: object | None = None,
+        ) -> Any:
+            del fullname, path, target
+            return None
+
+    class _NoneLoaderFinder:
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None = None,
+            target: object | None = None,
+        ) -> Any:
+            del path, target
+            spec = importlib.machinery.ModuleSpec(fullname, None)
+            spec.loader = None
+            return spec
+
+    sys.meta_path.append(_NoSpecFinder())  # type: ignore[arg-type]
+    sys.meta_path.append(_EmptyFinder())
+    try:
+        assert finder.find_spec("torch.backends.cuda") is None
+        sys.meta_path.append(_NoneLoaderFinder())
+        assert finder.find_spec("torch.backends.cuda") is None
+    finally:
+        sys.meta_path[:] = [
+            item
+            for item in sys.meta_path
+            if not isinstance(item, (_NoSpecFinder, _EmptyFinder, _NoneLoaderFinder))
+        ]
+
+
+def test_finder_wraps_cuda_and_lora_imports(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import importlib.machinery
+
+    _install_fake_attention(monkeypatch)
+    nn_mod = sys.modules["torch.nn"]
+
+    class Linear:
+        pass
+
+    nn_mod.Linear = Linear  # type: ignore[attr-defined]
+    mod = _load_sitecustomize(monkeypatch)
+    finder = mod._LAB_COMPAT_FINDER
+    assert finder is not None
+    finder._armed = set(finder._TARGETS)
+
+    class _DummyLoader:
+        def exec_module(self, module: Any) -> None:
+            name = getattr(module, "__name__", "")
+            if name == "torch.backends.cuda":
+                module.sdp_kernel = lambda **_k: None
+            elif name == "diffusers.models.lora":
+                module.LoRACompatibleLinear = object
+
+    class _DummyFinder:
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None = None,
+            target: object | None = None,
+        ) -> Any:
+            del path, target
+            if fullname not in {"torch.backends.cuda", "diffusers.models.lora"}:
+                return None
+            return importlib.machinery.ModuleSpec(fullname, _DummyLoader())  # type: ignore[arg-type]
+
+    class _NoSpecFinder:  # pyright: ignore[reportUnusedClass]
+        pass
+
+    sys.meta_path.append(_NoSpecFinder())  # type: ignore[arg-type]
+    sys.meta_path.append(_DummyFinder())
+    sys.modules.pop("torch.backends.cuda", None)
+    sys.modules.pop("diffusers.models.lora", None)
+    try:
+        spec = finder.find_spec("torch.backends.cuda")
+        assert spec is not None and spec.loader is not None
+        cuda = types.ModuleType("torch.backends.cuda")
+        created = spec.loader.create_module(spec)
+        if created is None:
+            created = cuda
+        spec.loader.exec_module(created)
+        assert getattr(created.sdp_kernel, "_lab_sdpa_shim", False)
+        spec2 = finder.find_spec("diffusers.models.lora")
+        assert spec2 is not None and spec2.loader is not None
+        lora = types.ModuleType("diffusers.models.lora")
+        spec2.loader.exec_module(lora)
+        assert lora.LoRACompatibleLinear is Linear
+    finally:
+        sys.meta_path[:] = [
+            item
+            for item in sys.meta_path
+            if not isinstance(item, (_DummyFinder, _NoSpecFinder))
+        ]
+
+
+def test_finder_create_module_uses_origin_loader(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import importlib.machinery
+
+    mod = _load_sitecustomize(monkeypatch)
+    finder = mod._LAB_COMPAT_FINDER
+    assert finder is not None
+    finder._armed.add("torch.backends.cuda")
+    created = types.ModuleType("torch.backends.cuda")
+    created.sdp_kernel = lambda **_k: None  # type: ignore[attr-defined]
+    _install_fake_attention(monkeypatch)
+
+    class _OriginLoader:
+        def create_module(self, spec: Any) -> Any:
+            del spec
+            return created
+
+        def exec_module(self, module: Any) -> None:
+            del module
+
+    class _OriginFinder:
+        def find_spec(
+            self,
+            fullname: str,
+            path: object | None = None,
+            target: object | None = None,
+        ) -> Any:
+            del path, target
+            if fullname != "torch.backends.cuda":
+                return None
+            return importlib.machinery.ModuleSpec(fullname, _OriginLoader())  # type: ignore[arg-type]
+
+    sys.meta_path.append(_OriginFinder())
+    sys.modules.pop("torch.backends.cuda", None)
+    try:
+        spec = finder.find_spec("torch.backends.cuda")
+        assert spec is not None and spec.loader is not None
+        loaded = spec.loader.create_module(spec)
+        assert loaded is created
+        spec.loader.exec_module(loaded)
+        assert getattr(loaded.sdp_kernel, "_lab_sdpa_shim", False)
+    finally:
+        sys.meta_path[:] = [
+            item for item in sys.meta_path if not isinstance(item, _OriginFinder)
+        ]
+
+
+def test_apply_named_shim_dispatches(monkeypatch: pytest.MonkeyPatch) -> None:
+    _install_fake_attention(monkeypatch)
+    mod = _load_sitecustomize(monkeypatch)
+    cuda = types.ModuleType("torch.backends.cuda")
+    cuda.sdp_kernel = lambda **_k: None  # type: ignore[attr-defined]
+    mod._apply_named_shim("torch.backends.cuda", cuda)
+    assert getattr(cuda.sdp_kernel, "_lab_sdpa_shim", False)
+    class Linear:
+        pass
+
+    nn_mod = sys.modules["torch.nn"]
+    nn_mod.Linear = Linear  # type: ignore[attr-defined]
+    lora = types.ModuleType("diffusers.models.lora")
+    lora.LoRACompatibleLinear = object  # type: ignore[attr-defined]
+    mod._apply_named_shim("diffusers.models.lora", lora)
+    assert lora.LoRACompatibleLinear is Linear
+    mod._apply_named_shim("other.mod", None)

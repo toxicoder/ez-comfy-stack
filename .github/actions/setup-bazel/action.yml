@@ -14,14 +14,18 @@ runs:
       uses: actions/cache@v5
       id: bazelisk-cache
       with:
-        path: /usr/local/bin/bazelisk
-        key: bazelisk-${{ runner.os }}-v1.25.0
+        path: ${{ runner.temp }}/bazelisk
+        key: bazelisk-${{ runner.os }}-${{ hashFiles('.devcontainer/tool-versions.env') }}
 
     - name: Install Bazelisk
       if: steps.bazelisk-cache.outputs.cache-hit != 'true'
       shell: bash
       run: |
         set -euo pipefail
+        set -a
+        # shellcheck disable=SC1091
+        source "${GITHUB_WORKSPACE}/.devcontainer/tool-versions.env"
+        set +a
         BAZELISK_VERSION="${BAZELISK_VERSION:-v1.25.0}"
         arch="$(uname -m)"
         case "$arch" in
@@ -30,16 +34,16 @@ runs:
           *) echo "unsupported arch: $arch" >&2; exit 1 ;;
         esac
         curl -fsSL "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/bazelisk-linux-${barch}" \
-          -o /tmp/bazelisk
-        sudo install /tmp/bazelisk /usr/local/bin/bazelisk
-        bazelisk version
+          -o "${RUNNER_TEMP}/bazelisk"
+        chmod +x "${RUNNER_TEMP}/bazelisk"
 
-    - name: Ensure Bazelisk is executable
-      if: steps.bazelisk-cache.outputs.cache-hit == 'true'
+    - name: Add Bazelisk to PATH
       shell: bash
       run: |
-        sudo chmod +x /usr/local/bin/bazelisk
-        bazelisk version
+        mkdir -p "${HOME}/bin"
+        install -m 0755 "${RUNNER_TEMP}/bazelisk" "${HOME}/bin/bazelisk"
+        echo "${HOME}/bin" >> "${GITHUB_PATH}"
+        "${HOME}/bin/bazelisk" version
 
     - name: Cache Bazel disk and repository cache
       uses: actions/cache@v5
@@ -47,8 +51,9 @@ runs:
         path: |
           ~/.cache/bazel-disk
           ~/.cache/bazel-repo
-        key: bazel-${{ runner.os }}-${{ hashFiles('MODULE.bazel.lock', '.bazelversion') }}
+        key: bazel-${{ runner.os }}-${{ github.job }}-${{ hashFiles('MODULE.bazel.lock', '.bazelversion') }}
         restore-keys: |
+          bazel-${{ runner.os }}-${{ github.job }}-
           bazel-${{ runner.os }}-
 
     - name: Cache lint tool binaries
@@ -59,7 +64,7 @@ runs:
         path: |
           /usr/local/bin/buildifier
           /usr/local/bin/shfmt
-        key: lint-bins-${{ runner.os }}-${{ runner.arch }}-bf8.2.1-sh3.10.0
+        key: lint-bins-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('.devcontainer/tool-versions.env') }}
 
     - name: Cache lint pip packages
       if: inputs.install-lint-tools == 'true'

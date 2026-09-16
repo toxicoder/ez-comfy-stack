@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from _lab_paths import LAB_ROOT, lab_graph_paths, lab_json
+from _lab_paths import LAB_ROOT, lab_graph_paths, lab_json, load_lab_graph
 
 from _lab_theme import (
     GOSEE_IDENTITY,
@@ -106,8 +106,8 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
-    draft = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
-    hero = json.loads(lab_json("klein/still-hero.json").read_text(encoding="utf-8"))
+    draft = load_lab_graph(lab_json("klein/still-draft.json"))
+    hero = load_lab_graph(lab_json("klein/still-hero.json"))
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")

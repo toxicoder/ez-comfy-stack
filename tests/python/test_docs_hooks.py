@@ -63,6 +63,32 @@ def test_docs_version_falls_back_to_ez(hooks, monkeypatch: pytest.MonkeyPatch) -
     assert hooks.docs_version() == "development"
 
 
+def test_git_head_nonzero_returncode(monkeypatch: pytest.MonkeyPatch) -> None:
+    """git log non-zero is fail-soft."""
+    module = _load_hooks()
+    monkeypatch.setattr(
+        module.subprocess,
+        "run",
+        lambda *_a, **_k: type("P", (), {"returncode": 2, "stdout": ""})(),
+    )
+    assert module._git_head_committer_date() is None
+
+
+def test_git_head_parses_iso_timestamp(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Successful git log is parsed as UTC datetime."""
+    module = _load_hooks()
+    monkeypatch.setattr(
+        module.subprocess,
+        "run",
+        lambda *_a, **_k: type(
+            "P", (), {"returncode": 0, "stdout": "2026-09-16T12:00:00+00:00\n"}
+        )(),
+    )
+    stamp = module._git_head_committer_date()
+    assert stamp is not None
+    assert stamp.year == 2026
+
+
 def test_docs_git_ref_default_main(hooks) -> None:
     """Unset version maps edit/source links to main."""
     assert hooks.docs_git_ref() == "main"

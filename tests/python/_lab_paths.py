@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 WF = ROOT / "workflows"
 LAB_ROOT = WF / "_lab"
 SHORTS_YAML = WF / "shorts"
+_LAB_GRAPH_CACHE: dict[Path, dict[str, Any]] | None = None
 ALLOWED_LANES = (
     "klein",
     "wan",
@@ -47,6 +48,70 @@ def lab_graph_paths(root: Path | None = None) -> list[Path]:
 def lab_example_paths(root: Path | None = None) -> list[Path]:
     """Alias for ``lab_graph_paths`` (historical name)."""
     return lab_graph_paths(root)
+
+
+def cached_lab_graph_map(*, root: Path | None = None) -> dict[Path, dict[str, Any]]:
+    """Parse every default-tree lab graph once per process.
+
+    Arguments:
+        root: Optional workflows root. Non-default trees are not cached.
+    Returns:
+        Mapping of graph path to parsed dict (shared; treat as read-only).
+    """
+    global _LAB_GRAPH_CACHE
+    if root is not None:
+        base = Path(root) / "_lab"
+        if not base.is_dir():
+            base = Path(root)
+        out: dict[Path, dict[str, Any]] = {}
+        for path in lab_graph_paths(root):
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                out[path] = data
+        return out
+    if _LAB_GRAPH_CACHE is None:
+        parsed: dict[Path, dict[str, Any]] = {}
+        for path in lab_graph_paths():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                parsed[path] = data
+        _LAB_GRAPH_CACHE = parsed
+    return _LAB_GRAPH_CACHE
+
+
+def load_lab_graph(path: Path) -> dict[str, Any]:
+    """Return parsed JSON for a lab graph, using the process cache when possible.
+
+    Arguments:
+        path: Graph path under ``workflows/_lab``.
+    Returns:
+        Graph dict.
+    """
+    cache = cached_lab_graph_map()
+    data = cache.get(path)
+    if data is not None:
+        return data
+    resolved = path.resolve()
+    for cached_path, cached in cache.items():
+        if cached_path.resolve() == resolved:
+            return cached
+    loaded = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(loaded, dict):
+        raise TypeError(f"lab graph {path} is not a JSON object")
+    return loaded
+
+
+def cached_lab_graph_rows() -> list[tuple[str, Path, dict[str, Any]]]:
+    """Return ``(lab_rel, path, data)`` for every cached default-tree graph."""
+    rows: list[tuple[str, Path, dict[str, Any]]] = []
+    for path, data in cached_lab_graph_map().items():
+        extra = data.get("extra") or {}
+        lab_rel = extra.get("lab_rel")
+        if not isinstance(lab_rel, str) or not lab_rel.strip():
+            lab_rel = path.relative_to(LAB_ROOT).with_suffix("").as_posix()
+        rows.append((str(lab_rel).strip(), path, data))
+    rows.sort(key=lambda row: row[1].as_posix())
+    return rows
 
 
 def _lab_base(root: Path | None) -> Path:

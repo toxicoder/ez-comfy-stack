@@ -1610,8 +1610,10 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
     pos_enhance_types = enhance_types - {"EZNegativePromptEnhance"}
     encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
     missing: list[str] = []
+    from _lab_paths import load_lab_graph
+
     for path in lab_graph_paths():
-        graph = json.loads(path.read_text(encoding="utf-8"))
+        graph = load_lab_graph(path)
         extra = graph.get("extra") or {}
         gid = str(extra.get("lab_rel") or graph.get("id") or path.stem)
         if gid in skip_ids:

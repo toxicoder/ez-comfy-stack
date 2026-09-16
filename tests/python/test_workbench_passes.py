@@ -124,3 +124,64 @@ def test_still_payload_size_token() -> None:
     assert payload["size"] == [1024, 1024]
     assert payload["plate"] == "mug"
     assert payload["blend"] == "/x.blend"
+
+
+def test_try_set_engine_exception_and_mismatch() -> None:
+    class _BoomRender:
+        def __init__(self) -> None:
+            self.engine = "BLENDER_EEVEE"
+
+        def __setattr__(self, name: str, value: object) -> None:
+            if name == "engine" and value == "BLENDER_EEVEE_NEXT":
+                raise RuntimeError("no")
+            object.__setattr__(self, name, value)
+
+    scene = SimpleNamespace(render=_BoomRender())
+    assert wp.try_set_engine(scene, ("BLENDER_EEVEE_NEXT",)) is None
+    scene2 = SimpleNamespace(render=SimpleNamespace(engine="WORKBENCH"))
+
+    class _Mismatch:
+        def __setattr__(self, name: str, value: object) -> None:
+            if name == "engine":
+                object.__setattr__(self, name, "OTHER")
+            else:
+                object.__setattr__(self, name, value)
+
+        def __init__(self) -> None:
+            object.__setattr__(self, "engine", "WORKBENCH")
+
+    scene3 = SimpleNamespace(render=_Mismatch())
+    assert wp.try_set_engine(scene3, ("BLENDER_EEVEE",)) is None
+    del scene2
+
+    class _Reject:
+        def __init__(self) -> None:
+            object.__setattr__(self, "engine", "WORKBENCH")
+
+        def __setattr__(self, name: str, value: object) -> None:
+            if name == "engine":
+                raise RuntimeError("no")
+            object.__setattr__(self, name, value)
+
+    assert wp.configure_eevee_normal(SimpleNamespace(render=_Reject()), None) is False
+
+
+def test_frame_extrinsic_uses_matrix_world() -> None:
+    class _Mat:
+        def to_translation(self) -> tuple[float, float, float]:
+            return (9.0, 8.0, 7.0)
+
+        def to_euler(self) -> tuple[float, float, float]:
+            return (0.5, 0.4, 0.3)
+
+    cam = SimpleNamespace(
+        location=(0.0, 0.0, 0.0),
+        rotation_euler=(0.0, 0.0, 0.0),
+        matrix_world=_Mat(),
+        data=SimpleNamespace(angle_y=0.2, angle=0.1),
+        name="CAM",
+    )
+    scene = SimpleNamespace(frame_set=lambda _n: None)
+    extra = wp.frame_extrinsic(scene, cam, 3)
+    assert extra["pos"] == [9.0, 8.0, 7.0]
+    assert extra["rot"] == [0.5, 0.4, 0.3]

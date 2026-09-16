@@ -57,6 +57,10 @@ def test_refuse_even_and_30s() -> None:
         validate_ltx_frames(120)
     with pytest.raises(ValueError, match="1\\+8n"):
         validate_ltx_frames(125)
+    with pytest.raises(ValueError, match=">= 1"):
+        validate_ltx_frames(0)
+    with pytest.raises(ValueError, match=">= 1"):
+        validate_ltx_frames(-1)
     with pytest.raises(ValueError, match="30/60/90"):
         preflight_duration_s(30.0)
     with pytest.raises(ValueError):

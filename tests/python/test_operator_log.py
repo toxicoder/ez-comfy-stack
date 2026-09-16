@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import io
 import sys
 from pathlib import Path
 
@@ -84,3 +85,32 @@ def test_heartbeat_newline(capsys: pytest.CaptureFixture[str]) -> None:
 def test_use_color_respects_no_color(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("NO_COLOR", "1")
     assert ol.use_color() is False
+
+
+class _TTY(io.StringIO):
+    def isatty(self) -> bool:
+        return True
+
+
+def test_use_color_true_on_tty(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("NO_COLOR", raising=False)
+    assert ol.use_color(stream=_TTY()) is True
+
+
+def test_format_elapsed_negative_and_bar_clamps() -> None:
+    assert ol.format_elapsed(-3) == "0:00"
+    assert ol.bar_fill(2, 0) == ("▓" * 2) + ("░" * 18)
+    assert ol.bar_fill(-4, 4) == "░░░░"
+    assert ol.bar_fill(9, 4) == "▓▓▓▓"
+
+
+def test_emit_tty_rewrite_then_newline(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("EZ_COMFY_PROGRESS", raising=False)
+    tty = _TTY()
+    ol._REWRITE = False
+    ol.emit("heartbeat", rewrite=True, stream=tty)
+    assert tty.getvalue().startswith("\r")
+    assert ol._REWRITE is True
+    ol.emit("done", rewrite=False, stream=tty)
+    assert "\n" in tty.getvalue()
+    assert ol._REWRITE is False

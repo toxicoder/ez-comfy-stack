@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from _lab_paths import lab_example_paths, lab_json
+from _lab_paths import lab_example_paths, lab_json, load_lab_graph
 from _stamp_app_mode import BANNED, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,7 +24,7 @@ def _graphs() -> list[Path]:
 
 
 def _load(path: Path) -> dict:
-    return json.loads(path.read_text(encoding="utf-8"))
+    return load_lab_graph(path)
 
 
 def _link_endpoints(graph: dict) -> tuple[set[int], set[int]]:
@@ -76,7 +76,6 @@ def test_lab_graph_completeness(path: Path) -> None:
         assert graph.get("id") == path.stem
         return
 
-    assert json.loads(path.read_text(encoding="utf-8"))
     assert graph.get("id") == path.stem
     assert graph.get("version") is not None
     assert graph.get("revision") is not None

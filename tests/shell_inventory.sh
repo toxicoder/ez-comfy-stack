@@ -52,7 +52,10 @@ main() {
   local funcs missing f
   funcs="$(list_production_functions)"
   local test_blob
-  test_blob="$(cat tests/bats/*.bats tests/bats/*.bash tests/python/*.py tests/*.sh 2>/dev/null || true)"
+  # Strip full-line comments so a name that appears only in a comment does not count.
+  test_blob="$(
+    grep -hvE '^[[:space:]]*(#|//)' tests/bats/*.bats tests/bats/*.bash tests/python/*.py tests/*.sh 2>/dev/null || true
+  )"
   missing=""
   while IFS= read -r f; do
     [[ -z ${f} ]] && continue
