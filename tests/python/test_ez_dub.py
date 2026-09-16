@@ -226,6 +226,35 @@ def test_apply_spoken_disclosure_uses_target_language_and_ref() -> None:
     assert seen[0][1] == "/tmp/spk00.wav"
 
 
+def test_apply_spoken_disclosure_crops_leading_bumper_hush() -> None:
+    from ez_dub.disclosure import apply_spoken_disclosure
+
+    rate = 24000
+    mix = [0.05] * (rate * 8)
+    turns = [{"t0": 2.0, "t1": 4.0, "speaker": "spk00"}]
+
+    def _synth(text: str, language: str, ref_wav: str, engine: str):
+        del text, language, ref_wav, engine
+        hush = [0.012] * rate
+        bumper = [0.35] * (rate * 2)
+        return hush + bumper, rate, ""
+
+    out, status = apply_spoken_disclosure(
+        mix,
+        rate,
+        language="es",
+        engine=ENGINE_CHATTERBOX,
+        ref_wav="",
+        turns=turns,
+        synthesize=_synth,
+    )
+    assert status == "spoken disclosure"
+    assert len(out) == len(mix)
+    fade = max(1, int(round(rate * 0.03)))
+    region = out[fade : fade + max(1, rate // 5)]
+    assert pipeline.rms(region) > 0.15
+
+
 def test_apply_spoken_disclosure_does_not_call_fit_turn_three_seconds(
     monkeypatch,
 ) -> None:
@@ -2693,6 +2722,26 @@ def test_crop_hallucination_tail_keeps_voiced_prefix() -> None:
     assert dur <= expected + 0.05
 
 
+def test_strip_leading_silence_drops_prefix_keeps_tail() -> None:
+    rate = 24000
+    hush = [0.0] * (rate * 2)
+    speech = _am_speech(rate, 1.5)
+    tail = [0.0] * (rate // 2)
+    out = pipeline.strip_leading_silence(hush + speech + tail, rate)
+    assert out
+    head = out[: max(1, rate // 10)]
+    assert pipeline.rms(head) > 0.05
+    assert len(out) < len(hush + speech + tail)
+    assert abs(len(out) - (len(speech) + len(tail))) <= rate // 10
+    silent = [0.0] * rate
+    assert pipeline.strip_leading_silence(silent, rate) == silent
+    assert pipeline.strip_leading_silence([], rate) == []
+    already = _am_speech(rate, 0.5)
+    kept = pipeline.strip_leading_silence(already, rate)
+    assert pipeline.rms(kept[: max(1, rate // 10)]) > 0.05
+    assert abs(len(kept) - len(already)) <= rate // 10
+
+
 def test_speech_onset_drops_watermark_hush() -> None:
     rate = 24000
     hush = [0.012] * (rate * 2)
@@ -2815,6 +2864,69 @@ def test_render_mix_strips_leading_clone_hush(
     assert pipeline.rms(head) > 0.05
     head_mix = mix[: max(1, rate // 5)]
     assert pipeline.rms(head_mix) > 0.04
+
+
+def test_render_mix_strips_leading_silence_when_disclosure_off(
+    tmp_path: Path, monkeypatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    lead_s = 2.0
+    samples = [0.0] * int(rate * lead_s) + _am_speech(rate, 6.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": lead_s,
+                "t1": lead_s + 4.0,
+                "text": "Hello team we stay on the match",
+                "text_target": "Hola equipo nos quedamos en el partido",
+                "overlap": False,
+                "rms": 0.2,
+            }
+        ],
+    }
+
+    def _tts(text, language, ref_wav, engine):
+        del text, language, ref_wav, engine
+        return _am_speech(rate, 4.0), rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert out_rate == rate
+    assert mix
+    assert "cloned" in status
+    yt, yt_rate = dub_audio.read_wav(dest / "ez_dub_yt.wav")
+    mixed, mix_rate = dub_audio.read_wav(dest / "ez_dub_mix.wav")
+    assert yt_rate == rate
+    assert mix_rate == rate
+    assert len(yt) == len(samples)
+    assert pipeline.rms(yt[: rate]) < pipeline.ONSET_ABS
+    head = max(1, rate // 5)
+    assert pipeline.rms(mix[:head]) > 0.04
+    assert pipeline.rms(mixed[:head]) > 0.04
+    assert len(mixed) < len(samples)
+    assert len(mix) == len(mixed)
 
 
 def test_render_mix_skips_unvoiced_clone(tmp_path: Path, monkeypatch) -> None:

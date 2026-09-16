@@ -12,6 +12,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 - App Mode: source file dropdown + upload (or URL), languages, stage, clone engine, Clone CFG
 - Cascade: ingest → ASR turns → speaker cluster (`ve.pt`) → merge → translate → clone → duration lock (≤1.25×, then spill, then fade-trim)
 - YouTube Studio multi-language audio upload (audio-only job-dir WAV + SRT)
+- Spoken disclosure off: mix/FLAC starts on speech; YT wav stays source-timed
 - `download-dub` usage, sequential Queue (Stage **all** default), and in-graph loudness
 - Qwen3-TTS opt-in: wheel (`--no-deps`) vs complete snapshot vs nested tokenizer; fail-fast empty mix
 - Optional still-image MP4 when you have no source video (host `audio-still-video`)
@@ -34,7 +35,7 @@ tags: [dub, translation, voice-clone, chatterbox, youtube, us-safe]
 
 [Local podcast](podcast.md) invents hosts and uses Kokoro stock voices. This lane clones **recorded speakers** from a show you own or are licensed to translate. Different disclosure. Different App.
 
-Spoken disclosure defaults **off**. Sidecars are always written (localized `ez_dub.disclosure.txt` plus English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it is a short localized overlay on `ez_dub_mix.wav` only — never on the duration-locked YT wav.
+Spoken disclosure defaults **off**. Sidecars are always written (localized `ez_dub.disclosure.txt` plus English `ez_dub.disclosure.en.txt`). If you turn the bumper on, it is a short localized overlay on `ez_dub_mix.wav` only — never on the duration-locked YT wav. When the bumper is off, `ez_dub_mix` (and the Comfy FLAC) drops leading hush so the clip starts on speech; `ez_dub_yt.wav` stays source-timed.
 
 English canonical:
 
@@ -118,7 +119,7 @@ Graph: **audio/dub/localize** (`extra.lab_profile` `us-safe-dub`). Occupancy **a
 | **Stage** | Default **all**. `all` / `analyze` / `render` |
 | **Clone engine** | chatterbox-ml or qwen3tts |
 | **Keep original bed** | Gaps keep ambience |
-| **Spoken disclosure** | Default **off**. Localized bumper on `ez_dub_mix` only; sidecar always written |
+| **Spoken disclosure** | Default **off**. Localized bumper on `ez_dub_mix` only; sidecar always written. Off: mix starts on speech (no reserved hush). YT wav stays source-timed |
 | **Speaking speed** | 1.0 default. Pitch-preserving stretch when fitting the original window |
 | **Clone CFG** | −1 auto: 0 when source ≠ target (EN→ES). 0.5 same-language. Auto-0 retries once at 0.25 if that take is not speech-like. Raise toward 0.5 if you want more of the original accent |
 | **Exaggeration** | 0.5 neutral. Higher is more intense and faster |

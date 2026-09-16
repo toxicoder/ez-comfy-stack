@@ -261,7 +261,7 @@ class EZDubRender:
         "Zero-shot clone (Chatterbox Multilingual V3 or Qwen3-TTS) with "
         "PerTh on. Cross-lang CFG auto is 0. Writes duration-locked YT WAV + "
         "SRT + disclosure sidecars. Spoken bumper (off by default) overlays "
-        "the mix wav only."
+        "the mix wav only. Off: mix starts on speech; YT wav stays source-timed."
     )
 
     def run(
