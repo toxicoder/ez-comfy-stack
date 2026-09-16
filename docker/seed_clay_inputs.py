@@ -18,6 +18,7 @@ import sys
 import zlib
 from pathlib import Path
 
+# LoadImage plate size, camera count, and ez_house_clay filename prefix.
 PACK_WIDTH = 1024
 PACK_HEIGHT = 1280
 CLAY_COUNT = 10
@@ -57,6 +58,15 @@ def write_rgb_png(path: Path, width: int, height: int, rgb: bytes) -> None:
     ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
 
     def chunk(tag: bytes, data: bytes) -> bytes:
+        """Return one PNG chunk (length, tag, data, CRC).
+
+        Args:
+            tag: Four-byte chunk type.
+            data: Chunk payload.
+
+        Returns:
+            On-disk chunk bytes.
+        """
         crc = zlib.crc32(tag + data) & 0xFFFFFFFF
         return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", crc)
 
@@ -71,12 +81,26 @@ def write_rgb_png(path: Path, width: int, height: int, rgb: bytes) -> None:
 def write_solid_png(
     path: Path, width: int, height: int, rgb: tuple[int, int, int]
 ) -> None:
-    """Write a solid RGB PNG."""
+    """Write a solid RGB PNG.
+
+    Args:
+        path: Destination file.
+        width: Pixel width.
+        height: Pixel height.
+        rgb: Fill color as an 8-bit RGB triple.
+    """
     write_rgb_png(path, width, height, bytes(rgb) * (width * height))
 
 
 def png_size(path: Path) -> tuple[int, int] | None:
-    """Read IHDR width x height, or None."""
+    """Read IHDR width x height, or None.
+
+    Args:
+        path: PNG file to inspect.
+
+    Returns:
+        ``(width, height)`` from IHDR, or ``None`` when unreadable.
+    """
     try:
         data = path.read_bytes()
     except OSError:
@@ -88,7 +112,14 @@ def png_size(path: Path) -> tuple[int, int] | None:
 
 
 def clay_plate_valid(path: Path) -> bool:
-    """True when path is a 1024x1280 PNG."""
+    """True when path is a 1024x1280 PNG.
+
+    Args:
+        path: Candidate LoadImage plate.
+
+    Returns:
+        Whether ``path`` is a file whose IHDR is ``PACK_WIDTH`` × ``PACK_HEIGHT``.
+    """
     return path.is_file() and png_size(path) == (PACK_WIDTH, PACK_HEIGHT)
 
 
@@ -106,7 +137,14 @@ def plate_rgb(index: int) -> tuple[int, int, int]:
 
 
 def _under_models_dir(path: Path) -> bool:
-    """True when path is under MODELS_DIR / MODELS_ROOT."""
+    """True when path is under MODELS_DIR / MODELS_ROOT.
+
+    Args:
+        path: Directory that would receive plates.
+
+    Returns:
+        Whether ``path`` resolves under a models-root env var.
+    """
     roots: list[Path] = []
     for key in ("MODELS_DIR", "MODELS_ROOT"):
         raw = os.environ.get(key, "").strip()

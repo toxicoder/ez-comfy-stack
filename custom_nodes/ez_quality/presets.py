@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping, Sequence
 
+# Quality ids, Klein 4B filenames, family step/CFG overlays, widget indexes.
 QUALITY_LAB = "lab"
 QUALITY_DRAFT = "draft"
 QUALITY_HIGH = "high"
@@ -120,12 +121,29 @@ def is_wan_14b_unet(name: str) -> bool:
 
 
 def _available(available_unets: Sequence[str] | None) -> set[str]:
+    """Normalize available UNET filenames to a set.
+
+    Args:
+        available_unets: Combo options, or None.
+
+    Returns:
+        Filename set (empty when None).
+    """
     if available_unets is None:
         return set()
     return {str(item) for item in available_unets if str(item).strip()}
 
 
 def _pick_unet(name: str, available: set[str]) -> str | None:
+    """Return ``name`` when it is allowed and present.
+
+    Args:
+        name: Candidate UNET filename.
+        available: Combo options; empty means no presence check.
+
+    Returns:
+        ``name``, or None when banned or missing from the combo.
+    """
     if is_banned_unet(name):
         return None
     if available and name not in available:
@@ -187,6 +205,17 @@ def _klein_overlay(
     unet_name: str,
     available: set[str],
 ) -> QualityOverlay:
+    """Klein 4B steps/CFG/UNET overlay for draft or high.
+
+    Args:
+        choice: ``draft`` or ``high``.
+        authored_steps: Current KSampler steps.
+        unet_name: Current UNET filename.
+        available: Combo options.
+
+    Returns:
+        Overlay for Klein occupancy.
+    """
     if choice == QUALITY_DRAFT:
         unet: str | None = None
         if is_klein_4b_unet(unet_name) and unet_name == KLEIN_BASE:
@@ -251,6 +280,14 @@ def infer_occupancy(graph: Mapping[str, Any]) -> str:
 
 
 def _first_unet_name(graph: Mapping[str, Any]) -> str:
+    """First UNETLoader filename in the graph.
+
+    Args:
+        graph: Serialized Comfy graph.
+
+    Returns:
+        Filename, or empty string when none is present.
+    """
     for node in graph.get("nodes") or []:
         if node.get("type") != "UNETLoader":
             continue

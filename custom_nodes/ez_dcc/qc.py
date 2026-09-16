@@ -10,6 +10,18 @@ from typing import Any
 
 
 def _load_from_path(path: Path, name: str) -> ModuleType:
+    """Load a Python module from an absolute file path.
+
+    Args:
+        path: ``guide_pack.py`` candidate.
+        name: Module name registered in ``sys.modules``.
+
+    Returns:
+        Executed module.
+
+    Raises:
+        ImportError: Spec or loader is missing.
+    """
     spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
         raise ImportError(f"cannot load {path}")
@@ -19,6 +31,14 @@ def _load_from_path(path: Path, name: str) -> ModuleType:
 
 
 def _load_guide_pack() -> ModuleType:
+    """Import ``guide_pack`` from PYTHONPATH, ``scripts/lib``, or the vendor copy.
+
+    Returns:
+        Loaded ``guide_pack`` module.
+
+    Raises:
+        ImportError: Neither scripts/lib nor the vendored file is available.
+    """
     try:
         import guide_pack as gp  # type: ignore[import-not-found]
 
@@ -36,37 +56,81 @@ def _load_guide_pack() -> ModuleType:
     raise ImportError("guide_pack is unavailable (scripts/lib and vendor miss)")
 
 
+# Loaded guide_pack module (scripts/lib or vendored _guide_pack.py).
 _GP = _load_guide_pack()
 GuidePackError = _GP.GuidePackError
 
 
 def validate_shot(data: dict[str, Any]) -> list[str]:
-    """Return shot-yaml defect strings (empty means ok)."""
+    """Return shot-yaml defect strings (empty means ok).
+
+    Args:
+        data: Parsed ``shot.yaml`` mapping.
+
+    Returns:
+        Defect messages; empty when the shot is valid.
+    """
     return list(_GP.validate_shot(data))
 
 
 def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]:
-    """Fail-closed QC for a dumped shot pack directory."""
+    """Fail-closed QC for a dumped shot pack directory.
+
+    Args:
+        pack_dir: Shot pack directory.
+        require_full_seq: When True, demand a full frame sequence or mp4.
+
+    Returns:
+        Defect messages; empty when the pack is valid.
+    """
     return list(_GP.validate_pack(pack_dir, require_full_seq=require_full_seq))
 
 
 def validate_still(data: dict[str, Any]) -> list[str]:
-    """Return still-yaml defect strings (empty means ok)."""
+    """Return still-yaml defect strings (empty means ok).
+
+    Args:
+        data: Parsed ``still.yaml`` mapping.
+
+    Returns:
+        Defect messages; empty when the still is valid.
+    """
     return list(_GP.validate_still(data))
 
 
 def validate_still_pack(pack_dir: Path) -> list[str]:
-    """Fail-closed QC for a single-frame still pack."""
+    """Fail-closed QC for a single-frame still pack.
+
+    Args:
+        pack_dir: Still pack directory.
+
+    Returns:
+        Defect messages; empty when the pack is valid.
+    """
     return list(_GP.validate_still_pack(pack_dir))
 
 
 def load_shot(path: Path) -> dict[str, Any]:
-    """Read shot.yaml from a pack directory or file."""
+    """Read shot.yaml from a pack directory or file.
+
+    Args:
+        path: Pack directory or ``shot.yaml`` file.
+
+    Returns:
+        Parsed shot mapping.
+    """
     return dict(_GP.load_shot(path))
 
 
 def load_still(path: Path) -> dict[str, Any]:
-    """Read still.yaml from a pack directory or file."""
+    """Read still.yaml from a pack directory or file.
+
+    Args:
+        path: Pack directory or ``still.yaml`` file.
+
+    Returns:
+        Parsed still mapping.
+    """
     return dict(_GP.load_still(path))
 
 

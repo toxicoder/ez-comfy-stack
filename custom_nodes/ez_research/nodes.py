@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING, Any
 
 _root = str(Path(__file__).resolve().parent.parent)
 if _root not in sys.path:
@@ -13,6 +14,10 @@ from ez_prompt_enhance.samples import CUSTOM, resolve_prompt, sample_combo_label
 
 from .pipeline import ResearchResult, run_chat, run_research, write_brief
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Default web-search widget and seed research question.
 _WEB_SEARCH_BOOL = (
     "BOOLEAN",
     {"default": True, "label_on": "On", "label_off": "Off"},
@@ -25,6 +30,14 @@ _DEFAULT_MESSAGE = (
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a Comfy widget value to bool.
+
+    Args:
+        value: BOOLEAN widget or loose truthy token.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -34,7 +47,15 @@ def _as_bool(value: object) -> bool:
     return False
 
 
-def _pack(result: ResearchResult) -> dict:
+def _pack(result: ResearchResult) -> dict[str, Any]:
+    """Build the Comfy output-node payload for a research result.
+
+    Args:
+        result: Chat or research reply.
+
+    Returns:
+        UI text/sources/status plus STRING result.
+    """
     return {
         "ui": {
             "text": (result.text,),
@@ -49,7 +70,12 @@ class EZCreativeResearch:
     """CPU chat / research desk for the creative process (no UNET)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (sample, prompt, mode, search, subagents).
+        """
         return {
             "required": {
                 "sample": (sample_combo_labels("research_chat"), {"default": CUSTOM}),
@@ -72,6 +98,7 @@ class EZCreativeResearch:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("reply",)
     FUNCTION = "run"
@@ -92,7 +119,21 @@ class EZCreativeResearch:
         history: object = "",
         sample: object = CUSTOM,
         catalog: object = "",
-    ) -> dict:
+    ) -> dict[str, Any]:
+        """Run chat or planner→search→synth and write a research brief.
+
+        Args:
+            prompt: Operator question or sample override.
+            mode: ``chat`` or ``research``.
+            web_search: When true, fetch SSRF-safe sources.
+            subagents: Planner query count (clamped 1–3).
+            history: Prior turns.
+            sample: Prompt catalog sample id.
+            catalog: Optional sample catalog override.
+
+        Returns:
+            Comfy output-node payload with the reply STRING.
+        """
         message = resolve_prompt(
             catalog,
             sample,
@@ -116,6 +157,7 @@ class EZCreativeResearch:
         return _pack(result)
 
 
+# Comfy custom-node registries.
 NODE_CLASS_MAPPINGS = {
     "EZCreativeResearch": EZCreativeResearch,
 }

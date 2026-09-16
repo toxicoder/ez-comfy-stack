@@ -12,6 +12,7 @@ import re
 from pathlib import Path
 from typing import Any, Mapping
 
+# Command-builder JSON path, session var ids, flag kinds, and parse/cache regexes.
 DEFAULT_BUILDER_PATH = (
     Path(__file__).resolve().parents[1] / "includes" / "command-builder.json"
 )
@@ -405,6 +406,14 @@ def expand_ezcmd(
     data = builder if builder is not None else load_builder()
 
     def repl(match: re.Match[str]) -> str:
+        """Replace one ezcmd fence with a builder widget.
+
+        Args:
+            match: Regex match whose group 1 is the fence body.
+
+        Returns:
+            Widget HTML for the command id in the fence.
+        """
         body = match.group(1)
         found = _CMD_ID_LINE_RE.search(body)
         if found is None:

@@ -13,8 +13,9 @@ import struct
 import sys
 import zlib
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
+# Guide-pack / still-pack contract (LTX VAE grid and layer names).
 SCHEMA = "ez.guide.shot.v1"
 STILL_SCHEMA = "ez.guide.still.v1"
 ENGINES = ("blender", "godot", "opentoonz", "krita", "mixed")
@@ -68,6 +69,37 @@ def layers_for_print(print_mode: str, *, include_normal: bool = False) -> list[s
     return layers
 
 
+class ShotRecord(TypedDict, total=False):
+    """Restricted ez.guide.shot.v1 mapping."""
+
+    schema: str
+    slug: str
+    shot_id: str
+    engine: str
+    print: str
+    frames: int
+    fps: int
+    size: list[int]
+    layers: list[str]
+    identity_ref: str
+    blend: str
+    camera: str
+
+
+class StillRecord(TypedDict, total=False):
+    """Restricted ez.guide.still.v1 mapping."""
+
+    schema: str
+    slug: str
+    plate: str
+    engine: str
+    print: str
+    size: list[int]
+    layers: list[str]
+    blend: str
+    camera: str
+
+
 class GuidePackError(ValueError):
     """Fail-closed guide pack defect."""
 
@@ -93,6 +125,15 @@ def write_rgb_png(path: Path, width: int, height: int, rgb: bytes) -> None:
     ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
 
     def chunk(tag: bytes, data: bytes) -> bytes:
+        """Pack a PNG chunk (length, tag, data, crc).
+
+        Args:
+            tag: Four-byte chunk type.
+            data: Chunk payload.
+
+        Returns:
+            Serialized chunk bytes.
+        """
         crc = zlib.crc32(tag + data) & 0xFFFFFFFF
         return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", crc)
 
@@ -105,12 +146,26 @@ def write_rgb_png(path: Path, width: int, height: int, rgb: bytes) -> None:
 
 
 def write_solid_png(path: Path, width: int, height: int, rgb: tuple[int, int, int]) -> None:
-    """Write a tiny valid RGB PNG (stdlib zlib). Used for fixtures and tests."""
+    """Write a tiny valid RGB PNG (stdlib zlib). Used for fixtures and tests.
+
+    Args:
+        path: Destination file.
+        width: Pixel width.
+        height: Pixel height.
+        rgb: Solid fill color.
+    """
     write_rgb_png(path, width, height, bytes(rgb) * (width * height))
 
 
 def png_size(path: Path) -> tuple[int, int] | None:
-    """Read IHDR width x height, or None."""
+    """Read IHDR width x height, or None.
+
+    Args:
+        path: PNG file.
+
+    Returns:
+        ``(width, height)`` or None when unreadable / not PNG.
+    """
     try:
         data = path.read_bytes()
     except OSError:
@@ -124,6 +179,14 @@ def png_size(path: Path) -> tuple[int, int] | None:
 
 
 def _unquote(value: str) -> str:
+    """Strip matching single or double quotes.
+
+    Args:
+        value: YAML scalar text.
+
+    Returns:
+        Unquoted string.
+    """
     text = value.strip()
     if len(text) >= 2 and text[0] == text[-1] and text[0] in {'"', "'"}:
         return text[1:-1]
@@ -131,7 +194,14 @@ def _unquote(value: str) -> str:
 
 
 def parse_shot_yaml(text: str) -> dict[str, Any]:
-    """Parse restricted ez.guide.shot.v1 YAML (indent-2, no PyYAML)."""
+    """Parse restricted ez.guide.shot.v1 YAML (indent-2, no PyYAML).
+
+    Args:
+        text: YAML document text.
+
+    Returns:
+        Flat mapping (JSON/YAML boundary).
+    """
     data: dict[str, Any] = {}
     for raw in text.splitlines():
         line = raw.split("#", 1)[0].rstrip()
@@ -175,7 +245,17 @@ def parse_shot_yaml(text: str) -> dict[str, Any]:
 
 
 def load_shot(path: Path) -> dict[str, Any]:
-    """Read shot.yaml from a pack directory or file."""
+    """Read shot.yaml from a pack directory or file.
+
+    Args:
+        path: Pack directory or ``shot.yaml`` path.
+
+    Returns:
+        Parsed shot mapping (YAML boundary).
+
+    Raises:
+        GuidePackError: File missing.
+    """
     shot_path = path / "shot.yaml" if path.is_dir() else path
     if not shot_path.is_file():
         raise GuidePackError(f"missing shot.yaml at {shot_path}")
@@ -183,7 +263,14 @@ def load_shot(path: Path) -> dict[str, Any]:
 
 
 def validate_shot(data: dict[str, Any]) -> list[str]:
-    """Return defect strings (empty means ok)."""
+    """Return defect strings (empty means ok).
+
+    Args:
+        data: Parsed shot mapping (YAML boundary).
+
+    Returns:
+        Human-readable defects.
+    """
     defects: list[str] = []
     if data.get("schema") != SCHEMA:
         defects.append(f"schema must be {SCHEMA}, got {data.get('schema')!r}")
@@ -230,12 +317,28 @@ def validate_shot(data: dict[str, Any]) -> list[str]:
 
 
 def _count_frames(folder: Path) -> int:
+    """Count PNG/EXR frames in a layer folder.
+
+    Args:
+        folder: Sequence directory.
+
+    Returns:
+        Number of frame files (0 if missing).
+    """
     if not folder.is_dir():
         return 0
     return sum(1 for p in folder.iterdir() if p.suffix.lower() in {".png", ".exr"})
 
 
 def _pack_size(shot: dict[str, Any]) -> tuple[int, int]:
+    """Return pack pixel size from shot.yaml, defaulting to the LTX grid.
+
+    Args:
+        shot: Parsed shot mapping.
+
+    Returns:
+        ``(width, height)``.
+    """
     size = shot.get("size")
     if isinstance(size, list) and len(size) == 2:
         try:
@@ -252,7 +355,17 @@ def _require_seq_or_mp4(
     require_full_seq: bool,
     frames: int = PACK_FRAMES,
 ) -> list[str]:
-    """Fail-closed sequence or muxed MP4 for one video layer."""
+    """Fail-closed sequence or muxed MP4 for one video layer.
+
+    Args:
+        pack_dir: Pack directory.
+        layer: Layer key (rgb, depth, canny, normal).
+        require_full_seq: When True, demand 0 or ``frames`` PNGs, else MP4.
+        frames: Expected frame count.
+
+    Returns:
+        Defect strings for this layer (empty if ok).
+    """
     mp4_name = SEQ_OR_MP4.get(layer)
     if mp4_name is None:
         return []
@@ -266,7 +379,15 @@ def _require_seq_or_mp4(
 
 
 def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]:
-    """Fail-closed QC for a dumped pack directory."""
+    """Fail-closed QC for a dumped pack directory.
+
+    Args:
+        pack_dir: Guide pack directory.
+        require_full_seq: When False, skip full 120-frame sequence (CI fixtures).
+
+    Returns:
+        Defect strings (empty means ok).
+    """
     defects: list[str] = []
     if not pack_dir.is_dir():
         return [f"missing pack directory {pack_dir}"]
@@ -300,7 +421,14 @@ def validate_pack(pack_dir: Path, *, require_full_seq: bool = True) -> list[str]
 
 
 def dump_shot_yaml(data: dict[str, Any]) -> str:
-    """Serialize a validated shot dict to restricted YAML."""
+    """Serialize a validated shot dict to restricted YAML.
+
+    Args:
+        data: Shot mapping.
+
+    Returns:
+        Restricted YAML document text.
+    """
     size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
     layers = data.get("layers") or list(DEFAULT_LAYERS)
     layer_s = ", ".join(str(x) for x in layers)
@@ -317,13 +445,22 @@ def dump_shot_yaml(data: dict[str, Any]) -> str:
         f"layers: [{layer_s}]",
     ]
     for key in ("identity_ref", "blend", "camera"):
-        if data.get(key):
-            lines.append(f"{key}: {data[key]}")
+        extra = data.get(key)
+        if extra:
+            lines.append(f"{key}: {extra}")
     return "\n".join(lines) + "\n"
 
 
 def write_shot_yaml(path: Path, data: dict[str, Any]) -> None:
-    """Write shot.yaml after validating fields."""
+    """Write shot.yaml after validating fields.
+
+    Args:
+        path: Destination file.
+        data: Shot mapping.
+
+    Raises:
+        GuidePackError: Validation defects.
+    """
     defects = validate_shot(data)
     if defects:
         raise GuidePackError("; ".join(defects))
@@ -332,7 +469,14 @@ def write_shot_yaml(path: Path, data: dict[str, Any]) -> None:
 
 
 def dump_still_yaml(data: dict[str, Any]) -> str:
-    """Serialize a validated still dict to restricted YAML."""
+    """Serialize a validated still dict to restricted YAML.
+
+    Args:
+        data: Still mapping.
+
+    Returns:
+        Restricted YAML document text.
+    """
     size = data.get("size") or [PACK_WIDTH, PACK_HEIGHT]
     layers = data.get("layers") or ["rgb", "depth", "canny", "first"]
     layer_s = ", ".join(str(x) for x in layers)
@@ -347,13 +491,22 @@ def dump_still_yaml(data: dict[str, Any]) -> str:
         f"layers: [{layer_s}]",
     ]
     for key in ("blend", "camera"):
-        if data.get(key):
-            lines.append(f"{key}: {data[key]}")
+        extra = data.get(key)
+        if extra:
+            lines.append(f"{key}: {extra}")
     return "\n".join(lines) + "\n"
 
 
 def write_still_yaml(path: Path, data: dict[str, Any]) -> None:
-    """Write still.yaml after validating fields."""
+    """Write still.yaml after validating fields.
+
+    Args:
+        path: Destination file.
+        data: Still mapping.
+
+    Raises:
+        GuidePackError: Validation defects.
+    """
     defects = validate_still(data)
     if defects:
         raise GuidePackError("; ".join(defects))
@@ -362,7 +515,17 @@ def write_still_yaml(path: Path, data: dict[str, Any]) -> None:
 
 
 def load_still(path: Path) -> dict[str, Any]:
-    """Read still.yaml from a pack directory or file."""
+    """Read still.yaml from a pack directory or file.
+
+    Args:
+        path: Pack directory or ``still.yaml`` path.
+
+    Returns:
+        Parsed still mapping (YAML boundary).
+
+    Raises:
+        GuidePackError: File missing.
+    """
     still_path = path / "still.yaml" if path.is_dir() else path
     if not still_path.is_file():
         raise GuidePackError(f"missing still.yaml at {still_path}")
@@ -370,7 +533,14 @@ def load_still(path: Path) -> dict[str, Any]:
 
 
 def validate_still(data: dict[str, Any]) -> list[str]:
-    """Return defect strings for ez.guide.still.v1 (empty means ok)."""
+    """Return defect strings for ez.guide.still.v1 (empty means ok).
+
+    Args:
+        data: Parsed still mapping (YAML boundary).
+
+    Returns:
+        Human-readable defects.
+    """
     defects: list[str] = []
     if data.get("schema") != STILL_SCHEMA:
         defects.append(f"schema must be {STILL_SCHEMA}, got {data.get('schema')!r}")
@@ -408,7 +578,14 @@ def validate_still(data: dict[str, Any]) -> list[str]:
 
 
 def validate_still_pack(pack_dir: Path) -> list[str]:
-    """Fail-closed QC for a single-frame still pack."""
+    """Fail-closed QC for a single-frame still pack.
+
+    Args:
+        pack_dir: Still pack directory.
+
+    Returns:
+        Defect strings (empty means ok).
+    """
     defects: list[str] = []
     if not pack_dir.is_dir():
         return [f"missing still pack directory {pack_dir}"]
@@ -448,7 +625,14 @@ def validate_still_pack(pack_dir: Path) -> list[str]:
 
 
 def parse_size_token(token: str) -> tuple[int, int] | None:
-    """Parse ``1280x704`` into a size tuple, or None."""
+    """Parse ``1280x704`` into a size tuple, or None.
+
+    Args:
+        token: Size token (``WxH``, optional multiply sign).
+
+    Returns:
+        ``(width, height)`` or None when the token is not ``WxH``.
+    """
     text = token.lower().replace("×", "x").strip()
     if "x" not in text:
         return None
@@ -460,6 +644,14 @@ def parse_size_token(token: str) -> tuple[int, int] | None:
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """CLI: validate | validate-still.
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     parser = argparse.ArgumentParser(prog="guide_pack")
     sub = parser.add_subparsers(dest="cmd", required=True)
     p_val = sub.add_parser("validate", help="validate a pack directory")

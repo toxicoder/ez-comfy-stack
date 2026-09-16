@@ -9,6 +9,7 @@ strict; a missing control slot shifts timesignature/language/keyscale.
 from __future__ import annotations
 
 import re
+from collections.abc import Iterator
 from typing import Any
 
 ACE_ENCODER_TYPE = "TextEncodeAceStepAudio1.5"
@@ -111,7 +112,7 @@ def assert_ace_encoder_widgets(node: dict[str, Any], *, where: str = "") -> list
     return widgets
 
 
-def iter_ace_encoders(graph: dict[str, Any]):
+def iter_ace_encoders(graph: dict[str, Any]) -> Iterator[dict[str, Any]]:
     """Yield TextEncodeAceStepAudio1.5 nodes from a lab graph."""
     for node in graph.get("nodes") or []:
         if node.get("type") == ACE_ENCODER_TYPE:

@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _creator_pack3 import PACK3, Pack3Spec
 from _lab_layout import LAB_GROUP_Y0, ensure_group_title_inset, group as _group
@@ -136,7 +137,7 @@ def _dump(path: Path, graph: dict) -> None:
 def _patch_cv_io() -> None:
     orig = cv.lab_json
 
-    def lab_json(stem: str, **kwargs):
+    def lab_json(stem: str, **kwargs: Any) -> Path:
         try:
             return orig(stem, **kwargs)
         except FileNotFoundError:

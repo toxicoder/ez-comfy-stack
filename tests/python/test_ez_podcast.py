@@ -1,6 +1,7 @@
 """Hermetic tests for ez_podcast (no Comfy, no network, no GGUF, no Kokoro)."""
 
 from __future__ import annotations
+import pytest
 
 import sys
 from pathlib import Path
@@ -138,7 +139,7 @@ def test_script_success_unloads_writer() -> None:
     assert "stay on the rack" in user
 
 
-def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:
+def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         sys,
         "path",
@@ -153,7 +154,7 @@ def test_kokoro_tts_no_turns_empty_audio() -> None:
     assert audio["sample_rate"] == 24000
 
 
-def test_kokoro_missing_onnx_does_not_raise(monkeypatch, tmp_path: Path) -> None:
+def test_kokoro_missing_onnx_does_not_raise(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     monkeypatch.setenv("MODELS_DIR", str(tmp_path))
     monkeypatch.setenv("MODELS_ROOT", str(tmp_path))
     audio = EZKokoroTTS().run(SEED_SCRIPT)[0]

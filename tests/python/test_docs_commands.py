@@ -4,6 +4,7 @@ Hermetic: stdlib + docs/commands.py. No MkDocs, network, or browser.
 """
 
 from __future__ import annotations
+from types import ModuleType
 
 import importlib.util
 import json
@@ -33,7 +34,7 @@ SESSION_IDS = (
 )
 
 
-def _load_commands():
+def _load_commands() -> ModuleType:
     """Load docs/commands.py as a module.
 
     Returns:
@@ -48,18 +49,18 @@ def _load_commands():
 
 
 @pytest.fixture
-def cmd():
+def cmd() -> ModuleType:
     """Loaded commands module."""
     return _load_commands()
 
 
 @pytest.fixture
-def builder(cmd):
+def builder(cmd: ModuleType) -> dict[str, object]:
     """Shipped builder JSON (validated)."""
     return cmd.load_builder(BUILDER_JSON)
 
 
-def test_shipped_builder_validates(cmd) -> None:
+def test_shipped_builder_validates(cmd: ModuleType) -> None:
     """includes/command-builder.json matches the session-var contract."""
     data = cmd.load_builder(BUILDER_JSON)
     ids = [row["id"] for row in data["variables"]]
@@ -72,7 +73,7 @@ def test_shipped_builder_validates(cmd) -> None:
     assert len(cmd_ids) == len(set(cmd_ids))
 
 
-def test_validate_builder_rejects_missing_session_var(cmd) -> None:
+def test_validate_builder_rejects_missing_session_var(cmd: ModuleType) -> None:
     """Dropping SPARK_HOST fails closed."""
     raw = json.loads(BUILDER_JSON.read_text(encoding="utf-8"))
     raw["variables"] = [v for v in raw["variables"] if v["id"] != "SPARK_HOST"]
@@ -80,7 +81,7 @@ def test_validate_builder_rejects_missing_session_var(cmd) -> None:
         cmd.validate_builder(raw)
 
 
-def test_validate_builder_rejects_duplicate_command(cmd, builder) -> None:
+def test_validate_builder_rejects_duplicate_command(cmd: ModuleType, builder: dict[str, object]) -> None:
     """Duplicate command ids are a schema error."""
     data = json.loads(json.dumps(builder))
     data["commands"].append(data["commands"][0])
@@ -88,7 +89,7 @@ def test_validate_builder_rejects_duplicate_command(cmd, builder) -> None:
         cmd.validate_builder(data)
 
 
-def test_substitute_vars_replaces_known_only(cmd) -> None:
+def test_substitute_vars_replaces_known_only(cmd: ModuleType) -> None:
     """Known tokens change; unknown ${FOO} stays; not recursive."""
     values = {"SPARK_HOST": "10.1.2.3", "COMFY_PORT": "9000"}
     text = "open http://${SPARK_HOST}:${COMFY_PORT} and ${FOO}"
@@ -98,7 +99,7 @@ def test_substitute_vars_replaces_known_only(cmd) -> None:
     assert nested == "host=${COMFY_PORT}"
 
 
-def test_substitute_vars_replaces_bash_default_form(cmd) -> None:
+def test_substitute_vars_replaces_bash_default_form(cmd: ModuleType) -> None:
     """${NAME:-default} is the same slot as ${NAME}; unknown :- form stays."""
     values = {"SPARK_HOST": "10.1.2.3", "SPARK_USER": "alx"}
     line = 'export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"'
@@ -110,7 +111,7 @@ def test_substitute_vars_replaces_bash_default_form(cmd) -> None:
     assert cmd.substitute_vars(mixed, values) == "ssh alx@10.1.2.3"
 
 
-def test_template_has_vars(cmd) -> None:
+def test_template_has_vars(cmd: ModuleType) -> None:
     """Auto-bind only when a session ${VAR} is present."""
     assert cmd.template_has_vars("ssh ${SPARK_USER}@${SPARK_HOST}")
     assert cmd.template_has_vars('export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"')
@@ -119,7 +120,7 @@ def test_template_has_vars(cmd) -> None:
     assert not cmd.template_has_vars("echo ${NOT_A_SESSION:-x}")
 
 
-def test_split_var_template_parts(cmd) -> None:
+def test_split_var_template_parts(cmd: ModuleType) -> None:
     """Chip renderer splits literals vs known session slots."""
     values = {"MODELS_DIR": "/mnt/models", "SPARK_HOST": "10.1.2.3"}
     parts = cmd.split_var_template("ls ${MODELS_DIR}/x", values)
@@ -140,7 +141,7 @@ def test_split_var_template_parts(cmd) -> None:
     assert plain == [("./scripts/manage.sh doctor", None)]
 
 
-def test_render_command_omits_unchecked_bool(cmd, builder) -> None:
+def test_render_command_omits_unchecked_bool(cmd: ModuleType, builder: dict[str, object]) -> None:
     """--drop-incomplete is absent until checked."""
     recipe = cmd.command_by_id("download-models", builder)
     defaults = cmd.default_var_values(builder)
@@ -155,7 +156,7 @@ def test_render_command_omits_unchecked_bool(cmd, builder) -> None:
     )
 
 
-def test_render_command_choice_or_int_emits_mbps(cmd, builder) -> None:
+def test_render_command_choice_or_int_emits_mbps(cmd: ModuleType, builder: dict[str, object]) -> None:
     """choice-or-int copies --limit 80, not a 'custom' token."""
     recipe = cmd.command_by_id("download-music", builder)
     defaults = cmd.default_var_values(builder)
@@ -173,7 +174,7 @@ def test_render_command_choice_or_int_emits_mbps(cmd, builder) -> None:
     assert off.endswith("--limit off")
 
 
-def test_render_command_bind_var_uses_session_limit(cmd, builder) -> None:
+def test_render_command_bind_var_uses_session_limit(cmd: ModuleType, builder: dict[str, object]) -> None:
     """Unset --limit follows DOWNLOAD_LIMIT from Your Spark."""
     recipe = cmd.command_by_id("download-models", builder)
     values = cmd.default_var_values(builder)
@@ -182,14 +183,14 @@ def test_render_command_bind_var_uses_session_limit(cmd, builder) -> None:
     assert "--limit 200" in line
 
 
-def test_render_command_required_tier(cmd, builder) -> None:
+def test_render_command_required_tier(cmd: ModuleType, builder: dict[str, object]) -> None:
     """Required --tier uses the recipe default when flags omit it."""
     recipe = cmd.command_by_id("download-wan", builder)
     line = cmd.render_command(recipe, {}, cmd.default_var_values(builder))
     assert line == "./scripts/utilities/download-wan.sh run --tier 5b"
 
 
-def test_render_ssh_forward_substitutes_host(cmd, builder) -> None:
+def test_render_ssh_forward_substitutes_host(cmd: ModuleType, builder: dict[str, object]) -> None:
     """Port-forward recipe copies the operator's Spark IP."""
     recipe = cmd.command_by_id("ssh-forward", builder)
     values = cmd.default_var_values(builder)
@@ -200,7 +201,7 @@ def test_render_ssh_forward_substitutes_host(cmd, builder) -> None:
     assert line == "ssh -L 8188:127.0.0.1:8188 alx@spark.lan"
 
 
-def test_expand_ezcmd_widget_and_unknown(cmd, builder) -> None:
+def test_expand_ezcmd_widget_and_unknown(cmd: ModuleType, builder: dict[str, object]) -> None:
     """Known id becomes a widget; unknown id fails the strict build."""
     md = "before\n\n```ezcmd\nid: download-music\n```\n\nafter\n"
     out = cmd.expand_ezcmd(md, builder)
@@ -213,7 +214,7 @@ def test_expand_ezcmd_widget_and_unknown(cmd, builder) -> None:
         cmd.expand_ezcmd("```ezcmd\nfoo: bar\n```\n", builder)
 
 
-def test_inject_command_assets_once(cmd, builder) -> None:
+def test_inject_command_assets_once(cmd: ModuleType, builder: dict[str, object]) -> None:
     """JSON blob lands before </body> and is not duplicated."""
     html = "<html><body><p>hi</p></body></html>"
     once = cmd.inject_command_assets(html, builder)
@@ -228,7 +229,7 @@ def test_inject_command_assets_once(cmd, builder) -> None:
     assert twice.count('id="ez-cmd-data"') == 1
 
 
-def test_mkdocs_wires_commands_js(cmd) -> None:
+def test_mkdocs_wires_commands_js(cmd: ModuleType) -> None:
     """extra_javascript lists commands.js; hooks expand ezcmd."""
     del cmd
     yml = MKDOCS_YML.read_text(encoding="utf-8")

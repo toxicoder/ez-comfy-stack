@@ -10,6 +10,7 @@ import copy
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
 from _lab_paths import apply_lab_identity, lab_json, lab_rel_of
@@ -184,7 +185,7 @@ def _mk(
     pos: list[float],
     size: list[float],
     title: str,
-    widgets,
+    widgets: list[Any] | dict[str, Any],
     inputs: list[dict],
     outputs: list[dict],
     *,

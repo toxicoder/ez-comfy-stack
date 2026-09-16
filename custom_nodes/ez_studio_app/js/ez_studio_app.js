@@ -1,3 +1,9 @@
+/**
+ * App Mode chrome: friendlier widget labels plus an occupancy status chip.
+ *
+ * Nodes 2.0: writes widget.label and a DOM banner. Does not use LiteGraph
+ * canvas drawing. Treat inputEl as optional.
+ */
 import { app } from "../../scripts/app.js";
 
 const LABELS = {
@@ -82,10 +88,18 @@ const CHIP = [
   "pointer-events:none",
 ].join(";");
 
+/**
+ * extra.lab_app_mode from the loaded graph, or null.
+ * @returns {object|null}
+ */
 function labAppMode() {
   return app.graph?.extra?.lab_app_mode || null;
 }
 
+/**
+ * Widget labels stamped in extra.linearData.inputs (nodeId:widgetName).
+ * @returns {Map<string, string>}
+ */
 function stampedLabels() {
   // Persist is [nodeId, widgetName, config]. App panel titles use widget.label.
   const labels = new Map();
@@ -102,6 +116,11 @@ function stampedLabels() {
   return labels;
 }
 
+/**
+ * Apply stamped or generic labels onto a node's widgets.
+ * @param {object} node
+ * @returns {void}
+ */
 function relabelWidgets(node) {
   if (!node?.widgets) {
     return;
@@ -120,17 +139,29 @@ function relabelWidgets(node) {
   }
 }
 
+/**
+ * Relabel every node on the live graph.
+ * @returns {void}
+ */
 function relabelGraph() {
   for (const node of app.graph?.nodes || []) {
     relabelWidgets(node);
   }
 }
 
+/**
+ * Count save/output nodes used for the occupancy chip progress line.
+ * @returns {number}
+ */
 function countSaveNodes() {
   const nodes = app.graph?.nodes || [];
   return nodes.filter((n) => SAVE_TYPES.has(n.type)).length;
 }
 
+/**
+ * Reuse or create the occupancy chip element.
+ * @returns {HTMLElement}
+ */
 function ensureBanner() {
   let el = document.getElementById(BANNER_ID);
   if (el) {
@@ -143,6 +174,11 @@ function ensureBanner() {
   return el;
 }
 
+/**
+ * Stick the chip into the App widgets host, else pin it under the header.
+ * @param {HTMLElement} el
+ * @returns {void}
+ */
 function mountBanner(el) {
   const host = document.querySelector("[data-testid=linear-widgets]");
   if (host) {
@@ -171,6 +207,11 @@ function mountBanner(el) {
   }
 }
 
+/**
+ * Show occupancy, run status, and handoff copy when App Mode is enabled.
+ * @param {string} status
+ * @returns {void}
+ */
 function renderBanner(status) {
   const mode = labAppMode();
   const el = ensureBanner();
@@ -203,9 +244,18 @@ function renderBanner(status) {
 
 app.registerExtension({
   name: "ez_studio_app.chrome",
+  /**
+   * Relabel widgets as each node is created.
+   * @param {object} node
+   * @returns {Promise<void>}
+   */
   async nodeCreated(node) {
     relabelWidgets(node);
   },
+  /**
+   * Mount the occupancy chip and subscribe to graph/execution events.
+   * @returns {Promise<void>}
+   */
   async setup() {
     let done = 0;
     const api = app.api;

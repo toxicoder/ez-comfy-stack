@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
+# Glossary JSON path, categories, wrap regexes, skip tags, and term cache.
 PLACEHOLDER = "<!-- ez-glossary:render -->"
 
 DEFAULT_GLOSSARY_PATH = (

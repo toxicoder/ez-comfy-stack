@@ -1,15 +1,18 @@
 """Hermetic tests for studio-ui watch/download (no network listen)."""
 
 from __future__ import annotations
+import pytest
 
 import importlib.util
 import json
 from pathlib import Path
+from types import ModuleType
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def _load_server():
+def _load_server() -> ModuleType:
     spec = importlib.util.spec_from_file_location(
         "studio_ui_server", ROOT / "studio-ui" / "server.py"
     )
@@ -19,7 +22,7 @@ def _load_server():
     return mod
 
 
-def test_watch_and_download_allowlist(tmp_path: Path, monkeypatch) -> None:
+def test_watch_and_download_allowlist(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     films = tmp_path / "films" / "gosee"
     films.mkdir(parents=True)
     (films / "state.json").write_text(
@@ -52,7 +55,7 @@ def test_studio_packages_export_empty_node_maps() -> None:
     assert "NODE_DISPLAY_NAME_MAPPINGS" in ez_studio_blocks.__all__
 
 
-def _bind_handler(server, path: str):
+def _bind_handler(server: ModuleType, path: str) -> tuple[Any, dict[str, object]]:
     from io import BytesIO
 
     handler = server.Handler.__new__(server.Handler)
@@ -75,7 +78,7 @@ def _bind_handler(server, path: str):
 
 
 def test_handler_routes_watch_media_thumb_and_board(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     films = tmp_path / "films" / "gosee"
     films.mkdir(parents=True)
@@ -151,7 +154,7 @@ def test_handler_routes_watch_media_thumb_and_board(
     server.Handler.log_message(handler, "ignored %s", "x")
 
 
-def test_main_uses_mocked_server(monkeypatch) -> None:
+def test_main_uses_mocked_server(monkeypatch: pytest.MonkeyPatch) -> None:
     server = _load_server()
     seen: dict[str, object] = {}
 
@@ -169,13 +172,13 @@ def test_main_uses_mocked_server(monkeypatch) -> None:
     assert seen["served"] is True
 
 
-def test_rows_when_films_missing(tmp_path: Path, monkeypatch) -> None:
+def test_rows_when_films_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     server = _load_server()
     monkeypatch.setattr(server, "FILMS", tmp_path / "no-such-films")
     assert server._rows() == []
 
 
-def test_rows_skip_invalid_json(tmp_path: Path, monkeypatch) -> None:
+def test_rows_skip_invalid_json(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     dest = tmp_path / "films" / "bad"
     dest.mkdir(parents=True)
     (dest / "state.json").write_text("{not-json", encoding="utf-8")
@@ -185,7 +188,7 @@ def test_rows_skip_invalid_json(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_publish_mp4_when_films_is_not_named_films(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     server = _load_server()
     monkeypatch.setattr(server, "FILMS", tmp_path)
@@ -195,7 +198,7 @@ def test_publish_mp4_when_films_is_not_named_films(
 
 
 def test_guides_alt_when_parent_guides_missing(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     alt = tmp_path / "films" / "guides"
     alt.mkdir(parents=True)
@@ -219,7 +222,7 @@ def test_guides_alt_when_parent_guides_missing(
     assert server.FILMS == Path("/films")
 
 
-def test_publish_mp4_resolve_failure(tmp_path: Path, monkeypatch) -> None:
+def test_publish_mp4_resolve_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     server = _load_server()
     monkeypatch.setattr(server, "FILMS", tmp_path)
     (tmp_path / "ez_gosee_90s.mp4").write_bytes(b"x")
@@ -232,7 +235,7 @@ def test_publish_mp4_resolve_failure(tmp_path: Path, monkeypatch) -> None:
     assert server.publish_mp4("gosee") is None
 
 
-def test_overlay_thumb_when_clay_missing(tmp_path: Path, monkeypatch) -> None:
+def test_overlay_thumb_when_clay_missing(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     dest = tmp_path / "films" / "gosee"
     dest.mkdir(parents=True)
     pack = tmp_path / "guides" / "gosee" / "01"
@@ -246,7 +249,7 @@ def test_overlay_thumb_when_clay_missing(tmp_path: Path, monkeypatch) -> None:
     assert lights["look"] == "on"
 
 
-def test_page_skips_non_dict_shot(tmp_path: Path, monkeypatch) -> None:
+def test_page_skips_non_dict_shot(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     server = _load_server()
     monkeypatch.setattr(
         server,
@@ -268,7 +271,7 @@ def test_page_skips_non_dict_shot(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_safe_thumb_resolve_fail_and_missing_file(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     server = _load_server()
     monkeypatch.setattr(server, "GUIDES", tmp_path / "guides")
@@ -283,7 +286,7 @@ def test_safe_thumb_resolve_fail_and_missing_file(
     assert server._safe_thumb("gosee", "01", "clay") is None
 
 
-def test_server_dunder_main(monkeypatch) -> None:
+def test_server_dunder_main(monkeypatch: pytest.MonkeyPatch) -> None:
     import runpy
 
     seen: dict[str, object] = {}
@@ -303,7 +306,7 @@ def test_server_dunder_main(monkeypatch) -> None:
 
 
 def test_film_board_links_watch_when_mp4_exists(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     dest = tmp_path / "films" / "gosee"
     dest.mkdir(parents=True)

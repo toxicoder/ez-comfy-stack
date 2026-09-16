@@ -7,6 +7,7 @@ when those modules exist.
 
 from .patch import apply_patches
 
+# Comfy registry (empty — this pack only wraps existing LTX nodes).
 NODE_CLASS_MAPPINGS: dict[str, type] = {}
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
 

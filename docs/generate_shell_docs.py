@@ -27,6 +27,7 @@ import re
 import sys
 from pathlib import Path
 
+# Script scan roots, output path, comment-marker regexes, and generated page chrome.
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = REPO_ROOT / "scripts"
 OUTPUT_DIR = REPO_ROOT / "docs" / "generated" / "shell"

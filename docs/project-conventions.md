@@ -11,6 +11,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Core principles
 - Repo layout and ownership
 - Shell style (Google Shell Style Guide + project deviations)
+- Python types and Google-style docstrings; custom-node JSDoc
 - Operator progress (bars, heartbeats, env)
 - Docker, testing, coverage gate, Pyright (Pylance) + mypy, and branching rules
 - Docs publish and **human-readable formatting** patterns
@@ -19,6 +20,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 
 - Consistent, reviewable contributions with a Bazel-first test/lint/docs graph and without the lab K8s surface
 - Shell that matches industry practice while staying safe on remote DGX Spark hosts
+- First-party Python that is annotated and Google-style documented (JSDoc on custom-node frontends)
 - MkDocs pages operators can **scan** (not only search)
 
 ## Principles
@@ -108,7 +110,7 @@ This project follows that guide for executables and libraries, with the **intent
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
 | ShellCheck | Clean at warning level (`bazelisk test //:lint --test_tag_filters=manual`) |
 | Pyright | Clean at `standard` (`bazelisk test //tests:typecheck`) |
-| mypy | Clean (`bazelisk test //tests:typecheck`; `mypy.ini`) |
+| mypy | Clean with `disallow_untyped_defs` + `disallow_incomplete_defs` (`bazelisk test //tests:typecheck`; `mypy.ini`) |
 | SUID/SGID | Forbidden |
 
 ### Intentional deviations from Google
@@ -141,6 +143,35 @@ some_func() {
   …
 }
 ```
+
+### Python types and docstrings
+
+First-party Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib/*.py`, `studio-ui`, `tools`) is annotated and Google-style documented. Pytest `test_*` bodies and one-off `Fake*` stubs are typed but do not need rich docstrings.
+
+| Rule | Detail |
+| --- | --- |
+| Annotations | Every def, including `_private` and nested. `from __future__ import annotations` |
+| mypy | `disallow_untyped_defs` and `disallow_incomplete_defs` |
+| Pyright | `standard` (not `strict` — Comfy/torch/bpy stay optional) |
+| `Any` | Only at tensor / `bpy` / optional-import boundaries, with a one-line reason |
+| Comfy `INPUT_TYPES` | Return `ComfyInputTypes` from `ez_common` via `TYPE_CHECKING` import (no runtime sibling import at module load) |
+| Docstrings | Module + class + every non-dunder function. `Args:` when there are params besides `self`/`cls`; `Returns:` when the annotation is not `None` |
+| Constants | PEP 257 attribute docstring, or one `#` group comment above a contiguous `UPPER_SNAKE` block |
+| Inventory | `tests/python/test_production_docstrings.py` |
+
+```python
+def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
+    """Resolve the durable Comfy output directory.
+
+    Args:
+        default: Last-resort path when nothing else is set.
+
+    Returns:
+        Directory path (may not exist yet).
+    """
+```
+
+Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site JS in `docs/javascripts/` already follows that pattern.
 
 ### Entry script skeleton
 
@@ -245,7 +276,9 @@ flowchart TB
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
 - `bazelisk test //:test-fast` (and `make coverage`) enforces:
   - **100% Python line coverage** on all first-party production packages (`custom_nodes`, `docker`, `docs`, `scripts/lib`, `studio-ui`, `tools`)
-  - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
+  - **Pyright** clean at `standard` and **mypy** clean with `disallow_untyped_defs` (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
+  - **Production docstring inventory**: every production class/function has a Google-style docstring (`Args:` / `Returns:` when the signature needs them); constants have a group comment or attribute docstring (`tests/python/test_production_docstrings.py`)
+  - **Custom-node JSDoc**: file banner + JSDoc on `function` declarations (`tests/python/test_jsdoc.py`)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (production-only references do not count)
   - Full BATS suite green
 - **Tests ship with production code** — same commit as the files under test
@@ -262,7 +295,8 @@ flowchart LR
 ```mermaid
 flowchart TB
   Cov["bazelisk test //:test-fast"] --> Py["100% line · first-party Python"]
-  Cov --> Pyright["Pyright standard + mypy · first-party Python"]
+  Cov --> Pyright["Pyright standard + mypy untyped-defs · first-party Python"]
+  Cov --> DocsInv["Production Google docs + JSDoc inventory"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>invoked under tests/"]
   Cov --> Bats["Full BATS suite green"]
   Lint["bazelisk test //:lint"] --> SC["ShellCheck warnings = defects"]

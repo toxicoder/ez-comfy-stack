@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from .edm_examples import EdmExample, _ex, format_edm_score
 
+# Catalog phase, track scores, and catalog rows.
 AFTERPARTY_PHASE = 3
 
 

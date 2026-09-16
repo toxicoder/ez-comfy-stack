@@ -7,10 +7,10 @@ import os
 import shutil
 import subprocess
 import sys
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any, Callable, cast
 
 from .align import (
     MAX_SPEED,
@@ -29,8 +29,16 @@ from .qc import evaluate_qc
 from .rights import require_rights
 from .sanitize import looks_like_target, sanitize_target
 from .srt import turns_to_srt
-from .turns import assign_overlap, empty_payload, merge_adjacent_turns, normalize_turn
+from .turns import (
+    ScriptPayload,
+    Turn,
+    assign_overlap,
+    empty_payload,
+    merge_adjacent_turns,
+    normalize_turn,
+)
 
+# Dub catalog: engines, stages, ISO language widgets, media suffixes.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 ENGINE_CHATTERBOX = "chatterbox-ml"
 ENGINE_QWEN3TTS = "qwen3tts"
@@ -73,21 +81,32 @@ VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
 MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
 
 # Tests inject these. Production stays None (fail-soft).
-fetch_hook: Callable[[str, Path], Path] | None = None
-asr_hook: Callable[[Path, str], list[dict[str, Any]]] | None = None
-embed_hook: Callable[[list[float], int], list[float]] | None = None
-translate_hook: Callable[[list[dict[str, Any]], str, str], list[dict[str, Any]]] | None = (
-    None
-)
-tts_hook: Callable[[str, str, str, str], tuple[list[float], int]] | None = None
+fetch_hook: Callable[..., Any] | None = None
+asr_hook: Callable[..., Any] | None = None
+embed_hook: Callable[..., Any] | None = None
+translate_hook: Callable[..., Any] | None = None
+tts_hook: Callable[..., Any] | None = None
 
 
 def _log(message: str) -> None:
+    """Write an ``[ez_dub]`` status line to stderr.
+
+    Args:
+        message: Human status without a trailing newline.
+    """
     print(f"[ez_dub] {message}", file=sys.stderr)
 
 
 def _progress(total: int) -> Any:
-    """Comfy ProgressBar when the sibling pack is importable."""
+    """Comfy ProgressBar when the sibling pack is importable.
+
+    Args:
+        total: Expected steps.
+
+    Returns:
+        ProgressBar-like object, or None in pytest. Typed ``Any`` because
+        Comfy's ProgressBar is an optional sibling import.
+    """
     _ensure_lab_custom_nodes_path()
     try:
         from ez_common import node_progress
@@ -109,7 +128,14 @@ def _ensure_lab_custom_nodes_path() -> None:
 
 
 def is_url(source: object) -> bool:
-    """True when the widget looks like an http(s) URL."""
+    """True when the widget looks like an http(s) URL.
+
+    Args:
+        source: Combo value, path, or URL.
+
+    Returns:
+        Whether ingest should fetch with yt-dlp.
+    """
     text = (source if isinstance(source, str) else str(source or "")).strip()
     lowered = text.lower()
     return lowered.startswith("http://") or lowered.startswith("https://")
@@ -140,7 +166,7 @@ def input_directory() -> Path:
 def list_input_media(root: Path | None = None) -> list[str]:
     """Audio and video filenames in the Comfy input folder (not recursive).
 
-    Arguments:
+    Args:
         root: Override directory (tests). Default is ``input_directory()``.
     Returns:
         Sorted basenames with a media suffix. Missing dirs yield ``[]``.
@@ -164,7 +190,7 @@ def list_input_media(root: Path | None = None) -> list[str]:
 def source_combo_options(root: Path | None = None) -> list[str]:
     """Combo values: ``(none)`` first, then ``list_input_media``.
 
-    Arguments:
+    Args:
         root: Override directory (tests).
     Returns:
         Non-empty list so the node can load with an empty input folder.
@@ -173,7 +199,14 @@ def source_combo_options(root: Path | None = None) -> list[str]:
 
 
 def _strip_annotated_name(name: str) -> str:
-    """Drop a Comfy `` [input]`` annotation from a combo value."""
+    """Drop a Comfy `` [input]`` annotation from a combo value.
+
+    Args:
+        name: Combo basename, possibly annotated.
+
+    Returns:
+        Basename without the `` [input]`` suffix.
+    """
     if name.endswith("]") and " [" in name:
         return name.rsplit(" [", 1)[0]
     return name
@@ -187,7 +220,7 @@ def resolve_media_source(
 ) -> str:
     """Turn App widgets into a path or URL for ``ingest``.
 
-    Arguments:
+    Args:
         source: Combo basename, ``(none)``, or an existing path.
         source_url: Optional http(s) override.
         input_dir: Override input folder (tests).
@@ -224,6 +257,7 @@ def resolve_media_source(
     raise FileNotFoundError(f"source missing: {path}")
 
 
+# Clone/ASR/translate knobs, status strings, pack files, process-local handles.
 TRANSLATE_MAX_TOKENS = 512
 TRANSLATE_TEMPERATURE = 0.3
 TRANSLATE_TIMEOUT_S = 120
@@ -356,7 +390,7 @@ _QWEN3_PROMPT_KEY = ""
 def language_code(code: object) -> str:
     """Map a widget value to an ISO 639-1 code (Chatterbox ``language_id``).
 
-    Arguments:
+    Args:
         code: Widget ISO code, language name, or ``auto``.
     Returns:
         ``auto``, a two-letter code, or ``en`` when unknown.
@@ -375,7 +409,14 @@ def language_code(code: object) -> str:
 
 
 def language_name(code: object) -> str:
-    """Map a widget code to an English language name (display only)."""
+    """Map a widget code to an English language name (display only).
+
+    Args:
+        code: Widget ISO code, language name, or ``auto``.
+
+    Returns:
+        English display name, or ``the source language`` for ``auto``.
+    """
     raw = language_code(code)
     if raw == "auto":
         return "the source language"
@@ -387,7 +428,7 @@ def clone_cfg_weight(
 ) -> float:
     """CFG for Chatterbox generate. Auto is 0 on language transfer.
 
-    Arguments:
+    Args:
         source: ISO source or ``auto``.
         target: ISO target.
         override: Widget value. ``< 0`` means auto.
@@ -416,7 +457,11 @@ def clone_cfg_weight(
 
 
 def dub_llm_timeout_s() -> int:
-    """Per-turn GGUF timeout for translation (default 120 s)."""
+    """Per-turn GGUF timeout for translation (default 120 s).
+
+    Returns:
+        Timeout in seconds from ``EZ_DUB_LLM_TIMEOUT_S`` or the default.
+    """
     raw = os.environ.get("EZ_DUB_LLM_TIMEOUT_S", str(TRANSLATE_TIMEOUT_S)).strip()
     try:
         value = int(raw)
@@ -430,7 +475,7 @@ def dub_llm_timeout_s() -> int:
 def split_clone_text(text: str, limit: int = CLONE_TEXT_LIMIT) -> list[str]:
     """Split clone text so each chunk stays within Chatterbox's ~300 char cap.
 
-    Arguments:
+    Args:
         text: One turn's target sentence(s).
         limit: Max characters per generate() call.
     Returns:
@@ -459,14 +504,26 @@ def split_clone_text(text: str, limit: int = CLONE_TEXT_LIMIT) -> list[str]:
 
 
 def asr_wheel_status(exc: BaseException | None = None) -> str:
-    """Operator-facing ASR miss. Include ImportError detail when present."""
+    """Operator-facing ASR miss. Include ImportError detail when present.
+
+    Args:
+        exc: Optional ImportError to append.
+
+    Returns:
+        Status string for Dub status.
+    """
     if exc is None:
         return ASR_WHEEL_STATUS
     return f"{ASR_WHEEL_STATUS} ({exc})"
 
 
 def _import_whisper_model() -> tuple[Any | None, str]:
-    """Load WhisperModel or an operator-facing ImportError reason."""
+    """Load WhisperModel or an operator-facing ImportError reason.
+
+    Returns:
+        ``(WhisperModel class, "")`` or ``(None, reason)``. The class is
+        ``Any`` because faster-whisper is an optional runtime dep.
+    """
     try:
         from faster_whisper import WhisperModel
     except ImportError as exc:
@@ -475,7 +532,11 @@ def _import_whisper_model() -> tuple[Any | None, str]:
 
 
 def preflight_asr() -> str:
-    """Empty when faster-whisper can load; otherwise an operator-facing reason."""
+    """Empty when faster-whisper can load; otherwise an operator-facing reason.
+
+    Returns:
+        Empty string on success, else a blocking Dub status.
+    """
     _, miss = _import_whisper_model()
     if miss:
         return miss
@@ -485,14 +546,25 @@ def preflight_asr() -> str:
 
 
 def perth_status(exc: BaseException | None = None) -> str:
-    """Operator-facing PerTh miss. Include ImportError detail when present."""
+    """Operator-facing PerTh miss. Include ImportError detail when present.
+
+    Args:
+        exc: Optional ImportError to append.
+
+    Returns:
+        Status string for Dub status.
+    """
     if exc is None:
         return PERTH_STATUS
     return f"{PERTH_STATUS} ({exc})"
 
 
 def preflight_perth() -> str:
-    """Empty when PerTh watermarker is callable; otherwise an operator-facing reason."""
+    """Empty when PerTh watermarker is callable; otherwise an operator-facing reason.
+
+    Returns:
+        Empty string on success, else a blocking Dub status.
+    """
     try:
         import perth
     except ImportError as exc:
@@ -503,7 +575,11 @@ def preflight_perth() -> str:
 
 
 def preflight_clone() -> str:
-    """Empty when Chatterbox V3 can load; otherwise an operator-facing reason."""
+    """Empty when Chatterbox V3 can load; otherwise an operator-facing reason.
+
+    Returns:
+        Empty string on success, else a blocking Dub status.
+    """
     try:
         from chatterbox.mtl_tts import ChatterboxMultilingualTTS
     except ImportError:
@@ -527,7 +603,12 @@ def preflight_clone() -> str:
 
 
 def _import_qwen3_model() -> tuple[Any | None, str]:
-    """Load Qwen3TTSModel or an operator-facing ImportError reason."""
+    """Load Qwen3TTSModel or an operator-facing ImportError reason.
+
+    Returns:
+        ``(model class, "")`` or ``(None, reason)``. The class is ``Any``
+        because qwen-tts is an optional runtime dep.
+    """
     try:
         from qwen_tts import Qwen3TTSModel  # type: ignore[import-not-found]
     except ImportError as exc:
@@ -538,7 +619,11 @@ def _import_qwen3_model() -> tuple[Any | None, str]:
 
 
 def preflight_qwen3() -> str:
-    """Empty when Qwen3-TTS can load offline; otherwise an operator-facing reason."""
+    """Empty when Qwen3-TTS can load offline; otherwise an operator-facing reason.
+
+    Returns:
+        Empty string on success, else a blocking Dub status.
+    """
     model_cls, miss = _import_qwen3_model()
     if miss:
         return miss
@@ -554,7 +639,11 @@ def preflight_qwen3() -> str:
 
 
 def translate_llama_status() -> str:
-    """Operator-facing Dub status when Llama cannot import."""
+    """Operator-facing Dub status when Llama cannot import.
+
+    Returns:
+        Blocking status from ez_prompt_enhance, or a local fallback.
+    """
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import llama_cpp_unavailable_status
@@ -564,7 +653,11 @@ def translate_llama_status() -> str:
 
 
 def preflight_translate() -> str:
-    """Empty when the on-box GGUF writer can load; otherwise a blocking reason."""
+    """Empty when the on-box GGUF writer can load; otherwise a blocking reason.
+
+    Returns:
+        Empty string on success, else a blocking Dub status.
+    """
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import _get_llama
@@ -582,7 +675,14 @@ def preflight_translate() -> str:
 
 
 def translate_blocking_status(status: str) -> str:
-    """Return ``status`` when it names a fatal translate miss; else empty."""
+    """Return ``status`` when it names a fatal translate miss; else empty.
+
+    Args:
+        status: Payload or preflight status.
+
+    Returns:
+        The same status when it is fatal, else ``""``.
+    """
     raw = (status or "").strip()
     if not raw:
         return ""
@@ -595,20 +695,41 @@ def translate_blocking_status(status: str) -> str:
 def _translation_needed(
     enhance: bool, source_language: str, target_language: str
 ) -> bool:
-    """True when Queue must run the GGUF writer (cross-language, enhance on)."""
+    """True when Queue must run the GGUF writer (cross-language, enhance on).
+
+    Args:
+        enhance: Widget; False pins widget text.
+        source_language: ISO source or ``auto``.
+        target_language: ISO target.
+
+    Returns:
+        Whether translation must run.
+    """
     if not enhance:
         return False
     return not _same_language(source_language, target_language)
 
 
 def load_translate_prompt() -> str:
-    """Writer system prompt for GGUF translation."""
+    """Writer system prompt for GGUF translation.
+
+    Returns:
+        Contents of ``prompts/translate_turns.txt``.
+    """
     path = PROMPTS_DIR / "translate_turns.txt"
     return path.read_text(encoding="utf-8").strip()
 
 
 def cosine(left: list[float], right: list[float]) -> float:
-    """Cosine similarity; 0 when either vector is empty/zero."""
+    """Cosine similarity; 0 when either vector is empty/zero.
+
+    Args:
+        left: Embedding.
+        right: Embedding.
+
+    Returns:
+        Cosine in ``[0, 1]`` for non-negative typical speaker vectors.
+    """
     n = min(len(left), len(right))
     if n == 0:
         return 0.0
@@ -633,7 +754,7 @@ def cluster_embeddings(
 ) -> list[str]:
     """Greedy nearest-centroid clustering.
 
-    Arguments:
+    Args:
         vectors: One embedding per segment.
         max_speakers: 0 means cap at 8.
         threshold: Below this, start a new speaker (until the cap).
@@ -681,6 +802,15 @@ def energy_vad(
 ) -> list[tuple[float, float]]:
     """Energy VAD fallback when Silero is missing.
 
+    Args:
+        samples: Mono PCM.
+        rate: Sample rate.
+        frame_ms: Analysis frame size.
+        hop_ms: Hop between frames.
+        thresh: RMS threshold.
+        min_s: Minimum span length.
+        pad_s: Padding added around each span.
+
     Returns:
         List of ``(t0, t1)`` speech spans in seconds.
     """
@@ -720,6 +850,17 @@ def energy_vad(
 
 
 def _slice_pcm(samples: list[float], rate: int, t0: float, t1: float) -> list[float]:
+    """Copy a ``[t0, t1]`` window from ``samples``.
+
+    Args:
+        samples: Mono PCM.
+        rate: Sample rate.
+        t0: Start seconds.
+        t1: End seconds.
+
+    Returns:
+        Slice, or ``[]`` when the window is empty.
+    """
     sr = int(rate) or SAMPLE_RATE
     a = max(0, int(round(t0 * sr)))
     b = min(len(samples), int(round(t1 * sr)))
@@ -729,6 +870,14 @@ def _slice_pcm(samples: list[float], rate: int, t0: float, t1: float) -> list[fl
 
 
 def _run(cmd: list[str]) -> tuple[int, str]:
+    """Run a subprocess; never raise on a missing binary.
+
+    Args:
+        cmd: argv.
+
+    Returns:
+        ``(returncode, stderr or stdout)``. Missing binary is ``(127, ...)``.
+    """
     try:
         proc = subprocess.run(
             cmd,
@@ -745,7 +894,7 @@ def _run(cmd: list[str]) -> tuple[int, str]:
 def fetch_url(url: str, dest_dir: Path) -> Path:
     """Download media with yt-dlp (or a test hook).
 
-    Arguments:
+    Args:
         url: http(s) URL the operator owns or is licensed to fetch.
         dest_dir: Job directory.
     Returns:
@@ -780,7 +929,13 @@ def fetch_url(url: str, dest_dir: Path) -> Path:
 
 
 def extract_audio(src: Path, dest: Path, rate: int = SAMPLE_RATE) -> None:
-    """ffmpeg-extract mono 16-bit PCM to dest (never copy a WAV as-is)."""
+    """ffmpeg-extract mono 16-bit PCM to dest (never copy a WAV as-is).
+
+    Args:
+        src: Local media path.
+        dest: Destination wav path.
+        rate: Target sample rate.
+    """
     dest.parent.mkdir(parents=True, exist_ok=True)
     code, err = _run(
         [
@@ -809,6 +964,12 @@ def ingest(
     root: Path | None = None,
 ) -> tuple[Path, str]:
     """Rights-gated ingest of a local path or URL.
+
+    Args:
+        source: Existing path or http(s) URL.
+        have_rights: Rights attestation widget.
+        slug: Job folder name.
+        root: Override output root (tests).
 
     Returns:
         ``(job_dir, status)``.
@@ -844,7 +1005,15 @@ def ingest(
 
 
 def _default_embed(pcm: list[float], rate: int) -> list[float]:
-    """Tiny energy/zcr fingerprint so clustering works without ONNX."""
+    """Tiny energy/zcr fingerprint so clustering works without ONNX.
+
+    Args:
+        pcm: Turn slice PCM.
+        rate: Unused (call-site compatibility).
+
+    Returns:
+        Four-float fingerprint.
+    """
     del rate
     if not pcm:
         return [0.0, 0.0, 0.0, 0.0]
@@ -863,12 +1032,17 @@ def _default_embed(pcm: list[float], rate: int) -> list[float]:
 
 
 def _close_voice_encoder() -> None:
+    """Drop the cached Chatterbox VoiceEncoder handle."""
     global _VOICE_ENCODER
     _VOICE_ENCODER = None
 
 
 def _get_voice_encoder() -> Any | None:
-    """Load Chatterbox VoiceEncoder + ve.pt once. None when the pack/wheel is missing."""
+    """Load Chatterbox VoiceEncoder + ve.pt once. None when the pack/wheel is missing.
+
+    Returns:
+        Encoder handle, or None. Typed ``Any`` because chatterbox is optional.
+    """
     global _VOICE_ENCODER
     if _VOICE_ENCODER is not None:
         return _VOICE_ENCODER
@@ -896,7 +1070,16 @@ def _get_voice_encoder() -> Any | None:
 
 
 def _resample_for_encoder(pcm: list[float], rate: int, dest_rate: int = S3_SR) -> list[float]:
-    """Linear resample a turn slice to the VoiceEncoder rate."""
+    """Linear resample a turn slice to the VoiceEncoder rate.
+
+    Args:
+        pcm: Turn slice PCM.
+        rate: Current sample rate.
+        dest_rate: VoiceEncoder rate (16 kHz).
+
+    Returns:
+        Resampled PCM.
+    """
     sr = int(rate) or SAMPLE_RATE
     if sr == dest_rate:
         return [float(x) for x in pcm]
@@ -909,7 +1092,15 @@ def _resample_for_encoder(pcm: list[float], rate: int, dest_rate: int = S3_SR) -
 
 
 def speaker_embed(pcm: list[float], rate: int) -> list[float]:
-    """Speaker embedding from ve.pt when available; energy fingerprint otherwise."""
+    """Speaker embedding from ve.pt when available; energy fingerprint otherwise.
+
+    Args:
+        pcm: Turn slice PCM.
+        rate: Sample rate.
+
+    Returns:
+        Embedding vector (dimension depends on the encoder).
+    """
     hook = embed_hook
     if hook is not None:
         return hook(pcm, rate)
@@ -941,18 +1132,25 @@ def analyze_pcm(
     max_speakers: int = 0,
     language: str = "auto",
     wav_path: Path | None = None,
-) -> tuple[list[dict[str, Any]], str, str]:
+) -> tuple[list[Turn], str, str]:
     """ASR segments become turns; cluster speakers from those slices.
 
     Energy VAD is not the turn source. Missing Whisper returns empty turns
     plus an operator-facing reason (never unlabeled empty-text windows).
 
+    Args:
+        samples: Source PCM.
+        rate: Sample rate.
+        max_speakers: Cluster cap; 0 means default.
+        language: Whisper language or ``auto``.
+        wav_path: Source wav (required for ASR).
+
     Returns:
-        ``(turns, detected_language, reason)``.
+        ``(turns, detected_language, reason)``. Turns are JSON mappings.
     """
     hook = asr_hook
     detected = ""
-    raw: list[dict[str, Any]] = []
+    raw: list[Turn] = []
     if hook is not None and wav_path is not None:
         asr_turns = hook(wav_path, language)
         raw = [normalize_turn(item, i + 1) for i, item in enumerate(asr_turns or [])]
@@ -980,13 +1178,21 @@ def analyze_pcm(
 
 
 def _close_whisper() -> None:
+    """Drop the cached faster-whisper handle."""
     global _WHISPER, _WHISPER_DIR_CACHED
     _WHISPER = None
     _WHISPER_DIR_CACHED = ""
 
 
 def _load_whisper_model(model_dir: str) -> Any:
-    """Construct WhisperModel, trying CPU int8 then CUDA float16."""
+    """Construct WhisperModel, trying CPU int8 then CUDA float16.
+
+    Args:
+        model_dir: CTranslate2 snapshot path.
+
+    Returns:
+        Loaded model handle (optional faster-whisper type).
+    """
     whisper_cls, miss = _import_whisper_model()
     if whisper_cls is None:
         raise ImportError(miss or ASR_WHEEL_STATUS)
@@ -1003,7 +1209,11 @@ def _load_whisper_model(model_dir: str) -> Any:
 
 
 def _get_whisper() -> tuple[Any | None, str]:
-    """Cached faster-whisper handle plus a miss reason."""
+    """Cached faster-whisper handle plus a miss reason.
+
+    Returns:
+        ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
+    """
     global _WHISPER, _WHISPER_DIR_CACHED
     _cls, miss = _import_whisper_model()
     if _cls is None:
@@ -1025,8 +1235,16 @@ def _get_whisper() -> tuple[Any | None, str]:
 
 def _whisper_segments(
     wav_path: Path, language: str
-) -> tuple[list[dict[str, Any]], str, str]:
-    """Transcribe the whole file. Turns are Whisper segments with text."""
+) -> tuple[list[Turn], str, str]:
+    """Transcribe the whole file. Turns are Whisper segments with text.
+
+    Args:
+        wav_path: Source wav.
+        language: Whisper language or ``auto``.
+
+    Returns:
+        ``(turns, detected_iso, reason)``. Turns are JSON mappings.
+    """
     if not wav_path.is_file():
         return [], "", MISSING_SOURCE_STATUS
     model, miss = _get_whisper()
@@ -1061,7 +1279,7 @@ def _whisper_segments(
         reason = f"faster-whisper failed: {exc}"
         _log(reason)
         return [], "", reason
-    turns: list[dict[str, Any]] = []
+    turns: list[Turn] = []
     for i, seg in enumerate(list(segments), start=1):
         text = str(getattr(seg, "text", "") or "").strip()
         start = float(getattr(seg, "start", 0.0) or 0.0)
@@ -1088,7 +1306,11 @@ def _whisper_segments(
 
 
 def _whisper_dir() -> str:
-    """First directory that has model.bin, config.json, and tokenizer.json."""
+    """First directory that has model.bin, config.json, and tokenizer.json.
+
+    Returns:
+        Snapshot path string, or ``""`` when missing.
+    """
     for root in _model_roots():
         candidates = (
             Path(root) / "Systran__faster-whisper-large-v3_whisper",
@@ -1101,11 +1323,18 @@ def _whisper_dir() -> str:
     return ""
 
 
-def _copy_source_targets(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Copy ``text`` into empty ``text_target`` fields."""
-    out: list[dict[str, Any]] = []
+def _copy_source_targets(turns: Sequence[Mapping[str, Any]]) -> list[Turn]:
+    """Copy ``text`` into empty ``text_target`` fields.
+
+    Args:
+        turns: JSON turns.
+
+    Returns:
+        Shallow copies with ``text_target`` filled when empty.
+    """
+    out: list[Turn] = []
     for turn in turns:
-        item = dict(turn)
+        item = cast(Turn, dict(turn))
         if not str(item.get("text_target") or "").strip():
             item["text_target"] = str(item.get("text") or "")
         out.append(item)
@@ -1113,6 +1342,15 @@ def _copy_source_targets(turns: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _same_language(source: str, target: str) -> bool:
+    """True when both resolve to the same ISO code (``auto`` is never same).
+
+    Args:
+        source: Widget or ISO source.
+        target: Widget or ISO target.
+
+    Returns:
+        Whether clone may copy source text as the target line.
+    """
     src = language_code(source)
     tgt = language_code(target)
     if src in {"", "auto"}:
@@ -1129,6 +1367,19 @@ def _translate_user_message(
     prev_target: str = "",
     next_source: str = "",
 ) -> str:
+    """Build the GGUF user prompt for one turn.
+
+    Args:
+        text: Source sentence.
+        source: Source language widget.
+        target: Target language widget.
+        prev_source: Previous source line (context only).
+        prev_target: Previous translation (context only).
+        next_source: Following source line (context only).
+
+    Returns:
+        Prompt string with ``/no_think``.
+    """
     src_name = language_name(source)
     tgt = language_code(target)
     tgt_name = language_name(tgt)
@@ -1149,16 +1400,25 @@ def _translate_user_message(
 
 
 def translate_turns(
-    turns: list[dict[str, Any]],
+    turns: Sequence[Mapping[str, Any]],
     target_language: str,
     source_language: str,
     *,
     enhance: bool = True,
-) -> tuple[list[dict[str, Any]], str]:
+) -> tuple[list[Turn], str]:
     """Fill ``text_target`` one turn at a time.
 
     Fatal GGUF/llama.cpp misses leave ``text_target`` empty so render cannot
     clone the source language as the target.
+
+    Args:
+        turns: JSON turns with source ``text``.
+        target_language: ISO target.
+        source_language: ISO source or ``auto``.
+        enhance: When False, copy source into ``text_target``.
+
+    Returns:
+        ``(turns, status)``.
     """
     tgt = language_code(target_language)
     src = language_code(source_language)
@@ -1168,10 +1428,10 @@ def translate_turns(
         return _copy_source_targets(turns), "same language"
     hook = translate_hook
     if hook is not None:
-        return hook(turns, tgt, src), ""
+        return hook([cast(Turn, dict(t)) for t in turns], tgt, src), ""
     spoken = [t for t in turns if str(t.get("text") or "").strip()]
     if not spoken:
-        return [dict(t) for t in turns], "no turns"
+        return [cast(Turn, dict(t)) for t in turns], "no turns"
     try:
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.client import REASON_EMPTY
@@ -1182,19 +1442,19 @@ def translate_turns(
         from ez_prompt_enhance.client import complete
     except Exception as exc:  # noqa: BLE001 — fail-soft
         _log(f"prompt enhance client unavailable: {exc}")
-        return [dict(t) for t in turns], "llama.cpp unavailable"
+        return [cast(Turn, dict(t)) for t in turns], "llama.cpp unavailable"
     system = load_translate_prompt()
     timeout = dub_llm_timeout_s()
     translated = 0
     passthrough = 0
     suspect = 0
     last_reason = ""
-    merged: list[dict[str, Any]] = []
+    merged: list[Turn] = []
     fatal = ""
     try:
         n_turns = len(turns)
         for idx, turn in enumerate(turns):
-            item = dict(turn)
+            item = cast(Turn, dict(turn))
             source_text = str(item.get("text") or "").strip()
             if not source_text:
                 item["text_target"] = str(item.get("text_target") or "")
@@ -1304,7 +1564,7 @@ def clone_token_budget(text: str) -> int:
     crop strips that prefix after decode. Chatterbox ``generate`` hardcodes
     1000 (~40 s) when this wrap is absent.
 
-    Arguments:
+    Args:
         text: Target-language line.
     Returns:
         Token count in ``[CLONE_TOKEN_MIN, CLONE_TOKEN_MAX]``.
@@ -1321,7 +1581,16 @@ def clone_token_budget(text: str) -> int:
 def _frame_rms(
     pcm: list[float], rate: int, frame_ms: int = 20
 ) -> tuple[list[float], int]:
-    """Non-overlapping frame RMS plus frame length in samples."""
+    """Non-overlapping frame RMS plus frame length in samples.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+        frame_ms: Frame size.
+
+    Returns:
+        ``(rms_per_frame, frame_length_samples)``.
+    """
     sr = int(rate) or SAMPLE_RATE
     frame = max(1, int(sr * frame_ms / 1000))
     n = len(pcm)
@@ -1336,7 +1605,7 @@ def _frame_rms(
 def _voiced_span(pcm: list[float], rate: int) -> tuple[int, int] | None:
     """Sample span of voiced audio plus onset pad, or None if none.
 
-    Arguments:
+    Args:
         pcm: Mono PCM.
         rate: Sample rate.
     Returns:
@@ -1358,6 +1627,14 @@ def _voiced_span(pcm: list[float], rate: int) -> tuple[int, int] | None:
         return (0, n) if peak >= thresh else None
 
     def _first_hold(seq: list[float]) -> int | None:
+        """Index of the first frame that starts an onset hold.
+
+        Args:
+            seq: Frame RMS values.
+
+        Returns:
+            Frame index, or None when no hold is found.
+        """
         run = 0
         for i, value in enumerate(seq):
             if value >= thresh:
@@ -1391,7 +1668,7 @@ def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
     ``max(ONSET_ABS, ONSET_REL * peak)`` and an 80 ms hold so watermark
     floor and clicks do not count as speech.
 
-    Arguments:
+    Args:
         pcm: Mono clone PCM.
         rate: Sample rate.
     Returns:
@@ -1411,7 +1688,7 @@ def strip_leading_silence(pcm: list[float], rate: int) -> list[float]:
     Does not change ``ez_dub_yt.wav``. No-op when no voiced burst is found
     (never returns empty for a non-empty mix).
 
-    Arguments:
+    Args:
         pcm: Mono mix PCM.
         rate: Sample rate.
     Returns:
@@ -1433,7 +1710,7 @@ def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
 
     Steady tones sit near 0; speech has syllable-scale swings.
 
-    Arguments:
+    Args:
         pcm: Mono PCM.
         rate: Sample rate.
         frame_ms: Frame size.
@@ -1456,7 +1733,16 @@ def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
 def _trim_silence(
     pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
 ) -> list[float]:
-    """Drop leading and trailing frames below ``thresh`` RMS."""
+    """Drop leading and trailing frames below ``thresh`` RMS.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+        thresh: Frame RMS below which a frame is silence.
+
+    Returns:
+        Trimmed PCM, or a copy when the whole clip is below thresh.
+    """
     if not pcm:
         return []
     sr = int(rate) or SAMPLE_RATE
@@ -1464,6 +1750,14 @@ def _trim_silence(
     n = len(pcm)
 
     def _voiced(index: int) -> bool:
+        """True when the frame at ``index`` is above the silence RMS.
+
+        Args:
+            index: Sample offset.
+
+        Returns:
+            Whether that frame is voiced.
+        """
         chunk = pcm[index : min(n, index + frame)]
         return rms(chunk) >= float(thresh)
 
@@ -1481,7 +1775,16 @@ def _trim_silence(
 def _concat_crossfade(
     chunks: list[list[float]], rate: int, xfade_ms: int = REF_XFADE_MS
 ) -> list[float]:
-    """Join PCM chunks with an equal-power-ish linear crossfade."""
+    """Join PCM chunks with an equal-power-ish linear crossfade.
+
+    Args:
+        chunks: PCM pieces in order.
+        rate: Sample rate.
+        xfade_ms: Crossfade length.
+
+    Returns:
+        Concatenated PCM.
+    """
     if not chunks:
         return []
     sr = int(rate) or SAMPLE_RATE
@@ -1503,7 +1806,15 @@ def _concat_crossfade(
 
 
 def _peak_normalize(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
-    """Scale so max abs sample is ``peak`` (no-op when already quieter)."""
+    """Scale so max abs sample is ``peak`` (no-op when already quieter).
+
+    Args:
+        pcm: Mono PCM.
+        peak: Target peak magnitude.
+
+    Returns:
+        Scaled PCM (or a copy).
+    """
     if not pcm:
         return []
     mag = max(abs(float(x)) for x in pcm)
@@ -1517,7 +1828,15 @@ def _peak_normalize(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
 
 
 def raise_to_peak(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
-    """Scale so max abs == peak. No-op on silence (mag < 1e-8)."""
+    """Scale so max abs == peak. No-op on silence (mag < 1e-8).
+
+    Args:
+        pcm: Mono PCM.
+        peak: Target peak magnitude.
+
+    Returns:
+        Scaled PCM (or a copy).
+    """
     if not pcm:
         return []
     mag = max(abs(float(x)) for x in pcm)
@@ -1531,6 +1850,13 @@ def match_rms(pcm: list[float], target_rms: float) -> list[float]:
     """Scale pcm so rms(pcm) ~= target_rms, then cap with raise_to_peak.
 
     No-op if rms(pcm) < 1e-8 or target_rms < REF_MIN_RMS.
+
+    Args:
+        pcm: Clone PCM.
+        target_rms: Desired RMS (usually the source window).
+
+    Returns:
+        Gain-matched PCM.
     """
     if not pcm:
         return []
@@ -1543,7 +1869,14 @@ def match_rms(pcm: list[float], target_rms: float) -> list[float]:
 
 
 def _speaker_ref_text(ref: Path | str) -> str:
-    """Transcript sidecar next to a speaker ref wav."""
+    """Transcript sidecar next to a speaker ref wav.
+
+    Args:
+        ref: Speaker ``.wav`` path.
+
+    Returns:
+        Sidecar text, or ``""`` when missing.
+    """
     path = Path(ref)
     txt = path.with_suffix(".txt")
     if not txt.is_file():
@@ -1552,6 +1885,15 @@ def _speaker_ref_text(ref: Path | str) -> str:
 
 
 def _turn_rms(turn: dict[str, Any], pcm: list[float]) -> float:
+    """Turn RMS from the mapping, else from ``pcm``.
+
+    Args:
+        turn: JSON turn mapping (may include ``rms``).
+        pcm: Window PCM used when ``rms`` is missing.
+
+    Returns:
+        Non-negative RMS.
+    """
     raw = turn.get("rms")
     try:
         value = float(raw) if raw is not None else 0.0
@@ -1567,7 +1909,16 @@ def _filter_ref_turns(
     samples: list[float],
     rate: int,
 ) -> list[dict[str, Any]]:
-    """Drop overlap, short, quiet, and (when VE-sized) off-centroid turns."""
+    """Drop overlap, short, quiet, and (when VE-sized) off-centroid turns.
+
+    Args:
+        group: JSON turns for one speaker.
+        samples: Source PCM.
+        rate: Sample rate.
+
+    Returns:
+        Filtered turn mappings (may include ``_pcm``).
+    """
     sr = int(rate) or SAMPLE_RATE
     kept: list[dict[str, Any]] = []
     vectors: list[list[float]] = []
@@ -1609,7 +1960,18 @@ def _extract_refs(
     dest: Path,
     max_s: float = REF_MAX_S,
 ) -> dict[str, Path]:
-    """Build a 3–10 s clean ref wav (and transcript sidecar) per speaker."""
+    """Build a 3–10 s clean ref wav (and transcript sidecar) per speaker.
+
+    Args:
+        samples: Source PCM.
+        rate: Sample rate.
+        turns: JSON turns.
+        dest: Speaker-ref directory.
+        max_s: Hard cap on ref duration.
+
+    Returns:
+        Speaker id to wav path.
+    """
     dest.mkdir(parents=True, exist_ok=True)
     by_spk: dict[str, list[dict[str, Any]]] = {}
     for turn in turns:
@@ -1666,7 +2028,14 @@ def _extract_refs(
 
 
 def expected_speech_s(text: str) -> float:
-    """Nominal spoken duration from word count (~160 wpm)."""
+    """Nominal spoken duration from word count (~160 wpm).
+
+    Args:
+        text: Clone line.
+
+    Returns:
+        Duration in seconds (at least 0.35 s).
+    """
     words = len((text or "").split())
     return max(0.35, words / EXPECTED_WORDS_PER_S)
 
@@ -1674,7 +2043,15 @@ def expected_speech_s(text: str) -> float:
 def normalize_clone_pcm(
     pcm: list[float], peak: float = REF_PEAK
 ) -> list[float]:
-    """Rescale int-range PCM into [-peak, peak]. No-op when already in [-1.5, 1.5]."""
+    """Rescale int-range PCM into [-peak, peak]. No-op when already in [-1.5, 1.5].
+
+    Args:
+        pcm: Clone PCM (may be int-range).
+        peak: Target peak.
+
+    Returns:
+        Float PCM in about ``[-peak, peak]``.
+    """
     if not pcm:
         return []
     mag = max(abs(float(x)) for x in pcm)
@@ -1685,7 +2062,14 @@ def normalize_clone_pcm(
 
 
 def _zero_cross_indices(pcm: list[float]) -> list[int]:
-    """Sample indices where the sign flips (zeros skipped, matching ZCR)."""
+    """Sample indices where the sign flips (zeros skipped, matching ZCR).
+
+    Args:
+        pcm: Mono PCM.
+
+    Returns:
+        Indices of zero crossings.
+    """
     if len(pcm) < 2:
         return []
     out: list[int] = []
@@ -1699,7 +2083,15 @@ def _zero_cross_indices(pcm: list[float]) -> list[int]:
 
 
 def zero_crossing_rate(pcm: list[float], rate: int) -> float:
-    """Zero-crossings per second. Noise sits near ``rate / 2``."""
+    """Zero-crossings per second. Noise sits near ``rate / 2``.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+
+    Returns:
+        Zero-crossings per second.
+    """
     if len(pcm) < 2:
         return 0.0
     dur = len(pcm) / float(int(rate) or SAMPLE_RATE)
@@ -1714,7 +2106,7 @@ def zc_interval_cv(pcm: list[float]) -> float:
     A pure / AM tone has nearly constant period (CV near 0). Speech and
     modulated noise have irregular gaps.
 
-    Arguments:
+    Args:
         pcm: Mono PCM.
     Returns:
         ``std / mean`` of successive ZC gaps, or 0.0 when too few gaps.
@@ -1741,7 +2133,17 @@ def voiced_fraction(
     thresh: float = REF_SILENCE_RMS,
     frame_ms: int = 20,
 ) -> float:
-    """Fraction of 20 ms frames whose RMS is at least ``thresh``."""
+    """Fraction of 20 ms frames whose RMS is at least ``thresh``.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+        thresh: Frame RMS threshold.
+        frame_ms: Frame size.
+
+    Returns:
+        Voiced fraction in ``[0, 1]``.
+    """
     sr = int(rate) or SAMPLE_RATE
     n = len(pcm)
     if n == 0:
@@ -1763,7 +2165,7 @@ def voiced_fraction(
 def is_speech_like(pcm: list[float], rate: int) -> bool:
     """False for silence, noise, a steady tone, or a PerTh/Chatterbox drone.
 
-    Arguments:
+    Args:
         pcm: Mono PCM.
         rate: Sample rate.
     Returns:
@@ -1790,7 +2192,16 @@ def is_speech_like(pcm: list[float], rate: int) -> bool:
 def crop_hallucination_tail(
     pcm: list[float], rate: int, text: str
 ) -> list[float]:
-    """Onset-crop hush, then keep a prefix up to 1.6× expected spoken duration."""
+    """Onset-crop hush, then keep a prefix up to 1.6× expected spoken duration.
+
+    Args:
+        pcm: Clone PCM.
+        rate: Sample rate.
+        text: Target line (duration prior).
+
+    Returns:
+        Cropped PCM.
+    """
     trimmed = speech_onset_slice(pcm, rate)
     if not trimmed:
         return trimmed
@@ -1805,7 +2216,14 @@ def crop_hallucination_tail(
 
 
 def _pcm_list(wav: object) -> list[float]:
-    """Flatten a TTS tensor/array/list into mono float PCM in [-1, 1]."""
+    """Flatten a TTS tensor/array/list into mono float PCM in [-1, 1].
+
+    Args:
+        wav: Optional TTS waveform (tensor/array/list; no torch import here).
+
+    Returns:
+        Mono float PCM.
+    """
     if wav is None:
         return []
     data: Any = wav
@@ -1836,6 +2254,11 @@ def _pcm_list(wav: object) -> list[float]:
 
 
 def _model_roots() -> list[str]:
+    """MODELS_DIR candidates, then ``/models`` and ``/mnt/models``.
+
+    Returns:
+        Unique directory strings (may not exist).
+    """
     roots: list[str] = []
     for key in ("MODELS_ROOT", "MODELS_DIR"):
         value = (os.environ.get(key) or "").strip()
@@ -1848,12 +2271,23 @@ def _model_roots() -> list[str]:
 
 
 def clone_dir_is_complete(folder: Path) -> bool:
-    """True when ``from_local`` can load multilingual V3 from this directory."""
+    """True when ``from_local`` can load multilingual V3 from this directory.
+
+    Args:
+        folder: Candidate snapshot.
+
+    Returns:
+        Whether all :data:`CLONE_REQUIRED_FILES` exist.
+    """
     return all((folder / name).is_file() for name in CLONE_REQUIRED_FILES)
 
 
 def clone_ckpt_dir() -> Path | None:
-    """First complete Chatterbox multilingual V3 snapshot (not t3-only comfy/tts)."""
+    """First complete Chatterbox multilingual V3 snapshot (not t3-only comfy/tts).
+
+    Returns:
+        Snapshot path, or None.
+    """
     for root in _model_roots():
         candidates = (
             Path(root) / "ResembleAI__chatterbox_clone",
@@ -1867,7 +2301,11 @@ def clone_ckpt_dir() -> Path | None:
 
 
 def pkuseg_home_dir() -> Path | None:
-    """MODELS_DIR pkuseg home when the ontonotes zip or extract is present."""
+    """MODELS_DIR pkuseg home when the ontonotes zip or extract is present.
+
+    Returns:
+        Directory path, or None.
+    """
     env = (os.environ.get("PKUSEG_HOME") or "").strip()
     if env:
         return Path(env)
@@ -1882,7 +2320,14 @@ def pkuseg_home_dir() -> Path | None:
 
 @contextmanager
 def _chatterbox_local_only(ckpt: Path) -> Iterator[None]:
-    """Force Cangjie + pkuseg onto the clone snapshot. No Hub during load/generate."""
+    """Force Cangjie + pkuseg onto the clone snapshot. No Hub during load/generate.
+
+    Args:
+        ckpt: Clone snapshot directory.
+
+    Returns:
+        Context manager. Restores Hub download hooks on exit.
+    """
     cangjie = ckpt / "Cangjie5_TC.json"
     prev_offline = os.environ.get("HF_HUB_OFFLINE")
     prev_pkuseg = os.environ.get("PKUSEG_HOME")
@@ -1898,12 +2343,29 @@ def _chatterbox_local_only(ckpt: Path) -> Iterator[None]:
         cache_dir: str | None = None,
         **kwargs: Any,
     ) -> str:
+        """Serve Cangjie from the snapshot; refuse other Hub filenames.
+
+        Args:
+            repo_id: Unused Hub repo.
+            filename: Requested file.
+            cache_dir: Unused Hub cache.
+            **kwargs: Unused Hub kwargs (optional-dep boundary).
+
+        Returns:
+            Local Cangjie path.
+        """
         del repo_id, cache_dir, kwargs
         if filename == "Cangjie5_TC.json" and cangjie.is_file():
             return str(cangjie)
         raise RuntimeError(f"hub download blocked: {filename}")
 
     def _patch(mod: Any, name: str) -> None:
+        """Replace ``mod.name`` with ``_local_download`` and record the original.
+
+        Args:
+            mod: Module or None (optional huggingface_hub).
+            name: Attribute to wrap.
+        """
         if mod is None or not hasattr(mod, name):
             return
         patches.append((mod, name, getattr(mod, name)))
@@ -1938,6 +2400,14 @@ def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str)
 
     Only remap a missing ``t3_model`` parameter. Inner TypeError (PerTh
     watermarker None, conds.pt, pkuseg) must surface as ``chatterbox failed``.
+
+    Args:
+        loader: ``ChatterboxMultilingualTTS.from_local``.
+        ckpt: Snapshot path string.
+        device: ``cuda`` or ``cpu``.
+
+    Returns:
+        Loaded model handle (optional chatterbox type).
     """
     try:
         params = inspect.signature(loader).parameters
@@ -1949,6 +2419,7 @@ def _from_local_multilingual(loader: Callable[..., Any], ckpt: str, device: str)
 
 
 def _close_chatterbox() -> None:
+    """Drop the cached Chatterbox handle and last error."""
     global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR, _CHATTERBOX_COND_KEY
     _CHATTERBOX = None
     _CHATTERBOX_CKPT = ""
@@ -1957,6 +2428,11 @@ def _close_chatterbox() -> None:
 
 
 def _chatterbox_device() -> str:
+    """``cuda`` when torch reports it, else ``cpu``.
+
+    Returns:
+        Device string for ``from_local``.
+    """
     try:
         import torch
 
@@ -1968,7 +2444,11 @@ def _chatterbox_device() -> str:
 
 
 def _load_chatterbox_model() -> tuple[Any | None, str]:
-    """Uncached from_local. Prefer this snapshot over a mixed comfy/tts dir."""
+    """Uncached from_local. Prefer this snapshot over a mixed comfy/tts dir.
+
+    Returns:
+        ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
+    """
     try:
         from chatterbox.mtl_tts import ChatterboxMultilingualTTS
     except ImportError:
@@ -1996,7 +2476,11 @@ def _load_chatterbox_model() -> tuple[Any | None, str]:
 
 
 def _get_chatterbox() -> tuple[Any | None, str]:
-    """Cached Chatterbox Multilingual V3 handle (including a failed load)."""
+    """Cached Chatterbox Multilingual V3 handle (including a failed load).
+
+    Returns:
+        ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
+    """
     global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR
     ckpt = clone_ckpt_dir()
     ckpt_s = str(ckpt) if ckpt is not None else ""
@@ -2023,7 +2507,15 @@ def _get_chatterbox() -> tuple[Any | None, str]:
 
 @contextmanager
 def _cap_t3_tokens(model: Any, budget: int) -> Iterator[None]:
-    """Pin ``t3.inference(..., max_new_tokens)`` for one generate() call."""
+    """Pin ``t3.inference(..., max_new_tokens)`` for one generate() call.
+
+    Args:
+        model: Loaded Chatterbox handle (optional-dep ``Any``).
+        budget: Token cap.
+
+    Returns:
+        Context manager. Restores ``t3.inference`` on exit.
+    """
     t3 = getattr(model, "t3", None)
     infer = getattr(t3, "inference", None)
     if t3 is None or not callable(infer):
@@ -2034,6 +2526,15 @@ def _cap_t3_tokens(model: Any, budget: int) -> Iterator[None]:
         cap = CLONE_TOKEN_MAX
 
     def _capped(*args: Any, **kwargs: Any) -> Any:
+        """t3.inference wrapper that clamps ``max_new_tokens``.
+
+        Args:
+            *args: Forwarded positional (optional TTS API).
+            **kwargs: Forwarded keywords; ``max_new_tokens`` is capped.
+
+        Returns:
+            Inner inference result (optional TTS tensor/object).
+        """
         raw = kwargs.get("max_new_tokens", CLONE_TOKEN_MAX)
         try:
             current = int(raw) if raw is not None else CLONE_TOKEN_MAX
@@ -2060,7 +2561,19 @@ def _try_chatterbox(
     cfg_weight: float = CFG_SAME_LANG,
     temperature: float = CLONE_TEMPERATURE,
 ) -> tuple[list[float], int, str]:
-    """Lazy Chatterbox Multilingual generate. Empty PCM plus a reason on miss."""
+    """Lazy Chatterbox Multilingual generate. Empty PCM plus a reason on miss.
+
+    Args:
+        text: Target-language chunk.
+        language_id: ISO language id.
+        ref_wav: Speaker reference path.
+        exaggeration: Chatterbox exaggeration.
+        cfg_weight: Chatterbox CFG.
+        temperature: Sampling temperature.
+
+    Returns:
+        ``(pcm, rate, error)``. ``error`` is empty on success.
+    """
     global _CHATTERBOX_COND_KEY
     model, err = _get_chatterbox()
     if model is None:
@@ -2109,6 +2622,7 @@ def _try_chatterbox(
 
 
 def _close_qwen3() -> None:
+    """Drop the cached Qwen3-TTS handle and voice-clone prompt."""
     global _QWEN3, _QWEN3_ERR, _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
     _QWEN3 = None
     _QWEN3_ERR = ""
@@ -2117,7 +2631,11 @@ def _close_qwen3() -> None:
 
 
 def _qwen3_snapshot_candidates() -> list[Path]:
-    """Possible Base snapshot directories under model roots."""
+    """Possible Base snapshot directories under model roots.
+
+    Returns:
+        Candidate paths (may not exist).
+    """
     found: list[Path] = []
     for root in _model_roots():
         found.extend(
@@ -2131,22 +2649,47 @@ def _qwen3_snapshot_candidates() -> list[Path]:
 
 
 def qwen3_base_is_complete(folder: Path) -> bool:
-    """True when Base metadata + talker weights are on disk."""
+    """True when Base metadata + talker weights are on disk.
+
+    Args:
+        folder: Candidate snapshot.
+
+    Returns:
+        Whether all :data:`QWEN3_BASE_REQUIRED_FILES` exist.
+    """
     return all((folder / name).is_file() for name in QWEN3_BASE_REQUIRED_FILES)
 
 
 def qwen3_tokenizer_is_complete(folder: Path) -> bool:
-    """True when the nested 12Hz speech tokenizer is on disk."""
+    """True when the nested 12Hz speech tokenizer is on disk.
+
+    Args:
+        folder: Candidate snapshot.
+
+    Returns:
+        Whether all :data:`QWEN3_TOKENIZER_REQUIRED_FILES` exist.
+    """
     return all((folder / name).is_file() for name in QWEN3_TOKENIZER_REQUIRED_FILES)
 
 
 def qwen3_dir_is_complete(folder: Path) -> bool:
-    """True when ``from_pretrained(..., local_files_only=True)`` can run."""
+    """True when ``from_pretrained(..., local_files_only=True)`` can run.
+
+    Args:
+        folder: Candidate snapshot.
+
+    Returns:
+        Whether Base + tokenizer files exist.
+    """
     return qwen3_base_is_complete(folder) and qwen3_tokenizer_is_complete(folder)
 
 
 def qwen3_base_dir() -> Path | None:
-    """First Base snapshot that has any sentinel (even incomplete)."""
+    """First Base snapshot that has any sentinel (even incomplete).
+
+    Returns:
+        Snapshot path, or None.
+    """
     for folder in _qwen3_snapshot_candidates():
         if (folder / "model.safetensors").is_file() or (folder / "config.json").is_file():
             return folder
@@ -2154,7 +2697,11 @@ def qwen3_base_dir() -> Path | None:
 
 
 def qwen3_ckpt_dir() -> Path | None:
-    """First complete local Qwen3-TTS Base snapshot (0.6B download-podcast pack)."""
+    """First complete local Qwen3-TTS Base snapshot (0.6B download-podcast pack).
+
+    Returns:
+        Snapshot path, or None.
+    """
     for folder in _qwen3_snapshot_candidates():
         if qwen3_dir_is_complete(folder):
             return folder
@@ -2162,7 +2709,15 @@ def qwen3_ckpt_dir() -> Path | None:
 
 
 def _from_pretrained_local(loader: Callable[..., Any], ckpt: str) -> Any:
-    """Call ``from_pretrained`` with ``local_files_only=True`` when supported."""
+    """Call ``from_pretrained`` with ``local_files_only=True`` when supported.
+
+    Args:
+        loader: ``Qwen3TTSModel.from_pretrained``.
+        ckpt: Snapshot path string.
+
+    Returns:
+        Loaded model handle (optional qwen-tts type).
+    """
     try:
         return loader(ckpt, local_files_only=True)
     except TypeError:
@@ -2170,7 +2725,11 @@ def _from_pretrained_local(loader: Callable[..., Any], ckpt: str) -> Any:
 
 
 def _load_qwen3_model() -> tuple[Any | None, str]:
-    """Uncached Qwen3-TTS Base handle. None plus a reason on miss."""
+    """Uncached Qwen3-TTS Base handle. None plus a reason on miss.
+
+    Returns:
+        ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
+    """
     model_cls, miss = _import_qwen3_model()
     if model_cls is None:
         return None, miss or QWEN3_WHEEL_STATUS
@@ -2190,7 +2749,11 @@ def _load_qwen3_model() -> tuple[Any | None, str]:
 
 
 def _get_qwen3() -> tuple[Any | None, str]:
-    """Cached Qwen3-TTS handle (including a failed load)."""
+    """Cached Qwen3-TTS handle (including a failed load).
+
+    Returns:
+        ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
+    """
     global _QWEN3, _QWEN3_ERR
     if _QWEN3 is not None:
         return _QWEN3, ""
@@ -2206,7 +2769,14 @@ def _get_qwen3() -> tuple[Any | None, str]:
 
 
 def _qwen3_language(language_id: str) -> str:
-    """English language name for Qwen3-TTS (``Spanish``, not ``es``)."""
+    """English language name for Qwen3-TTS (``Spanish``, not ``es``).
+
+    Args:
+        language_id: ISO code or ``auto``.
+
+    Returns:
+        English language name, or ``Auto``.
+    """
     raw = language_code(language_id)
     if raw == "auto":
         return "Auto"
@@ -2219,7 +2789,17 @@ def _try_qwen3tts(
     ref_wav: str,
     ref_text: str = "",
 ) -> tuple[list[float], int, str]:
-    """Lazy Qwen3-TTS Base clone. Empty PCM plus a reason on miss."""
+    """Lazy Qwen3-TTS Base clone. Empty PCM plus a reason on miss.
+
+    Args:
+        text: Target-language chunk.
+        language_id: ISO language id.
+        ref_wav: Speaker reference path.
+        ref_text: Optional transcript sidecar text.
+
+    Returns:
+        ``(pcm, rate, error)``. ``error`` is empty on success.
+    """
     global _QWEN3_PROMPT, _QWEN3_PROMPT_KEY
     model, err = _get_qwen3()
     if model is None:
@@ -2284,7 +2864,20 @@ def synthesize_turn(
     cfg_weight: float = CFG_SAME_LANG,
     ref_text: str = "",
 ) -> tuple[list[float], int, str]:
-    """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code."""
+    """Clone one line. Tests inject ``tts_hook``. ``language`` is an ISO code.
+
+    Args:
+        text: Target-language line.
+        language: ISO language id.
+        ref_wav: Speaker reference path.
+        engine: Clone engine id.
+        exaggeration: Chatterbox exaggeration.
+        cfg_weight: Chatterbox CFG.
+        ref_text: Optional Qwen3 ref transcript.
+
+    Returns:
+        ``(pcm, rate, error)``. ``error`` is empty on success.
+    """
     hook = tts_hook
     lang = language_code(language)
     chunks = split_clone_text(text)
@@ -2333,7 +2926,18 @@ def _maybe_loudnorm_yt(
     source_len: int,
     room: list[float],
 ) -> list[float]:
-    """Fail-soft ffmpeg loudnorm on ez_dub_yt.wav. Keep raised PCM on miss."""
+    """Fail-soft ffmpeg loudnorm on ez_dub_yt.wav. Keep raised PCM on miss.
+
+    Args:
+        dest: Job directory.
+        mix: Raised mix PCM (fallback).
+        rate: Sample rate.
+        source_len: Required sample count.
+        room: Room-tone loop for duration lock.
+
+    Returns:
+        Loudnorm PCM, or ``mix`` on miss.
+    """
     yt = dest / "ez_dub_yt.wav"
     loud = dest / "ez_dub_yt.loudnorm.wav"
     code, _err = _run(
@@ -2363,7 +2967,11 @@ def _maybe_loudnorm_yt(
 
 
 def _maybe_yt_mp3_48k(dest: Path) -> None:
-    """Fail-soft 48 kHz / 320k MP3 next to the duration-locked YT wav."""
+    """Fail-soft 48 kHz / 320k MP3 next to the duration-locked YT wav.
+
+    Args:
+        dest: Job directory containing ``ez_dub_yt.wav``.
+    """
     yt = dest / "ez_dub_yt.wav"
     mp3 = dest / "ez_dub_yt_48k.mp3"
     if not yt.is_file():
@@ -2396,7 +3004,18 @@ def _write_render_qc(
     extra_qc: list[str],
     peak: float,
 ) -> None:
-    """Write qc.json and append ``qc:`` onto ``flags``. Never raises."""
+    """Write qc.json and append ``qc:`` onto ``flags``. Never raises.
+
+    Args:
+        dest: Job directory.
+        mix: Mix PCM.
+        rate: Sample rate.
+        turns: JSON turns.
+        lang: ISO target.
+        flags: Mutable status flags (appended).
+        extra_qc: Extra QC check ids.
+        peak: Mix peak passed to evaluate_qc.
+    """
     try:
         report = evaluate_qc(
             mix,
@@ -2417,7 +3036,7 @@ def _write_render_qc(
 def render_mix(
     samples: list[float],
     rate: int,
-    payload: dict[str, Any],
+    payload: Mapping[str, Any],
     dest: Path,
     *,
     engine: str = ENGINE_CHATTERBOX,
@@ -2433,6 +3052,18 @@ def render_mix(
         ``(mix_wav, rate, status)``. ``mix_wav`` is the listen clip
         (``ez_dub_mix``): overlay when spoken disclosure is on, leading
         hush stripped when it is off. ``ez_dub_yt.wav`` stays source-timed.
+
+    Args:
+        samples: Source PCM.
+        rate: Sample rate.
+        payload: JSON script mapping.
+        dest: Job directory.
+        engine: Clone engine id.
+        keep_bed: Keep source in non-speech gaps.
+        spoken_disclosure: Overlay a localized bumper on the mix wav.
+        speed: Time-compression ceiling.
+        exaggeration: Chatterbox exaggeration.
+        cfg_weight: Chatterbox CFG; ``< 0`` means auto.
     """
     pace = float(speed) if speed else 1.0
     if pace < 0.5:
@@ -2481,6 +3112,16 @@ def render_mix(
     cross_cfg = abs(cfg - CFG_CROSS_LANG) < 1e-9
 
     def _prep_clone(raw_pcm: list[float], raw_sr: int, text: str) -> list[float]:
+        """Resample to mix rate and crop a hallucination tail.
+
+        Args:
+            raw_pcm: Clone PCM.
+            raw_sr: Clone sample rate.
+            text: Target line (duration prior).
+
+        Returns:
+            Mix-rate PCM.
+        """
         out = raw_pcm
         if raw_sr != rate:
             out = resample_linear(
@@ -2709,8 +3350,16 @@ def render_mix(
     return mix_wav, rate, status
 
 
-def _spoken_clone_text(turn: dict[str, Any], payload: dict[str, Any]) -> str:
-    """Target-language line for clone. Never fall back to source on a cross-language job."""
+def _spoken_clone_text(turn: Mapping[str, Any], payload: Mapping[str, Any]) -> str:
+    """Target-language line for clone. Never fall back to source on a cross-language job.
+
+    Args:
+        turn: JSON turn mapping.
+        payload: JSON script mapping.
+
+    Returns:
+        Clone text, or ``""`` when cross-lang ``text_target`` is empty.
+    """
     target = str(turn.get("text_target") or "").strip()
     if target:
         return target
@@ -2728,8 +3377,19 @@ def _fail_analyze(
     source_language: str,
     stage: str,
     reason: str,
-) -> tuple[dict[str, Any], str]:
-    """Persist an empty translation payload and a blocking Dub status."""
+) -> tuple[ScriptPayload, str]:
+    """Persist an empty translation payload and a blocking Dub status.
+
+    Args:
+        dest: Job directory.
+        target_language: ISO target.
+        source_language: ISO source or ``auto``.
+        stage: Widget stage.
+        reason: Blocking Dub status.
+
+    Returns:
+        ``(empty_payload, reason)``.
+    """
     payload = empty_payload(
         target_language=target_language,
         source_language=source_language,
@@ -2756,7 +3416,7 @@ def _fail_analyze(
 def missing_source_status(dest: Path) -> str:
     """Operator-facing reason when ``source.wav`` is absent.
 
-    Arguments:
+    Args:
         dest: Job directory that may contain ``state.json`` from a failed ingest.
 
     Returns:
@@ -2780,15 +3440,28 @@ def analyze_job(
     max_speakers: int,
     enhance: bool,
     stage: str,
-    widget_payload: dict[str, Any] | None = None,
-) -> tuple[dict[str, Any], str]:
-    """Analyze + translate, or pin widget JSON when enhance is off / stage=render."""
+    widget_payload: Mapping[str, Any] | None = None,
+) -> tuple[ScriptPayload, str]:
+    """Analyze + translate, or pin widget JSON when enhance is off / stage=render.
+
+    Args:
+        dest: Job directory.
+        target_language: ISO target.
+        source_language: ISO source or ``auto``.
+        max_speakers: Cluster cap; 0 means default.
+        enhance: When False, pin widget text.
+        stage: ``all``, ``analyze``, or ``render``.
+        widget_payload: Current widget JSON (JSON boundary).
+
+    Returns:
+        ``(payload, status)``.
+    """
     wav = dest / "source.wav"
     name = stage if stage in STAGES else STAGE_ALL
     widget_turns = list((widget_payload or {}).get("turns") or [])
     if name == STAGE_RENDER:
         if widget_turns:
-            payload = dict(widget_payload or {})
+            payload = cast(ScriptPayload, dict(widget_payload or {}))
             payload["stage"] = STAGE_RENDER
             payload["target_language"] = target_language
             return payload, "pinned widget"
@@ -2800,7 +3473,7 @@ def analyze_job(
         )
         return payload, NO_TURNS_STATUS
     if not enhance and widget_turns:
-        payload = dict(widget_payload or {})
+        payload = cast(ScriptPayload, dict(widget_payload or {}))
         payload["stage"] = name
         payload["target_language"] = target_language
         return payload, "enhance off"
@@ -2884,4 +3557,4 @@ def analyze_job(
             "flags": [],
         },
     )
-    return payload, status
+    return cast(ScriptPayload, payload), status

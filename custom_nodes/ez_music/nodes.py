@@ -5,8 +5,12 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Prompt path, flavor id, and canned lyrics widgets.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 FLAVOR_RAP = "rap_lyrics"
 
@@ -60,10 +64,20 @@ cut"""
 
 
 def _log(message: str) -> None:
+    """Write an ez_music status line to stderr.
+
+    Args:
+        message: Human status without a trailing newline.
+    """
     print(f"[ez_music] {message}", file=sys.stderr)
 
 
 def _sample_combo() -> tuple:
+    """Rap-draft sample combo widget for EZRapLyrics.
+
+    Returns:
+        Comfy combo spec ``(labels, {default})``.
+    """
     _ensure_lab_custom_nodes_path()
     from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
@@ -82,6 +96,14 @@ def _ensure_lab_custom_nodes_path() -> None:
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a widget value to bool.
+
+    Args:
+        value: Boolean, number, or truthy string.
+
+    Returns:
+        True for ``1`` / ``true`` / ``yes`` / ``on`` and numeric non-zero.
+    """
     if isinstance(value, bool):
         return bool(value)
     if isinstance(value, (int, float)):
@@ -94,7 +116,7 @@ def _as_bool(value: object) -> bool:
 def load_writer_prompt(name: str = FLAVOR_RAP) -> str:
     """Load the rap-lyrics system prompt from this pack.
 
-    Arguments:
+    Args:
         name: stem without .txt (default ``rap_lyrics``).
     Returns:
         File contents stripped of trailing whitespace.
@@ -107,6 +129,15 @@ def load_writer_prompt(name: str = FLAVOR_RAP) -> str:
 
 
 def _pack_text(text: str, status: str) -> dict[str, Any]:
+    """Build an output-node payload with lyrics and a UI status.
+
+    Args:
+        text: Lyrics string on the result pin.
+        status: Passthrough / UI status text.
+
+    Returns:
+        Comfy ``ui`` plus ``result`` dict.
+    """
     return {
         "ui": {"text": (text,), "passthrough": (status,)},
         "result": (text,),
@@ -117,7 +148,12 @@ class EZRapLyrics:
     """Draft original rap lyrics via the on-box GGUF. Enhance defaults off."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Declare Comfy widgets for this node.
+
+        Returns:
+            Required and optional input specs.
+        """
         return {
             "required": {
                 "sample": _sample_combo(),
@@ -143,6 +179,7 @@ class EZRapLyrics:
             },
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("lyrics",)
     FUNCTION = "run"
@@ -155,7 +192,26 @@ class EZRapLyrics:
         "invents the vocal timbre from tags plus lyrics."
     )
 
-    def run(self, lyrics, enhance=False, context="", sample="custom", catalog=""):
+    def run(
+        self,
+        lyrics: str,
+        enhance: bool = False,
+        context: str = "",
+        sample: str = "custom",
+        catalog: str = "",
+    ) -> dict[str, Any]:
+        """Rewrite widget lyrics via the on-box GGUF when enhance is on.
+
+        Args:
+            lyrics: Widget or resolved sample lyrics.
+            enhance: When false, pass the text through.
+            context: Optional extra system context.
+            sample: Sample combo label.
+            catalog: Catalog override for sample lookup.
+
+        Returns:
+            Output-node dict with lyrics on ``result``.
+        """
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.samples import resolve_prompt
 
@@ -199,7 +255,12 @@ class EZAudioMetadata:
     """Stamp artist/album/title tags and optional cover on saved audio."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Declare Comfy widgets for this node.
+
+        Returns:
+            Required and optional input specs.
+        """
         return {
             "required": {
                 "audio": ("AUDIO",),
@@ -217,6 +278,7 @@ class EZAudioMetadata:
             },
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("AUDIO",)
     RETURN_NAMES = ("audio",)
     FUNCTION = "run"
@@ -230,17 +292,34 @@ class EZAudioMetadata:
 
     def run(
         self,
-        audio,
-        artist="",
-        album="",
-        title="",
-        track=1,
-        tracktotal=1,
-        year=2026,
-        art_mode="skip",
-        prefix="",
-        cover=None,
-    ):
+        audio: object,
+        artist: str = "",
+        album: str = "",
+        title: str = "",
+        track: int = 1,
+        tracktotal: int = 1,
+        year: int = 2026,
+        art_mode: str = "skip",
+        prefix: str = "",
+        cover: object | None = None,
+    ) -> dict[str, Any]:
+        """Copy SaveAudio masters into the album folder and stamp tags.
+
+        Args:
+            audio: ACE AUDIO payload (passed through).
+            artist: Act name.
+            album: Album title.
+            title: Track title.
+            track: One-based track number.
+            tracktotal: Album track count.
+            year: Release year.
+            art_mode: ``skip``, ``upload``, or ``generate``.
+            prefix: SaveAudio stem to match; derived from title when empty.
+            cover: Optional Comfy IMAGE tensor.
+
+        Returns:
+            Output-node dict with the original AUDIO on ``result``.
+        """
         from .metadata import AudioMeta, album_dir_from_env, resolve_cover, stamp_audio_file
         from .naming import music_output_prefix
 
@@ -293,7 +372,12 @@ class EZAlbumPack:
     """Zip albums/<Artist>/<Album>/ for one-shot download."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Declare Comfy widgets for this node.
+
+        Returns:
+            Required and optional input specs.
+        """
         return {
             "required": {
                 "artist": ("STRING", {"default": "", "multiline": False}),
@@ -301,6 +385,7 @@ class EZAlbumPack:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("zip_path",)
     FUNCTION = "run"
@@ -311,7 +396,16 @@ class EZAlbumPack:
         "Queue tracks first (or album-render). CPU only."
     )
 
-    def run(self, artist="", album=""):
+    def run(self, artist: str = "", album: str = "") -> dict[str, Any]:
+        """Zip the album output folder.
+
+        Args:
+            artist: Act name.
+            album: Album title.
+
+        Returns:
+            Output-node dict with the zip path on ``result``.
+        """
         from .metadata import album_dir_from_env
         from .pack import pack_album
 
@@ -328,7 +422,15 @@ class EZAlbumPack:
 
 
 def _save_cover_tensor(image: object, dest: Path) -> Path:
-    """Write a Comfy IMAGE tensor as PNG. Best-effort."""
+    """Write a Comfy IMAGE tensor as PNG. Best-effort.
+
+    Args:
+        image: Comfy IMAGE tensor or array-like.
+        dest: PNG path.
+
+    Returns:
+        ``dest``.
+    """
     dest.parent.mkdir(parents=True, exist_ok=True)
     array: Any = image
     cpu = getattr(image, "cpu", None)
@@ -347,7 +449,14 @@ def _save_cover_tensor(image: object, dest: Path) -> Path:
 
 
 def _output_root(album_dir: Path) -> Path:
-    """Comfy output dir, else the album folder (tests)."""
+    """Comfy output dir, else the album folder (tests).
+
+    Args:
+        album_dir: Fallback when Comfy and env are unset.
+
+    Returns:
+        Directory that contains SaveAudio masters.
+    """
     try:
         from ez_common import output_root
 
@@ -370,7 +479,17 @@ def _stamp_output_masters(
     meta: object,
     cover: Path | None,
 ) -> list[Path]:
-    """Copy SaveAudio files matching prefix into the album folder and tag them."""
+    """Copy SaveAudio files matching prefix into the album folder and tag them.
+
+    Args:
+        prefix: SaveAudio filename stem to glob.
+        album_dir: Destination album folder.
+        meta: ``AudioMeta`` instance; other types skip stamping.
+        cover: Optional cover image.
+
+    Returns:
+        Paths of tagged copies.
+    """
     import shutil
 
     from .metadata import AudioMeta, stamp_audio_file
@@ -391,6 +510,7 @@ def _stamp_output_masters(
     return stamped
 
 
+# Comfy registry.
 NODE_CLASS_MAPPINGS = {
     "EZRapLyrics": EZRapLyrics,
     "EZAudioMetadata": EZAudioMetadata,

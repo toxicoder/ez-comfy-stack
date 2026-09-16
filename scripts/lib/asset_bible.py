@@ -12,8 +12,9 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
+# ez.asset.v1 / index contract (slug, size, and refuse-embedded-mesh limits).
 SCHEMA = "ez.asset.v1"
 INDEX_SCHEMA = "ez.asset-index.v1"
 
@@ -78,6 +79,30 @@ _EMBEDDED_KEYS = frozenset(
 MAX_SCENE_BYTES = 256_000
 MAX_STRING_CHARS = 4096
 MAX_NUMERIC_ARRAY = 16
+
+
+class AssetRecord(TypedDict):
+    """Normalized ez.asset.v1 mapping."""
+
+    schema: str
+    id: str
+    kind: str
+    prompt: str
+    seed: int
+    pipeline: str
+    parent: str | None
+    takes: list[str]
+    files: dict[str, Any]
+    tags: list[str]
+    license: str
+    ready: bool
+
+
+class AssetListRecord(AssetRecord):
+    """Catalog row with directory slug and relative path."""
+
+    slug: str
+    path: str
 
 
 class AssetBibleError(ValueError):
@@ -160,7 +185,14 @@ def refuse_models_dir(path: str | Path) -> Path:
 
 
 def _strip_comment(line: str) -> str:
-    """Drop unquoted # comments."""
+    """Drop unquoted # comments.
+
+    Args:
+        line: Raw YAML line.
+
+    Returns:
+        Line without a trailing unquoted comment.
+    """
     in_single = False
     in_double = False
     escaped = False
@@ -181,7 +213,17 @@ def _strip_comment(line: str) -> str:
 
 
 def _split_key(content: str) -> tuple[str, str]:
-    """Split a mapping line on the first unquoted colon."""
+    """Split a mapping line on the first unquoted colon.
+
+    Args:
+        content: Mapping line without indent.
+
+    Returns:
+        ``(key, rest)`` split on the first unquoted colon.
+
+    Raises:
+        AssetBibleError: No unquoted colon.
+    """
     in_single = False
     in_double = False
     for i, char in enumerate(content):
@@ -195,7 +237,14 @@ def _split_key(content: str) -> tuple[str, str]:
 
 
 def _unescape_double(text: str) -> str:
-    """Unescape a double-quoted YAML scalar (minimal)."""
+    """Unescape a double-quoted YAML scalar (minimal).
+
+    Args:
+        text: Interior of a double-quoted scalar.
+
+    Returns:
+        Unescaped string.
+    """
     out: list[str] = []
     escaped = False
     for char in text:
@@ -212,7 +261,14 @@ def _unescape_double(text: str) -> str:
 
 
 def _split_flow(inner: str) -> list[str]:
-    """Split a flow collection on top-level commas."""
+    """Split a flow collection on top-level commas.
+
+    Args:
+        inner: Interior of ``[]`` or ``{}``.
+
+    Returns:
+        Top-level items (stripped).
+    """
     parts: list[str] = []
     buf: list[str] = []
     depth_sq = 0
@@ -260,7 +316,14 @@ def _split_flow(inner: str) -> list[str]:
 
 
 def _parse_scalar(text: str) -> Any:
-    """Parse a restricted YAML scalar / flow collection."""
+    """Parse a restricted YAML scalar / flow collection.
+
+    Args:
+        text: Scalar or flow-collection text.
+
+    Returns:
+        Python value (JSON boundary: may be mapping, list, or scalar).
+    """
     text = text.strip()
     if text in {"", "null", "~", "None"}:
         return None
@@ -298,7 +361,17 @@ def _parse_scalar(text: str) -> Any:
 
 
 def _tokenize(text: str) -> list[tuple[int, str]]:
-    """Turn restricted YAML into (indent, content) rows."""
+    """Turn restricted YAML into (indent, content) rows.
+
+    Args:
+        text: YAML document text.
+
+    Returns:
+        ``(indent, content)`` rows with comments stripped.
+
+    Raises:
+        AssetBibleError: Tabs or odd indent.
+    """
     rows: list[tuple[int, str]] = []
     for raw in text.splitlines():
         stripped_nl = _strip_comment(raw).rstrip()
@@ -316,7 +389,16 @@ def _tokenize(text: str) -> list[tuple[int, str]]:
 def _parse_mapping(
     lines: list[tuple[int, str]], start: int, min_indent: int
 ) -> tuple[dict[str, Any], int]:
-    """Parse a block mapping starting at min_indent."""
+    """Parse a block mapping starting at min_indent.
+
+    Args:
+        lines: Tokenized YAML rows.
+        start: Index of the first mapping entry.
+        min_indent: Expected indent of keys.
+
+    Returns:
+        Mapping and the next unconsumed index.
+    """
     result: dict[str, Any] = {}
     i = start
     while i < len(lines):
@@ -345,7 +427,16 @@ def _parse_mapping(
 def _parse_list(
     lines: list[tuple[int, str]], start: int, min_indent: int
 ) -> tuple[list[Any], int]:
-    """Parse a block list starting at min_indent."""
+    """Parse a block list starting at min_indent.
+
+    Args:
+        lines: Tokenized YAML rows.
+        start: Index of the first list item.
+        min_indent: Expected indent of ``- `` items.
+
+    Returns:
+        List and the next unconsumed index.
+    """
     result: list[Any] = []
     i = start
     while i < len(lines):
@@ -386,7 +477,16 @@ def _parse_list(
 def _parse_value_block(
     lines: list[tuple[int, str]], start: int, min_indent: int
 ) -> tuple[Any, int]:
-    """Parse a nested mapping or list at or above min_indent."""
+    """Parse a nested mapping or list at or above min_indent.
+
+    Args:
+        lines: Tokenized YAML rows.
+        start: Index of the nested value.
+        min_indent: Minimum indent for the nested block.
+
+    Returns:
+        Parsed value and the next unconsumed index.
+    """
     if start >= len(lines):
         return None, start
     indent, content = lines[start]
@@ -404,7 +504,7 @@ def parse_restricted_yaml(text: str) -> Any:
         text: YAML document text.
 
     Returns:
-        Mapping, list, or scalar.
+        Mapping, list, or scalar (JSON/YAML boundary).
 
     Raises:
         AssetBibleError: On syntax the subset does not accept.
@@ -418,22 +518,54 @@ def parse_restricted_yaml(text: str) -> Any:
     return value
 
 
-def _require_slug(value: Any, field: str) -> str:
-    """Require a slug string."""
+def _require_slug(value: object, field: str) -> str:
+    """Require a slug string.
+
+    Args:
+        value: Candidate id.
+        field: Field name for errors.
+
+    Returns:
+        The slug.
+
+    Raises:
+        AssetBibleError: Not a lowercase hyphenated slug.
+    """
     if not isinstance(value, str) or not _SLUG_RE.fullmatch(value):
         raise AssetBibleError(f"{field} must be a lowercase slug, got {value!r}")
     return value
 
 
-def _as_str_list(value: Any, field: str) -> list[str]:
-    """Require a list of strings."""
+def _as_str_list(value: object, field: str) -> list[str]:
+    """Require a list of strings.
+
+    Args:
+        value: Candidate list.
+        field: Field name for errors.
+
+    Returns:
+        Copied string list.
+
+    Raises:
+        AssetBibleError: Not a list of strings.
+    """
     if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
         raise AssetBibleError(f"{field} must be a list of strings")
     return list(value)
 
 
-def _normalize_files(value: Any) -> dict[str, Any]:
-    """Accept a file-role mapping or list of role names."""
+def _normalize_files(value: object) -> dict[str, Any]:
+    """Accept a file-role mapping or list of role names.
+
+    Args:
+        value: Mapping of role → presence, or list of role names.
+
+    Returns:
+        Role mapping (list form becomes ``{role: True}``).
+
+    Raises:
+        AssetBibleError: Empty or wrong type.
+    """
     if isinstance(value, list):
         if not value or not all(isinstance(item, str) and item for item in value):
             raise AssetBibleError("files list must be non-empty role names")
@@ -450,7 +582,7 @@ def _normalize_files(value: Any) -> dict[str, Any]:
     raise AssetBibleError("files must be a mapping or list of roles")
 
 
-def validate_asset(data: Any) -> dict[str, Any]:
+def validate_asset(data: object) -> dict[str, Any]:
     """Validate an ez.asset.v1 mapping (fail closed).
 
     Args:
@@ -530,8 +662,13 @@ def load_asset(path: str | Path) -> dict[str, Any]:
     return validate_asset(parsed)
 
 
-def _refuse_embedded(value: Any, loc: str) -> None:
-    """Walk a scene document and refuse mesh bytes / giant base64."""
+def _refuse_embedded(value: object, loc: str) -> None:
+    """Walk a scene document and refuse mesh bytes / giant base64.
+
+    Args:
+        value: Nested JSON value.
+        loc: JSON-pointer-like location for errors.
+    """
     if isinstance(value, dict):
         for key, item in value.items():
             if str(key).lower() in _EMBEDDED_KEYS:
@@ -563,7 +700,7 @@ def _refuse_embedded(value: Any, loc: str) -> None:
             )
 
 
-def validate_scene(data: Any) -> dict[str, Any]:
+def validate_scene(data: object) -> dict[str, Any]:
     """Validate a scene.json that instances slugs (no embedded meshes).
 
     Args:
@@ -688,16 +825,21 @@ def list_assets(output_dir: str | Path) -> list[dict[str, Any]]:
                 f"{yaml_path}: directory slug {slug!r} != id {asset['id']!r}"
             )
         rel = yaml_path.parent.relative_to(root).as_posix()
-        rec = dict(asset)
-        rec["slug"] = slug
-        rec["path"] = rel
+        rec: dict[str, Any] = {**asset, "slug": slug, "path": rel}
         records.append(rec)
     records.sort(key=lambda item: item["id"])
     return records
 
 
-def _format_scalar(value: Any) -> str:
-    """Format a YAML scalar for index.yaml."""
+def _format_scalar(value: object) -> str:
+    """Format a YAML scalar for index.yaml.
+
+    Args:
+        value: Scalar to emit.
+
+    Returns:
+        Restricted YAML token.
+    """
     if value is None:
         return "null"
     if value is True:
@@ -778,7 +920,12 @@ def ensure_layout(output_dir: str | Path, kind: str, slug: str) -> Path:
 
 
 def _print_human(records: list[dict[str, Any]], output_dir: Path) -> None:
-    """Print a status-like catalog listing."""
+    """Print a status-like catalog listing.
+
+    Args:
+        records: Catalog rows from ``list_assets``.
+        output_dir: Catalog root (for the empty-state message).
+    """
     if not records:
         print(f"Asset Bible: 0 assets in {output_dir}")
         print("Catalog is empty. Expected <dir>/<kind>/<slug>/asset.yaml")
@@ -799,7 +946,14 @@ def _print_human(records: list[dict[str, Any]], output_dir: Path) -> None:
 
 
 def _json_ready(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Drop non-JSON-friendly values (already primitives)."""
+    """Drop non-JSON-friendly values (already primitives).
+
+    Args:
+        records: Catalog rows.
+
+    Returns:
+        JSON-serializable copies.
+    """
     out: list[dict[str, Any]] = []
     for rec in records:
         item = dict(rec)
@@ -813,7 +967,14 @@ def _json_ready(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def _cli(argv: list[str] | None = None) -> int:
-    """CLI: validate FILE | ls --output-dir DIR [--json]."""
+    """CLI: validate FILE | ls --output-dir DIR [--json].
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     parser = argparse.ArgumentParser(prog="asset_bible")
     sub = parser.add_subparsers(dest="cmd", required=True)
     p_val = sub.add_parser("validate", help="validate asset.yaml or scene.json")

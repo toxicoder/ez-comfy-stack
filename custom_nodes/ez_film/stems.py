@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any, Callable
 
+# Stem mix: DX duck, YouTube loudnorm, AAC 48 kHz.
 DUCK_DB = -15.0
 LOUDNORM = "loudnorm=I=-14:LRA=11:TP=-1.5"
 AAC_BITRATE = "192k"
@@ -20,7 +21,11 @@ RunFn = Callable[..., Any]
 
 
 def find_ffmpeg() -> str | None:
-    """Resolve ffmpeg on PATH, or None."""
+    """Resolve ffmpeg on PATH, or None.
+
+    Returns:
+        Executable path, or None.
+    """
     return shutil.which("ffmpeg")
 
 
@@ -29,6 +34,15 @@ def _run(
     *,
     run: RunFn = subprocess.run,
 ) -> subprocess.CompletedProcess[str]:
+    """Run a subprocess with captured text output.
+
+    Args:
+        argv: Command vector.
+        run: ``subprocess.run`` or a test double.
+
+    Returns:
+        Completed process (not checked).
+    """
     return run(argv, check=False, capture_output=True, text=True)
 
 
@@ -41,6 +55,14 @@ def mix_filter(
     """Build filter_complex for optional DX plus ducked beds.
 
     Bed inputs are numbered after DX (or from 0 when no DX). Empty DX skips duck.
+
+    Args:
+        has_dx: True when input 0 is dialogue.
+        bed_count: Number of BG/FX/MX beds.
+        duck_db: Volume applied to beds when DX is present.
+
+    Returns:
+        ffmpeg ``-filter_complex`` string ending in ``[a]``.
     """
     if bed_count < 1:
         raise ValueError("need at least one bed stem (BG/FX/MX)")
@@ -77,7 +99,18 @@ def mix_argv(
     duck_db: float = DUCK_DB,
     video: Path | None = None,
 ) -> list[str]:
-    """ffmpeg argv: mix stems, optional video stream-copy, YouTube loudnorm."""
+    """ffmpeg argv: mix stems, optional video stream-copy, YouTube loudnorm.
+
+    Args:
+        stems: Ordered audio paths (DX first when ``has_dx``).
+        dest: Destination mix.m4a or mix.mp4.
+        has_dx: True when the first stem is dialogue.
+        duck_db: Volume applied to beds when DX is present.
+        video: Optional picture to stream-copy into mix.mp4.
+
+    Returns:
+        ffmpeg argument vector.
+    """
     if not stems:
         raise ValueError("no stems")
     argv = ["ffmpeg", "-y"]
@@ -132,7 +165,14 @@ def mix_argv(
 
 
 def parse_lufs(stderr: str) -> float | None:
-    """Parse ffmpeg loudnorm JSON I from stderr."""
+    """Parse ffmpeg loudnorm JSON I from stderr.
+
+    Args:
+        stderr: ffmpeg stderr (and optional stdout) text.
+
+    Returns:
+        Integrated LUFS, or None when unreadable.
+    """
     match = None
     text = stderr or ""
     start = text.rfind("{")
@@ -157,7 +197,16 @@ def parse_lufs(stderr: str) -> float | None:
 
 
 def lufs_in_band(value: float | None, *, target: float = LUFS_TARGET, tol: float = LUFS_TOL) -> bool:
-    """True when measured LUFS is within YouTube −14 ± 2."""
+    """True when measured LUFS is within YouTube −14 ± 2.
+
+    Args:
+        value: Measured integrated LUFS, or None.
+        target: Target LUFS (YouTube −14).
+        tol: Allowed absolute error.
+
+    Returns:
+        Whether ``value`` is inside the band.
+    """
     if value is None:
         return False
     return abs(value - target) <= tol
@@ -175,7 +224,22 @@ def mix_stems(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
 ) -> dict[str, Any]:
-    """Write stems mix under dest_dir/mix.m4a (or mix.mp4 with video)."""
+    """Write stems mix under dest_dir/mix.m4a (or mix.mp4 with video).
+
+    Args:
+        dest_dir: ``films/<slug>/stems/<id>/``.
+        dx: Optional dialogue stem.
+        bg: Optional bed.
+        fx: Optional FX stem.
+        mx: Optional music stem.
+        video: Optional picture to mux.
+        duck_db: Volume applied to beds when DX is present.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Mix report dict (``ok``, ``path``, ``defects``).
+    """
     beds = [p for p in (bg, fx, mx) if p is not None]
     report: dict[str, Any] = {
         "ok": False,
@@ -225,6 +289,14 @@ def mix_stems(
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """Parse argv and mix picture-lock stems.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.stems")
     parser.add_argument("--dest", required=True, help="films/<slug>/stems/<id>/")
     parser.add_argument("--dx", default="")

@@ -516,8 +516,61 @@ run_ffmpeg_logged() {
 }
 
 # Hugging Face helpers kept as names so existing BATS stay green.
+
+#######################################
+# Compat wrapper for progress_format_mib (HF download progress).
+# Arguments:
+#   $1  Size in KiB (integer)
+# Outputs:
+#   Human size on stdout
+# Returns:
+#   0
+#######################################
 hf_format_mib() { progress_format_mib "$@"; }
+
+#######################################
+# Compat wrapper for progress_format_rate (HF download progress).
+# Arguments:
+#   $1  Delta KiB (integer; may be 0)
+#   $2  Interval seconds (positive)
+# Outputs:
+#   Rate string on stdout
+# Returns:
+#   0
+#######################################
 hf_format_rate() { progress_format_rate "$@"; }
+
+#######################################
+# Compat wrapper for progress_format_elapsed (HF download progress).
+# Arguments:
+#   $1  Elapsed seconds
+# Outputs:
+#   Time string on stdout
+# Returns:
+#   0
+#######################################
 hf_format_elapsed() { progress_format_elapsed "$@"; }
+
+#######################################
+# Compat wrapper for progress_emit (HF download progress).
+# Globals:
+#   GREEN, NC, _PROGRESS_ON_TTY
+# Arguments:
+#   $1  Body line (without prefix)
+# Outputs:
+#   Progress to stderr
+# Returns:
+#   0
+#######################################
 hf_progress_emit() { progress_emit "$@"; }
+
+#######################################
+# Compat wrapper for progress_newline (HF download progress).
+# Globals:
+#   _PROGRESS_ON_TTY
+# Outputs:
+#   Optional newline on stderr
+# Returns:
+#   0
+#######################################
 hf_progress_newline() { progress_newline "$@"; }

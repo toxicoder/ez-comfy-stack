@@ -12,12 +12,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+# Catalog paths, combo sentinels, flavor ids, widget axes, and lazy JSON caches.
 CINEMA_DIR = Path(__file__).resolve().parent
 AXES_PATH = CINEMA_DIR / "axes.json"
 RECIPES_PATH = CINEMA_DIR / "recipes.json"
 NONE = "none"
 DEFAULT_WAN_CAMERA = "fixed camera"
 
+# Cinema flavor ids (Klein stills, Wan silent, LTX joint AV).
 FLAVOR_KLEIN = "klein"
 FLAVOR_KLEIN_EDIT = "klein_edit"
 FLAVOR_KLEIN_IDENTITY = "klein_identity"
@@ -81,6 +83,14 @@ class SpliceResult:
 
 
 def _collapse_spaces(text: str) -> str:
+    """Fold runs of space and extra blank lines.
+
+    Args:
+        text: Raw clause text.
+
+    Returns:
+        Stripped text with compact whitespace.
+    """
     cleaned = re.sub(r"[ \t]+", " ", text)
     cleaned = re.sub(r" +([,.;:])", r"\1", cleaned)
     cleaned = re.sub(r"\s+\n", "\n", cleaned)
@@ -89,6 +99,15 @@ def _collapse_spaces(text: str) -> str:
 
 
 def _as_bool(value: object, default: bool = True) -> bool:
+    """Parse a catalog flag.
+
+    Args:
+        value: JSON bool, number, or yes/no string.
+        default: Fallback when ``value`` is None or unrecognized.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if value is None:
@@ -105,6 +124,15 @@ def _as_bool(value: object, default: bool = True) -> bool:
 
 
 def _string_list(entry: dict[str, Any], field: str) -> list[str]:
+    """Read a string or list-of-strings catalog field.
+
+    Args:
+        entry: Technique object.
+        field: Key such as ``conflicts``.
+
+    Returns:
+        Non-empty stripped strings.
+    """
     raw = entry.get(field) or []
     if isinstance(raw, str):
         return [raw.strip()] if raw.strip() else []
@@ -119,6 +147,14 @@ def _string_list(entry: dict[str, Any], field: str) -> list[str]:
 
 
 def _load_json(path: Path) -> Any:
+    """Read a UTF-8 JSON file.
+
+    Args:
+        path: Catalog path under ``cinema/``.
+
+    Returns:
+        Parsed JSON value.
+    """
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -155,6 +191,14 @@ def axis_ids() -> tuple[str, ...]:
 
 
 def _catalog_path(axis_id: str) -> Path:
+    """Resolve the JSON file for one axis.
+
+    Args:
+        axis_id: Axis key from ``axes.json``.
+
+    Returns:
+        Path next to this module.
+    """
     meta = load_axes().get(axis_id) or {}
     filename = str(meta.get("file") or f"{axis_id}.json")
     return CINEMA_DIR / filename
@@ -180,6 +224,11 @@ def load_axis(axis_id: str) -> list[dict[str, Any]]:
 
 
 def _ensure_catalogs() -> dict[str, list[dict[str, Any]]]:
+    """Load every axis catalog once and index techniques by id.
+
+    Returns:
+        Axis id to technique list mapping (cached).
+    """
     global _CATALOGS, _BY_ID
     if _CATALOGS is not None and _BY_ID is not None:
         return _CATALOGS
@@ -316,45 +365,125 @@ def reset_cinema_caches_for_tests() -> None:
 
 
 def _normalize_pick(value: object) -> str:
+    """Coerce a combo pick to a catalog id or ``none``.
+
+    Args:
+        value: Widget value.
+
+    Returns:
+        Stripped id, or ``none`` when empty.
+    """
     raw = value if isinstance(value, str) else str(value or NONE)
     cleaned = raw.strip() or NONE
     return cleaned
 
 
 def _is_i2v(flavor: str) -> bool:
+    """True for Wan/LTX image-to-video flavors.
+
+    Args:
+        flavor: Splice flavor id.
+
+    Returns:
+        Whether the start image owns look.
+    """
     return flavor in {FLAVOR_WAN_I2V, FLAVOR_LTX_I2V}
 
 
 def _is_klein(flavor: str) -> bool:
+    """True for Klein still / edit / identity flavors.
+
+    Args:
+        flavor: Splice flavor id.
+
+    Returns:
+        Whether this is a still-family splice.
+    """
     return flavor in {FLAVOR_KLEIN, FLAVOR_KLEIN_EDIT, FLAVOR_KLEIN_IDENTITY}
 
 
 def _is_identity(flavor: str) -> bool:
+    """True for the camera-free Klein bible flavor.
+
+    Args:
+        flavor: Splice flavor id.
+
+    Returns:
+        Whether identity skips camera axes.
+    """
     return flavor == FLAVOR_KLEIN_IDENTITY
 
 
 def _is_wan(flavor: str) -> bool:
+    """True for Wan T2V/I2V flavors.
+
+    Args:
+        flavor: Splice flavor id.
+
+    Returns:
+        Whether Wan camera-token rules apply.
+    """
     return flavor in {FLAVOR_WAN_T2V, FLAVOR_WAN_I2V}
 
 
 def _is_ltx(flavor: str) -> bool:
+    """True for LTX T2V/I2V flavors.
+
+    Args:
+        flavor: Splice flavor id.
+
+    Returns:
+        Whether AV audio clauses apply.
+    """
     return flavor in {FLAVOR_LTX_T2V, FLAVOR_LTX_I2V}
 
 
 def _still_ok(entry: dict[str, Any]) -> bool:
+    """Whether a technique may appear on Klein stills.
+
+    Args:
+        entry: Technique object.
+
+    Returns:
+        ``still_ok`` flag, default True.
+    """
     return _as_bool(entry.get("still_ok"), True)
 
 
 def _motion_ok(entry: dict[str, Any]) -> bool:
+    """Whether a technique may appear on Wan motion splices.
+
+    Args:
+        entry: Technique object.
+
+    Returns:
+        ``motion_ok`` flag, default True.
+    """
     return _as_bool(entry.get("motion_ok"), True)
 
 
 def _av_ok(entry: dict[str, Any]) -> bool:
+    """Whether a technique may appear on LTX AV splices.
+
+    Args:
+        entry: Technique object.
+
+    Returns:
+        ``av_ok`` flag, default True.
+    """
     return _as_bool(entry.get("av_ok"), True)
 
 
 def _flavor_keeps(entry: dict[str, Any], flavor: str) -> str:
-    """Return empty if kept, else drop reason."""
+    """Return empty if kept, else drop reason.
+
+    Args:
+        entry: Selected technique (with axis metadata).
+        flavor: Splice flavor id.
+
+    Returns:
+        Empty string when the pick survives, otherwise an operator reason.
+    """
     still_mode = str(entry.get("_still_mode") or "clause")
     if _is_identity(flavor):
         if not bool(entry.get("_identity_include")):
@@ -413,6 +542,15 @@ def _resolve_conflicts(entries: list[dict[str, Any]]) -> tuple[list[dict[str, An
 
 
 def _render_clause(entry: dict[str, Any], flavor: str) -> str:
+    """Pick the CLIP clause for one technique.
+
+    Args:
+        entry: Technique object.
+        flavor: Splice flavor id.
+
+    Returns:
+        Still freeze text, motion clause, or empty for Wan camera axes.
+    """
     still_mode = str(entry.get("_still_mode") or "clause")
     clause = str(entry.get("clause") or "").strip()
     still = str(entry.get("still") or "").strip()
@@ -424,12 +562,29 @@ def _render_clause(entry: dict[str, Any], flavor: str) -> str:
 
 
 def _render_audio(entry: dict[str, Any], flavor: str) -> str:
+    """Return the LTX audio clause, or empty on other flavors.
+
+    Args:
+        entry: Technique object.
+        flavor: Splice flavor id.
+
+    Returns:
+        Audio sentence, or empty.
+    """
     if not _is_ltx(flavor):
         return ""
     return str(entry.get("audio") or "").strip()
 
 
 def _wan_token(entry: dict[str, Any]) -> str:
+    """Wan camera verb for a camera-axis technique.
+
+    Args:
+        entry: Technique object.
+
+    Returns:
+        ``wan_token``, else the lowercased label, else empty.
+    """
     token = str(entry.get("wan_token") or "").strip()
     if token:
         return token
@@ -439,6 +594,14 @@ def _wan_token(entry: dict[str, Any]) -> str:
 
 
 def _join_sentences(parts: list[str]) -> str:
+    """Join clauses as sentences with terminal punctuation.
+
+    Args:
+        parts: Clause fragments in splice order.
+
+    Returns:
+        One paragraph, empty parts dropped.
+    """
     sentences: list[str] = []
     for part in parts:
         text = _collapse_spaces(part)

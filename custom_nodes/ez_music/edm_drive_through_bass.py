@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from .edm_examples import EdmExample, _ex, format_edm_score
 
-
+# Track scores and catalog rows.
 RUMBLE_STRIP_LYRICS = format_edm_score(
     ("inst", "heavy warped drop\nhybrid trap 808 wreck\nrumble grind"),
     ("inst", "trap hats roll\n808 slide"),

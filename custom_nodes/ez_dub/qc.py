@@ -6,11 +6,20 @@ from typing import Any
 
 from .sanitize import LEAK_PATTERNS, looks_like_target
 
+# Mix QC thresholds (interior gap and quiet peak).
 GAP_LIMIT_S = 0.80
 QUIET_PEAK = 0.25
 
 
 def _cross_lang(target_language: str) -> bool:
+    """True when the target is not English/auto (clone must translate).
+
+    Args:
+        target_language: ISO target widget.
+
+    Returns:
+        Whether empty/passthrough targets are a defect.
+    """
     lang = (target_language or "").strip().lower()
     if len(lang) > 2:
         lang = lang[:2]
@@ -18,6 +27,14 @@ def _cross_lang(target_language: str) -> bool:
 
 
 def _spoken(turn: dict[str, Any]) -> bool:
+    """True when a JSON turn has source text.
+
+    Args:
+        turn: JSON turn mapping.
+
+    Returns:
+        Whether ``text`` is non-empty.
+    """
     return bool(str(turn.get("text") or "").strip())
 
 
@@ -30,7 +47,19 @@ def evaluate_qc(
     peak: float,
     extra_flags: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Return a JSON-able dict. Never raises."""
+    """Return a JSON-able dict. Never raises.
+
+    Args:
+        mix: Mix PCM.
+        rate: Sample rate.
+        turns: JSON turns.
+        target_language: ISO target.
+        peak: Unused (call-site compatibility).
+        extra_flags: Optional extra check ids.
+
+    Returns:
+        ``{ok, flags, checks, rate}`` mapping (JSON boundary).
+    """
     del peak
     checks: list[dict[str, str]] = []
     try:

@@ -1,9 +1,21 @@
+/**
+ * EZDubIngest frontend: native Upload media button next to the source combo.
+ *
+ * Nodes 2.0: uses addWidget("button") and widget.value. Vue STRING widgets
+ * have no canvas textarea — treat inputEl as optional.
+ */
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 
 const ACCEPT =
   "audio/*,video/*,.wav,.mp3,.flac,.ogg,.m4a,.aac,.mp4,.mkv,.mov,.webm";
 
+/**
+ * POST a local file to Comfy /upload/image and select it on the source combo.
+ * @param {object} sourceWidget
+ * @param {File} file
+ * @returns {Promise<void>}
+ */
 async function uploadToInput(sourceWidget, file) {
   const body = new FormData();
   body.append("image", file);
@@ -29,11 +41,21 @@ async function uploadToInput(sourceWidget, file) {
 
 app.registerExtension({
   name: "ez_dub.ingestUpload",
+  /**
+   * Wrap EZDubIngest so the source combo gets an Upload media button.
+   * @param {object} nodeType
+   * @param {object} nodeData
+   * @returns {Promise<void>}
+   */
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (nodeData?.name !== "EZDubIngest") {
       return;
     }
     const onNodeCreated = nodeType.prototype.onNodeCreated;
+    /**
+     * Mount a hidden file input and a native button widget after source.
+     * @returns {void}
+     */
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       const sourceWidget = this.widgets?.find((w) => w.name === "source");
@@ -71,6 +93,10 @@ app.registerExtension({
         widgets.splice(after + 1, 0, uploadWidget);
       }
       const onRemoved = this.onRemoved;
+      /**
+       * Remove the hidden file input when the node is deleted.
+       * @returns {void}
+       */
       this.onRemoved = function () {
         fileInput.remove();
         onRemoved?.apply(this, arguments);

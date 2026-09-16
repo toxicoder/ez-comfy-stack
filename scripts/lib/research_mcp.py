@@ -11,20 +11,36 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, TypedDict, cast
 
+# MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "ez-research"
 SERVER_VERSION = "1"
 
+RpcId = str | int | None
 ToolHandler = Callable[[dict[str, Any]], dict[str, Any]]
 
 
+class ToolSpec(TypedDict):
+    """One MCP tool: description, JSON Schema, handler."""
+
+    description: str
+    inputSchema: dict[str, Any]
+    handler: ToolHandler
+
+
 def _repo_root() -> Path:
+    """Return the repository root (parent of ``scripts/``).
+
+    Returns:
+        Absolute repo path.
+    """
     return Path(__file__).resolve().parents[2]
 
 
 def _ensure_custom_nodes_path() -> None:
+    """Prepend ``custom_nodes/`` so ez_research imports resolve."""
     custom = str(_repo_root() / "custom_nodes")
     if custom not in sys.path:
         sys.path.insert(0, custom)
@@ -34,15 +50,29 @@ _ensure_custom_nodes_path()
 
 
 def _output_dir() -> Path:
+    """Return COMFY_OUTPUT_DIR (host occupancy root).
+
+    Returns:
+        Output directory path.
+    """
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
 def _lab_root() -> Path:
+    """Return workflows/_lab.
+
+    Returns:
+        Lab graph root.
+    """
     return _repo_root() / "workflows" / "_lab"
 
 
 def occupancy_status() -> dict[str, Any]:
-    """Read occupancy JSON from COMFY_OUTPUT_DIR."""
+    """Read occupancy JSON from COMFY_OUTPUT_DIR.
+
+    Returns:
+        Occupancy mapping (JSON boundary).
+    """
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
@@ -63,6 +93,14 @@ def occupancy_status() -> dict[str, Any]:
 
 
 def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
+    """Collect App widget labels from extra.linearData.inputs.
+
+    Args:
+        extra: Graph ``extra`` mapping.
+
+    Returns:
+        Widget labels in linear order.
+    """
     linear = extra.get("linearData") or {}
     labels: list[str] = []
     inputs = linear.get("inputs") if isinstance(linear, dict) else None
@@ -78,6 +116,14 @@ def _linear_labels(extra: Mapping[str, Any]) -> list[str]:
 
 
 def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
+    """Load one unique lab graph by stem or _lab-relative id.
+
+    Args:
+        stem: File stem, lab_rel, or ``_lab/...`` path.
+
+    Returns:
+        ``(path, graph)`` or None when missing/ambiguous/invalid JSON.
+    """
     text = str(stem or "").replace("\\", "/").strip().lstrip("./")
     text = text.removeprefix("_lab/")
     if text.endswith(".json"):
@@ -103,10 +149,26 @@ def _load_lab_graph(stem: str) -> tuple[Path, dict[str, Any]] | None:
 
 
 def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: read occupancy JSON.
+
+    Args:
+        _args: Unused tool arguments.
+
+    Returns:
+        ``{ok, occupancy}``.
+    """
     return {"ok": True, "occupancy": occupancy_status()}
 
 
 def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: list shipped lab Apps.
+
+    Args:
+        _args: Unused tool arguments.
+
+    Returns:
+        ``{ok, apps, count}``.
+    """
     apps: list[dict[str, Any]] = []
     root = _lab_root()
     if not root.is_dir():
@@ -140,6 +202,14 @@ def tool_list_lab_apps(_args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: describe one lab App.
+
+    Args:
+        args: ``stem`` or ``id``.
+
+    Returns:
+        App metadata or ``ok`` false.
+    """
     stem = str(args.get("stem") or args.get("id") or "")
     loaded = _load_lab_graph(stem)
     if loaded is None:
@@ -169,6 +239,14 @@ def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_chat(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: one-turn creative-process chat.
+
+    Args:
+        args: ``message`` (required), optional ``history``, ``web_search``.
+
+    Returns:
+        Chat payload with brief path.
+    """
     from ez_research.pipeline import run_chat, write_brief
 
     message = str(args.get("message") or args.get("prompt") or "")
@@ -187,6 +265,14 @@ def tool_chat(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_web_search(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: SSRF-safe HTTPS search.
+
+    Args:
+        args: ``query`` or ``q``.
+
+    Returns:
+        Hits and formatted sources.
+    """
     from ez_research.search import format_sources, search_web
 
     query = str(args.get("query") or args.get("q") or "")
@@ -203,6 +289,14 @@ def tool_web_search(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_research(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: planner + search subagents + synthesizer.
+
+    Args:
+        args: ``message`` (required), optional history/web_search/subagents.
+
+    Returns:
+        Research payload with brief path.
+    """
     from ez_research.pipeline import run_research, write_brief
 
     message = str(args.get("message") or args.get("prompt") or "")
@@ -227,7 +321,8 @@ def tool_research(args: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-TOOLS: dict[str, dict[str, Any]] = {
+# Typed MCP tool table (names are the public tool ids).
+TOOLS: dict[str, ToolSpec] = {
     "occupancy_status": {
         "description": "Read GB10 occupancy mode, parked flag, and PIDs.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -297,6 +392,11 @@ TOOLS: dict[str, dict[str, Any]] = {
 
 
 def list_tools() -> list[dict[str, Any]]:
+    """List MCP tools without handlers.
+
+    Returns:
+        ``{name, description, inputSchema}`` rows.
+    """
     return [
         {
             "name": name,
@@ -308,6 +408,15 @@ def list_tools() -> list[dict[str, Any]]:
 
 
 def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Dispatch a named MCP tool.
+
+    Args:
+        name: Tool id.
+        arguments: JSON-object arguments (JSON boundary).
+
+    Returns:
+        Tool payload (``ok`` false on unknown tool).
+    """
     spec = TOOLS.get(name)
     if spec is None:
         return {"ok": False, "error": f"unknown tool {name}"}
@@ -315,18 +424,44 @@ def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str
     return handler(dict(arguments or {}))
 
 
-def _rpc_result(msg_id: Any, result: Any) -> dict[str, Any]:
+def _rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 success envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        result: Method result payload.
+
+    Returns:
+        JSON-RPC response object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "result": result}
 
 
-def _rpc_error(msg_id: Any, code: int, message: str) -> dict[str, Any]:
+def _rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 error envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        code: JSON-RPC error code.
+        message: Error text.
+
+    Returns:
+        JSON-RPC error object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": message}}
 
 
 def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
-    """Handle one JSON-RPC message. Notifications return None."""
+    """Handle one JSON-RPC message. Notifications return None.
+
+    Args:
+        message: Parsed JSON-RPC request (JSON boundary).
+
+    Returns:
+        Response object, or None for notifications.
+    """
     method = str(message.get("method") or "")
-    msg_id = message.get("id")
+    msg_id = cast(RpcId, message.get("id"))
     params = message.get("params") or {}
     if method == "notifications/initialized":
         return None
@@ -358,6 +493,7 @@ def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def serve_stdio() -> None:
+    """Serve JSON-RPC on stdin/stdout (one JSON object per line)."""
     for raw in sys.stdin:
         line = raw.strip()
         if not line:
@@ -375,6 +511,14 @@ def serve_stdio() -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI: --stdio | --list-tools | --call TOOL [JSON].
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     args = list(sys.argv[1:] if argv is None else argv)
     if not args or args[0] in ("--stdio", "stdio"):
         serve_stdio()

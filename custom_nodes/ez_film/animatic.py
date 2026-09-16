@@ -12,12 +12,17 @@ from typing import Any, Callable
 
 from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, parse_shots_yaml
 
+# Still-hold duration matching the 5.00 s picture contract.
 HOLD_SECONDS = 5.00
 RunFn = Callable[..., Any]
 
 
 def find_ffmpeg() -> str | None:
-    """Resolve ffmpeg on PATH, or None."""
+    """Resolve ffmpeg on PATH, or None.
+
+    Returns:
+        Executable path, or None.
+    """
     return shutil.which("ffmpeg")
 
 
@@ -26,6 +31,15 @@ def _run(
     *,
     run: RunFn = subprocess.run,
 ) -> subprocess.CompletedProcess[str]:
+    """Run a subprocess with captured text output.
+
+    Args:
+        argv: Command vector.
+        run: ``subprocess.run`` or a test double.
+
+    Returns:
+        Completed process (not checked).
+    """
     return run(argv, check=False, capture_output=True, text=True)
 
 
@@ -34,7 +48,16 @@ def shot_sources(
     guides: Path,
     stills: Path | None = None,
 ) -> list[dict[str, str]]:
-    """Pick clay.mp4 when present, else a still to hold for 5.00s."""
+    """Pick clay.mp4 when present, else a still to hold for 5.00s.
+
+    Args:
+        parsed: Parsed shot-sheet dict (``shots`` list).
+        guides: ``guides/<slug>/`` pack root.
+        stills: Optional ``stills/<id>.png`` directory.
+
+    Returns:
+        Per-shot dicts with ``id``, ``kind``, and ``path``.
+    """
     rows: list[dict[str, str]] = []
     for index, shot in enumerate(parsed["shots"], start=1):
         sid = f"{index:02d}"
@@ -54,7 +77,16 @@ def shot_sources(
 
 
 def concat_argv(concat_list: Path, dest: Path, cap: float) -> list[str]:
-    """ffmpeg concat demuxer, video-only, hard 90s cap."""
+    """ffmpeg concat demuxer, video-only, hard 90s cap.
+
+    Args:
+        concat_list: Concat demuxer list file.
+        dest: Destination MP4.
+        cap: ffmpeg ``-t`` cap in seconds.
+
+    Returns:
+        ffmpeg argument vector.
+    """
     return [
         "ffmpeg",
         "-y",
@@ -76,7 +108,12 @@ def concat_argv(concat_list: Path, dest: Path, cap: float) -> list[str]:
 
 
 def write_concat_list(rows: list[dict[str, str]], dest: Path) -> None:
-    """Write ffmpeg concat demuxer list (still rows loop 5.00s)."""
+    """Write ffmpeg concat demuxer list (still rows loop 5.00s).
+
+    Args:
+        rows: Shot source rows from :func:`shot_sources`.
+        dest: Concat list path to write.
+    """
     lines: list[str] = []
     for row in rows:
         path = row["path"].replace("'", r"'\''")
@@ -96,7 +133,20 @@ def build_animatic(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
 ) -> dict[str, Any]:
-    """Write films/<slug>/publish/animatic.mp4 from clay or held stills."""
+    """Write films/<slug>/publish/animatic.mp4 from clay or held stills.
+
+    Args:
+        yaml_text: Film bible YAML contents.
+        dest: ``films/<slug>/`` jobstore directory.
+        guides: ``guides/<slug>/`` pack root.
+        stills: Optional stills directory.
+        cap: Publish duration cap.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Animatic report dict (``ok``, ``path``, ``defects``).
+    """
     parsed = parse_shots_yaml(yaml_text)
     slug = str(parsed["meta"]["slug"])
     rows = shot_sources(parsed, guides, stills)
@@ -143,6 +193,14 @@ def build_animatic(
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """Parse argv and build a 90s animatic.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.animatic")
     parser.add_argument("--yaml", required=True)
     parser.add_argument("--dest", required=True, help="films/<slug>/")

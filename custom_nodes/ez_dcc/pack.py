@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 from typing import Any
 
+# Guide-pack layer names and muxed video filenames under a shot directory.
 SHOT_STILL_LAYERS = ("first", "last", "clay", "depth", "canny")
 SHOT_VIDEO_LAYERS = ("clay", "depth", "canny")
 STILL_PACK_LAYERS = ("first", "rgb", "depth", "canny", "normal")
@@ -41,22 +42,57 @@ def output_directory() -> Path:
 
 
 def shot_dir(slug: str, shot_id: str) -> Path:
-    """``guides/<slug>/<shot_id>/`` under the output directory."""
+    """``guides/<slug>/<shot_id>/`` under the output directory.
+
+    Args:
+        slug: Film / project slug.
+        shot_id: Shot directory name.
+
+    Returns:
+        Shot pack directory path (may not exist yet).
+    """
     return output_directory() / "guides" / str(slug) / str(shot_id)
 
 
 def still_dir(slug: str, plate: str) -> Path:
-    """``guides/<slug>/stills/<plate>/`` under the output directory."""
+    """``guides/<slug>/stills/<plate>/`` under the output directory.
+
+    Args:
+        slug: Film / project slug.
+        plate: Still-pack plate id.
+
+    Returns:
+        Still pack directory path (may not exist yet).
+    """
     return output_directory() / "guides" / str(slug) / "stills" / str(plate)
 
 
 def camera_json_path(slug: str, shot_id: str) -> Path:
-    """Optional ``camera.json`` next to the shot pack."""
+    """Optional ``camera.json`` next to the shot pack.
+
+    Args:
+        slug: Film / project slug.
+        shot_id: Shot directory name.
+
+    Returns:
+        Expected ``camera.json`` path (may be missing).
+    """
     return shot_dir(slug, shot_id) / "camera.json"
 
 
 def shot_still_path(pack_dir: Path, layer: str) -> Path:
-    """Resolve a still PNG inside a shot pack. Depth is dumped mist 0-1."""
+    """Resolve a still PNG inside a shot pack. Depth is dumped mist 0-1.
+
+    Args:
+        pack_dir: Shot pack directory.
+        layer: One of ``SHOT_STILL_LAYERS``.
+
+    Returns:
+        PNG path for that layer.
+
+    Raises:
+        ValueError: Unknown layer name.
+    """
     if layer in {"first", "clay"}:
         return pack_dir / "first.png"
     if layer == "last":
@@ -75,7 +111,18 @@ def shot_still_path(pack_dir: Path, layer: str) -> Path:
 
 
 def shot_video_path(pack_dir: Path, layer: str) -> Path:
-    """Absolute mp4 path for a video layer. Does not decode frames."""
+    """Absolute mp4 path for a video layer. Does not decode frames.
+
+    Args:
+        pack_dir: Shot pack directory.
+        layer: One of ``SHOT_VIDEO_LAYERS``.
+
+    Returns:
+        Mp4 path for that layer.
+
+    Raises:
+        ValueError: Unknown layer name.
+    """
     name = VIDEO_FILENAMES.get(layer)
     if name is None:
         raise ValueError(f"unknown shot video layer {layer!r}")
@@ -83,7 +130,18 @@ def shot_video_path(pack_dir: Path, layer: str) -> Path:
 
 
 def still_pack_path(pack_dir: Path, layer: str) -> Path:
-    """Resolve a PNG inside an ``ez.guide.still.v1`` pack."""
+    """Resolve a PNG inside an ``ez.guide.still.v1`` pack.
+
+    Args:
+        pack_dir: Still pack directory.
+        layer: One of ``STILL_PACK_LAYERS``.
+
+    Returns:
+        PNG path for that layer.
+
+    Raises:
+        ValueError: Unknown layer name.
+    """
     if layer in {"first", "rgb"}:
         return pack_dir / "first.png"
     if layer in {"depth", "canny", "normal"}:

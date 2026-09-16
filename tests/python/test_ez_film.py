@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -259,7 +260,7 @@ def test_stitch_film_runs_ffmpeg_and_checks_cap(tmp_path: Path) -> None:
     out = str(tmp_path / "ez_gosee_90s.mp4")
     captured: list[list[str]] = []
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         captured.append(list(argv))
         Path(argv[-1]).write_bytes(b"mp4")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
@@ -304,7 +305,7 @@ def test_stitch_film_refuses_missing_stem_and_short_master(tmp_path: Path) -> No
         Path(path).write_bytes(b"mp4")
     out = str(tmp_path / "ez_gosee_90s.mp4")
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "width,height" in joined:
             return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
@@ -342,7 +343,7 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
     out = str(tmp_path / "ez_gosee_90s.mp4")
     captured: list[list[str]] = []
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         captured.append(list(argv))
         Path(argv[-1]).write_bytes(b"out")
         return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
@@ -376,7 +377,7 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
 
     captured.clear()
 
-    def fail_run(argv, **_kwargs):
+    def fail_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=1, stdout="", stderr="boom")
 
     with patch.object(film_concat, "validate_stitch_stems", return_value=None):
@@ -397,7 +398,7 @@ def test_stitch_film_xfade_requires_audio_and_runs_three_steps(
 
 
 def test_probe_has_audio_and_hz() -> None:
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "codec_type" in joined:
             return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
@@ -408,7 +409,7 @@ def test_probe_has_audio_and_hz() -> None:
     assert probe_has_audio("/tmp/a.mp4", ffprobe="ffprobe", run=fake_run) is True
     assert probe_audio_hz("/tmp/a.mp4", ffprobe="ffprobe", run=fake_run) == 48000
 
-    def empty_run(argv, **_kwargs):
+    def empty_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 
     assert probe_has_audio("/tmp/a.mp4", ffprobe="ffprobe", run=empty_run) is False
@@ -435,7 +436,7 @@ def test_normalize_pads_113_and_validate_refuses_3s(tmp_path: Path) -> None:
     src.write_bytes(b"mp4")
     padded_written: list[str] = []
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         dest = str(argv[-1])
         if "tpad" in joined:
@@ -468,7 +469,7 @@ def test_normalize_pads_113_and_validate_refuses_3s(tmp_path: Path) -> None:
     for path in shots:
         Path(path).write_bytes(b"mp4")
 
-    def three_run(argv, **_kwargs):
+    def three_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "width,height" in joined:
             return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
@@ -481,7 +482,7 @@ def test_normalize_pads_113_and_validate_refuses_3s(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError, match="shot duration"):
         validate_stitch_stems(shots, ffprobe="ffprobe", run=three_run)
 
-    def legal_121_run(argv, **_kwargs):
+    def legal_121_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "width,height" in joined:
             return SimpleNamespace(returncode=0, stdout="1280,704\n", stderr="")
@@ -501,7 +502,7 @@ def test_stitch_film_pads_113_frame_stems(tmp_path: Path) -> None:
     out = str(tmp_path / "ez_gosee_90s.mp4")
     captured: list[str] = []
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         dest = str(argv[-1])
         captured.append(joined)
@@ -530,17 +531,17 @@ def test_stitch_film_pads_113_frame_stems(tmp_path: Path) -> None:
     assert Path(out).is_file()
     assert not list(tmp_path.glob("*.pad.mp4"))
 
-    def boom_run(argv, **_kwargs):
+    def boom_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         raise OSError("no ffprobe")
 
     assert probe_has_audio("/tmp/a.mp4", ffprobe="ffprobe", run=boom_run) is False
 
-    def bad_hz(argv, **_kwargs):
+    def bad_hz(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=0, stdout="nope\n", stderr="")
 
     assert probe_audio_hz("/tmp/a.mp4", ffprobe="ffprobe", run=bad_hz) is None
 
-    def fail_code(argv, **_kwargs):
+    def fail_code(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         return SimpleNamespace(returncode=1, stdout="audio\n", stderr="")
 
     assert probe_has_audio("/tmp/a.mp4", ffprobe="ffprobe", run=fail_code) is False
@@ -559,7 +560,7 @@ def test_assert_master_duration_hermetic_without_path_ffprobe(
         with pytest.raises(RuntimeError, match="ffprobe required"):
             film_concat.assert_master_duration(str(out), 90.0)
 
-        def _injected(argv, **_kwargs):
+        def _injected(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
             joined = " ".join(str(a) for a in argv)
             if "codec_type" in joined:
                 return SimpleNamespace(returncode=0, stdout="audio\n", stderr="")
@@ -584,7 +585,7 @@ def test_film_concat_node(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
     for path in shots.values():
         Path(path).write_bytes(b"x")
 
-    def fake_stitch(paths, out_mp4, cap, xfade_cs=0):
+    def fake_stitch(paths: list[str], out_mp4: str, cap: float, xfade_cs: int = 0) -> str:
         assert len(paths) == SHOT_COUNT
         assert cap == DEFAULT_CAP_SECONDS
         assert xfade_cs == 0
@@ -626,7 +627,7 @@ def test_film_concat_node_picks_vhs_audio_mp4(
 
     captured: list[list[str]] = []
 
-    def fake_stitch(paths, out_mp4, cap, xfade_cs=0):
+    def fake_stitch(paths: list[str], out_mp4: str, cap: float, xfade_cs: int = 0) -> str:
         captured.append(list(paths))
         assert cap == DEFAULT_CAP_SECONDS
         assert xfade_cs == 8
@@ -655,7 +656,7 @@ def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:
     out = str(tmp_path / "out.mp4")
     captured: list[list[str]] = []
 
-    def fail_then_ok(argv, **_kwargs):
+    def fail_then_ok(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         captured.append(list(argv))
         if len(captured) == 1:
             return SimpleNamespace(
@@ -718,7 +719,7 @@ def test_speech_band_parsers_and_ratio(tmp_path: Path) -> None:
     shot = tmp_path / "talk.mp4"
     shot.write_bytes(b"x")
 
-    def talking_run(argv, **_kwargs):
+    def talking_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "silencedetect" in joined:
             return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_TALKING)
@@ -735,7 +736,7 @@ def test_speech_band_parsers_and_ratio(tmp_path: Path) -> None:
     assert defects
     assert any("speech-band" in line for line in defects)
 
-    def foley_run(argv, **_kwargs):
+    def foley_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "silencedetect" in joined:
             return SimpleNamespace(returncode=0, stdout="", stderr=SILENCE_FOLEY)
@@ -752,7 +753,7 @@ def test_accept_master_scripts_ffprobe(tmp_path: Path) -> None:
     master = tmp_path / "ez_gosee_90s.mp4"
     master.write_bytes(b"x")
 
-    def talking_run(argv, **_kwargs):
+    def talking_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "format=duration" in joined or "stream=duration" in joined:
             return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")
@@ -775,7 +776,7 @@ def test_accept_master_scripts_ffprobe(tmp_path: Path) -> None:
     )
     assert any("speech-band" in line for line in defects)
 
-    def clean_run(argv, **_kwargs):
+    def clean_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(str(a) for a in argv)
         if "format=duration" in joined or "stream=duration" in joined:
             return SimpleNamespace(returncode=0, stdout="90.00\n", stderr="")

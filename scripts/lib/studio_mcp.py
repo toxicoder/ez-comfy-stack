@@ -11,20 +11,36 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Callable, Mapping, TypedDict, cast
 
+# MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "ez-studio"
 SERVER_VERSION = "1"
 
+RpcId = str | int | None
 ToolHandler = Callable[[dict[str, Any]], dict[str, Any]]
 
 
+class ToolSpec(TypedDict):
+    """One MCP tool: description, JSON Schema, handler."""
+
+    description: str
+    inputSchema: dict[str, Any]
+    handler: ToolHandler
+
+
 def _repo_root() -> Path:
+    """Return the repository root (parent of ``scripts/``).
+
+    Returns:
+        Absolute repo path.
+    """
     return Path(__file__).resolve().parents[2]
 
 
 def _ensure_custom_nodes_path() -> None:
+    """Prepend ``custom_nodes/`` so ez_studio_forge imports resolve."""
     custom = str(_repo_root() / "custom_nodes")
     if custom not in sys.path:
         sys.path.insert(0, custom)
@@ -34,11 +50,20 @@ _ensure_custom_nodes_path()
 
 
 def _output_dir() -> Path:
+    """Return COMFY_OUTPUT_DIR (host occupancy root).
+
+    Returns:
+        Output directory path.
+    """
     return Path(os.environ.get("COMFY_OUTPUT_DIR", "/mnt/comfy-output"))
 
 
 def occupancy_status() -> dict[str, Any]:
-    """Read occupancy JSON from COMFY_OUTPUT_DIR."""
+    """Read occupancy JSON from COMFY_OUTPUT_DIR.
+
+    Returns:
+        Occupancy mapping (JSON boundary).
+    """
     path = _output_dir() / ".occupancy.json"
     if path.is_file():
         try:
@@ -59,10 +84,26 @@ def occupancy_status() -> dict[str, Any]:
 
 
 def tool_occupancy_status(_args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: read occupancy JSON.
+
+    Args:
+        _args: Unused tool arguments.
+
+    Returns:
+        ``{ok, occupancy}``.
+    """
     return {"ok": True, "occupancy": occupancy_status()}
 
 
 def tool_search_templates(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: search shipped lab Apps and studio-block ids.
+
+    Args:
+        args: Optional ``query``/``q``, ``occupancy``, ``lane``.
+
+    Returns:
+        ``{ok, templates, count}``.
+    """
     from ez_studio_forge.pipeline import list_templates
 
     rows = list_templates(
@@ -74,6 +115,14 @@ def tool_search_templates(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_get_template(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: describe one lab App or studio-block.
+
+    Args:
+        args: ``stem``, ``id``, or ``template``.
+
+    Returns:
+        Template description payload.
+    """
     from ez_studio_forge.pipeline import describe_template
 
     stem = str(args.get("stem") or args.get("id") or args.get("template") or "")
@@ -81,10 +130,26 @@ def tool_get_template(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_describe_app(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: alias of get_template for lab Apps.
+
+    Args:
+        args: ``stem`` (required by schema).
+
+    Returns:
+        Template description payload.
+    """
     return tool_get_template(args)
 
 
 def tool_apply_slots(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: clone a lab graph and patch named slots (no disk write).
+
+    Args:
+        args: ``stem`` (required), optional ``slots`` object.
+
+    Returns:
+        Cloned graph payload or error.
+    """
     from ez_studio_forge.pipeline import ForgeError, apply_slots, clone_template
 
     stem = str(args.get("stem") or args.get("template") or "")
@@ -108,6 +173,14 @@ def tool_apply_slots(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def tool_validate_workflow(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: check banned strings, Vue-corrected renderer, linear ids.
+
+    Args:
+        args: Optional ``stem``, ``graph``, ``slug``.
+
+    Returns:
+        ``{ok, errors}``.
+    """
     from ez_studio_forge.pipeline import clone_template, validate_workflow
 
     stem = str(args.get("stem") or args.get("template") or "")
@@ -127,6 +200,15 @@ def tool_validate_workflow(args: dict[str, Any]) -> dict[str, Any]:
 
 
 def _save_from_args(args: dict[str, Any], *, force_app: bool | None) -> dict[str, Any]:
+    """Clone, stamp, and write a lab graph into live ``_user/``.
+
+    Args:
+        args: ``stem``/``template``, ``slug``, optional slots/overwrite/as_app.
+        force_app: True forces App view; False forces workflow; None uses args.
+
+    Returns:
+        Save payload or ForgeError mapping.
+    """
     from ez_studio_forge.pipeline import (
         ForgeError,
         apply_slots,
@@ -173,14 +255,38 @@ def _save_from_args(args: dict[str, Any], *, force_app: bool | None) -> dict[str
 
 
 def tool_save_workflow(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: clone a lab graph into live ``_user/`` (never writes ``_lab``).
+
+    Args:
+        args: ``stem`` and ``slug`` (required), optional as_app/overwrite/slots.
+
+    Returns:
+        Save payload or error.
+    """
     return _save_from_args(args, force_app=None)
 
 
 def tool_create_app(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: clone a lab graph into live ``_user/`` as an App.
+
+    Args:
+        args: ``stem`` and ``slug`` (required), optional overwrite/slots.
+
+    Returns:
+        Save payload or error.
+    """
     return _save_from_args(args, force_app=True)
 
 
 def tool_generate_app(args: dict[str, Any]) -> dict[str, Any]:
+    """MCP tool: pick a lab template from a brief and write ``_user/``.
+
+    Args:
+        args: ``brief`` (required), optional template/slug/as_app/overwrite/slots.
+
+    Returns:
+        Generate payload (may include ``error``).
+    """
     from ez_studio_forge.pipeline import generate_app
 
     brief = str(args.get("brief") or args.get("prompt") or args.get("message") or "")
@@ -213,7 +319,8 @@ def tool_generate_app(args: dict[str, Any]) -> dict[str, Any]:
     return payload
 
 
-TOOLS: dict[str, dict[str, Any]] = {
+# Typed MCP tool table (names are the public tool ids).
+TOOLS: dict[str, ToolSpec] = {
     "occupancy_status": {
         "description": "Read GB10 occupancy mode, parked flag, and PIDs.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -339,6 +446,11 @@ TOOLS: dict[str, dict[str, Any]] = {
 
 
 def list_tools() -> list[dict[str, Any]]:
+    """List MCP tools without handlers.
+
+    Returns:
+        ``{name, description, inputSchema}`` rows.
+    """
     return [
         {
             "name": name,
@@ -350,6 +462,15 @@ def list_tools() -> list[dict[str, Any]]:
 
 
 def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    """Dispatch a named MCP tool.
+
+    Args:
+        name: Tool id.
+        arguments: JSON-object arguments (JSON boundary).
+
+    Returns:
+        Tool payload (``ok`` false on unknown tool).
+    """
     spec = TOOLS.get(name)
     if spec is None:
         return {"ok": False, "error": f"unknown tool {name}"}
@@ -357,18 +478,44 @@ def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str
     return handler(dict(arguments or {}))
 
 
-def _rpc_result(msg_id: Any, result: Any) -> dict[str, Any]:
+def _rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 success envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        result: Method result payload.
+
+    Returns:
+        JSON-RPC response object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "result": result}
 
 
-def _rpc_error(msg_id: Any, code: int, message: str) -> dict[str, Any]:
+def _rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
+    """Build a JSON-RPC 2.0 error envelope.
+
+    Args:
+        msg_id: Request id (string, number, or null).
+        code: JSON-RPC error code.
+        message: Error text.
+
+    Returns:
+        JSON-RPC error object.
+    """
     return {"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": message}}
 
 
 def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
-    """Handle one JSON-RPC message. Notifications return None."""
+    """Handle one JSON-RPC message. Notifications return None.
+
+    Args:
+        message: Parsed JSON-RPC request (JSON boundary).
+
+    Returns:
+        Response object, or None for notifications.
+    """
     method = str(message.get("method") or "")
-    msg_id = message.get("id")
+    msg_id = cast(RpcId, message.get("id"))
     params = message.get("params") or {}
     if method == "notifications/initialized":
         return None
@@ -400,6 +547,7 @@ def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
 
 
 def serve_stdio() -> None:
+    """Serve JSON-RPC on stdin/stdout (one JSON object per line)."""
     for raw in sys.stdin:
         line = raw.strip()
         if not line:
@@ -417,6 +565,14 @@ def serve_stdio() -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI: --stdio | --list-tools | --call TOOL [JSON].
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     args = list(sys.argv[1:] if argv is None else argv)
     if not args or args[0] in ("--stdio", "stdio"):
         serve_stdio()

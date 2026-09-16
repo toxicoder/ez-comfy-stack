@@ -11,7 +11,7 @@ import argparse
 import shutil
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 
 from asset_bible import (  # noqa: E402
     KIND_DIRS,
@@ -24,6 +24,7 @@ from asset_bible import (  # noqa: E402
 from guide_pack import png_size, write_solid_png  # noqa: E402
 from house_clay_render import render_clay_plate  # noqa: E402
 
+# ez.house.layout.v1 / views.v1 contract (Instagram 4:5 clay stills).
 SCHEMA_LAYOUT = "ez.house.layout.v1"
 SCHEMA_VIEWS = "ez.house.views.v1"
 PACK_WIDTH = 1024
@@ -59,6 +60,60 @@ REQUIRED_ROOM = ("id", "box")
 REQUIRED_PROP = ("id", "primitive", "pose", "size")
 CLAY_PREFIX = "ez_house_clay"
 MAX_NUMERIC_ARRAY = 16
+
+
+class HouseRoom(TypedDict):
+    """One room AABB with optional wall openings."""
+
+    id: str
+    box: list[float]
+    openings: list[str]
+
+
+class HouseProp(TypedDict):
+    """One greybox prop (primitive + pose)."""
+
+    id: str
+    primitive: str
+    pose: list[float]
+    size: list[float]
+    room: str | None
+    ref: str | None
+
+
+class HouseCamera(TypedDict):
+    """One place_10 camera."""
+
+    id: str
+    pos: list[float]
+    look: list[float]
+    lens_mm: int
+    label: str
+
+
+class HouseLayout(TypedDict):
+    """Normalized ez.house.layout.v1 mapping."""
+
+    schema: str
+    id: str
+    kind: str
+    pipeline: str
+    size: list[int]
+    rooms: list[HouseRoom]
+    props: list[HouseProp]
+    cameras: list[HouseCamera]
+    hdri: str | None
+
+
+class HouseViews(TypedDict):
+    """Normalized ez.house.views.v1 mapping."""
+
+    schema: str
+    id: str
+    engine: str
+    size: list[int]
+    cameras: list[str]
+    layers: list[str]
 
 
 class HouseLayoutError(ValueError):
@@ -218,13 +273,37 @@ def refuse_output_dir(path: str | Path) -> Path:
         raise HouseLayoutError(str(exc)) from exc
 
 
-def _require_slug(value: Any, field: str) -> str:
+def _require_slug(value: object, field: str) -> str:
+    """Require a lowercase hyphenated slug.
+
+    Args:
+        value: Candidate id.
+        field: Field name for errors.
+
+    Returns:
+        The slug.
+
+    Raises:
+        HouseLayoutError: Not a slug.
+    """
     if not isinstance(value, str) or not _SLUG_RE.fullmatch(value):
         raise HouseLayoutError(f"{field} must be a lowercase slug, got {value!r}")
     return value
 
 
-def _require_id(value: Any, field: str) -> str:
+def _require_id(value: object, field: str) -> str:
+    """Require a lowercase hyphenated id (not necessarily a slug).
+
+    Args:
+        value: Candidate id.
+        field: Field name for errors.
+
+    Returns:
+        The id.
+
+    Raises:
+        HouseLayoutError: Empty, mixed case, or non-alnum/hyphen.
+    """
     if not isinstance(value, str) or not value or not value.replace("-", "").isalnum():
         raise HouseLayoutError(f"{field} must be a hyphenated id, got {value!r}")
     if value != value.lower():
@@ -232,7 +311,20 @@ def _require_id(value: Any, field: str) -> str:
     return value
 
 
-def _vec(value: Any, field: str, length: int) -> list[float]:
+def _vec(value: object, field: str, length: int) -> list[float]:
+    """Require a numeric list of a fixed length.
+
+    Args:
+        value: Candidate list.
+        field: Field name for errors.
+        length: Expected element count.
+
+    Returns:
+        Float list of ``length``.
+
+    Raises:
+        HouseLayoutError: Wrong length or non-numeric.
+    """
     if not isinstance(value, list) or len(value) != length:
         raise HouseLayoutError(f"{field} must be a list of {length} numbers")
     out: list[float] = []
@@ -243,7 +335,13 @@ def _vec(value: Any, field: str, length: int) -> list[float]:
     return out
 
 
-def _refuse_embedded(value: Any, loc: str) -> None:
+def _refuse_embedded(value: object, loc: str) -> None:
+    """Walk a layout document and refuse mesh bytes / giant base64.
+
+    Args:
+        value: Nested YAML value.
+        loc: Location for errors.
+    """
     if isinstance(value, dict):
         for key, item in value.items():
             if str(key).lower() in _EMBEDDED_KEYS:
@@ -269,7 +367,19 @@ def _refuse_embedded(value: Any, loc: str) -> None:
             raise HouseLayoutError(f"refusing embedded base64 at {loc}")
 
 
-def _validate_room(item: Any, index: int) -> dict[str, Any]:
+def _validate_room(item: object, index: int) -> dict[str, Any]:
+    """Normalize one room mapping.
+
+    Args:
+        item: Raw room object (YAML boundary).
+        index: Index in ``rooms``.
+
+    Returns:
+        Normalized room.
+
+    Raises:
+        HouseLayoutError: Missing/invalid fields.
+    """
     loc = f"rooms[{index}]"
     if not isinstance(item, dict):
         raise HouseLayoutError(f"{loc} must be a mapping")
@@ -291,7 +401,19 @@ def _validate_room(item: Any, index: int) -> dict[str, Any]:
     }
 
 
-def _validate_prop(item: Any, index: int) -> dict[str, Any]:
+def _validate_prop(item: object, index: int) -> dict[str, Any]:
+    """Normalize one prop mapping.
+
+    Args:
+        item: Raw prop object (YAML boundary).
+        index: Index in ``props``.
+
+    Returns:
+        Normalized prop.
+
+    Raises:
+        HouseLayoutError: Missing/invalid fields.
+    """
     loc = f"props[{index}]"
     if not isinstance(item, dict):
         raise HouseLayoutError(f"{loc} must be a mapping")
@@ -319,7 +441,20 @@ def _validate_prop(item: Any, index: int) -> dict[str, Any]:
     }
 
 
-def _validate_camera(item: Any, index: int, expected_id: str) -> dict[str, Any]:
+def _validate_camera(item: object, index: int, expected_id: str) -> dict[str, Any]:
+    """Normalize one camera mapping in place_10 order.
+
+    Args:
+        item: Raw camera object (YAML boundary).
+        index: Index in ``cameras``.
+        expected_id: Required PLACE_10 id at this index.
+
+    Returns:
+        Normalized camera.
+
+    Raises:
+        HouseLayoutError: Missing/invalid fields or wrong id.
+    """
     loc = f"cameras[{index}]"
     if not isinstance(item, dict):
         raise HouseLayoutError(f"{loc} must be a mapping")
@@ -349,7 +484,7 @@ def _validate_camera(item: Any, index: int, expected_id: str) -> dict[str, Any]:
     }
 
 
-def validate_layout(data: Any) -> dict[str, Any]:
+def validate_layout(data: object) -> dict[str, Any]:
     """Validate an ez.house.layout.v1 mapping.
 
     Args:
@@ -466,7 +601,7 @@ def dump_views_yaml(data: dict[str, Any]) -> str:
     )
 
 
-def validate_views(data: Any) -> dict[str, Any]:
+def validate_views(data: object) -> dict[str, Any]:
     """Validate an ez.house.views.v1 mapping.
 
     Args:
@@ -688,6 +823,14 @@ def write_fixture_pack(dest: str | Path, *, slug: str = "lab-penthouse") -> Path
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """CLI: validate | validate-views | fixture | copy-inputs | seed-inputs.
+
+    Args:
+        argv: Optional argument list (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process status.
+    """
     parser = argparse.ArgumentParser(prog="house_layout")
     sub = parser.add_subparsers(dest="cmd", required=True)
     p_val = sub.add_parser("validate", help="validate a layout YAML")

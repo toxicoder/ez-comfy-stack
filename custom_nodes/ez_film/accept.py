@@ -19,6 +19,7 @@ from .jobstore import DURATION_S, DURATION_TOL, load_state, shot_mp4
 from .shots import SHOT_COUNT, film_slug
 from .stems import LUFS_TARGET, LUFS_TOL, lufs_in_band, parse_lufs
 
+# Accept-gate geometry, duration, loudness, and speech-band ffmpeg filters.
 ACCEPT_WIDTH = 1280
 ACCEPT_HEIGHT = 704
 ACCEPT_FPS = 24.0
@@ -47,12 +48,20 @@ RunFn = Callable[..., Any]
 
 
 def find_ffprobe() -> str | None:
-    """Resolve ffprobe on PATH, or None."""
+    """Resolve ffprobe on PATH, or None.
+
+    Returns:
+        Executable path, or None.
+    """
     return shutil.which("ffprobe")
 
 
 def find_ffmpeg() -> str | None:
-    """Resolve ffmpeg on PATH, or None."""
+    """Resolve ffmpeg on PATH, or None.
+
+    Returns:
+        Executable path, or None.
+    """
     return shutil.which("ffmpeg")
 
 
@@ -61,6 +70,15 @@ def _run(
     *,
     run: RunFn = subprocess.run,
 ) -> subprocess.CompletedProcess[str]:
+    """Run a subprocess with captured text output.
+
+    Args:
+        argv: Command vector.
+        run: ``subprocess.run`` or a test double.
+
+    Returns:
+        Completed process (not checked).
+    """
     return run(argv, check=False, capture_output=True, text=True)
 
 
@@ -70,7 +88,16 @@ def probe_duration_s(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """Format duration seconds, or None."""
+    """Format duration seconds, or None.
+
+    Args:
+        path: Media file.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Duration in seconds, or None.
+    """
     exe = ffprobe or find_ffprobe()
     if not exe or not path.is_file():
         return None
@@ -96,7 +123,16 @@ def probe_wh(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> tuple[int, int] | None:
-    """First video stream width×height, or None."""
+    """First video stream width×height, or None.
+
+    Args:
+        path: Media file.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        ``(width, height)`` or None.
+    """
     exe = ffprobe or find_ffprobe()
     if not exe or not path.is_file():
         return None
@@ -134,7 +170,16 @@ def probe_has_audio(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> bool:
-    """True when stream 0 of type audio exists."""
+    """True when stream 0 of type audio exists.
+
+    Args:
+        path: Media file.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Whether an audio stream is present.
+    """
     exe = ffprobe or find_ffprobe()
     if not exe or not path.is_file():
         return False
@@ -160,7 +205,15 @@ def probe_has_audio(
 
 
 def stem_mix_path(dest: Path, sid: str) -> Path | None:
-    """Return stems/<id>/mix.m4a or mix.mp4 when present."""
+    """Return stems/<id>/mix.m4a or mix.mp4 when present.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        sid: Shot id ``01``…``18``.
+
+    Returns:
+        Mix path, or None when missing.
+    """
     folder = dest / "stems" / sid
     for name in ("mix.mp4", "mix.m4a", "mix.wav"):
         path = folder / name
@@ -175,7 +228,16 @@ def probe_lufs(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """Measure integrated loudness via ffmpeg loudnorm JSON, or None."""
+    """Measure integrated loudness via ffmpeg loudnorm JSON, or None.
+
+    Args:
+        path: Audio or muxed media file.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Integrated LUFS, or None.
+    """
     exe = ffmpeg or shutil.which("ffmpeg")
     if not exe or not path.is_file():
         return None
@@ -199,7 +261,14 @@ def probe_lufs(
 
 
 def parse_astats_rms_db(text: str) -> float | None:
-    """Last astats RMS level dB (Overall), or None."""
+    """Last astats RMS level dB (Overall), or None.
+
+    Args:
+        text: ffmpeg astats stderr/stdout.
+
+    Returns:
+        RMS dB, or None.
+    """
     matches = _RMS_DB_RE.findall(text or "")
     if not matches:
         return None
@@ -210,7 +279,14 @@ def parse_astats_rms_db(text: str) -> float | None:
 
 
 def parse_astats_peak_db(text: str) -> float | None:
-    """Last astats Peak level dB (Overall), or None."""
+    """Last astats Peak level dB (Overall), or None.
+
+    Args:
+        text: ffmpeg astats stderr/stdout.
+
+    Returns:
+        Peak dB, or None.
+    """
     matches = _PEAK_DB_RE.findall(text or "")
     if not matches:
         return None
@@ -225,6 +301,13 @@ def parse_sustained_nonsilence_s(text: str, duration_s: float) -> float:
 
     Transients shorter than 0.40 s (footfall/splash) are ignored. No
     silencedetect events means the whole clip is treated as non-silence.
+
+    Args:
+        text: ffmpeg silencedetect stderr/stdout.
+        duration_s: Clip duration in seconds.
+
+    Returns:
+        Seconds of sustained non-silence.
     """
     if duration_s <= 0:
         return 0.0
@@ -262,7 +345,17 @@ def _ffmpeg_af(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
 ) -> str:
-    """Run ffmpeg ``-af`` to null and return stderr+stdout, or empty."""
+    """Run ffmpeg ``-af`` to null and return stderr+stdout, or empty.
+
+    Args:
+        path: Media file.
+        af: ffmpeg audio filter graph.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Combined stderr and stdout, or empty on failure.
+    """
     exe = ffmpeg or find_ffmpeg()
     if not exe or not path.is_file():
         return ""
@@ -287,6 +380,14 @@ def probe_speech_band_ratio(
     Speech band is 300–3400 Hz via ``highpass=f=300,lowpass=f=3400`` then
     astats. A ratio at or above ``SPEECH_RATIO_MIN`` (~0.398, 8 dB) means
     the mix is voice-shaped.
+
+    Args:
+        path: Media file.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Speech-band / full-band RMS ratio, or None.
     """
     speech_text = _ffmpeg_af(
         path,
@@ -312,7 +413,16 @@ def probe_speech_peak_db(
     ffmpeg: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """Speech-band peak dBFS, or None."""
+    """Speech-band peak dBFS, or None.
+
+    Args:
+        path: Media file.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Peak dBFS, or None.
+    """
     text = _ffmpeg_af(
         path,
         f"{SPEECH_BAND_FILTER},{ASTATS_FILTER}",
@@ -330,7 +440,18 @@ def probe_sustained_nonsilence_s(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """Band-limited non-silence longer than 0.40 s, or None."""
+    """Band-limited non-silence longer than 0.40 s, or None.
+
+    Args:
+        path: Media file.
+        duration_s: Clip duration; probed when omitted.
+        ffmpeg: Override ffmpeg path.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Seconds of sustained non-silence, or None.
+    """
     dur = duration_s if duration_s is not None else probe_duration_s(
         path, ffprobe=ffprobe, run=run
     )
@@ -356,7 +477,19 @@ def world_only_speech_defects(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> list[str]:
-    """Defects when a world-only mix looks like sustained speech."""
+    """Defects when a world-only mix looks like sustained speech.
+
+    Args:
+        path: Mix or master media file.
+        label: Prefix for defect strings (shot id or ``master``).
+        duration_s: Clip duration; probed when omitted.
+        ffmpeg: Override ffmpeg path.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Defect strings (empty = pass).
+    """
     ratio = probe_speech_band_ratio(path, ffmpeg=ffmpeg, run=run)
     if ratio is None:
         return [f"{label}: could not measure speech-band"]
@@ -394,7 +527,16 @@ def probe_fps(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """First video stream frame rate, or None."""
+    """First video stream frame rate, or None.
+
+    Args:
+        path: Media file.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Frame rate, or None.
+    """
     exe = ffprobe or find_ffprobe()
     if not exe or not path.is_file():
         return None
@@ -441,7 +583,16 @@ def probe_audio_duration_s(
     ffprobe: str | None = None,
     run: RunFn = subprocess.run,
 ) -> float | None:
-    """Audio stream duration seconds, else format duration, or None."""
+    """Audio stream duration seconds, else format duration, or None.
+
+    Args:
+        path: Media file.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        Audio duration in seconds, or None.
+    """
     exe = ffprobe or find_ffprobe()
     if not exe or not path.is_file():
         return None
@@ -481,7 +632,18 @@ def accept_master(
     run: RunFn = subprocess.run,
     audio_policy: str = "world-only",
 ) -> list[str]:
-    """Defects for a published 90s master (empty = pass)."""
+    """Defects for a published 90s master (empty = pass).
+
+    Args:
+        mp4: Published master path.
+        ffprobe: Override ffprobe path.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+        audio_policy: ``world-only`` enables the speech-band gate.
+
+    Returns:
+        Defect strings (empty = pass).
+    """
     defects: list[str] = []
     if not mp4.is_file():
         return [f"master: missing {mp4}"]
@@ -533,7 +695,20 @@ def accept_shot(
     audio_policy: str = "world-only",
     probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> list[str]:
-    """Return defect strings for one shot (empty = pass)."""
+    """Return defect strings for one shot (empty = pass).
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        row: Shot row from ``state.json``.
+        ffprobe: Override ffprobe path.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+        audio_policy: ``world-only`` or ``stems``.
+        probe_lufs_fn: Optional LUFS probe override.
+
+    Returns:
+        Defect strings (empty = pass).
+    """
     sid = str(row.get("id") or "")
     defects: list[str] = []
     if row.get("status") != "ok":
@@ -585,7 +760,18 @@ def accept_film(
     run: RunFn = subprocess.run,
     probe_lufs_fn: Callable[..., float | None] | None = None,
 ) -> dict[str, Any]:
-    """Fail closed: all 18 shots ok, 5.00s, 1280×704, LTX audio present."""
+    """Fail closed: all 18 shots ok, 5.00s, 1280×704, LTX audio present.
+
+    Args:
+        dest: ``films/<slug>`` jobstore directory.
+        ffprobe: Override ffprobe path.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+        probe_lufs_fn: Optional LUFS probe override.
+
+    Returns:
+        Accept report dict written to ``publish/accept.json``.
+    """
     state = load_state(dest)
     defects: list[str] = []
     shots = list(state.get("shots") or [])
@@ -636,6 +822,14 @@ def accept_film(
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """Parse argv and run the accept-film CLI.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.accept")
     parser.add_argument("--dest", required=True, help="films/<slug> jobstore directory")
     args = parser.parse_args(argv)
@@ -657,5 +851,13 @@ if __name__ == "__main__":
 
 
 def film_dest(output_dir: Path, film: str) -> Path:
-    """``${COMFY_OUTPUT_DIR}/films/<slug>``."""
+    """``${COMFY_OUTPUT_DIR}/films/<slug>``.
+
+    Args:
+        output_dir: Comfy output root.
+        film: Film id (go-see, still-here, switchyard).
+
+    Returns:
+        Jobstore directory path.
+    """
     return Path(output_dir) / "films" / film_slug(film)

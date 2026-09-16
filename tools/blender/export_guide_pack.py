@@ -44,11 +44,20 @@ from workbench_passes import (  # noqa: E402
     frame_extrinsic,
 )
 
+# Allowed (width, height) pairs for LTX-oriented guide packs.
 LTX_SIZES = {(PACK_WIDTH, PACK_HEIGHT), (768, 1280)}
 
 
 def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
-    """Parse argv after Blender's ``--`` separator."""
+    """Parse argv after Blender's ``--`` separator.
+
+    Args:
+        argv: Full argv including Blender flags, or args after ``--``.
+            ``None`` reads ``sys.argv``.
+
+    Returns:
+        Parsed export namespace.
+    """
     raw = list(sys.argv if argv is None else argv)
     if "--" in raw:
         raw = raw[raw.index("--") + 1 :]
@@ -74,7 +83,16 @@ def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
 def shot_payload(
     ns: argparse.Namespace, blend: str = "", *, include_normal: bool = False
 ) -> dict[str, Any]:
-    """Build ez.guide.shot.v1 fields from CLI."""
+    """Build ez.guide.shot.v1 fields from CLI.
+
+    Args:
+        ns: Parsed export arguments.
+        blend: Source ``.blend`` path when known.
+        include_normal: Whether to list a normal layer.
+
+    Returns:
+        Shot document mapping (not yet validated).
+    """
     data: dict[str, Any] = {
         "schema": SCHEMA,
         "slug": ns.film,
@@ -94,6 +112,12 @@ def shot_payload(
 
 
 def _configure_scene(bpy: Any, ns: argparse.Namespace) -> None:
+    """Set resolution, clay shading, and the named camera.
+
+    Args:
+        bpy: Blender Python module.
+        ns: Parsed export arguments.
+    """
     scene = bpy.context.scene
     configure_resolution(scene, int(ns.width), int(ns.height), int(ns.fps), int(ns.frames))
     configure_clay(scene)
@@ -102,6 +126,13 @@ def _configure_scene(bpy: Any, ns: argparse.Namespace) -> None:
 
 
 def _render_pass(bpy: Any, dest: Path, folder: str) -> None:
+    """Render an animation into ``dest/folder``.
+
+    Args:
+        bpy: Blender Python module.
+        dest: Pack output directory.
+        folder: Subdirectory name (``rgb``, ``depth``, ``canny``, ``normal``).
+    """
     scene = bpy.context.scene
     out = dest / folder
     out.mkdir(parents=True, exist_ok=True)
@@ -110,6 +141,12 @@ def _render_pass(bpy: Any, dest: Path, folder: str) -> None:
 
 
 def _copy_first_last(dest: Path, frames: int) -> None:
+    """Copy first and last RGB frames to ``first.png`` / ``last.png``.
+
+    Args:
+        dest: Pack output directory.
+        frames: Expected frame count (used when glob is empty).
+    """
     rgb_files = sorted(p for p in (dest / "rgb").glob("*.png"))
     if not rgb_files:
         first_src = dest / "rgb" / "0001.png"
@@ -121,6 +158,13 @@ def _copy_first_last(dest: Path, frames: int) -> None:
 
 
 def _dump_camera(bpy: Any, dest: Path, ns: argparse.Namespace) -> None:
+    """Write per-frame ``camera.json`` when the scene has a camera.
+
+    Args:
+        bpy: Blender Python module.
+        dest: Pack output directory.
+        ns: Parsed export arguments.
+    """
     scene = bpy.context.scene
     cam = scene.camera
     if cam is None:
@@ -137,7 +181,11 @@ def _dump_camera(bpy: Any, dest: Path, ns: argparse.Namespace) -> None:
 
 
 def export_with_bpy(ns: argparse.Namespace) -> None:
-    """Render clay + depth + canny + first/last using the host bpy module."""
+    """Render clay + depth + canny + first/last using the host bpy module.
+
+    Args:
+        ns: Parsed export arguments.
+    """
     try:
         import bpy  # type: ignore[import-not-found]
     except ImportError as exc:
@@ -184,6 +232,11 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
 
 
 def main() -> int:
+    """CLI: fail-closed size/frames check, then export.
+
+    Returns:
+        Process exit status.
+    """
     ns = parse_export_args()
     if ns.frames != PACK_FRAMES:
         print(f"frames must be {PACK_FRAMES}, got {ns.frames}", file=sys.stderr)

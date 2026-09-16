@@ -112,6 +112,17 @@ cmd_run() {
   done
 }
 
+#######################################
+# CLI dispatcher.
+# Globals:
+#   FILM, DRY_RUN
+# Arguments:
+#   $@  Film id (go-see|still-here|switchyard) and --yes/--dry-run
+# Outputs:
+#   Status via log/warn/err on stderr
+# Returns:
+#   Exit status of cmd_run
+#######################################
 main() {
   parse_args "$@"
   cmd_run

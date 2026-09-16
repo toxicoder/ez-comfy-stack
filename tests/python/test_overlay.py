@@ -6,6 +6,7 @@ import json
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 import pytest
 
@@ -58,7 +59,7 @@ def test_overlay_qc_happy_fake_ffmpeg(tmp_path: Path) -> None:
     gp.write_solid_png(look, 1280, 704, (40, 80, 120))
     dest = tmp_path / "guides" / "gosee" / "12"
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         joined = " ".join(argv)
         if "blend=" in joined:
             Path(argv[-1]).write_bytes(clay.read_bytes())

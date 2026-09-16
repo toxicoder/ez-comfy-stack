@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import gc
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from .concat import (
     copy_publish_master,
@@ -17,6 +17,9 @@ from .concat import (
     write_preview_html,
 )
 from .shots import DEFAULT_CAP_SECONDS, FILM_CHOICES, SHOT_COUNT
+
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
 
 
 def _unload_models() -> str:
@@ -51,9 +54,15 @@ class EZUnloadModels:
     """Pass-through IMAGE that unloads diffusion models first."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return the Comfy widget schema.
+
+        Returns:
+            Required IMAGE input.
+        """
         return {"required": {"image": ("IMAGE",)}}
 
+    # Comfy node contract.
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("image",)
     FUNCTION = "run"
@@ -64,6 +73,14 @@ class EZUnloadModels:
     )
 
     def run(self, image: object) -> tuple[object]:
+        """Unload models, then return the same IMAGE tensor.
+
+        Args:
+            image: Comfy IMAGE batch (identity pass-through).
+
+        Returns:
+            One-element tuple of the input image.
+        """
         _unload_models()
         return (image,)
 
@@ -72,7 +89,12 @@ class EZFilmConcat:
     """Stitch 18 LTX shot MP4s into ``ez_{slug}_90s.mp4`` with a 90s cap."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return the Comfy widget schema.
+
+        Returns:
+            Film, cap, xfade, 18 VHS shots, and optional disclosure.
+        """
         required: dict[str, Any] = {
             "film": (list(FILM_CHOICES), {"default": "go-see"}),
             "cap_seconds": (
@@ -103,6 +125,7 @@ class EZFilmConcat:
             },
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("path",)
     FUNCTION = "run"
@@ -123,7 +146,19 @@ class EZFilmConcat:
         xfade_cs: int = 0,
         disclosure: str = "",
         **shots: object,
-    ):
+    ) -> dict[str, Any]:
+        """Stitch 18 shot MP4s and return a VHS-style preview payload.
+
+        Args:
+            film: Film id (go-see, still-here, switchyard).
+            cap_seconds: Publish duration cap (default 90).
+            xfade_cs: Audio acrossfade in centiseconds; 0 is a hard cut.
+            disclosure: Optional LTX disclosure text for the sidecar.
+            shots: ``shot_01`` … ``shot_18`` VHS_FILENAMES payloads.
+
+        Returns:
+            Comfy output dict with ``ui.gifs`` preview and ``result`` path.
+        """
         paths = []
         for index in range(1, SHOT_COUNT + 1):
             path = resolve_shot_path(shots.get(f"shot_{index:02d}"))
@@ -162,19 +197,26 @@ FILM_DISCLOSURE = (
     "This video includes AI-generated picture and sound (LTX Community License). "
     "Do not strip provenance. Not legal advice."
 )
+"""LTX Community License AI-media disclosure prepended by EZFilmDisclosure."""
 
 
 class EZFilmDisclosure:
     """LTX Community License end-card text (disclose AI media)."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return the Comfy widget schema.
+
+        Returns:
+            Optional multiline end-card text.
+        """
         return {
             "required": {
                 "text": ("STRING", {"default": "", "multiline": True}),
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("text",)
     FUNCTION = "run"
@@ -185,6 +227,14 @@ class EZFilmDisclosure:
     )
 
     def run(self, text: str = "") -> tuple[str]:
+        """Prepend the LTX disclosure when it is not already present.
+
+        Args:
+            text: Operator end-card body.
+
+        Returns:
+            One-element tuple of disclosure text.
+        """
         body = str(text or "").strip()
         if body.startswith(FILM_DISCLOSURE):
             return (body,)
@@ -193,6 +243,7 @@ class EZFilmDisclosure:
         return (f"{FILM_DISCLOSURE}\n\n{body}",)
 
 
+# Comfy pack registry.
 NODE_CLASS_MAPPINGS = {
     "EZUnloadModels": EZUnloadModels,
     "EZFilmConcat": EZFilmConcat,

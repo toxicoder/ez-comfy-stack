@@ -1,3 +1,9 @@
+/**
+ * EZQuality frontend: overlay KSampler steps/CFG and Klein 4B UNET on Queue.
+ *
+ * Nodes 2.0: writes widget.value (and widget.callback). Does not change size,
+ * length, CLIP, or VAE. Lab restores the authored snapshot.
+ */
 import { app } from "../../scripts/app.js";
 
 const QUALITY_LAB = "lab";
@@ -36,10 +42,21 @@ const BANNED = [
 const snapshots = new WeakMap();
 let applying = false;
 
+/**
+ * Find a widget by name on a node.
+ * @param {object} node
+ * @param {string} name
+ * @returns {object|undefined}
+ */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
 }
 
+/**
+ * Combo option strings from widget.options.values (array or getter).
+ * @param {object|undefined} widget
+ * @returns {string[]}
+ */
 function comboValues(widget) {
   const raw = widget?.options?.values;
   if (typeof raw === "function") {
@@ -56,11 +73,21 @@ function comboValues(widget) {
   return [];
 }
 
+/**
+ * True when a UNET filename matches a banned family.
+ * @param {string} name
+ * @returns {boolean}
+ */
 function isBannedUnet(name) {
   const blob = String(name || "").toLowerCase();
   return BANNED.some((needle) => blob.includes(needle));
 }
 
+/**
+ * True when a UNET filename is Klein 4B (not 9B).
+ * @param {string} name
+ * @returns {boolean}
+ */
 function isKlein4b(name) {
   const blob = String(name || "").toLowerCase();
   if (blob.includes("9b")) {
@@ -69,12 +96,21 @@ function isKlein4b(name) {
   return blob.includes("klein") && blob.includes("4b");
 }
 
+/**
+ * True when a UNET filename looks like Wan 14B.
+ * @param {string} name
+ * @returns {boolean}
+ */
 function isWan14(name) {
   return String(name || "")
     .toLowerCase()
     .includes("14b");
 }
 
+/**
+ * Infer graph occupancy from extra.lab_app_mode or node types.
+ * @returns {string}
+ */
 function occupancy() {
   const mode = app.graph?.extra?.lab_app_mode?.occupancy;
   if (mode) {
@@ -112,6 +148,10 @@ function occupancy() {
   return "";
 }
 
+/**
+ * First UNETLoader unet_name on the graph, or empty.
+ * @returns {string}
+ */
 function firstUnetName() {
   for (const node of app.graph?.nodes || []) {
     if (node.type !== "UNETLoader") {
@@ -125,6 +165,10 @@ function firstUnetName() {
   return "";
 }
 
+/**
+ * True when any UNETLoader is Wan 14B (overlay is a no-op then).
+ * @returns {boolean}
+ */
 function graphHasWan14() {
   for (const node of app.graph?.nodes || []) {
     if (node.type !== "UNETLoader") {
@@ -138,6 +182,12 @@ function graphHasWan14() {
   return false;
 }
 
+/**
+ * Return name when it is present and not banned; otherwise null.
+ * @param {string} name
+ * @param {string[]} available
+ * @returns {string|null}
+ */
 function pickUnet(name, available) {
   if (!name || isBannedUnet(name)) {
     return null;
@@ -148,6 +198,14 @@ function pickUnet(name, available) {
   return name;
 }
 
+/**
+ * Steps/CFG/UNET overlay for a quality choice, or {} for lab / no-op lanes.
+ * @param {string} choice
+ * @param {number} authoredSteps
+ * @param {string} unetName
+ * @param {string[]} available
+ * @returns {object}
+ */
 function resolveOverlay(choice, authoredSteps, unetName, available) {
   const occ = occupancy();
   if (choice === QUALITY_LAB || occ === "llm" || occ === "none") {
@@ -200,6 +258,12 @@ function resolveOverlay(choice, authoredSteps, unetName, available) {
   return {};
 }
 
+/**
+ * Set a widget value and fire its callback when the value actually changes.
+ * @param {object|undefined} widget
+ * @param {*} value
+ * @returns {void}
+ */
 function setWidget(widget, value) {
   if (!widget || widget.value === value) {
     return;
@@ -210,6 +274,10 @@ function setWidget(widget, value) {
   }
 }
 
+/**
+ * Snapshot authored steps/cfg/unet_name so lab can restore them.
+ * @returns {void}
+ */
 function snapshotGraph() {
   const snap = [];
   for (const node of app.graph?.nodes || []) {
@@ -229,6 +297,10 @@ function snapshotGraph() {
   snapshots.set(app.graph, snap);
 }
 
+/**
+ * Restore the last authored snapshot onto the live graph.
+ * @returns {void}
+ */
 function restoreSnapshot() {
   const snap = snapshots.get(app.graph);
   if (!snap) {
@@ -240,6 +312,11 @@ function restoreSnapshot() {
   }
 }
 
+/**
+ * Apply or restore a quality overlay across sampler/UNET widgets.
+ * @param {string} choice
+ * @returns {void}
+ */
 function applyQuality(choice) {
   if (applying) {
     return;
@@ -287,6 +364,11 @@ function applyQuality(choice) {
   }
 }
 
+/**
+ * Bind the quality combo once so changes and Queue apply the overlay.
+ * @param {object} node
+ * @returns {void}
+ */
 function bindQualityNode(node) {
   const widget = widgetByName(node, "quality");
   if (!widget || widget._ezQualityBound) {
@@ -295,17 +377,30 @@ function bindQualityNode(node) {
   widget._ezQualityBound = true;
   widget.label = "Quality";
   const prior = widget.callback;
+  /**
+   * Chain the prior callback then overlay the chosen quality.
+   * @param {*} value
+   * @returns {void}
+   */
   widget.callback = function (value) {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
     }
     applyQuality(value);
   };
+  /**
+   * Re-apply the current quality immediately before Queue.
+   * @returns {void}
+   */
   widget.beforeQueued = function () {
     applyQuality(widget.value);
   };
 }
 
+/**
+ * Snapshot the graph and bind every EZQuality node.
+ * @returns {void}
+ */
 function bindAll() {
   snapshotGraph();
   for (const node of app.graph?.nodes || []) {
@@ -321,16 +416,30 @@ function bindAll() {
 
 app.registerExtension({
   name: "ez_quality.overlay",
+  /**
+   * Wrap EZQuality so the combo applies overlays on create.
+   * @param {object} nodeType
+   * @param {object} nodeData
+   * @returns {Promise<void>}
+   */
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (nodeData.name !== "EZQuality") {
       return;
     }
     const onNodeCreated = nodeType.prototype.onNodeCreated;
+    /**
+     * Bind the quality combo when the node is created.
+     * @returns {void}
+     */
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       bindQualityNode(this);
     };
   },
+  /**
+   * Re-bind overlays after a graph load.
+   * @returns {Promise<void>}
+   */
   async afterConfigureGraph() {
     bindAll();
   },

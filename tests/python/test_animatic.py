@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "lib"))
@@ -58,7 +59,7 @@ def test_animatic_happy_fake_ffmpeg(tmp_path: Path) -> None:
         pack.mkdir(parents=True)
         gp.write_solid_png(pack / "first.png", 1280, 704, (120, 120, 120))
 
-    def fake_run(argv, **_kwargs):
+    def fake_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
         Path(argv[-1]).write_bytes(b"mp4")
         return SimpleNamespace(returncode=0, stdout="", stderr="")
 

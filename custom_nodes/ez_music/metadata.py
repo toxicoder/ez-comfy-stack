@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+# AI comment, art-mode ids, and cover filenames.
 AI_DISCLOSURE = (
     "AI generated audio (ACE-Step). Human rewrite required before release. "
     "Not a clone of a living artist."
@@ -22,6 +23,19 @@ COVER_NAMES = ("cover.jpg", "cover.jpeg", "cover.png", "cover.webp")
 
 @dataclass(frozen=True)
 class AudioMeta:
+    """Album tags written onto a master and its sidecar.
+
+    Attributes:
+        artist: Act name.
+        album: Album title.
+        title: Track title.
+        track: One-based track number.
+        tracktotal: Album track count.
+        year: Release year.
+        art_mode: ``skip``, ``upload``, or ``generate``.
+        comment: AI-disclosure comment stamped on the file.
+    """
+
     artist: str
     album: str
     title: str
@@ -32,23 +46,40 @@ class AudioMeta:
     comment: str = AI_DISCLOSURE
 
     def track_label(self) -> str:
+        """Format ``track/tracktotal`` for Vorbis and ID3.
+
+        Returns:
+            ``N/M`` with a minimum total of 1.
+        """
         total = int(self.tracktotal) if int(self.tracktotal) > 0 else 1
         return f"{int(self.track)}/{total}"
 
 
 def _log(message: str) -> None:
+    """Write an ez_music status line to stderr.
+
+    Args:
+        message: Human status without a trailing newline.
+    """
     print(f"[ez_music] {message}", file=sys.stderr)
 
 
 def sidecar_path(audio_path: Path) -> Path:
-    """JSON next to an audio master."""
+    """JSON next to an audio master.
+
+    Args:
+        audio_path: Tagged audio file.
+
+    Returns:
+        ``<audio>.<suffix>.meta.json``.
+    """
     return audio_path.with_suffix(audio_path.suffix + ".meta.json")
 
 
 def write_sidecar(audio_path: Path, meta: AudioMeta, *, cover: Path | None) -> Path:
     """Write a sidecar JSON with tags and optional cover path.
 
-    Arguments:
+    Args:
         audio_path: Tagged audio file.
         meta: Album fields.
         cover: Cover image when included.
@@ -70,7 +101,7 @@ def resolve_cover(
 ) -> Path | None:
     """Pick cover art for skip / upload / generate.
 
-    Arguments:
+    Args:
         art_mode: ``skip``, ``upload``, or ``generate``.
         upload: Operator-supplied image (upload mode).
         album_dir: ``albums/<Artist>/<Album>`` (generate looks here).
@@ -99,6 +130,14 @@ def resolve_cover(
 
 
 def _picture_mime(path: Path) -> str:
+    """Guess a cover-art MIME type from the file suffix.
+
+    Args:
+        path: Cover image path.
+
+    Returns:
+        ``image/jpeg``, ``image/png``, or ``image/webp``.
+    """
     suffix = path.suffix.lower()
     if suffix in {".jpg", ".jpeg"}:
         return "image/jpeg"
@@ -110,6 +149,13 @@ def _picture_mime(path: Path) -> str:
 
 
 def _stamp_flac(path: Path, meta: AudioMeta, cover: Path | None) -> None:
+    """Write Vorbis comments and optional picture onto a FLAC.
+
+    Args:
+        path: FLAC master.
+        meta: Album fields.
+        cover: Optional cover image.
+    """
     from mutagen.flac import FLAC, Picture
 
     audio = FLAC(str(path))
@@ -132,6 +178,13 @@ def _stamp_flac(path: Path, meta: AudioMeta, cover: Path | None) -> None:
 
 
 def _stamp_id3(path: Path, meta: AudioMeta, cover: Path | None) -> None:
+    """Write ID3 frames and optional APIC onto MP3 or WAV.
+
+    Args:
+        path: MP3 or WAV master.
+        meta: Album fields.
+        cover: Optional cover image.
+    """
     from mutagen.id3 import ID3
     from mutagen.id3._frames import APIC, COMM, TALB, TDRC, TIT2, TPE1, TPE2, TRCK
     from mutagen.id3._util import ID3NoHeaderError
@@ -162,7 +215,7 @@ def _stamp_id3(path: Path, meta: AudioMeta, cover: Path | None) -> None:
 def stamp_audio_file(path: Path, meta: AudioMeta, cover: Path | None = None) -> Path:
     """Write Vorbis/ID3 tags when mutagen can parse the file.
 
-    Arguments:
+    Args:
         path: FLAC, MP3, or WAV master.
         meta: Album fields.
         cover: Optional image (skipped when None).
@@ -192,7 +245,7 @@ def stamp_audio_file(path: Path, meta: AudioMeta, cover: Path | None = None) -> 
 def album_dir_from_env(artist: str, album: str, *, output_dir: Path | None = None) -> Path:
     """``${COMFY_OUTPUT_DIR}/albums/<Artist>/<Album>``.
 
-    Arguments:
+    Args:
         artist: Act name.
         album: Album title.
         output_dir: Override (tests).

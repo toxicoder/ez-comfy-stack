@@ -12,16 +12,34 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# Repo root, Cinema Rack JSON catalogs, and generated markdown output dir.
 ROOT = Path(__file__).resolve().parents[1]
 CINEMA = ROOT / "custom_nodes" / "ez_prompt_enhance" / "cinema"
 OUT = ROOT / "docs" / "generated" / "cinema"
 
 
 def _load(path: Path) -> Any:
+    """Read JSON from ``path``.
+
+    Args:
+        path: JSON file.
+
+    Returns:
+        Parsed JSON value.
+    """
     return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _cell(value: object, limit: int = 160) -> str:
+    """Collapse whitespace and escape pipes for a Markdown table cell.
+
+    Args:
+        value: Cell contents (stringified).
+        limit: Maximum character length before ellipsis.
+
+    Returns:
+        Single-line table cell text.
+    """
     text = " ".join(str(value or "").split())
     text = text.replace("|", "\\|")
     if len(text) > limit:
@@ -30,6 +48,14 @@ def _cell(value: object, limit: int = 160) -> str:
 
 
 def _flags(row: dict[str, Any]) -> str:
+    """Format still/motion/AV flags for a technique row.
+
+    Args:
+        row: Technique object from an axis catalog.
+
+    Returns:
+        Comma-separated flag labels, or an em dash when none apply.
+    """
     bits: list[str] = []
     if row.get("still_ok", True):
         bits.append("still")
@@ -97,6 +123,11 @@ def write_axis_page(axis_id: str, meta: dict[str, Any], rows: list[dict[str, Any
 
 
 def write_index(pages: list[dict[str, str]]) -> None:
+    """Write the cinema catalog index page.
+
+    Args:
+        pages: Manifest rows including the index stub.
+    """
     lines = [
         "---",
         "title: Cinema technique catalogs",
@@ -130,6 +161,11 @@ def write_index(pages: list[dict[str, str]]) -> None:
 
 
 def main() -> int:
+    """Generate cinema axis pages and the catalog index.
+
+    Returns:
+        Process exit status (always 0 on success).
+    """
     axes = _load(CINEMA / "axes.json")
     if not isinstance(axes, dict):
         raise SystemExit("axes.json must be an object")

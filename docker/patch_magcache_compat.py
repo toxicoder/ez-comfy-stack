@@ -31,6 +31,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+# MagCache rewrite markers, pack path, and import needles (idempotent per file).
 MARKER = "LAB_MAGCACHE_FREQS_PATCH"
 INIT_MARKER = "LAB_MAGCACHE_CAL_IMPORT_PATCH"
 PACK_REL = Path("custom_nodes") / "ComfyUI-MagCache"
@@ -84,7 +85,15 @@ def _init_replacement(newline: str) -> str:
 
 
 def _compiles(source: str, filename: str = "<nodes.py>") -> bool:
-    """Return True if source is valid Python syntax."""
+    """Return True if source is valid Python syntax.
+
+    Args:
+        source: Python source to compile.
+        filename: Name used in SyntaxError messages.
+
+    Returns:
+        Whether ``source`` compiles as a module.
+    """
     try:
         compile(source, filename, "exec")
         return True

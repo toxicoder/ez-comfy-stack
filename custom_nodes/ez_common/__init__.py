@@ -1,7 +1,9 @@
 """Shared operator progress and output-dir resolution for in-canvas ez_* packs.
 
 No nodes. Other packs must lazy-import this module inside functions (Comfy 0.34
-does not register sibling folder names at load).
+does not register sibling folder names at load). Type-only imports of
+``ComfyInputTypes`` under ``TYPE_CHECKING`` are safe because every pack uses
+``from __future__ import annotations``.
 """
 
 from __future__ import annotations
@@ -9,32 +11,70 @@ from __future__ import annotations
 import os
 import sys
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeAlias
 
-NODE_CLASS_MAPPINGS: dict[str, Any] = {}
+NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
+"""Comfy registry (empty — this pack has no nodes)."""
+
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {}
+"""Comfy display-name registry (empty — this pack has no nodes)."""
 
 _DEFAULT_OUTPUT = "/mnt/comfy-output"
+"""Host fallback when Comfy and container paths are unset."""
+
 _CONTAINER_OUTPUT = "/outputs"
+"""In-container compose bind; used when that directory exists."""
+
+
+ComfyInputTypes: TypeAlias = dict[str, Any]
+"""ComfyUI ``INPUT_TYPES`` payload (required/optional/hidden widget specs).
+
+Widget values stay ``Any``: combo lists and option dicts mix str/int/bool.
+Tensor types are not imported here. TypedDict is avoided so tests can index
+``optional`` when a node omits that key.
+"""
 
 
 class NullProgress:
     """Stand-in when Comfy ProgressBar is unavailable (pytest)."""
 
     def update(self, n: int = 1) -> None:
+        """Ignore a relative progress step.
+
+        Args:
+            n: Unused step count (Comfy ProgressBar API).
+        """
         return
 
     def update_absolute(self, value: int) -> None:
+        """Ignore an absolute progress value.
+
+        Args:
+            value: Unused absolute value (Comfy ProgressBar API).
+        """
         return
 
 
 def node_log(prefix: str, message: str) -> None:
-    """Write ``[prefix] message`` to stderr (shows up in manage.sh logs)."""
+    """Write ``[prefix] message`` to stderr (shows up in manage.sh logs).
+
+    Args:
+        prefix: Pack id such as ``ez_dub``.
+        message: Human status line without a trailing newline.
+    """
     print(f"[{prefix}] {message}", file=sys.stderr)
 
 
 def node_progress(total: int) -> Any:
-    """Comfy ProgressBar when importable, else NullProgress."""
+    """Comfy ProgressBar when importable, else NullProgress.
+
+    Args:
+        total: Expected steps; values below 1 clamp to 1.
+
+    Returns:
+        Comfy ``ProgressBar`` or ``NullProgress``. Typed as ``Any`` because
+        ``comfy.utils`` is optional in hermetic tests.
+    """
     n = int(total) if total else 1
     if n < 1:
         n = 1

@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# Repo root and ``scripts/lib`` so Blender's Python can import house_layout.
 _REPO = Path(__file__).resolve().parents[2]
 _LIB = _REPO / "scripts" / "lib"
 if str(_LIB) not in sys.path:
@@ -37,6 +38,7 @@ from house_layout import (  # noqa: E402
     write_views_yaml,
 )
 
+# Greybox wall thickness and Workbench clay / prop / glass RGB triples.
 WALL = 0.12
 CLAY = (0.55, 0.52, 0.48)
 PROP = (0.38, 0.36, 0.34)
@@ -44,7 +46,15 @@ GLASS = (0.62, 0.68, 0.72)
 
 
 def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
-    """Parse argv after Blender's ``--`` separator."""
+    """Parse argv after Blender's ``--`` separator.
+
+    Args:
+        argv: Full argv including Blender flags, or args after ``--``.
+            ``None`` reads ``sys.argv``.
+
+    Returns:
+        Parsed export namespace.
+    """
     raw = list(sys.argv if argv is None else argv)
     if "--" in raw:
         raw = raw[raw.index("--") + 1 :]
@@ -60,6 +70,13 @@ def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def _look_at(bpy: Any, obj: Any, target: tuple[float, float, float]) -> None:
+    """Point ``obj`` so its local -Z aims at ``target``.
+
+    Args:
+        bpy: Blender Python module (unused; kept for call-site symmetry).
+        obj: Object whose ``rotation_euler`` is set.
+        target: World-space look-at point.
+    """
     mathutils = __import__("mathutils")
     loc = obj.location
     direction = mathutils.Vector(target) - loc
@@ -76,6 +93,19 @@ def _new_mesh(
     scale: tuple[float, float, float],
     color: tuple[float, float, float],
 ) -> Any:
+    """Create a primitive mesh, assign a solid material, and return it.
+
+    Args:
+        bpy: Blender Python module.
+        name: Object name.
+        primitive: ``cube``, ``cylinder``, or ``plane``.
+        location: World-space location.
+        scale: Object scale.
+        color: Diffuse RGB in 0..1.
+
+    Returns:
+        The new Blender object.
+    """
     if primitive == "cylinder":
         bpy.ops.mesh.primitive_cylinder_add(
             radius=1.0, depth=2.0, location=location
@@ -100,10 +130,25 @@ def _new_mesh(
 def _wall_on(
     openings: list[str], wall: str
 ) -> bool:
+    """True when ``wall`` is not listed as an opening.
+
+    Args:
+        openings: Opening ids (``north``, ``south``, ``east``, ``west``).
+        wall: Wall id to test.
+
+    Returns:
+        Whether that wall should be meshed.
+    """
     return wall not in openings
 
 
 def _add_room(bpy: Any, room: dict[str, Any]) -> None:
+    """Mesh floor, ceiling, and closed walls for one layout room.
+
+    Args:
+        bpy: Blender Python module.
+        room: Layout room mapping (``id``, ``box``, ``openings``).
+    """
     x, y, z, sx, sy, sz = room["box"]
     openings = room["openings"]
     rid = room["id"]
@@ -166,8 +211,13 @@ def _add_room(bpy: Any, room: dict[str, Any]) -> None:
         )
 
 
-def construct_scene(bpy: Any, layout: dict) -> None:
-    """Build greybox rooms, props, and named cameras from a layout."""
+def construct_scene(bpy: Any, layout: dict[str, Any]) -> None:
+    """Build greybox rooms, props, and named cameras from a layout.
+
+    Args:
+        bpy: Blender Python module.
+        layout: Validated ez.house.layout.v1 mapping.
+    """
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=False)
     for room in layout["rooms"]:
@@ -199,6 +249,13 @@ def construct_scene(bpy: Any, layout: dict) -> None:
 
 
 def _configure_workbench(bpy: Any, width: int, height: int) -> None:
+    """Set PNG Workbench clay shading and mist for depth stills.
+
+    Args:
+        bpy: Blender Python module.
+        width: Pixel width.
+        height: Pixel height.
+    """
     scene = bpy.context.scene
     scene.render.resolution_x = int(width)
     scene.render.resolution_y = int(height)
@@ -223,6 +280,17 @@ def _configure_workbench(bpy: Any, width: int, height: int) -> None:
 def _render_camera(
     bpy: Any, camera_name: str, dest: Path, folder: str
 ) -> Path:
+    """Render one still from ``camera_name`` into ``dest/folder``.
+
+    Args:
+        bpy: Blender Python module.
+        camera_name: Object name of the camera.
+        dest: Pack output directory.
+        folder: Subdirectory (``views`` or ``depth``).
+
+    Returns:
+        Path to the written PNG.
+    """
     scene = bpy.context.scene
     obj = bpy.data.objects.get(camera_name)
     if obj is None:
@@ -244,7 +312,11 @@ def _render_camera(
 
 
 def export_with_bpy(ns: argparse.Namespace) -> None:
-    """Construct the greybox, dump clay + depth stills, export GLB."""
+    """Construct the greybox, dump clay + depth stills, export GLB.
+
+    Args:
+        ns: Parsed export arguments.
+    """
     try:
         import bpy  # type: ignore[import-not-found]
     except ImportError as exc:
@@ -303,6 +375,11 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
 
 
 def main() -> int:
+    """CLI: export house views or print a layout error.
+
+    Returns:
+        Process exit status.
+    """
     ns = parse_export_args()
     try:
         export_with_bpy(ns)

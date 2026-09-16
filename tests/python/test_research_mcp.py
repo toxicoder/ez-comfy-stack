@@ -40,7 +40,7 @@ def test_unknown_tool_errors() -> None:
     assert "unknown" in result["error"]
 
 
-def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch) -> None:
+def test_occupancy_status_reads_state_file(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     payload = {
         "version": 1,
@@ -81,7 +81,7 @@ def test_describe_app_research_chat() -> None:
     assert missing["ok"] is False
 
 
-def test_chat_and_research_tools(monkeypatch) -> None:
+def test_chat_and_research_tools(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "ez_research.pipeline.run_chat",
         lambda message, history="", web_search=False: ResearchResult(
@@ -103,7 +103,7 @@ def test_chat_and_research_tools(monkeypatch) -> None:
     assert research["queries"] == ["q"]
 
 
-def test_web_search_tool(monkeypatch) -> None:
+def test_web_search_tool(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         "ez_research.search.search_web",
         lambda query, limit=5, fetch_bodies=False: [
@@ -132,7 +132,7 @@ def test_handle_rpc_tools_list_and_call() -> None:
     assert unknown["error"]["code"] == -32601
 
 
-def test_main_list_tools_and_help(capsys) -> None:
+def test_main_list_tools_and_help(capsys: pytest.CaptureFixture[str]) -> None:
     assert mcp.main(["--help"]) == 0
     assert mcp.main(["--list-tools"]) == 0
     out = capsys.readouterr().out
@@ -141,7 +141,7 @@ def test_main_list_tools_and_help(capsys) -> None:
     assert mcp.main(["--call"]) == 1
 
 
-def test_handle_rpc_tools_call_occupancy(tmp_path: Path, monkeypatch) -> None:
+def test_handle_rpc_tools_call_occupancy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "wan"}),
@@ -160,7 +160,7 @@ def test_handle_rpc_tools_call_occupancy(tmp_path: Path, monkeypatch) -> None:
     assert body["occupancy"]["mode"] == "wan"
 
 
-def test_serve_stdio_ping(monkeypatch, capsys) -> None:
+def test_serve_stdio_ping(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     import io
 
     monkeypatch.setattr(
@@ -175,14 +175,14 @@ def test_serve_stdio_ping(monkeypatch, capsys) -> None:
     assert payload["result"] == {}
 
 
-def test_main_stdio_empty(monkeypatch) -> None:
+def test_main_stdio_empty(monkeypatch: pytest.MonkeyPatch) -> None:
     import io
 
     monkeypatch.setattr(sys, "stdin", io.StringIO(""))
     assert mcp.main([]) == 0
 
 
-def test_main_call_occupancy(tmp_path: Path, monkeypatch, capsys) -> None:
+def test_main_call_occupancy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     (tmp_path / ".occupancy.json").write_text(
         json.dumps({"mode": "idle", "parked": False}),

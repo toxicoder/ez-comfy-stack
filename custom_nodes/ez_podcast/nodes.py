@@ -6,8 +6,12 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Writer prompts, disclosure bumper, seed scripts, flavors, and TTS backends.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 DISCLOSURE_TEXT = (
     "Voices and music on this show are synthesized. The hosts are original "
@@ -36,6 +40,7 @@ BACKEND_QWEN3TTS = "qwen3tts"
 BACKENDS = (BACKEND_KOKORO, BACKEND_CHATTERBOX, BACKEND_QWEN3TTS)
 # Tests inject a synthesizer. Production stays None (fail-soft to Kokoro).
 optional_backend_hook: Any | None = None
+# Kokoro voice ids, default hosts, ONNX filenames, speaker-line regex, sample rate.
 KOKORO_VOICES = (
     "af_heart",
     "af_bella",
@@ -60,10 +65,20 @@ SAMPLE_RATE_KOKORO = 24000
 
 
 def _log(message: str) -> None:
+    """Write a pack status line to stderr.
+
+    Args:
+        message: Text after the ``[ez_podcast]`` prefix.
+    """
     print(f"[ez_podcast] {message}", file=sys.stderr)
 
 
-def _sample_combo() -> tuple:
+def _sample_combo() -> tuple[Any, ...]:
+    """Prompt-enhance sample combo for the podcast writer.
+
+    Returns:
+        ``(labels, options)`` widget spec.
+    """
     _ensure_lab_custom_nodes_path()
     from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
@@ -82,6 +97,14 @@ def _ensure_lab_custom_nodes_path() -> None:
 
 
 def _as_bool(value: object) -> bool:
+    """Coerce a Comfy widget value to bool.
+
+    Args:
+        value: BOOLEAN widget or loose truthy token.
+
+    Returns:
+        Parsed boolean.
+    """
     if isinstance(value, bool):
         return value
     if isinstance(value, (int, float)):
@@ -94,12 +117,14 @@ def _as_bool(value: object) -> bool:
 def load_writer_prompt(flavor: str) -> str:
     """Load a named writer system prompt from this pack.
 
-    Arguments:
+    Args:
         flavor: ``podcast_two_host`` or ``radio_drama``.
+
     Returns:
         File contents stripped of trailing whitespace.
+
     Raises:
-        FileNotFoundError if the prompt file is missing.
+        FileNotFoundError: Prompt file is missing.
     """
     name = flavor if flavor in FLAVORS else FLAVOR_PODCAST
     path = PROMPTS_DIR / f"{name}.txt"
@@ -109,8 +134,9 @@ def load_writer_prompt(flavor: str) -> str:
 def prepend_disclosure(script: str) -> str:
     """Put the fixed bumper on the first spoken line.
 
-    Arguments:
+    Args:
         script: Operator or writer text (Speaker A/B lines).
+
     Returns:
         Disclosure paragraph, blank line, then the script. If the script
         already starts with the bumper, return it unchanged.
@@ -127,8 +153,9 @@ def prepend_disclosure(script: str) -> str:
 def parse_speaker_turns(script: str) -> list[tuple[str, str]]:
     """Split a script into (role, text) turns.
 
-    Arguments:
+    Args:
         script: Multiline Speaker A/B / Announcer lines.
+
     Returns:
         List of ``(speaker_a|speaker_b|announcer, spoken text)``.
         Unlabeled leftover lines attach to the previous turn, or to
@@ -164,10 +191,11 @@ def parse_speaker_turns(script: str) -> list[tuple[str, str]]:
 def resolve_tts_backend(backend: object, ref_a: object = "", ref_b: object = "") -> str:
     """Pick a backend. Empty operator refs always fall back to Kokoro built-ins.
 
-    Arguments:
+    Args:
         backend: Requested id (kokoro / chatterbox / qwen3tts).
         ref_a: Optional owned reference path for speaker A.
         ref_b: Optional owned reference path for speaker B.
+
     Returns:
         One of BACKENDS. Unknown values become kokoro. Chatterbox and
         Qwen3-TTS without both refs become kokoro (no celebrity defaults).
@@ -186,6 +214,11 @@ def resolve_tts_backend(backend: object, ref_a: object = "", ref_b: object = "")
 
 
 def _model_roots() -> list[str]:
+    """Candidate model roots from env then container fallbacks.
+
+    Returns:
+        Unique directory strings, env first.
+    """
     roots: list[str] = []
     for key in ("MODELS_ROOT", "MODELS_DIR"):
         value = (os.environ.get(key) or "").strip()
@@ -226,7 +259,16 @@ def resolve_kokoro_paths() -> tuple[str, str]:
     return onnx, voices
 
 
-def _pack_text(text: str, status: str) -> dict:
+def _pack_text(text: str, status: str) -> dict[str, Any]:
+    """Build the Comfy output-node payload for a script STRING.
+
+    Args:
+        text: Script body.
+        status: Passthrough / enhance status shown in the UI.
+
+    Returns:
+        UI text plus STRING result.
+    """
     return {
         "ui": {"text": (text,), "passthrough": (status,)},
         "result": (text,),
@@ -234,7 +276,14 @@ def _pack_text(text: str, status: str) -> dict:
 
 
 def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> dict[str, Any]:
-    """Minimal AUDIO dict without importing torch at module load."""
+    """Minimal AUDIO dict without importing torch at module load.
+
+    Args:
+        sample_rate: Waveform sample rate.
+
+    Returns:
+        ``{"waveform", "sample_rate"}`` with a one-sample silence.
+    """
     try:
         import torch
 
@@ -245,6 +294,15 @@ def _empty_audio(sample_rate: int = SAMPLE_RATE_KOKORO) -> dict[str, Any]:
 
 
 def _audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
+    """Pack PCM samples into a Comfy AUDIO dict.
+
+    Args:
+        samples: 1-D PCM, numpy array, or torch tensor.
+        sample_rate: Waveform sample rate.
+
+    Returns:
+        ``{"waveform", "sample_rate"}``. Torch is imported here only.
+    """
     try:
         import torch
 
@@ -259,6 +317,14 @@ def _audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
 
 
 def _concat_pcm(chunks: list[Any]) -> Any:
+    """Concatenate per-turn PCM chunks.
+
+    Args:
+        chunks: PCM arrays or lists.
+
+    Returns:
+        One 1-D float sequence (numpy when available).
+    """
     if not chunks:
         return [0.0]
     try:
@@ -279,7 +345,12 @@ class EZPodcastScript:
     """Draft Speaker A/B lines via the on-box GGUF. Enhance defaults off."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required and optional widget map (sample, prompt, enhance, flavor).
+        """
         return {
             "required": {
                 "sample": _sample_combo(),
@@ -306,6 +377,7 @@ class EZPodcastScript:
             },
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("script",)
     FUNCTION = "run"
@@ -320,13 +392,26 @@ class EZPodcastScript:
 
     def run(
         self,
-        prompt,
-        enhance,
-        flavor=FLAVOR_PODCAST,
-        context="",
-        sample="custom",
-        catalog="",
-    ):
+        prompt: str,
+        enhance: object,
+        flavor: str = FLAVOR_PODCAST,
+        context: str = "",
+        sample: str = "custom",
+        catalog: str = "",
+    ) -> dict[str, Any]:
+        """Rewrite a two-host or radio-drama script, fail-soft without a GGUF.
+
+        Args:
+            prompt: Operator script or sample override.
+            enhance: When false, return the original text.
+            flavor: ``podcast_two_host`` or ``radio_drama``.
+            context: Optional extra context STRING.
+            sample: Prompt catalog sample id.
+            catalog: Optional sample catalog override.
+
+        Returns:
+            Comfy output-node payload with the script STRING.
+        """
         _ensure_lab_custom_nodes_path()
         from ez_prompt_enhance.samples import resolve_prompt
 
@@ -367,7 +452,12 @@ class EZPodcastDisclosure:
     """Fixed spoken bumper. Operators cannot edit the disclosure string."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (script).
+        """
         return {
             "required": {
                 "script": (
@@ -377,6 +467,7 @@ class EZPodcastDisclosure:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("script",)
     FUNCTION = "run"
@@ -387,7 +478,15 @@ class EZPodcastDisclosure:
         "real people."
     )
 
-    def run(self, script):
+    def run(self, script: str) -> tuple[str]:
+        """Prepend the fixed disclosure bumper.
+
+        Args:
+            script: Speaker A/B script.
+
+        Returns:
+            Script STRING with the bumper first.
+        """
         text = prepend_disclosure(script)
         return (text,)
 
@@ -396,7 +495,12 @@ class EZKokoroTTS:
     """Two-host (plus optional announcer) TTS. Kokoro built-ins by default."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (script, voices, backend, refs, speed).
+        """
         voices = list(KOKORO_VOICES)
         return {
             "required": {
@@ -424,6 +528,7 @@ class EZKokoroTTS:
             }
         }
 
+    # Comfy node contract.
     RETURN_TYPES = ("AUDIO",)
     RETURN_NAMES = ("audio",)
     FUNCTION = "run"
@@ -437,16 +542,32 @@ class EZKokoroTTS:
 
     def run(
         self,
-        script,
-        speaker_a_voice=DEFAULT_VOICE_A,
-        speaker_b_voice=DEFAULT_VOICE_B,
-        announcer_voice=DEFAULT_ANNOUNCER,
-        include_announcer=False,
-        backend=BACKEND_KOKORO,
-        speaker_a_ref="",
-        speaker_b_ref="",
-        speed=1.0,
-    ):
+        script: str,
+        speaker_a_voice: str = DEFAULT_VOICE_A,
+        speaker_b_voice: str = DEFAULT_VOICE_B,
+        announcer_voice: str = DEFAULT_ANNOUNCER,
+        include_announcer: object = False,
+        backend: str = BACKEND_KOKORO,
+        speaker_a_ref: str = "",
+        speaker_b_ref: str = "",
+        speed: float = 1.0,
+    ) -> tuple[dict[str, Any]]:
+        """Synthesize speaker turns to one AUDIO clip.
+
+        Args:
+            script: Speaker A/B / Announcer lines.
+            speaker_a_voice: Kokoro voice id for speaker A.
+            speaker_b_voice: Kokoro voice id for speaker B.
+            announcer_voice: Kokoro voice id for announcer.
+            include_announcer: When false, drop announcer turns.
+            backend: kokoro / chatterbox / qwen3tts.
+            speaker_a_ref: Optional owned reference WAV for speaker A.
+            speaker_b_ref: Optional owned reference WAV for speaker B.
+            speed: Kokoro speed (0.5–1.5).
+
+        Returns:
+            One-item AUDIO tuple. Torch is imported inside helpers only.
+        """
         chosen = resolve_tts_backend(backend, speaker_a_ref, speaker_b_ref)
         turns = parse_speaker_turns(script)
         if not _as_bool(include_announcer):
@@ -499,6 +620,18 @@ class EZKokoroTTS:
         speed: float,
         ref_wav: object,
     ) -> tuple[Any | None, int]:
+        """Synthesize one turn, falling back to Kokoro when extras miss.
+
+        Args:
+            text: Spoken line.
+            voice: Kokoro voice id.
+            backend: Resolved backend id.
+            speed: Kokoro speed.
+            ref_wav: Optional owned reference path.
+
+        Returns:
+            ``(pcm, sample_rate)`` or ``(None, rate)`` on failure.
+        """
         if backend in {BACKEND_CHATTERBOX, BACKEND_QWEN3TTS}:
             pcm = self._try_optional_backend(text, backend, ref_wav)
             if pcm is not None:
@@ -508,6 +641,16 @@ class EZKokoroTTS:
     def _try_optional_backend(
         self, text: str, backend: str, ref_wav: object
     ) -> Any | None:
+        """Call the test hook or refuse extras without a runtime install.
+
+        Args:
+            text: Spoken line.
+            backend: chatterbox or qwen3tts.
+            ref_wav: Operator-owned reference path.
+
+        Returns:
+            PCM samples, or None to fall back to Kokoro.
+        """
         path = (ref_wav if isinstance(ref_wav, str) else str(ref_wav or "")).strip()
         if not path:
             return None
@@ -525,6 +668,16 @@ class EZKokoroTTS:
     def _synthesize_kokoro(
         self, text: str, voice: str, speed: float
     ) -> tuple[Any | None, int]:
+        """Run Kokoro-ONNX for one turn.
+
+        Args:
+            text: Spoken line.
+            voice: Kokoro voice id.
+            speed: Kokoro speed.
+
+        Returns:
+            ``(pcm, sample_rate)`` or ``(None, rate)`` when weights miss.
+        """
         onnx, voices = resolve_kokoro_paths()
         if not os.path.isfile(onnx) or not os.path.isfile(voices):
             _log(
@@ -549,6 +702,7 @@ class EZKokoroTTS:
         return samples, int(rate or SAMPLE_RATE_KOKORO)
 
 
+# Comfy custom-node registries.
 NODE_CLASS_MAPPINGS: dict[str, Any] = {
     "EZPodcastScript": EZPodcastScript,
     "EZPodcastDisclosure": EZPodcastDisclosure,

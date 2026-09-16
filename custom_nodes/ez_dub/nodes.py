@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from .align import SAMPLE_RATE
 from .audio import audio_from_pcm, empty_audio, read_wav
@@ -16,7 +16,6 @@ from .pipeline import (
     SOURCE_NONE,
     STAGE_ALL,
     STAGE_ANALYZE,
-    STAGE_RENDER,
     STAGES,
     TARGET_LANG_WIDGET,
     analyze_job,
@@ -29,9 +28,13 @@ from .pipeline import (
     synthesize_turn,
 )
 from .rights import RightsError
-from .turns import dumps_payload, parse_payload
+from .turns import Turn, dumps_payload, parse_payload
 
-SEED_TURNS: list[dict[str, Any]] = []
+if TYPE_CHECKING:
+    from ez_common import ComfyInputTypes
+
+# Empty widget seed so the App translation field is valid JSON on first load.
+SEED_TURNS: list[Turn] = []
 SEED_SCRIPT = dumps_payload(
     {
         "target_language": "es",
@@ -43,14 +46,44 @@ SEED_SCRIPT = dumps_payload(
 )
 
 
-def _pack_text(text: str, status: str) -> dict:
+class ComfyUiResult(TypedDict):
+    """OUTPUT_NODE payload Comfy shows in the UI.
+
+    ``result`` may hold AUDIO tensors; torch is not imported at pack load.
+    """
+
+    ui: dict[str, Any]
+    result: tuple[Any, ...]
+
+
+def _pack_text(text: str, status: str) -> ComfyUiResult:
+    """Pack a STRING OUTPUT_NODE result.
+
+    Args:
+        text: Widget JSON or status body.
+        status: Short Dub status for the passthrough UI.
+
+    Returns:
+        Comfy ``ui``/``result`` mapping.
+    """
     return {
         "ui": {"text": (text,), "passthrough": (status,)},
         "result": (text,),
     }
 
 
-def _pack_audio(samples: Any, rate: int, status: str) -> dict:
+def _pack_audio(samples: Any, rate: int, status: str) -> ComfyUiResult:
+    """Pack an AUDIO OUTPUT_NODE result.
+
+    Args:
+        samples: Mono PCM or empty. Typed ``Any`` so torch is not imported
+            at module load.
+        rate: Sample rate.
+        status: Short Dub status for the passthrough UI.
+
+    Returns:
+        Comfy ``ui``/``result`` mapping.
+    """
     audio = audio_from_pcm(samples, rate) if samples else empty_audio(rate)
     return {
         "ui": {"text": (status,), "passthrough": (status,)},
@@ -62,7 +95,12 @@ class EZDubIngest:
     """Local file or URL ingest. Refuses Queue without rights."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Comfy widget schema.
+
+        Returns:
+            Required ingest widgets.
+        """
         return {
             "required": {
                 "source": (source_combo_options(), {"default": SOURCE_NONE}),
@@ -82,6 +120,7 @@ class EZDubIngest:
             }
         }
 
+    # Comfy node metadata (outputs, category, operator description).
     RETURN_TYPES = ("STRING", "AUDIO")
     RETURN_NAMES = ("job_id", "audio")
     FUNCTION = "run"
@@ -95,12 +134,25 @@ class EZDubIngest:
 
     def run(
         self,
-        source,
-        have_rights=False,
+        source: str,
+        have_rights: object = False,
         job_slug: object = "episode",
-        source_url="",
+        source_url: str = "",
         **kwargs: object,
-    ):
+    ) -> ComfyUiResult:
+        """Ingest a local file or URL into ``dubs/<slug>/source.wav``.
+
+        Args:
+            source: Combo basename, ``(none)``, or path.
+            have_rights: Rights attestation widget.
+            job_slug: Job folder name.
+            source_url: Optional http(s) override.
+            **kwargs: Extra Comfy widget keys (ignored).
+
+        Returns:
+            ``job_id`` plus a short AUDIO preview (tensor/list, no torch
+            import at load).
+        """
         del kwargs
         slug = sanitize_slug(
             job_slug if isinstance(job_slug, str) else "episode"
@@ -137,7 +189,12 @@ class EZDubScript:
     """Diarize + ASR + translate. Widget JSON is the human edit surface."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Comfy widget schema.
+
+        Returns:
+            Required script widgets plus optional ``job_id``.
+        """
         return {
             "required": {
                 "prompt": (
@@ -168,6 +225,7 @@ class EZDubScript:
             },
         }
 
+    # Comfy node metadata (outputs, category, operator description).
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("script",)
     FUNCTION = "run"
@@ -180,14 +238,28 @@ class EZDubScript:
 
     def run(
         self,
-        prompt,
-        enhance=True,
-        target_language="es",
-        source_language="auto",
-        max_speakers=0,
-        stage=STAGE_ALL,
-        job_id="",
-    ):
+        prompt: str,
+        enhance: bool = True,
+        target_language: str = "es",
+        source_language: str = "auto",
+        max_speakers: int = 0,
+        stage: str = STAGE_ALL,
+        job_id: str = "",
+    ) -> ComfyUiResult:
+        """Diarize, ASR, and translate into editable widget JSON.
+
+        Args:
+            prompt: Current widget JSON (pinned when enhance is off).
+            enhance: When False, pin widget text and skip GGUF.
+            target_language: ISO target.
+            source_language: ISO source or ``auto``.
+            max_speakers: Cluster cap; 0 means default.
+            stage: ``all``, ``analyze``, or ``render``.
+            job_id: Optional ingest slug.
+
+        Returns:
+            Packed script STRING plus Dub status.
+        """
         widget = parse_payload(prompt)
         slug = sanitize_slug(job_id or widget.get("slug") or "episode")
         dest = dub_dir(slug)
@@ -211,7 +283,12 @@ class EZDubRender:
     """Clone, duration-lock, mix, SRT, disclosure sidecar."""
 
     @classmethod
-    def INPUT_TYPES(cls) -> dict:
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Comfy widget schema.
+
+        Returns:
+            Required render widgets plus optional ``job_id``.
+        """
         return {
             "required": {
                 "script": (
@@ -252,6 +329,7 @@ class EZDubRender:
             },
         }
 
+    # Comfy node metadata (outputs, category, operator description).
     RETURN_TYPES = ("AUDIO",)
     RETURN_NAMES = ("audio",)
     FUNCTION = "run"
@@ -266,15 +344,30 @@ class EZDubRender:
 
     def run(
         self,
-        script,
-        engine=ENGINE_CHATTERBOX,
-        keep_bed=True,
-        spoken_disclosure=False,
-        speed=1.0,
-        cfg_weight=-1.0,
-        exaggeration=0.5,
-        job_id="",
-    ):
+        script: str,
+        engine: str = ENGINE_CHATTERBOX,
+        keep_bed: bool = True,
+        spoken_disclosure: bool = False,
+        speed: float = 1.0,
+        cfg_weight: float = -1.0,
+        exaggeration: float = 0.5,
+        job_id: str = "",
+    ) -> ComfyUiResult:
+        """Clone, duration-lock, and mix.
+
+        Args:
+            script: Translation JSON from EZDubScript.
+            engine: Clone engine id.
+            keep_bed: Keep source in non-speech gaps.
+            spoken_disclosure: Overlay a localized bumper on the mix wav.
+            speed: Time-compression ceiling (1.0 is unchanged).
+            cfg_weight: Chatterbox CFG; ``< 0`` means auto.
+            exaggeration: Chatterbox exaggeration.
+            job_id: Optional ingest slug.
+
+        Returns:
+            Packed AUDIO mix (tensor/list, no torch import at load).
+        """
         payload = parse_payload(script)
         if payload.get("stage") == STAGE_ANALYZE:
             return _pack_audio([], SAMPLE_RATE, "analyze only — set Stage to render")
@@ -307,7 +400,19 @@ class EZDubRender:
         ref_wav: str = "",
         turns: list[dict[str, Any]] | None = None,
     ) -> tuple[list[float], str]:
-        """Overlay a localized bumper without changing duration (mix wav only)."""
+        """Overlay a localized bumper without changing duration (mix wav only).
+
+        Args:
+            samples: Mix PCM.
+            rate: Sample rate.
+            engine: Clone engine id.
+            language: Target language for the bumper.
+            ref_wav: Speaker reference path.
+            turns: JSON turns (leading gap).
+
+        Returns:
+            ``(mix, status)`` with unchanged length.
+        """
         return apply_spoken_disclosure(
             samples,
             rate,
@@ -319,7 +424,8 @@ class EZDubRender:
         )
 
 
-NODE_CLASS_MAPPINGS: dict[str, Any] = {
+# Comfy pack registry.
+NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {
     "EZDubIngest": EZDubIngest,
     "EZDubScript": EZDubScript,
     "EZDubRender": EZDubRender,

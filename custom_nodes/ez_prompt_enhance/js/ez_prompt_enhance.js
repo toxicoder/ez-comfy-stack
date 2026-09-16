@@ -1,3 +1,9 @@
+/**
+ * Prompt-enhance / sample-picker frontend: catalog samples plus CLIP preview.
+ *
+ * Nodes 2.0: set widget.value; treat inputEl as optional (Vue STRING widgets
+ * have no canvas textarea). Sample combo uses widget.options.values.
+ */
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
 
@@ -16,10 +22,23 @@ const NODE_CLASSES = new Set([
 const SAMPLE_CUSTOM = "custom";
 const catalogCache = new Map();
 
+/**
+ * Find a widget by name on a node.
+ * @param {object} node
+ * @param {string} name
+ * @returns {object|undefined}
+ */
 function widgetByName(node, name) {
   return node.widgets?.find((w) => w.name === name);
 }
 
+/**
+ * Write text onto a STRING widget and optionally lock the textarea.
+ * @param {object|undefined} widget
+ * @param {string} text
+ * @param {boolean} readOnly
+ * @returns {void}
+ */
 function setTextWidget(widget, text, readOnly) {
   if (!widget) {
     return;
@@ -31,6 +50,11 @@ function setTextWidget(widget, text, readOnly) {
   }
 }
 
+/**
+ * Catalog id from the catalog widget, else extra.lab_rel.
+ * @param {object} node
+ * @returns {string}
+ */
 function catalogIdFromNode(node) {
   const catalog = widgetByName(node, "catalog");
   const raw = catalog?.value;
@@ -40,10 +64,20 @@ function catalogIdFromNode(node) {
   return app.graph?.extra?.lab_rel || "";
 }
 
+/**
+ * WEB_DIRECTORY URL for a sample JSON file.
+ * @param {string} name
+ * @returns {string}
+ */
 function samplesUrl(name) {
   return `/extensions/ez_prompt_enhance/samples/${name}`;
 }
 
+/**
+ * Fetch JSON or return null on HTTP error.
+ * @param {string} url
+ * @returns {Promise<object|null>}
+ */
 async function loadJson(url) {
   const response = await fetch(url);
   if (!response.ok) {
@@ -52,6 +86,11 @@ async function loadJson(url) {
   return response.json();
 }
 
+/**
+ * Load and cache sample rows for a catalog id (index.json then stem.json).
+ * @param {string} catalogId
+ * @returns {Promise<object[]>}
+ */
 async function loadCatalog(catalogId) {
   if (!catalogId) {
     return [];
@@ -70,6 +109,12 @@ async function loadCatalog(catalogId) {
   return rows;
 }
 
+/**
+ * Match a sample combo value to a catalog row, or null for custom.
+ * @param {object[]} rows
+ * @param {string} sample
+ * @returns {object|null}
+ */
 function lookupSample(rows, sample) {
   const key = String(sample || "").trim().toLowerCase();
   if (!key || key === SAMPLE_CUSTOM) {
@@ -84,6 +129,13 @@ function lookupSample(rows, sample) {
   );
 }
 
+/**
+ * Copy prompt/tags/lyrics from a sample row onto matching widgets.
+ * @param {object} node
+ * @param {object} row
+ * @param {boolean} readOnly
+ * @returns {void}
+ */
 function applySampleRow(node, row, readOnly) {
   if (row.prompt != null && widgetByName(node, "prompt")) {
     setTextWidget(widgetByName(node, "prompt"), row.prompt, readOnly);
@@ -96,6 +148,11 @@ function applySampleRow(node, row, readOnly) {
   }
 }
 
+/**
+ * Refresh sample combo values and apply or unlock the chosen sample.
+ * @param {object} node
+ * @returns {Promise<void>}
+ */
 async function syncSample(node) {
   const sampleWidget = widgetByName(node, "sample");
   if (!sampleWidget) {
@@ -126,6 +183,11 @@ async function syncSample(node) {
   }
 }
 
+/**
+ * Bind the sample combo once so changes reload catalog text.
+ * @param {object} node
+ * @returns {void}
+ */
 function bindSamplePicker(node) {
   const sampleWidget = widgetByName(node, "sample");
   if (!sampleWidget || sampleWidget._ezSampleBound) {
@@ -133,6 +195,10 @@ function bindSamplePicker(node) {
   }
   sampleWidget._ezSampleBound = true;
   const prior = sampleWidget.callback;
+  /**
+   * Chain the prior callback then apply the selected sample.
+   * @returns {void}
+   */
   sampleWidget.callback = function () {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
@@ -145,6 +211,12 @@ function bindSamplePicker(node) {
 const PREVIEW = "CLIP prompt";
 const STATUS = "Enhance status";
 
+/**
+ * Join a UI message field into a display string.
+ * @param {object} message
+ * @param {string} key
+ * @returns {string}
+ */
 function textFromMessage(message, key) {
   const raw = message?.[key];
   if (raw == null) {
@@ -156,6 +228,14 @@ function textFromMessage(message, key) {
   return String(raw);
 }
 
+/**
+ * Create or update a non-serialized STRING widget.
+ * @param {object} node
+ * @param {string} name
+ * @param {string} text
+ * @param {boolean} multiline
+ * @returns {void}
+ */
 function upsertWidget(node, name, text, multiline) {
   if (!node.widgets) {
     return;
@@ -179,6 +259,13 @@ function upsertWidget(node, name, text, multiline) {
   widget.value = text;
 }
 
+/**
+ * Fill CLIP prompt and enhance-status widgets.
+ * @param {object} node
+ * @param {string} text
+ * @param {string} status
+ * @returns {void}
+ */
 function populate(node, text, status) {
   upsertWidget(node, PREVIEW, text, true);
   upsertWidget(node, STATUS, status, false);
@@ -186,11 +273,21 @@ function populate(node, text, status) {
 
 app.registerExtension({
   name: "ez_prompt_enhance.preview",
+  /**
+   * Wrap enhance/sample nodes with preview widgets and the sample picker.
+   * @param {object} nodeType
+   * @param {object} nodeData
+   * @returns {Promise<void>}
+   */
   async beforeRegisterNodeDef(nodeType, nodeData) {
     if (!NODE_CLASSES.has(nodeData.name)) {
       return;
     }
     const onNodeCreated = nodeType.prototype.onNodeCreated;
+    /**
+     * Seed preview widgets (except sample/research) and bind the sample combo.
+     * @returns {void}
+     */
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       if (nodeData.name !== "EZSamplePrompt" && nodeData.name !== "EZCreativeResearch") {
@@ -199,11 +296,20 @@ app.registerExtension({
       bindSamplePicker(this);
     };
     const onConfigure = nodeType.prototype.onConfigure;
+    /**
+     * Re-bind the sample picker after a graph load.
+     * @returns {void}
+     */
     nodeType.prototype.onConfigure = function () {
       onConfigure?.apply(this, arguments);
       bindSamplePicker(this);
     };
     const onExecuted = nodeType.prototype.onExecuted;
+    /**
+     * Refresh CLIP preview widgets from the last execution payload.
+     * @param {object} message
+     * @returns {void}
+     */
     nodeType.prototype.onExecuted = function (message) {
       onExecuted?.apply(this, arguments);
       populate(

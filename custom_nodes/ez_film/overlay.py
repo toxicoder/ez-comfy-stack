@@ -15,13 +15,21 @@ import sys
 from pathlib import Path
 from typing import Any, Callable
 
+# LTX VAE grid used for clay/look overlay QC.
 PACK_WIDTH = 1280
 PACK_HEIGHT = 704
 RunFn = Callable[..., Any]
 
 
 def png_size(path: Path) -> tuple[int, int] | None:
-    """Read IHDR width x height, or None."""
+    """Read IHDR width x height, or None.
+
+    Args:
+        path: PNG file.
+
+    Returns:
+        ``(width, height)`` or None when unreadable.
+    """
     try:
         data = path.read_bytes()
     except OSError:
@@ -35,7 +43,11 @@ def png_size(path: Path) -> tuple[int, int] | None:
 
 
 def find_ffmpeg() -> str | None:
-    """Resolve ffmpeg on PATH, or None."""
+    """Resolve ffmpeg on PATH, or None.
+
+    Returns:
+        Executable path, or None.
+    """
     return shutil.which("ffmpeg")
 
 
@@ -44,11 +56,29 @@ def _run(
     *,
     run: RunFn = subprocess.run,
 ) -> subprocess.CompletedProcess[str]:
+    """Run a subprocess with captured text output.
+
+    Args:
+        argv: Command vector.
+        run: ``subprocess.run`` or a test double.
+
+    Returns:
+        Completed process (not checked).
+    """
     return run(argv, check=False, capture_output=True, text=True)
 
 
 def blend_argv(clay: Path, look: Path, overlay: Path) -> list[str]:
-    """ffmpeg 50% blend of clay first.png and look plate."""
+    """ffmpeg 50% blend of clay first.png and look plate.
+
+    Args:
+        clay: Guide-pack ``first.png``.
+        look: Klein look-plate PNG.
+        overlay: Destination overlay PNG.
+
+    Returns:
+        ffmpeg argument vector.
+    """
     return [
         "ffmpeg",
         "-y",
@@ -65,7 +95,15 @@ def blend_argv(clay: Path, look: Path, overlay: Path) -> list[str]:
 
 
 def psnr_argv(clay: Path, look: Path) -> list[str]:
-    """ffmpeg PSNR of look vs clay (stats on stderr)."""
+    """ffmpeg PSNR of look vs clay (stats on stderr).
+
+    Args:
+        clay: Guide-pack ``first.png``.
+        look: Klein look-plate PNG.
+
+    Returns:
+        ffmpeg argument vector.
+    """
     return [
         "ffmpeg",
         "-i",
@@ -81,7 +119,14 @@ def psnr_argv(clay: Path, look: Path) -> list[str]:
 
 
 def parse_psnr(stderr: str) -> float | None:
-    """Extract average PSNR from ffmpeg psnr filter stderr."""
+    """Extract average PSNR from ffmpeg psnr filter stderr.
+
+    Args:
+        stderr: ffmpeg stderr text.
+
+    Returns:
+        Average PSNR, or None when missing.
+    """
     match = re.search(r"average:([0-9.]+)", stderr or "")
     if not match:
         return None
@@ -103,6 +148,16 @@ def overlay_qc(
 
     Writes overlay.png and score.json under dest. Human still picks;
     the score only ranks candidates.
+
+    Args:
+        clay: Guide-pack ``first.png``.
+        look: Klein look-plate PNG.
+        dest: Shot directory for overlay.png and score.json.
+        ffmpeg: Override ffmpeg path.
+        run: Override ``subprocess.run``.
+
+    Returns:
+        QC report dict (``ok``, ``score``, ``defects``).
     """
     defects: list[str] = []
     if not clay.is_file():
@@ -166,6 +221,14 @@ def overlay_qc(
 
 
 def _cli(argv: list[str] | None = None) -> int:
+    """Parse argv and run clay-vs-look overlay QC.
+
+    Args:
+        argv: Argument vector, or None for ``sys.argv``.
+
+    Returns:
+        Process exit code.
+    """
     parser = argparse.ArgumentParser(prog="ez_film.overlay")
     parser.add_argument("--clay", required=True, help="guide pack first.png")
     parser.add_argument("--look", required=True, help="Klein look plate PNG")

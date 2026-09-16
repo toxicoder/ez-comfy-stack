@@ -7,8 +7,9 @@ import shutil
 import struct
 import subprocess
 from collections.abc import Callable
-from typing import Any
+from typing import Any, TypedDict
 
+# Duration-lock knobs (24 kHz PCM, atempo bounds, WSOLA window).
 SAMPLE_RATE = 24000
 MAX_SPEED = 1.25
 MIN_STRETCH = 0.88
@@ -22,8 +23,45 @@ ATEMPO_MAX = 2.0
 stretch_hook: Callable[[list[float], int, int], list[float]] | None = None
 
 
+class FitFlags(TypedDict):
+    """Flags from :func:`fit_turn`.
+
+    Attributes:
+        speed: Time-compression factor (1.0 is unchanged).
+        stretch: Inverse of ``speed``.
+        trimmed: True when the start of the sentence was fade-trimmed.
+        padded: True when synth was shorter than the window (not zero-padded).
+        spill: True when overflow used the following gap.
+    """
+
+    speed: float
+    stretch: float
+    trimmed: bool
+    padded: bool
+    spill: bool
+
+
+class LockFlags(TypedDict):
+    """Flags from :func:`lock_duration`.
+
+    Attributes:
+        padded: True when room-tone (or zeros) extended the mix.
+        trimmed: True when the mix was fade-trimmed to ``target_n``.
+    """
+
+    padded: bool
+    trimmed: bool
+
+
 def rms(samples: list[float]) -> float:
-    """Root-mean-square of a PCM list."""
+    """Root-mean-square of a PCM list.
+
+    Args:
+        samples: Mono PCM.
+
+    Returns:
+        RMS, or 0.0 when ``samples`` is empty.
+    """
     if not samples:
         return 0.0
     acc = 0.0
@@ -35,7 +73,7 @@ def rms(samples: list[float]) -> float:
 def resample_linear(samples: list[float], out_len: int) -> list[float]:
     """Linear resample to ``out_len`` samples.
 
-    Arguments:
+    Args:
         samples: Mono PCM.
         out_len: Desired length.
     Returns:
@@ -75,7 +113,7 @@ def time_stretch(
     back to linear. Production prefers ffmpeg ``atempo`` via
     :func:`pitch_preserving_stretch`.
 
-    Arguments:
+    Args:
         samples: Mono PCM.
         out_len: Desired length in samples.
         rate: Sample rate (window size is 20 ms).
@@ -155,7 +193,7 @@ def _ffmpeg_atempo(
 ) -> list[float] | None:
     """Pitch-preserving stretch via ffmpeg ``atempo``. None on miss/fail.
 
-    Arguments:
+    Args:
         samples: Mono PCM.
         out_len: Desired length in samples.
         rate: Sample rate.
@@ -223,7 +261,7 @@ def pitch_preserving_stretch(
 
     Prefers ffmpeg ``atempo``, then WSOLA. Tests may set ``stretch_hook``.
 
-    Arguments:
+    Args:
         samples: Mono PCM.
         out_len: Desired length in samples.
         rate: Sample rate.
@@ -254,14 +292,14 @@ def fit_turn(
     spill_s: float = 0.0,
     max_speed: float = MAX_SPEED,
     min_stretch: float = MIN_STRETCH,
-) -> tuple[list[float], dict[str, Any]]:
+) -> tuple[list[float], FitFlags]:
     """Fit a clone into ``window_s``, spilling only into the following gap.
 
     Never time-compress more than ``max_speed`` (default 1.25×). Overflow
     after that fade-trims the start of the sentence. ``min_stretch`` is
     accepted for call-site compatibility and is not stacked with max_speed.
 
-    Arguments:
+    Args:
         synth: Synthesized PCM.
         rate: Sample rate.
         window_s: Original turn length in seconds.
@@ -274,7 +312,7 @@ def fit_turn(
         ``len(pcm)`` only so trailing window keeps the bed.
     """
     del min_stretch
-    flags: dict[str, Any] = {
+    flags: FitFlags = {
         "speed": 1.0,
         "stretch": 1.0,
         "trimmed": False,
@@ -318,10 +356,10 @@ def lock_duration(
     target_n: int,
     room: list[float] | None = None,
     rate: int = SAMPLE_RATE,
-) -> tuple[list[float], dict[str, bool]]:
+) -> tuple[list[float], LockFlags]:
     """Pad or fade-trim so ``len(mix) == target_n``.
 
-    Arguments:
+    Args:
         mix: Mixed PCM.
         target_n: Source sample count.
         room: Optional room-tone loop for padding.
@@ -358,7 +396,17 @@ def collect_room_tone(
     rate: int,
     want: int | None = None,
 ) -> list[float]:
-    """PCM from non-speech gaps for padding (not digital silence)."""
+    """PCM from non-speech gaps for padding (not digital silence).
+
+    Args:
+        source: Original mix PCM.
+        turns: JSON turns with ``t0``/``t1`` (speech windows).
+        rate: Sample rate.
+        want: Desired length in samples; default 250 ms.
+
+    Returns:
+        Loopable gap PCM of length ``want`` (zeros when no gaps).
+    """
     sr = int(rate) or SAMPLE_RATE
     need = int(want) if want else max(1, int(0.25 * sr))
     n = len(source)
@@ -392,7 +440,7 @@ def build_timeline(
 ) -> list[float]:
     """Replace speech windows with clones; keep bed in gaps when requested.
 
-    Arguments:
+    Args:
         source: Original mix PCM (defines duration).
         clones: Items with ``t0`` and ``pcm``.
         rate: Sample rate.

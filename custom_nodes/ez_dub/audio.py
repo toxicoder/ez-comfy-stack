@@ -11,7 +11,13 @@ from .align import SAMPLE_RATE
 
 
 def write_wav(path: Path | str, samples: list[float], rate: int) -> None:
-    """Write mono 16-bit PCM WAV."""
+    """Write mono 16-bit PCM WAV.
+
+    Args:
+        path: Destination path (parents are created).
+        samples: Mono PCM in roughly ``[-1, 1]``.
+        rate: Sample rate; 0 falls back to :data:`SAMPLE_RATE`.
+    """
     dest = Path(path)
     dest.parent.mkdir(parents=True, exist_ok=True)
     sr = int(rate) or SAMPLE_RATE
@@ -29,7 +35,7 @@ def write_wav(path: Path | str, samples: list[float], rate: int) -> None:
 def read_wav(path: Path | str) -> tuple[list[float], int]:
     """Read a WAV as mono float32-range samples.
 
-    Arguments:
+    Args:
         path: Existing wav path.
     Returns:
         ``(samples, sample_rate)``. Multi-channel files are averaged.
@@ -68,7 +74,15 @@ def read_wav(path: Path | str) -> tuple[list[float], int]:
 
 
 def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, Any]:
-    """Minimal AUDIO dict without importing torch at module load."""
+    """Minimal AUDIO dict without importing torch at module load.
+
+    Args:
+        sample_rate: Waveform sample rate.
+
+    Returns:
+        Comfy AUDIO mapping. ``waveform`` is a torch tensor when torch
+        is importable, else a nested list (tests).
+    """
     try:
         import torch
 
@@ -79,7 +93,16 @@ def empty_audio(sample_rate: int = SAMPLE_RATE) -> dict[str, Any]:
 
 
 def audio_from_pcm(samples: Any, sample_rate: int) -> dict[str, Any]:
-    """Pack a 1-D PCM sequence as Comfy AUDIO."""
+    """Pack a 1-D PCM sequence as Comfy AUDIO.
+
+    Args:
+        samples: 1-D PCM sequence (list or tensor). Typed ``Any`` so torch
+            is not imported at module load.
+        sample_rate: Waveform sample rate.
+
+    Returns:
+        Comfy AUDIO mapping. ``waveform`` stays a tensor/list, not a numpy array.
+    """
     try:
         import torch
 

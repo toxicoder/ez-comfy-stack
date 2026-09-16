@@ -6,7 +6,14 @@ from typing import Any
 
 
 def format_ts(seconds: float) -> str:
-    """SRT timestamp ``HH:MM:SS,mmm``."""
+    """SRT timestamp ``HH:MM:SS,mmm``.
+
+    Args:
+        seconds: Time in seconds (clamped at 0).
+
+    Returns:
+        SRT timestamp string.
+    """
     total_ms = max(0, int(round(float(seconds) * 1000)))
     hours, rem = divmod(total_ms, 3_600_000)
     minutes, rem = divmod(rem, 60_000)
@@ -17,7 +24,7 @@ def format_ts(seconds: float) -> str:
 def turns_to_srt(turns: list[dict[str, Any]], *, field: str = "text") -> str:
     """Build an SRT body.
 
-    Arguments:
+    Args:
         turns: Normalized turns with t0/t1.
         field: ``text`` (source) or ``text_target``.
     Returns:

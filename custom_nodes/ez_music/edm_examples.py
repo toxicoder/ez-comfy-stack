@@ -11,6 +11,7 @@ from typing import Literal, TypedDict
 from .albums import album_rel, drive_album_for_phase
 from .naming import music_output_prefix
 
+# Take length and Drive-through vocal locks.
 EDM_DURATION_S = 180.0
 DRIVE_LOCK = (
     "instrumental, no vocals, no singing, no choir, no vocal chops, "
@@ -20,6 +21,7 @@ DRIVE_TREAT_LOCK = "sparse vocal chop, DJ shout, no rap, original composition"
 EdmSeries = Literal["drive-through"]
 EdmAceMode = Literal["instrumental", "vocal"]
 
+# Score labels, layouts, and forbidden-cue needles.
 SCORE_LABELS = frozenset({"intro", "inst", "drop", "build-up", "outro", "chorus"})
 EDM_LAYOUTS = frozenset(
     {"column", "wide-stage", "stacked-tower", "prompt-left", "output-rail"}
@@ -187,6 +189,34 @@ FORBIDDEN_SCORE_NEEDLES = (
 
 
 class EdmExample(TypedDict):
+    """One Drive-through catalog take (score, tags, album fields).
+
+    Attributes:
+        stem: Lab filename stem (``NN-slug``).
+        slug: Kebab title without the track prefix.
+        rel: Lab-relative id under ``audio/albums``.
+        series: Catalog series key (``drive-through``).
+        title: Operator-facing take name.
+        tags: ACE-Step tags line.
+        bpm: Tempo written into tags.
+        duration: Take length in seconds.
+        seed: Fixed ACE / sampler seed.
+        phase: Live-set hour index.
+        prefix: SaveAudio stem ``NN - Title``.
+        description: Lab graph description.
+        lyrics: Arrangement score.
+        ace_mode: ``instrumental`` or ``vocal``.
+        layout: Comfy node placement name.
+        artist: Branded act name.
+        artist_slug: Artist folder slug.
+        album: Album title.
+        album_slug: Album folder slug.
+        track: One-based track number.
+        tracktotal: Album track count.
+        year: Release year.
+        cover_prompt: US-safe cover-art prompt.
+    """
+
     stem: str
     slug: str
     rel: str
@@ -215,7 +245,7 @@ class EdmExample(TypedDict):
 def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
     """Join style tags with the Drive-through bed lock and bpm.
 
-    Arguments:
+    Args:
         parts: Genre and production tags for this take.
         bpm: Tempo written into the tags line.
         treat: If True, use the sparse DJ-shout lock instead of no-vocals.
@@ -227,6 +257,15 @@ def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
 
 
 def _desc(take: str, *, treat: bool = False) -> str:
+    """Lab graph description for one Drive-through take.
+
+    Args:
+        take: Short arrangement blurb.
+        treat: If True, mention a sparse DJ vocal chop.
+
+    Returns:
+        Operator-facing description string.
+    """
     vocal = "sparse DJ vocal chop" if treat else "instrumental"
     return (
         f"US-safe EDM 180s: Drive-through {take}, "
@@ -248,7 +287,7 @@ def _ex(
 ) -> EdmExample:
     """Build one Drive-through catalog row.
 
-    Arguments:
+    Args:
         slug: Kebab title used in the lab stem.
         title: Operator-facing take name.
         bpm: Tempo written into tags and the ACE encoder.
@@ -294,7 +333,14 @@ def _ex(
 
 
 def _cues_from_body(text: str) -> str:
-    """Join production-cue lines into one comma-separated bracket body."""
+    """Join production-cue lines into one comma-separated bracket body.
+
+    Args:
+        text: Multiline production cues.
+
+    Returns:
+        Single comma-separated cue string.
+    """
     parts = [line.strip() for line in text.splitlines() if line.strip()]
     return ", ".join(parts)
 
@@ -302,7 +348,7 @@ def _cues_from_body(text: str) -> str:
 def _uniquify_score(seed: int, lyrics: str) -> str:
     """Stamp each non-chorus marker so drop and fill cues stay unique.
 
-    Arguments:
+    Args:
         seed: Take seed used as the uniqueness token.
         lyrics: Score from ``format_edm_score``.
     Returns:
@@ -335,7 +381,7 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
     This is not the Nill Bye verse/chorus loop and not a fixed
     melody-drop-break-drop skeleton. First section is a named drop.
 
-    Arguments:
+    Args:
         sections: (label, body) pairs. Bodies are production cues.
     Returns:
         ACE-Step lyrics with labeled blocks.
@@ -384,7 +430,14 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
 
 
 def drive_slug_from_stem(stem: str) -> str:
-    """Kebab slug from a legacy or short Drive-through stem."""
+    """Kebab slug from a legacy or short Drive-through stem.
+
+    Args:
+        stem: Lab filename stem (legacy prefix optional).
+
+    Returns:
+        Title slug without the numeric track prefix.
+    """
     text = stem.removeprefix("music-edm-drive-through-").removesuffix("-lab-example")
     if text[:1].isdigit() and "-" in text:
         return text.split("-", 1)[1]
@@ -392,7 +445,14 @@ def drive_slug_from_stem(stem: str) -> str:
 
 
 def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]:
-    """Number tracks and attach album metadata for one live-set hour."""
+    """Number tracks and attach album metadata for one live-set hour.
+
+    Args:
+        rows: Partial catalog rows sharing one phase.
+
+    Returns:
+        Completed ``EdmExample`` rows for that album.
+    """
     if not rows:
         return ()
     info = drive_album_for_phase(int(rows[0]["phase"]))
@@ -422,6 +482,11 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
 
 
 def _catalog() -> tuple[EdmExample, ...]:
+    """Assemble every Drive-through hour into numbered album rows.
+
+    Returns:
+        All EDM examples in catalog order.
+    """
     from .edm_drive_through import EDM_DRIVE_THROUGH
     from .edm_drive_through_afterparty import EDM_DRIVE_THROUGH_AFTERPARTY
     from .edm_drive_through_bass import EDM_DRIVE_THROUGH_BASS
@@ -441,4 +506,5 @@ def _catalog() -> tuple[EdmExample, ...]:
     return tuple(out)
 
 
+# Numbered Drive-through catalog (all hours).
 EDM_EXAMPLES: tuple[EdmExample, ...] = _catalog()

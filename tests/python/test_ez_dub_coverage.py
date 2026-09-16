@@ -10,6 +10,7 @@ import sys
 import types
 import wave
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -54,7 +55,7 @@ def _am_speech(rate: int, seconds: float, fmod: float = 4.5) -> list[float]:
     return out
 
 
-def _passthrough_ffmpeg(monkeypatch) -> None:
+def _passthrough_ffmpeg(monkeypatch: pytest.MonkeyPatch) -> None:
     def _run(cmd: list[str]) -> tuple[int, str]:
         if not cmd or cmd[0] != "ffmpeg":
             return 127, "missing"
@@ -129,7 +130,7 @@ def _es_payload() -> dict:
 
 
 class _FakeTensor:
-    def __init__(self, data, ndim: int) -> None:
+    def __init__(self, data: Any, ndim: int) -> None:
         self._data = data
         self.ndim = ndim
 
@@ -145,7 +146,7 @@ class _FakeTorch:
         return _FakeTensor([[[0.0]]], 3)
 
     @staticmethod
-    def as_tensor(samples, dtype=None) -> _FakeTensor:
+    def as_tensor(samples: Any, dtype: Any = None) -> _FakeTensor:
         del dtype
         if isinstance(samples, list) and samples and isinstance(samples[0], list):
             return _FakeTensor(samples, 2)
@@ -257,7 +258,7 @@ def test_disclosure_lang_sentence_synth_and_overlay() -> None:
     assert dub_disclosure._first_t0([{"t0": object()}]) == 0.0
     assert dub_disclosure._first_t0([{"t0": "nope"}, {"t0": 1.5}]) == 1.5
 
-    def _empty(*_a, **_k):
+    def _empty(*_a: Any, **_k: Any) -> tuple[list[float], int]:
         return [], 24000
 
     out, status = dub_disclosure.apply_spoken_disclosure(
@@ -272,7 +273,7 @@ def test_disclosure_lang_sentence_synth_and_overlay() -> None:
     assert status == "disclosure skipped"
     assert len(out) == 1000
 
-    def _other_rate(text, language, ref_wav, engine):
+    def _other_rate(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
         return [0.3] * 8000, 8000, ""
 
@@ -290,7 +291,7 @@ def test_disclosure_lang_sentence_synth_and_overlay() -> None:
 
 
 def test_jobstore_fallbacks_invalid_state_and_read_json(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     def _boom() -> Path:
         raise RuntimeError("no ez_common")
@@ -348,7 +349,7 @@ def test_jobstore_fallbacks_invalid_state_and_read_json(
     assert jobstore.read_json(path) == payload
 
 
-def test_audio_widths_channels_and_torch(tmp_path: Path, monkeypatch) -> None:
+def test_audio_widths_channels_and_torch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     u8 = tmp_path / "u8.wav"
     with wave.open(str(u8), "wb") as handle:
         handle.setnchannels(1)
@@ -389,10 +390,10 @@ def test_audio_widths_channels_and_torch(tmp_path: Path, monkeypatch) -> None:
     assert packed2["sample_rate"] == 16000
 
 
-def test_nodes_empty_wav_and_overlay_disclosure(tmp_path: Path, monkeypatch) -> None:
+def test_nodes_empty_wav_and_overlay_disclosure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
 
-    def _ingest(source, have_rights, slug):
+    def _ingest(source: str, have_rights: bool, slug: str) -> tuple[Path, str]:
         del source, have_rights
         dest = jobstore.dub_dir(slug)
         dest.mkdir(parents=True, exist_ok=True)
@@ -403,7 +404,7 @@ def test_nodes_empty_wav_and_overlay_disclosure(tmp_path: Path, monkeypatch) -> 
     out = EZDubIngest().run("clip.wav", True, "ep")
     assert out["result"][0] == "ep"
 
-    def _synth(text, language, ref_wav, engine):
+    def _synth(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int, str]:
         del text, language, ref_wav, engine
         return _am_speech(24000, 0.5), 24000, ""
 
@@ -443,7 +444,7 @@ def test_align_resample_stretch_fit_room_timeline() -> None:
     assert len(stretched) == 2400
     assert align.pitch_preserving_stretch([], 8, 24000) == [0.0] * 8
 
-    def _hook(samples, out_len, rate):
+    def _hook(samples: Any, out_len: int, rate: int) -> list[float]:
         del samples, rate
         return [0.3] * out_len
 
@@ -451,7 +452,7 @@ def test_align_resample_stretch_fit_room_timeline() -> None:
     try:
         monkey_got = [0.4] * 50
 
-        def _atempo(samples, out_len, rate):
+        def _atempo(samples: Any, out_len: int, rate: int) -> Any:
             del samples, rate
             return monkey_got if out_len == 50 else None
 
@@ -480,7 +481,7 @@ def test_align_resample_stretch_fit_room_timeline() -> None:
         def __bool__(self) -> bool:
             return True
 
-        def __iter__(self):
+        def __iter__(self) -> object:
             return iter(())
 
     locked, lock_flags = align.lock_duration(
@@ -507,7 +508,7 @@ def test_align_resample_stretch_fit_room_timeline() -> None:
     assert len(mix) == 100
 
 
-def test_ffmpeg_atempo_empty_stdout_and_resample(monkeypatch) -> None:
+def test_ffmpeg_atempo_empty_stdout_and_resample(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(align.shutil, "which", lambda _name: "/usr/bin/ffmpeg")
 
     class _Empty:
@@ -530,8 +531,8 @@ def test_ffmpeg_atempo_empty_stdout_and_resample(monkeypatch) -> None:
 # --- pipeline helpers
 
 
-def test_progress_and_input_directory_fallbacks(tmp_path: Path, monkeypatch) -> None:
-    def _boom(_total: int):
+def test_progress_and_input_directory_fallbacks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def _boom(_total: int) -> Any:
         raise RuntimeError("no comfy bar")
 
     monkeypatch.setattr("ez_common.node_progress", _boom)
@@ -574,7 +575,7 @@ def test_list_input_media_skips_dirs_and_hidden(tmp_path: Path) -> None:
     assert names == ["keep.wav"]
 
 
-def test_resolve_media_source_url_and_annotated(tmp_path: Path, monkeypatch) -> None:
+def test_resolve_media_source_url_and_annotated(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     url = "https://example.invalid/owned.wav"
     assert pipeline.resolve_media_source(url) == url
     found = tmp_path / "ann.wav"
@@ -622,7 +623,7 @@ def test_split_clone_text_hard_cut_and_remainder() -> None:
     assert len(spaced) > 1
 
 
-def test_dub_llm_timeout_non_positive(monkeypatch) -> None:
+def test_dub_llm_timeout_non_positive(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("EZ_DUB_LLM_TIMEOUT_S", "0")
     assert pipeline.dub_llm_timeout_s() == pipeline.TRANSLATE_TIMEOUT_S
 
@@ -638,7 +639,7 @@ def test_run_subprocess_and_missing_binary() -> None:
     assert msg
 
 
-def test_fetch_url_and_extract_and_ingest_video(tmp_path: Path, monkeypatch) -> None:
+def test_fetch_url_and_extract_and_ingest_video(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline.fetch_hook = None
     dest = tmp_path / "job"
     dest.mkdir()
@@ -692,7 +693,7 @@ def test_fetch_url_and_extract_and_ingest_video(tmp_path: Path, monkeypatch) -> 
     assert (job / "source_video.mp4").is_file()
 
 
-def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) -> None:
+def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     assert pipeline._default_embed([], 24000) == [0.0, 0.0, 0.0, 0.0]
     same = pipeline._resample_for_encoder([0.1, 0.2], 16000, 16000)
     assert same == [0.1, 0.2]
@@ -712,13 +713,13 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     assert pipeline._get_voice_encoder() is None
 
     class _VE:
-        def load_state_dict(self, _state) -> None:
+        def load_state_dict(self, _state: Any) -> None:
             return None
 
         def eval(self) -> None:
             return None
 
-        def embeds_from_wavs(self, wavs, sample_rate=16000):
+        def embeds_from_wavs(self, wavs: Any, sample_rate: int = 16000) -> Any:
             del wavs, sample_rate
             return [[0.2] * 8]
 
@@ -752,7 +753,7 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     monkeypatch.setitem(sys.modules, "numpy", np_mod)
 
     class _Enc:
-        def embeds_from_wavs(self, wavs, sample_rate=16000):
+        def embeds_from_wavs(self, wavs: Any, sample_rate: int = 16000) -> Any:
             del wavs, sample_rate
             return None
 
@@ -761,7 +762,7 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     assert len(vec) == 4
 
     class _Enc2:
-        def embeds_from_wavs(self, wavs, sample_rate=16000):
+        def embeds_from_wavs(self, wavs: Any, sample_rate: int = 16000) -> Any:
             del wavs, sample_rate
             return [[]]
 
@@ -770,7 +771,7 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     assert len(vec2) == 4
 
     class _Enc3:
-        def embeds_from_wavs(self, wavs, sample_rate=16000):
+        def embeds_from_wavs(self, wavs: Any, sample_rate: int = 16000) -> Any:
             del wavs, sample_rate
             raise RuntimeError("embed fail")
 
@@ -779,7 +780,7 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     assert len(vec3) == 4
 
     class _Enc4:
-        def embeds_from_wavs(self, wavs, sample_rate=16000):
+        def embeds_from_wavs(self, wavs: Any, sample_rate: int = 16000) -> Any:
             del wavs, sample_rate
             return [[0.1] * 8]
 
@@ -807,7 +808,7 @@ def test_embed_encoder_whisper_and_analyze_edges(tmp_path: Path, monkeypatch) ->
     assert detected == ""
 
 
-def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
+def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(pipeline, "_import_whisper_model", lambda: (None, "no wheel"))
     with pytest.raises(ImportError):
         pipeline._load_whisper_model("/m")
@@ -829,7 +830,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
         def __init__(self, model_dir: str, device: str = "cpu", compute_type: str = "int8") -> None:
             del model_dir, device, compute_type
 
-        def transcribe(self, path: str, **kwargs):
+        def transcribe(self, path: str, **kwargs: Any) -> Any:
             del path, kwargs
 
             class _Seg:
@@ -859,7 +860,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
     assert again is model
     assert miss2 == ""
 
-    def _load_boom(_d: str):
+    def _load_boom(_d: str) -> Any:
         raise RuntimeError("load boom")
 
     pipeline._close_whisper()
@@ -889,7 +890,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
         language = "en"
 
     class _BothType:
-        def transcribe(self, path: str, **kwargs):
+        def transcribe(self, path: str, **kwargs: Any) -> Any:
             del path
             if "vad_filter" in kwargs or "beam_size" in kwargs:
                 raise TypeError("no extra")
@@ -902,7 +903,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
     assert turns[0]["text"] == "Hello"
 
     class _Raise:
-        def transcribe(self, path: str, **kwargs):
+        def transcribe(self, path: str, **kwargs: Any) -> Any:
             del path, kwargs
             raise RuntimeError("asr crash")
 
@@ -911,7 +912,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
     assert "faster-whisper failed" in crashed
 
     class _Silent:
-        def transcribe(self, path: str, **kwargs):
+        def transcribe(self, path: str, **kwargs: Any) -> Any:
             del path, kwargs
 
             class _Seg:
@@ -930,7 +931,7 @@ def test_whisper_load_get_and_segments(tmp_path: Path, monkeypatch) -> None:
     assert no_speech == "no speech"
 
 
-def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch) -> None:
+def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     fw = types.ModuleType("faster_whisper")
 
     class _WM:
@@ -961,7 +962,7 @@ def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch) -> None:
     sys.modules.pop("perth", None)
 
     class _FakeImport:
-        def find_spec(self, name, *_a, **_k):
+        def find_spec(self, name: str, *_a: Any, **_k: Any) -> Any:
             if name == "perth":
                 raise ImportError("no perth")
             return None
@@ -987,7 +988,7 @@ def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch) -> None:
 
     class _Loader:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             return object()
 
@@ -1015,7 +1016,7 @@ def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch) -> None:
     assert miss_q == ""
 
     class _BoomQwen(types.ModuleType):
-        def __getattr__(self, name: str):
+        def __getattr__(self, name: str) -> object:
             raise RuntimeError("qwen init")
 
     monkeypatch.setitem(sys.modules, "qwen_tts", _BoomQwen("qwen_tts"))
@@ -1053,7 +1054,7 @@ def test_preflight_import_and_status_paths(tmp_path: Path, monkeypatch) -> None:
     assert pipeline.preflight_translate() == ""
 
 
-def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
+def test_translate_turns_remaining_reason_paths(monkeypatch: pytest.MonkeyPatch) -> None:
     empty, reason = pipeline.translate_turns(
         [{"id": 1, "text": "  ", "text_target": ""}],
         "es",
@@ -1066,7 +1067,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
     turns[0]["text"] = ""
     calls: list[str] = []
 
-    def _complete(system: str, user: str, **kwargs):
+    def _complete(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, kwargs
         calls.append(user)
         return "Hoy nos quedamos en el partido.", None
@@ -1077,7 +1078,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
     assert out[0]["text_target"] == ""
     assert "translated" in why or out[1]["text_target"]
 
-    def _pass(system: str, user: str, **kwargs):
+    def _pass(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, user, kwargs
         return "Welcome back to the tape.", None
 
@@ -1086,7 +1087,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
     assert "passthrough" in why_p
     assert out_p[0]["text_target"] == "Welcome back to the tape."
 
-    def _suspect(system: str, user: str, **kwargs):
+    def _suspect(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, user, kwargs
         return "This is the time for you and the rest of the people.", None
 
@@ -1095,7 +1096,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
     assert "passthrough" in why_s or "suspect" in why_s
     assert out_s[0]["text_target"]
 
-    def _mix(system: str, user: str, **kwargs):
+    def _mix(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, kwargs
         source_line = ""
         for line in user.splitlines():
@@ -1124,7 +1125,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch) -> None:
     assert out_i[0]["text_target"] == ""
 
 
-def test_clone_prep_voiced_trim_concat_and_tokens(monkeypatch) -> None:
+def test_clone_prep_voiced_trim_concat_and_tokens(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(pipeline, "CLONE_SILENCE_PAD_S", 0.0)
     monkeypatch.setattr(pipeline, "CLONE_TOKEN_RATE", 1.0)
     assert pipeline.clone_token_budget("Hola") == pipeline.CLONE_TOKEN_MIN
@@ -1184,11 +1185,11 @@ def test_clone_prep_voiced_trim_concat_and_tokens(monkeypatch) -> None:
     assert pipeline._pcm_list([object(), 0.25]) == [0.25]
 
 
-def test_filter_refs_purity_and_extract_edges(tmp_path: Path, monkeypatch) -> None:
+def test_filter_refs_purity_and_extract_edges(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     rate = 24000
     samples = [0.25] * (rate * 12)
 
-    def _embed(pcm, sr):
+    def _embed(pcm: list[float], sr: int) -> list[float]:
         del pcm, sr
         return [1.0] + [0.0] * 8
 
@@ -1217,7 +1218,7 @@ def test_filter_refs_purity_and_extract_edges(tmp_path: Path, monkeypatch) -> No
         kept = pipeline._filter_ref_turns(group, samples, rate)
         assert kept
 
-        def _split(pcm, sr):
+        def _split(pcm: list[float], sr: int) -> list[float]:
             del pcm, sr
             if not hasattr(_split, "n"):
                 _split.n = 0  # type: ignore[attr-defined]
@@ -1240,7 +1241,7 @@ def test_filter_refs_purity_and_extract_edges(tmp_path: Path, monkeypatch) -> No
     )
     assert none == {}
 
-    def _empty_pcm(samples_i, sr, t0, t1):
+    def _empty_pcm(samples_i: Any, sr: int, t0: float, t1: float) -> list[float]:
         del samples_i, sr, t0, t1
         return []
 
@@ -1283,7 +1284,7 @@ def test_filter_refs_purity_and_extract_edges(tmp_path: Path, monkeypatch) -> No
     assert "spk00" in refs
 
 
-def test_model_roots_pkuseg_and_chatterbox_context(tmp_path: Path, monkeypatch) -> None:
+def test_model_roots_pkuseg_and_chatterbox_context(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("MODELS_ROOT", raising=False)
     monkeypatch.delenv("MODELS_DIR", raising=False)
     roots = pipeline._model_roots()
@@ -1309,7 +1310,7 @@ def test_model_roots_pkuseg_and_chatterbox_context(tmp_path: Path, monkeypatch) 
     assert os.environ.get("PKUSEG_HOME") == "/prev-pk"
 
 
-def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch) -> None:
+def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     with pytest.raises(RuntimeError, match="t3_model"):
         pipeline._from_local_multilingual(len, "/ckpt", "cpu")  # type: ignore[arg-type]
 
@@ -1339,7 +1340,7 @@ def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch) -
 
     class _RT:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             raise RuntimeError("t3 boom")
 
@@ -1350,7 +1351,7 @@ def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch) -
 
     class _EX:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             raise ValueError("inner")
 
@@ -1365,12 +1366,12 @@ def test_from_local_signature_and_load_chatterbox(tmp_path: Path, monkeypatch) -
     assert pipeline._chatterbox_device() == "cuda"
 
 
-def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
+def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     class _T3:
         def __init__(self) -> None:
             self.seen: list[object] = []
 
-        def inference(self, **kwargs):
+        def inference(self, **kwargs: Any) -> Any:
             self.seen.append(kwargs.get("max_new_tokens"))
             return "ok"
 
@@ -1380,7 +1381,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
         def __init__(self) -> None:
             self.t3 = _T3()
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text, kwargs
             self.t3.inference(max_new_tokens="bad")
             self.t3.inference(max_new_tokens=0)
@@ -1416,7 +1417,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     class _Boom:
         sr = 24000
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text, kwargs
             raise RuntimeError("gen fail")
 
@@ -1428,7 +1429,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     class _Empty:
         sr = 24000
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text, kwargs
             return []
 
@@ -1439,7 +1440,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     class _Ok:
         sr = 24000
 
-        def generate(self, text: str, **kwargs):
+        def generate(self, text: str, **kwargs: Any) -> Any:
             del text, kwargs
             return [0.1] * 80
 
@@ -1461,7 +1462,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
 
     class _Q:
         @staticmethod
-        def from_pretrained(path, local_files_only=False):
+        def from_pretrained(path: str, local_files_only: bool = False) -> object:
             del path
             if local_files_only:
                 raise TypeError("no local")
@@ -1492,7 +1493,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
 
     class _RaiseQ:
         @staticmethod
-        def from_pretrained(path, local_files_only=False):
+        def from_pretrained(path: str, local_files_only: bool = False) -> object:
             del path, local_files_only
             raise RuntimeError("load q")
 
@@ -1504,7 +1505,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
 
     class _OKQ:
         @staticmethod
-        def from_pretrained(path, local_files_only=False):
+        def from_pretrained(path: str, local_files_only: bool = False) -> object:
             del path, local_files_only
             return loaded
 
@@ -1546,11 +1547,11 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     assert "generate_voice_clone" in errc
 
     class _PromptFail:
-        def create_voice_clone_prompt(self, **kwargs):
+        def create_voice_clone_prompt(self, **kwargs: Any) -> Any:
             del kwargs
             raise RuntimeError("prompt")
 
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             del kwargs
             return [[0.1] * 40], 24000
 
@@ -1567,12 +1568,12 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
         def __init__(self) -> None:
             self.n = 0
 
-        def create_voice_clone_prompt(self, **kwargs):
+        def create_voice_clone_prompt(self, **kwargs: Any) -> Any:
             del kwargs
             self.n += 1
             return {"p": self.n}
 
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             del kwargs
             return [[0.1] * 40], 24000
 
@@ -1585,7 +1586,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     assert cache.n == 1
 
     class _Inline:
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             assert "ref_audio" in kwargs
             return [[0.2] * 20], 16000
 
@@ -1598,7 +1599,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     assert pcm_i
 
     class _CloneBoom:
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             del kwargs
             raise RuntimeError("clone boom")
 
@@ -1607,7 +1608,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     assert "qwen3tts failed" in errb
 
     class _EmptyQ:
-        def generate_voice_clone(self, **kwargs):
+        def generate_voice_clone(self, **kwargs: Any) -> Any:
             del kwargs
             return [[]], 24000
 
@@ -1616,7 +1617,7 @@ def test_cap_t3_try_chatterbox_and_qwen(tmp_path: Path, monkeypatch) -> None:
     assert "empty audio" in erre
 
 
-def test_synthesize_turn_engines_without_hook(monkeypatch) -> None:
+def test_synthesize_turn_engines_without_hook(monkeypatch: pytest.MonkeyPatch) -> None:
     pipeline.tts_hook = None
     pcm, rate, err = pipeline.synthesize_turn("   ", "es", "", ENGINE_CHATTERBOX)
     assert pcm == []
@@ -1654,7 +1655,7 @@ def test_synthesize_turn_engines_without_hook(monkeypatch) -> None:
     assert err4 == ""
 
 
-def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> None:
+def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     dest = tmp_path / "job"
     dest.mkdir()
     rate = 24000
@@ -1716,7 +1717,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
     )
     assert any("qc:" in f for f in flags) or (dest / "qc.json").is_file()
 
-    def _qc_boom(*_a, **_k):
+    def _qc_boom(*_a: Any, **_k: Any) -> Any:
         raise RuntimeError("qc")
 
     monkeypatch.setattr(pipeline, "evaluate_qc", _qc_boom)
@@ -1730,7 +1731,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
     dub_audio.write_wav(job / "source.wav", src, rate)
     payload = _es_payload()
 
-    def _tts(text, language, ref_wav, engine):
+    def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
         return _am_speech(12000, max(0.4, len(text) * 20 / 12000.0)), 12000
 
@@ -1758,7 +1759,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
     job2.mkdir(parents=True)
     dub_audio.write_wav(job2 / "source.wav", src, rate)
 
-    def _tts_hot(text, language, ref_wav, engine):
+    def _tts_hot(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return _am_speech(rate, 6.0), rate
 
@@ -1785,7 +1786,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
     job3.mkdir(parents=True)
     dub_audio.write_wav(job3 / "source.wav", src, rate)
 
-    def _tts_miss(text, language, ref_wav, engine):
+    def _tts_miss(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return [], rate
 
@@ -1810,7 +1811,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
     dub_audio.write_wav(job4 / "source.wav", src, rate)
     n = {"c": 0}
 
-    def _tts_retry(text, language, ref_wav, engine):
+    def _tts_retry(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         n["c"] += 1
         if n["c"] == 1:
@@ -1857,7 +1858,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
         ],
     }
 
-    def _tts_ok(text, language, ref_wav, engine):
+    def _tts_ok(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del text, language, ref_wav, engine
         return _am_speech(rate, 0.4), rate
 
@@ -1911,7 +1912,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
 
     seen_refs: list[str] = []
 
-    def _tts6(text, language, ref_wav, engine):
+    def _tts6(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, engine
         seen_refs.append(ref_wav)
         return _am_speech(rate, max(0.5, len(text) * 40 / float(rate))), rate
@@ -1936,7 +1937,7 @@ def test_loudnorm_mp3_qc_and_render_mix_edges(tmp_path: Path, monkeypatch) -> No
 
     real_lock = pipeline.lock_duration
 
-    def _trim_lock(mix, target_n, room=None, rate=24000):
+    def _trim_lock(mix: Any, target_n: int, room: Any = None, rate: int = 24000) -> Any:
         longer = list(mix) + [0.1] * 50
         return real_lock(longer, target_n, room=room, rate=rate)
 
@@ -1975,7 +1976,7 @@ def test_spoken_clone_text_same_language() -> None:
     assert empty == ""
 
 
-def test_analyze_job_auto_detect_and_asr_reason(tmp_path: Path, monkeypatch) -> None:
+def test_analyze_job_auto_detect_and_asr_reason(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "ep"
     dest.mkdir(parents=True)
@@ -2000,7 +2001,7 @@ def test_analyze_job_auto_detect_and_asr_reason(tmp_path: Path, monkeypatch) -> 
     assert payload["turns"] == []
     assert reason == "no speech"
 
-    def _whisper(path: Path, language: str):
+    def _whisper(path: Path, language: str) -> Any:
         del path, language
         return (
             [
@@ -2040,7 +2041,7 @@ def test_analyze_job_auto_detect_and_asr_reason(tmp_path: Path, monkeypatch) -> 
     assert "speakers" in reason2
 
 
-def test_ezdub_script_invalid_stage_and_langs(tmp_path: Path, monkeypatch) -> None:
+def test_ezdub_script_invalid_stage_and_langs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     dest = tmp_path / "dubs" / "episode"
     dest.mkdir(parents=True)
@@ -2068,12 +2069,12 @@ def test_time_stretch_tail_and_search_branches() -> None:
     assert len(tiny_dest) == 40
 
 
-def test_remaining_align_and_sanitize_gaps(monkeypatch) -> None:
+def test_remaining_align_and_sanitize_gaps(monkeypatch: pytest.MonkeyPatch) -> None:
     import builtins
 
     real_round = builtins.round
 
-    def _round(x, ndigits=None):
+    def _round(x: Any, ndigits: int | None = None) -> Any:
         if ndigits is not None:
             return real_round(x, ndigits)
         if 40.0 < float(x) < 90.0:
@@ -2087,7 +2088,7 @@ def test_remaining_align_and_sanitize_gaps(monkeypatch) -> None:
 
     real_range = builtins.range
 
-    def _range(*args):
+    def _range(*args: Any) -> Any:
         if len(args) == 1 and 2 <= int(args[0]) <= 40:
             return real_range(int(args[0]) + 12)
         return real_range(*args)
@@ -2120,7 +2121,7 @@ def test_remaining_align_and_sanitize_gaps(monkeypatch) -> None:
     assert "Hola" in leaked
 
 
-def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch) -> None:
+def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setitem(sys.modules, "faster_whisper", None)
     cls, miss = pipeline._import_whisper_model()
     assert cls is None
@@ -2143,7 +2144,7 @@ def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch) -
 
     class _Loader:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             return object()
 
@@ -2205,7 +2206,7 @@ def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch) -
 
     real_enum = builtins.enumerate
 
-    def _enum(iterable, start=0):
+    def _enum(iterable: Any, start: int = 0) -> Any:
         if isinstance(iterable, list) and iterable and isinstance(iterable[0], dict):
             return real_enum([], start)
         return real_enum(iterable, start)
@@ -2230,7 +2231,7 @@ def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch) -
 
     real_rev = builtins.reversed
 
-    def _rev(seq):
+    def _rev(seq: Any) -> Any:
         data = list(seq)
         if data and max(abs(float(x)) for x in data) > 0.1:
             return iter([0.0] * len(data))
@@ -2243,10 +2244,10 @@ def test_remaining_pipeline_preflight_and_helpers(tmp_path: Path, monkeypatch) -
     monkeypatch.setattr(builtins, "reversed", real_rev)
 
 
-def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch) -> None:
+def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     class _TTS:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             raise OSError("disk")
 
@@ -2281,7 +2282,7 @@ def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch) -> No
     monkeypatch.setattr(pipeline, "preflight_clone", lambda: "")
     pipeline.tts_hook = None
 
-    def _synth_err(*_a, **_k):
+    def _synth_err(*_a: Any, **_k: Any) -> tuple[list[float], int, str]:
         return [], rate, "engine boom"
 
     monkeypatch.setattr(pipeline, "synthesize_turn", _synth_err)
@@ -2302,7 +2303,7 @@ def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch) -> No
     dub_audio.write_wav(dest2 / "source.wav", src, rate)
     n = {"c": 0}
 
-    def _synth_retry(*_a, **_k):
+    def _synth_retry(*_a: Any, **_k: Any) -> tuple[list[float], int, str]:
         n["c"] += 1
         if n["c"] == 1:
             tone = [math.sin(2 * math.pi * 90 * i / rate) for i in range(rate)]
@@ -2328,7 +2329,13 @@ def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch) -> No
     dub_audio.write_wav(dest3 / "source.wav", src, rate)
     n3 = {"c": 0}
 
-    def _synth_partial(text, language, ref_wav, engine, **kwargs):
+    def _synth_partial(
+        text: str,
+        language: str,
+        ref_wav: str,
+        engine: str,
+        **kwargs: Any,
+    ) -> tuple[list[float], int, str]:
         del language, ref_wav, engine, kwargs
         n3["c"] += 1
         if "Bienvenidos" in text:
@@ -2353,7 +2360,7 @@ def test_remaining_chatterbox_qwen_and_render(tmp_path: Path, monkeypatch) -> No
         assert isinstance(qc, dict)
 
 
-def test_cover_align_ffmpeg_fallback_and_src_bound(monkeypatch) -> None:
+def test_cover_align_ffmpeg_fallback_and_src_bound(monkeypatch: pytest.MonkeyPatch) -> None:
     align.stretch_hook = None
     monkeypatch.setattr(align, "_ffmpeg_atempo", lambda *_a, **_k: None)
     out = align.pitch_preserving_stretch([0.2] * 80, 40, 24000)
@@ -2363,7 +2370,7 @@ def test_cover_align_ffmpeg_fallback_and_src_bound(monkeypatch) -> None:
 
     real_range = builtins.range
 
-    def _range(*args):
+    def _range(*args: Any) -> Any:
         if len(args) == 1 and int(args[0]) == 2:
             return real_range(24)
         return real_range(*args)
@@ -2375,7 +2382,7 @@ def test_cover_align_ffmpeg_fallback_and_src_bound(monkeypatch) -> None:
 
     real_max = builtins.max
 
-    def _max(*args):
+    def _max(*args: Any) -> Any:
         if len(args) == 2 and args[0] == 1 and args[1] == 240:
             return 5000
         return real_max(*args)
@@ -2385,7 +2392,7 @@ def test_cover_align_ffmpeg_fallback_and_src_bound(monkeypatch) -> None:
     assert len(stretched) == 2400
 
 
-def test_cover_zc_interval_cv_second_gap_guard(monkeypatch) -> None:
+def test_cover_zc_interval_cv_second_gap_guard(monkeypatch: pytest.MonkeyPatch) -> None:
     class _Flip(list):
         def __len__(self) -> int:
             self._n = getattr(self, "_n", 0) + 1
@@ -2397,14 +2404,14 @@ def test_cover_zc_interval_cv_second_gap_guard(monkeypatch) -> None:
     assert pipeline.zc_interval_cv([0.1] * 10) == 0.0
 
 
-def test_cover_pipeline_success_returns(tmp_path: Path, monkeypatch) -> None:
+def test_cover_pipeline_success_returns(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(pipeline, "_import_whisper_model", lambda: (object(), ""))
     monkeypatch.setattr(pipeline, "_whisper_dir", lambda: "/models/whisper")
     assert pipeline.preflight_asr() == ""
 
     class _Ok:
         @staticmethod
-        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3"):
+        def from_local(ckpt_dir: str, device: str, t3_model: str = "v3") -> object:
             del ckpt_dir, device, t3_model
             return object()
 

@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+# This file, repo root, and ``scripts/lib`` so Blender's Python can import helpers.
 _HERE = Path(__file__).resolve().parent
 _REPO = _HERE.parents[1]
 _LIB = _REPO / "scripts" / "lib"
@@ -38,11 +39,20 @@ from workbench_passes import (  # noqa: E402
     frame_extrinsic,
 )
 
+# Layer names written into ez.guide.still.v1 when dumping a plate.
 DEFAULT_STILL_LAYERS = ["rgb", "depth", "canny", "first"]
 
 
 def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
-    """Parse argv after Blender's ``--`` separator."""
+    """Parse argv after Blender's ``--`` separator.
+
+    Args:
+        argv: Full argv including Blender flags, or args after ``--``.
+            ``None`` reads ``sys.argv``.
+
+    Returns:
+        Parsed export namespace.
+    """
     raw = list(sys.argv if argv is None else argv)
     if "--" in raw:
         raw = raw[raw.index("--") + 1 :]
@@ -60,7 +70,17 @@ def parse_export_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def resolve_size(ns: argparse.Namespace) -> tuple[int, int]:
-    """Return width, height from --size or --width/--height."""
+    """Return width, height from --size or --width/--height.
+
+    Args:
+        ns: Parsed export arguments.
+
+    Returns:
+        ``(width, height)`` in pixels.
+
+    Raises:
+        SystemExit: ``--size`` token is not ``WxH``.
+    """
     if ns.size:
         parsed = parse_size_token(str(ns.size))
         if parsed is None:
@@ -70,7 +90,15 @@ def resolve_size(ns: argparse.Namespace) -> tuple[int, int]:
 
 
 def still_payload(ns: argparse.Namespace, blend: str = "") -> dict[str, Any]:
-    """Build ez.guide.still.v1 fields from CLI."""
+    """Build ez.guide.still.v1 fields from CLI.
+
+    Args:
+        ns: Parsed export arguments.
+        blend: Source ``.blend`` path when known.
+
+    Returns:
+        Still document mapping (not yet validated).
+    """
     width, height = resolve_size(ns)
     data: dict[str, Any] = {
         "schema": STILL_SCHEMA,
@@ -89,6 +117,16 @@ def still_payload(ns: argparse.Namespace, blend: str = "") -> dict[str, Any]:
 
 
 def _render_still(bpy: Any, dest: Path, filename: str) -> Path:
+    """Render one still PNG into ``dest/filename``.
+
+    Args:
+        bpy: Blender Python module.
+        dest: Pack output directory.
+        filename: PNG basename.
+
+    Returns:
+        Path to the written PNG.
+    """
     scene = bpy.context.scene
     dest.mkdir(parents=True, exist_ok=True)
     png = dest / filename
@@ -105,7 +143,11 @@ def _render_still(bpy: Any, dest: Path, filename: str) -> Path:
 
 
 def export_with_bpy(ns: argparse.Namespace) -> None:
-    """Render one clay/depth/canny still using the host bpy module."""
+    """Render one clay/depth/canny still using the host bpy module.
+
+    Args:
+        ns: Parsed export arguments.
+    """
     try:
         import bpy  # type: ignore[import-not-found]
     except ImportError as exc:
@@ -162,6 +204,11 @@ def export_with_bpy(ns: argparse.Namespace) -> None:
 
 
 def main() -> int:
+    """CLI: parse args and export a still pack.
+
+    Returns:
+        Process exit status.
+    """
     ns = parse_export_args()
     export_with_bpy(ns)
     return 0

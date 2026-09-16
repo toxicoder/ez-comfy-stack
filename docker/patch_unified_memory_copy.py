@@ -25,6 +25,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+# Unified-memory copy=False rewrite: marker, target file, and exact assignment.
 MARKER = "LAB_SPARK_UM_COPY_PATCH"
 REL_PATH = Path("comfy") / "utils.py"
 NEEDLE = "tensor = tensor.to(device=device, copy=True)"
@@ -32,7 +33,15 @@ REPLACEMENT = f"tensor = tensor.to(device=device, copy=False)  # {MARKER}"
 
 
 def _compiles(source: str, filename: str = "<utils.py>") -> bool:
-    """Return True if source is valid Python syntax."""
+    """Return True if source is valid Python syntax.
+
+    Args:
+        source: Python source to compile.
+        filename: Name used in SyntaxError messages.
+
+    Returns:
+        Whether ``source`` compiles as a module.
+    """
     try:
         compile(source, filename, "exec")
         return True

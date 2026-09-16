@@ -6,6 +6,7 @@ from typing import Any, Callable
 
 from .align import fit_turn, resample_linear
 
+# Canonical English bumper plus localized overlays (ISO 639-1 keys).
 DISCLOSURE_TEXT = (
     "This audio is an AI-translated dub. Voices are synthesized from the "
     "original speakers with the rights-holder's authorization."
@@ -44,6 +45,14 @@ SynthesizeFn = Callable[..., Any]
 
 
 def _lang_key(language: str) -> str:
+    """Normalize a widget language to a ``DISCLOSURE_LOCALIZED`` key.
+
+    Args:
+        language: ISO code, locale, or empty.
+
+    Returns:
+        Two-letter key when known, else the stripped lowercased value.
+    """
     raw = (language or "").strip().lower()
     if raw in DISCLOSURE_LOCALIZED:
         return raw
@@ -53,12 +62,27 @@ def _lang_key(language: str) -> str:
 
 
 def disclosure_for(language: str) -> str:
-    """Localized bumper text; English canonical when the language is unknown."""
+    """Localized bumper text; English canonical when the language is unknown.
+
+    Args:
+        language: Target language widget.
+
+    Returns:
+        Spoken disclosure sentence.
+    """
     key = _lang_key(language)
     return DISCLOSURE_LOCALIZED.get(key, DISCLOSURE_TEXT)
 
 
 def _first_sentence(text: str) -> str:
+    """Keep a bumper short enough to overlay without stretching.
+
+    Args:
+        text: Full disclosure paragraph.
+
+    Returns:
+        First sentence, or a 220-character prefix.
+    """
     if len(text) <= 220:
         return text
     for sep in (". ", "! ", "? "):
@@ -75,6 +99,18 @@ def _synth_pcm(
     ref_wav: str,
     engine: str,
 ) -> tuple[list[float], int]:
+    """Synthesize bumper PCM via the clone callback.
+
+    Args:
+        synthesize: Clone callable (optional TTS; returns PCM/rate).
+        text: Bumper sentence.
+        language: ISO language id.
+        ref_wav: Speaker reference path.
+        engine: Clone engine id.
+
+    Returns:
+        ``(pcm, rate)``; empty PCM when synthesis fails.
+    """
     result = synthesize(text, language, ref_wav, engine)
     if not result:
         return [], 0
@@ -88,6 +124,14 @@ def _synth_pcm(
 def _overlay_region(
     mix: list[float], bumper: list[float], n: int, fade: int
 ) -> None:
+    """Crossfade ``bumper`` onto the start of ``mix`` in place.
+
+    Args:
+        mix: Mix PCM (mutated).
+        bumper: Disclosure PCM.
+        n: Overlay length in samples.
+        fade: Edge fade length in samples.
+    """
     count = min(n, len(mix), len(bumper))
     if count <= 0:
         return
@@ -103,7 +147,15 @@ def _overlay_region(
 
 
 def _crop_bumper_hush(bumper: list[float], rate: int) -> list[float]:
-    """Drop leading clone hush from a synthesized bumper. Empty means skip."""
+    """Drop leading clone hush from a synthesized bumper. Empty means skip.
+
+    Args:
+        bumper: Synthesized bumper PCM.
+        rate: Sample rate.
+
+    Returns:
+        Onset-cropped PCM, or ``[]`` when nothing is voiced.
+    """
     if not bumper:
         return []
     from .pipeline import speech_onset_slice
@@ -112,6 +164,14 @@ def _crop_bumper_hush(bumper: list[float], rate: int) -> list[float]:
 
 
 def _first_t0(turns: list[dict[str, Any]] | None) -> float:
+    """Earliest turn start, used as the leading non-speech gap.
+
+    Args:
+        turns: JSON turns with ``t0``, or None.
+
+    Returns:
+        Minimum ``t0`` in seconds, or 0.0.
+    """
     if not turns:
         return 0.0
     starts: list[float] = []
@@ -139,6 +199,18 @@ def apply_spoken_disclosure(
 
     Must NOT change len(mix).
     Must NOT call fit_turn(bumper, 3.0) on a long paragraph.
+
+    Args:
+        mix: Mix PCM (length is preserved).
+        rate: Sample rate.
+        language: Target language for the bumper text.
+        engine: Clone engine id.
+        ref_wav: Speaker reference path.
+        turns: JSON turns (leading gap); optional.
+        synthesize: Clone callback (optional TTS).
+
+    Returns:
+        ``(mix, status)`` where status is ``spoken disclosure`` or skip.
     """
     out = [float(x) for x in mix]
     sr = int(rate) or 1

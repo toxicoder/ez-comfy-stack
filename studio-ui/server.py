@@ -11,9 +11,11 @@ from pathlib import Path
 from typing import Any, TypedDict
 from urllib.parse import parse_qs, urlparse
 
+# Jobstore films directory (``/films/films`` when present, else ``/films``).
 FILMS = Path("/films/films")
 if not FILMS.is_dir():
     FILMS = Path("/films")
+# Guide packs live beside films, or under ``/films/guides``.
 GUIDES = FILMS.parent / "guides"
 if not GUIDES.is_dir():
     alt = Path("/films/guides")
@@ -21,6 +23,17 @@ if not GUIDES.is_dir():
         GUIDES = alt
 
 class FilmRow(TypedDict):
+    """One film's board row from jobstore ``state.json``.
+
+    Attributes:
+        slug: Jobstore directory name / film id.
+        film: Display title from state.
+        ok: Count of shots with status ``ok`` (decimal string).
+        total: Shot count (decimal string).
+        audio_policy: Mix policy, default ``world-only``.
+        shots: Per-shot light dicts (id, clay, look, overlay, print, audio, thumb).
+    """
+
     slug: str
     film: str
     ok: str
@@ -29,6 +42,7 @@ class FilmRow(TypedDict):
     shots: list[dict[str, str]]
 
 
+# Allowlisted 90s masters under the Comfy output root (slug → filename).
 PUBLISH_FILES = {
     "gosee": "ez_gosee_90s.mp4",
     "stillhere": "ez_stillhere_90s.mp4",
@@ -37,7 +51,11 @@ PUBLISH_FILES = {
 
 
 def output_root() -> Path:
-    """Comfy output dir: parent of jobstore ``films/`` when that layout exists."""
+    """Comfy output dir: parent of jobstore ``films/`` when that layout exists.
+
+    Returns:
+        Directory that contains allowlisted ``ez_*_90s.mp4`` masters.
+    """
     if FILMS.name == "films":
         parent = FILMS.parent
         if parent.is_dir():
@@ -46,7 +64,14 @@ def output_root() -> Path:
 
 
 def publish_mp4(slug: str) -> Path | None:
-    """Allowlisted 90s master under the output root, or None."""
+    """Allowlisted 90s master under the output root, or None.
+
+    Args:
+        slug: Film slug (must be a key in ``PUBLISH_FILES``).
+
+    Returns:
+        Path to the MP4 when it exists under the output root, else ``None``.
+    """
     name = PUBLISH_FILES.get(slug)
     if not name:
         return None
@@ -62,10 +87,31 @@ def publish_mp4(slug: str) -> Path | None:
 
 
 def _light(on: bool) -> str:
+    """CSS class for a board light.
+
+    Args:
+        on: Whether the artifact exists / shot is ok.
+
+    Returns:
+        ``on`` or ``off``.
+    """
     return "on" if on else "off"
 
 
-def _shot_lights(dest: Path, slug: str, sid: str, row: dict) -> dict[str, str]:
+def _shot_lights(
+    dest: Path, slug: str, sid: str, row: dict[str, Any]
+) -> dict[str, str]:
+    """Build one shot's clay/look/overlay/print/audio lights and thumb URL.
+
+    Args:
+        dest: Film jobstore directory (contains ``stems/``).
+        slug: Film slug.
+        sid: Shot id (directory name under the guide pack).
+        row: Shot object from ``state.json``.
+
+    Returns:
+        Light dict consumed by :func:`_page`.
+    """
     pack = GUIDES / slug / sid
     stems = dest / "stems" / sid
     clay = (pack / "first.png").is_file() or (pack / "clay.mp4").is_file()
@@ -90,6 +136,11 @@ def _shot_lights(dest: Path, slug: str, sid: str, row: dict) -> dict[str, str]:
 
 
 def _rows() -> list[FilmRow]:
+    """Load board rows from each ``*/state.json`` under ``FILMS``.
+
+    Returns:
+        Sorted film rows (empty when the films dir is missing).
+    """
     rows: list[FilmRow] = []
     if not FILMS.is_dir():
         return rows
@@ -120,6 +171,11 @@ def _rows() -> list[FilmRow]:
 
 
 def _page() -> bytes:
+    """Render the jobstore board HTML.
+
+    Returns:
+        UTF-8 HTML document bytes.
+    """
     rows = _rows()
     body = [
         "<h1>ez-comfy film board</h1>",
@@ -190,7 +246,14 @@ def _page() -> bytes:
 
 
 def watch_page(slug: str) -> bytes | None:
-    """HTML5 player for an allowlisted 90s master."""
+    """HTML5 player for an allowlisted 90s master.
+
+    Args:
+        slug: Film slug (must resolve via :func:`publish_mp4`).
+
+    Returns:
+        Player HTML bytes, or ``None`` when the master is missing.
+    """
     path = publish_mp4(slug)
     if path is None:
         return None
@@ -213,6 +276,16 @@ def watch_page(slug: str) -> bytes | None:
 
 
 def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
+    """Resolve a clay/overlay PNG under ``GUIDES``, or ``None``.
+
+    Args:
+        slug: Alphanumeric film slug.
+        shot: Digit-only shot id.
+        kind: ``clay`` (``first.png``) or ``overlay``.
+
+    Returns:
+        File path when it exists under ``GUIDES``, else ``None``.
+    """
     if not slug.isalnum() or not shot.isdigit() or kind not in {"clay", "overlay"}:
         return None
     pack = GUIDES / slug / shot
@@ -230,7 +303,14 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
 
 
 class Handler(BaseHTTPRequestHandler):
+    """Stdlib HTTP handler for the board, thumbs, and allowlisted MP4s."""
+
     def do_GET(self) -> None:  # noqa: N802
+        """Serve board HTML, ``/watch``, ``/media``, or ``/thumb``.
+
+        Returns:
+            None
+        """
         parsed = urlparse(self.path)
         parts = [p for p in parsed.path.split("/") if p]
         if len(parts) == 2 and parts[0] in {"watch", "media"}:
@@ -286,10 +366,17 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
     def log_message(self, format: str, *args: Any) -> None:
+        """Swallow request logs (board is a sidecar, not an access log).
+
+        Args:
+            format: Unused printf-style log format from ``BaseHTTPRequestHandler``.
+            *args: Unused format arguments.
+        """
         return
 
 
 def main() -> None:
+    """Listen on ``0.0.0.0:8190`` until killed."""
     print("[ez-comfy] studio-ui http://0.0.0.0:8190", file=sys.stderr, flush=True)
     httpd = ThreadingHTTPServer(("0.0.0.0", 8190), Handler)
     httpd.serve_forever()

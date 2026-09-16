@@ -29,6 +29,7 @@ import re
 import sys
 from pathlib import Path
 
+# VHS.core.js rewrite: marker, pack paths, and legacy widgetInputs import.
 MARKER = "LAB_VHS_WIDGET_INPUTS_PATCH"
 PACK_REL = Path("custom_nodes") / "ComfyUI-VideoHelperSuite"
 CORE_REL = PACK_REL / "web" / "js" / "VHS.core.js"
