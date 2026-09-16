@@ -737,7 +737,7 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         )
     if name == "seconds" and ntype == "EmptyAceStep1.5LatentAudio":
         return "Bed or sting length in seconds."
-    if name == "prompt" and ntype == "EZKleinPromptEnhance":
+    if name == "prompt" and ntype == "EZKleinPromptEnhance" and node is not None:
         if _enhance_mode(node) == "text_swap":
             return (
                 "Replacement lettering, or Replace SALE with OPEN. "
