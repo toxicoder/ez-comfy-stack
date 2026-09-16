@@ -1436,16 +1436,17 @@ def encyclopedia() -> dict[str, Any]:
         "Save 90s film (MP4)",
         "Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.",
         origin="ez_film",
-        lab="Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8.",
+        lab="Queue once. xfade_cs is audio-only acrossfade; 0 is a hard cut. go-see ships xfade_cs 8. act=0 is a 90s film master; act=1–5 writes ez_<slug>_actN_90s.mp4.",
         sockets=[
             *[_s(f"shot_{i:02d}", "VHS_FILENAMES", "in", f"Shot {i:02d} MP4.") for i in range(1, 19)],
             _s("disclosure", "STRING", "in", "EZFilmDisclosure text."),
-            _s("path", "STRING", "out", "ez_<slug>_90s.mp4 path."),
+            _s("path", "STRING", "out", "Published MP4 path."),
         ],
         widgets=[
-            _w("film", index=0, typ="COMBO", desc="Film slug.", gen="Picks output name and shot-map. Must match the graph.", choices=[("go-see", "Parkour 90s."), ("still-here", "Household morning 90s."), ("switchyard", "Night freight-yard 90s.")]),
-            _w("cap_seconds", index=1, typ="FLOAT", rng="90.0 max", desc="Hard duration cap.", gen="Stay 90. Longer fights the product rule (no 90 s denoise; this is a stitch cap)."),
-            _w("xfade_cs", index=2, typ="INT", rng="0–50; 10 = 0.10 s", desc="Audio-only acrossfade in centiseconds.", gen="0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see. Picture stays cut-only so duration stays on picture."),
+            _w("film", index=0, typ="COMBO", desc="Film id.", gen="Picks output name and shot-map. Must match the graph.", choices=[("go-see", "Parkour 90s."), ("still-here", "Household morning 90s."), ("switchyard", "Night freight-yard 90s."), ("tide-table", "Dawn skiff 7.5 min."), ("night-oven", "Bakery 7.5 min."), ("glasshouse", "Storm glasshouse 7.5 min."), ("last-lane", "Night two-lane 7.5 min."), ("breakwater", "Storm-wall walk 7.5 min.")]),
+            _w("cap_seconds", index=1, typ="FLOAT", rng="90.0 max", desc="Hard duration cap for this 18-shot stitch.", gen="Stay 90. This is a stitch cap, not a denoise length. 7.5 min masters are host concat of 90 stems."),
+            _w("xfade_cs", index=2, typ="INT", rng="0–50; 10 = 0.10 s", desc="Audio-only acrossfade in centiseconds.", gen="0 = hard cut (still-here, switchyard). 8 = 0.08 s audio cross on go-see / last-lane / breakwater. Picture stays cut-only so duration stays on picture."),
+            _w("act", index=3, typ="INT", rng="0–5", desc="0 = 90s film master; 1–5 = act master for a 7.5 min film.", gen="Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4."),
         ],
     )
     nodes["EZDCCLoadGuideStill"] = _n(
