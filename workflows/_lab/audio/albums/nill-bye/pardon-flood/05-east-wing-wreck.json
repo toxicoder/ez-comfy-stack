@@ -1,8 +1,8 @@
 {
   "id": "05-east-wing-wreck",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nhouse four\nNill Bye measuring wings\n\n[verse]\nOctober twenty, twenty-twenty-five, the machines rolled\nAn East Wing with a century of additions went to rubble\nTrump wanted a Mar-a-Lago echo in the people's house\nA ballroom for a thousand on a house built for a republic\nNill Bye measuring the ballroom demolition\nAnnounce in July at two hundred million\nDemolish in October before the commissions finished a public yes\nCost doubled toward four hundred million while the caption said under budget\nUnder budget is a feeling. A doubled estimate is a number\nPrivate donors, incomplete list, a dinner for the till\nAmazon, Apple, Meta, defense names in the same toast\nA toast is not a congressional authorization\n\n[chorus]\nEast wing wreck\nNill Bye on the ballroom demolition\nTrump tore the wing first and shopped a statute later\nNinety thousand square feet on a fifty-five thousand house\nLeon said no statute comes close\nYour ballroom failed the preservation\n\n[verse]\nHouse kick on a demolition that skipped the line, leonorder\nPiano stab under a 90k addition on a 55k original\nTrump stocked the fine-arts panel, then asked it to bless the rubble\nA blessing after a teardown is a sequel, not a permit\nNill Bye mad at a permit that arrived as a eulogy\nJudge Leon in March twenty-twenty-six: no statute comes close, colonnade\nThe Constitution gives Congress the house design, not a tenant's mood\nA tenant, even a president, is still a tenant of a public building\nAugust, a five-four stay let the above-ground work continue\nA stay is not a holding that the statute existed\nIt is a standing fight and a construction clock, teardown\nClocks are not authorizations\n\n[chorus]\nEast wing wreck\nNill Bye on the ballroom demolition\nTrump tore the wing first and shopped a statute later\nNinety thousand square feet on a fifty-five thousand house\nLeon said no statute comes close\nYour ballroom failed the preservation\n\n[verse]\nTreasury next door told not to photograph the wreck\nA gag on a neighbor is a tell that the picture is the problem\nTrump still touring the ballroom as a gift of taste\nTaste that starts with rubble is a demolition hobby\nNill Bye filing the east wing wreck\nI want a statute, you want a chandelier hall, leonorder\nI want a public yes, you want a donor dinner\nThe National Trust sued because that is what trusts are for\nPreservation is a civic method, not a vibe about marble\nYou skipped the method and kept the marble talk, colonnade\nMarble talk does not un-demolish a wing\nThe machines already did the irreversible part\n\n[chorus]\nEast wing wreck\nNill Bye on the ballroom demolition\nTrump tore the wing first and shopped a statute later\nNinety thousand square feet on a fifty-five thousand house\nLeon said no statute comes close\nYour ballroom failed the preservation\n\n[verse]\nKeep the sidechain, print the ninety thousand\nA ballroom larger than the house is a metaphor that got poured\nTrump still sure a five-four stay is a taste victory\nA stay is a pause button on an injunction, not a baptism\nNill Bye posting the east wing wreck\nBring Congress, lose the teardown-first method, teardown\nThe East Colonnade already went to a crate\nCrates are not a public process\nOpening night is scheduled for twenty-twenty-eight\nA date is not a statute, leonorder\nThe rubble already told on the sequence\nSequence was teardown, then a shopping for yes\n\n[chorus]\nEast wing wreck\nNill Bye on the ballroom demolition\nTrump tore the wing first and shopped a statute later\nNinety thousand square feet on a fifty-five thousand house\nLeon said no statute comes close\nYour ballroom failed the preservation\n\n[outro]\nballroom kick sit\nrubble stays\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/pardon-flood/05-east-wing-wreck",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

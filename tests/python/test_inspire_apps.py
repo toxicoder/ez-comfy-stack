@@ -70,9 +70,12 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
-    assert "Klein prompt" in labels
-    assert "Wan prompt" in labels
-    assert "LTX prompt" in labels
+    assert labels[0] == "Prompt"
+    assert "Context" in labels
+    assert "Klein prompt" not in labels
+    assert "Wan prompt" not in labels
+    assert "LTX prompt" not in labels
+    assert any("style" in label.lower() for label in labels)
     assert len(labels) == len(set(labels)), labels
     _assert_no_overlap(graph)
 

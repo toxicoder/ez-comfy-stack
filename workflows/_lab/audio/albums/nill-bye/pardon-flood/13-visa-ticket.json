@@ -1,8 +1,8 @@
 {
   "id": "13-visa-ticket",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nhardstyle reverse\nNill Bye pricing H-1B\n\n[verse]\nSame Oval photo as the million-dollar SKU, a two-product launch\nA hundred thousand on an H-1B as if a fee were a statute, hundredk\nTrump sold it as a filter for the serious firms\nSerious is a stump word for firms that can float a six-figure hello\nNill Bye pricing the hundred-thousand fee\nA labor market is wages, shortages, a lottery with rules\nA ticket is a till. You picked a till\nStartups, labs, public hospitals do not float a hundred-k hello\nThey are not unserious. They are not a luxury brand, h1bfee\nYou priced them out and called it quality control\nQuality control that only hears a wire is a silk rope\nSilk ropes are not a Department of Labor method, tillgate\n\n[chorus]\nVisa ticket\nNill Bye on the hundred-thousand fee\nTrump SKU'd a work status as a hundred-k gate\nA gate that hears a wire is a wealth test, not a labor market\nCongress writes the categories. You wrote a price tag\nYour ticket failed the organic visa\n\n[verse]\nHardstyle reverse-bass on a sold gate, hundredk\nScreech lead under a fee that photographs as toughness\nTrump still touring the ticket as putting Americans first, h1bfee\nFirst would be a wage rule, a recruitment test, a real audit\nNill Bye mad at a till dressed as a labor program\nI will not punch the worker. I will punch the SKU\nThe worker did not design the hundred-k hello\nYou did, in the same photo as the million-dollar residency\nTwo products, one launch, a consistent method: checkout\nCheckout is not an immigration system\nIt is a checkout stall with a patriotic caption, tillgate\nCaptions are the costume. The till is the science, hundredk\n\n[chorus]\nVisa ticket\nNill Bye on the hundred-thousand fee\nTrump SKU'd a work status as a hundred-k gate\nA gate that hears a wire is a wealth test, not a labor market\nCongress writes the categories. You wrote a price tag\nYour ticket failed the organic visa\n\n[verse]\nH-1B already had a fight worth having: wages, abuse, replacement\nThat fight lives in a statute and a DOL file, not a price tag\nTrump skipped the fight and sold a gate, h1bfee\nSkipping is the tell that the photo mattered more than the file, tillgate\nNill Bye filing the visa ticket\nI want a wage floor, you want a hundred-k hello\nI want a file, you want a SKU\nA fee this size is a policy that selects for the already-large\nAlready-large is not a public-interest test\nIt is a customer segment\nCustomer segments belong in a catalog\nCatalogs are not organic visa acts\n\n[chorus]\nVisa ticket\nNill Bye on the hundred-thousand fee\nTrump SKU'd a work status as a hundred-k gate\nA gate that hears a wire is a wealth test, not a labor market\nCongress writes the categories. You wrote a price tag\nYour ticket failed the organic visa\n\n[verse]\nKeep the reverse bass, print the hundred thousand\nA ticket can exist. This one is a checkout stall on a status\nTrump still sure a price tag is a labor filter\nA filter that cannot hear a lab or a ward is a wealth test\nNill Bye posting the visa ticket\nBring Congress, lose the till\nThe Oval already looked like a launch\nThe worker already was not the designer\nThe SKU already told on the labor talk, hundredk\nLabor talk already bounced off the hello\nHello is a price\nA price is not a statute, h1bfee\n\n[chorus]\nVisa ticket\nNill Bye on the hundred-thousand fee\nTrump SKU'd a work status as a hundred-k gate\nA gate that hears a wire is a wealth test, not a labor market\nCongress writes the categories. You wrote a price tag\nYour ticket failed the organic visa\n\n[outro]\nbass rest\ntill stays\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/pardon-flood/13-visa-ticket",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

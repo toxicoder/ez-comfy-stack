@@ -818,6 +818,7 @@
       ]
     },
     "lab_rel": "audio/albums/drive-through/afterparty/02-diesel-hum",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -942,8 +943,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

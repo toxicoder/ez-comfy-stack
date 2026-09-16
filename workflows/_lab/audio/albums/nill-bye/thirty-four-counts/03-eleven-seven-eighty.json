@@ -1,8 +1,8 @@
 {
   "id": "03-eleven-seven-eighty",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ntape hiss\nNill Bye transcribing\n\n[verse]\nJanuary two, a Saturday pressure-call, raffensperger\nBrad Raffensperger, fellow Republican\nTrump wanted eleven thousand seven hundred eighty\nOne more than the eleven thousand seven hundred seventy-nine\nNill Bye transcribing the Georgia tape\nThe state had counted, audited, recounted\nBiden's margin did not move for a threat\nYou offered a criminal overlay if they refused\nDead voters at five thousand, they found two\nThe data you have is wrong, he said\nYou said recalculate. He said stand by the numbers\nA secretary of state is not a vending slot, canvass\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nJazz hop brushes on a recorded hour\nMuted trumpet under a demand dressed as math, remainder\nTrump treated a certified result as a suggestion\nFind is a verb with a destination built in\nNill Bye mad at a hunt for uncast ballots\nYou do not find votes the way you find a sock\nYou count them, then you live with the total\nMeadows asked for compromise on a certified sheet, raffensperger\nCompromise is for a bill, not a tally\nGeorgia already ran the machine and the hand\nThree methods, one winner, zero magic remainder\nThe tape is the exhibit, not a gossip mill\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nFulton theories, suitcase lore, scanned-thrice myths\nEach one died in the same conversation\nTrump kept stacking debunked clips as if volume were proof\nRaffensperger kept answering with the actual canvass\nNill Bye filing the margin-plus-one ask\nOne more than you lost by is not a coincidence\nIt is the tell that the number was the goal\nAccuracy was the costume, canvass\nA Republican official still said no\nThat no is the whole civic method, remainder\nYou wanted a colleague to break his own count, raffensperger\nHe declined, and the tape kept running\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[verse]\nYears on, you still tour the same remainder\nAs if a recording were a rumor you could out-shout\nTrump still sure Georgia hid a sock-drawer of ballots\nThe drawer was a certified canvass\nNill Bye posting the eleven seven eighty\nA find-request is a pressure campaign\nI want a tally, you want a remainder that fits\nKeep the brushes, print the ask\nEleven thousand seven hundred eighty is not an audit finding\nIt is a shopping list, canvass\nThe tape already priced the errand, remainder\nRaffensperger already closed the register\n\n[chorus]\nEleven seven eighty\nNill Bye on the Georgia tape\nTrump asked to find a margin-plus-one\nRaffensperger kept the certified math\nThree counts, same winner, one ask\nYour find was a demand, not an audit\n\n[outro]\ntape stop\nmargin holds\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

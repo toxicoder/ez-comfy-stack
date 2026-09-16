@@ -272,7 +272,7 @@
           "name": "start_image",
           "shape": 7,
           "type": "IMAGE",
-          "link": null
+          "link": 6
         }
       ],
       "outputs": [
@@ -360,7 +360,7 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": null
+          "link": 8
         },
         {
           "name": "negative",

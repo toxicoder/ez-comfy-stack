@@ -957,10 +957,128 @@ def apply_enhance_policy(graph: dict[str, Any]) -> None:
         extra["lab_app_mode"]["enhance_off_identity"] = True
 
 
+def _next_link_id(graph: dict[str, Any]) -> int:
+    lid = 1
+    if graph.get("links"):
+        lid = max(int(link[0]) for link in graph["links"]) + 1
+    return lid
+
+
+def _ensure_named_input(
+    node: dict[str, Any],
+    name: str,
+    ltype: str = "STRING",
+    widget: str | None = None,
+) -> dict[str, Any]:
+    inputs = node.setdefault("inputs", [])
+    existing = next((item for item in inputs if item.get("name") == name), None)
+    if existing is not None:
+        if widget and "widget" not in existing:
+            existing["widget"] = {"name": widget}
+        return existing
+    item: dict[str, Any] = {"name": name, "type": ltype, "link": None}
+    if widget:
+        item["widget"] = {"name": widget}
+    inputs.append(item)
+    return item
+
+
+def _link_string(
+    graph: dict[str, Any],
+    src: dict[str, Any],
+    dst: dict[str, Any],
+    dest_name: str,
+    *,
+    src_slot: int = 0,
+    widget: str | None = None,
+) -> int | None:
+    """Wire src STRING output into dst named input. Skip if already linked from src."""
+    dest = _ensure_named_input(dst, dest_name, widget=widget)
+    if dest.get("link") is not None:
+        lid = int(dest["link"])
+        for link in graph.get("links") or []:
+            if int(link[0]) == lid and int(link[1]) == int(src["id"]):
+                return lid
+        return lid
+    outputs = src.setdefault("outputs", [])
+    while len(outputs) <= src_slot:
+        outputs.append(
+            {
+                "name": "prompt",
+                "type": "STRING",
+                "links": [],
+                "slot_index": len(outputs),
+            }
+        )
+    lid = _next_link_id(graph)
+    links = outputs[src_slot].setdefault("links", [])
+    if not isinstance(links, list):
+        outputs[src_slot]["links"] = [lid]
+    else:
+        links.append(lid)
+        outputs[src_slot]["links"] = links
+    dest["link"] = lid
+    dest_slot = dst["inputs"].index(dest)
+    graph.setdefault("links", []).append(
+        [lid, int(src["id"]), src_slot, int(dst["id"]), dest_slot, "STRING"]
+    )
+    graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), lid)
+    return lid
+
+
+def repair_dest_input_links(graph: dict[str, Any]) -> None:
+    """Set dest inputs[slot].link from links[] so Nodes 2.0 keeps the wire."""
+    by_id = {int(n["id"]): n for n in graph.get("nodes") or []}
+    for link in graph.get("links") or []:
+        if not isinstance(link, list) or len(link) < 5:
+            continue
+        lid, dest, slot = int(link[0]), int(link[3]), int(link[4])
+        node = by_id.get(dest)
+        if node is None:
+            continue
+        inputs = node.get("inputs") or []
+        if slot >= len(inputs):
+            continue
+        recorded = inputs[slot].get("link")
+        if recorded is None:
+            inputs[slot]["link"] = lid
+
+
+def wire_identity_context_to_ltx(graph: dict[str, Any]) -> None:
+    """Fan Klein identity STRING into every LTX enhance context socket."""
+    klein = next(
+        (n for n in graph.get("nodes") or [] if n.get("type") == "EZKleinPromptEnhance"),
+        None,
+    )
+    if klein is None:
+        return
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZLTXPromptEnhance":
+            continue
+        _link_string(graph, klein, node, "context")
+
+
+def wire_script_context_to_ace(graph: dict[str, Any]) -> None:
+    """Fan podcast script STRING into ACE-Step enhance context."""
+    script = next(
+        (n for n in graph.get("nodes") or [] if n.get("type") == "EZPodcastScript"),
+        None,
+    )
+    if script is None:
+        return
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZAceStepPromptEnhance":
+            continue
+        _link_string(graph, script, node, "context")
+
+
 def enable_lab_graph(graph: dict[str, Any]) -> None:
     """Wire ACE tags, normalize widgets, then apply the on/off enhance policy."""
     insert_ace_enhance(graph)
     insert_negative_enhance(graph)
+    wire_identity_context_to_ltx(graph)
+    wire_script_context_to_ace(graph)
+    repair_dest_input_links(graph)
     normalize_enhance_widgets(graph)
     apply_enhance_policy(graph)
     extra = graph.setdefault("extra", {})

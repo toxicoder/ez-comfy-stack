@@ -1015,11 +1015,26 @@ def test_writer_prompt_forbids_living_mcs() -> None:
 
 
 def test_lyrics_enhance_off_passthrough() -> None:
+    types = EZRapLyrics.INPUT_TYPES()
+    assert types["optional"]["context"][1]["forceInput"] is True
     with patch("ez_prompt_enhance.client.complete") as complete:
-        out = EZRapLyrics().run(DRAFT_LYRICS, False)
+        out = EZRapLyrics().run(DRAFT_LYRICS, False, "album theme")
     complete.assert_not_called()
     assert out["result"][0] == DRAFT_LYRICS
     assert out["ui"]["passthrough"][0] == "enhance off"
+
+
+def test_lyrics_enhance_on_sends_context() -> None:
+    with (
+        patch("ez_prompt_enhance.client.complete", return_value=("[verse]\nrewritten", None)) as complete,
+        patch("ez_prompt_enhance.client._close_llm"),
+    ):
+        out = EZRapLyrics().run(DRAFT_LYRICS, True, "own the booth")
+    assert "[verse]" in out["result"][0]
+    user = complete.call_args[0][1]
+    assert DRAFT_LYRICS.splitlines()[0] in user or "[intro]" in user
+    assert "Context:" in user
+    assert "own the booth" in user
 
 
 def test_lyrics_missing_gguf_passthrough() -> None:

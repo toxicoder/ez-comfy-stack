@@ -125,7 +125,13 @@ class EZRapLyrics:
                     "BOOLEAN",
                     {"default": True, "label_on": "On", "label_off": "Off"},
                 ),
-            }
+            },
+            "optional": {
+                "context": (
+                    "STRING",
+                    {"forceInput": True, "dynamicPrompts": False},
+                ),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -140,25 +146,28 @@ class EZRapLyrics:
         "invents the vocal timbre from tags plus lyrics."
     )
 
-    def run(self, lyrics, enhance=False):
+    def run(self, lyrics, enhance=False, context=""):
         original = lyrics if isinstance(lyrics, str) else str(lyrics)
+        ctx = context if isinstance(context, str) else str(context or "")
         if not _as_bool(enhance):
             return _pack_text(original, "enhance off")
         try:
             _ensure_lab_custom_nodes_path()
             from ez_prompt_enhance.client import _close_llm
             from ez_prompt_enhance.client import complete
+            from ez_prompt_enhance.client import compose_context_user
+            from ez_prompt_enhance.client import with_context_system
         except Exception as exc:  # noqa: BLE001 — fail-soft
             _log(f"prompt enhance client unavailable: {exc}")
             return _pack_text(original, "llama.cpp unavailable")
         try:
-            system = load_writer_prompt(FLAVOR_RAP)
+            system = with_context_system(load_writer_prompt(FLAVOR_RAP), ctx)
         except FileNotFoundError as exc:
             _log(f"rap lyrics prompt missing: {exc}")
             return _pack_text(original, "passthrough")
         _log("rewriting rap lyrics via on-box GGUF…")
         try:
-            rewritten, reason = complete(system, original)
+            rewritten, reason = complete(system, compose_context_user(original, ctx))
         finally:
             try:
                 _close_llm()

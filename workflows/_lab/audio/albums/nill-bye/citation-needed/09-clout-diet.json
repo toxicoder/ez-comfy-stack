@@ -1,8 +1,8 @@
 {
   "id": "09-clout-diet",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ndusty break\nlikes as food\nNill Bye scanning\n\n[verse]\nRake ate a clout diet of likes\nDusty break under a hollow spike\nCalories counted in a double-tap gram\nI want a protein, you want a ham\nSpy keys click on an empty macro\nYour hunger is a feed, your plate is a tableau\nNill Bye reading what the serving hid\nHe smiles at a calorie that never did\nSub bass low, the portion shrinks\nYou fasted on applause till the body blinks\nClout diet closed when the likes run dry\nEmpty macros, a decorative pie\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nYou plated a metric and called it a meal\nThen you crashed when the hunger got stark\nRake with a clout diet, no fiber in\nNill Bye weighing the hollow grin\nTrip-hop dust, the snack is air\nI want a gram, you want a stare\nLikes as calories, the scale is fake\nYour protein is a caption you cannot bake\nSpy keys wait on a fasting boast\nYou sold a diet that was mostly ghost\nEmpty macros on a pretty dish\nClout diet truth, you swallowed a wish\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nDusty break while you chase a serving\nI want a portion that is actually deserving\nNill Bye logging the missing gram\nRake still chewing a numerical jam\nSub bass under a calorie mirage\nYou wanted a bulk from a borrowed collage\nHunger first, then the flex, then the crash-out\nThat's a clout diet, not a workout\nFiber none, the plate is styled\nI keep the ledger, you keep it wild\nLikes unpaid, the macros vacant\nHe still ordering a decorative bacon\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nRake at the empty-plate bar\nNill Bye posting the diet's scar\nClout diet first, the work can idle\nYou wanted a bulk from a hungry bait\nTrip-hop fades, the serving's gone\nI close the scale, you ask what went wrong\nCalories of clout do not rebuild\nEmpty macros, the hunger filled\nSpy keys out, the snack is lapsed\nEat the work, the likes are untrue\nHe still hunting a numerical feast\nI file the diet as a decorative beast\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[outro]\nlikes unpaid\nmacros empty\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/citation-needed/09-clout-diet",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

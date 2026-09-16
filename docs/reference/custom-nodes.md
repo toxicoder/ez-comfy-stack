@@ -48,7 +48,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
-| `ez_prompt_enhance` | 6 nodes | Klein / Wan / LTX / negative / join / ACE-Step |
+| `ez_prompt_enhance` | 7 nodes | Klein / Wan / LTX / negative / join / context join / ACE-Step |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
@@ -121,7 +121,7 @@ Category `ez-comfy/music`. [Local music](../music.md).
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZRapLyrics` | Rap Lyrics | `lyrics` STRING multiline, `enhance` BOOLEAN (default on) | `STRING` lyrics | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. **Forbids living-MC names and famous hooks**. ACE-Step still invents vocal timbre from tags plus lyrics |
+| `EZRapLyrics` | Rap Lyrics | `lyrics` STRING multiline, `enhance` BOOLEAN (default on); optional `context` STRING (forceInput) | `STRING` lyrics | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. **Forbids living-MC names and famous hooks**. ACE-Step still invents vocal timbre from tags plus lyrics. Context ignored when Enhance is off |
 | `EZAudioMetadata` | Album metadata | `AUDIO` audio, `artist` `album` `title` STRING, `track` INT 1–99, `tracktotal` INT 1–99, `year` INT 1900–2100 (default 2026), `art_mode` combo `skip` `upload` `generate` (default `skip`), `prefix` STRING; optional `IMAGE` cover | `AUDIO` audio | graph **audio** | Copies ACE SaveAudio masters into `albums/<Artist>/<Album>/` and writes tags |
 | `EZAlbumPack` | Pack album zip | `artist` STRING, `album` STRING | `STRING` zip_path | graph **audio** | Writes `<Album>.m3u` and `<Album>.zip`. CPU only |
 
@@ -133,7 +133,7 @@ Category `ez-comfy/podcast`. [Local podcast](../podcast.md).
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZPodcastScript` | Podcast Script | `prompt` STRING multiline, `enhance` BOOLEAN (default on), `flavor` combo `podcast_two_host` `radio_drama` (default `podcast_two_host`) | `STRING` script | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. Unloads the writer after a rewrite so TTS can run in the same Queue |
+| `EZPodcastScript` | Podcast Script | `prompt` STRING multiline, `enhance` BOOLEAN (default on), `flavor` combo `podcast_two_host` `radio_drama` (default `podcast_two_host`); optional `context` STRING (forceInput) | `STRING` script | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. Unloads the writer after a rewrite so TTS can run in the same Queue. Context ignored when Enhance is off |
 | `EZPodcastDisclosure` | Podcast Disclosure | `script` STRING | `STRING` script | graph **audio** | Prepends the **fixed** line: voices and music are synthesized; hosts are original characters, not recordings of real people. Operators cannot edit that string |
 | `EZKokoroTTS` | Kokoro TTS (two-host) | `script` STRING, `speaker_a_voice` / `speaker_b_voice` / `announcer_voice` combo (Kokoro ids; defaults `af_heart` / `am_michael` / `bm_george`), `include_announcer` BOOLEAN (default false), `backend` combo `kokoro` `chatterbox` `qwen3tts` (default `kokoro`), `speaker_a_ref` / `speaker_b_ref` STRING, `speed` FLOAT 0.5–1.5 (default 1.0) | `AUDIO` audio | graph **audio** | Kokoro-82M ONNX/CPU built-ins (Apache 2.0). Chatterbox / Qwen3-TTS only with operator-owned refs; empty refs fall back to Kokoro. **Never ships celebrity WAVs** |
 
@@ -145,12 +145,13 @@ Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft withou
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZKleinPromptEnhance` | Klein Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible |
-| `EZWanPromptEnhance` | Wan Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint. **No audio**. Style ignored on I2V/flf/vace |
-| `EZLTXPromptEnhance` | LTX Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. Style ignored on I2V |
+| `EZKleinPromptEnhance` | Klein Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo; optional `context` STRING (forceInput) | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. Context is bible/research; ignored when Enhance is off |
+| `EZWanPromptEnhance` | Wan Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style`; optional `context` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint. **No audio**. Style ignored on I2V/flf/vace. Context ignored when Enhance is off |
+| `EZLTXPromptEnhance` | LTX Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style`; optional `context` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. Style ignored on I2V. Context (identity/logline) ignored when Enhance is off |
 | `EZNegativePromptEnhance` | Negative Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `family` combo `klein` `wan` `ltx` (default `klein`); optional `positive` STRING (forceInput) | `STRING` prompt | CPU GGUF | Rewrites the negative against the enhanced positive so look terms cannot fight. Keeps watermarks / melt / flicker. Fail-soft; a deterministic complement still runs |
 | `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | — | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
-| `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`) | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and empty-body `[inst]` / `[drop]` lyrics (free-text lines fold into the brackets so ACE does not sing them) |
+| `EZContextJoin` | Context Join | `a` STRING (forceInput), `label_a`…`label_d`; optional `b` `c` `d` STRING (forceInput) | `STRING` context | — | Packs labeled desk fields (logline/script/audio policy/score). Empty values omitted. Wire into Prompt Enhance `context` |
+| `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`); optional `context` | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and empty-body `[inst]` / `[drop]` lyrics (free-text lines fold into the brackets so ACE does not sing them). Context (episode script) ignored when Enhance is off |
 
 ---
 

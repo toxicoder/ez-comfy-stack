@@ -117,7 +117,7 @@ ID_LTX_AUDIO_VAE = 103
 ID_LTX_NEG = 104
 ID_LTX_EMPTY_AUDIO = 105
 ID_UNLOAD = 50
-ID_MARKDOWN = 12
+ID_MARKDOWN = 13
 ID_CONCAT = 900
 ID_DISCLOSURE = 901
 SHOT_ID_BASE = 200
@@ -256,8 +256,8 @@ def build_shot_map_markdown(film: str, label: str, parsed: dict, beats: tuple) -
 def build_film_operator_note(stem: str, film: str, slug: str, label: str) -> str:
     enhance_line = (
         "Prompt enhance is **off** so the pinned identity and each baked LTX I2V "
-        "paragraph are encoded as written. Turn Enhance on only if you want the "
-        "4B rewriter."
+        "paragraph are encoded as written. The identity STRING is wired into each "
+        "shot enhance as context (used only if you turn Enhance on)."
     )
     klein_line = (
         "Models: Klein 4B distilled FP8 (identity still, 4-step, Enhance **off**, "
@@ -509,6 +509,8 @@ def build_one_click_film(
                 "YouTube 16:9 still",
                 "none",
             ]
+        if node.get("type") == "EZNegativePromptEnhance":
+            node["pos"] = [480.0, 400.0]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Positive":
             node["widgets_values"] = [identity]
         if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative":

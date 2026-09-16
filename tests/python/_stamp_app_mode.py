@@ -591,6 +591,12 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         return "Editable turns JSON. Rewrite translation fills text_target."
     if name == "enhance" and ntype == "EZDubScript":
         return "On: diarize + ASR + GGUF translate. Off: pin this JSON."
+    if ntype == "PrimitiveNode" and name == "value":
+        title = str((node or {}).get("title") or "")
+        if title == "Prompt":
+            return "Lazy sentence. All three family rewriters read this."
+        if title == "Context":
+            return "Optional research brief or bible. Empty is fine."
     return DEFAULT_WIDGET_DESCRIPTIONS.get(name)
 
 
@@ -605,6 +611,8 @@ def widget_config(
     text = overrides.get(name) or widget_description(name, node)
     label = display_label(node, name, collide=collide)
     height = WIDGET_HEIGHTS.get(name)
+    if name == "value" and str((node or {}).get("title") or "") == "Prompt":
+        height = WIDGET_HEIGHTS.get("prompt")
     config: dict[str, Any] = {}
     if text:
         config["description"] = str(text)
@@ -1057,6 +1065,29 @@ def _collect_raw_inputs(
                 raw.append((node["id"], "value", node))
         return raw
 
+    if spec.get("forge_widgets"):
+        for node in graph.get("nodes") or []:
+            if node.get("type") == "PrimitiveNode":
+                raw.append((node["id"], "value", node))
+        for node in graph.get("nodes") or []:
+            ntype = node.get("type")
+            nid = node["id"]
+            if ntype not in (
+                "EZKleinPromptEnhance",
+                "EZWanPromptEnhance",
+                "EZLTXPromptEnhance",
+            ):
+                continue
+            raw.extend(
+                (
+                    (nid, "style", node),
+                    (nid, "enhance", node),
+                )
+            )
+            if ntype == "EZLTXPromptEnhance":
+                raw.append((nid, "audio_notes", node))
+        return raw
+
     if spec.get("research_widgets"):
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZCreativeResearch":
@@ -1078,12 +1109,16 @@ def _collect_raw_inputs(
         ntype = node.get("type")
         nid = node["id"]
         if ntype == "EZAceStepPromptEnhance":
+            has_rap = any(
+                other.get("type") == "EZRapLyrics" for other in graph.get("nodes") or []
+            )
             mode = _enhance_mode(node)
             show_score = mode != "instrumental" or spec.get("ace_instrumental_score")
             raw.append((nid, "tags", node))
-            if show_score:
+            if show_score and not has_rap:
                 raw.append((nid, "lyrics", node))
-            raw.append((nid, "enhance", node))
+            if not has_rap:
+                raw.append((nid, "enhance", node))
             if show_score:
                 raw.append((nid, "mode", node))
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):

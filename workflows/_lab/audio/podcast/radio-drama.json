@@ -2,7 +2,7 @@
   "id": "radio-drama",
   "revision": 1,
   "last_node_id": 35,
-  "last_link_id": 28,
+  "last_link_id": 30,
   "nodes": [
     {
       "id": 1,
@@ -77,7 +77,9 @@
           "name": "script",
           "type": "STRING",
           "links": [
-            1
+            1,
+            29,
+            30
           ],
           "slot_index": 0
         }
@@ -848,7 +850,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/podcast/radio-drama\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein/podcast-cover.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## audio/podcast/radio-drama\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein/podcast-cover.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -988,7 +990,13 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 29
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -1032,7 +1040,13 @@
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 30
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -1287,6 +1301,22 @@
       6,
       2,
       "STRING"
+    ],
+    [
+      29,
+      2,
+      0,
+      34,
+      0,
+      "STRING"
+    ],
+    [
+      30,
+      2,
+      0,
+      35,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1372,7 +1402,7 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-radio",
-    "lab_note": "## audio/podcast/radio-drama\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein/podcast-cover.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## audio/podcast/radio-drama\n\nUS-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.\n\n- Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.\n- ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).\n- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session \u2014 not a one-graph film.\n- Cover: Queue **klein/podcast-cover.json** separately.\n\nVoices and music on this show are synthesized. The hosts are original characters, not recordings of real people.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
     "lab_description": "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
       "scale": 1,
@@ -1381,6 +1411,8 @@
         0
       ]
     },
+    "lab_rel": "audio/podcast/radio-drama",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1519,9 +1551,7 @@
     "lab_optional_unwired": [
       "UNETLoader",
       "VHS_VideoCombine"
-    ],
-    "lab_rel": "audio/podcast/radio-drama",
-    "workflowRendererVersion": "Vue-corrected"
+    ]
   },
   "version": 0.4
 }

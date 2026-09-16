@@ -1,8 +1,8 @@
 {
   "id": "04-memecoin-tab",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ntrap pads\nNill Bye reading OGE\n\n[verse]\nThree days before the oath, a social post as a launch\nCIC Digital and Fight Fight Fight on the cap table, cicdigital\nTrump-linked entities sitting on about four-fifths of the coins\nFour-fifths is not a community. It is an insider float\nNill Bye reading the inauguration token\nWatchdogs said a foreign buyer can curry in silence\nSilence is the feature of a memecoin wire\nA hotel folio at least has a name. A wallet can shrug\nYou spent a first term arguing emoluments were a nothing\nThen you invented a faster nothing with a ticker\nFaster is not cleaner\nIt is a conflict with a block time, ogefile\n\n[chorus]\nMemecoin tab\nNill Bye on the inauguration token\nTrump posted GET YOUR dollar-sign now\nAffiliates kept about eighty percent of the supply\nA token is a wire from anyone, including a foreign desk\nYour disclosure failed the ethics office\n\n[verse]\nTrap hats on a pre-oath SKU\nDark pads under a GET YOUR now that was also a pump cue\nTrump's 2025 OGE pile later showed the haul\nCIC Digital in the hundreds of millions on souvenir coins\nNill Bye mad at a souvenir that is also a wire\nWorld Liberty on the other wing of the same year, insiderfloat\nGovernance tokens, a platform, a family stake around three-fifths\nThen the enforcement weather over crypto went sunny\nSunny weather plus a family ticker is the ethics cartoon\nCartoons are funny until they are a national-security desk, cicdigital\nA desk that cannot see a wallet is a blind spot you built\nYou built it on purpose because the float pays\n\n[chorus]\nMemecoin tab\nNill Bye on the inauguration token\nTrump posted GET YOUR dollar-sign now\nAffiliates kept about eighty percent of the supply\nA token is a wire from anyone, including a foreign desk\nYour disclosure failed the ethics office\n\n[verse]\nEarly wallets flipped. Late wallets ate the joke\nThat pattern is the memecoin method, not a mystery\nTrump still selling the token as an expression of support\nSupport that makes a family float richer is a product\nNill Bye filing the memecoin tab, ogefile\nI want a blind trust, you want a ticker\nI want a disclosure that can name a foreign desk, insiderfloat\nYou wanted a shrug and a social post\nThe OGE packet still had to count the millions\nCounting is the science. The shrug is the costume, cicdigital\nA president who sells a ticker is a checkout, not a steward\nSteward is the job. Checkout is the side hustle you promoted\n\n[chorus]\nMemecoin tab\nNill Bye on the inauguration token\nTrump posted GET YOUR dollar-sign now\nAffiliates kept about eighty percent of the supply\nA token is a wire from anyone, including a foreign desk\nYour disclosure failed the ethics office\n\n[verse]\nKeep the pads, print the eighty percent\nAn insider float is the whole conflict geometry\nTrump still sure a souvenir cannot be an emolument\nA souvenir that wires is an emolument with extra steps\nNill Bye posting the insider float\nBring a divestment, lose the ticker\nThe pre-oath post already timed the pump\nTiming is a method, ogefile\nThe OGE already added the haul\nThe wallet already shrugged\nShrug is not an ethics plan, insiderfloat\nThe float already told on the community talk, cicdigital\n\n[chorus]\nMemecoin tab\nNill Bye on the inauguration token\nTrump posted GET YOUR dollar-sign now\nAffiliates kept about eighty percent of the supply\nA token is a wire from anyone, including a foreign desk\nYour disclosure failed the ethics office\n\n[outro]\ntrap pads sit\nticker ticks\ncut",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/pardon-flood/04-memecoin-tab",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

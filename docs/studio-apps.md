@@ -90,9 +90,9 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein/hook-still** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
 | **klein/character-draft** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
 | **klein/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
-| **inspire/prompt-forge** | No UNET. Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
 | **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
-| **inspire/beat-sheet** | Script desk. Logline, audio policy, 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
+| **inspire/beat-sheet** | Script desk. Logline / script / audio policy / score pack into every card rewrite. 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---
 

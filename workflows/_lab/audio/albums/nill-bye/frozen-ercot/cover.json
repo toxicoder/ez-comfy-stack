@@ -388,7 +388,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/albums/nill-bye/frozen-ercot/cover\n\nAlbum cover for **Nill Bye \u2014 Frozen Ercot**. Occupancy klein \u2014 stop ACE-Step / Wan / LTX. Queue this before album-render --art generate. Prefix `albums/Nill Bye/Frozen Ercot/cover`.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## audio/albums/nill-bye/frozen-ercot/cover\n\nAlbum cover for **Nill Bye \u2014 Frozen Ercot**. Occupancy klein \u2014 stop ACE-Step / Wan / LTX. Queue this before album-render --art generate. Prefix `albums/Nill Bye/Frozen Ercot/cover`.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -673,7 +673,7 @@
         0
       ]
     },
-    "lab_note": "square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celebrity, no photograph\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Album cover still for Nill Bye / Frozen Ercot",
     "lab_app_mode": {
       "enabled": true,
@@ -729,14 +729,14 @@
       "LoadImage"
     ],
     "lab_rel": "audio/albums/nill-bye/frozen-ercot/cover",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_album": {
       "artist": "Nill Bye",
       "album": "Frozen Ercot",
       "album_slug": "frozen-ercot",
       "role": "cover",
       "year": 2026
-    },
-    "workflowRendererVersion": "Vue-corrected"
+    }
   },
   "version": 0.4
 }

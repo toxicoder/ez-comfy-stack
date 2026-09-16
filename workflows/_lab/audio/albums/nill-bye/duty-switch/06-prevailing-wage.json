@@ -1,8 +1,8 @@
 {
   "id": "06-prevailing-wage",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\ndnb-amen\nNill Bye reading the LCA\n\n[verse]\nH-1B already had a fight worth having: wages, abuse, replacement, wagetable\nThat fight lives in a statute and a DOL file, not a price tag, wardnight\nNill Bye reading the LCA as the install, wagetable\nPrevailing wage, a recruitment test, a real audit of the replacement claim, wardnight\nThose three are a labor market. A till is a customer segment\nCustomer segments belong in a catalog. Catalogs are not organic visa acts\nI want the labor market. I want the ward and the lab still able to hire\nWards and labs are not unserious. They are not a luxury brand, lcafile\nLuxury brands can float a six-figure hello. Public hospitals cannot\nCannot is the fairness test. Pass the test with a wage rule, not a checkout\nCheckouts photograph as toughness. Wage rules photograph as a PDF\nI want the PDF\n\n[chorus]\nPrevailing wage\nNill Bye on the labor file\nA visa is a status with a wage, a recruitment, an audit\nA hundred-k hello is a till, not a Department of Labor method\nLabs and wards do not float a luxury checkout\nYour H-1B is a file, not a SKU\n\n[verse]\nAmen break on a recruitment that actually recruited\nSub reese under an audit that can catch a replacement dodge\nNill Bye filing prevailing wage\nI will not punch the worker. I will punch the till as a fake labor program\nThe worker did not design a hundred-k hello. A photo-op did, wagetable\nPhoto-ops are not DOL. DOL is a form, a wage, a visit\nVisits are how abuse gets caught. Tills do not catch abuse. Tills select for the already-large\nAlready-large is not a public-interest test, lcafile\nPublic interest is a ward that can still staff a night, wardnight\nStaff the night. Date the LCA. Publish the wage table, lcafile\nWage tables are science for a labor file, wagetable\nBring the table, lose the hello\n\n[chorus]\nPrevailing wage\nNill Bye on the labor file\nA visa is a status with a wage, a recruitment, an audit\nA hundred-k hello is a till, not a Department of Labor method\nLabs and wards do not float a luxury checkout\nYour H-1B is a file, not a SKU\n\n[verse]\nCongress writes the categories. Categories have names and tests\nIf you want a tighter test, tighten the wage and the recruitment, in a bill\nNill Bye posting prevailing wage\nBills can be strict. Strict and a till are not the same sentence, wardnight\nStrict is a floor. A till is a velvet-adjacent rope we already renamed silk in another era\nThis era is a floor. Floors let a lab hire. Tills let a giant hire\nI want the lab. I want the ward. I want the startup that cannot float a luxury gate, lcafile\nGates that only hear a wire are wealth tests\nWealth tests are allowed in a private club. They are not a labor program\nLabor programs have files. Keep the file, wagetable\nKeep the audit. Keep the recruitment\nThe Oval already looked like a launch. Launches are for products. This is a status\n\n[chorus]\nPrevailing wage\nNill Bye on the labor file\nA visa is a status with a wage, a recruitment, an audit\nA hundred-k hello is a till, not a Department of Labor method\nLabs and wards do not float a luxury checkout\nYour H-1B is a file, not a SKU\n\n[verse]\nKeep the amen, print the LCA\nPrevailing wage is a civic method: floor, recruitment, audit, a bill if you want tighter\nNill Bye keeping the labor file, wardnight\nA ticket can exist. This one should be a file that a ward can pass\nPassing is a wage you can pay and a recruitment you can show\nShowing is the science. Showing is also the fairness\nFairness is a night shift that still has a nurse\nNurses are not a SKU. Do not SKU them, lcafile\nSKU is a store word we are not putting in this take\nThis take is a floor. Date the floor. Publish the table, wagetable\nTables are the install, wardnight\nPrevailing wage is the whole install, lcafile\n\n[chorus]\nPrevailing wage\nNill Bye on the labor file\nA visa is a status with a wage, a recruitment, an audit\nA hundred-k hello is a till, not a Department of Labor method\nLabs and wards do not float a luxury checkout\nYour H-1B is a file, not a SKU\n\n[outro]\namen rest, lcafile\nfloor sits\ncut",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/06-prevailing-wage",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

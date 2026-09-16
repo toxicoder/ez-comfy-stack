@@ -1,8 +1,8 @@
 {
   "id": "15-wrench-the-tap",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nfestival-trap\nfestival-crowd\nNill Bye pulling pipe\n\n[verse]\nLead service lines are a 19th-century install still drinking in a 21st-century kitchen\nKitchens are a civic product. The product should not dose a child, bloodleaddelta\nNill Bye pulling pipe as a public-health method, worstfirst\nEPA's Lead and Copper Rule Improvements already named replacement as the work, lslrtrench\nWork is a trench, a new line, a flush, a test, bloodleaddelta\nTests are blood and water. Both should fall. Falling is the science, worstfirst\nI want the fall. I want the inventory of lines published so a block can see the queue\nQueues that hide are how a quiet dose continues\nContinue is optional. Make it optional by digging\nDigging is not glamorous. Digging is a civilization of care you can photograph as a trench\nPhotograph the trench. Date the first block. Publish the blood-lead delta\nDeltas are the thesis, lslrtrench\n\n[chorus]\nWrench the tap\nNill Bye on the service line\nA neurotoxin in a tap is a measurement you can end with a wrench\nEPA already wrote the replacement. Fund it. Dig it. Date it\nBlood-lead is a number. Numbers fall when the pipe leaves the ground\nYour progress is a trench and a new line\n\n[verse]\nFestival 808 on a wrench that actually turns\nCrowd-bed under a block that got the new line first because the number was worst\nNill Bye filing wrench the tap\nWorst-first is a triage. Triage is science. Do not reverse it for a ribbon in a richer zip\nZips are not a health method. Blood-lead is a health method, bloodleaddelta\nI want the method. I want the crew. I want the year-by-year replacement clock, worstfirst\nClocks are how a rule becomes a pipe on a truck\nTrucks are the implementation desk. Fund the trucks. Staff the trench\nTrenches are cheaper than a lifetime of a neurotoxin\nCheaper is allowed to be the argument. The argument still ends at the same install, lslrtrench, nightbed\nInstall the line. Flush the tap. Test the tap\nBring the wrench, lose the quiet dose\n\n[chorus]\nWrench the tap\nNill Bye on the service line\nA neurotoxin in a tap is a measurement you can end with a wrench\nEPA already wrote the replacement. Fund it. Dig it. Date it\nBlood-lead is a number. Numbers fall when the pipe leaves the ground\nYour progress is a trench and a new line\n\n[verse]\nA filter is a bridge. A replacement is the destination\nDo not let the bridge become the policy. The policy is the trench\nNill Bye posting wrench the tap\nBridges can still ship while the trench is queued. Queue in public\nPublic queues are how a block knows it is not forgotten\nForgotten blocks are how a neurotoxin becomes a geography\nGeographies of dose are optional. Un-write them with a map of lines\nMaps are science. Maps plus a wrench are progress, bloodleaddelta\nProgress is a kid whose blood-lead fell because a pipe left the dirt\nKids are not a talking point. Kids are the reason the number exists\nKeep the reason. Keep the wrench. Keep the worst-first, worstfirst\nThe kitchen already knew the tap was the test, lslrtrench\n\n[chorus]\nWrench the tap\nNill Bye on the service line\nA neurotoxin in a tap is a measurement you can end with a wrench\nEPA already wrote the replacement. Fund it. Dig it. Date it\nBlood-lead is a number. Numbers fall when the pipe leaves the ground\nYour progress is a trench and a new line\n\n[verse]\nKeep the 808, print the replacement clock, bloodleaddelta\nWrench the tap is a civic method: inventory, worst-first, trench, test, publish the delta\nNill Bye keeping the wrench\nA neurotoxin is not a vibe. It is a metal you can take out of the ground\nTake it out. Date the last line in the worst census tract\nTracts are a map. Maps are how a closer stays honest\nHonest closers still have a bass. The bass can celebrate a trench\nCelebrating a trench is allowed. That is raw progress, worstfirst\nRaw progress is a tap that does not dose\nDo not dose. Dig. Replace. Test, lslrtrench\nThree verbs. Civilization is verbs with a wrench\nWrench the tap is the whole install, bloodleaddelta\n\n[chorus]\nWrench the tap\nNill Bye on the service line\nA neurotoxin in a tap is a measurement you can end with a wrench\nEPA already wrote the replacement. Fund it. Dig it. Date it\nBlood-lead is a number. Numbers fall when the pipe leaves the ground\nYour progress is a trench and a new line\n\n[outro]\nfestival stop, lslrtrench\ntap clean\ncut\nyeah",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/15-wrench-the-tap",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

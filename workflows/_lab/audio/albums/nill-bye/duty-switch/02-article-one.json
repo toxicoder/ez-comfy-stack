@@ -1,8 +1,8 @@
 {
   "id": "02-article-one",
   "revision": 1,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 15,
+  "last_link_id": 17,
   "nodes": [
     {
       "id": 1,
@@ -40,7 +40,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            13
+            14
           ],
           "slot_index": 0
         }
@@ -115,8 +115,8 @@
             "name": "seconds"
           },
           "links": [
-            6,
-            7
+            7,
+            8
           ],
           "slot_index": 0
         }
@@ -148,7 +148,7 @@
         {
           "name": "seconds",
           "type": "FLOAT",
-          "link": 6,
+          "link": 7,
           "widget": {
             "name": "seconds"
           }
@@ -159,7 +159,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            11
+            12
           ],
           "slot_index": 0
         }
@@ -174,20 +174,63 @@
       "title": "Latent length (seconds)"
     },
     {
-      "id": 5,
-      "type": "EZAceStepPromptEnhance",
+      "id": 15,
+      "type": "EZRapLyrics",
       "pos": [
         500,
         80
       ],
       "size": [
         400,
-        360
+        320
       ],
       "flags": {},
       "order": 4,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZRapLyrics"
+      },
+      "widgets_values": [
+        "[intro]\nrage-clip\nNill Bye opening Article I\n\n[verse]\nLearning Resources already wrote the holding in plain English\nIEEPA does not authorize a president to tax imports\nNill Bye opening Article I like a toolbox that actually fits\nIf you want a tariff, bring a bill. Bills have hearings and a score\nScores are CBO. CBO is a band around a number\nBands are how adults tax. Emergencies are how hobbies print a schedule\nHobbyhorses can be sincere. They still need a statute that names a duty\nName it. Debate it. Pass it. Date it\nSection 232 still sits for true sector tools that Congress actually wrote, regularorder\nUse the tool that exists. Do not stretch a 1977 sanctions grant into a VAT\nStretching is how a six-three happens\nI install the bill. The bill is the method, taxingclause\n\n[chorus]\nArticle one\nNill Bye on the taxing clause\nCongress lays and collects. That is the old sentence\nIEEPA is a sanctions toolbox, not a customs desk\nRegulate importation is not levy\nYour rate card goes through a bill\n\n[verse]\nRage hats on a customs desk that belongs to Congress\nLaser hats under a levy verb the emergency grant never received\nNill Bye filing article one\nA deficit is a budget fact, not a tariff clause, regularorder\nBudget facts go to a reconciliation or a regular order, not a night-letter rate card, cboscore\nRate cards that raise tens of billions are taxes. Taxes have a home in Article I\nHome them. That is not a technicality. That is the whole design, regularorder\nDesign is a republic that does not mint peacetime revenue from a sanctions page, taxingclause\nI want the page used for sanctions. I want the desk used for bills, cboscore\nTwo tools, two jobs. Do not mix the jobs\nMixing the jobs is how toy companies catch a tax they never voted\nBring a bill, lose the worldwide emergency as a till, regularorder\n\n[chorus]\nArticle one\nNill Bye on the taxing clause\nCongress lays and collects. That is the old sentence\nIEEPA is a sanctions toolbox, not a customs desk\nRegulate importation is not levy\nYour rate card goes through a bill\n\n[verse]\nRefund fights belong to a trade court after a holding\nThe holding already closed the emergency hobbyhorse, taxingclause\nNill Bye posting article one\nIf the policy is reciprocity, write reciprocity in a statute with a sunset\nSunsets are a band around a power. Bands are adulthood\nAdulthood is a hearing where a family firm can testify\nTestimony is slower than a Liberation caption. Slower is a feature when the tool is a tax, taxingclause\nTaxes should be slow. Slow is how you do not break a supply chain by accident\nAccidents are allowed to be expensive. Make them rarer with a bill\nRarer is progress, cboscore\nProgress is a customs schedule with a public score\nScore it. Pass it. Date it. That is the install, regularorder\n\n[chorus]\nArticle one\nNill Bye on the taxing clause\nCongress lays and collects. That is the old sentence\nIEEPA is a sanctions toolbox, not a customs desk\nRegulate importation is not levy\nYour rate card goes through a bill\n\n[verse]\nKeep the distortion, print the Roberts sentence, cboscore\nArticle one is a civic method: levy is a bill, sanctions stay sanctions\nNill Bye keeping the taxing clause, taxingclause\nRegulate is not a revenue power. Keep that sentence on the wall, cboscore\nWalls are how shops remember a six-three\nRemembering is cheaper than a second wreck, regularorder\nI want the cheaper path. The cheaper path is regular order, taxingclause\nRegular order is not a vibe. It is a calendar with a score\nCalendars are science for a tax, cboscore\nHang the calendar. Write the duty. Vote the duty\nThe toy companies already paid the homework, taxingclause\nArticle one is the whole install, regularorder\n\n[chorus]\nArticle one\nNill Bye on the taxing clause\nCongress lays and collects. That is the old sentence\nIEEPA is a sanctions toolbox, not a customs desk\nRegulate importation is not levy\nYour rate card goes through a bill\n\n[outro]\nrage hats sit, cboscore\nbill dated\ncut",
+        false
+      ],
+      "title": "Rap lyrics"
+    },
+    {
+      "id": 5,
+      "type": "EZAceStepPromptEnhance",
+      "pos": [
+        500,
+        460.0
+      ],
+      "size": [
+        400,
+        360
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lyrics",
+          "type": "STRING",
+          "link": 6,
+          "widget": {
+            "name": "lyrics"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "tags",
@@ -222,14 +265,14 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        520
+        860.0
       ],
       "size": [
         400,
         420
       ],
       "flags": {},
-      "order": 5,
+      "order": 6,
       "mode": 0,
       "inputs": [
         {
@@ -256,7 +299,7 @@
         {
           "name": "duration",
           "type": "FLOAT",
-          "link": 7,
+          "link": 8,
           "widget": {
             "name": "duration"
           }
@@ -267,8 +310,8 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            8,
-            9
+            9,
+            10
           ],
           "slot_index": 0
         }
@@ -307,13 +350,13 @@
         46
       ],
       "flags": {},
-      "order": 6,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 9
+          "link": 10
         }
       ],
       "outputs": [
@@ -321,7 +364,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            10
+            11
           ],
           "slot_index": 0
         }
@@ -344,7 +387,7 @@
         262
       ],
       "flags": {},
-      "order": 7,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -355,17 +398,17 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 8
+          "link": 9
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 10
+          "link": 11
         },
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 11
+          "link": 12
         }
       ],
       "outputs": [
@@ -373,7 +416,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            12
+            13
           ],
           "slot_index": 0
         }
@@ -404,18 +447,18 @@
         60
       ],
       "flags": {},
-      "order": 8,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 12
+          "link": 13
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 13
+          "link": 14
         }
       ],
       "outputs": [
@@ -423,9 +466,9 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            14,
             15,
-            16
+            16,
+            17
           ],
           "slot_index": 0
         }
@@ -448,13 +491,13 @@
         80
       ],
       "flags": {},
-      "order": 9,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 14
+          "link": 15
         }
       ],
       "outputs": [],
@@ -478,13 +521,13 @@
         100
       ],
       "flags": {},
-      "order": 10,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 15
+          "link": 16
         }
       ],
       "outputs": [],
@@ -509,7 +552,7 @@
         500
       ],
       "flags": {},
-      "order": 11,
+      "order": 12,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -533,7 +576,7 @@
         80
       ],
       "flags": {},
-      "order": 12,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -571,13 +614,13 @@
         220
       ],
       "flags": {},
-      "order": 13,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 16
+          "link": 17
         },
         {
           "name": "cover",
@@ -652,6 +695,14 @@
     ],
     [
       6,
+      15,
+      0,
+      5,
+      0,
+      "STRING"
+    ],
+    [
+      7,
       3,
       0,
       4,
@@ -659,7 +710,7 @@
       "FLOAT"
     ],
     [
-      7,
+      8,
       3,
       0,
       6,
@@ -667,7 +718,7 @@
       "FLOAT"
     ],
     [
-      8,
+      9,
       6,
       0,
       8,
@@ -675,7 +726,7 @@
       "CONDITIONING"
     ],
     [
-      9,
+      10,
       6,
       0,
       7,
@@ -683,7 +734,7 @@
       "CONDITIONING"
     ],
     [
-      10,
+      11,
       7,
       0,
       8,
@@ -691,7 +742,7 @@
       "CONDITIONING"
     ],
     [
-      11,
+      12,
       4,
       0,
       8,
@@ -699,7 +750,7 @@
       "LATENT"
     ],
     [
-      12,
+      13,
       8,
       0,
       9,
@@ -707,7 +758,7 @@
       "LATENT"
     ],
     [
-      13,
+      14,
       1,
       2,
       9,
@@ -715,7 +766,7 @@
       "VAE"
     ],
     [
-      14,
+      15,
       9,
       0,
       10,
@@ -723,7 +774,7 @@
       "AUDIO"
     ],
     [
-      15,
+      16,
       9,
       0,
       11,
@@ -731,7 +782,7 @@
       "AUDIO"
     ],
     [
-      16,
+      17,
       9,
       0,
       14,
@@ -818,6 +869,7 @@
       ]
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/02-article-one",
+    "workflowRendererVersion": "Vue-corrected",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -839,7 +891,7 @@
           }
         ],
         [
-          5,
+          15,
           "lyrics",
           {
             "description": "Lyrics, or [inst] for instrumental.",
@@ -848,7 +900,7 @@
           }
         ],
         [
-          5,
+          15,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -942,8 +994,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "workflowRendererVersion": "Vue-corrected"
+    "linearMode": true
   },
   "version": 0.4
 }

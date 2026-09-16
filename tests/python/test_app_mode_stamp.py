@@ -204,7 +204,8 @@ def test_research_chat_exposes_message_mode_search() -> None:
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
-    assert names[:3] == ["prompt", "prompt", "prompt"]
+    assert names[:2] == ["value", "value"]
+    assert names.count("prompt") == 0
     assert names.count("style") == 3
     assert names.count("enhance") == 3
     assert "audio_notes" in names
@@ -268,9 +269,10 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names.count("style") == 3
     labels = _labels(_load("inspire/prompt-forge.json"))
-    assert "Klein prompt" in labels
-    assert "Wan prompt" in labels
-    assert "LTX prompt" in labels
+    assert labels[0] == "Prompt"
+    assert "Context" in labels
+    assert "Klein prompt" not in labels
+    assert any("style" in label.lower() for label in labels)
     assert len(labels) == len(set(labels)), labels
 
 

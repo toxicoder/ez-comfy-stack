@@ -103,8 +103,12 @@ def test_writer_prompts_exist() -> None:
 
 
 def test_script_enhance_off_passthrough() -> None:
+    types = EZPodcastScript.INPUT_TYPES()
+    assert types["optional"]["context"][1]["forceInput"] is True
     with patch("ez_prompt_enhance.client.complete") as complete:
-        out = EZPodcastScript().run(SEED_SCRIPT, False, "podcast_two_host")
+        out = EZPodcastScript().run(
+            SEED_SCRIPT, False, "podcast_two_host", "research brief"
+        )
     complete.assert_not_called()
     assert out["result"][0] == SEED_SCRIPT
     assert out["ui"]["passthrough"][0] == "enhance off"
@@ -122,12 +126,16 @@ def test_script_missing_gguf_passthrough() -> None:
 
 def test_script_success_unloads_writer() -> None:
     with (
-        patch("ez_prompt_enhance.client.complete", return_value=("Speaker A: Hi.\nSpeaker B: Yo.", None)),
+        patch("ez_prompt_enhance.client.complete", return_value=("Speaker A: Hi.\nSpeaker B: Yo.", None)) as complete,
         patch("ez_prompt_enhance.client._close_llm") as close,
     ):
-        out = EZPodcastScript().run("lazy", True, "podcast_two_host")
+        out = EZPodcastScript().run("lazy", True, "podcast_two_host", "stay on the rack")
     close.assert_called()
     assert "Speaker A: Hi." in out["result"][0]
+    user = complete.call_args[0][1]
+    assert "lazy" in user
+    assert "Context:" in user
+    assert "stay on the rack" in user
 
 
 def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch) -> None:

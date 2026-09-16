@@ -15,6 +15,7 @@ from pathlib import Path
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_dest, lab_json, write_lab_graph
 from _stamp_app_mode import stamp_suite_graph
+from _wire_prompt_enhance import enable_lab_graph
 from _wire_prompt_enhance import _rewrite_enhance_blurb
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,7 +46,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
-3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
+3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.
@@ -66,7 +67,7 @@ US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1,
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
-3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit lyrics before Queue. Human rewrite required before any release.
+3. Prompt enhance is **off** so the canned bars stay as written. Turn Enhance on only if you want the 4B rewriter. Edit **Rap lyrics** before Queue (wired into ACE). Human rewrite required before any release.
 4. Original lyrics only. No living-artist names. No famous-hook paraphrases. No “in the style of <living artist>”.
 5. ACE-Step vocal is an invented timbre, not a clone.
 6. Saves: `ez_rap_full` FLAC + 320 kbps MP3.
@@ -171,6 +172,7 @@ class Graph:
             "version": 0.4,
         }
         apply_lab_identity(graph, rel)
+        enable_lab_graph(graph)
         stamp_suite_graph(graph)
         extra = graph.setdefault("extra", {})
         extra["lab_note"] = _rewrite_enhance_blurb(str(extra.get("lab_note") or ""))
@@ -462,6 +464,7 @@ def _build_ace(
     enhance_title: str = "ez_rap_prompt",
     layout: str = "column",
     album_meta: dict | None = None,
+    rap_writer: bool = False,
 ) -> dict:
     pos, group_specs = _ace_layout(layout)
     pos[13] = [2200, 80]
@@ -529,13 +532,32 @@ def _build_ace(
         inputs=[g.inp("seconds", "FLOAT", widget="seconds")],
         outputs=[g.out("LATENT", "LATENT", [])],
     )
+    ace_pos = list(pos[5])
+    enc_pos = list(pos[6])
+    if rap_writer:
+        g.add(
+            15,
+            "EZRapLyrics",
+            list(pos[5]),
+            [400, 320],
+            "Rap lyrics",
+            [lyrics, False],
+            outputs=[g.out("lyrics", "STRING", [])],
+        )
+        ace_pos = [pos[5][0], pos[5][1] + 380.0]
+        if ace_pos[1] + 360.0 > enc_pos[1] - 40.0:
+            enc_pos[1] = ace_pos[1] + 400.0
+    ace_inputs = []
+    if rap_writer:
+        ace_inputs = [g.inp("lyrics", "STRING", widget="lyrics")]
     g.add(
         5,
         "EZAceStepPromptEnhance",
-        pos[5],
+        ace_pos,
         [400, 360],
         enhance_title,
         [tags, lyrics, False, ace_mode],
+        inputs=ace_inputs or None,
         outputs=[
             g.out("tags", "STRING", []),
             g.out("lyrics", "STRING", []),
@@ -544,7 +566,7 @@ def _build_ace(
     g.add(
         6,
         "TextEncodeAceStepAudio1.5",
-        pos[6],
+        enc_pos,
         [400, 420],
         "ACE tags + lyrics",
         _ace_widgets(
@@ -660,6 +682,8 @@ def _build_ace(
     g.link(1, 1, 6, 0, "CLIP")
     g.link(5, 0, 6, 1, "STRING")
     g.link(5, 1, 6, 2, "STRING")
+    if rap_writer:
+        g.link(15, 0, 5, 0, "STRING")
     g.link(3, 0, 4, 0, "FLOAT")
     g.link(3, 0, 6, 3, "FLOAT")
     g.link(6, 0, 8, 1, "CONDITIONING")
@@ -703,6 +727,7 @@ def build_draft() -> dict:
         "ez_rap_draft",
         DRAFT_NOTE,
         "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal",
+        rap_writer=True,
         album_meta={
             "artist": "Local",
             "album": "Demos",
@@ -723,6 +748,7 @@ def build_full() -> dict:
         "ez_rap_full",
         FULL_NOTE,
         "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal",
+        rap_writer=True,
         album_meta={
             "artist": "Local",
             "album": "Demos",
@@ -766,6 +792,7 @@ def build_diss(ex: DissExample) -> dict:
         bpm=int(ex["bpm"]),
         seed=int(ex["seed"]),
         album_meta=_catalog_meta(ex),
+        rap_writer=True,
     )
 
 

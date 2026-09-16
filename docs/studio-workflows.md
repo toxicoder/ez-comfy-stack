@@ -115,7 +115,7 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 | Workflow | What it does |
 | --- | --- |
-| **inspire/prompt-forge** | No UNET. Klein / Wan / LTX enhance preview (occupancy **llm**) |
+| **inspire/prompt-forge** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX enhance preview (occupancy **llm**) |
 | **inspire/research-chat** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
 | **inspire/beat-sheet** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |
 

@@ -13,8 +13,9 @@ import sys
 from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
-from _lab_paths import lab_json
+from _lab_paths import apply_lab_identity, lab_json
 from _stamp_app_mode import stamp_suite_graph
+from _wire_prompt_enhance import enable_lab_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -46,7 +47,7 @@ US-safe audio-first episode (Option A). Sequential Queue — do not load Klein +
 1. Edit the script (human part). Prompt enhance is **off** so Speaker A/B labels stay parser input. Turn Enhance on only if you want the 4B rewriter.
 2. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
-4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. Duck −15 dB under speech.
+4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
 6. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
 7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
@@ -59,7 +60,7 @@ AUDIO_NOTE_B = f"""## audio/podcast/radio-drama
 US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engines as Option A.
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
-- ACE-Step sting + bed, instrumental only, empty lyrics. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
+- ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
 - Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session — not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
@@ -148,6 +149,8 @@ class Graph:
             "extra": extra,
             "version": 0.4,
         }
+        apply_lab_identity(graph, self.graph_id)
+        enable_lab_graph(graph)
         stamp_suite_graph(graph)
         ensure_group_title_inset(graph)
         _assert_no_overlap(graph)

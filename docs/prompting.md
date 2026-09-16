@@ -14,6 +14,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507). Seeded graphs pin Enhance **on** for lazy CLIP printers and **off** when the string is already a recipe, script, or film shot.
 - Negative CLIP nodes go through **Negative Prompt Enhance** (positive CLIP string as context) so canned `illustration` / `Pixar` terms cannot fight the intended look
+- Rewriter **context** sockets carry a bible, logline, research brief, or episode script. Enhance **off** ignores context so authored recipes stay pinned
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
@@ -25,7 +26,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 
 !!! tip "Lab graphs already ship model-native prompts"
 
-    Seeded lab graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **inspire/research-chat** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then copy prompt ingredients into **inspire/prompt-forge**. Prompt Forge previews Klein / Wan / LTX rewrites with no UNET. Copy the family you need into Spark Still. The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
+    Seeded lab graphs use research-backed Positive / Motion text. Prompt Enhance is **on** for lazy CLIP printers (Klein stills, generic 5s Wan/LTX, identity bibles you type). It is **off** for authored recipes: 90s films, talking-head freeze, ping-pong loops, camera-verb I2V, podcast Speaker A/B scripts, ACE tags/lyrics, IC-LoRA. Turn it the other way in the App if you want. **inspire/research-chat** is a no-UNET creative desk (occupancy **llm**): chat or planner+search subagents, then paste ingredients into **inspire/prompt-forge** Context (or type the lazy sentence once in Prompt — all three families share it). Beat Sheet packs Logline / Script / Audio policy / Score into every card rewrite. 90s films wire the Klein identity STRING into each LTX enhance **context** (dormant while Enhance is off). The CLIP prompt box is visible before Queue (empty until rewrite) and shows the encoded string after.
 
 ```mermaid
 flowchart TB
@@ -107,6 +108,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **ACE-Step Prompt Enhance** | `vocal`, `instrumental` | music-rap-* tags+lyrics; music-edm-drive-through-* scores; podcast instrumental beds |
 | **Negative Prompt Enhance** | family `klein` `wan` `ltx` | every CLIP **Negative** — reads the enhanced positive so the negative cannot fight the intended medium, lighting, or subject |
 | **Prompt Join** | `lock=view`: shot + lock + bible + inventory + closer (camera-first walkthrough; this still is only the room and backdrop the shot names). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
+| **Context Join** | labeled logline / script / audio policy / score packed into one STRING | beat-sheet desk → every LTX card enhance `context` |
 
 STRING out → CLIPTextEncode `text` input.
 

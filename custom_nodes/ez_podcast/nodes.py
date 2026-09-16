@@ -288,7 +288,13 @@ class EZPodcastScript:
                     {"default": True, "label_on": "On", "label_off": "Off"},
                 ),
                 "flavor": ([FLAVOR_PODCAST, FLAVOR_RADIO], {"default": FLAVOR_PODCAST}),
-            }
+            },
+            "optional": {
+                "context": (
+                    "STRING",
+                    {"forceInput": True, "dynamicPrompts": False},
+                ),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -303,8 +309,9 @@ class EZPodcastScript:
         "can run in the same Queue."
     )
 
-    def run(self, prompt, enhance, flavor=FLAVOR_PODCAST):
+    def run(self, prompt, enhance, flavor=FLAVOR_PODCAST, context=""):
         original = prompt if isinstance(prompt, str) else str(prompt)
+        ctx = context if isinstance(context, str) else str(context or "")
         name = flavor if flavor in FLAVORS else FLAVOR_PODCAST
         if not _as_bool(enhance):
             return _pack_text(original, "enhance off")
@@ -312,12 +319,14 @@ class EZPodcastScript:
             _ensure_lab_custom_nodes_path()
             from ez_prompt_enhance.client import _close_llm
             from ez_prompt_enhance.client import complete
+            from ez_prompt_enhance.client import compose_context_user
+            from ez_prompt_enhance.client import with_context_system
         except Exception as exc:  # noqa: BLE001 — fail-soft
             _log(f"prompt enhance client unavailable: {exc}")
             return _pack_text(original, "llama.cpp unavailable")
-        system = load_writer_prompt(name)
+        system = with_context_system(load_writer_prompt(name), ctx)
         try:
-            rewritten, reason = complete(system, original)
+            rewritten, reason = complete(system, compose_context_user(original, ctx))
         finally:
             try:
                 _close_llm()
