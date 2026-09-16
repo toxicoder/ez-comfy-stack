@@ -4187,6 +4187,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../../klein/text-swap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    text-swap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../../klein/thumbnail/" class="md-nav__link">
         
   
@@ -13061,7 +13089,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 23:10 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T23:10:54+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 23:54 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T23:54:53+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -26580,9 +26608,9 @@ Prompt enhance is <strong>off</strong> so authored text (recipe, script labels, 
 <p><strong>How it affects generation:</strong> Off = encode the widget as-is (plus style suffix if set).</p>
 <p><strong>This graph:</strong> <code>true</code></p>
 <h4 id="mode_1"><code>mode</code><a class="headerlink" href="#mode_1" title="Permanent link">&para;</a></h4>
-<p>Type <code>COMBO</code>. Range / default: t2i / edit / identity.</p>
+<p>Type <code>COMBO</code>. Range / default: t2i / edit / identity / text_swap.</p>
 <p>System prompt flavor.</p>
-<p><strong>How it affects generation:</strong> t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).</p>
+<p><strong>How it affects generation:</strong> t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.</p>
 <p><strong>This graph:</strong> <code>t2i</code></p>
 <p><strong>Other choices</strong></p>
 <table>
@@ -26604,6 +26632,10 @@ Prompt enhance is <strong>off</strong> so authored text (recipe, script labels, 
 <tr>
 <td><code>identity</code></td>
 <td>Camera-free identity bible.</td>
+</tr>
+<tr>
+<td><code>text_swap</code></td>
+<td>Replace lettering; source still owns look and size.</td>
 </tr>
 </tbody>
 </table>
