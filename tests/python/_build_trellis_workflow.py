@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from _lab_layout import finalize_layout
 from _lab_paths import lab_dest
 from _stamp_app_mode import apply_lab_completeness_flags
 from _stamp_app_mode import ensure_occupancy_note
@@ -457,6 +458,7 @@ def build_trellis() -> dict[str, Any]:
 def main() -> None:
     dest = lab_dest("optional/klein/trellis2", lane="optional")
     graph = build_trellis()
+    finalize_layout(graph)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(dest)
 

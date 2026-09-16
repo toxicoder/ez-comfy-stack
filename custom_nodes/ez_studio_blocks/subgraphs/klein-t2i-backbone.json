@@ -1,6 +1,6 @@
 {
   "id": "ez-studio-blocks-klein-t2i-backbone",
-  "revision": 1,
+  "revision": 3,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
@@ -161,7 +161,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              212
+              234
             ],
             "size": [
               360,
@@ -197,7 +197,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              368
+              412
             ],
             "size": [
               360,
@@ -229,7 +229,7 @@
             "id": 4,
             "type": "CLIPTextEncode",
             "pos": [
-              940,
+              948,
               80
             ],
             "size": [
@@ -276,8 +276,8 @@
             "id": 5,
             "type": "CLIPTextEncode",
             "pos": [
-              940,
-              290
+              948,
+              312
             ],
             "size": [
               420,
@@ -323,8 +323,8 @@
             "id": 6,
             "type": "EmptyFlux2LatentImage",
             "pos": [
-              940,
-              460
+              948,
+              544
             ],
             "size": [
               280,
@@ -461,7 +461,7 @@
             "type": "SaveImage",
             "pos": [
               1840,
-              176
+              198
             ],
             "size": [
               280,
@@ -491,7 +491,7 @@
             "type": "Note",
             "pos": [
               40,
-              606.0
+              722
             ],
             "size": [
               960,
@@ -552,8 +552,8 @@
             "id": 12,
             "type": "EZNegativePromptEnhance",
             "pos": [
-              480.0,
-              930.0
+              480,
+              1074
             ],
             "size": [
               420,

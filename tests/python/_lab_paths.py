@@ -247,6 +247,9 @@ def write_lab_graph(path: Path, graph: dict[str, Any]) -> Path:
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     apply_lab_identity(graph, lab_rel_of(path))
+    from _lab_layout import ensure_node_spacing
+
+    ensure_node_spacing(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     return path
 

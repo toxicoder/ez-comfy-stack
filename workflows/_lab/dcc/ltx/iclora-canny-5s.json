@@ -1,6 +1,6 @@
 {
   "id": "iclora-canny-5s",
-  "revision": 8,
+  "revision": 10,
   "last_node_id": 25,
   "last_link_id": 33,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        320
+        364
       ],
       "size": [
         400,
@@ -152,8 +152,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
-        444
+        1088,
+        512
       ],
       "size": [
         420,
@@ -199,8 +199,8 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
-        634
+        1088,
+        744
       ],
       "size": [
         420,
@@ -320,7 +320,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1580,
-        330
+        374
       ],
       "size": [
         280,
@@ -371,7 +371,7 @@
       "id": 9,
       "type": "KSampler",
       "pos": [
-        1940,
+        1948,
         80
       ],
       "size": [
@@ -431,7 +431,7 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        2660,
+        2668,
         80
       ],
       "size": [
@@ -475,8 +475,8 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        2660,
-        176
+        2668,
+        572
       ],
       "size": [
         280,
@@ -506,7 +506,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        490
+        546
       ],
       "size": [
         360,
@@ -540,7 +540,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1580,
-        460
+        528
       ],
       "size": [
         300,
@@ -581,7 +581,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1940,
-        400
+        414
       ],
       "size": [
         280,
@@ -668,7 +668,7 @@
       "type": "Note",
       "pos": [
         40,
-        1734.0
+        1846
       ],
       "size": [
         960,
@@ -755,8 +755,8 @@
       "id": 19,
       "type": "ImageFromBatch",
       "pos": [
-        2980,
-        560
+        2996,
+        572
       ],
       "size": [
         240,
@@ -796,8 +796,8 @@
       "id": 20,
       "type": "SaveImage",
       "pos": [
-        2980,
-        680
+        2996,
+        724
       ],
       "size": [
         280,
@@ -827,7 +827,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
-        444
+        512
       ],
       "size": [
         420,
@@ -867,7 +867,7 @@
       "id": 22,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3340.0,
+        3348,
         80
       ],
       "size": [

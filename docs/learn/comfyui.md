@@ -40,7 +40,7 @@ Daily rule: **do not edit raw `_lab` JSON.** Open the graph, change widgets, Que
 
 ### Nodes 2.0
 
-The studio canvas uses [Nodes 2.0](https://docs.comfy.org/interface/nodes-2) (Vue DOM nodes, not LiteGraph canvas drawing). `start` writes `Comfy.VueNodes.Enabled` and `Comfy.VueNodes.AutoScaleLayout` into `user/default/comfy.settings.json` **only when those keys are absent** — an operator who already toggled Nodes 2.0 off keeps that choice. Lab graphs stamp `extra.workflowRendererVersion` as **`Vue-corrected`** so coordinates stay LiteGraph-canonical; do **not** stamp `"Vue"` or the frontend shrinks the layout by 1.2×.
+The studio canvas uses [Nodes 2.0](https://docs.comfy.org/interface/nodes-2) (Vue DOM nodes, not LiteGraph canvas drawing). `start` writes `Comfy.VueNodes.Enabled` and `Comfy.VueNodes.AutoScaleLayout` into `user/default/comfy.settings.json` **only when those keys are absent** — an operator who already toggled Nodes 2.0 off keeps that choice. Lab graphs stamp `extra.workflowRendererVersion` as **`Vue-corrected`** so coordinates stay LiteGraph-canonical; do **not** stamp `"Vue"` or the frontend shrinks the layout by 1.2×. Shipped node positions already leave room for Vue widget height (Enhance, CLIP, LoadImage, KSampler) so Auto-scale does not stack boxes.
 
 Toggle from the Comfy logo menu or Settings. Classic LiteGraph still loads the same JSON.
 

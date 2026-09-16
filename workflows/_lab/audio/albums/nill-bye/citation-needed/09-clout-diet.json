@@ -1,6 +1,6 @@
 {
   "id": "09-clout-diet",
-  "revision": 1,
+  "revision": 3,
   "last_node_id": 16,
   "last_link_id": 17,
   "nodes": [
@@ -58,7 +58,7 @@
       "type": "ModelSamplingAuraFlow",
       "pos": [
         40,
-        220
+        252
       ],
       "size": [
         330,
@@ -97,7 +97,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        380
+        412
       ],
       "size": [
         280,
@@ -135,7 +135,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         40,
-        520
+        566
       ],
       "size": [
         320,
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        460.0
+        916
       ],
       "size": [
         400,
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        860.0
+        1408
       ],
       "size": [
         400,
@@ -346,7 +346,7 @@
       "id": 7,
       "type": "ConditioningZeroOut",
       "pos": [
-        940,
+        948,
         80
       ],
       "size": [
@@ -383,8 +383,8 @@
       "id": 8,
       "type": "KSampler",
       "pos": [
-        940,
-        180
+        948,
+        212
       ],
       "size": [
         330,
@@ -488,7 +488,7 @@
       "type": "SaveAudio",
       "pos": [
         1340,
-        180
+        212
       ],
       "size": [
         320,
@@ -518,7 +518,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1340,
-        300
+        554
       ],
       "size": [
         320,
@@ -549,7 +549,7 @@
       "type": "Note",
       "pos": [
         1340,
-        440
+        896
       ],
       "size": [
         440,
@@ -611,7 +611,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        280
+        534
       ],
       "size": [
         360,
@@ -832,8 +832,8 @@
       "bounding": [
         20,
         24,
-        420,
-        280
+        400,
+        332
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -844,9 +844,9 @@
       "title": "DURATION",
       "bounding": [
         20,
-        324,
-        420,
-        300
+        356,
+        360,
+        336
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -858,8 +858,8 @@
       "bounding": [
         480,
         24,
-        820,
-        1000
+        818,
+        1356
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -871,8 +871,8 @@
       "bounding": [
         1320,
         24,
-        500,
-        940
+        480,
+        1416
       ],
       "color": "#3f789e",
       "font_size": 24,

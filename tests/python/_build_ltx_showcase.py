@@ -12,7 +12,7 @@ import copy
 import json
 from pathlib import Path
 
-from _lab_layout import ensure_group_title_inset
+from _lab_layout import finalize_layout
 from _lab_paths import apply_lab_identity, lab_dest, lab_json
 from _lab_theme import (
     I2V_LOCK,
@@ -60,28 +60,14 @@ def _load(path: Path) -> dict:
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
-    boxes: list[tuple[int, str, float, float, float, float]] = []
-    for node in graph["nodes"]:
-        x, y = node["pos"]
-        size = node.get("size", [200, 100])
-        if isinstance(size, dict):
-            width, height = float(size.get("0", 200)), float(size.get("1", 100))
-        else:
-            width, height = float(size[0]), float(size[1])
-        boxes.append(
-            (node["id"], node["type"], x - pad, y - pad, x + width + pad, y + height + pad)
-        )
-    for i, a in enumerate(boxes):
-        for b in boxes[i + 1 :]:
-            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-                raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
+    del pad
+    finalize_layout(graph)
 
 
 def _dump(stem: str, graph: dict) -> None:
     apply_lab_identity(graph, stem)
     stamp_suite_graph(graph)
-    ensure_group_title_inset(graph)
-    _assert_no_overlap(graph)
+    finalize_layout(graph)
     dest = lab_dest(stem)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {dest.relative_to(ROOT)}")

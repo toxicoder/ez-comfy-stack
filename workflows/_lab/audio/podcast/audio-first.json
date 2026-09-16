@@ -1,6 +1,6 @@
 {
   "id": "audio-first",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 16,
   "last_link_id": 18,
   "nodes": [
@@ -97,7 +97,7 @@
       "type": "EZPodcastDisclosure",
       "pos": [
         500,
-        400
+        654
       ],
       "size": [
         420,
@@ -134,7 +134,7 @@
       "type": "EZKokoroTTS",
       "pos": [
         500,
-        520
+        976
       ],
       "size": [
         420,
@@ -179,8 +179,8 @@
       "id": 5,
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
-        40,
-        220
+        48,
+        252
       ],
       "size": [
         400,
@@ -249,7 +249,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        620
+        1108
       ],
       "size": [
         400,
@@ -336,7 +336,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        200
+        232
       ],
       "size": [
         320,
@@ -396,7 +396,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1440,
-        510
+        966
       ],
       "size": [
         280,
@@ -438,7 +438,7 @@
       "type": "AudioAdjustVolume",
       "pos": [
         1440,
-        610
+        1098
       ],
       "size": [
         280,
@@ -522,7 +522,7 @@
       "type": "SaveAudio",
       "pos": [
         1860,
-        240
+        272
       ],
       "size": [
         320,
@@ -552,7 +552,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1860,
-        360
+        614
       ],
       "size": [
         320,
@@ -583,7 +583,7 @@
       "type": "Note",
       "pos": [
         1860,
-        500
+        956
       ],
       "size": [
         400,
@@ -607,7 +607,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         -400,
-        220
+        252
       ],
       "size": [
         400,
@@ -839,8 +839,8 @@
       "bounding": [
         20,
         24,
-        440,
-        900
+        448,
+        1408
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -853,7 +853,7 @@
         480,
         24,
         460,
-        820
+        1296
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -865,8 +865,8 @@
       "bounding": [
         1420,
         24,
-        400,
-        700
+        360,
+        1198
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -879,7 +879,7 @@
         1840,
         24,
         440,
-        920
+        1396
       ],
       "color": "#3f789e",
       "font_size": 24,

@@ -1,6 +1,6 @@
 {
   "id": "before-after",
-  "revision": 2,
+  "revision": 4,
   "last_node_id": 23,
   "last_link_id": 29,
   "nodes": [
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        412
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        510
+        570
       ],
       "size": [
         420,
@@ -157,7 +157,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        970
+        1062
       ],
       "size": [
         420,
@@ -205,7 +205,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1150
+        1294
       ],
       "size": [
         280,
@@ -241,7 +241,7 @@
       "type": "Note",
       "pos": [
         40,
-        1310
+        1472
       ],
       "size": [
         420,
@@ -264,8 +264,8 @@
       "id": 8,
       "type": "VAEEncode",
       "pos": [
-        1740,
-        170
+        1764,
+        198
       ],
       "size": [
         240,
@@ -308,7 +308,7 @@
       "type": "ReferenceLatent",
       "pos": [
         40,
-        1710
+        1904
       ],
       "size": [
         280,
@@ -391,7 +391,7 @@
       "id": 11,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         80
       ],
       "size": [
@@ -438,7 +438,7 @@
       "id": 12,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         80
       ],
       "size": [
@@ -498,7 +498,7 @@
       "id": 13,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         80
       ],
       "size": [
@@ -541,7 +541,7 @@
       "id": 14,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         80
       ],
       "size": [
@@ -612,7 +612,7 @@
       "id": 17,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         460
       ],
       "size": [
@@ -659,7 +659,7 @@
       "id": 18,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         460
       ],
       "size": [
@@ -719,7 +719,7 @@
       "id": 19,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         460
       ],
       "size": [
@@ -761,7 +761,7 @@
       "id": 20,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         460
       ],
       "size": [
@@ -791,8 +791,8 @@
       "id": 21,
       "type": "ReferenceLatent",
       "pos": [
-        980,
-        660
+        988,
+        692
       ],
       "size": [
         240,
@@ -834,8 +834,8 @@
       "id": 22,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        1770.0
+        508,
+        1770
       ],
       "size": [
         420,
@@ -1144,8 +1144,8 @@
       "bounding": [
         20,
         24,
-        430,
-        430
+        400,
+        490
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1156,9 +1156,9 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        454,
+        514,
         460,
-        500
+        520
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1170,8 +1170,8 @@
       "bounding": [
         500,
         24,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1183,8 +1183,8 @@
       "bounding": [
         500,
         404,
-        1840,
-        360
+        1852,
+        412
       ],
       "color": "#3f789e",
       "font_size": 24,

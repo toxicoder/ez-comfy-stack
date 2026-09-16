@@ -1,6 +1,6 @@
 {
   "id": "finish",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 8,
   "last_link_id": 0,
   "nodes": [
@@ -32,8 +32,8 @@
       "id": 2,
       "type": "PrimitiveNode",
       "pos": [
-        40.0,
-        576.0
+        40,
+        600
       ],
       "size": [
         300.0,
@@ -67,8 +67,8 @@
       "id": 3,
       "type": "PrimitiveNode",
       "pos": [
-        388.0,
-        576.0
+        388,
+        600
       ],
       "size": [
         300.0,
@@ -102,8 +102,8 @@
       "id": 4,
       "type": "PrimitiveNode",
       "pos": [
-        736.0,
-        576.0
+        736,
+        600
       ],
       "size": [
         300.0,
@@ -137,8 +137,8 @@
       "id": 5,
       "type": "PrimitiveNode",
       "pos": [
-        1084.0,
-        576.0
+        1084,
+        600
       ],
       "size": [
         300.0,
@@ -172,8 +172,8 @@
       "id": 6,
       "type": "PrimitiveNode",
       "pos": [
-        1432.0,
-        576.0
+        1432,
+        600
       ],
       "size": [
         300.0,
@@ -208,7 +208,7 @@
       "type": "SaveAudio",
       "pos": [
         40,
-        776.0
+        792
       ],
       "size": [
         320,
@@ -274,7 +274,7 @@
         20,
         24,
         1380,
-        476.0
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -285,9 +285,9 @@
       "title": "STEMS",
       "bounding": [
         20,
-        520.0,
-        1660,
-        196.0
+        544,
+        1732,
+        220
       ],
       "color": "#3f789e",
       "font_size": 24,

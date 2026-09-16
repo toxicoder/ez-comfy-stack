@@ -12,7 +12,7 @@ import json
 import sys
 from pathlib import Path
 
-from _lab_layout import GROUP_TITLE_INSET, group as _group, ensure_group_title_inset
+from _lab_layout import GROUP_TITLE_INSET, group as _group, finalize_layout
 from _lab_paths import lab_dest, lab_json
 from _stamp_app_mode import stamp_suite_graph
 
@@ -207,7 +207,7 @@ def _load(name: str) -> dict:
 def _save(graph: dict, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
     stamp_suite_graph(graph)
-    ensure_group_title_inset(graph)
+    finalize_layout(graph)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
 
 

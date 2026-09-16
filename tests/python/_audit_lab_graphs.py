@@ -1,7 +1,7 @@
 """One-process auditor for shipped lab JSON (used by workflow.bats).
 
 Hermetic: stdlib only. Walks workflows/_lab once and checks parse, id stem,
-banned model needles, and AABB overlaps (except DCC envelopes and TRELLIS).
+banned model needles, and estimated Vue AABB overlaps (every lane, including DCC).
 """
 
 from __future__ import annotations
@@ -10,6 +10,13 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import Any
+
+_PY = Path(__file__).resolve().parent
+if str(_PY) not in sys.path:
+    sys.path.insert(0, str(_PY))
+
+from _lab_layout import node_overlap_hits  # noqa: E402
 
 BANNED = (
     "z_image_turbo",
@@ -20,45 +27,16 @@ BANNED = (
     "Seedance",
     "Kling",
 )
-PAD = 20
 
 
-def _skip_aabb(path: Path, lab_root: Path) -> bool:
-    rel = path.relative_to(lab_root).as_posix()
-    if rel.startswith("dcc/"):
-        return True
-    return rel == "optional/klein/trellis2.json"
-
-
-def _overlap_hit(graph: dict) -> str | None:
-    boxes: list[tuple[object, object, float, float, float, float]] = []
-    for node in graph.get("nodes") or []:
-        pos = node.get("pos") or [0, 0]
-        x, y = float(pos[0]), float(pos[1])
-        size = node.get("size", [200, 100])
-        if isinstance(size, dict):
-            width, height = float(size.get("0", 200)), float(size.get("1", 100))
-        else:
-            width, height = float(size[0]), float(size[1])
-        boxes.append(
-            (
-                node.get("id"),
-                node.get("type"),
-                x - PAD,
-                y - PAD,
-                x + width + PAD,
-                y + height + PAD,
-            )
-        )
-    for i, left in enumerate(boxes):
-        for right in boxes[i + 1 :]:
-            if (
-                left[2] < right[4]
-                and left[4] > right[2]
-                and left[3] < right[5]
-                and left[5] > right[3]
-            ):
-                return f"overlap {left[0]}({left[1]}) vs {right[0]}({right[1]})"
+def _overlap_hit(graph: dict[str, Any]) -> str | None:
+    hits = node_overlap_hits(graph)
+    if hits:
+        return f"overlap {hits[0]}"
+    for sub in (graph.get("definitions") or {}).get("subgraphs") or []:
+        sub_hits = node_overlap_hits(sub)
+        if sub_hits:
+            return f"subgraph overlap {sub_hits[0]}"
     return None
 
 
@@ -76,8 +54,6 @@ def audit_lab_graphs(lab_root: Path) -> int:
         for needle in BANNED:
             if needle in text:
                 raise SystemExit(f"{path}: banned {needle!r}")
-        if _skip_aabb(path, lab_root):
-            continue
         hit = _overlap_hit(data)
         if hit:
             raise SystemExit(f"{path}: {hit}")

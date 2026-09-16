@@ -1,6 +1,6 @@
 {
   "id": "from-klein-still",
-  "revision": 1,
+  "revision": 3,
   "last_node_id": 23,
   "last_link_id": 40,
   "nodes": [
@@ -34,7 +34,7 @@
       "type": "EZDCCLoadStillPack",
       "pos": [
         40,
-        440
+        472
       ],
       "size": [
         320,
@@ -80,8 +80,8 @@
       "id": 3,
       "type": "EZUnloadModels",
       "pos": [
-        400,
-        440
+        408,
+        472
       ],
       "size": [
         280,
@@ -118,7 +118,7 @@
       "type": "CLIPVisionLoader",
       "pos": [
         40,
-        800
+        858
       ],
       "size": [
         360,
@@ -151,7 +151,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        920
+        1010
       ],
       "size": [
         360,
@@ -188,7 +188,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1040
+        1172
       ],
       "size": [
         360,
@@ -223,7 +223,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1140
+        1314
       ],
       "size": [
         360,
@@ -255,8 +255,8 @@
       "id": 8,
       "type": "Trellis2Conditioning",
       "pos": [
-        720,
-        440
+        736,
+        472
       ],
       "size": [
         260,
@@ -305,8 +305,8 @@
       "id": 9,
       "type": "EmptyTrellis2LatentStructure",
       "pos": [
-        720,
-        560
+        736,
+        634
       ],
       "size": [
         260,
@@ -337,8 +337,8 @@
       "id": 10,
       "type": "KSampler",
       "pos": [
-        1040,
-        440
+        1044,
+        472
       ],
       "size": [
         280,
@@ -398,7 +398,7 @@
       "type": "VaeDecodeStructureTrellis2",
       "pos": [
         1380,
-        440
+        472
       ],
       "size": [
         280,
@@ -441,7 +441,7 @@
       "type": "Trellis2ShapeStage",
       "pos": [
         1380,
-        560
+        634
       ],
       "size": [
         280,
@@ -503,7 +503,7 @@
       "type": "KSampler",
       "pos": [
         1720,
-        440
+        472
       ],
       "size": [
         280,
@@ -563,7 +563,7 @@
       "type": "Trellis2UpsampleStage",
       "pos": [
         2060,
-        440
+        472
       ],
       "size": [
         300,
@@ -633,7 +633,7 @@
       "type": "KSampler",
       "pos": [
         2420,
-        440
+        472
       ],
       "size": [
         280,
@@ -694,7 +694,7 @@
       "type": "VaeDecodeShapeTrellis",
       "pos": [
         2760,
-        440
+        472
       ],
       "size": [
         280,
@@ -742,7 +742,7 @@
       "type": "Trellis2TextureStage",
       "pos": [
         2760,
-        560
+        634
       ],
       "size": [
         280,
@@ -802,7 +802,7 @@
       "type": "KSampler",
       "pos": [
         3100,
-        440
+        472
       ],
       "size": [
         280,
@@ -862,7 +862,7 @@
       "type": "VaeDecodeTextureTrellis",
       "pos": [
         3440,
-        440
+        472
       ],
       "size": [
         280,
@@ -908,7 +908,7 @@
       "type": "PaintMesh",
       "pos": [
         3780,
-        440
+        472
       ],
       "size": [
         240,
@@ -949,7 +949,7 @@
       "type": "MeshToFile3D",
       "pos": [
         4080,
-        440
+        472
       ],
       "size": [
         240,
@@ -985,8 +985,8 @@
       "id": 22,
       "type": "EZDCCOccupancyGate",
       "pos": [
-        400,
-        440
+        408,
+        624
       ],
       "size": [
         280,

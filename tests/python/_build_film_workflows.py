@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
+from _lab_layout import GROUP_TITLE_INSET, finalize_layout, group as _group
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _long_film_bibles import ACT_TITLES, SPECS
 from _stamp_app_mode import stamp_suite_graph
@@ -149,28 +149,14 @@ def _dump(path: Path, graph: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     apply_lab_identity(graph, lab_rel_of(path))
     stamp_suite_graph(graph)
-    ensure_group_title_inset(graph)
-    _assert_no_overlap(graph)
+    finalize_layout(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
 
 
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
-    boxes: list[tuple[int, str, float, float, float, float]] = []
-    for node in graph["nodes"]:
-        x, y = node["pos"]
-        size = node.get("size", [200, 100])
-        if isinstance(size, dict):
-            width, height = float(size.get("0", 200)), float(size.get("1", 100))
-        else:
-            width, height = float(size[0]), float(size[1])
-        boxes.append(
-            (node["id"], node["type"], x - pad, y - pad, x + width + pad, y + height + pad)
-        )
-    for i, a in enumerate(boxes):
-        for b in boxes[i + 1 :]:
-            if a[2] < b[4] and a[4] > b[2] and a[3] < b[5] and a[5] > b[3]:
-                raise SystemExit(f"overlap {a[0]}({a[1]}) vs {b[0]}({b[1]})")
+    del pad
+    finalize_layout(graph)
 
 
 def _inp(name: str, typ: str, link: int | None = None, *, shape: int | None = None, widget: str | None = None) -> dict:

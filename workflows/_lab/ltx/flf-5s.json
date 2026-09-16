@@ -1,6 +1,6 @@
 {
   "id": "flf-5s",
-  "revision": 8,
+  "revision": 10,
   "last_node_id": 25,
   "last_link_id": 41,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -78,7 +78,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        320
+        364
       ],
       "size": [
         400,
@@ -113,7 +113,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
+        1088,
         80
       ],
       "size": [
@@ -160,8 +160,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
-        290
+        1088,
+        334
       ],
       "size": [
         420,
@@ -208,7 +208,7 @@
       "type": "EmptyLTXVLatentVideo",
       "pos": [
         1080,
-        440
+        572
       ],
       "size": [
         300,
@@ -398,7 +398,7 @@
       "type": "SaveImage",
       "pos": [
         2340,
-        176
+        572
       ],
       "size": [
         280,
@@ -428,7 +428,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        490
+        546
       ],
       "size": [
         360,
@@ -462,7 +462,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1080,
-        610
+        774
       ],
       "size": [
         300,
@@ -503,7 +503,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1580,
-        220
+        234
       ],
       "size": [
         280,
@@ -545,7 +545,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1940,
-        400
+        526
       ],
       "size": [
         280,
@@ -590,7 +590,7 @@
       "type": "Note",
       "pos": [
         40,
-        780.0
+        960
       ],
       "size": [
         960,
@@ -718,8 +718,8 @@
       "id": 18,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        2660.0,
-        540
+        2668,
+        572
       ],
       "size": [
         320,
@@ -760,8 +760,8 @@
       "id": 19,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620.0,
-        1250.0
+        620,
+        1392
       ],
       "size": [
         420,
@@ -801,7 +801,7 @@
       "type": "LoadImage",
       "pos": [
         1080,
-        790
+        976
       ],
       "size": [
         320,
@@ -840,8 +840,8 @@
     {
       "type": "LoadImage",
       "pos": [
-        1080,
-        1144
+        1088,
+        1474
       ],
       "size": [
         320,
@@ -880,8 +880,8 @@
     {
       "type": "LTXVAddGuide",
       "pos": [
-        1440,
-        790
+        1448,
+        970
       ],
       "size": [
         320,
@@ -956,8 +956,8 @@
     {
       "type": "LTXVAddGuide",
       "pos": [
-        1440,
-        1010
+        1448,
+        1222
       ],
       "size": [
         320,
@@ -1032,8 +1032,8 @@
     {
       "type": "LTXVCropGuides",
       "pos": [
-        2260,
-        520
+        2268,
+        914
       ],
       "size": [
         280,

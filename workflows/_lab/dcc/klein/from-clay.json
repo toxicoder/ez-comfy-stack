@@ -1,6 +1,6 @@
 {
   "id": "from-clay",
-  "revision": 5,
+  "revision": 7,
   "last_node_id": 16,
   "last_link_id": 17,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        412
       ],
       "size": [
         360,
@@ -112,7 +112,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
+        948,
         80
       ],
       "size": [
@@ -159,8 +159,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        290
+        948,
+        464
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         940,
-        460
+        696
       ],
       "size": [
         280,
@@ -344,7 +344,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        176
+        198
       ],
       "size": [
         280,
@@ -374,7 +374,7 @@
       "type": "Note",
       "pos": [
         40,
-        606.0
+        874
       ],
       "size": [
         960,
@@ -478,7 +478,7 @@
       "type": "VAEEncode",
       "pos": [
         2180,
-        420
+        656
       ],
       "size": [
         240,
@@ -519,8 +519,8 @@
       "id": 14,
       "type": "ReferenceLatent",
       "pos": [
-        940,
-        80
+        948,
+        312
       ],
       "size": [
         280,
@@ -562,8 +562,8 @@
       "id": 15,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        930.0
+        480,
+        1226
       ],
       "size": [
         420,

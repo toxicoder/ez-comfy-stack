@@ -1,6 +1,6 @@
 {
   "id": "ez-studio-blocks-ltx-av-5s",
-  "revision": 1,
+  "revision": 3,
   "last_node_id": 1,
   "last_link_id": 0,
   "nodes": [
@@ -152,7 +152,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              212
+              234
             ],
             "size": [
               360,
@@ -186,7 +186,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              320
+              364
             ],
             "size": [
               400,
@@ -261,8 +261,8 @@
             "id": 5,
             "type": "CLIPTextEncode",
             "pos": [
-              1080,
-              444
+              1088,
+              512
             ],
             "size": [
               420,
@@ -308,8 +308,8 @@
             "id": 6,
             "type": "CLIPTextEncode",
             "pos": [
-              1080,
-              634
+              1088,
+              744
             ],
             "size": [
               420,
@@ -429,7 +429,7 @@
             "type": "LTXVConditioning",
             "pos": [
               1580,
-              330
+              374
             ],
             "size": [
               280,
@@ -480,7 +480,7 @@
             "id": 9,
             "type": "KSampler",
             "pos": [
-              1940,
+              1948,
               80
             ],
             "size": [
@@ -540,7 +540,7 @@
             "id": 10,
             "type": "VAEDecode",
             "pos": [
-              2660,
+              2668,
               80
             ],
             "size": [
@@ -583,8 +583,8 @@
             "id": 12,
             "type": "SaveImage",
             "pos": [
-              2660,
-              176
+              2668,
+              572
             ],
             "size": [
               280,
@@ -614,7 +614,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              490
+              546
             ],
             "size": [
               360,
@@ -648,7 +648,7 @@
             "type": "LTXVEmptyLatentAudio",
             "pos": [
               1580,
-              460
+              528
             ],
             "size": [
               300,
@@ -689,7 +689,7 @@
             "type": "LTXVConcatAVLatent",
             "pos": [
               1940,
-              400
+              414
             ],
             "size": [
               280,
@@ -776,7 +776,7 @@
             "type": "Note",
             "pos": [
               40,
-              854.0
+              1004
             ],
             "size": [
               960,
@@ -864,7 +864,7 @@
             "type": "EZLTXPromptEnhance",
             "pos": [
               620,
-              444
+              512
             ],
             "size": [
               420,
@@ -902,8 +902,8 @@
             "id": 20,
             "type": "LTXVAudioVAEDecode",
             "pos": [
-              2980.0,
-              540
+              2996,
+              572
             ],
             "size": [
               320,
@@ -944,8 +944,8 @@
             "id": 21,
             "type": "EZNegativePromptEnhance",
             "pos": [
-              620.0,
-              1274.0
+              620,
+              1436
             ],
             "size": [
               420,

@@ -1,6 +1,6 @@
 {
   "id": "hook-av",
-  "revision": 2,
+  "revision": 4,
   "last_node_id": 20,
   "last_link_id": 24,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -76,7 +76,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        320
+        364
       ],
       "size": [
         400,
@@ -111,7 +111,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
+        1088,
         80
       ],
       "size": [
@@ -158,8 +158,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1080,
-        290
+        1088,
+        334
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyLTXVLatentVideo",
       "pos": [
         1080,
-        440
+        572
       ],
       "size": [
         300,
@@ -394,7 +394,7 @@
       "type": "SaveImage",
       "pos": [
         2340,
-        176
+        572
       ],
       "size": [
         280,
@@ -424,7 +424,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        490
+        546
       ],
       "size": [
         360,
@@ -458,7 +458,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1080,
-        610
+        774
       ],
       "size": [
         300,
@@ -499,7 +499,7 @@
       "type": "LTXVConcatAVLatent",
       "pos": [
         1580,
-        220
+        234
       ],
       "size": [
         280,
@@ -541,7 +541,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         1940,
-        400
+        526
       ],
       "size": [
         280,
@@ -714,8 +714,8 @@
       "id": 18,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        2660.0,
-        540
+        2668,
+        572
       ],
       "size": [
         320,

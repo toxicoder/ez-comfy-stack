@@ -21,6 +21,7 @@ from _lab_layout import (  # noqa: E402
     ensure_group_title_inset,
     group,
     group_overlap_hits,
+    node_overlap_hits,
     title_inset_hits,
 )
 from _lab_paths import lab_graph_paths, load_lab_graph  # noqa: E402
@@ -86,3 +87,13 @@ def test_groups_do_not_overlap(path: Path) -> None:
     graph = load_lab_graph(path)
     hits = group_overlap_hits(graph)
     assert hits == [], f"{path.name}: {hits}"
+
+
+@pytest.mark.parametrize("path", _graphs(), ids=lambda p: str(p.relative_to(WF)))
+def test_nodes_do_not_overlap(path: Path) -> None:
+    graph = load_lab_graph(path)
+    hits = node_overlap_hits(graph)
+    assert hits == [], f"{path.name}: {hits[:8]}"
+    for sub in (graph.get("definitions") or {}).get("subgraphs") or []:
+        sub_hits = node_overlap_hits(sub)
+        assert sub_hits == [], f"{path.name} subgraph: {sub_hits[:8]}"

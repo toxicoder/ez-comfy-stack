@@ -13,11 +13,11 @@ from _lab_layout import (
     GROUP_TITLE_INSET,
     LAB_GROUP_Y0,
     LAB_NODE_Y0,
-    ensure_group_title_inset,
+    finalize_layout,
     group as _group,
 )
 from _stamp_app_mode import stamp_suite_graph
-from _build_inspire_apps import _assert_no_overlap, _node
+from _build_inspire_apps import _node
 
 NOTE = """## audio/finish
 
@@ -137,8 +137,7 @@ def build_audio_finish() -> dict:
 def main() -> None:
     graph = build_audio_finish()
     stamp_suite_graph(graph)
-    ensure_group_title_inset(graph)
-    _assert_no_overlap(graph)
+    finalize_layout(graph)
     dest = Path(__file__).resolve().parents[2] / "workflows" / "_lab" / "audio" / "finish.json"
     dest.parent.mkdir(parents=True, exist_ok=True)
     dest.write_text(__import__("json").dumps(graph, indent=2) + "\n", encoding="utf-8")

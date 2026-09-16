@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _lab_layout import ensure_node_spacing
 from _lab_paths import ROOT, lab_json, stamp_nodes2
 from _stamp_app_mode import BANNED, occupancy_stanza
 
@@ -170,6 +171,7 @@ def wrap_blueprint(
         },
     }
     stamp_nodes2(graph)
+    ensure_node_spacing(graph)
     _assert_clean(graph, where=name)
     return graph
 

@@ -1,6 +1,6 @@
 {
   "id": "storyboard-6up",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 46,
   "last_link_id": 63,
   "nodes": [
@@ -48,7 +48,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -89,7 +89,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        412
       ],
       "size": [
         360,
@@ -127,7 +127,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        510
+        570
       ],
       "size": [
         420,
@@ -172,7 +172,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        970
+        1062
       ],
       "size": [
         420,
@@ -224,7 +224,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1150
+        1294
       ],
       "size": [
         280,
@@ -264,7 +264,7 @@
       "type": "Note",
       "pos": [
         40,
-        1310
+        1472
       ],
       "size": [
         420,
@@ -328,7 +328,7 @@
       "id": 11,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         80
       ],
       "size": [
@@ -375,7 +375,7 @@
       "id": 12,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         80
       ],
       "size": [
@@ -435,7 +435,7 @@
       "id": 13,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         80
       ],
       "size": [
@@ -477,7 +477,7 @@
       "id": 14,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         80
       ],
       "size": [
@@ -548,7 +548,7 @@
       "id": 17,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         460
       ],
       "size": [
@@ -595,7 +595,7 @@
       "id": 18,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         460
       ],
       "size": [
@@ -655,7 +655,7 @@
       "id": 19,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         460
       ],
       "size": [
@@ -697,7 +697,7 @@
       "id": 20,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         460
       ],
       "size": [
@@ -768,7 +768,7 @@
       "id": 23,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         840
       ],
       "size": [
@@ -815,7 +815,7 @@
       "id": 24,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         840
       ],
       "size": [
@@ -875,7 +875,7 @@
       "id": 25,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         840
       ],
       "size": [
@@ -917,7 +917,7 @@
       "id": 26,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         840
       ],
       "size": [
@@ -988,7 +988,7 @@
       "id": 29,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         1220
       ],
       "size": [
@@ -1035,7 +1035,7 @@
       "id": 30,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         1220
       ],
       "size": [
@@ -1095,7 +1095,7 @@
       "id": 31,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         1220
       ],
       "size": [
@@ -1137,7 +1137,7 @@
       "id": 32,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         1220
       ],
       "size": [
@@ -1208,7 +1208,7 @@
       "id": 35,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         1600
       ],
       "size": [
@@ -1255,7 +1255,7 @@
       "id": 36,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         1600
       ],
       "size": [
@@ -1315,7 +1315,7 @@
       "id": 37,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         1600
       ],
       "size": [
@@ -1357,7 +1357,7 @@
       "id": 38,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         1600
       ],
       "size": [
@@ -1428,7 +1428,7 @@
       "id": 41,
       "type": "CLIPTextEncode",
       "pos": [
-        980,
+        988,
         1980
       ],
       "size": [
@@ -1475,7 +1475,7 @@
       "id": 42,
       "type": "KSampler",
       "pos": [
-        1380,
+        1396,
         1980
       ],
       "size": [
@@ -1535,7 +1535,7 @@
       "id": 43,
       "type": "VAEDecode",
       "pos": [
-        1740,
+        1764,
         1980
       ],
       "size": [
@@ -1577,7 +1577,7 @@
       "id": 44,
       "type": "SaveImage",
       "pos": [
-        2020,
+        2052,
         1980
       ],
       "size": [
@@ -2189,8 +2189,8 @@
       "bounding": [
         20,
         24,
-        430,
-        430
+        400,
+        490
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2201,9 +2201,9 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        454,
+        514,
         460,
-        500
+        520
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -2215,8 +2215,8 @@
       "bounding": [
         500,
         24,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2228,8 +2228,8 @@
       "bounding": [
         500,
         404,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2241,8 +2241,8 @@
       "bounding": [
         500,
         784,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2254,8 +2254,8 @@
       "bounding": [
         500,
         1164,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2267,8 +2267,8 @@
       "bounding": [
         500,
         1544,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2280,8 +2280,8 @@
       "bounding": [
         500,
         1924,
-        1840,
-        360
+        1852,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,

@@ -1,6 +1,6 @@
 {
   "id": "endcard-cta",
-  "revision": 2,
+  "revision": 4,
   "last_node_id": 14,
   "last_link_id": 12,
   "nodes": [
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        234
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        412
       ],
       "size": [
         360,
@@ -111,7 +111,7 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
+        948,
         80
       ],
       "size": [
@@ -158,8 +158,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        290
+        948,
+        312
       ],
       "size": [
         420,
@@ -205,8 +205,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        940,
-        460
+        948,
+        544
       ],
       "size": [
         280,
@@ -343,7 +343,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        176
+        198
       ],
       "size": [
         280,
@@ -373,7 +373,7 @@
       "type": "Note",
       "pos": [
         40,
-        606.0
+        722
       ],
       "size": [
         960,
@@ -474,8 +474,8 @@
       "id": 13,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        930.0
+        480,
+        1074
       ],
       "size": [
         420,
@@ -648,8 +648,8 @@
       "bounding": [
         20,
         24,
-        430,
-        430
+        400,
+        490
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -661,8 +661,8 @@
       "bounding": [
         460,
         24,
-        920,
-        400
+        928,
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -674,8 +674,8 @@
       "bounding": [
         1420,
         24,
-        380,
-        500
+        360,
+        362
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -687,8 +687,8 @@
       "bounding": [
         1820,
         24,
-        340,
-        430
+        320,
+        488
       ],
       "color": "#3f789e",
       "font_size": 24,

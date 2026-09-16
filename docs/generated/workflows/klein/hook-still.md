@@ -84,7 +84,7 @@ flowchart LR
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
-| 6 | Size 9:16 hook still | `EmptyFlux2LatentImage` | Ungrouped |
+| 6 | Size 9:16 hook still | `EmptyFlux2LatentImage` | PROMPT |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |

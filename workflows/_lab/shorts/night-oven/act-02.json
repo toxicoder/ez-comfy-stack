@@ -1,6 +1,6 @@
 {
   "id": "act-02",
-  "revision": 7,
+  "revision": 9,
   "last_node_id": 902,
   "last_link_id": 468,
   "nodes": [
@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        1170
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        212
+        1334
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        368
+        1630
       ],
       "size": [
         360,
@@ -111,8 +111,8 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        80
+        948,
+        1170
       ],
       "size": [
         420,
@@ -158,8 +158,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        940,
-        290
+        948,
+        1402
       ],
       "size": [
         420,
@@ -205,8 +205,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        940,
-        460
+        948,
+        1700
       ],
       "size": [
         280,
@@ -241,7 +241,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        80
+        1170
       ],
       "size": [
         320,
@@ -301,7 +301,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        80
+        1170
       ],
       "size": [
         240,
@@ -343,7 +343,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        176
+        1298
       ],
       "size": [
         280,
@@ -373,7 +373,7 @@
       "type": "Note",
       "pos": [
         40,
-        766.0
+        2154
       ],
       "size": [
         960,
@@ -397,7 +397,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        80
+        1170
       ],
       "size": [
         420,
@@ -454,8 +454,8 @@
       "id": 12,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        400.0
+        480,
+        1662
       ],
       "size": [
         420,
@@ -527,7 +527,7 @@
       "type": "MarkdownNote",
       "pos": [
         40,
-        2000
+        2688
       ],
       "size": [
         960,
@@ -550,8 +550,8 @@
       "id": 50,
       "type": "EZUnloadModels",
       "pos": [
-        1840,
-        500
+        1848,
+        1640
       ],
       "size": [
         320,
@@ -588,7 +588,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        1180
+        2534
       ],
       "size": [
         520,
@@ -639,7 +639,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1310
+        3280
       ],
       "size": [
         360,
@@ -707,7 +707,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        1410
+        3410
       ],
       "size": [
         520,
@@ -760,7 +760,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1560
+        3592
       ],
       "size": [
         360,
@@ -811,7 +811,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        1660
+        3722
       ],
       "size": [
         420,
@@ -875,7 +875,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         40,
-        1820
+        3954
       ],
       "size": [
         300,
@@ -933,7 +933,7 @@
       "type": "EZFilmConcat",
       "pos": [
         40,
-        2560
+        4432
       ],
       "size": [
         420,
@@ -1113,7 +1113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        340
+        512
       ],
       "size": [
         420,
@@ -1159,7 +1159,7 @@
       "id": 201,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
+        2668,
         20
       ],
       "size": [
@@ -1232,8 +1232,8 @@
       "id": 202,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        260
+        2668,
+        314
       ],
       "size": [
         280,
@@ -1284,8 +1284,8 @@
       "id": 203,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        382
+        2668,
+        586
       ],
       "size": [
         280,
@@ -1326,7 +1326,7 @@
       "id": 204,
       "type": "KSampler",
       "pos": [
-        3020,
+        3036,
         20
       ],
       "size": [
@@ -1387,7 +1387,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        322
+        494
       ],
       "size": [
         280,
@@ -1431,7 +1431,7 @@
       "id": 206,
       "type": "VAEDecode",
       "pos": [
-        3380,
+        3404,
         20
       ],
       "size": [
@@ -1474,8 +1474,8 @@
       "id": 207,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        106
+        3404,
+        512
       ],
       "size": [
         320,
@@ -1516,8 +1516,8 @@
       "id": 208,
       "type": "VHS_VideoCombine",
       "pos": [
-        3380,
-        212
+        3404,
+        650
       ],
       "size": [
         320,
@@ -1583,7 +1583,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        450
+        632
       ],
       "size": [
         240,
@@ -1625,7 +1625,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        570
+        784
       ],
       "size": [
         280,
@@ -1700,8 +1700,8 @@
       "id": 220,
       "type": "CLIPTextEncode",
       "pos": [
-        3760,
-        340
+        3772,
+        512
       ],
       "size": [
         420,
@@ -1747,7 +1747,7 @@
       "id": 221,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
+        4228,
         20
       ],
       "size": [
@@ -1820,8 +1820,8 @@
       "id": 222,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        260
+        4228,
+        314
       ],
       "size": [
         280,
@@ -1872,8 +1872,8 @@
       "id": 223,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        382
+        4240,
+        586
       ],
       "size": [
         280,
@@ -1914,7 +1914,7 @@
       "id": 224,
       "type": "KSampler",
       "pos": [
-        4580,
+        4596,
         20
       ],
       "size": [
@@ -1975,7 +1975,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        322
+        494
       ],
       "size": [
         280,
@@ -2019,7 +2019,7 @@
       "id": 226,
       "type": "VAEDecode",
       "pos": [
-        4940,
+        4964,
         20
       ],
       "size": [
@@ -2062,8 +2062,8 @@
       "id": 227,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        106
+        4964,
+        512
       ],
       "size": [
         320,
@@ -2104,8 +2104,8 @@
       "id": 228,
       "type": "VHS_VideoCombine",
       "pos": [
-        4940,
-        212
+        4964,
+        650
       ],
       "size": [
         320,
@@ -2171,7 +2171,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        450
+        632
       ],
       "size": [
         240,
@@ -2213,7 +2213,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        570
+        784
       ],
       "size": [
         280,
@@ -2288,8 +2288,8 @@
       "id": 240,
       "type": "CLIPTextEncode",
       "pos": [
-        5320,
-        340
+        5332,
+        512
       ],
       "size": [
         420,
@@ -2335,7 +2335,7 @@
       "id": 241,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
+        5788,
         20
       ],
       "size": [
@@ -2408,8 +2408,8 @@
       "id": 242,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        260
+        5788,
+        314
       ],
       "size": [
         280,
@@ -2460,8 +2460,8 @@
       "id": 243,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        382
+        5800,
+        586
       ],
       "size": [
         280,
@@ -2502,7 +2502,7 @@
       "id": 244,
       "type": "KSampler",
       "pos": [
-        6140,
+        6156,
         20
       ],
       "size": [
@@ -2563,7 +2563,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        322
+        494
       ],
       "size": [
         280,
@@ -2607,7 +2607,7 @@
       "id": 246,
       "type": "VAEDecode",
       "pos": [
-        6500,
+        6524,
         20
       ],
       "size": [
@@ -2650,8 +2650,8 @@
       "id": 247,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        106
+        6524,
+        138
       ],
       "size": [
         320,
@@ -2692,8 +2692,8 @@
       "id": 248,
       "type": "VHS_VideoCombine",
       "pos": [
-        6500,
-        212
+        6524,
+        276
       ],
       "size": [
         320,
@@ -2759,7 +2759,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        450
+        632
       ],
       "size": [
         240,
@@ -2801,7 +2801,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        570
+        784
       ],
       "size": [
         280,
@@ -2831,7 +2831,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         2200,
-        920
+        2534
       ],
       "size": [
         420,
@@ -2877,7 +2877,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        1240
+        3610
       ],
       "size": [
         420,
@@ -2923,8 +2923,8 @@
       "id": 261,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
-        920
+        2668,
+        2534
       ],
       "size": [
         320,
@@ -2996,8 +2996,8 @@
       "id": 262,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        1160
+        2668,
+        2836
       ],
       "size": [
         280,
@@ -3048,8 +3048,8 @@
       "id": 263,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        1282
+        2668,
+        3574
       ],
       "size": [
         280,
@@ -3090,8 +3090,8 @@
       "id": 264,
       "type": "KSampler",
       "pos": [
-        3020,
-        920
+        3036,
+        2534
       ],
       "size": [
         320,
@@ -3151,7 +3151,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        1222
+        3592
       ],
       "size": [
         280,
@@ -3195,8 +3195,8 @@
       "id": 266,
       "type": "VAEDecode",
       "pos": [
-        3380,
-        920
+        3404,
+        2534
       ],
       "size": [
         240,
@@ -3238,8 +3238,8 @@
       "id": 267,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        1006
+        3404,
+        3026
       ],
       "size": [
         320,
@@ -3281,7 +3281,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         3380,
-        1112
+        3374
       ],
       "size": [
         320,
@@ -3347,7 +3347,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        1350
+        3730
       ],
       "size": [
         240,
@@ -3389,7 +3389,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        1470
+        3882
       ],
       "size": [
         280,
@@ -3419,7 +3419,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         3760,
-        920
+        2534
       ],
       "size": [
         420,
@@ -3465,7 +3465,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         3760,
-        1240
+        3610
       ],
       "size": [
         420,
@@ -3511,8 +3511,8 @@
       "id": 281,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
-        920
+        4228,
+        2534
       ],
       "size": [
         320,
@@ -3584,8 +3584,8 @@
       "id": 282,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        1160
+        4228,
+        2836
       ],
       "size": [
         280,
@@ -3636,8 +3636,8 @@
       "id": 283,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        1282
+        4228,
+        3574
       ],
       "size": [
         280,
@@ -3678,8 +3678,8 @@
       "id": 284,
       "type": "KSampler",
       "pos": [
-        4580,
-        920
+        4596,
+        2534
       ],
       "size": [
         320,
@@ -3739,7 +3739,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        1222
+        3592
       ],
       "size": [
         280,
@@ -3783,8 +3783,8 @@
       "id": 286,
       "type": "VAEDecode",
       "pos": [
-        4940,
-        920
+        4964,
+        2534
       ],
       "size": [
         240,
@@ -3826,8 +3826,8 @@
       "id": 287,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        1006
+        4964,
+        3026
       ],
       "size": [
         320,
@@ -3869,7 +3869,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         4940,
-        1112
+        3374
       ],
       "size": [
         320,
@@ -3935,7 +3935,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        1350
+        3730
       ],
       "size": [
         240,
@@ -3977,7 +3977,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        1470
+        3882
       ],
       "size": [
         280,
@@ -4007,7 +4007,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         5320,
-        920
+        2534
       ],
       "size": [
         420,
@@ -4053,7 +4053,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         5320,
-        1240
+        3610
       ],
       "size": [
         420,
@@ -4099,8 +4099,8 @@
       "id": 301,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
-        920
+        5788,
+        2534
       ],
       "size": [
         320,
@@ -4172,8 +4172,8 @@
       "id": 302,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        1160
+        5788,
+        2836
       ],
       "size": [
         280,
@@ -4224,8 +4224,8 @@
       "id": 303,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        1282
+        5788,
+        3574
       ],
       "size": [
         280,
@@ -4266,8 +4266,8 @@
       "id": 304,
       "type": "KSampler",
       "pos": [
-        6140,
-        920
+        6156,
+        2534
       ],
       "size": [
         320,
@@ -4327,7 +4327,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        1222
+        3592
       ],
       "size": [
         280,
@@ -4371,8 +4371,8 @@
       "id": 306,
       "type": "VAEDecode",
       "pos": [
-        6500,
-        920
+        6524,
+        2534
       ],
       "size": [
         240,
@@ -4414,8 +4414,8 @@
       "id": 307,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        1006
+        6524,
+        2652
       ],
       "size": [
         320,
@@ -4457,7 +4457,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         6500,
-        1112
+        3374
       ],
       "size": [
         320,
@@ -4523,7 +4523,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        1350
+        3730
       ],
       "size": [
         240,
@@ -4565,7 +4565,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        1470
+        3882
       ],
       "size": [
         280,
@@ -4595,7 +4595,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         2200,
-        1820
+        4252
       ],
       "size": [
         420,
@@ -4641,7 +4641,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        2140
+        4744
       ],
       "size": [
         420,
@@ -4687,8 +4687,8 @@
       "id": 321,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
-        1820
+        2668,
+        4252
       ],
       "size": [
         320,
@@ -4760,8 +4760,8 @@
       "id": 322,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        2060
+        2668,
+        4524
       ],
       "size": [
         280,
@@ -4812,8 +4812,8 @@
       "id": 323,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        2182
+        2668,
+        4678
       ],
       "size": [
         280,
@@ -4854,8 +4854,8 @@
       "id": 324,
       "type": "KSampler",
       "pos": [
-        3020,
-        1820
+        3036,
+        4252
       ],
       "size": [
         320,
@@ -4915,7 +4915,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        2122
+        4726
       ],
       "size": [
         280,
@@ -4959,8 +4959,8 @@
       "id": 326,
       "type": "VAEDecode",
       "pos": [
-        3380,
-        1820
+        3404,
+        4252
       ],
       "size": [
         240,
@@ -5002,8 +5002,8 @@
       "id": 327,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        1906
+        3404,
+        4744
       ],
       "size": [
         320,
@@ -5044,8 +5044,8 @@
       "id": 328,
       "type": "VHS_VideoCombine",
       "pos": [
-        3380,
-        2012
+        3404,
+        4882
       ],
       "size": [
         320,
@@ -5111,7 +5111,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        2250
+        4864
       ],
       "size": [
         240,
@@ -5153,7 +5153,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        2370
+        5016
       ],
       "size": [
         280,
@@ -5183,7 +5183,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         3760,
-        1820
+        4252
       ],
       "size": [
         420,
@@ -5228,8 +5228,8 @@
       "id": 340,
       "type": "CLIPTextEncode",
       "pos": [
-        3760,
-        2140
+        3772,
+        4816
       ],
       "size": [
         420,
@@ -5275,8 +5275,8 @@
       "id": 341,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
-        1820
+        4228,
+        4252
       ],
       "size": [
         320,
@@ -5348,8 +5348,8 @@
       "id": 342,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        2060
+        4228,
+        4524
       ],
       "size": [
         280,
@@ -5400,8 +5400,8 @@
       "id": 343,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        2182
+        4228,
+        4678
       ],
       "size": [
         280,
@@ -5442,8 +5442,8 @@
       "id": 344,
       "type": "KSampler",
       "pos": [
-        4580,
-        1820
+        4596,
+        4252
       ],
       "size": [
         320,
@@ -5503,7 +5503,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        2122
+        4726
       ],
       "size": [
         280,
@@ -5547,8 +5547,8 @@
       "id": 346,
       "type": "VAEDecode",
       "pos": [
-        4940,
-        1820
+        4964,
+        4252
       ],
       "size": [
         240,
@@ -5590,8 +5590,8 @@
       "id": 347,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        1906
+        4964,
+        4744
       ],
       "size": [
         320,
@@ -5632,8 +5632,8 @@
       "id": 348,
       "type": "VHS_VideoCombine",
       "pos": [
-        4940,
-        2012
+        4964,
+        4882
       ],
       "size": [
         320,
@@ -5699,7 +5699,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        2250
+        4864
       ],
       "size": [
         240,
@@ -5741,7 +5741,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        2370
+        5016
       ],
       "size": [
         280,
@@ -5771,7 +5771,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         5320,
-        1820
+        4252
       ],
       "size": [
         420,
@@ -5816,8 +5816,8 @@
       "id": 360,
       "type": "CLIPTextEncode",
       "pos": [
-        5320,
-        2140
+        5332,
+        4816
       ],
       "size": [
         420,
@@ -5863,8 +5863,8 @@
       "id": 361,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
-        1820
+        5788,
+        4252
       ],
       "size": [
         320,
@@ -5936,8 +5936,8 @@
       "id": 362,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        2060
+        5788,
+        4524
       ],
       "size": [
         280,
@@ -5988,8 +5988,8 @@
       "id": 363,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        2182
+        5788,
+        4678
       ],
       "size": [
         280,
@@ -6030,8 +6030,8 @@
       "id": 364,
       "type": "KSampler",
       "pos": [
-        6140,
-        1820
+        6156,
+        4252
       ],
       "size": [
         320,
@@ -6091,7 +6091,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        2122
+        4726
       ],
       "size": [
         280,
@@ -6135,8 +6135,8 @@
       "id": 366,
       "type": "VAEDecode",
       "pos": [
-        6500,
-        1820
+        6524,
+        4252
       ],
       "size": [
         240,
@@ -6178,8 +6178,8 @@
       "id": 367,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        1906
+        6524,
+        4370
       ],
       "size": [
         320,
@@ -6220,8 +6220,8 @@
       "id": 368,
       "type": "VHS_VideoCombine",
       "pos": [
-        6500,
-        2012
+        6524,
+        4508
       ],
       "size": [
         320,
@@ -6287,7 +6287,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        2250
+        4864
       ],
       "size": [
         240,
@@ -6329,7 +6329,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        2370
+        5016
       ],
       "size": [
         280,
@@ -6359,7 +6359,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         2200,
-        2720
+        5402
       ],
       "size": [
         420,
@@ -6405,7 +6405,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        3040
+        5894
       ],
       "size": [
         420,
@@ -6451,8 +6451,8 @@
       "id": 381,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
-        2720
+        2668,
+        5402
       ],
       "size": [
         320,
@@ -6524,8 +6524,8 @@
       "id": 382,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        2960
+        2668,
+        5674
       ],
       "size": [
         280,
@@ -6576,8 +6576,8 @@
       "id": 383,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        3082
+        2668,
+        5828
       ],
       "size": [
         280,
@@ -6618,8 +6618,8 @@
       "id": 384,
       "type": "KSampler",
       "pos": [
-        3020,
-        2720
+        3036,
+        5402
       ],
       "size": [
         320,
@@ -6679,7 +6679,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        3022
+        5876
       ],
       "size": [
         280,
@@ -6723,8 +6723,8 @@
       "id": 386,
       "type": "VAEDecode",
       "pos": [
-        3380,
-        2720
+        3404,
+        5402
       ],
       "size": [
         240,
@@ -6766,8 +6766,8 @@
       "id": 387,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        2806
+        3404,
+        5894
       ],
       "size": [
         320,
@@ -6808,8 +6808,8 @@
       "id": 388,
       "type": "VHS_VideoCombine",
       "pos": [
-        3380,
-        2912
+        3404,
+        6032
       ],
       "size": [
         320,
@@ -6875,7 +6875,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        3150
+        6014
       ],
       "size": [
         240,
@@ -6917,7 +6917,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        3270
+        6166
       ],
       "size": [
         280,
@@ -6947,7 +6947,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         3760,
-        2720
+        5402
       ],
       "size": [
         420,
@@ -6992,8 +6992,8 @@
       "id": 400,
       "type": "CLIPTextEncode",
       "pos": [
-        3760,
-        3040
+        3772,
+        5966
       ],
       "size": [
         420,
@@ -7039,8 +7039,8 @@
       "id": 401,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
-        2720
+        4228,
+        5402
       ],
       "size": [
         320,
@@ -7112,8 +7112,8 @@
       "id": 402,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        2960
+        4228,
+        5674
       ],
       "size": [
         280,
@@ -7164,8 +7164,8 @@
       "id": 403,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        3082
+        4228,
+        5828
       ],
       "size": [
         280,
@@ -7206,8 +7206,8 @@
       "id": 404,
       "type": "KSampler",
       "pos": [
-        4580,
-        2720
+        4596,
+        5402
       ],
       "size": [
         320,
@@ -7267,7 +7267,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        3022
+        5876
       ],
       "size": [
         280,
@@ -7311,8 +7311,8 @@
       "id": 406,
       "type": "VAEDecode",
       "pos": [
-        4940,
-        2720
+        4964,
+        5402
       ],
       "size": [
         240,
@@ -7354,8 +7354,8 @@
       "id": 407,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        2806
+        4964,
+        5894
       ],
       "size": [
         320,
@@ -7396,8 +7396,8 @@
       "id": 408,
       "type": "VHS_VideoCombine",
       "pos": [
-        4940,
-        2912
+        4964,
+        6032
       ],
       "size": [
         320,
@@ -7463,7 +7463,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        3150
+        6014
       ],
       "size": [
         240,
@@ -7505,7 +7505,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        3270
+        6166
       ],
       "size": [
         280,
@@ -7535,7 +7535,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         5320,
-        2720
+        5402
       ],
       "size": [
         420,
@@ -7580,8 +7580,8 @@
       "id": 420,
       "type": "CLIPTextEncode",
       "pos": [
-        5320,
-        3040
+        5332,
+        5966
       ],
       "size": [
         420,
@@ -7627,8 +7627,8 @@
       "id": 421,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
-        2720
+        5788,
+        5402
       ],
       "size": [
         320,
@@ -7700,8 +7700,8 @@
       "id": 422,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        2960
+        5788,
+        5674
       ],
       "size": [
         280,
@@ -7752,8 +7752,8 @@
       "id": 423,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        3082
+        5788,
+        5828
       ],
       "size": [
         280,
@@ -7794,8 +7794,8 @@
       "id": 424,
       "type": "KSampler",
       "pos": [
-        6140,
-        2720
+        6156,
+        5402
       ],
       "size": [
         320,
@@ -7855,7 +7855,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        3022
+        5876
       ],
       "size": [
         280,
@@ -7899,8 +7899,8 @@
       "id": 426,
       "type": "VAEDecode",
       "pos": [
-        6500,
-        2720
+        6524,
+        5402
       ],
       "size": [
         240,
@@ -7942,8 +7942,8 @@
       "id": 427,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        2806
+        6524,
+        5520
       ],
       "size": [
         320,
@@ -7984,8 +7984,8 @@
       "id": 428,
       "type": "VHS_VideoCombine",
       "pos": [
-        6500,
-        2912
+        6524,
+        5658
       ],
       "size": [
         320,
@@ -8051,7 +8051,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        3150
+        6014
       ],
       "size": [
         240,
@@ -8093,7 +8093,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        3270
+        6166
       ],
       "size": [
         280,
@@ -8123,7 +8123,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         2200,
-        3620
+        6552
       ],
       "size": [
         420,
@@ -8169,7 +8169,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        3940
+        7044
       ],
       "size": [
         420,
@@ -8215,8 +8215,8 @@
       "id": 441,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
-        3620
+        2668,
+        6552
       ],
       "size": [
         320,
@@ -8288,8 +8288,8 @@
       "id": 442,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        3860
+        2668,
+        6824
       ],
       "size": [
         280,
@@ -8340,8 +8340,8 @@
       "id": 443,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        3982
+        2668,
+        6978
       ],
       "size": [
         280,
@@ -8382,8 +8382,8 @@
       "id": 444,
       "type": "KSampler",
       "pos": [
-        3020,
-        3620
+        3036,
+        6552
       ],
       "size": [
         320,
@@ -8443,7 +8443,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        3922
+        7026
       ],
       "size": [
         280,
@@ -8487,8 +8487,8 @@
       "id": 446,
       "type": "VAEDecode",
       "pos": [
-        3380,
-        3620
+        3404,
+        6552
       ],
       "size": [
         240,
@@ -8530,8 +8530,8 @@
       "id": 447,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        3706
+        3404,
+        7044
       ],
       "size": [
         320,
@@ -8572,8 +8572,8 @@
       "id": 448,
       "type": "VHS_VideoCombine",
       "pos": [
-        3380,
-        3812
+        3404,
+        7182
       ],
       "size": [
         320,
@@ -8639,7 +8639,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        4050
+        7164
       ],
       "size": [
         240,
@@ -8681,7 +8681,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        4170
+        7316
       ],
       "size": [
         280,
@@ -8711,7 +8711,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         3760,
-        3620
+        6552
       ],
       "size": [
         420,
@@ -8756,8 +8756,8 @@
       "id": 460,
       "type": "CLIPTextEncode",
       "pos": [
-        3760,
-        3940
+        3772,
+        7116
       ],
       "size": [
         420,
@@ -8803,8 +8803,8 @@
       "id": 461,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
-        3620
+        4228,
+        6552
       ],
       "size": [
         320,
@@ -8876,8 +8876,8 @@
       "id": 462,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        3860
+        4228,
+        6824
       ],
       "size": [
         280,
@@ -8928,8 +8928,8 @@
       "id": 463,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        3982
+        4228,
+        6978
       ],
       "size": [
         280,
@@ -8970,8 +8970,8 @@
       "id": 464,
       "type": "KSampler",
       "pos": [
-        4580,
-        3620
+        4596,
+        6552
       ],
       "size": [
         320,
@@ -9031,7 +9031,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        3922
+        7026
       ],
       "size": [
         280,
@@ -9075,8 +9075,8 @@
       "id": 466,
       "type": "VAEDecode",
       "pos": [
-        4940,
-        3620
+        4964,
+        6552
       ],
       "size": [
         240,
@@ -9118,8 +9118,8 @@
       "id": 467,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        3706
+        4964,
+        7044
       ],
       "size": [
         320,
@@ -9160,8 +9160,8 @@
       "id": 468,
       "type": "VHS_VideoCombine",
       "pos": [
-        4940,
-        3812
+        4964,
+        7182
       ],
       "size": [
         320,
@@ -9227,7 +9227,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        4050
+        7164
       ],
       "size": [
         240,
@@ -9269,7 +9269,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        4170
+        7316
       ],
       "size": [
         280,
@@ -9299,7 +9299,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         5320,
-        3620
+        6552
       ],
       "size": [
         420,
@@ -9344,8 +9344,8 @@
       "id": 480,
       "type": "CLIPTextEncode",
       "pos": [
-        5320,
-        3940
+        5332,
+        7116
       ],
       "size": [
         420,
@@ -9391,8 +9391,8 @@
       "id": 481,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
-        3620
+        5788,
+        6552
       ],
       "size": [
         320,
@@ -9464,8 +9464,8 @@
       "id": 482,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        3860
+        5788,
+        6824
       ],
       "size": [
         280,
@@ -9516,8 +9516,8 @@
       "id": 483,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        3982
+        5788,
+        6978
       ],
       "size": [
         280,
@@ -9558,8 +9558,8 @@
       "id": 484,
       "type": "KSampler",
       "pos": [
-        6140,
-        3620
+        6156,
+        6552
       ],
       "size": [
         320,
@@ -9619,7 +9619,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        3922
+        7026
       ],
       "size": [
         280,
@@ -9663,8 +9663,8 @@
       "id": 486,
       "type": "VAEDecode",
       "pos": [
-        6500,
-        3620
+        6524,
+        6552
       ],
       "size": [
         240,
@@ -9706,8 +9706,8 @@
       "id": 487,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        3706
+        6524,
+        6670
       ],
       "size": [
         320,
@@ -9748,8 +9748,8 @@
       "id": 488,
       "type": "VHS_VideoCombine",
       "pos": [
-        6500,
-        3812
+        6524,
+        6808
       ],
       "size": [
         320,
@@ -9815,7 +9815,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        4050
+        7164
       ],
       "size": [
         240,
@@ -9857,7 +9857,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        4170
+        7316
       ],
       "size": [
         280,
@@ -9887,7 +9887,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         2200,
-        4520
+        7702
       ],
       "size": [
         420,
@@ -9933,7 +9933,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         2200,
-        4840
+        8194
       ],
       "size": [
         420,
@@ -9979,8 +9979,8 @@
       "id": 501,
       "type": "LTXVImgToVideo",
       "pos": [
-        2660,
-        4520
+        2668,
+        7702
       ],
       "size": [
         320,
@@ -10052,8 +10052,8 @@
       "id": 502,
       "type": "LTXVConditioning",
       "pos": [
-        2660,
-        4760
+        2668,
+        7974
       ],
       "size": [
         280,
@@ -10104,8 +10104,8 @@
       "id": 503,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        2660,
-        4882
+        2668,
+        8128
       ],
       "size": [
         280,
@@ -10146,8 +10146,8 @@
       "id": 504,
       "type": "KSampler",
       "pos": [
-        3020,
-        4520
+        3036,
+        7702
       ],
       "size": [
         320,
@@ -10207,7 +10207,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         3020,
-        4822
+        8176
       ],
       "size": [
         280,
@@ -10251,8 +10251,8 @@
       "id": 506,
       "type": "VAEDecode",
       "pos": [
-        3380,
-        4520
+        3404,
+        7702
       ],
       "size": [
         240,
@@ -10294,8 +10294,8 @@
       "id": 507,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3380,
-        4606
+        3404,
+        8194
       ],
       "size": [
         320,
@@ -10336,8 +10336,8 @@
       "id": 508,
       "type": "VHS_VideoCombine",
       "pos": [
-        3380,
-        4712
+        3404,
+        8332
       ],
       "size": [
         320,
@@ -10403,7 +10403,7 @@
       "type": "ImageFromBatch",
       "pos": [
         3020,
-        4950
+        8314
       ],
       "size": [
         240,
@@ -10445,7 +10445,7 @@
       "type": "SaveImage",
       "pos": [
         3020,
-        5070
+        8466
       ],
       "size": [
         280,
@@ -10475,7 +10475,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         3760,
-        4520
+        7702
       ],
       "size": [
         420,
@@ -10520,8 +10520,8 @@
       "id": 520,
       "type": "CLIPTextEncode",
       "pos": [
-        3760,
-        4840
+        3772,
+        8266
       ],
       "size": [
         420,
@@ -10567,8 +10567,8 @@
       "id": 521,
       "type": "LTXVImgToVideo",
       "pos": [
-        4220,
-        4520
+        4228,
+        7702
       ],
       "size": [
         320,
@@ -10640,8 +10640,8 @@
       "id": 522,
       "type": "LTXVConditioning",
       "pos": [
-        4220,
-        4760
+        4228,
+        7974
       ],
       "size": [
         280,
@@ -10692,8 +10692,8 @@
       "id": 523,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        4220,
-        4882
+        4228,
+        8128
       ],
       "size": [
         280,
@@ -10734,8 +10734,8 @@
       "id": 524,
       "type": "KSampler",
       "pos": [
-        4580,
-        4520
+        4596,
+        7702
       ],
       "size": [
         320,
@@ -10795,7 +10795,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         4580,
-        4822
+        8176
       ],
       "size": [
         280,
@@ -10839,8 +10839,8 @@
       "id": 526,
       "type": "VAEDecode",
       "pos": [
-        4940,
-        4520
+        4964,
+        7702
       ],
       "size": [
         240,
@@ -10882,8 +10882,8 @@
       "id": 527,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        4940,
-        4606
+        4964,
+        8194
       ],
       "size": [
         320,
@@ -10924,8 +10924,8 @@
       "id": 528,
       "type": "VHS_VideoCombine",
       "pos": [
-        4940,
-        4712
+        4964,
+        8332
       ],
       "size": [
         320,
@@ -10991,7 +10991,7 @@
       "type": "ImageFromBatch",
       "pos": [
         4580,
-        4950
+        8314
       ],
       "size": [
         240,
@@ -11033,7 +11033,7 @@
       "type": "SaveImage",
       "pos": [
         4580,
-        5070
+        8466
       ],
       "size": [
         280,
@@ -11063,7 +11063,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         5320,
-        4520
+        7702
       ],
       "size": [
         420,
@@ -11108,8 +11108,8 @@
       "id": 540,
       "type": "CLIPTextEncode",
       "pos": [
-        5320,
-        4840
+        5332,
+        8266
       ],
       "size": [
         420,
@@ -11155,8 +11155,8 @@
       "id": 541,
       "type": "LTXVImgToVideo",
       "pos": [
-        5780,
-        4520
+        5788,
+        7702
       ],
       "size": [
         320,
@@ -11228,8 +11228,8 @@
       "id": 542,
       "type": "LTXVConditioning",
       "pos": [
-        5780,
-        4760
+        5788,
+        7974
       ],
       "size": [
         280,
@@ -11280,8 +11280,8 @@
       "id": 543,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        5780,
-        4882
+        5788,
+        8128
       ],
       "size": [
         280,
@@ -11322,8 +11322,8 @@
       "id": 544,
       "type": "KSampler",
       "pos": [
-        6140,
-        4520
+        6156,
+        7702
       ],
       "size": [
         320,
@@ -11383,7 +11383,7 @@
       "type": "LTXVSeparateAVLatent",
       "pos": [
         6140,
-        4822
+        8176
       ],
       "size": [
         280,
@@ -11427,8 +11427,8 @@
       "id": 546,
       "type": "VAEDecode",
       "pos": [
-        6500,
-        4520
+        6524,
+        7702
       ],
       "size": [
         240,
@@ -11470,8 +11470,8 @@
       "id": 547,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        6500,
-        4606
+        6524,
+        7820
       ],
       "size": [
         320,
@@ -11512,8 +11512,8 @@
       "id": 548,
       "type": "VHS_VideoCombine",
       "pos": [
-        6500,
-        4712
+        6524,
+        7958
       ],
       "size": [
         320,
@@ -11579,7 +11579,7 @@
       "type": "ImageFromBatch",
       "pos": [
         6140,
-        4950
+        8314
       ],
       "size": [
         240,
@@ -11620,7 +11620,7 @@
       "type": "SaveImage",
       "pos": [
         6140,
-        5070
+        8466
       ],
       "size": [
         280,
@@ -11649,8 +11649,8 @@
       "id": 901,
       "type": "EZFilmDisclosure",
       "pos": [
-        500,
-        2560
+        508,
+        4432
       ],
       "size": [
         420,
@@ -11682,8 +11682,8 @@
       "id": 51,
       "type": "LoadImage",
       "pos": [
-        1480.0,
-        400.0
+        1480,
+        1662
       ],
       "size": [
         320.0,
@@ -11723,8 +11723,8 @@
       "id": 902,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480.0,
-        2860.0
+        508,
+        3912
       ],
       "size": [
         420,
@@ -15513,9 +15513,9 @@
       "title": "1. Identity (Klein)",
       "bounding": [
         20,
-        20,
-        2100,
-        1100
+        1114,
+        2168,
+        1364
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -15526,9 +15526,9 @@
       "title": "2. LTX models",
       "bounding": [
         20,
-        1124,
-        600,
-        820
+        2478,
+        1000,
+        1898
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -15540,8 +15540,8 @@
       "bounding": [
         2180,
         -36,
-        4720,
-        900
+        4684,
+        1150
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -15552,9 +15552,9 @@
       "title": "4. Beat 2 (3 \u00d7 5.00s LTX)",
       "bounding": [
         2180,
-        864,
-        4720,
-        900
+        2478,
+        4684,
+        1718
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -15565,9 +15565,9 @@
       "title": "5. Beat 3 (3 \u00d7 5.00s LTX)",
       "bounding": [
         2180,
-        1764,
-        4720,
-        900
+        4196,
+        4684,
+        1150
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -15578,9 +15578,9 @@
       "title": "6. Beat 4 (3 \u00d7 5.00s LTX)",
       "bounding": [
         2180,
-        2664,
-        4720,
-        900
+        5346,
+        4684,
+        1150
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -15591,9 +15591,9 @@
       "title": "7. Beat 5 (3 \u00d7 5.00s LTX)",
       "bounding": [
         2180,
-        3564,
-        4720,
-        900
+        6496,
+        4684,
+        1150
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -15604,9 +15604,9 @@
       "title": "8. Beat 6 (3 \u00d7 5.00s LTX)",
       "bounding": [
         2180,
-        4464,
-        4720,
-        900
+        7646,
+        4684,
+        1150
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -15617,9 +15617,9 @@
       "title": "9. Publish 90s MP4",
       "bounding": [
         20,
-        2504,
-        1000,
-        280
+        4376,
+        928,
+        300
       ],
       "color": "#3f789e",
       "font_size": 24,
