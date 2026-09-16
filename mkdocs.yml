@@ -122,6 +122,7 @@ nav:
       - Node parameter encyclopedia: reference/workflow-nodes.md
       - Stills graphs: create/workflows-stills.md
       - Motion graphs: create/workflows-motion.md
+      - Creator pack: create/workflows-creator.md
       - Film graphs: create/workflows-film.md
       - Audio graphs: create/workflows-audio.md
       - 90s shorts: shorts.md

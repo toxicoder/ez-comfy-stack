@@ -18,6 +18,7 @@ CATALOG_PAGES = (
     DOCS / "studio-workflows.md",
     DOCS / "create" / "workflows-stills.md",
     DOCS / "create" / "workflows-motion.md",
+    DOCS / "create" / "workflows-creator.md",
     DOCS / "create" / "workflows-film.md",
     DOCS / "create" / "workflows-audio.md",
 )
@@ -42,7 +43,7 @@ def _graph_id(path: Path) -> str:
 
 
 def test_catalog_pages_exist() -> None:
-    """Index and the four catalog children are present."""
+    """Index and the catalog children are present."""
     missing = [str(path.relative_to(ROOT)) for path in CATALOG_PAGES if not path.is_file()]
     assert missing == [], "catalog pages missing:\n" + "\n".join(missing)
 

@@ -61,6 +61,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | [Node parameter encyclopedia](../reference/workflow-nodes.md) | All 78 types used in `_lab`, not tied to one graph |
 | [Stills catalog](workflows-stills.md) | Klein scan table |
 | [Motion catalog](workflows-motion.md) | Wan / LTX scan table |
+| [Creator pack](workflows-creator.md) | Platform stills, loops, and AV jobs |
 | [Film catalog](workflows-film.md) | 90s + DCC |
 | [Audio catalog](workflows-audio.md) | Podcast, dub, albums |
 | [Custom nodes](../reference/custom-nodes.md) | `ez_*` pack catalog (`INPUT_TYPES`) |
