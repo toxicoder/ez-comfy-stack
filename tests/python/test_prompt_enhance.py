@@ -23,6 +23,7 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZAceStepPromptEnhance,
     EZKleinPromptEnhance,
     EZLTXPromptEnhance,
+    EZNegativePromptEnhance,
     EZPromptJoin,
     EZWanPromptEnhance,
     NODE_CLASS_MAPPINGS,
@@ -122,6 +123,13 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "instrumental" in ace_inst.lower()
     assert "no vocals" in ace_inst.lower()
     assert "empty-body" in ace_inst.lower() or "inside the brackets" in ace_inst.lower()
+    for stem in ("negative_klein", "negative_wan", "negative_ltx"):
+        neg = client.load_system_prompt(stem)
+        assert "comma" in neg.lower() or "comma-separated" in neg.lower()
+        assert "positive" in neg.lower()
+        assert "watermark" in neg.lower() or "artifact" in neg.lower()
+    ltx_neg = client.load_system_prompt("negative_ltx")
+    assert "audio" in ltx_neg.lower() or "foley" in ltx_neg.lower()
 
 
 def test_style_catalog_is_fifty_unique() -> None:
@@ -207,6 +215,83 @@ def test_apply_style_to_prompt_overrides_lab_3d() -> None:
     painted = client.apply_style_to_prompt(photo, "watercolor_illustration")
     assert "photoreal still" not in painted.lower()
     assert "transparent watercolor" in painted.lower() or "wet-into-wet" in painted.lower()
+
+
+_KLEIN_NEG_SEED = (
+    "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, "
+    "melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+)
+
+
+def test_complement_negative_drops_look_fights_keeps_artifacts() -> None:
+    watercolor = (
+        "Transparent watercolor on paper. A rooftop terrace at golden hour, "
+        "wet-into-wet blooms and paper tooth."
+    )
+    out = client.complement_negative(_KLEIN_NEG_SEED, watercolor)
+    lower = out.lower()
+    assert "illustration" not in lower
+    assert "watermark" in lower
+    assert "melted geometry" in lower
+    photoreal = (
+        "Still photograph from a real camera, captured in the moment. "
+        "A rooftop terrace, physically plausible light, material microdetail."
+    )
+    photo = client.complement_negative(_KLEIN_NEG_SEED, photoreal)
+    photo_l = photo.lower()
+    assert "illustration" in photo_l
+    assert "pixar" in photo_l
+    assert "watermark" in photo_l
+    empty = client.complement_negative(_KLEIN_NEG_SEED, "")
+    assert empty == _KLEIN_NEG_SEED
+    assert client.complement_negative("", watercolor) == ""
+    pixar = (
+        "Stylized feature 3D with appealing proportions. A rooftop, "
+        "soft global illumination."
+    )
+    pix = client.complement_negative(_KLEIN_NEG_SEED, pixar).lower()
+    assert "pixar" not in pix
+    assert "watermark" in pix
+    user = client.compose_negative_user("illustration, watermarks", watercolor)
+    assert user.startswith("POSITIVE:")
+    assert "NEGATIVE SEED:" in user
+    assert "illustration, watermarks" in user
+    assert "Transparent watercolor" in user
+
+
+def test_negative_prompt_enhance_uses_positive_context() -> None:
+    node = EZNegativePromptEnhance()
+    types = node.INPUT_TYPES()
+    assert types["required"]["enhance"][1]["default"] is True
+    assert types["required"]["family"][0] == ["klein", "wan", "ltx"]
+    assert types["optional"]["positive"][1]["forceInput"] is True
+    assert node.OUTPUT_NODE is True
+    watercolor = "Transparent watercolor on paper. A rooftop, wet-into-wet, paper tooth."
+    off = node.run(_KLEIN_NEG_SEED, False, "klein", watercolor)
+    assert off["ui"]["passthrough"][0] == "enhance off"
+    assert "illustration" not in off["result"][0].lower()
+    assert "watermark" in off["result"][0].lower()
+    with patch(
+        "ez_prompt_enhance.nodes.complete",
+        return_value=("illustration, watermarks", None),
+    ) as mock:
+        on = node.run(_KLEIN_NEG_SEED, True, "wan", watercolor)
+    assert mock.call_args.kwargs.get("max_tokens") == 200
+    system, user = mock.call_args[0][0], mock.call_args[0][1]
+    assert "POSITIVE:" in user
+    assert "NEGATIVE SEED:" in user
+    assert _KLEIN_NEG_SEED.split(",")[0] in user or "game-engine" in user
+    assert "watermark" in system.lower() or "artifact" in system.lower()
+    assert "illustration" not in on["result"][0].lower()
+    assert "watermark" in on["result"][0].lower()
+    with patch(
+        "ez_prompt_enhance.nodes.complete",
+        return_value=("", "GGUF missing"),
+    ):
+        miss = node.run(_KLEIN_NEG_SEED, True, "ltx", watercolor)
+    assert miss["ui"]["passthrough"][0]
+    assert "watermark" in miss["result"][0].lower()
+    assert "illustration" not in miss["result"][0].lower()
 
 
 def test_strip_fences_quotes_and_think() -> None:
@@ -481,6 +566,7 @@ def test_web_directory_and_preview_js() -> None:
     assert "EZKleinPromptEnhance" in body
     assert "EZWanPromptEnhance" in body
     assert "EZLTXPromptEnhance" in body
+    assert "EZNegativePromptEnhance" in body
     assert "EZAceStepPromptEnhance" in body
     assert "EZRapLyrics" in body
     assert "EZPodcastScript" in body
@@ -1240,6 +1326,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZNegativePromptEnhance",
         "EZPromptJoin",
         "EZAceStepPromptEnhance",
     }
@@ -1422,10 +1509,12 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZNegativePromptEnhance",
         "EZAceStepPromptEnhance",
         "EZRapLyrics",
         "EZPodcastScript",
     }
+    pos_enhance_types = enhance_types - {"EZNegativePromptEnhance"}
     encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
     missing: list[str] = []
     for path in lab_graph_paths():
@@ -1456,6 +1545,41 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
             if ntype not in encoder_types:
                 continue
             title = str(node.get("title") or "")
+            if ntype == "CLIPTextEncode" and "neg" in title.lower():
+                text_inp = next(
+                    (i for i in node.get("inputs") or [] if i.get("name") == "text"),
+                    None,
+                )
+                if text_inp is None or text_inp.get("link") is None:
+                    missing.append(f"{path.name}: CLIP {title!r} has no text link")
+                    continue
+                src = by_id.get(int(links[int(text_inp["link"])][1]))
+                if src is None or src.get("type") != "EZNegativePromptEnhance":
+                    missing.append(
+                        f"{path.name}: CLIP {title!r} fed by "
+                        f"{None if src is None else src.get('type')}"
+                    )
+                    continue
+                pos_inp = next(
+                    (i for i in src.get("inputs") or [] if i.get("name") == "positive"),
+                    None,
+                )
+                has_pos_enhance = any(
+                    n.get("type") in pos_enhance_types for n in graph["nodes"]
+                )
+                if has_pos_enhance:
+                    if pos_inp is None or pos_inp.get("link") is None:
+                        missing.append(
+                            f"{path.name}: negative enhance #{src['id']} missing positive"
+                        )
+                    else:
+                        pos_src = by_id.get(int(links[int(pos_inp["link"])][1]))
+                        if pos_src is None or pos_src.get("type") not in pos_enhance_types:
+                            missing.append(
+                                f"{path.name}: negative enhance #{src['id']} "
+                                f"positive from {None if pos_src is None else pos_src.get('type')}"
+                            )
+                continue
             if "neg" in title.lower():
                 continue
             if ntype == "CLIPTextEncode":

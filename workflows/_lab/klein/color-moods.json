@@ -1,8 +1,8 @@
 {
   "id": "color-moods",
-  "revision": 1,
-  "last_node_id": 33,
-  "last_link_id": 51,
+  "revision": 2,
+  "last_node_id": 34,
+  "last_link_id": 53,
   "nodes": [
     {
       "id": 1,
@@ -140,7 +140,8 @@
             5,
             16,
             28,
-            40
+            40,
+            53
           ],
           "slot_index": 0
         }
@@ -176,6 +177,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 1
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 52,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -1358,6 +1367,47 @@
       },
       "widgets_values": [],
       "title": "Ref from 01 (HIGH KEY)"
+    },
+    {
+      "id": 34,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1770.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 53
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            52
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -1768,6 +1818,22 @@
       32,
       0,
       "IMAGE"
+    ],
+    [
+      52,
+      34,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      53,
+      4,
+      0,
+      34,
+      0,
+      "STRING"
     ]
   ],
   "groups": [

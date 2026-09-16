@@ -1,8 +1,8 @@
 {
   "id": "banner-wide",
-  "revision": 1,
-  "last_node_id": 12,
-  "last_link_id": 10,
+  "revision": 2,
+  "last_node_id": 13,
+  "last_link_id": 12,
   "nodes": [
     {
       "id": 1,
@@ -173,6 +173,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 11,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -442,7 +450,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            10
+            10,
+            12
           ],
           "slot_index": 0
         }
@@ -458,6 +467,47 @@
         "none"
       ],
       "title": "Klein Prompt Enhance"
+    },
+    {
+      "id": 13,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        930.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -539,6 +589,22 @@
       0,
       4,
       1,
+      "STRING"
+    ],
+    [
+      11,
+      13,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      12,
+      12,
+      0,
+      13,
+      0,
       "STRING"
     ]
   ],

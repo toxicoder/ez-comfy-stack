@@ -1,8 +1,8 @@
 {
   "id": "flf-from-guide",
-  "revision": 3,
-  "last_node_id": 16,
-  "last_link_id": 17,
+  "revision": 4,
+  "last_node_id": 17,
+  "last_link_id": 19,
   "nodes": [
     {
       "id": 1,
@@ -219,6 +219,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 15
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 18,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -578,7 +586,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            16
+            16,
+            19
           ],
           "slot_index": 0
         }
@@ -632,6 +641,47 @@
         "image"
       ],
       "title": "Guide last.png"
+    },
+    {
+      "id": 17,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1260.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "wan"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -754,6 +804,22 @@
       8,
       2,
       "IMAGE"
+    ],
+    [
+      18,
+      17,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      19,
+      15,
+      0,
+      17,
+      0,
+      "STRING"
     ]
   ],
   "groups": [

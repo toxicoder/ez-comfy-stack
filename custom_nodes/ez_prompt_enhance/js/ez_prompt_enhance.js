@@ -5,6 +5,7 @@ const NODE_CLASSES = new Set([
   "EZKleinPromptEnhance",
   "EZWanPromptEnhance",
   "EZLTXPromptEnhance",
+  "EZNegativePromptEnhance",
   "EZAceStepPromptEnhance",
   "EZRapLyrics",
   "EZPodcastScript",

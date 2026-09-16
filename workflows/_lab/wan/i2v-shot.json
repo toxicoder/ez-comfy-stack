@@ -1,8 +1,8 @@
 {
   "id": "i2v-shot",
-  "revision": 2,
-  "last_node_id": 17,
-  "last_link_id": 18,
+  "revision": 3,
+  "last_node_id": 18,
+  "last_link_id": 20,
   "nodes": [
     {
       "id": 1,
@@ -219,6 +219,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 15
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 19,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -644,7 +652,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            18
+            18,
+            20
           ],
           "slot_index": 0
         }
@@ -660,6 +669,47 @@
         "none"
       ],
       "title": "Wan Prompt Enhance"
+    },
+    {
+      "id": 18,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1420.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "wan"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -789,6 +839,22 @@
       0,
       6,
       1,
+      "STRING"
+    ],
+    [
+      19,
+      18,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      20,
+      17,
+      0,
+      18,
+      0,
       "STRING"
     ]
   ],

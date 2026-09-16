@@ -1,8 +1,8 @@
 {
   "id": "lighting-trio",
-  "revision": 1,
-  "last_node_id": 27,
-  "last_link_id": 39,
+  "revision": 2,
+  "last_node_id": 28,
+  "last_link_id": 41,
   "nodes": [
     {
       "id": 1,
@@ -136,7 +136,8 @@
           "links": [
             5,
             16,
-            28
+            28,
+            41
           ],
           "slot_index": 0
         }
@@ -172,6 +173,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 1
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 40,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -1088,6 +1097,47 @@
       },
       "widgets_values": [],
       "title": "Ref from 01 (NIGHT LAMP)"
+    },
+    {
+      "id": 28,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1770.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 41
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            40
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -1402,6 +1452,22 @@
       26,
       0,
       "IMAGE"
+    ],
+    [
+      40,
+      28,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      41,
+      4,
+      0,
+      28,
+      0,
+      "STRING"
     ]
   ],
   "groups": [

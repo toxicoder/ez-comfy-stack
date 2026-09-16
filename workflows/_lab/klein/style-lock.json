@@ -1,8 +1,8 @@
 {
   "id": "style-lock",
-  "revision": 1,
-  "last_node_id": 32,
-  "last_link_id": 41,
+  "revision": 2,
+  "last_node_id": 33,
+  "last_link_id": 43,
   "nodes": [
     {
       "id": 1,
@@ -139,7 +139,8 @@
             2,
             12,
             22,
-            32
+            32,
+            43
           ],
           "slot_index": 0
         }
@@ -175,6 +176,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 1
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 42,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -1139,6 +1148,47 @@
         "ez_style_04"
       ],
       "title": "Save RAIN"
+    },
+    {
+      "id": 33,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1770.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -1469,6 +1519,22 @@
       32,
       0,
       "IMAGE"
+    ],
+    [
+      42,
+      33,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      43,
+      4,
+      0,
+      33,
+      0,
+      "STRING"
     ]
   ],
   "groups": [

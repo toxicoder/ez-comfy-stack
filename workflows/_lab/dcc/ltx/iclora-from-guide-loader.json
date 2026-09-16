@@ -1,8 +1,8 @@
 {
   "id": "iclora-from-guide-loader",
-  "revision": 7,
-  "last_node_id": 25,
-  "last_link_id": 32,
+  "revision": 8,
+  "last_node_id": 26,
+  "last_link_id": 34,
   "nodes": [
     {
       "id": 1,
@@ -221,6 +221,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 17
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 33,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -667,7 +675,7 @@
       "type": "Note",
       "pos": [
         40,
-        854.0
+        1734.0
       ],
       "size": [
         960,
@@ -841,7 +849,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            28
+            28,
+            34
           ],
           "slot_index": 0
         }
@@ -1009,6 +1018,47 @@
         "depth"
       ],
       "title": "Load guide video path"
+    },
+    {
+      "id": 26,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        620.0,
+        1354.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            33
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -1227,6 +1277,22 @@
       24,
       0,
       "IMAGE"
+    ],
+    [
+      33,
+      26,
+      0,
+      6,
+      1,
+      "STRING"
+    ],
+    [
+      34,
+      21,
+      0,
+      26,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],

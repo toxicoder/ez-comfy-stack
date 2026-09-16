@@ -35,6 +35,8 @@ DEFAULT_TIMEOUT_S = 180
 DEFAULT_N_THREADS = 8
 DEFAULT_N_CTX = 4096
 DEFAULT_MAX_TOKENS = 800
+NEGATIVE_MAX_TOKENS = 200
+NEGATIVE_FAMILIES = ("klein", "wan", "ltx")
 STYLE_NONE = "none"
 LOCK_VIEW = "view"
 LOCK_STATE = "state"
@@ -608,6 +610,131 @@ def apply_style_to_prompt(text: str, style_id: str) -> str:
 def ensure_style_details(text: str, style_id: str) -> str:
     """Apply the selected style to CLIP text (alias of apply_style_to_prompt)."""
     return apply_style_to_prompt(text, style_id)
+
+
+_ARTIFACT_KEEP = (
+    "watermark",
+    "watermarks",
+    "melted geometry",
+    "duplicate limbs",
+    "morphing",
+    "identity drift",
+    "warping objects",
+    "face melting",
+    "flicker",
+    "jitter",
+    "frame stutter",
+    "rubbery motion",
+    "melting edges",
+    "texture crawl",
+    "sudden cuts",
+    "burned-in text",
+    "oversharpen halos",
+    "muddy blacks",
+    "muddy textures",
+    "plastic skin",
+)
+_WORD_RE = re.compile(r"[a-z0-9][a-z0-9'-]{4,}")
+
+
+def compose_negative_user(prompt: str, positive: str) -> str:
+    """Build the rewriter user message: positive context plus negative seed.
+
+    Arguments:
+      prompt: canned or lazy negative seed
+      positive: CLIP-bound positive string (may be empty)
+    Returns:
+      User message with POSITIVE / NEGATIVE SEED sections.
+    """
+    seed = (prompt or "").strip()
+    pos = (positive or "").strip()
+    parts: list[str] = []
+    if pos:
+        parts.append(f"POSITIVE:\n{pos}")
+    parts.append(f"NEGATIVE SEED:\n{seed or '(empty)'}")
+    return "\n\n".join(parts)
+
+
+def _negative_tokens(negative: str) -> list[str]:
+    return [token.strip() for token in (negative or "").split(",") if token.strip()]
+
+
+def _is_artifact_token(token: str) -> bool:
+    low = token.lower()
+    for keep in _ARTIFACT_KEEP:
+        if keep in low or low in keep:
+            return True
+    return False
+
+
+def _token_hits_blob(token: str, blob: str) -> bool:
+    if not token or not blob:
+        return False
+    if token in blob:
+        return True
+    for word in _WORD_RE.findall(token):
+        if word in blob:
+            return True
+    return False
+
+
+def _inferred_style_ids(positive: str) -> list[str]:
+    blob = (positive or "").lower()
+    if not blob:
+        return []
+    hits: list[str] = []
+    for sid, entry in load_styles().items():
+        needles: list[str] = []
+        for field in ("medium", "label", "suffix"):
+            text = str(entry.get(field) or "").strip().rstrip(".")
+            if len(text) >= 8:
+                needles.append(text.lower())
+        for phrase in style_must_include(sid):
+            if len(phrase) >= 8:
+                needles.append(phrase.lower())
+        if any(needle in blob for needle in needles):
+            hits.append(sid)
+    return hits
+
+
+def _style_own_look(style_id: str) -> str:
+    entry = _style_entry(style_id)
+    parts = [
+        _own_look_blob(style_id),
+        str(entry.get("label") or ""),
+        str(entry.get("wan_stylization") or ""),
+    ]
+    return " ".join(parts).lower()
+
+
+def complement_negative(negative: str, positive: str) -> str:
+    """Drop negative tokens that fight the positive look; keep artifacts.
+
+    Arguments:
+      negative: comma-separated negative seed or rewriter output
+      positive: CLIP-bound positive (style already applied)
+    Returns:
+      Comma-separated negative. Unchanged when positive is empty.
+    """
+    seed = (negative or "").strip()
+    if not seed:
+        return seed
+    pos = (positive or "").strip()
+    if not pos:
+        return seed
+    look = pos.lower()
+    for sid in _inferred_style_ids(pos):
+        look = f"{look} {_style_own_look(sid)}"
+    kept: list[str] = []
+    for token in _negative_tokens(seed):
+        if _is_artifact_token(token):
+            kept.append(token)
+            continue
+        low = token.lower()
+        if _token_hits_blob(low, look):
+            continue
+        kept.append(token)
+    return ", ".join(kept)
 
 
 def flavor_for_system(name: str) -> str:

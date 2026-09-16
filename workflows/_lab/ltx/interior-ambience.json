@@ -1,8 +1,8 @@
 {
   "id": "interior-ambience",
-  "revision": 1,
-  "last_node_id": 18,
-  "last_link_id": 22,
+  "revision": 2,
+  "last_node_id": 19,
+  "last_link_id": 24,
   "nodes": [
     {
       "id": 1,
@@ -173,6 +173,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 4
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 23,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -681,7 +689,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            19
+            19,
+            24
           ],
           "slot_index": 0
         }
@@ -740,6 +749,47 @@
       },
       "widgets_values": [],
       "title": "Audio VAE Decode"
+    },
+    {
+      "id": 19,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        620.0,
+        1250.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -902,6 +952,22 @@
       16,
       1,
       "AUDIO"
+    ],
+    [
+      23,
+      19,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      24,
+      17,
+      0,
+      19,
+      0,
+      "STRING"
     ]
   ],
   "groups": [],

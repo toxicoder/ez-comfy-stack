@@ -67,7 +67,7 @@
         "id": "7c3e9b10-6a21-4f0a-9c11-00000000aa02",
         "name": "wan-i2v-5s",
         "version": 1,
-        "revision": 2,
+        "revision": 3,
         "config": {},
         "extra": {
           "lab_occupancy": "wan",
@@ -323,7 +323,7 @@
               "cnr_id": "comfy-core"
             },
             "widgets_values": [
-              "Slow cinematic dolly-in toward the techno wizard. Coat hem and holographic glyph motes drift in a warm bay breeze. Palms and unmarked glass towers hold over a bright waterfront. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
+              "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps."
             ],
             "title": "Motion / prompt"
           },
@@ -346,6 +346,14 @@
                 "name": "clip",
                 "type": "CLIP",
                 "link": 15
+              },
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 17,
+                "widget": {
+                  "name": "text"
+                }
               }
             ],
             "outputs": [
@@ -699,7 +707,8 @@
                 "name": "prompt",
                 "type": "STRING",
                 "links": [
-                  16
+                  16,
+                  18
                 ],
                 "slot_index": 0
               }
@@ -708,13 +717,54 @@
               "Node name for S&R": "EZWanPromptEnhance"
             },
             "widgets_values": [
-              "Slow cinematic dolly-in toward the techno wizard. Coat hem and holographic glyph motes drift in a warm bay breeze. Palms and unmarked glass towers hold over a bright waterfront. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
+              "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps.",
               true,
               "i2v",
               "5 seconds, 24 fps",
               "none"
             ],
             "title": "Wan Prompt Enhance"
+          },
+          {
+            "id": 16,
+            "type": "EZNegativePromptEnhance",
+            "pos": [
+              480.0,
+              1260.0
+            ],
+            "size": [
+              420,
+              280
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "STRING",
+                "link": 18
+              }
+            ],
+            "outputs": [
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "links": [
+                  17
+                ],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZNegativePromptEnhance"
+            },
+            "widgets_values": [
+              "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+              true,
+              "wan"
+            ],
+            "title": "Negative Prompt Enhance"
           }
         ],
         "links": [
@@ -828,6 +878,22 @@
             0,
             6,
             1,
+            "STRING"
+          ],
+          [
+            17,
+            16,
+            0,
+            7,
+            1,
+            "STRING"
+          ],
+          [
+            18,
+            15,
+            0,
+            16,
+            0,
             "STRING"
           ]
         ]
