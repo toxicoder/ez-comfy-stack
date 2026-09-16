@@ -6,35 +6,35 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="US-safe audio-first episode and radio-drama lanes on one DGX Spark (Kokoro + native ACE-Step).">
+        <meta name="description" content="Bazel-first test, lint, and docs workflow for ez-comfy-stack — targets, Makefile shims, and CI.">
       
       
       
-        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/podcast/">
+        <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/development/contribute/building-with-bazel/">
       
       
-        <link rel="prev" href="../shorts/">
+        <link rel="prev" href="../../project-conventions/">
       
       
-        <link rel="next" href="../dub/">
+        <link rel="next" href="../docs-style/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Local podcast - ez-comfy-stack</title>
+        <title>Building with Bazel - ez-comfy-stack</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +53,9 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#local-podcast" class="md-skip">
+        <a href="#building-with-bazel" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href="../.." title="ez-comfy-stack" class="md-header__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Local podcast
+              Building with Bazel
             
           </span>
         </div>
@@ -227,7 +227,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   
   
@@ -248,7 +248,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../learn/" class="md-tabs__link">
+        <a href="../../learn/" class="md-tabs__link">
           
   
   
@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../getting-started/" class="md-tabs__link">
+        <a href="../../getting-started/" class="md-tabs__link">
           
   
   
@@ -284,13 +284,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../visual-generative-ai/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../visual-generative-ai/" class="md-tabs__link">
           
   
   
@@ -310,7 +308,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../occupancy/" class="md-tabs__link">
+        <a href="../../occupancy/" class="md-tabs__link">
           
   
   
@@ -326,11 +324,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../project-conventions/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../project-conventions/" class="md-tabs__link">
           
   
   
@@ -370,7 +370,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
+    <a href="../.." title="ez-comfy-stack" class="md-nav__button md-logo" aria-label="ez-comfy-stack" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -400,7 +400,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -479,7 +479,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/" class="md-nav__link">
+      <a href="../../learn/" class="md-nav__link">
         
   
   
@@ -507,7 +507,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/architecture/" class="md-nav__link">
+      <a href="../../learn/architecture/" class="md-nav__link">
         
   
   
@@ -535,7 +535,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/comfyui/" class="md-nav__link">
+      <a href="../../learn/comfyui/" class="md-nav__link">
         
   
   
@@ -563,7 +563,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/generation/" class="md-nav__link">
+      <a href="../../learn/generation/" class="md-nav__link">
         
   
   
@@ -591,7 +591,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/pipeline/" class="md-nav__link">
+      <a href="../../learn/pipeline/" class="md-nav__link">
         
   
   
@@ -619,7 +619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/clay-to-finish/" class="md-nav__link">
+      <a href="../../learn/clay-to-finish/" class="md-nav__link">
         
   
   
@@ -647,7 +647,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/blender-creator/" class="md-nav__link">
+      <a href="../../learn/blender-creator/" class="md-nav__link">
         
   
   
@@ -675,7 +675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/comfy-first-blender/" class="md-nav__link">
+      <a href="../../learn/comfy-first-blender/" class="md-nav__link">
         
   
   
@@ -703,7 +703,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/dream-house/" class="md-nav__link">
+      <a href="../../learn/dream-house/" class="md-nav__link">
         
   
   
@@ -731,7 +731,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../learn/hardware/" class="md-nav__link">
+      <a href="../../learn/hardware/" class="md-nav__link">
         
   
   
@@ -759,7 +759,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../glossary/" class="md-nav__link">
+      <a href="../../glossary/" class="md-nav__link">
         
   
   
@@ -846,7 +846,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   
@@ -874,7 +874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../prompting/" class="md-nav__link">
+      <a href="../../prompting/" class="md-nav__link">
         
   
   
@@ -902,7 +902,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../licenses/" class="md-nav__link">
+      <a href="../../licenses/" class="md-nav__link">
         
   
   
@@ -930,7 +930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../start/faq/" class="md-nav__link">
+      <a href="../../start/faq/" class="md-nav__link">
         
   
   
@@ -958,7 +958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../start/when-to-use-vs-spark-lab/" class="md-nav__link">
+      <a href="../../start/when-to-use-vs-spark-lab/" class="md-nav__link">
         
   
   
@@ -990,31 +990,26 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -1032,7 +1027,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1050,7 +1045,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../visual-generative-ai/" class="md-nav__link">
+      <a href="../../visual-generative-ai/" class="md-nav__link">
         
   
   
@@ -1078,7 +1073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../studio-apps/" class="md-nav__link">
+      <a href="../../studio-apps/" class="md-nav__link">
         
   
   
@@ -1106,7 +1101,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../studio-workflows/" class="md-nav__link">
+      <a href="../../studio-workflows/" class="md-nav__link">
         
   
   
@@ -1140,20 +1135,17 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
         
           
-          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
             
   
   
@@ -1189,7 +1181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/workflows-index/" class="md-nav__link">
+      <a href="../../create/workflows-index/" class="md-nav__link">
         
   
   
@@ -1217,7 +1209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/" class="md-nav__link">
+      <a href="../../generated/workflows/" class="md-nav__link">
         
   
   
@@ -1245,7 +1237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/workflow-nodes/" class="md-nav__link">
+      <a href="../../reference/workflow-nodes/" class="md-nav__link">
         
   
   
@@ -1325,7 +1317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/banner-wide/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/banner-wide/" class="md-nav__link">
         
   
   
@@ -1353,7 +1345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/before-after/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/before-after/" class="md-nav__link">
         
   
   
@@ -1381,7 +1373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/camera-angles/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/camera-angles/" class="md-nav__link">
         
   
   
@@ -1409,7 +1401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/character-draft/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/character-draft/" class="md-nav__link">
         
   
   
@@ -1437,7 +1429,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/character-tweak/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/character-tweak/" class="md-nav__link">
         
   
   
@@ -1465,7 +1457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/color-moods/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/color-moods/" class="md-nav__link">
         
   
   
@@ -1493,7 +1485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/dream-house-clay/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/dream-house-clay/" class="md-nav__link">
         
   
   
@@ -1521,7 +1513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/dream-house/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/dream-house/" class="md-nav__link">
         
   
   
@@ -1549,7 +1541,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/endcard-cta/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/endcard-cta/" class="md-nav__link">
         
   
   
@@ -1577,7 +1569,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/food-tabletop/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/food-tabletop/" class="md-nav__link">
         
   
   
@@ -1605,7 +1597,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/hook-still/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/hook-still/" class="md-nav__link">
         
   
   
@@ -1633,7 +1625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/identity-sheet/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/identity-sheet/" class="md-nav__link">
         
   
   
@@ -1661,7 +1653,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/ig-square/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/ig-square/" class="md-nav__link">
         
   
   
@@ -1689,7 +1681,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/lighting-trio/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/lighting-trio/" class="md-nav__link">
         
   
   
@@ -1717,7 +1709,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/lower-third-bg/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/lower-third-bg/" class="md-nav__link">
         
   
   
@@ -1745,7 +1737,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/og-blog/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/og-blog/" class="md-nav__link">
         
   
   
@@ -1773,7 +1765,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/platform-pack/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/platform-pack/" class="md-nav__link">
         
   
   
@@ -1801,7 +1793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/podcast-cover/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/podcast-cover/" class="md-nav__link">
         
   
   
@@ -1829,7 +1821,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/product-packshot/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/product-packshot/" class="md-nav__link">
         
   
   
@@ -1857,7 +1849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/quote-bg/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/quote-bg/" class="md-nav__link">
         
   
   
@@ -1885,7 +1877,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/shorts-still/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/shorts-still/" class="md-nav__link">
         
   
   
@@ -1913,7 +1905,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/still-daily/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/still-daily/" class="md-nav__link">
         
   
   
@@ -1941,7 +1933,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/still-draft/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/still-draft/" class="md-nav__link">
         
   
   
@@ -1969,7 +1961,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/still-hero/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/still-hero/" class="md-nav__link">
         
   
   
@@ -1997,7 +1989,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/storyboard-6up/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/storyboard-6up/" class="md-nav__link">
         
   
   
@@ -2025,7 +2017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/style-lock/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/style-lock/" class="md-nav__link">
         
   
   
@@ -2053,7 +2045,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/talking-head/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/talking-head/" class="md-nav__link">
         
   
   
@@ -2081,7 +2073,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/thumbnail/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/thumbnail/" class="md-nav__link">
         
   
   
@@ -2109,7 +2101,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/klein/time-of-day/" class="md-nav__link">
+      <a href="../../generated/workflows/klein/time-of-day/" class="md-nav__link">
         
   
   
@@ -2197,7 +2189,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/bumper-loop/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/bumper-loop/" class="md-nav__link">
         
   
   
@@ -2225,7 +2217,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/flf-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/flf-5s/" class="md-nav__link">
         
   
   
@@ -2253,7 +2245,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/gif-loop/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/gif-loop/" class="md-nav__link">
         
   
   
@@ -2281,7 +2273,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/i2v-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/i2v-5s/" class="md-nav__link">
         
   
   
@@ -2309,7 +2301,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/i2v-shot/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/i2v-shot/" class="md-nav__link">
         
   
   
@@ -2337,7 +2329,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/orbit-i2v/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/orbit-i2v/" class="md-nav__link">
         
   
   
@@ -2365,7 +2357,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/parallax-i2v/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/parallax-i2v/" class="md-nav__link">
         
   
   
@@ -2393,7 +2385,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/push-in-i2v/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/push-in-i2v/" class="md-nav__link">
         
   
   
@@ -2421,7 +2413,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/shorts-i2v/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/shorts-i2v/" class="md-nav__link">
         
   
   
@@ -2449,7 +2441,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/sticker-loop/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/sticker-loop/" class="md-nav__link">
         
   
   
@@ -2477,7 +2469,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/t2v-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/t2v-5s/" class="md-nav__link">
         
   
   
@@ -2505,7 +2497,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/wan/vace-join/" class="md-nav__link">
+      <a href="../../generated/workflows/wan/vace-join/" class="md-nav__link">
         
   
   
@@ -2593,7 +2585,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/a2v-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/a2v-5s/" class="md-nav__link">
         
   
   
@@ -2621,7 +2613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/broll-ambient/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/broll-ambient/" class="md-nav__link">
         
   
   
@@ -2649,7 +2641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/dialogue-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/dialogue-5s/" class="md-nav__link">
         
   
   
@@ -2677,7 +2669,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/flf-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/flf-5s/" class="md-nav__link">
         
   
   
@@ -2705,7 +2697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/hook-av/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/hook-av/" class="md-nav__link">
         
   
   
@@ -2733,7 +2725,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/i2v-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/i2v-5s/" class="md-nav__link">
         
   
   
@@ -2761,7 +2753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/i2v-shot/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/i2v-shot/" class="md-nav__link">
         
   
   
@@ -2789,7 +2781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/interior-ambience/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/interior-ambience/" class="md-nav__link">
         
   
   
@@ -2817,7 +2809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/multishot-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/multishot-5s/" class="md-nav__link">
         
   
   
@@ -2845,7 +2837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/product-hero/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/product-hero/" class="md-nav__link">
         
   
   
@@ -2873,7 +2865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/shorts-i2v/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/shorts-i2v/" class="md-nav__link">
         
   
   
@@ -2901,7 +2893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/t2v-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/t2v-5s/" class="md-nav__link">
         
   
   
@@ -2929,7 +2921,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/ltx/weather-broll/" class="md-nav__link">
+      <a href="../../generated/workflows/ltx/weather-broll/" class="md-nav__link">
         
   
   
@@ -3017,7 +3009,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/shorts/go-see/" class="md-nav__link">
+      <a href="../../generated/workflows/shorts/go-see/" class="md-nav__link">
         
   
   
@@ -3045,7 +3037,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/shorts/still-here/" class="md-nav__link">
+      <a href="../../generated/workflows/shorts/still-here/" class="md-nav__link">
         
   
   
@@ -3073,7 +3065,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/shorts/switchyard/" class="md-nav__link">
+      <a href="../../generated/workflows/shorts/switchyard/" class="md-nav__link">
         
   
   
@@ -3161,7 +3153,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/klein/from-canny/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/klein/from-canny/" class="md-nav__link">
         
   
   
@@ -3189,7 +3181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/klein/from-clay-plates/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/klein/from-clay-plates/" class="md-nav__link">
         
   
   
@@ -3217,7 +3209,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/klein/from-clay/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/klein/from-clay/" class="md-nav__link">
         
   
   
@@ -3245,7 +3237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/klein/from-guide-loader/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/klein/from-guide-loader/" class="md-nav__link">
         
   
   
@@ -3273,7 +3265,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/ltx/iclora-canny-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/ltx/iclora-canny-5s/" class="md-nav__link">
         
   
   
@@ -3301,7 +3293,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/ltx/iclora-depth-5s/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/ltx/iclora-depth-5s/" class="md-nav__link">
         
   
   
@@ -3329,7 +3321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/ltx/iclora-depth-shorts/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/ltx/iclora-depth-shorts/" class="md-nav__link">
         
   
   
@@ -3357,7 +3349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/ltx/iclora-from-guide-loader/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/ltx/iclora-from-guide-loader/" class="md-nav__link">
         
   
   
@@ -3385,7 +3377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/trellis/from-klein-still/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/trellis/from-klein-still/" class="md-nav__link">
         
   
   
@@ -3413,7 +3405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/dcc/wan/flf-from-guide/" class="md-nav__link">
+      <a href="../../generated/workflows/dcc/wan/flf-from-guide/" class="md-nav__link">
         
   
   
@@ -3501,7 +3493,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/optional/klein/trellis2/" class="md-nav__link">
+      <a href="../../generated/workflows/optional/klein/trellis2/" class="md-nav__link">
         
   
   
@@ -3529,7 +3521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/optional/longcat-video/" class="md-nav__link">
+      <a href="../../generated/workflows/optional/longcat-video/" class="md-nav__link">
         
   
   
@@ -3557,7 +3549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/optional/wan/i2v-a14b/" class="md-nav__link">
+      <a href="../../generated/workflows/optional/wan/i2v-a14b/" class="md-nav__link">
         
   
   
@@ -3645,7 +3637,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/inspire/beat-sheet/" class="md-nav__link">
+      <a href="../../generated/workflows/inspire/beat-sheet/" class="md-nav__link">
         
   
   
@@ -3673,7 +3665,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/inspire/prompt-forge/" class="md-nav__link">
+      <a href="../../generated/workflows/inspire/prompt-forge/" class="md-nav__link">
         
   
   
@@ -3701,7 +3693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/inspire/research-chat/" class="md-nav__link">
+      <a href="../../generated/workflows/inspire/research-chat/" class="md-nav__link">
         
   
   
@@ -3789,7 +3781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/dub/localize/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/dub/localize/" class="md-nav__link">
         
   
   
@@ -3817,7 +3809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/finish/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/finish/" class="md-nav__link">
         
   
   
@@ -3845,7 +3837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/music/rap-draft/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/music/rap-draft/" class="md-nav__link">
         
   
   
@@ -3873,7 +3865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/music/rap-full/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/music/rap-full/" class="md-nav__link">
         
   
   
@@ -3901,7 +3893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/podcast/audio-first/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/podcast/audio-first/" class="md-nav__link">
         
   
   
@@ -3929,7 +3921,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/podcast/radio-drama/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/podcast/radio-drama/" class="md-nav__link">
         
   
   
@@ -4017,7 +4009,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/drive-through/afterparty/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/drive-through/afterparty/" class="md-nav__link">
         
   
   
@@ -4045,7 +4037,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/drive-through/headliner/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/drive-through/headliner/" class="md-nav__link">
         
   
   
@@ -4073,7 +4065,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/drive-through/hour-1/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/drive-through/hour-1/" class="md-nav__link">
         
   
   
@@ -4101,7 +4093,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/drive-through/hour-2/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/drive-through/hour-2/" class="md-nav__link">
         
   
   
@@ -4129,7 +4121,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/drive-through/secret-homage/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/drive-through/secret-homage/" class="md-nav__link">
         
   
   
@@ -4157,7 +4149,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/citation-needed/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/citation-needed/" class="md-nav__link">
         
   
   
@@ -4185,7 +4177,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/duty-switch/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/duty-switch/" class="md-nav__link">
         
   
   
@@ -4213,7 +4205,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/false-drop/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/false-drop/" class="md-nav__link">
         
   
   
@@ -4241,7 +4233,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/frozen-ercot/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/frozen-ercot/" class="md-nav__link">
         
   
   
@@ -4269,7 +4261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/lone-star-tab/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/lone-star-tab/" class="md-nav__link">
         
   
   
@@ -4297,7 +4289,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/pardon-flood/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/pardon-flood/" class="md-nav__link">
         
   
   
@@ -4325,7 +4317,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/peer-review/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/peer-review/" class="md-nav__link">
         
   
   
@@ -4353,7 +4345,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/thirty-four-counts/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/thirty-four-counts/" class="md-nav__link">
         
   
   
@@ -4381,7 +4373,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/workflows/audio/albums/nill-bye/winterize-wells/" class="md-nav__link">
+      <a href="../../generated/workflows/audio/albums/nill-bye/winterize-wells/" class="md-nav__link">
         
   
   
@@ -4425,7 +4417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/workflow-nodes/" class="md-nav__link">
+      <a href="../../reference/workflow-nodes/" class="md-nav__link">
         
   
   
@@ -4453,7 +4445,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/workflows-stills/" class="md-nav__link">
+      <a href="../../create/workflows-stills/" class="md-nav__link">
         
   
   
@@ -4481,7 +4473,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/workflows-motion/" class="md-nav__link">
+      <a href="../../create/workflows-motion/" class="md-nav__link">
         
   
   
@@ -4509,7 +4501,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/workflows-film/" class="md-nav__link">
+      <a href="../../create/workflows-film/" class="md-nav__link">
         
   
   
@@ -4537,7 +4529,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/workflows-audio/" class="md-nav__link">
+      <a href="../../create/workflows-audio/" class="md-nav__link">
         
   
   
@@ -4565,7 +4557,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../shorts/" class="md-nav__link">
+      <a href="../../shorts/" class="md-nav__link">
         
   
   
@@ -4590,37 +4582,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Local podcast
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../podcast/" class="md-nav__link">
         
   
   
@@ -4636,142 +4601,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#two-operator-paths" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Two operator paths
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Two operator paths">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-a-audio-first-commercial-episode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option A — audio-first commercial episode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-b-one-graph-radio-drama" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option B — one-graph radio drama
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-those-packs-are-not-vendored" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why those packs are not vendored
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#engines-on-spark" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Engines on Spark
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#voice-consent-and-invented-characters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Voice consent and invented characters
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#platform-and-us-rules-operator-checklist" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Platform and US rules (operator checklist)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Download
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-runs-on-queue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What runs on Queue
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sequential-queue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sequential Queue
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -4784,7 +4613,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dub/" class="md-nav__link">
+      <a href="../../dub/" class="md-nav__link">
         
   
   
@@ -4812,7 +4641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../music/" class="md-nav__link">
+      <a href="../../music/" class="md-nav__link">
         
   
   
@@ -4840,7 +4669,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/music-rap/" class="md-nav__link">
+      <a href="../../create/music-rap/" class="md-nav__link">
         
   
   
@@ -4868,7 +4697,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/music-edm/" class="md-nav__link">
+      <a href="../../create/music-edm/" class="md-nav__link">
         
   
   
@@ -4896,7 +4725,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../create/music-disclosure/" class="md-nav__link">
+      <a href="../../create/music-disclosure/" class="md-nav__link">
         
   
   
@@ -4924,7 +4753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../studio-sidecars/" class="md-nav__link">
+      <a href="../../studio-sidecars/" class="md-nav__link">
         
   
   
@@ -4952,7 +4781,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../asset-bible/" class="md-nav__link">
+      <a href="../../asset-bible/" class="md-nav__link">
         
   
   
@@ -4980,7 +4809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../blender-gb10-sidecar/" class="md-nav__link">
+      <a href="../../blender-gb10-sidecar/" class="md-nav__link">
         
   
   
@@ -5008,7 +4837,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../dcc-workflows/" class="md-nav__link">
+      <a href="../../dcc-workflows/" class="md-nav__link">
         
   
   
@@ -5036,7 +4865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../splat-sidecar/" class="md-nav__link">
+      <a href="../../splat-sidecar/" class="md-nav__link">
         
   
   
@@ -5064,7 +4893,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/custom-nodes/" class="md-nav__link">
+      <a href="../../reference/custom-nodes/" class="md-nav__link">
         
   
   
@@ -5092,7 +4921,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/config-and-schemas/" class="md-nav__link">
+      <a href="../../reference/config-and-schemas/" class="md-nav__link">
         
   
   
@@ -5120,7 +4949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reference/studio-ui/" class="md-nav__link">
+      <a href="../../reference/studio-ui/" class="md-nav__link">
         
   
   
@@ -5207,7 +5036,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../occupancy/" class="md-nav__link">
+      <a href="../../occupancy/" class="md-nav__link">
         
   
   
@@ -5235,7 +5064,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/occupancy-matrix/" class="md-nav__link">
+      <a href="../../operate/occupancy-matrix/" class="md-nav__link">
         
   
   
@@ -5263,7 +5092,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/mcp/" class="md-nav__link">
+      <a href="../../operate/mcp/" class="md-nav__link">
         
   
   
@@ -5291,7 +5120,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../manage-cli/" class="md-nav__link">
+      <a href="../../manage-cli/" class="md-nav__link">
         
   
   
@@ -5319,7 +5148,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generated/shell/reference/" class="md-nav__link">
+      <a href="../../generated/shell/reference/" class="md-nav__link">
         
   
   
@@ -5347,7 +5176,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../models-and-cache/" class="md-nav__link">
+      <a href="../../models-and-cache/" class="md-nav__link">
         
   
   
@@ -5375,7 +5204,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../download-tiers/" class="md-nav__link">
+      <a href="../../download-tiers/" class="md-nav__link">
         
   
   
@@ -5403,7 +5232,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../download-limit/" class="md-nav__link">
+      <a href="../../download-limit/" class="md-nav__link">
         
   
   
@@ -5431,7 +5260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/models-packs/" class="md-nav__link">
+      <a href="../../operate/models-packs/" class="md-nav__link">
         
   
   
@@ -5459,7 +5288,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/models-tokens/" class="md-nav__link">
+      <a href="../../operate/models-tokens/" class="md-nav__link">
         
   
   
@@ -5487,7 +5316,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/models-sharing/" class="md-nav__link">
+      <a href="../../operate/models-sharing/" class="md-nav__link">
         
   
   
@@ -5515,7 +5344,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../disk-wizard/" class="md-nav__link">
+      <a href="../../disk-wizard/" class="md-nav__link">
         
   
   
@@ -5543,7 +5372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/backup-restore/" class="md-nav__link">
+      <a href="../../operate/backup-restore/" class="md-nav__link">
         
   
   
@@ -5571,7 +5400,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../reboot-safety/" class="md-nav__link">
+      <a href="../../reboot-safety/" class="md-nav__link">
         
   
   
@@ -5599,7 +5428,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../spark-farm/" class="md-nav__link">
+      <a href="../../spark-farm/" class="md-nav__link">
         
   
   
@@ -5627,7 +5456,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../troubleshooting/" class="md-nav__link">
+      <a href="../../troubleshooting/" class="md-nav__link">
         
   
   
@@ -5655,7 +5484,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-docs-site/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-docs-site/" class="md-nav__link">
         
   
   
@@ -5683,7 +5512,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-canvas/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-canvas/" class="md-nav__link">
         
   
   
@@ -5711,7 +5540,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-host-docker/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-host-docker/" class="md-nav__link">
         
   
   
@@ -5739,7 +5568,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-downloads/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-downloads/" class="md-nav__link">
         
   
   
@@ -5767,7 +5596,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-start-runtime/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-start-runtime/" class="md-nav__link">
         
   
   
@@ -5795,7 +5624,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../operate/troubleshooting-models-workflows/" class="md-nav__link">
+      <a href="../../operate/troubleshooting-models-workflows/" class="md-nav__link">
         
   
   
@@ -5827,26 +5656,31 @@
       
   
   
+    
   
   
+  
     
     
     
     
+      
+        
+        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -5864,7 +5698,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
@@ -5882,7 +5716,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../project-conventions/" class="md-nav__link">
+      <a href="../../project-conventions/" class="md-nav__link">
         
   
   
@@ -5907,10 +5741,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../contribute/building-with-bazel/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Building with Bazel
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -5926,6 +5787,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#daily-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Daily commands
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#target-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Target map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ci" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CI
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -5938,7 +5874,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contribute/docs-style/" class="md-nav__link">
+      <a href="../docs-style/" class="md-nav__link">
         
   
   
@@ -5966,7 +5902,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contribute/testing-docs/" class="md-nav__link">
+      <a href="../testing-docs/" class="md-nav__link">
         
   
   
@@ -5994,7 +5930,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contribute/contributing/" class="md-nav__link">
+      <a href="../contributing/" class="md-nav__link">
         
   
   
@@ -6022,7 +5958,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../contribute/security/" class="md-nav__link">
+      <a href="../security/" class="md-nav__link">
         
   
   
@@ -6077,49 +6013,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#two-operator-paths" class="md-nav__link">
+  <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Two operator paths
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Two operator paths">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#option-a-audio-first-commercial-episode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option A — audio-first commercial episode
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#option-b-one-graph-radio-drama" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Option B — one-graph radio drama
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#why-those-packs-are-not-vendored" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Why those packs are not vendored
+        Prerequisites
       
     </span>
   </a>
@@ -6127,10 +6024,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#engines-on-spark" class="md-nav__link">
+  <a href="#daily-commands" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Engines on Spark
+        Daily commands
       
     </span>
   </a>
@@ -6138,10 +6035,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#voice-consent-and-invented-characters" class="md-nav__link">
+  <a href="#target-map" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Voice consent and invented characters
+        Target map
       
     </span>
   </a>
@@ -6149,10 +6046,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#platform-and-us-rules-operator-checklist" class="md-nav__link">
+  <a href="#ci" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Platform and US rules (operator checklist)
+        CI
       
     </span>
   </a>
@@ -6160,32 +6057,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#download" class="md-nav__link">
+  <a href="#safety" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Download
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#what-runs-on-queue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        What runs on Queue
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sequential-queue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Sequential Queue
+        Safety
       
     </span>
   </a>
@@ -6212,205 +6087,110 @@
   
 
 
-<h1 id="local-podcast">Local podcast<a class="headerlink" href="#local-podcast" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
-<li>Option A (audio-first commercial episode) vs Option B (one-graph radio drama)</li>
-<li><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="app-mode" data-href="../glossary/#app-mode" data-short="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view." data-category="Studio" title="ComfyUI widget surface on a saved graph (frontend 1.41.13+). Same JSON as graph view.">App Mode</span>: script, bed/sting tags, length, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="kokoro" data-href="../glossary/#kokoro" data-short="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine." data-category="Models" title="Apache ONNX/CPU TTS with built-in voices. Default podcast speech engine.">Kokoro</span> stock voices (refs stay graph-only)</li>
-<li>Why <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="tts" data-href="../glossary/#tts" data-short="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API." data-category="Audio" title="Text-to-speech. Lab default is Kokoro ONNX/CPU, not a cloud voice API.">TTS</span>-Audio-Suite and OldTimeRadio are not vendored</li>
-<li>Kokoro default on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="chatterbox" data-href="../glossary/#chatterbox" data-short="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default." data-category="Models" title="Optional MIT GPU TTS. PerTh watermark stays on. Not a download-models default.">Chatterbox</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../glossary/#qwen3-tts" data-short="Optional Apache TTS + voice design. Not the Kokoro default." data-category="Models" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> optional (<code>qwen3tts</code> is a complete snapshot, not weights-only)</li>
-<li>Native <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../glossary/#ace-step" data-short="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX." data-category="Models" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> instrumental beds</li>
-<li>Voice consent, platform rules, and authorship</li>
-<li><code>download-podcast</code> usage, sequential <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="queue" data-href="../glossary/#queue" data-short="One run of the current graph: encode, sample, decode, save." data-category="Studio" title="One run of the current graph: encode, sample, decode, save.">Queue</span>, and <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../glossary/#loudnorm" data-short="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14." data-category="Film" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span></li>
-<li>Optional YouTube still-video: host <code>audio-still-video</code> after cover (not Apple Podcasts)</li>
-<li>Clone-and-translate of a recorded show is a different lane: <a href="../dub/">Local dub</a></li>
+<h1 id="building-with-bazel">Building with Bazel<a class="headerlink" href="#building-with-bazel" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
+<li>Why <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="bazelisk" data-href="../../glossary/#bazelisk" data-short="Contributor launcher that pins Bazel 8.4.1. Official test/lint/docs entry point." data-category="Studio" title="Contributor launcher that pins Bazel 8.4.1. Official test/lint/docs entry point.">Bazelisk</span> is the primary test/lint/docs launcher</li>
+<li>Daily commands and Makefile shims</li>
+<li>CI path filters</li>
+<li>What this repo still refuses (K3s, dashboard, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nccl" data-href="../../glossary/#nccl" data-short="Multi-GPU collective. This sample stack does not ship it. Independent Sparks share MODELS_DIR only." data-category="Hardware and safety" title="Multi-GPU collective. This sample stack does not ship it. Independent Sparks share MODELS_DIR only.">NCCL</span>)</li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
-<li>Queue a local two-host episode without cloud TTS or rented music</li>
-<li>Keep the visual studio bootable when podcast extras are missing</li>
-<li>Disclose synthetic voices in the mix, not only in a description box</li>
-<li>Mux a cover still + episode FLAC into a YouTube MP4 without changing the episode graph</li>
+<li>Reproducible hermetic BATS via vendored bats-core</li>
+<li>One command (<code>bazelisk run //:validate</code>) before a PR</li>
+<li>The same slices GitHub Actions runs</li>
 </ul></div></div>
-<div class="admonition warning">
-<p class="admonition-title">Not legal advice</p>
-<p>Platform rules and copyright change. Read the current Apple, YouTube, Spotify, FTC, and USCO pages before you monetize.</p>
-</div>
-<hr />
-<h2 id="two-operator-paths">Two operator paths<a class="headerlink" href="#two-operator-paths" title="Permanent link">&para;</a></h2>
-<p>Do <strong>not</strong> load <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" data-short="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine." data-category="Models" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" data-short="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips." data-category="Models" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> + <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" data-short="Joint audio/video model (Community License, gated, $10M company-revenue cap)." data-category="Models" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> + ACE-Step + TTS in one session. Cover art is a separate graph.</p>
-<h3 id="option-a-audio-first-commercial-episode">Option A — audio-first commercial episode<a class="headerlink" href="#option-a-audio-first-commercial-episode" title="Permanent link">&para;</a></h3>
-<p>Graph: <strong>audio/podcast/audio-first</strong> (<code>extra.lab_profile</code> <code>us-safe-podcast</code>).</p>
+<p>Runtime stays <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="docker-compose" data-href="../../glossary/#docker-compose" data-short="One ComfyUI service, restart no, mem_limit 90g. Not K3s." data-category="Hardware and safety" title="One ComfyUI service, restart no, mem_limit 90g. Not K3s.">Docker Compose</span> (<code>restart: "no"</code>). Bazel does <strong>not</strong> add K3s, a lab dashboard, or NCCL. Graduate to <a href="https://github.com/toxicoder/nvidia-dgx-spark-lab">nvidia-dgx-spark-lab</a> for those.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_HOST</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_HOST</span><span class="k">:-</span><span class="nv">127</span><span class="p">.0.0.1</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">SPARK_USER</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SPARK_USER</span><span class="k">:-</span><span class="nv">$USER</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MODELS_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">MODELS_DIR</span><span class="k">:-</span><span class="p">/mnt/models</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_OUTPUT_DIR</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="k">:-</span><span class="p">/mnt/comfy-output</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nb">export</span><span class="w"> </span><span class="nv">COMFY_PORT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_PORT</span><span class="k">:-</span><span class="nv">8188</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nb">export</span><span class="w"> </span><span class="nv">DOWNLOAD_LIMIT</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">DOWNLOAD_LIMIT</span><span class="k">:-</span><span class="nv">auto</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Bazelisk (recommended) or Bazel 8.4.1 (<code>.bazelversion</code>)</li>
+<li>Host tools for lint: shellcheck, shfmt, buildifier, <code>pip install -r tests/requirements.txt</code></li>
+</ul>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># macOS</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>brew<span class="w"> </span>install<span class="w"> </span>bazelisk<span class="w"> </span>buildifier<span class="w"> </span>shfmt<span class="w"> </span>shellcheck
+</span></code></pre></div>
+<h2 id="daily-commands">Daily commands<a class="headerlink" href="#daily-commands" title="Permanent link">&para;</a></h2>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//:validate
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//:validate<span class="w"> </span>--<span class="w"> </span>--all
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>bazelisk<span class="w"> </span><span class="nb">test</span><span class="w"> </span>//:test-fast
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>bazelisk<span class="w"> </span><span class="nb">test</span><span class="w"> </span>//:lint<span class="w"> </span>--test_tag_filters<span class="o">=</span>manual
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//:fix
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//:manage<span class="w"> </span>--<span class="w"> </span>doctor
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//docs:docs
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//docs:serve
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>bazelisk<span class="w"> </span>run<span class="w"> </span>//scripts:run-utility<span class="w"> </span>--<span class="w"> </span>download-limit<span class="w"> </span>status
+</span></code></pre></div>
+<p><code>make test</code>, <code>make lint</code>, <code>make coverage</code>, and <code>make docs</code> call Bazelisk when it is on <code>PATH</code>.</p>
+<h2 id="target-map">Target map<a class="headerlink" href="#target-map" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Stage</th>
-<th>What runs</th>
-<th>Prefix</th>
+<th>Target</th>
+<th>What it runs</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>SCRIPT</td>
-<td>App <strong>Script</strong> + <strong>Rewrite script</strong>. In-tree <code>EZPodcastScript</code> (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../glossary/#enhance" data-short="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP." data-category="Studio" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">enhance</span> <strong>off</strong> so <code>Speaker A:</code> / <code>Speaker B:</code> stay parser input). Missing <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gguf" data-href="../glossary/#gguf" data-short="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file." data-category="Models" title="llama.cpp weight format. Prompt Enhance uses a ~2.5 GiB Qwen3-4B Q4_K_M file.">GGUF</span> passes the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="widget" data-href="../glossary/#widget" data-short="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle)." data-category="Studio" title="A control on a Comfy node (prompt, seed, width, filename, Enhance toggle).">widget</span> through</td>
-<td><code>ez_podcast_script</code></td>
+<td><code>//:test-fast</code></td>
+<td>Split BATS + pytest 100% + Pyright + mypy + shell inventory</td>
 </tr>
 <tr>
-<td>DISCLOSURE</td>
-<td><code>EZPodcastDisclosure</code> prepends the spoken bumper</td>
-<td>(string)</td>
+<td><code>//:test</code></td>
+<td>test-fast + strict MkDocs</td>
 </tr>
 <tr>
-<td>VOICES</td>
-<td>App <strong>Speaker A / B</strong>, <strong>Include announcer</strong>, <strong>Speaking speed</strong>. <code>EZKokoroTTS</code> Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only</td>
-<td><code>ez_podcast_voice</code></td>
+<td><code>//:lint</code></td>
+<td>ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools)</td>
 </tr>
 <tr>
-<td>BEDS</td>
-<td>App <strong>Bed tags</strong>, <strong>Rewrite bed</strong>, <strong>Bed length (seconds)</strong>. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden)</td>
-<td><code>ez_podcast_bed</code></td>
+<td><code>//:validate</code></td>
+<td>Git-aware core + docs slices</td>
 </tr>
 <tr>
-<td>MIX</td>
-<td>Duck −15 dB + overlay. FLAC master + 320 kbps MP3</td>
-<td><code>ez_podcast_ep</code> / <code>ez_podcast_mix</code></td>
-</tr>
-<tr>
-<td>COVER</td>
-<td>Queue <strong>klein/podcast-cover</strong> separately (1024², <code>ez_podcast</code>)</td>
-<td><code>ez_podcast</code></td>
+<td><code>//docs:docs</code></td>
+<td><code>generate_shell_docs.py</code> + <code>generate_workflow_docs.py</code> + <code>mkdocs build --strict</code></td>
 </tr>
 </tbody>
 </table>
-<p>First spoken line is always:</p>
-<blockquote>
-<p>Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.</p>
-</blockquote>
-<p>Do not type that line yourself. The disclosure node prepends it.</p>
-<h3 id="option-b-one-graph-radio-drama">Option B — one-graph radio drama<a class="headerlink" href="#option-b-one-graph-radio-drama" title="Permanent link">&para;</a></h3>
-<p>Graph: <strong>audio/podcast/radio-drama</strong> (<code>us-safe-radio</code>). Same legal engines. Writer prompt is lab-original fiction (<code>radio_drama.txt</code>), not a news rewrite. App Mode: <strong>Script</strong>, <strong>Sting tags</strong> / <strong>Bed tags</strong>, sting and bed length, <strong>Speaker A / B / Announcer</strong>, <strong>Include announcer</strong>, <strong>Speaking speed</strong>. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (<code>ez_radio_ep</code> / <code>ez_radio_mix</code>).</p>
-<p>Optional Wan silent bumper / LTX 5s hook <strong>groups default off</strong> (node mode never). Queue <strong>wan/bumper-loop</strong> or <strong>ltx/hook-av</strong> in a later session. Not a one-graph film.</p>
-<hr />
-<h2 id="why-those-packs-are-not-vendored">Why those packs are not vendored<a class="headerlink" href="#why-those-packs-are-not-vendored" title="Permanent link">&para;</a></h2>
-<p>This lab does <strong>not</strong> git-clone, pip-require, or default to:</p>
-<ul>
-<li><strong>TTS-Audio-Suite</strong> — many engines, including F5-TTS CC-BY-NC, Fish NC, Higgs commercial traps, VibeVoice research-only, and ARM wheel pain on <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="gb10" data-href="../glossary/#gb10" data-short="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy." data-category="Hardware and safety" title="Spark GPU with ~128 GiB unified memory shared by OS, SSH, Docker, and Comfy.">GB10</span></li>
-<li><strong><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="comfyui" data-href="../glossary/#comfyui" data-short="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio." data-category="Studio" title="Node-graph UI for local image, video, and audio generation. This stack&#x27;s studio.">ComfyUI</span>-OldTimeRadio</strong> — optional lanes that pull US-excluded or non-commercial video models</li>
-<li>Cloud ACE-Step forks, MiniMax Music, F5-TTS official weights, Coqui XTTS v2, Echo-TTS, Fish Audio S2, celebrity reference WAVs, ElevenLabs, or xAI TTS</li>
-</ul>
-<p>Native ACE-Step 1.5 already ships in <code>COMFYUI_REF=v0.34.6</code> (<code>TextEncodeAceStepAudio1.5</code>, <code>EmptyAceStep1.5LatentAudio</code>). Beds stay <strong>instrumental</strong> (<code>instrumental</code>, <code>no vocals</code> in tags; empty lyrics). Rap vocals with original lyrics live on <a href="../music/">Local music</a> and reuse this same AIO dest — do not download it twice.</p>
-<hr />
-<h2 id="engines-on-spark">Engines on Spark<a class="headerlink" href="#engines-on-spark" title="Permanent link">&para;</a></h2>
+<p>Queries:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>bazelisk<span class="w"> </span>query<span class="w"> </span><span class="s1">'kind(".*_test", //...)'</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>bazelisk<span class="w"> </span>query<span class="w"> </span><span class="s1">'deps(//tests:bats_manage_test)'</span>
+</span></code></pre></div>
+<h2 id="ci">CI<a class="headerlink" href="#ci" title="Permanent link">&para;</a></h2>
+<p>Path-filtered jobs in <code>.github/workflows/ci.yml</code>:</p>
 <table>
 <thead>
 <tr>
-<th>Engine</th>
-<th>License</th>
-<th>Role</th>
-<th>Default download?</th>
+<th>Job</th>
+<th>When</th>
+<th>What</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Kokoro-82M ONNX</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="apache" data-href="../glossary/#apache" data-short="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights." data-category="Licenses" title="License on default Klein 4B and Wan 2.2 (and several opt-in packs). Redistribute NOTICE with weights.">Apache 2.0</span></td>
-<td>Default TTS, built-in voices, CPU/aarch64-safe</td>
-<td>No — <code>download-podcast --tier analog</code></td>
+<td><strong>bazel-core</strong></td>
+<td>scripts/tests/docker/… or CI graph</td>
+<td><code>//:test-fast</code> then <code>//:lint --test_tag_filters=manual</code></td>
 </tr>
 <tr>
-<td>ACE-Step 1.5 turbo AIO</td>
-<td>MIT</td>
-<td>Instrumental beds</td>
-<td>No — <code>--tier acestep</code></td>
+<td><strong>docs-and-render</strong></td>
+<td>docs/** or CI graph</td>
+<td><code>//docs:docs</code></td>
 </tr>
 <tr>
-<td>Chatterbox Turbo</td>
-<td>MIT</td>
-<td>Optional GPU TTS; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="perth" data-href="../glossary/#perth" data-short="Chatterbox implicit watermark. Stays on. Needs setuptools&lt;82 (pkg_resources)." data-category="Audio" title="Chatterbox implicit watermark. Stays on. Needs setuptools&lt;82 (pkg_resources).">PerTh</span> watermark stays on</td>
-<td>No — <code>--tier chatterbox</code></td>
-</tr>
-<tr>
-<td>Qwen3-TTS 0.6B</td>
-<td>Apache 2.0</td>
-<td>Optional TTS + voice design. <code>--tier qwen3tts</code> is a <strong>complete Base snapshot</strong> (config + text tokenizer + nested 12Hz <code>speech_tokenizer/</code>), not <code>model.safetensors</code> only. Wheel is a separate <code>--no-deps</code> extra</td>
-<td>No — <code>--tier qwen3tts</code></td>
-</tr>
-<tr>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../glossary/#qwen" data-short="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family." data-category="Models" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF</td>
-<td>Apache 2.0</td>
-<td>Script draft, fail-soft</td>
-<td>Already in <code>download-models</code></td>
+<td><strong>validate-gate</strong></td>
+<td>always</td>
+<td><code>scripts/ci_check_only.sh</code></td>
 </tr>
 </tbody>
 </table>
-<p>Empty Chatterbox/Qwen3 refs fall back to Kokoro built-ins. Never drop celebrity WAVs into the graph.</p>
-<p><code>kokoro-onnx</code> / <code>onnxruntime</code> are <strong>optional runtime</strong> installs inside the container venv. They are <strong>not</strong> baked in <code>phase-nodes.sh</code> (a new pip would invalidate <strong>venv-extra</strong>, not the multi‑GB torch layer). Analog graphs still load if the wheel is missing; Queue fail-softs until you install it and <code>download-podcast --tier analog</code>.</p>
-<hr />
-<h2 id="voice-consent-and-invented-characters">Voice consent and invented characters<a class="headerlink" href="#voice-consent-and-invented-characters" title="Permanent link">&para;</a></h2>
-<p>Hosts are <strong>original characters</strong>, not recordings of real people. Operator-owned reference clips are allowed only when you have rights. Do not clone living people. Do not ship Rogan/Ramsay-style refs in this repo. Translating a recorded podcast while keeping the original speakers is <a href="../dub/">Local dub</a> (<code>audio/dub/localize</code>), with a rights attestation on every Queue.</p>
-<hr />
-<h2 id="platform-and-us-rules-operator-checklist">Platform and US rules (operator checklist)<a class="headerlink" href="#platform-and-us-rules-operator-checklist" title="Permanent link">&para;</a></h2>
-<ul>
-<li><strong>Apple Podcasts 1.11</strong> — disclose material AI audio in the <strong>content</strong> and in <strong>metadata</strong></li>
-<li><strong>YouTube</strong> — use the synthetic/altered content toggle; July 2026 inauthentic-content rules (no template slop, no AI <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="doctor" data-href="../glossary/#doctor" data-short="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing." data-category="Hardware and safety" title="Preflight: Docker, GPU, RAM/disk, dirs, license one-liner, image tag, timing.">doctor</span> / lawyer / finance-advisor persona)</li>
-<li><strong>Spotify</strong> — allowed if you own the rights, disclose, and do not use unconsented clones</li>
-<li><strong>FTC</strong> — spoken sponsor reads; synthetic persona endorsements need both a paid-connection disclosure and “this voice is AI”</li>
-<li><strong>USCO Part 2 / Thaler</strong> — prompts are not authorship. A human-edited script plus selection, arrangement, and mix <strong>can</strong> be. Raw generations are not registrable</li>
-</ul>
-<hr />
-<h2 id="download">Download<a class="headerlink" href="#download" title="Permanent link">&para;</a></h2>
-<p>Podcast weights are <strong>opt-in</strong>. <code>./scripts/manage.sh download-models</code> does <strong>not</strong> pull them. <code>doctor</code> prints analog JSON and still exits 0 when the pack is absent.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>analog<span class="w">      </span><span class="c1"># Kokoro ONNX + voices</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>acestep<span class="w">     </span><span class="c1"># ace_step_1.5_turbo_aio.safetensors</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># same AIO dest as: ./scripts/manage.sh download-music --tier turbo</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>qwen3tts<span class="w">    </span><span class="c1"># complete 0.6B Base + nested 12Hz tokenizer (~3 GB)</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/manage.sh<span class="w"> </span>download-podcast<span class="w"> </span>--tier<span class="w"> </span>all<span class="w">         </span><span class="c1"># analog + ACE + optional TTS</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># same --limit auto|N|off wrap as download-models (always clears on exit)</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># qwen3tts with compose up: extras then pip install --no-deps qwen-tts</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1"># (never unconstrained pip install qwen-tts — it pins transformers==4.57.3)</span>
-</span></code></pre></div>
-<p>Layout after analog + acestep:</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>${MODELS_DIR}/comfy/
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>  onnx/kokoro-v1.0.onnx
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>  tts/voices-v1.0.bin
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  checkpoints/ace_step_1.5_turbo_aio.safetensors
-</span></code></pre></div>
-<p>Relative symlinks only (host <code>/mnt/models</code> vs container <code>/models</code>).</p>
-<hr />
-<h2 id="what-runs-on-queue">What runs on Queue<a class="headerlink" href="#what-runs-on-queue" title="Permanent link">&para;</a></h2>
-<pre class="mermaid"><code>sequenceDiagram
-  participant U as Studio user
-  participant S as EZPodcastScript
-  participant D as Disclosure
-  participant K as Kokoro TTS
-  participant A as ACE-Step beds
-  participant M as Mix
-
-  U-&gt;&gt;S: Queue (Enhance on)
-  S-&gt;&gt;D: script string
-  D-&gt;&gt;K: bumper + lines
-  D-&gt;&gt;A: instrumental tags
-  K-&gt;&gt;M: voice stems
-  A-&gt;&gt;M: beds
-  M-&gt;&gt;U: FLAC + MP3 under COMFY_OUTPUT_DIR</code></pre>
-<p>Cover art is a <strong>later</strong> Klein session. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="occupancy" data-href="../glossary/#occupancy" data-short="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX." data-category="Hardware and safety" title="One heavy GPU job. Park Comfy for blender-desk or llm-desk; stop those before TRELLIS/LTX.">Occupancy</span>: do not load LTX + ACE-Step together.</p>
-<h2 id="sequential-queue">Sequential Queue<a class="headerlink" href="#sequential-queue" title="Permanent link">&para;</a></h2>
-<ol>
-<li><code>download-podcast --tier analog</code> (and <code>--tier acestep</code> for beds)</li>
-<li>Optional: <code>pip install kokoro-onnx onnxruntime</code> in the Comfy venv (runtime; see <a href="../operate/troubleshooting-models-workflows/">Troubleshooting — models and workflows</a>)</li>
-<li><code>./scripts/manage.sh start</code> — type <strong>yes</strong></li>
-<li>Load <strong>audio/podcast/audio-first</strong>. Enhance on. Queue. Files under <code>${COMFY_OUTPUT_DIR}</code> as <code>ez_podcast_ep_*.flac</code> / <code>ez_podcast_mix_*.mp3</code></li>
-<li>Load <strong>klein/podcast-cover</strong> in a <strong>later</strong> session. Queue <code>ez_podcast_*.png</code></li>
-<li>Loudness (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ffmpeg" data-href="../glossary/#ffmpeg" data-short="Host binary for concat, loudnorm, overlays, animatic, and audio-still-video. Hard fail if missing." data-category="Hardware and safety" title="Host binary for concat, loudnorm, overlays, animatic, and audio-still-video. Hard fail if missing.">ffmpeg</span>; Comfy cannot <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="lufs" data-href="../glossary/#lufs" data-short="Loudness units. Podcast default −16; YouTube −14. Comfy has no LUFS node — ffmpeg loudnorm." data-category="Audio" title="Loudness units. Podcast default −16; YouTube −14. Comfy has no LUFS node — ffmpeg loudnorm.">LUFS</span>):</li>
-</ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_ep_00001_.flac"</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># --target youtube  → −14 LUFS; default podcast → −16 LUFS</span>
-</span></code></pre></div>
-<ol>
-<li>Optional YouTube still-image video (host ffmpeg; the graph still saves FLAC + MP3). Do this <strong>after</strong> loudnorm if you want −14 LUFS in the MP4; <code>audio-still-video</code> does not loudnorm unless <code>--loudnorm youtube</code>:</li>
-</ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>./scripts/manage.sh<span class="w"> </span>audio-still-video<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--audio<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_ep_00001_-youtube-lufs.flac"</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--image<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">COMFY_OUTPUT_DIR</span><span class="si">}</span><span class="s2">/ez_podcast_00001_.png"</span>
-</span></code></pre></div>
-<p>Apple Podcasts still wants the audio master. The MP4 is a YouTube convenience, not a talking-head.</p>
-<p>Start still requires typing <code>yes</code>. Compose <code>restart: "no"</code> is unchanged.</p>
+<p>Disk cache keys on <code>MODULE.bazel.lock</code> + <code>.bazelversion</code>.</p>
+<h2 id="safety">Safety<a class="headerlink" href="#safety" title="Permanent link">&para;</a></h2>
+<p>No safety impact on Compose: <code>restart: "no"</code>, type <strong>yes</strong> on <code>start</code>, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="headroom" data-href="../../glossary/#headroom" data-short="Free host RAM/disk checked before start so SSH still works under load." data-category="Hardware and safety" title="Free host RAM/disk checked before start so SSH still works under load.">headroom</span> preflight, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-limit" data-href="../../glossary/#download-limit" data-short="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit." data-category="Downloads" title="Throttle Hugging Face pulls (auto = 85% of speedtest). Always clear on wrap exit.">download-limit</span> clear-on-exit stay in <code>docker/docker-compose.yml</code> and <code>manage.sh</code>.</p>
 
 
 
@@ -6471,18 +6251,18 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.top", "navigation.tracking", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
-        <script src="../javascripts/glossary.js"></script>
+        <script src="../../javascripts/glossary.js"></script>
       
-        <script src="../javascripts/commands.js"></script>
+        <script src="../../javascripts/commands.js"></script>
       
-        <script src="../javascripts/tables.js"></script>
+        <script src="../../javascripts/tables.js"></script>
       
-        <script src="../javascripts/published.js"></script>
+        <script src="../../javascripts/published.js"></script>
       
     
   <script type="application/json" id="ez-cmd-data">{"variables":[{"id":"SPARK_HOST","label":"Spark IP / DNS","default":"127.0.0.1"},{"id":"SPARK_USER","label":"SSH user","default":"spark"},{"id":"MODELS_DIR","label":"MODELS_DIR","default":"/mnt/models"},{"id":"COMFY_OUTPUT_DIR","label":"COMFY_OUTPUT_DIR","default":"/mnt/comfy-output"},{"id":"COMFY_PORT","label":"ComfyUI port","default":"8188"},{"id":"DOWNLOAD_LIMIT","label":"Download limit","default":"auto"}],"commands":[{"id":"download-models","title":"download-models","description":"Default pack only (Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF). No --tier. --limit is bandwidth, not quality.","argv":["./scripts/manage.sh","download-models"],"flags":[{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto (85% of speedtest when HTB works)"},{"value":"off","label":"off (SSH risk — full-rate pull)"}]},{"name":"drop-incomplete","kind":"bool","default":false,"label":"Delete stuck *.incomplete then re-pull"}]},{"id":"download-image","title":"download-image --tier","description":"Still UNET pack. fast is the lab default and also pulls TE + flux2-vae companions. Not a video quality ladder.","argv":["./scripts/utilities/download-image.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"fast","choices":[{"value":"fast","label":"fast — Klein 4B distilled FP8 + TE + VAE (default, in download-models)"},{"value":"nvfp4","label":"nvfp4 — Klein 4B NVFP4 still UNET (optional)"},{"value":"base","label":"base — Klein 4B base FP8 still UNET (optional)"},{"value":"zimage","label":"zimage — Z-Image Turbo stills (optional)"},{"value":"all","label":"all — fast + nvfp4 + base + zimage"}]}]},{"id":"download-wan","title":"download-wan --tier","description":"Different Wan graphs, not a quality ladder. all does not include vace or s2v. Unload LTX before Fun InP / VACE / S2V.","argv":["./scripts/utilities/download-wan.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"5b","choices":[{"value":"5b","label":"5b — Wan 2.2 TI2V-5B silent (~12 GB, in download-models)"},{"value":"a14b","label":"a14b — Wan 2.2 I2V A14B FP8 (~20 GB, opt-in)"},{"value":"fun-inp","label":"fun-inp — Fun InP A14B first-last-frame (~47 GB, floor 40)"},{"value":"vace","label":"vace — Wan 2.1 VACE 1.3B join (~6 GB, not in all)"},{"value":"s2v","label":"s2v — Wan 2.2 S2V-14B talking-head (~20 GB, not in all)"},{"value":"all","label":"all — 5b + a14b + fun-inp (not vace, not s2v)"}]}]},{"id":"download-ltx","title":"download-ltx --tier","description":"LTX generation selector, not “better”. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).","argv":["./scripts/utilities/download-ltx.sh","run"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"2.5","choices":[{"value":"2.5","label":"2.5 — distilled INT8-convrot AV (~30 GB, in download-models)"},{"value":"2.3","label":"2.3 — retired distilled FP8 fallback (auto-includes gemma)"},{"value":"balanced","label":"balanced — 2.3 alias (FP8, auto-includes gemma)"},{"value":"quality","label":"quality — 2.3 BF16 alias (larger, auto-includes gemma)"},{"value":"iclora","label":"iclora — IC-LoRA Union Control (~1 GB, not in all)"},{"value":"gemma","label":"gemma — LTX-2.3 Gemma DualCLIP (~8 GB)"},{"value":"all","label":"all — 2.5 + 2.3 + gemma (not iclora)"}]}]},{"id":"download-podcast","title":"download-podcast --tier","description":"Opt-in audio packs. analog is Kokoro only. acestep shares the ~10 GB AIO with download-music --tier turbo. Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-podcast"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"analog","choices":[{"value":"analog","label":"analog — Kokoro-82M ONNX + voices (tiny, default)"},{"value":"acestep","label":"acestep — ACE-Step 1.5 turbo AIO (~10 GB, shared with music turbo)"},{"value":"chatterbox","label":"chatterbox — optional MIT GPU TTS"},{"value":"qwen3tts","label":"qwen3tts — optional Qwen3-TTS 0.6B"},{"value":"all","label":"all — analog + acestep + chatterbox + qwen3tts"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-dub","title":"download-dub --tier","description":"Opt-in dub packs. asr is Silero VAD + faster-whisper. clone is Chatterbox Multilingual V3 (ve.pt + s3gen.pt + T3 V3 + conds.pt). With the stack up, pip-installs faster-whisper, setuptools\u003c82 (PerTh / pkg_resources), then the Chatterbox V3 GitHub zip --no-deps --force-reinstall (does not pin torch; PyPI 0.1.7 has no t3_model=v3). Missing pack is not a doctor failure.","argv":["./scripts/manage.sh","download-dub"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"asr","choices":[{"value":"asr","label":"asr — Silero VAD + faster-whisper large-v3 (default)"},{"value":"clone","label":"clone — Chatterbox Multilingual V3 (MIT, PerTh on)"},{"value":"all","label":"all — asr + clone"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-music","title":"download-music --tier","description":"Closest thing to a size ladder. turbo shares dest with download-podcast --tier acestep — do not pull the AIO twice. Occupancy: stop LTX/Wan/Klein first.","argv":["./scripts/manage.sh","download-music"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"turbo","choices":[{"value":"turbo","label":"turbo — ACE-Step 1.5 AIO (~10 GB, default rap/podcast beds)"},{"value":"xl","label":"xl — split XL files (larger; not the default)"},{"value":"all","label":"all — turbo + xl"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"download-3d","title":"download-3d --tier","description":"Opt-in 3D. da3-large is refused. Unload LTX first. SuperSplat is a host viewer, not this downloader.","argv":["./scripts/manage.sh","download-3d"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"trellis2","choices":[{"value":"trellis2","label":"trellis2 — Comfy-Org TRELLIS.2 INT8 + DINOv3 (~12 GB)"},{"value":"da3-base","label":"da3-base — Depth Anything 3 BASE Apache (~1 GB)"},{"value":"all","label":"all — trellis2 + da3-base"}]}]},{"id":"download-longcat","title":"download-longcat --tier","description":"Opt-in MIT LongCat. No NCCL in this sample stack.","argv":["./scripts/manage.sh","download-longcat"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"video","choices":[{"value":"video","label":"video — LongCat-Video"},{"value":"avatar","label":"avatar — LongCat-Video-Avatar"},{"value":"all","label":"all — video + avatar"}]}]},{"id":"download-dreamx","title":"download-dreamx --tier","description":"Apache DreamX-Creator only. DreamX-World is refused.","argv":["./scripts/manage.sh","download-dreamx"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"creator","choices":[{"value":"creator","label":"creator — DreamX-Creator 1.0 Apache (~8 GB selective, full repo ~54 GB)"}]}]},{"id":"download-restore","title":"download-restore --tier","description":"Post-concat SeedVR2 restore pack. Not part of download-models.","argv":["./scripts/manage.sh","download-restore"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"seedvr2-3b","choices":[{"value":"seedvr2-3b","label":"seedvr2-3b — SeedVR2-3B Apache (~15 GB)"}]}]},{"id":"download-llm","title":"download-llm --tier","description":"Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.","argv":["./scripts/manage.sh","download-llm"],"flags":[{"name":"tier","kind":"choice","required":true,"default":"enhance","choices":[{"value":"enhance","label":"enhance — Qwen3-4B Q4_K_M (default, in download-models)"},{"value":"qwen36-35b-a3b","label":"qwen36-35b-a3b — Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"},{"value":"all","label":"all — enhance + qwen36-35b-a3b"}]},{"name":"limit","kind":"choice-or-int","required":false,"default":"auto","bind_var":"DOWNLOAD_LIMIT","int_label":"Mbps","choices":[{"value":"auto","label":"auto"},{"value":"off","label":"off (SSH risk)"}]}]},{"id":"occupancy","title":"occupancy enter","description":"Park Comfy for blender-desk (POST /free) or llm-desk (35B sidecar), or enter a heavy family. Does not start Compose. NVENC stays XOR with compose-up. Graph occupancy label llm is not a CLI mode.","argv":["./scripts/manage.sh","occupancy","enter"],"flags":[{"name":"mode","kind":"choice","required":true,"default":"blender-desk","choices":[{"value":"blender-desk","label":"blender-desk — park Comfy, Workbench dumps"},{"value":"llm-desk","label":"llm-desk — park Comfy, host 35B llama-server"},{"value":"klein","label":"klein — stop Blender and 35B sidecar, Queue stills"},{"value":"trellis","label":"trellis — stop Blender and 35B sidecar, Queue TRELLIS.2"},{"value":"wan","label":"wan — stop Blender and 35B sidecar, Queue silent motion"},{"value":"ltx","label":"ltx — stop Blender and 35B sidecar, Queue AV print"},{"value":"idle","label":"idle — stop Blender, 35B sidecar, and Compose"}]}]},{"id":"research-mcp","title":"research-mcp","description":"In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF. No execute_code. Does not refuse a GPU session.","argv":["./scripts/manage.sh","research-mcp"],"flags":[]},{"id":"ssh-forward","title":"SSH port-forward","description":"Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.","argv":["ssh","-L","${COMFY_PORT}:127.0.0.1:${COMFY_PORT}","${SPARK_USER}@${SPARK_HOST}"],"flags":[]},{"id":"open-ui","title":"Open ComfyUI URL","description":"On-box / LAN URL. Use ssh-forward from a laptop instead.","argv":["echo","http://${SPARK_HOST}:${COMFY_PORT}"],"flags":[]},{"id":"doctor","title":"doctor","description":"Preflight. Missing weights are a warning, not a hard fail.","argv":["./scripts/manage.sh","doctor"],"flags":[]},{"id":"start","title":"start","description":"Type yes. Headroom preflight. Compose restart: no.","argv":["./scripts/manage.sh","start"],"flags":[]},{"id":"stop","title":"stop","description":"Stop containers. Keeps models, outputs, and the comfy-state volume.","argv":["./scripts/manage.sh","stop"],"flags":[]},{"id":"reap-models-plan","title":"reap-models --plan","description":"MODELS_DIR class plan only. Does not delete. cleanup does not delete weights.","argv":["./scripts/manage.sh","reap-models","--plan"],"flags":[]},{"id":"disk-wizard-plan","title":"disk-wizard --plan","description":"Host-wide leftover survey. Read-only. Never docker system prune -a --volumes.","argv":["./scripts/manage.sh","disk-wizard","--plan"],"flags":[]},{"id":"help","title":"help","description":"Print the manage.sh command list.","argv":["./scripts/manage.sh","help"],"flags":[]},{"id":"setup","title":"setup","description":".env, MODELS_DIR, COMFY_OUTPUT_DIR, optional Docker CE, hf CLI, then doctor.","argv":["./scripts/manage.sh","setup"],"flags":[{"name":"install-docker","kind":"bool","default":false,"label":"Install Docker CE + compose plugin when missing"}]},{"id":"status","title":"status","description":"Compose project status. Prints MODELS_DIR, COMFY_OUTPUT_DIR, port.","argv":["./scripts/manage.sh","status"],"flags":[]},{"id":"restart","title":"restart","description":"stop then start. Full yes confirm and headroom again.","argv":["./scripts/manage.sh","restart"],"flags":[]},{"id":"logs","title":"logs","description":"Follow compose logs.","argv":["./scripts/manage.sh","logs"],"flags":[]},{"id":"download-limit","title":"download-limit","description":"Throttle Hugging Face pulls. wrap always clears on exit.","argv":["./scripts/manage.sh","download-limit","status"],"flags":[]},{"id":"clear-hf-locks","title":"clear-hf-locks","description":"Remove stale Hugging Face .lock files under MODELS_DIR.","argv":["./scripts/manage.sh","clear-hf-locks"],"flags":[]},{"id":"reset-hf-partials","title":"reset-hf-partials","description":"Delete *.incomplete under MODELS_DIR. Finished weights kept.","argv":["./scripts/manage.sh","reset-hf-partials"],"flags":[]},{"id":"print-shot","title":"print-shot","description":"Queue one compiled 90s shot into films/\u003cslug>/shots/.","argv":["./scripts/manage.sh","print-shot"],"flags":[]},{"id":"film-resume","title":"film-resume","description":"Reprint failed 90s shots only. Skip ok 5.00s takes.","argv":["./scripts/manage.sh","film-resume"],"flags":[]},{"id":"film-export-otio","title":"film-export-otio","description":"Write films/\u003cslug>/publish OTIO from the jobstore. Host-side.","argv":["./scripts/manage.sh","film-export-otio"],"flags":[]},{"id":"film-proxies","title":"film-proxies","description":"NVENC proxies. Refuse if compose is up. Never rewrite masters.","argv":["./scripts/manage.sh","film-proxies"],"flags":[]},{"id":"take-promote","title":"take-promote","description":"Copy a take into shots/NN.mp4 and mark the shot ok.","argv":["./scripts/manage.sh","take-promote"],"flags":[]},{"id":"promote-workflow","title":"promote-workflow","description":"Copy a live _user graph into workflows/_lab/\u003clane>/. Does not commit.","argv":["./scripts/manage.sh","promote-workflow"],"flags":[]},{"id":"album-render","title":"album-render","description":"Queue one shipped album then zip. Compose must already be up.","argv":["./scripts/manage.sh","album-render"],"flags":[]},{"id":"llm-sidecar","title":"llm-sidecar","description":"Host llama-server for occupancy llm-desk (127.0.0.1:30000). Prefer occupancy enter llm-desk.","argv":["./scripts/manage.sh","llm-sidecar","status"],"flags":[]},{"id":"blender-mcp","title":"blender-mcp","description":"In-tree typed Blender MCP. bpy tools need blender-desk. No execute_code.","argv":["./scripts/manage.sh","blender-mcp"],"flags":[]},{"id":"blender-llm","title":"blender-llm","description":"Optional host Qwen3-4B CPU client for blender-mcp. Path D if llama.cpp missing.","argv":["./scripts/manage.sh","blender-llm"],"flags":[]},{"id":"blender","title":"blender","description":"Host Blender sidecar. Workbench in blender-desk. Dies if Comfy is a heavy job.","argv":["./scripts/manage.sh","blender"],"flags":[]},{"id":"blender-install","title":"blender-install","description":"Host apt install of Ubuntu blender (universe). Never in the Dockerfile. Occupancy does not install Blender.","argv":["./scripts/manage.sh","blender-install"],"flags":[]},{"id":"export-guides","title":"export-guides","description":"Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","export-guides"],"flags":[]},{"id":"blender-stills","title":"blender-stills","description":"Dump a single-frame clay/depth/canny still. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","blender-stills"],"flags":[]},{"id":"house-views","title":"house-views","description":"Dump 1024x1280 Instagram clay stills + GLB. Dies if Comfy is heavy.","argv":["./scripts/manage.sh","house-views"],"flags":[]},{"id":"asset-ls","title":"asset-ls","description":"Read-only Asset Bible catalog under COMFY_OUTPUT_DIR/assets.","argv":["./scripts/manage.sh","asset-ls"],"flags":[]},{"id":"film-accept","title":"film-accept","description":"Fail-closed 90s gate: 5.00s, 1280x704, LTX audio.","argv":["./scripts/manage.sh","film-accept"],"flags":[]},{"id":"shot-sheet","title":"shot-sheet","description":"Write films/\u003cslug>/shots.yaml with shot-card defaults.","argv":["./scripts/manage.sh","shot-sheet"],"flags":[]},{"id":"overlay-qc","title":"overlay-qc","description":"50% clay/look overlay. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","overlay-qc"],"flags":[]},{"id":"film-animatic","title":"film-animatic","description":"Cheap 90s animatic from clay.mp4 or stills. Host ffmpeg.","argv":["./scripts/manage.sh","film-animatic"],"flags":[]},{"id":"stem-mix","title":"stem-mix","description":"Picture-lock stems; duck -15 dB; YouTube loudnorm. Occupancy audio.","argv":["./scripts/manage.sh","stem-mix"],"flags":[]},{"id":"audio-still-video","title":"audio-still-video","description":"Mux a still + audio master to YouTube MP4. Host ffmpeg; compose may stay up.","argv":["./scripts/manage.sh","audio-still-video"],"flags":[]},{"id":"spark-timing","title":"spark-timing","description":"Kitchen wall-clock table. Do not record on pytorch-fallback.","argv":["./scripts/manage.sh","spark-timing","show"],"flags":[]},{"id":"models-status","title":"models-status","description":"Disk bible: keep-set + refuse list. Does not delete.","argv":["./scripts/manage.sh","models-status"],"flags":[]},{"id":"cleanup","title":"cleanup","description":"Type DELETE. Removes ez-comfy-state only. Keeps MODELS_DIR and COMFY_OUTPUT_DIR.","argv":["./scripts/manage.sh","cleanup"],"flags":[]},{"id":"spark-farm-status","title":"spark-farm status","description":"Probe independent Spark workers. Never starts compose remotely. No NCCL.","argv":["./scripts/utilities/spark-farm.sh","status"],"flags":[]}]}</script>
