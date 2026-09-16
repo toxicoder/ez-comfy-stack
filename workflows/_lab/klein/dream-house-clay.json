@@ -5064,7 +5064,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/dream-house-clay"
+    "lab_rel": "klein/dream-house-clay",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -1289,7 +1289,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/camera-angles"
+    "lab_rel": "klein/camera-angles",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -15213,7 +15213,8 @@
         550
       ]
     },
-    "lab_rel": "shorts/switchyard"
+    "lab_rel": "shorts/switchyard",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

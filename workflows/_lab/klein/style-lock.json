@@ -1609,7 +1609,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/style-lock"
+    "lab_rel": "klein/style-lock",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

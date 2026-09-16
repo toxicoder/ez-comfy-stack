@@ -8,7 +8,7 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 
 **What's on this page**
 
-- **Studio-user symptoms** on the Comfy canvas (Missing Models, LTX 720, dub, DCC dumps)
+- **Studio-user symptoms** on the Comfy canvas (Missing Models, LTX 720, Nodes 2.0, dub, DCC dumps)
 - **Occupancy XOR** — park vs stop, sidecar contention, splat/Blender park-first
 - **studio-ui board** on :8190 vs App Mode on `${COMFY_PORT}`
 
@@ -26,6 +26,8 @@ tags: [troubleshooting, comfyui, occupancy, studio-ui, dub]
 | Symptom | Likely cause | Action |
 | --- | --- | --- |
 | **Missing Models** on a seeded lab graph | Weights not on `MODELS_DIR` / broken `comfy/` symlink | `./scripts/manage.sh download-models` then restart. [Models and cache](../models-and-cache.md) |
+| Nodes look tiny / groups overlap after load | LiteGraph sizes under Nodes 2.0, or `workflowRendererVersion` stamped `"Vue"` | Confirm Settings **Nodes 2.0** and **Auto-scale layout** are on. Lab JSON must be `Vue-corrected`, not `"Vue"` (that shrinks geometry 1.2×). Restart so `start` reseeds settings when those keys are absent. [ComfyUI basics](../learn/comfyui.md) |
+| Preview widgets blank / Upload media missing under Nodes 2.0 | Old `ez_*` JS (`inputEl` / `node_widget`) or a third-party LiteGraph-only pack | Pull latest and restart so `ez_prompt_enhance` / `ez_research` / `ez_dub` JS copies. Toggle Nodes 2.0 off only if a **user** pack is LiteGraph-only. [Custom nodes](../reference/custom-nodes.md) |
 | Start images vanished after `cleanup` | LoadImage files lived on the named volume | Put start frames in `${COMFY_OUTPUT_DIR}/input` (container `/inputs`). `cleanup` does not delete `COMFY_OUTPUT_DIR` |
 | LTX `einops` / divide by 45 | Width/height not ÷32 (720 or 1080) | Lab size is **1280×704**. `ez_ltx_spatial` auto-snaps; prefer typing 704 |
 | No MP4 preview, only PNGs | Old graph without VHS, or looking at SaveImage | Re-open seeded `wan-*` / `ltx-*`; open **Save video (MP4)** node |

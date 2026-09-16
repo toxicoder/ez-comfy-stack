@@ -179,7 +179,8 @@
     "lab_optional_unwired": [
       "EZCreativeResearch"
     ],
-    "lab_rel": "inspire/research-chat"
+    "lab_rel": "inspire/research-chat",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

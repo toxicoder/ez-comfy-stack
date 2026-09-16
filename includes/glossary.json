@@ -356,8 +356,17 @@
     "aliases": ["ComfyUI"],
     "category": "Studio",
     "short": "Node-graph UI for local image, video, and audio generation. This stack's studio.",
-    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files live under `_lab/<lane>/` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. See [ComfyUI basics](learn/comfyui.md).",
-    "see_also": ["queue", "widget", "workflow", "manage-sh"]
+    "long": "You operate the host with manage.sh; you *use* the studio in the browser at COMFY_PORT (default 8188). Graphs are nodes and widgets, not a chat box. Seeded files live under `_lab/<lane>/` and copy into `user/default/workflows/` on start. App Mode graphs land as `*.app.json` so they appear under Apps as well as Workflows. The canvas defaults to Nodes 2.0. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["queue", "widget", "workflow", "manage-sh", "nodes-2"]
+  },
+  {
+    "id": "nodes-2",
+    "title": "Nodes 2.0",
+    "aliases": ["Nodes 2.0", "Vue nodes"],
+    "category": "Studio",
+    "short": "ComfyUI's Vue-based node renderer. Default canvas on this studio.",
+    "long": "Nodes 2.0 draws nodes as Vue DOM instead of LiteGraph canvas. Lab graphs stamp `extra.workflowRendererVersion` as `Vue-corrected` (canonical coordinates; do not stamp `Vue` or the frontend shrinks the layout). `start` seeds `Comfy.VueNodes.Enabled` when that key is absent. Toggle from the Comfy logo menu or Settings. See [ComfyUI basics](learn/comfyui.md).",
+    "see_also": ["comfyui", "workflow", "widget"]
   },
   {
     "id": "workflow",

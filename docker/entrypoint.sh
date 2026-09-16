@@ -848,6 +848,62 @@ install_lab_workflows() {
 }
 
 #######################################
+# Seed Nodes 2.0 (Vue nodes) defaults into comfy.settings.json.
+# Writes Comfy.VueNodes.Enabled and AutoScaleLayout only when those keys
+# are absent. Never overwrites an operator toggle.
+# Globals:
+#   None
+# Arguments:
+#   $1  Comfy user/default directory (…/user/default)
+# Outputs:
+#   ep_log
+# Returns:
+#   0 always (fail-soft)
+#######################################
+seed_comfy_vue_nodes_settings() {
+  local dest_dir="${1:?}"
+  local settings="${dest_dir}/comfy.settings.json"
+  mkdir -p "${dest_dir}"
+  if ! command -v python3 >/dev/null 2>&1; then
+    ep_log "WARN: python3 missing — skip Vue nodes settings seed"
+    return 0
+  fi
+  if python3 - "${settings}" <<'PY'; then
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+keys = {
+    "Comfy.VueNodes.Enabled": True,
+    "Comfy.VueNodes.AutoScaleLayout": True,
+}
+data = {}
+if path.is_file():
+    try:
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError, TypeError):
+        sys.exit(1)
+    if not isinstance(loaded, dict):
+        sys.exit(1)
+    data = loaded
+changed = False
+for key, value in keys.items():
+    if key not in data:
+        data[key] = value
+        changed = True
+if changed:
+    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+sys.exit(0)
+PY
+    ep_log "Vue nodes settings seeded in ${settings}"
+  else
+    ep_log "WARN: Vue nodes settings seed failed"
+  fi
+  return 0
+}
+
+#######################################
 # Copy one in-tree custom-node pack into Comfy custom_nodes.
 # Bind-mounted like workflows so node edits skip image rebuild.
 # Globals:
@@ -1437,6 +1493,7 @@ main() {
 
   ep_log "phase 3/4: install lab workflows and custom nodes"
   install_lab_workflows /opt/ez-comfy/workflows "${comfy_home}/user/default/workflows"
+  seed_comfy_vue_nodes_settings "${comfy_home}/user/default"
   install_all_lab_custom_nodes \
     "${LAB_CUSTOM_NODES_SRC:-/opt/ez-comfy/custom_nodes}" \
     "${comfy_home}/custom_nodes"

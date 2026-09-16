@@ -871,7 +871,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "wan/i2v-shot"
+    "lab_rel": "wan/i2v-shot",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

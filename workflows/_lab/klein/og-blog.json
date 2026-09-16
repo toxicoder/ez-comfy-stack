@@ -662,7 +662,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/og-blog"
+    "lab_rel": "klein/og-blog",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -621,7 +621,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/shorts-still"
+    "lab_rel": "klein/shorts-still",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

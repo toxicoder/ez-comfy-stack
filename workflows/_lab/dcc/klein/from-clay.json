@@ -750,7 +750,8 @@
       ],
       "prefix": "ez_clay_hero"
     },
-    "lab_rel": "dcc/klein/from-clay"
+    "lab_rel": "dcc/klein/from-clay",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

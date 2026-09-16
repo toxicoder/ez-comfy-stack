@@ -75,7 +75,8 @@
         "revision": 7,
         "config": {},
         "extra": {
-          "lab_occupancy": "ltx"
+          "lab_occupancy": "ltx",
+          "workflowRendererVersion": "Vue-corrected"
         },
         "groups": [],
         "inputs": [
@@ -1131,6 +1132,7 @@
   "version": 0.4,
   "extra": {
     "lab_occupancy": "ltx",
-    "lab_note": "Occupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job."
+    "lab_note": "Occupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.",
+    "workflowRendererVersion": "Vue-corrected"
   }
 }

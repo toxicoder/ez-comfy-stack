@@ -609,7 +609,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/thumbnail"
+    "lab_rel": "klein/thumbnail",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

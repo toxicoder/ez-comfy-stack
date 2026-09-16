@@ -1908,7 +1908,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/time-of-day"
+    "lab_rel": "klein/time-of-day",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

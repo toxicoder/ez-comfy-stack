@@ -972,7 +972,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/broll-ambient"
+    "lab_rel": "ltx/broll-ambient",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

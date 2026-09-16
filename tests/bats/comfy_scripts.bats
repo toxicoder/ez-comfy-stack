@@ -897,6 +897,46 @@ teardown() {
   [ "${status}" -eq 0 ]
 }
 
+@test "seed_comfy_vue_nodes_settings creates and merges without clobber" {
+  # shellcheck disable=SC1090
+  source "${REPO_ROOT}/docker/entrypoint.sh"
+  local dest settings
+  dest="${TEST_TMP_DIR}/user_default"
+  settings="${dest}/comfy.settings.json"
+  run grep -F 'seed_comfy_vue_nodes_settings' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'Comfy.VueNodes.Enabled' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'Comfy.VueNodes.AutoScaleLayout' "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run grep -F 'seed_comfy_vue_nodes_settings "${comfy_home}/user/default"' \
+    "${REPO_ROOT}/docker/entrypoint.sh"
+  [ "${status}" -eq 0 ]
+  run seed_comfy_vue_nodes_settings "${dest}"
+  [ "${status}" -eq 0 ]
+  [ -f "${settings}" ]
+  python3 - "${settings}" <<'PY'
+import json
+import sys
+
+data = json.loads(open(sys.argv[1], encoding="utf-8").read())
+assert data["Comfy.VueNodes.Enabled"] is True
+assert data["Comfy.VueNodes.AutoScaleLayout"] is True
+PY
+  printf '%s\n' '{"Comfy.VueNodes.Enabled": false, "other": 1}' >"${settings}"
+  run seed_comfy_vue_nodes_settings "${dest}"
+  [ "${status}" -eq 0 ]
+  python3 - "${settings}" <<'PY'
+import json
+import sys
+
+data = json.loads(open(sys.argv[1], encoding="utf-8").read())
+assert data["Comfy.VueNodes.Enabled"] is False
+assert data["Comfy.VueNodes.AutoScaleLayout"] is True
+assert data["other"] == 1
+PY
+}
+
 @test "main with mocked install and NO_EXEC" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"

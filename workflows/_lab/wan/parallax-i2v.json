@@ -805,7 +805,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "wan/parallax-i2v"
+    "lab_rel": "wan/parallax-i2v",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

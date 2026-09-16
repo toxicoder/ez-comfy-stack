@@ -1908,7 +1908,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/color-moods"
+    "lab_rel": "klein/color-moods",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

@@ -3541,7 +3541,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/dream-house"
+    "lab_rel": "klein/dream-house",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

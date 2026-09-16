@@ -972,7 +972,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/weather-broll"
+    "lab_rel": "ltx/weather-broll",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

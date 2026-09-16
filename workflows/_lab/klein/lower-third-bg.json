@@ -662,7 +662,8 @@
     "lab_optional_unwired": [
       "LoadImage"
     ],
-    "lab_rel": "klein/lower-third-bg"
+    "lab_rel": "klein/lower-third-bg",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

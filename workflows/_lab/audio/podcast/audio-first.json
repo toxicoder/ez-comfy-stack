@@ -948,7 +948,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "audio/podcast/audio-first"
+    "lab_rel": "audio/podcast/audio-first",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

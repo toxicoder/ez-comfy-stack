@@ -750,7 +750,8 @@
       "prefix": "ez_canny_hero",
       "guide": "canny"
     },
-    "lab_rel": "dcc/klein/from-canny"
+    "lab_rel": "dcc/klein/from-canny",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

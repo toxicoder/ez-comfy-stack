@@ -1317,7 +1317,8 @@
         21
       ]
     },
-    "lab_rel": "optional/klein/trellis2"
+    "lab_rel": "optional/klein/trellis2",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

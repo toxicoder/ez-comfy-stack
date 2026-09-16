@@ -312,7 +312,8 @@
       "EZLTXPromptEnhance",
       "EZWanPromptEnhance"
     ],
-    "lab_rel": "inspire/prompt-forge"
+    "lab_rel": "inspire/prompt-forge",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

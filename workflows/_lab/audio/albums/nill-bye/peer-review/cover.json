@@ -669,7 +669,8 @@
       "album_slug": "peer-review",
       "role": "cover",
       "year": 2026
-    }
+    },
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

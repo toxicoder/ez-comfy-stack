@@ -15213,7 +15213,8 @@
         550
       ]
     },
-    "lab_rel": "shorts/still-here"
+    "lab_rel": "shorts/still-here",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

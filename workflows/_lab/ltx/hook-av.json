@@ -972,7 +972,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "ltx/hook-av"
+    "lab_rel": "ltx/hook-av",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

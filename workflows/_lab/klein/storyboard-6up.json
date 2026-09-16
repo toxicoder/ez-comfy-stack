@@ -2252,7 +2252,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/storyboard-6up"
+    "lab_rel": "klein/storyboard-6up",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

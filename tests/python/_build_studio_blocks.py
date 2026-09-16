@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from _lab_paths import ROOT, lab_json
+from _lab_paths import ROOT, lab_json, stamp_nodes2
 from _stamp_app_mode import BANNED, occupancy_stanza
 
 PACK = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs"
@@ -169,6 +169,7 @@ def wrap_blueprint(
             "lab_note": occupancy_stanza(occupancy),
         },
     }
+    stamp_nodes2(graph)
     _assert_clean(graph, where=name)
     return graph
 

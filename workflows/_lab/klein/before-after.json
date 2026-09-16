@@ -1148,7 +1148,8 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "klein/before-after"
+    "lab_rel": "klein/before-after",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }

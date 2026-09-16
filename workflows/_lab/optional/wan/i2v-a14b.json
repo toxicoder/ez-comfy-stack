@@ -854,7 +854,8 @@
     "lab_optional_unwired": [
       "UNETLoader"
     ],
-    "lab_rel": "optional/wan/i2v-a14b"
+    "lab_rel": "optional/wan/i2v-a14b",
+    "workflowRendererVersion": "Vue-corrected"
   },
   "version": 0.4
 }
