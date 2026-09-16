@@ -21,24 +21,6 @@ cd "${ROOT}"
 FAIL=0
 
 #######################################
-# Collect production function names from scripts/ and docker/*.sh.
-# Globals:
-#   None
-# Arguments:
-#   None
-# Outputs:
-#   Writes sorted unique function names to stdout (one per line)
-# Returns:
-#   0
-#######################################
-list_production_functions() {
-  {
-    grep -RhoE '^[a-zA-Z_][a-zA-Z0-9_]*\(\)' scripts --include='*.sh' 2>/dev/null || true
-    grep -RhoE '^[a-zA-Z_][a-zA-Z0-9_]*\(\)' docker --include='*.sh' 2>/dev/null || true
-  } | sed 's/()//' | sort -u
-}
-
-#######################################
 # Coverage gate entrypoint.
 # Globals:
 #   None
@@ -51,47 +33,11 @@ list_production_functions() {
 #######################################
 main() {
   echo "=== Python coverage (100%) ==="
-  if ! python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
-    echo "Install pytest-cov: pip install pytest pytest-cov" >&2
-    FAIL=1
-  else
-    PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes" python3 -m pytest tests/python -q \
-      --cov=patch_get_free_memory \
-      --cov=patch_unified_memory_copy \
-      --cov=patch_magcache_compat \
-      --cov=patch_vhs_widget_inputs \
-      --cov=seed_clay_inputs \
-      --cov=ez_ltx_spatial \
-      --cov-report=term-missing \
-      --cov-fail-under=100 || FAIL=1
-  fi
+  bash tests/run_pytest.sh || FAIL=1
 
   bash tests/typecheck.sh || FAIL=1
 
-  echo "=== Shell function inventory (strict: must appear under tests/) ==="
-  FUNCS="$(list_production_functions)"
-  TEST_BLOB="$(cat tests/bats/*.bats tests/bats/*.bash tests/python/*.py tests/*.sh 2>/dev/null || true)"
-
-  MISSING=""
-  while IFS= read -r f; do
-    [[ -z ${f} ]] && continue
-    # Entrypoints are exercised by executing the script; skip inventory.
-    case "${f}" in
-      main) continue ;;
-    esac
-    if ! grep -qE "\\b${f}\\b" <<<"${TEST_BLOB}"; then
-      MISSING="${MISSING}${f}"$'\n'
-    fi
-  done <<<"${FUNCS}"
-
-  if [[ -n ${MISSING} ]]; then
-    echo "Untested shell functions (not referenced under tests/):" >&2
-    printf '%s' "${MISSING}" >&2
-    FAIL=1
-  else
-    count="$(echo "${FUNCS}" | grep -c . || true)"
-    echo "All ${count} production shell functions referenced under tests/."
-  fi
+  bash tests/shell_inventory.sh || FAIL=1
 
   echo "=== BATS suite ==="
   JOBS="${BATS_JOBS:-}"

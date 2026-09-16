@@ -14,7 +14,7 @@
 | Occupancy | One heavy GPU job (XOR) |
 | Downloads | `download-limit auto` = **85%** of measured Mbps (24h host cache) |
 | Restart | `restart: "no"` — type **yes** on start |
-| Tests | Hermetic **100%** coverage gate |
+| Tests | Hermetic **100%** coverage gate (`bazelisk run //:validate`) |
 
 **Documentation:** [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (from `main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (from `development`).
 

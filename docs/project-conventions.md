@@ -17,7 +17,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 
 **What this enables**
 
-- Consistent, reviewable contributions without the full lab Bazel/K8s surface
+- Consistent, reviewable contributions with a Bazel-first test/lint/docs graph and without the lab K8s surface
 - Shell that matches industry practice while staying safe on remote DGX Spark hosts
 - MkDocs pages operators can **scan** (not only search)
 
@@ -30,8 +30,31 @@ tags: [conventions, contributing, safety, shell, google-style]
 | No auto-start | `restart: "no"` |
 | Hermetic tests | BATS/pytest/Pyright/mypy without real Spark |
 | Docs as code | MkDocs pages with required sections |
-| Keep it small | No K8s/Ansible/dashboard/Bazel |
+| Keep it small | No K8s/Ansible/dashboard/NCCL |
+| Bazel-first | `bazelisk run //:validate`; Makefile is a shim |
 | Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy on every change |
+
+## Bazel-first workflow
+
+Bazel is the **official** test/lint/docs entry point. The `Makefile` is a thin compatibility shim.
+
+```bash
+bazelisk run //:validate                    # git-aware: core + docs slices
+bazelisk run //:validate -- --all           # full suite before merge
+bazelisk run //:fix                         # buildifier + shfmt
+bazelisk test //:test-fast                  # CI core (BATS + pytest + typecheck)
+bazelisk test //:lint --test_tag_filters=manual
+bazelisk run //:manage -- doctor
+bazelisk run //docs:docs
+```
+
+| After editing | Run |
+| --- | --- |
+| Any source change (before PR) | `bazelisk run //:validate` |
+| `BUILD.bazel` or `.bzl` | `bazelisk run //:fix` |
+| Shell structured comments | `bazelisk run //docs:docs` |
+
+See [Building with Bazel](contribute/building-with-bazel.md). Runtime is still Docker Compose — Bazel does not add K3s, a dashboard, or NCCL.
 
 ## Repo layout
 
@@ -83,9 +106,9 @@ This project follows that guide for executables and libraries, with the **intent
 | Structure | Helpers grouped; multi-function scripts use `main` + source guard |
 | Libraries | `scripts/lib/*.sh` — `.sh` extension, **not** executable |
 | Entry scripts | `*.sh`, executable, `set -euo pipefail` |
-| ShellCheck | Clean at warning level (`make lint`) |
-| Pyright | Clean at `standard` (`make typecheck` / `make lint`) |
-| mypy | Clean (`make typecheck` / `make lint`; `mypy.ini`) |
+| ShellCheck | Clean at warning level (`bazelisk test //:lint --test_tag_filters=manual`) |
+| Pyright | Clean at `standard` (`bazelisk test //tests:typecheck`) |
+| mypy | Clean (`bazelisk test //tests:typecheck`; `mypy.ini`) |
 | SUID/SGID | Forbidden |
 
 ### Intentional deviations from Google
@@ -220,7 +243,7 @@ flowchart TB
 - BATS for shell; pytest for Python; **Pyright** (Pylance) and **mypy** for first-party Python
 - **Hermetic by default**: `test_helper.bash` sets `LAB_HERMETIC=1`, speed/probe mocks, and `HF_PROGRESS=0` (no real curl/speedtest, no progress-monitor sleeps)
 - **Parallel BATS**: `bats --jobs` across files when GNU `parallel` is installed (`BATS_JOBS` override); serialize within files
-- `make coverage` enforces:
+- `bazelisk test //:test-fast` (and `make coverage`) enforces:
   - **100% Python line coverage** on `patch_get_free_memory` and `patch_unified_memory_copy`
   - **Pyright** clean at `standard` and **mypy** clean (`tests/typecheck.sh`; Comfy/torch/bpy imports are not required)
   - **Strict shell inventory**: every function in `scripts/**/*.sh` and `docker/**/*.sh` must be **named under `tests/`** (production-only references do not count)
@@ -238,11 +261,11 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-  Cov["make coverage"] --> Py["100% line · UM patches"]
+  Cov["bazelisk test //:test-fast"] --> Py["100% line · UM patches"]
   Cov --> Pyright["Pyright standard + mypy · first-party Python"]
   Cov --> Shell["Every scripts/** + docker/** function<br/>named under tests/"]
   Cov --> Bats["Full BATS suite green"]
-  Lint["make lint"] --> SC["ShellCheck warnings = defects"]
+  Lint["bazelisk test //:lint"] --> SC["ShellCheck warnings = defects"]
   Lint --> Fmt["shfmt"]
   Lint --> Pyright
 ```
@@ -263,7 +286,7 @@ flowchart LR
 
 Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How docs tests work: [Testing docs](contribute/testing-docs.md). Comment-derived CLI: [Generated shell reference](generated/shell/reference.md). **AI-drafted docs still need a human pass** before merge.
 
-- Local / PR: `make docs` (runs `docs/generate_shell_docs.py`, then strict MkDocs Material build into `site/`)
+- Local / PR: `bazelisk run //docs:docs` (or `make docs`) — generators then strict MkDocs Material into `site/`
 - Public site (per long-lived branch) via **mike** on GitHub Pages:
   - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
@@ -335,5 +358,5 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps th
 **Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B and old `flux-to-ltx*` GHCR tags are banned/frozen mentions only.
 
 ```bash
-make docs   # strict build must stay green
+bazelisk run //docs:docs   # strict build must stay green
 ```

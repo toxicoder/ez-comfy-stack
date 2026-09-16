@@ -1,6 +1,6 @@
 ---
 title: Testing docs
-description: make test, coverage, lint, docs, typecheck — 100% Python gate, shell inventory, mike aliases, generate_shell_docs.py.
+description: bazelisk test-fast, coverage, lint, docs, typecheck — 100% Python gate, shell inventory, mike aliases, generate_shell_docs.py.
 tags: [testing, coverage, mkdocs, mike, contributing]
 ---
 
@@ -8,11 +8,11 @@ tags: [testing, coverage, mkdocs, mike, contributing]
 
 **What's on this page**
 
-- **Make targets** — `test` / `coverage` / `lint` / `docs` / `typecheck`
+- **Bazel / Make targets** — `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
 - **100% Python gate** — UM patches + `ez_ltx_spatial` (not the shell generator)
 - **Shell function inventory**
 - **`deploy-docs.yml` + mike** — `main` → `latest`, `development` → `development`
-- **`make docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` then `mkdocs build --strict`
+- **`bazelisk run //docs:docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` then `mkdocs build --strict`
 
 **What this enables**
 
@@ -37,15 +37,17 @@ Hermetic tests do not need a Spark. Docs JS session vars still use those names i
 
 ## Make targets
 
+Makefile shims call Bazelisk when present. Canonical commands: [Building with Bazel](building-with-bazel.md).
+
 | Target | What it runs |
 | --- | --- |
-| **`make test`** | `tests/run_all.sh` — BATS + Python + Pyright + mypy |
-| **`make coverage`** | `tests/coverage.sh` — 100% pytest-cov gate + typecheck + shell inventory + full BATS |
-| **`make lint`** | ShellCheck + `shfmt -d` + `tests/typecheck.sh` (Pyright + mypy) |
+| **`bazelisk test //:test-fast`** / **`make test`** | BATS + Python + Pyright + mypy |
+| **`make coverage`** | Same as `//:test-fast` via Bazel, else `tests/coverage.sh` |
+| **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier + Pyright + mypy |
 | **`make typecheck`** | Pyright (Pylance) + mypy |
-| **`make docs`** | `python3 docs/generate_shell_docs.py` then `NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict` |
-| **`make fmt`** | `shfmt -w` |
-| **`make doctor`** | `./scripts/manage.sh doctor` (host; not hermetic) |
+| **`bazelisk run //docs:docs`** | generators then `NO_MKDOCS_2_WARNING=1 mkdocs build --strict` |
+| **`bazelisk run //:fix`** | buildifier + `shfmt -w` |
+| **`make doctor`** | `bazelisk run //:manage -- doctor` (host; not hermetic) |
 
 Install once: `pip install -r tests/requirements.txt` and `pip install -r docs/requirements.txt`.
 

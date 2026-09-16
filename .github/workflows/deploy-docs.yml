@@ -91,6 +91,8 @@ jobs:
           # Suppress Material MkDocs 2.0 advisory; pins stay on mkdocs 1.x.
           NO_MKDOCS_2_WARNING: "1"
         run: |
+          python3 docs/generate_shell_docs.py
+          python3 docs/generate_workflow_docs.py
           python -m mkdocs build --strict
           # mike copies from site/; ensure no Jekyll processing on Pages.
           touch site/.nojekyll

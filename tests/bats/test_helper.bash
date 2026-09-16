@@ -30,9 +30,15 @@
 #   0 on success
 #######################################
 bats_canonical_repo_root() {
-  local here
+  local here candidate manage_real
   here="$(cd "$(dirname "${BATS_TEST_FILENAME}")" && pwd)"
-  cd "${here}/../.." && pwd
+  candidate="$(cd "${here}/../.." && pwd)"
+  if [[ -f "${candidate}/scripts/manage.sh" ]]; then
+    manage_real="$(readlink -f "${candidate}/scripts/manage.sh" 2>/dev/null || realpath "${candidate}/scripts/manage.sh" 2>/dev/null || echo "${candidate}/scripts/manage.sh")"
+    dirname "$(dirname "${manage_real}")"
+    return 0
+  fi
+  (cd "${candidate}" && pwd -P)
 }
 
 #######################################

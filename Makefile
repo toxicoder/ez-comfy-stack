@@ -1,79 +1,148 @@
-# ez-comfy-stack — thin operator / CI entry points
+# ez-comfy-stack — Bazel-primary with Make compatibility shims
 #
-# Purpose:
-#   Provide short, documented targets for the workflows contributors run most:
-#   hermetic tests, coverage gate, shell format/lint, MkDocs build, and doctor.
-#   Does not wrap Docker stack start/stop (use ./scripts/manage.sh for that).
+# Preferred:
+#   bazelisk run //:validate
+#   bazelisk test //:test-fast
+#   bazelisk test //:lint --test_tag_filters=manual
+#   bazelisk run //:fix
+#   bazelisk run //docs:docs
+#   bazelisk run //:manage -- doctor
 #
-# Requirements:
-#   bash, bats, python3, shellcheck, shfmt; tests/requirements.txt
-#   (pytest, pytest-cov, pyright, mypy) for tests/coverage/lint; docs/requirements.txt
-#   (mkdocs-material + mike) for docs.
+# This Makefile exists for people without bazelisk and for muscle memory.
+# Most targets delegate to Bazel when bazelisk/bazel is on PATH.
 
-.PHONY: help test bats python coverage lint typecheck fmt docs doctor clean
+SHELL := /bin/bash
+.SHELLFLAGS := -eu -o pipefail -c
+
+BAZEL := $(shell command -v bazelisk 2>/dev/null || command -v bazel 2>/dev/null || echo "")
+
+.PHONY: help test bats python coverage lint typecheck fmt docs doctor clean fix validate
 
 # @target help — list available Make targets
 help:
-	@echo "Targets:"
-	@echo "  make test       Run BATS + Python tests + Pyright + mypy"
-	@echo "  make coverage   100% coverage gate + Pyright + mypy"
-	@echo "  make lint       shellcheck + shfmt check + Pyright + mypy"
-	@echo "  make typecheck  Pyright (Pylance) + mypy"
-	@echo "  make fmt        shfmt -w"
-	@echo "  make docs       generate shell reference + mkdocs build --strict"
-	@echo "  make doctor     ./scripts/manage.sh doctor"
+	@echo "ez-comfy-stack (Bazel primary)"
+	@echo ""
+	@echo "Preferred (bazelisk):"
+	@echo "  bazelisk run //:validate"
+	@echo "  bazelisk test //:test-fast"
+	@echo "  bazelisk test //:lint --test_tag_filters=manual"
+	@echo "  bazelisk run //:fix"
+	@echo "  bazelisk run //docs:docs"
+	@echo "  bazelisk run //:manage -- doctor"
+	@echo ""
+	@echo "Makefile shims:"
+	@echo "  make test       (bazelisk test //:test-fast, else tests/run_all.sh)"
+	@echo "  make coverage"
+	@echo "  make lint"
+	@echo "  make typecheck"
+	@echo "  make fmt / make fix"
+	@echo "  make docs"
+	@echo "  make validate"
+	@echo "  make doctor"
 
-# @target test — full hermetic suite (see tests/run_all.sh)
+# @target test — full hermetic suite (BATS + pytest + Pyright + mypy)
 test:
-	bash tests/run_all.sh
-
-# @target bats — shell behavior tests only (parallel across files when available)
-bats:
-	@jobs="$${BATS_JOBS:-}"; \
-	if [ -z "$$jobs" ]; then \
-	  jobs=$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4); \
-	fi; \
-	if bats --help 2>&1 | grep -q -- '--jobs' && command -v parallel >/dev/null 2>&1; then \
-	  bats --jobs "$$jobs" --no-parallelize-within-files tests/bats; \
+	@if [ -n "$(BAZEL)" ]; then \
+	  echo "→ Bazel primary: bazelisk test //:test-fast"; \
+	  $(BAZEL) test //:test-fast; \
 	else \
-	  bats tests/bats; \
+	  bash tests/run_all.sh; \
+	fi
+
+# @target bats — shell behavior tests only
+bats:
+	@if [ -n "$(BAZEL)" ]; then \
+	  $(BAZEL) test //tests:bats; \
+	else \
+	  jobs="$${BATS_JOBS:-}"; \
+	  if [ -z "$$jobs" ]; then \
+	    jobs=$$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4); \
+	  fi; \
+	  if bats --help 2>&1 | grep -q -- '--jobs' && command -v parallel >/dev/null 2>&1; then \
+	    bats --jobs "$$jobs" --no-parallelize-within-files tests/bats; \
+	  else \
+	    bats tests/bats; \
+	  fi; \
 	fi
 
 # @target python — patch module unit tests with 100% coverage fail-under
 python:
-	PYTHONPATH=docker:custom_nodes python3 -m pytest tests/python -q --cov=patch_get_free_memory --cov=patch_unified_memory_copy --cov=patch_magcache_compat --cov=patch_vhs_widget_inputs --cov=seed_clay_inputs --cov=ez_ltx_spatial --cov-fail-under=100
+	@if [ -n "$(BAZEL)" ]; then \
+	  $(BAZEL) test //tests:pytest; \
+	else \
+	  bash tests/run_pytest.sh; \
+	fi
 
 # @target coverage — Python 100% + Pyright + mypy + shell function inventory + BATS
 coverage:
-	bash tests/coverage.sh
+	@if [ -n "$(BAZEL)" ]; then \
+	  echo "→ Bazel primary: bazelisk test //:test-fast"; \
+	  $(BAZEL) test //:test-fast; \
+	else \
+	  bash tests/coverage.sh; \
+	fi
 
 # @target typecheck — Pyright (Pylance) + mypy on first-party Python
 typecheck:
-	bash tests/typecheck.sh
+	@if [ -n "$(BAZEL)" ]; then \
+	  $(BAZEL) test //tests:typecheck; \
+	else \
+	  bash tests/typecheck.sh; \
+	fi
 
-# @target lint — ShellCheck + shfmt diff (no write) + Pyright + mypy
+# @target lint — ShellCheck + shfmt + Pyright + mypy
 lint:
-	shellcheck -x scripts/manage.sh scripts/lib/*.sh scripts/utilities/*.sh docker/*.sh docker/install-comfy/*.sh
-	shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh
-	bash tests/typecheck.sh
+	@if [ -n "$(BAZEL)" ]; then \
+	  echo "→ Bazel primary: bazelisk test //:lint --test_tag_filters=manual"; \
+	  $(BAZEL) test //:lint --test_tag_filters=manual; \
+	else \
+	  shellcheck -x scripts/manage.sh scripts/lib/*.sh scripts/utilities/*.sh docker/*.sh docker/install-comfy/*.sh; \
+	  shfmt -d -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh; \
+	  bash tests/typecheck.sh; \
+	fi
 
-# @target fmt — apply shfmt -w to shell sources
-fmt:
-	shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh
+# @target fmt — apply shfmt -w (and buildifier when Bazel tools exist)
+fmt: fix
 
-# @target docs — generate CLI + workflow references, then strict MkDocs Material build into site/
-# NO_MKDOCS_2_WARNING: suppress Material advisory; stack is pinned to mkdocs 1.x.
+# @target fix — trusted formatters
+fix:
+	@if [ -n "$(BAZEL)" ]; then \
+	  echo "→ Bazel primary: bazelisk run //:fix"; \
+	  $(BAZEL) run //:fix; \
+	else \
+	  shfmt -w -s -i 2 -ci scripts docker/install-comfy.sh docker/install-comfy docker/entrypoint.sh tests/coverage.sh tests/run_all.sh tests/typecheck.sh; \
+	fi
+
+# @target validate — git-aware core + docs slices
+validate:
+	@if [ -n "$(BAZEL)" ]; then \
+	  $(BAZEL) run //:validate; \
+	else \
+	  echo "bazelisk required for validate target" >&2; \
+	  exit 1; \
+	fi
+
+# @target docs — generate CLI + workflow references, then strict MkDocs Material build
 docs:
-	python3 docs/generate_shell_docs.py
-	python3 docs/generate_workflow_docs.py
-	NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
-	# Match deploy-docs.yml: mike copies from site/; skip Jekyll on Pages.
-	touch site/.nojekyll
+	@if [ -n "$(BAZEL)" ]; then \
+	  echo "→ Bazel primary: bazelisk run //docs:docs"; \
+	  $(BAZEL) run //docs:docs; \
+	else \
+	  python3 docs/generate_shell_docs.py; \
+	  python3 docs/generate_workflow_docs.py; \
+	  NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict; \
+	  touch site/.nojekyll; \
+	fi
 
 # @target doctor — host preflight without starting the stack
 doctor:
-	./scripts/manage.sh doctor
+	@if [ -n "$(BAZEL)" ]; then \
+	  $(BAZEL) run //:manage -- doctor; \
+	else \
+	  ./scripts/manage.sh doctor; \
+	fi
 
 # @target clean — remove local build/test artifacts (not models or git state)
 clean:
 	rm -rf site coverage .coverage htmlcov .pytest_cache .mypy_cache
+	@if [ -n "$(BAZEL)" ]; then $(BAZEL) clean --expunge || true; fi

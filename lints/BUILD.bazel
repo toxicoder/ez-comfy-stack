@@ -1,0 +1,96 @@
+"""Package purpose: Aggregate lint test suite (shellcheck, shfmt, buildifier, pyright, mypy).
+
+Tagged 'manual' because they depend on host tools being present in PATH.
+"""
+
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+package(default_visibility = ["//visibility:private"])
+
+sh_test(
+    name = "shell",
+    srcs = ["run_shellcheck.sh"],
+    data = [
+        "//:fix.sh",
+        "//scripts:doc_sources",
+        "//scripts:lib/check_tool.sh",
+    ],
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+        "shellcheck",
+    ],
+)
+
+sh_test(
+    name = "shfmt",
+    srcs = ["run_shfmt.sh"],
+    data = ["//scripts:lib/check_tool.sh"],
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+        "shfmt",
+    ],
+)
+
+sh_test(
+    name = "buildifier",
+    srcs = ["buildifier_check.sh"],
+    data = ["//scripts:lib/check_tool.sh"],
+    tags = [
+        "buildifier",
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+    ],
+)
+
+sh_test(
+    name = "pyright",
+    srcs = ["run_pyright.sh"],
+    data = [
+        "//:pyrightconfig.json",
+        "//scripts:lib/check_tool.sh",
+    ],
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "no-sandbox",
+        "pyright",
+    ],
+)
+
+sh_test(
+    name = "mypy",
+    srcs = ["run_mypy.sh"],
+    data = [
+        "//:mypy.ini",
+        "//scripts:lib/check_tool.sh",
+    ],
+    tags = [
+        "lint",
+        "local",
+        "manual",
+        "mypy",
+        "no-sandbox",
+    ],
+)
+
+test_suite(
+    name = "all",
+    tags = ["lint"],
+    tests = [
+        ":buildifier",
+        ":mypy",
+        ":pyright",
+        ":shell",
+        ":shfmt",
+    ],
+    visibility = ["//visibility:public"],
+)

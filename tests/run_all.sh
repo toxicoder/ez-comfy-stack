@@ -70,16 +70,7 @@ else
 fi
 
 echo "==> Python"
-export PYTHONPATH="${ROOT}/docker:${ROOT}/custom_nodes${PYTHONPATH:+:${PYTHONPATH}}"
-if python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
-  python3 -m pytest tests/python -q --cov=patch_get_free_memory \
-    --cov=patch_unified_memory_copy --cov=patch_magcache_compat \
-    --cov=patch_vhs_widget_inputs \
-    --cov=seed_clay_inputs --cov=ez_ltx_spatial \
-    --cov-report=term-missing --cov-fail-under=100
-else
-  python3 -m pytest tests/python -q
-fi
+bash tests/run_pytest.sh
 
 echo "==> Typecheck (Pyright + mypy)"
 bash tests/typecheck.sh

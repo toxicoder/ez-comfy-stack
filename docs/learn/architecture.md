@@ -20,7 +20,7 @@ tags: [architecture, compose, occupancy, spark, safety]
 - **Keeping** SSH-safe defaults (`restart: "no"`, 90g/80g, headroom)
 - **Knowing** when to stay on this Compose demo vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab)
 
-This is a **sample Compose studio** on one NVIDIA DGX Spark (GB10). It is not K3s, not Bazel, and not multi-node NCCL. Graduate to the lab when you outgrow a demo: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
+This is a **sample Compose studio** on one NVIDIA DGX Spark (GB10). It is not K3s and not multi-node NCCL. Bazelisk is the contributor test/lint/docs graph, not a cluster control plane. Graduate to the lab when you outgrow a demo: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
 
 ```bash
 export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"

@@ -1,0 +1,12 @@
+"""Package purpose: Resource policy, disk catalog, and model manifest filegroups."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "policy",
+    srcs = glob(
+        ["*"],
+        allow_empty = True,
+        exclude = ["BUILD.bazel"],
+    ),
+)

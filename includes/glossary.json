@@ -1807,5 +1807,14 @@
     "short": "Banned lip-sync OSS. Lab talking-head is LTX audio freeze, not mouth-sync.",
     "long": "Two-stage freeze lives in Comfy Templates → LTX-2.5. Do not pip-install Wav2Lip. See [Motion workflows](create/workflows-motion.md).",
     "see_also": ["a2v", "ltx", "us-safe"]
+  },
+  {
+    "id": "bazelisk",
+    "title": "Bazelisk",
+    "aliases": ["Bazelisk"],
+    "category": "Studio",
+    "short": "Contributor launcher that pins Bazel 8.4.1. Official test/lint/docs entry point.",
+    "long": "`bazelisk run //:validate` is the pre-PR gate. The Makefile is a shim. Bazel here is not K3s and not a dashboard. See [Building with Bazel](contribute/building-with-bazel.md).",
+    "see_also": ["occupancy"]
   }
 ]

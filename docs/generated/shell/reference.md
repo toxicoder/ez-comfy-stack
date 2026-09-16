@@ -547,6 +547,28 @@ Source after scripts/lib/common.sh (uses err). Not executable.
       Does not start Compose. Does not apt-install unless blender-install.sh
       is invoked. Does not weaken restart: "no", headroom, or download-limit.
 
+<!-- source: scripts/lib/check_tool.sh -->
+## check_tool helper
+
+Resilient tool checker used by lints/run_*.sh and CI installers.
+By default, a missing tool prints a message and exits 0 so local runs can
+continue when optional linters are not installed.
+
+When CI=true or REQUIRE_LINT_TOOLS=1, a missing tool is fatal (exit 1).
+
+### Function `check_tool`
+
+```bash
+Usage:
+```
+
+  source "$(dirname "$0")/../lib/check_tool.sh"
+  check_tool shellcheck "apt install shellcheck"
+
+!!! warning
+
+    Safety: Read-only PATH probe. No GPU, Docker, or network.
+
 <!-- source: scripts/lib/common.sh -->
 ## common
 
@@ -1713,6 +1735,26 @@ Usage:
 ```
 
 ### Command: research-mcp
+
+<!-- source: scripts/utilities/runner.sh -->
+## Utility runner (Bazel entry)
+
+Dispatches to `scripts/utilities/<name>.sh`.
+
+### Command: run-utility
+
+```bash
+Usage:
+```
+
+  bazelisk run //scripts:run-utility -- download-limit status
+  bazelisk run //scripts:run-utility -- occupancy status
+
+!!! warning
+
+    Safety:
+      Only invokes scripts under scripts/utilities/; each utility keeps its
+      own confirmations and download-limit clear-on-exit.
 
 <!-- source: scripts/utilities/shot-sheet.sh -->
 ## shot-sheet
