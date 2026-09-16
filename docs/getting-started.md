@@ -183,7 +183,7 @@ LTX-2.5 is **gated**. Klein 4B and Wan 5B are Apache. A token in `.env` is **not
 
 ### 5. `download-models`
 
-Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. **No `--tier`.** Throttled by download-limit (`auto` = **85%** of speedtest when HTB works). The wrap **always clears on exit**.
+Default pack only: Klein 4B + Wan 2.2 5B + LTX-2.5 + prompt-enhance GGUF. **No `--tier`.** Throttled by download-limit (`auto` = **85%** of measured Mbps, cached 24h, when HTB works). The wrap **always clears on exit**.
 
 ```ezcmd
 id: download-models
@@ -192,7 +192,7 @@ id: download-models
 | What | Detail |
 | --- | --- |
 | **Tiers** | `download-image --tier fast` + `download-wan --tier 5b` + `download-ltx --tier 2.5` + `download-llm` |
-| **Throttle** | Default `auto` (speedtest → **85%**). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
+| **Throttle** | Default `auto` (duration HTTP / speedtest → **85%**, 24h cache). Manual: `--limit 40` (Mbps). Persistent: `DOWNLOAD_LIMIT=40` in `.env`. `off` is SSH risk. |
 | **Progress** | `══ 1/4 ══` Klein → Wan → LTX → GGUF, then a `↓` size/MiB/s line per repo |
 | **Layout** | Weights under `${MODELS_DIR}` with relative `comfy/` symlinks |
 | **LTX size** | Selective distilled set (status floor ~**30 GB**), not the Kijai 2.3 monorepo |

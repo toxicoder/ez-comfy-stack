@@ -6,8 +6,10 @@
 #
 # Purpose:
 #   Apply kernel traffic shaping via wondershaper on the default-route interface.
-#   Supports fixed Mbps caps and an **auto** mode that runs a speedtest and applies
-#   floor(0.85 × measured_download_mbps). Apply is verified via tc qdisc (or mocks).
+#   Supports fixed Mbps caps and an **auto** mode that measures download Mbps
+#   (duration HTTP probe first, then Ookla, then speedtest-cli) and applies
+#   floor(0.85 × measured_download_mbps). Auto measurements are cached 24h on the
+#   host (not MODELS_DIR). Apply is verified via tc qdisc (or mocks).
 #   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
 #   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
 #   (warn + continue unthrottled) unless DOWNLOAD_LIMIT_REQUIRE=1.
@@ -17,10 +19,10 @@
 #   download-models.
 #
 # Usage:
-#   download-limit.sh status [--json]
-#   download-limit.sh run --limit auto|N [--fallback N]
+#   download-limit.sh status [--json] [--refresh]
+#   download-limit.sh run --limit auto|N [--fallback N] [--refresh]
 #   download-limit.sh clear
-#   download-limit.sh wrap --limit auto|N -- <command...>
+#   download-limit.sh wrap --limit auto|N [--refresh] -- <command...>
 #
 # Requirements:
 #   - sudo (unless LAB_NO_SUDO=1 for mocks)
@@ -30,7 +32,8 @@
 #
 # Test hooks:
 #   LAB_MOCK_IFACE, LAB_MOCK_WONDERSHAPER, LAB_MOCK_SPEEDTEST_MBPS,
-#   LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO, DOWNLOAD_LIMIT_REQUIRE
+#   LAB_MOCK_HTTP_SPEED_MBPS, LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO,
+#   DOWNLOAD_LIMIT_REQUIRE, DOWNLOAD_LIMIT_CACHE_DIR, DOWNLOAD_LIMIT_CACHE_TTL_SEC
 #
 # Units:
 #   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.
@@ -59,11 +62,18 @@ readonly DEFAULT_UPLOAD_MBPS=10000
 # Clamp wondershaper kbps arguments to a range HTB typically accepts.
 readonly MIN_RATE_KBPS=8
 readonly MAX_RATE_KBPS=10000000
+# Duration HTTP probe: large payload + short max-time so TCP slow start does not
+# dominate. curl exit 28 (timeout) is a valid sample when enough bytes arrived.
+readonly HTTP_PROBE_BYTES_DEFAULT=250000000
+readonly HTTP_PROBE_MAX_TIME_DEFAULT=12
+readonly HTTP_PROBE_MIN_BYTES=1000000
+readonly SPEED_CACHE_TTL_DEFAULT=86400
 
 CMD="status"
 LIMIT_SPEC=""
 FALLBACK_MBPS="${DOWNLOAD_LIMIT_FALLBACK:-50}"
 JSON_FLAG=0
+REFRESH_SPEED=0
 WRAP_ARGS=()
 
 #######################################
@@ -580,10 +590,334 @@ apply_limits() {
 }
 
 #######################################
+# TTL for the host-local auto speed cache in seconds.
+# Globals:
+#   DOWNLOAD_LIMIT_CACHE_TTL_SEC, SPEED_CACHE_TTL_DEFAULT
+# Arguments:
+#   None
+# Outputs:
+#   Non-negative integer seconds on stdout
+# Returns:
+#   0
+#######################################
+speed_cache_ttl_sec() {
+  local ttl="${DOWNLOAD_LIMIT_CACHE_TTL_SEC:-${SPEED_CACHE_TTL_DEFAULT}}"
+  if [[ ! ${ttl} =~ ^[0-9]+$ ]]; then
+    echo "${SPEED_CACHE_TTL_DEFAULT}"
+    return 0
+  fi
+  echo "${ttl}"
+}
+
+#######################################
+# Path to the host-local speed-cache JSON file (not MODELS_DIR).
+# Globals:
+#   DOWNLOAD_LIMIT_CACHE_DIR, XDG_CACHE_HOME, HOME
+# Arguments:
+#   None
+# Outputs:
+#   File path on stdout
+# Returns:
+#   0
+#######################################
+speed_cache_path() {
+  local dir
+  dir="${DOWNLOAD_LIMIT_CACHE_DIR:-${XDG_CACHE_HOME:-${HOME}/.cache}/ez-comfy}"
+  echo "${dir}/download-limit-speed.json"
+}
+
+#######################################
+# Load speed cache JSON if present and well-formed.
+# Globals:
+#   None (path from speed_cache_path)
+# Arguments:
+#   None
+# Outputs:
+#   One line: measured_mbps source iface unix_ts version
+# Returns:
+#   0 on success; 1 if missing or corrupt
+#######################################
+read_speed_cache() {
+  local path
+  path="$(speed_cache_path)"
+  if [[ ! -f ${path} ]]; then
+    return 1
+  fi
+  python3 -c '
+import json, sys
+try:
+    with open(sys.argv[1], encoding="utf-8") as fh:
+        data = json.load(fh)
+except Exception:
+    sys.exit(1)
+mbps = data.get("measured_mbps")
+ts = data.get("unix_ts")
+ver = data.get("version", 0)
+src = str(data.get("source") or "unknown").replace(" ", "_")
+iface = str(data.get("iface") or "-").replace(" ", "_")
+if not isinstance(mbps, (int, float)) or int(mbps) < 1:
+    sys.exit(1)
+if not isinstance(ts, (int, float)) or int(ts) < 0:
+    sys.exit(1)
+print(int(mbps), src, iface, int(ts), int(ver) if isinstance(ver, (int, float)) else 0)
+' "${path}" 2>/dev/null
+}
+
+#######################################
+# Persist a trusted speed measurement to the host-local cache.
+# Skips write when TTL is 0. Never stores fallback/untrusted values (caller).
+# Globals:
+#   DOWNLOAD_LIMIT_CACHE_TTL_SEC
+# Arguments:
+#   $1  measured Mbps (positive integer)
+#   $2  source (http|ookla|speedtest-cli|mock)
+#   $3  optional interface name
+# Outputs:
+#   None
+# Returns:
+#   0 always (write errors are non-fatal)
+#######################################
+write_speed_cache() {
+  local mbps="${1:-}"
+  local src="${2:-unknown}"
+  local iface="${3:-}"
+  local ttl path dir now
+  ttl="$(speed_cache_ttl_sec)"
+  if [[ ${ttl} -eq 0 ]]; then
+    return 0
+  fi
+  if [[ ! ${mbps} =~ ^[0-9]+$ || ${mbps} -lt 1 ]]; then
+    return 0
+  fi
+  path="$(speed_cache_path)"
+  dir="$(dirname "${path}")"
+  mkdir -p "${dir}" || return 0
+  now="$(date +%s)"
+  python3 -c '
+import json, os, sys
+path, mbps, src, iface, ts = sys.argv[1:6]
+payload = {
+    "version": 1,
+    "measured_mbps": int(mbps),
+    "source": src,
+    "iface": iface,
+    "unix_ts": int(ts),
+}
+tmp = path + ".tmp"
+with open(tmp, "w", encoding="utf-8") as fh:
+    json.dump(payload, fh, indent=2)
+    fh.write("\n")
+os.replace(tmp, path)
+' "${path}" "${mbps}" "${src}" "${iface}" "${now}" 2>/dev/null || true
+  return 0
+}
+
+#######################################
+# Print cached measured Mbps when the entry is fresh for this interface.
+# Globals:
+#   REFRESH_SPEED, DOWNLOAD_LIMIT_CACHE_TTL_SEC
+# Arguments:
+#   $1  Optional current iface (default: get_active_interface)
+# Outputs:
+#   Integer Mbps on stdout when fresh; log line on stderr
+# Returns:
+#   0 if a fresh cache entry was used; 1 otherwise
+#######################################
+speed_cache_fresh() {
+  local iface="${1:-}"
+  local ttl now mbps src cached_iface ts ver age age_txt ttl_h line
+  if [[ ${REFRESH_SPEED:-0} -eq 1 ]]; then
+    return 1
+  fi
+  ttl="$(speed_cache_ttl_sec)"
+  if [[ ${ttl} -eq 0 ]]; then
+    return 1
+  fi
+  if [[ -z ${iface} ]]; then
+    iface="$(get_active_interface)"
+  fi
+  line="$(read_speed_cache)" || return 1
+  read -r mbps src cached_iface ts ver <<<"${line}"
+  if [[ -z ${mbps} || ! ${mbps} =~ ^[0-9]+$ ]]; then
+    return 1
+  fi
+  if [[ ${ver} != "1" ]]; then
+    return 1
+  fi
+  if [[ -n ${cached_iface} && ${cached_iface} != "-" && -n ${iface} && ${cached_iface} != "${iface}" ]]; then
+    return 1
+  fi
+  now="$(date +%s)"
+  if [[ ${now} -lt ${ts} ]]; then
+    return 1
+  fi
+  age=$((now - ts))
+  if [[ ${age} -ge ${ttl} ]]; then
+    return 1
+  fi
+  if [[ ${age} -ge 3600 ]]; then
+    age_txt="$((age / 3600))h ago"
+  elif [[ ${age} -ge 60 ]]; then
+    age_txt="$((age / 60))m ago"
+  else
+    age_txt="${age}s ago"
+  fi
+  ttl_h=$((ttl / 3600))
+  if [[ ${ttl_h} -lt 1 ]]; then
+    dl_log "Using cached download speed from ${age_txt}: ${mbps} Mbps (TTL ${ttl}s)"
+  else
+    dl_log "Using cached download speed from ${age_txt}: ${mbps} Mbps (TTL ${ttl_h}h)"
+  fi
+  echo "${mbps}"
+  return 0
+}
+
+#######################################
+# JSON object describing the speed cache (for status --json).
+# Globals:
+#   REFRESH_SPEED (not applied here; status may remeasure first)
+# Arguments:
+#   None
+# Outputs:
+#   Compact JSON object on stdout
+# Returns:
+#   0
+#######################################
+speed_cache_json_object() {
+  local path ttl iface
+  path="$(speed_cache_path)"
+  ttl="$(speed_cache_ttl_sec)"
+  iface="$(get_active_interface)"
+  python3 -c '
+import json, os, sys, time
+path, ttl_s, iface = sys.argv[1:4]
+ttl = int(ttl_s)
+now = int(time.time())
+obj = {
+    "path": path,
+    "ttl_sec": ttl,
+    "valid": False,
+    "measured_mbps": None,
+    "age_sec": None,
+    "source": None,
+    "iface": None,
+}
+if os.path.isfile(path):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            data = json.load(fh)
+        mbps = int(data.get("measured_mbps") or 0)
+        ts = int(data.get("unix_ts") or 0)
+        cached_iface = str(data.get("iface") or "")
+        age = now - ts if ts else None
+        valid = (
+            mbps >= 1
+            and ts > 0
+            and age is not None
+            and age >= 0
+            and ttl > 0
+            and age < ttl
+        )
+        if cached_iface and iface and cached_iface != iface:
+            valid = False
+        obj.update(
+            {
+                "measured_mbps": mbps if mbps else None,
+                "age_sec": age,
+                "source": data.get("source"),
+                "iface": cached_iface or None,
+                "valid": bool(valid),
+            }
+        )
+    except Exception:
+        pass
+print(json.dumps(obj, separators=(",", ":")))
+' "${path}" "${ttl}" "${iface:-}"
+}
+
+#######################################
+# Convert curl -w "code bps size time" into integer Mbps if the sample is trusted.
+# Accepts curl exit 0 (complete) or 28 (max-time), matching a duration probe.
+# Globals:
+#   HTTP_PROBE_MIN_BYTES
+# Arguments:
+#   $1  write-out line (http_code speed_download size_download time_total)
+#   $2  curl exit code
+# Outputs:
+#   Integer Mbps on stdout
+# Returns:
+#   0 if trusted; 1 otherwise
+#######################################
+parse_curl_speed_sample() {
+  local line="${1:-}"
+  local curl_rc="${2:-1}"
+  local code bps size mbps
+  if [[ ${curl_rc} -ne 0 && ${curl_rc} -ne 28 ]]; then
+    return 1
+  fi
+  code="$(echo "${line}" | awk '{print $1}')"
+  bps="$(echo "${line}" | awk '{print $2}')"
+  size="$(echo "${line}" | awk '{print $3}')"
+  if [[ ! ${code} =~ ^2[0-9][0-9]$ ]]; then
+    return 1
+  fi
+  if [[ -z ${bps} || ! ${bps} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    return 1
+  fi
+  if [[ -z ${size} || ! ${size} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    return 1
+  fi
+  python3 -c "import sys; sys.exit(0 if float('${size}') >= ${HTTP_PROBE_MIN_BYTES} else 1)" 2>/dev/null || return 1
+  mbps="$(python3 -c "print(max(1, int(float('${bps}') * 8 / 1e6)))" 2>/dev/null)" || return 1
+  if [[ ${mbps} -lt 1 ]]; then
+    return 1
+  fi
+  echo "${mbps}"
+  return 0
+}
+
+#######################################
+# One HTTP download sample against a URL (optional IPv4-only).
+# Globals:
+#   SPEEDTEST_HTTP_MAX_TIME, HTTP_PROBE_MAX_TIME_DEFAULT
+# Arguments:
+#   $1  URL
+#   $2  1 to pass curl -4, 0 otherwise
+# Outputs:
+#   Integer Mbps on stdout; log on stderr
+# Returns:
+#   0 on trusted sample; 1 otherwise
+#######################################
+http_probe_url() {
+  local url="${1:-}"
+  local ipv4="${2:-1}"
+  local max_time curl_rc=0 out mbps size tsec
+  local -a curl_opts
+  [[ -n ${url} ]] || return 1
+  max_time="${SPEEDTEST_HTTP_MAX_TIME:-${HTTP_PROBE_MAX_TIME_DEFAULT}}"
+  curl_opts=(
+    -s -L --connect-timeout 5 --max-time "${max_time}" -o /dev/null
+    -w '%{http_code} %{speed_download} %{size_download} %{time_total}'
+  )
+  if [[ ${ipv4} -eq 1 ]]; then
+    curl_opts+=(-4)
+  fi
+  out="$(curl "${curl_opts[@]}" "${url}" 2>/dev/null)" || curl_rc=$?
+  mbps="$(parse_curl_speed_sample "${out}" "${curl_rc}")" || return 1
+  size="$(echo "${out}" | awk '{print $3}')"
+  tsec="$(echo "${out}" | awk '{print $4}')"
+  dl_log "HTTP probe OK via ${url%%\?*} ≈ ${mbps} Mbps (${tsec}s, ${size} bytes)"
+  echo "${mbps}"
+  return 0
+}
+
+#######################################
 # HTTP download probe → approximate download Mbps (no sudo).
+# Duration transfer: large payload + short max-time; curl timeout is a valid sample.
 # Uses Cloudflare speed endpoint by default; override with SPEEDTEST_HTTP_URL.
 # Globals:
-#   LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_URL, SPEEDTEST_HTTP_BYTES
+#   LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_URL, SPEEDTEST_HTTP_BYTES,
+#   SPEEDTEST_HTTP_MAX_TIME, HTTP_PROBE_*
 # Arguments:
 #   None
 # Outputs:
@@ -603,36 +937,25 @@ probe_http_download_mbps() {
   if ! command -v curl >/dev/null 2>&1; then
     return 1
   fi
-  local bytes bps mbps code url
+  local bytes url mbps
   local -a urls=()
-  bytes="${SPEEDTEST_HTTP_BYTES:-15000000}"
+  bytes="${SPEEDTEST_HTTP_BYTES:-${HTTP_PROBE_BYTES_DEFAULT}}"
   if [[ -n ${SPEEDTEST_HTTP_URL:-} ]]; then
     urls+=("${SPEEDTEST_HTTP_URL}")
   fi
   urls+=(
     "https://speed.cloudflare.com/__down?bytes=${bytes}"
-    "https://proof.ovh.net/files/10Mb.dat"
-    "https://github.com/github/gitignore/archive/refs/heads/main.zip"
+    "https://proof.ovh.net/files/100Mb.dat"
   )
   for url in "${urls[@]}"; do
-    # -4 prefer IPv4; capture http_code + speed
-    code="$(curl -4 -L --connect-timeout 5 --max-time 25 -o /dev/null \
-      -w '%{http_code} %{speed_download}' "${url}" 2>/dev/null)" || continue
-    bps="$(echo "${code}" | awk '{print $2}')"
-    code="$(echo "${code}" | awk '{print $1}')"
-    if [[ ! ${code} =~ ^2[0-9][0-9]$ ]]; then
-      continue
+    if mbps="$(http_probe_url "${url}" 1)"; then
+      echo "${mbps}"
+      return 0
     fi
-    if [[ -z ${bps} || ! ${bps} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-      continue
+    if mbps="$(http_probe_url "${url}" 0)"; then
+      echo "${mbps}"
+      return 0
     fi
-    mbps="$(python3 -c "print(max(1, int(float('${bps}') * 8 / 1e6)))" 2>/dev/null)" || continue
-    if [[ ${mbps} -lt 1 ]]; then
-      continue
-    fi
-    dl_log "HTTP probe OK via ${url%%\?*} ≈ ${mbps} Mbps"
-    echo "${mbps}"
-    return 0
   done
   return 1
 }
@@ -721,10 +1044,81 @@ EOF
 }
 
 #######################################
-# Return measured download Mbps as integer, or empty on failure.
-# Clears any shaping first, ensures speedtest-cli, then CLI/Ookla/HTTP probes.
+# Parse Ookla CLI JSON/simple download Mbps when `speedtest` is on PATH.
 # Globals:
-#   LAB_MOCK_SPEEDTEST_MBPS, LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_*
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Integer Mbps on stdout
+# Returns:
+#   0 on parseable result; 1 otherwise
+#######################################
+ookla_download_mbps() {
+  local out="" n
+  if ! command -v speedtest >/dev/null 2>&1; then
+    return 1
+  fi
+  out=$(speedtest --accept-license --accept-gdpr -f json 2>/dev/null |
+    python3 -c 'import json,sys
+d=json.load(sys.stdin)
+b=d.get("download",{})
+if isinstance(b, dict):
+    print(int(b.get("bandwidth",0)*8/1e6))
+else:
+    print(0)
+' 2>/dev/null) || true
+  if [[ -z ${out} || ${out} == "0" ]]; then
+    out=$(speedtest --accept-license --accept-gdpr --simple 2>/dev/null |
+      awk '/Download/{print int($2); exit}') || true
+  fi
+  if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    n="${out%.*}"
+    if [[ ${n} =~ ^[0-9]+$ && ${n} -ge 1 ]]; then
+      echo "${n}"
+      return 0
+    fi
+  fi
+  return 1
+}
+
+#######################################
+# Parse sivel speedtest-cli --simple download Mbps.
+# Globals:
+#   LAB_MOCK_SPEEDTEST_MBPS
+# Arguments:
+#   None
+# Outputs:
+#   Integer Mbps on stdout
+# Returns:
+#   0 on parseable result; 1 otherwise
+#######################################
+speedtest_cli_download_mbps() {
+  local out="" n
+  if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
+    echo "${LAB_MOCK_SPEEDTEST_MBPS}"
+    return 0
+  fi
+  if ! command -v speedtest-cli >/dev/null 2>&1; then
+    return 1
+  fi
+  out=$(speedtest-cli --simple 2>/dev/null | awk '/Download:/{print $2; exit}') || true
+  if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
+    n="${out%.*}"
+    if [[ ${n} =~ ^[0-9]+$ && ${n} -ge 1 ]]; then
+      echo "${n}"
+      return 0
+    fi
+  fi
+  return 1
+}
+
+#######################################
+# Return measured download Mbps as integer, or empty on failure.
+# Cache hit (24h default) skips probes. Else: duration HTTP, Ookla, then sivel.
+# Globals:
+#   LAB_MOCK_SPEEDTEST_MBPS, LAB_MOCK_HTTP_SPEED_MBPS, SPEEDTEST_HTTP_*,
+#   REFRESH_SPEED, DOWNLOAD_LIMIT_CACHE_*
 # Arguments:
 #   None
 # Outputs:
@@ -733,60 +1127,72 @@ EOF
 #   0 on success; 1 on failure
 #######################################
 run_speedtest_mbps() {
+  local cached iface best=0 probe_src="" candidate reason=""
   if [[ ${LAB_FORCE_SPEEDTEST_FAIL:-} == "1" ]]; then
     dl_warn "Preflight speed: forced fail (test)"
     return 1
   fi
-  if [[ -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
+  iface="$(get_active_interface)"
+  if cached="$(speed_cache_fresh "${iface}")"; then
+    echo "${cached}"
+    return 0
+  fi
+
+  # Unthrottle before a real HTTP probe so residual wondershaper/tc does not skew.
+  if [[ -z ${LAB_MOCK_HTTP_SPEED_MBPS:-} && ${LAB_HERMETIC:-0} != "1" && ${LAB_NO_NETWORK:-0} != "1" ]]; then
+    clear_limits_for_speedtest
+  fi
+
+  # HTTP first — short completed files and sivel-first were under-reading line rate.
+  if candidate="$(probe_http_download_mbps)"; then
+    best="${candidate}"
+    probe_src="http"
+  fi
+
+  if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} && ${best} -ge 1 ]]; then
+    write_speed_cache "${best}" "http" "${iface}"
+    echo "${best}"
+    return 0
+  fi
+
+  if [[ ${best} -lt 1 && -n ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
+    write_speed_cache "${LAB_MOCK_SPEEDTEST_MBPS}" "mock" "${iface}"
     echo "${LAB_MOCK_SPEEDTEST_MBPS}"
     return 0
   fi
-  # Hermetic HTTP mock must win over host speedtest-cli (CI runners may have it)
-  if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} ]]; then
-    echo "${LAB_MOCK_HTTP_SPEED_MBPS}"
-    return 0
-  fi
-  # No real CLI/HTTP when hermetic (tests set LAB_HERMETIC=1 via test_helper)
+
   if [[ ${LAB_HERMETIC:-0} == "1" || ${LAB_NO_NETWORK:-0} == "1" ]]; then
+    if [[ ${best} -ge 1 ]]; then
+      write_speed_cache "${best}" "${probe_src}" "${iface}"
+      echo "${best}"
+      return 0
+    fi
     dl_warn "Preflight speed: hermetic/no-network (no mock Mbps set)"
     return 1
   fi
 
-  # Unthrottle before any probe so residual wondershaper/tc does not skew results
-  clear_limits_for_speedtest
-
-  ensure_speedtest_cli || true
-
-  local out="" reason=""
-  if command -v speedtest-cli >/dev/null 2>&1; then
-    out=$(speedtest-cli --simple 2>/dev/null | awk '/Download:/{print $2; exit}') || true
-    if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-      printf '%d\n' "${out%.*}"
-      return 0
+  if candidate="$(ookla_download_mbps)"; then
+    if [[ ${candidate} -gt ${best} ]]; then
+      best="${candidate}"
+      probe_src="ookla"
     fi
-    reason="speedtest-cli gave no parseable result"
-  else
-    reason="speedtest-cli not available after install attempt"
   fi
-  if command -v speedtest >/dev/null 2>&1; then
-    out=$(speedtest --accept-license --accept-gdpr -f json 2>/dev/null |
-      python3 -c 'import json,sys; d=json.load(sys.stdin); print(int(d.get("download",{}).get("bandwidth",0)*8/1e6))' 2>/dev/null) || true
-    if [[ -z ${out} ]]; then
-      out=$(speedtest --accept-license --accept-gdpr --simple 2>/dev/null |
-        awk '/Download/{print int($2); exit}') || true
-    fi
-    if [[ -n ${out} && ${out} =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-      printf '%d\n' "${out%.*}"
-      return 0
-    fi
-    reason="${reason}; ookla speedtest gave no parseable result"
-  fi
-  if out=$(probe_http_download_mbps); then
-    echo "${out}"
+
+  if [[ ${best} -ge 1 ]]; then
+    write_speed_cache "${best}" "${probe_src}" "${iface}"
+    echo "${best}"
     return 0
   fi
-  reason="${reason}; HTTP speed probe failed (curl/Cloudflare)"
-  # dl_warn is visible even under measured=$(run_speedtest_mbps) — stderr not captured
+
+  ensure_speedtest_cli || true
+  if candidate="$(speedtest_cli_download_mbps)"; then
+    best="${candidate}"
+    probe_src="speedtest-cli"
+    write_speed_cache "${best}" "${probe_src}" "${iface}"
+    echo "${best}"
+    return 0
+  fi
+  reason="HTTP speed probe failed; ookla speedtest gave no parseable result; speedtest-cli unavailable or unparseable"
   dl_warn "Preflight speed: ${reason}"
   return 1
 }
@@ -827,15 +1233,10 @@ resolve_limit_mbps() {
   local spec="${1}"
   if [[ ${spec} == "auto" ]]; then
     local measured
-    if measured=$(run_speedtest_mbps 2>/dev/null); then
+    if measured=$(run_speedtest_mbps); then
       local auto
       auto=$(compute_auto_limit "${measured}")
-      # Heuristic label: mock/http vs classic speedtest
-      if [[ -n ${LAB_MOCK_HTTP_SPEED_MBPS:-} || -z ${LAB_MOCK_SPEEDTEST_MBPS:-} ]]; then
-        dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
-      else
-        dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
-      fi
+      dl_log "Measured download ≈ ${measured} Mbps → auto limit ${auto} Mbps (85%)"
       echo "${auto}"
       return 0
     fi
@@ -863,19 +1264,32 @@ resolve_limit_mbps() {
 #   Exit status depends on command path; see implementation.
 #######################################
 cmd_status() {
-  local iface shaping="no"
+  local iface shaping="no" cache_json cache_line mbps src cached_iface ts ver ttl age
   iface=$(get_active_interface)
   iface=${iface:-unknown}
+  if [[ ${REFRESH_SPEED} -eq 1 ]]; then
+    run_speedtest_mbps >/dev/null || true
+  fi
   if shaping_supported; then
     shaping="yes"
   fi
   if [[ ${JSON_FLAG} -eq 1 ]]; then
-    printf '{"interface":"%s","tool":"wondershaper","auto_fraction":%s,"shaping_supported":%s}\n' \
-      "${iface}" "${AUTO_FRACTION}" "$([[ ${shaping} == yes ]] && echo true || echo false)"
+    cache_json="$(speed_cache_json_object)"
+    printf '{"interface":"%s","tool":"wondershaper","auto_fraction":%s,"shaping_supported":%s,"speed_cache":%s}\n' \
+      "${iface}" "${AUTO_FRACTION}" "$([[ ${shaping} == yes ]] && echo true || echo false)" "${cache_json}"
   else
     dl_log "Interface: ${iface}"
     dl_log "auto fraction: ${AUTO_FRACTION} (85%)"
     dl_log "kernel HTB shaping: ${shaping}"
+    ttl="$(speed_cache_ttl_sec)"
+    dl_log "speed cache: $(speed_cache_path) (TTL ${ttl}s)"
+    if cache_line="$(read_speed_cache)"; then
+      read -r mbps src cached_iface ts ver <<<"${cache_line}"
+      age=$(($(date +%s) - ts))
+      dl_log "cached speed: ${mbps} Mbps source=${src} age=${age}s"
+    else
+      dl_log "cached speed: none"
+    fi
     if check_wondershaper; then
       dl_log "wondershaper: present"
     else
@@ -1036,6 +1450,7 @@ wrap_with_live_speed_limit() {
   # Quick dry-run: if HTTP probe works, use it as preflight-quality measure (no 15s idle)
   if live_mbps=$(probe_http_download_mbps); then
     dl_log "Reliable HTTP probe ≈ ${live_mbps} Mbps — skipping idle RX sample"
+    write_speed_cache "${live_mbps}" "http" "${iface}"
     if shaping_supported; then
       apply_limit_from_measured "${iface}" "${live_mbps}" || true
     else
@@ -1147,6 +1562,10 @@ parse_args() {
         JSON_FLAG=1
         shift
         ;;
+      --refresh)
+        REFRESH_SPEED=1
+        shift
+        ;;
       --)
         shift
         WRAP_ARGS=("$@")
@@ -1155,10 +1574,10 @@ parse_args() {
       -h | --help)
         cat <<'EOF' >&2
 Usage:
-  download-limit.sh status [--json]
-  download-limit.sh run --limit auto|N [--fallback N]
+  download-limit.sh status [--json] [--refresh]
+  download-limit.sh run --limit auto|N [--fallback N] [--refresh]
   download-limit.sh clear
-  download-limit.sh wrap --limit auto|N -- <command...>
+  download-limit.sh wrap --limit auto|N [--refresh] -- <command...>
 EOF
         exit 0
         ;;

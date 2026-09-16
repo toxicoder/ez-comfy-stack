@@ -44,7 +44,7 @@ First install is still [Getting Started](../getting-started.md). Symptom tables:
 ./scripts/manage.sh start   # type: yes
 ```
 
-`--limit` follows `${DOWNLOAD_LIMIT}` (default `auto` = 85% of speedtest when HTB works). Wrap **always clears on exit**.
+`--limit` follows `${DOWNLOAD_LIMIT}` (default `auto` = 85% of a duration HTTP / speedtest sample, cached 24h on the host, when HTB works). Wrap **always clears on exit**.
 
 ---
 

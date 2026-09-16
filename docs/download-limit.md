@@ -1,6 +1,6 @@
 ---
 title: Download Limit
-description: Throttle model downloads with wondershaper; auto mode uses speedtest and caps at 85% of line rate.
+description: Throttle model downloads with wondershaper; auto mode measures line rate (cached 24h) and caps at 85%.
 tags: [bandwidth, wondershaper, speedtest, safety]
 ---
 
@@ -9,9 +9,9 @@ tags: [bandwidth, wondershaper, speedtest, safety]
 **What's on this page**
 
 - Why bandwidth limits matter on remote Sparks
-- CLI usage (`status`, `run`, `clear`, `wrap`)
+- CLI usage (`status`, `run`, `clear`, `wrap`, `--refresh`)
 - Manual Mbps cap (`download-models --limit N`) vs auto
-- Auto mode (85% of speedtest) and wrap lifecycle
+- Auto mode (85% of a duration HTTP / speedtest sample, cached 24h) and wrap lifecycle
 
 **What this enables**
 
@@ -43,19 +43,19 @@ flowchart LR
 
 | Command | Purpose |
 | --- | --- |
-| `status [--json]` | Report interface + current limit |
+| `status [--json] [--refresh]` | Report interface + speed cache; `--refresh` remasures |
 | `run --limit 50` | Apply a fixed Mbps cap |
-| `run --limit auto` | Measure line rate, apply 85% |
-| `clear` | Remove wondershaper limit |
+| `run --limit auto` | Measure line rate (or cache), apply 85% |
+| `clear` | Remove wondershaper limit (does **not** drop the speed cache) |
 | `wrap --limit auto` or `--limit N` | Apply → run command → **always clear on exit** |
 | `manage.sh download-models --limit N` | Same wrap; **N** is a standing Mbps cap for this download |
 
 ```bash
-./scripts/utilities/download-limit.sh status [--json]
+./scripts/utilities/download-limit.sh status [--json] [--refresh]
 ./scripts/utilities/download-limit.sh run --limit 50
-./scripts/utilities/download-limit.sh run --limit auto
+./scripts/utilities/download-limit.sh run --limit auto [--refresh]
 ./scripts/utilities/download-limit.sh clear
-./scripts/utilities/download-limit.sh wrap --limit auto -- <command...>
+./scripts/utilities/download-limit.sh wrap --limit auto [--refresh] -- <command...>
 ```
 
 Via manage:
@@ -84,30 +84,35 @@ flowchart TB
 
 When you pass `--limit auto`:
 
-1. **Clear** any existing bandwidth limits on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew the result
-2. **Install `speedtest-cli`** hard (`pip --user`, `--break-system-packages`, `pipx`, `apt`/`python3-speedtest-cli` with `sudo -n`)
-3. Try `speedtest-cli --simple`
-4. Else Ookla `speedtest`
-5. Else **HTTP probe** multi-URL (Cloudflare, OVH, GitHub, …) via `curl -4`
-6. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when the sample is **trusted**
-7. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download
+1. **Cache** — reuse a host-local measurement from the last 24h (`${XDG_CACHE_HOME:-~/.cache}/ez-comfy/download-limit-speed.json`). Not stored on `MODELS_DIR` (independent Sparks share that). `--refresh` or `DOWNLOAD_LIMIT_CACHE_TTL_SEC=0` skips the cache.
+2. **Clear** any existing bandwidth limits on the default-route interface (wondershaper + best-effort `tc`) so residual caps do not skew a new sample
+3. **Duration HTTP probe** first: large Cloudflare `__down?bytes=` payload (default 250 MB) with `--max-time` ~12s. curl **timeout (exit 28) is a valid sample** when ≥1 MB arrived — a short completed file under-reads gigabit (TCP slow start)
+4. Else Ookla `speedtest` JSON if on PATH (take **max** vs HTTP when both succeed)
+5. Else install and try `speedtest-cli --simple` (often under-reads gigabit; last resort)
+6. Apply `floor(0.85 × measured)` (minimum 1 Mbps) when the sample is **trusted**, and **write the cache**
+7. If all probes fail: **do not** use idle NIC RX as line rate — use default `max-workers=4` and start download. Fallback `DOWNLOAD_LIMIT_FALLBACK` is **not** cached
 
 ++ctrl+c++ kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).
 
-Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`.
+Override HTTP probe: `SPEEDTEST_HTTP_URL`, `SPEEDTEST_HTTP_BYTES`, `SPEEDTEST_HTTP_MAX_TIME`.
 
 ```mermaid
 flowchart TB
-  A["--limit auto"] --> B["speedtest-cli"]
-  B --> C{"ok?"}
-  C -->|no| D["Ookla speedtest"]
-  D --> E{"ok?"}
-  E -->|no| F["HTTP curl probe<br/>Cloudflare __down"]
+  A["--limit auto"] --> Cache{"24h host cache?"}
+  Cache -->|hit| H["limit = floor 0.85 × Mbps"]
+  Cache -->|miss or --refresh| F["Duration HTTP probe<br/>large payload + max-time"]
   F --> G{"ok?"}
-  C -->|yes| H["limit = floor 0.85 × Mbps"]
+  G -->|yes| Ook{"Ookla on PATH?"}
+  Ook -->|yes| Mx["max HTTP, Ookla"]
+  Ook -->|no| H
+  Mx --> H
+  G -->|no| D["Ookla speedtest"]
+  D --> E{"ok?"}
   E -->|yes| H
-  G -->|yes| H
-  G -->|no| I["DOWNLOAD_LIMIT_FALLBACK"]
+  E -->|no| B["speedtest-cli last resort"]
+  B --> C{"ok?"}
+  C -->|yes| H
+  C -->|no| I["DOWNLOAD_LIMIT_FALLBACK<br/>not cached"]
   H --> J{"kernel HTB?"}
   I --> J
   J -->|yes| K["wondershaper Mbps cap"]

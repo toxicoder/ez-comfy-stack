@@ -223,6 +223,10 @@ exit 0
   parse_args run --limit 40 --fallback 10
   [ "${LIMIT_SPEC}" = "40" ]
   [ "${FALLBACK_MBPS}" = "10" ]
+  parse_args wrap --limit auto --refresh -- true
+  [ "${LIMIT_SPEC}" = "auto" ]
+  [ "${REFRESH_SPEED}" -eq 1 ]
+  REFRESH_SPEED=0
 
   run cmd_status
   [ "${status}" -eq 0 ]
@@ -246,7 +250,7 @@ exit 0
   unset LAB_MOCK_SPEEDTEST_MBPS
   export LAB_MOCK_HTTP_SPEED_MBPS=33
   rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
-  run bash "${DLS}" run --limit auto --fallback 33
+  run bash "${DLS}" run --limit auto --fallback 33 --refresh
   [ "${status}" -eq 0 ]
   unset LAB_MOCK_HTTP_SPEED_MBPS
 }
@@ -378,4 +382,227 @@ exit 0
   LIMIT_SPEC=50
   run cmd_run
   [ "${status}" -ne 0 ]
+}
+
+@test "parse_curl_speed_sample accepts timeout and rejects tiny bodies" {
+  run parse_curl_speed_sample "200 12500000 15000000 12.0" 28
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "100" ]
+  run parse_curl_speed_sample "200 12500000 15000000 8.0" 0
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "100" ]
+  run parse_curl_speed_sample "200 12500000 500 0.1" 0
+  [ "${status}" -ne 0 ]
+  run parse_curl_speed_sample "404 12500000 15000000 12.0" 0
+  [ "${status}" -ne 0 ]
+  run parse_curl_speed_sample "200 12500000 15000000 12.0" 7
+  [ "${status}" -ne 0 ]
+  run parse_curl_speed_sample "200 notanumber 15000000 12.0" 0
+  [ "${status}" -ne 0 ]
+}
+
+@test "http_probe_url and probe_http_download_mbps duration curl mock" {
+  unset LAB_MOCK_HTTP_SPEED_MBPS
+  export LAB_HERMETIC=0
+  export LAB_NO_NETWORK=0
+  install_mock_bin curl '
+echo "200 25000000 12000000 12.0"
+exit 28
+'
+  run parse_curl_speed_sample "200 25000000 12000000 12.0" 28
+  [ "${output}" = "200" ]
+  run http_probe_url "https://speed.cloudflare.com/__down?bytes=250000000" 1
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"200"* ]]
+  run probe_http_download_mbps
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "200" ]
+
+  install_mock_bin curl '
+echo "200 12500000 500 0.05"
+exit 0
+'
+  run probe_http_download_mbps
+  [ "${status}" -ne 0 ]
+}
+
+@test "run_speedtest_mbps prefers HTTP mock over lower sivel mock" {
+  rm -f "$(speed_cache_path)"
+  export LAB_MOCK_HTTP_SPEED_MBPS=200
+  export LAB_MOCK_SPEEDTEST_MBPS=40
+  run run_speedtest_mbps
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "200" ]
+}
+
+@test "run_speedtest_mbps takes max of HTTP curl and Ookla" {
+  rm -f "$(speed_cache_path)"
+  unset LAB_MOCK_HTTP_SPEED_MBPS
+  unset LAB_MOCK_SPEEDTEST_MBPS
+  export LAB_HERMETIC=0
+  export LAB_NO_NETWORK=0
+  install_mock_bin curl '
+echo "200 6250000 8000000 12.0"
+exit 28
+'
+  install_mock_bin speedtest '
+if [[ " $* " == *" -f json"* || "$*" == *json* ]]; then
+  echo "{\"download\":{\"bandwidth\":25000000}}"
+  exit 0
+fi
+echo "Download: 200 Mbps"
+exit 0
+'
+  rm -f "${TEST_TMP_DIR}/bin/speedtest-cli"
+  run run_speedtest_mbps
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "200" ]
+}
+
+@test "speed cache helpers ttl path write read fresh refresh and corrupt" {
+  run speed_cache_ttl_sec
+  [ "${output}" = "86400" ]
+  DOWNLOAD_LIMIT_CACHE_TTL_SEC=0
+  run speed_cache_ttl_sec
+  [ "${output}" = "0" ]
+  DOWNLOAD_LIMIT_CACHE_TTL_SEC=bogus
+  run speed_cache_ttl_sec
+  [ "${output}" = "86400" ]
+  unset DOWNLOAD_LIMIT_CACHE_TTL_SEC
+
+  run speed_cache_path
+  [[ "${output}" == *"/download-limit-speed.json" ]]
+
+  run write_speed_cache 940 http eth0
+  [ "${status}" -eq 0 ]
+  [ -f "$(speed_cache_path)" ]
+  run read_speed_cache
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == 940* ]]
+  run speed_cache_fresh eth0
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "940" ]
+  [[ "${output}" == *"cached"* || "${output}" == *"940"* ]]
+
+  run speed_cache_fresh eth1
+  [ "${status}" -ne 0 ]
+
+  REFRESH_SPEED=1
+  run speed_cache_fresh eth0
+  [ "${status}" -ne 0 ]
+  REFRESH_SPEED=0
+
+  DOWNLOAD_LIMIT_CACHE_TTL_SEC=0
+  run speed_cache_fresh eth0
+  [ "${status}" -ne 0 ]
+  rm -f "$(speed_cache_path)"
+  run write_speed_cache 50 http eth0
+  [ ! -f "$(speed_cache_path)" ]
+  unset DOWNLOAD_LIMIT_CACHE_TTL_SEC
+
+  run write_speed_cache 100 http eth0
+  python3 -c '
+import json, time
+p = "'"${DOWNLOAD_LIMIT_CACHE_DIR}"'/download-limit-speed.json"
+with open(p, encoding="utf-8") as fh:
+    data = json.load(fh)
+data["unix_ts"] = int(time.time()) - 90000
+with open(p, "w", encoding="utf-8") as fh:
+    json.dump(data, fh)
+'
+  run speed_cache_fresh eth0
+  [ "${status}" -ne 0 ]
+
+  echo "not-json" >"$(speed_cache_path)"
+  run read_speed_cache
+  [ "${status}" -ne 0 ]
+  run speed_cache_fresh eth0
+  [ "${status}" -ne 0 ]
+
+  run write_speed_cache 0 http eth0
+  [ "${status}" -eq 0 ]
+
+  run speed_cache_json_object
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"ttl_sec"* ]]
+}
+
+@test "run_speedtest_mbps uses 24h cache and --refresh remeasures" {
+  rm -f "$(speed_cache_path)"
+  export LAB_MOCK_HTTP_SPEED_MBPS=100
+  unset LAB_MOCK_SPEEDTEST_MBPS
+  run run_speedtest_mbps
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "100" ]
+  [ -f "$(speed_cache_path)" ]
+
+  export LAB_MOCK_HTTP_SPEED_MBPS=999
+  run run_speedtest_mbps
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "100" ]
+  [[ "${output}" == *"cached"* ]]
+
+  REFRESH_SPEED=1
+  run run_speedtest_mbps
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "999" ]
+  REFRESH_SPEED=0
+}
+
+@test "failed speedtest does not write cache fallback" {
+  rm -f "$(speed_cache_path)"
+  export LAB_FORCE_SPEEDTEST_FAIL=1
+  FALLBACK_MBPS=50
+  run resolve_limit_mbps auto
+  [ "${status}" -eq 0 ]
+  mbps="$(printf '%s\n' "${output}" | awk 'NF{line=$0} END{print line}')"
+  [ "${mbps}" = "50" ]
+  [ ! -f "$(speed_cache_path)" ]
+  unset LAB_FORCE_SPEEDTEST_FAIL
+}
+
+@test "cmd_status json includes speed_cache and --refresh remeasures" {
+  rm -f "$(speed_cache_path)"
+  export LAB_MOCK_HTTP_SPEED_MBPS=80
+  JSON_FLAG=1
+  run cmd_status
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"speed_cache"* ]]
+  [[ "${output}" == *"ttl_sec"* ]]
+
+  run write_speed_cache 80 http eth0
+  run cmd_status
+  [[ "${output}" == *"80"* ]]
+
+  JSON_FLAG=0
+  run cmd_status
+  [[ "${output}" == *"cached speed"* || "${output}" == *"speed cache"* ]]
+
+  REFRESH_SPEED=1
+  export LAB_MOCK_HTTP_SPEED_MBPS=120
+  JSON_FLAG=1
+  run cmd_status
+  [ "${status}" -eq 0 ]
+  REFRESH_SPEED=0
+}
+
+@test "ookla_download_mbps and speedtest_cli_download_mbps parse mocks" {
+  install_mock_bin speedtest '
+echo "{\"download\":{\"bandwidth\":12500000}}"
+exit 0
+'
+  run ookla_download_mbps
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "100" ]
+
+  unset LAB_MOCK_SPEEDTEST_MBPS
+  install_speedtest_mock 77
+  run speedtest_cli_download_mbps
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "77" ]
 }
