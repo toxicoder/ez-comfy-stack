@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Throttle model downloads with wondershaper; auto mode uses speedtest and caps at 85% of line rate.">
+        <meta name="description" content="Throttle model downloads with wondershaper; auto mode measures line rate (cached 24h) and caps at 85%.">
       
       
       
@@ -2844,7 +2844,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 01:43 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T01:43:30+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 02:10 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T02:10:54+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -2855,9 +2855,9 @@
 
 <h1 id="download-limit">Download Limit<a class="headerlink" href="#download-limit" title="Permanent link">&para;</a></h1><div class="ez-page-brief" role="region" aria-label="Page overview"><div class="ez-page-brief__col ez-page-brief__on-page"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"></path></svg><span class="ez-page-brief__label">What's on this page</span></p><ul>
 <li>Why bandwidth limits matter on remote Sparks</li>
-<li>CLI usage (<code>status</code>, <code>run</code>, <code>clear</code>, <code>wrap</code>)</li>
+<li>CLI usage (<code>status</code>, <code>run</code>, <code>clear</code>, <code>wrap</code>, <code>--refresh</code>)</li>
 <li>Manual Mbps cap (<code>download-models --limit N</code>) vs auto</li>
-<li>Auto mode (85% of speedtest) and wrap lifecycle</li>
+<li>Auto mode (85% of a duration HTTP / speedtest sample, cached 24h) and wrap lifecycle</li>
 </ul></div><div class="ez-page-brief__col ez-page-brief__enables"><p class="ez-page-brief__title"><svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"></path></svg><span class="ez-page-brief__label">What this enables</span></p><ul>
 <li>Downloading multi‑GB <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ltx" data-href="../glossary/#ltx" title="Joint audio/video model (Community License, gated, $10M company-revenue cap).">LTX</span> weights without saturating the uplink and freezing SSH</li>
 </ul></div></div>
@@ -2885,8 +2885,8 @@
 </thead>
 <tbody>
 <tr>
-<td><code>status [--json]</code></td>
-<td>Report interface + current limit</td>
+<td><code>status [--json] [--refresh]</code></td>
+<td>Report interface + speed cache; <code>--refresh</code> remasures</td>
 </tr>
 <tr>
 <td><code>run --limit 50</code></td>
@@ -2894,11 +2894,11 @@
 </tr>
 <tr>
 <td><code>run --limit auto</code></td>
-<td>Measure line rate, apply 85%</td>
+<td>Measure line rate (or cache), apply 85%</td>
 </tr>
 <tr>
 <td><code>clear</code></td>
-<td>Remove wondershaper limit</td>
+<td>Remove wondershaper limit (does <strong>not</strong> drop the speed cache)</td>
 </tr>
 <tr>
 <td><code>wrap --limit auto</code> or <code>--limit N</code></td>
@@ -2910,11 +2910,11 @@
 </tr>
 </tbody>
 </table>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--refresh<span class="o">]</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>run<span class="w"> </span>--limit<span class="w"> </span><span class="m">50</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>run<span class="w"> </span>--limit<span class="w"> </span>auto
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>run<span class="w"> </span>--limit<span class="w"> </span>auto<span class="w"> </span><span class="o">[</span>--refresh<span class="o">]</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>clear
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>wrap<span class="w"> </span>--limit<span class="w"> </span>auto<span class="w"> </span>--<span class="w"> </span>&lt;command...&gt;
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>./scripts/utilities/download-limit.sh<span class="w"> </span>wrap<span class="w"> </span>--limit<span class="w"> </span>auto<span class="w"> </span><span class="o">[</span>--refresh<span class="o">]</span><span class="w"> </span>--<span class="w"> </span>&lt;command...&gt;
 </span></code></pre></div>
 <p>Via manage:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./scripts/manage.sh<span class="w"> </span>download-limit<span class="w"> </span>clear
@@ -2933,27 +2933,32 @@
 <h2 id="auto-mode-measure-real-mbps">Auto mode (measure real Mbps)<a class="headerlink" href="#auto-mode-measure-real-mbps" title="Permanent link">&para;</a></h2>
 <p>When you pass <code>--limit auto</code>:</p>
 <ol>
-<li><strong>Clear</strong> any existing bandwidth limits on the default-route interface (wondershaper + best-effort <code>tc</code>) so residual caps do not skew the result</li>
-<li><strong>Install <code>speedtest-cli</code></strong> hard (<code>pip --user</code>, <code>--break-system-packages</code>, <code>pipx</code>, <code>apt</code>/<code>python3-speedtest-cli</code> with <code>sudo -n</code>)</li>
-<li>Try <code>speedtest-cli --simple</code></li>
-<li>Else Ookla <code>speedtest</code></li>
-<li>Else <strong>HTTP probe</strong> multi-URL (Cloudflare, OVH, GitHub, …) via <code>curl -4</code></li>
-<li>Apply <code>floor(0.85 × measured)</code> (minimum 1 Mbps) when the sample is <strong>trusted</strong></li>
-<li>If all probes fail: <strong>do not</strong> use idle NIC RX as line rate — use default <code>max-workers=4</code> and start download</li>
+<li><strong>Cache</strong> — reuse a host-local measurement from the last 24h (<code>${XDG_CACHE_HOME:-~/.cache}/ez-comfy/download-limit-speed.json</code>). Not stored on <code>MODELS_DIR</code> (independent Sparks share that). <code>--refresh</code> or <code>DOWNLOAD_LIMIT_CACHE_TTL_SEC=0</code> skips the cache.</li>
+<li><strong>Clear</strong> any existing bandwidth limits on the default-route interface (wondershaper + best-effort <code>tc</code>) so residual caps do not skew a new sample</li>
+<li><strong>Duration HTTP probe</strong> first: large Cloudflare <code>__down?bytes=</code> payload (default 250 MB) with <code>--max-time</code> ~12s. curl <strong>timeout (exit 28) is a valid sample</strong> when ≥1 MB arrived — a short completed file under-reads gigabit (TCP slow start)</li>
+<li>Else Ookla <code>speedtest</code> JSON if on PATH (take <strong>max</strong> vs HTTP when both succeed)</li>
+<li>Else install and try <code>speedtest-cli --simple</code> (often under-reads gigabit; last resort)</li>
+<li>Apply <code>floor(0.85 × measured)</code> (minimum 1 Mbps) when the sample is <strong>trusted</strong>, and <strong>write the cache</strong></li>
+<li>If all probes fail: <strong>do not</strong> use idle NIC RX as line rate — use default <code>max-workers=4</code> and start download. Fallback <code>DOWNLOAD_LIMIT_FALLBACK</code> is <strong>not</strong> cached</li>
 </ol>
 <p><span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span> kills the download process group, progress heartbeat, and HTTP probes (INT→TERM→KILL).</p>
-<p>Override HTTP probe: <code>SPEEDTEST_HTTP_URL</code>, <code>SPEEDTEST_HTTP_BYTES</code>.</p>
+<p>Override HTTP probe: <code>SPEEDTEST_HTTP_URL</code>, <code>SPEEDTEST_HTTP_BYTES</code>, <code>SPEEDTEST_HTTP_MAX_TIME</code>.</p>
 <pre class="mermaid"><code>flowchart TB
-  A["--limit auto"] --&gt; B["speedtest-cli"]
-  B --&gt; C{"ok?"}
-  C --&gt;|no| D["Ookla speedtest"]
-  D --&gt; E{"ok?"}
-  E --&gt;|no| F["HTTP curl probe&lt;br/&gt;Cloudflare __down"]
+  A["--limit auto"] --&gt; Cache{"24h host cache?"}
+  Cache --&gt;|hit| H["limit = floor 0.85 × Mbps"]
+  Cache --&gt;|miss or --refresh| F["Duration HTTP probe&lt;br/&gt;large payload + max-time"]
   F --&gt; G{"ok?"}
-  C --&gt;|yes| H["limit = floor 0.85 × Mbps"]
+  G --&gt;|yes| Ook{"Ookla on PATH?"}
+  Ook --&gt;|yes| Mx["max HTTP, Ookla"]
+  Ook --&gt;|no| H
+  Mx --&gt; H
+  G --&gt;|no| D["Ookla speedtest"]
+  D --&gt; E{"ok?"}
   E --&gt;|yes| H
-  G --&gt;|yes| H
-  G --&gt;|no| I["DOWNLOAD_LIMIT_FALLBACK"]
+  E --&gt;|no| B["speedtest-cli last resort"]
+  B --&gt; C{"ok?"}
+  C --&gt;|yes| H
+  C --&gt;|no| I["DOWNLOAD_LIMIT_FALLBACK&lt;br/&gt;not cached"]
   H --&gt; J{"kernel HTB?"}
   I --&gt; J
   J --&gt;|yes| K["wondershaper Mbps cap"]

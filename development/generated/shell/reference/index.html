@@ -6532,7 +6532,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 01:43 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T01:43:30+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 02:10 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T02:10:54+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -7365,8 +7365,10 @@ Not download-models. Unload LTX first.</p>
 <p>Limit host download bandwidth so multi‑GB model pulls cannot starve remote SSH.</p>
 <p>Purpose:
   Apply kernel traffic shaping via <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="htb" data-href="../../../glossary/#htb" title="Kernel traffic shaping used by download-limit. Often missing on Spark; then the wrap soft-fails.">wondershaper</span> on the default-route interface.
-  Supports fixed Mbps caps and an <strong>auto</strong> mode that runs a speedtest and applies
-  floor(0.85 × measured_download_mbps). Apply is verified via tc qdisc (or mocks).
+  Supports fixed Mbps caps and an <strong>auto</strong> mode that measures download Mbps
+  (duration HTTP probe first, then Ookla, then speedtest-cli) and applies
+  floor(0.85 × measured_download_mbps). Auto measurements are cached 24h on the
+  host (not MODELS_DIR). Apply is verified via tc qdisc (or mocks).
   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
   (warn + continue unthrottled) unless DOWNLOAD_LIMIT_REQUIRE=1.</p>
@@ -7375,10 +7377,10 @@ Not download-models. Unload LTX first.</p>
   download-models.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Usage:
 </span></code></pre></div>
-<p>download-limit.sh status [--json]
-  download-limit.sh run --limit auto|N [--fallback N]
+<p>download-limit.sh status [--json] [--refresh]
+  download-limit.sh run --limit auto|N [--fallback N] [--refresh]
   download-limit.sh clear
-  download-limit.sh wrap --limit auto|N -- <command...></p>
+  download-limit.sh wrap --limit auto|N [--refresh] -- <command...></p>
 <p>Requirements:</p>
 <ul>
 <li>
@@ -7396,7 +7398,8 @@ Not download-models. Unload LTX first.</p>
 </ul>
 <p>Test hooks:
   LAB_MOCK_IFACE, LAB_MOCK_WONDERSHAPER, LAB_MOCK_SPEEDTEST_MBPS,
-  LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO, DOWNLOAD_LIMIT_REQUIRE</p>
+  LAB_MOCK_HTTP_SPEED_MBPS, LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO,
+  DOWNLOAD_LIMIT_REQUIRE, DOWNLOAD_LIMIT_CACHE_DIR, DOWNLOAD_LIMIT_CACHE_TTL_SEC</p>
 <p>Units:
   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.
   Wondershaper rates are clamped to a legal HTB kbps range.</p>
