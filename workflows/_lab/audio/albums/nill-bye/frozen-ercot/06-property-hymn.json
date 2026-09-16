@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nsteel strings\nNill Bye appraising\n\n[verse]\nNo income tax is the state hymn\nThe county sends the real invoice\nSchool M&O on the homestead\nSeniors drowning in the appraisal jump\nAbbott tours a fifty percent cut\nTwenty-twenty-six, Lubbock microphone\nNill Bye appraising the old sessions\nCompression talks, then a smaller trim\nYou sold a hymn, delivered a coupon\nRenters get none of the choir\nBusiness personal, still a maze\nYour miracle is a levy with a smile\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nGina's race made affordability the issue\nSo you retuned the property hymn\nAbbott found religion in the tax-roll\nAfter years of the same complaint\nNill Bye checking the effective rate\nTexas ranks high on the property bite\nYou point at California like a shield\nWhile Austin ISD eats the raise\nA fifty percent pitch is a poster\nA certified roll is a kitchen table\nI want the levy cut in code\nYou want it cut in a stump speech\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nLocal governments catch the blame\nYou capped them, then underfunded schools\nAbbott calls it discipline\nDistricts call it a squeeze play\nNill Bye following the recapture\nRobin Hood with a campaign overlay\nThe hymn never mentions the appraisal district\nOr the freeze that skips the renter\nOil pays a severance story\nHouseholds pay the monthly truth\nYou brand the absence of income tax\nAnd hide the presence of the levy\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nTwenty-twenty-six affordability tour\nHealth costs, tuition, the homestead too\nNill Bye filing the property hymn\nAbbott still conducting the choir\nA cut you can campaign is not a cut you passed\nUntil the roll actually moves\nI score the levy, you score the primary\nNo income tax is a bumper sticker\nThe appraisal is the body of the song\nYou keep remixing the chorus\nBring a statute, drop the hymnal\nThe kitchen table already knows the key\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[outro]\nstrings mute\nlevy stays\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/06-property-hymn"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "folk, acoustic guitar, shaker, room mic, male rap vocals, dry booth, no autotune, 82 bpm",
         "[intro]\nsteel strings\nNill Bye appraising\n\n[verse]\nNo income tax is the state hymn\nThe county sends the real invoice\nSchool M&O on the homestead\nSeniors drowning in the appraisal jump\nAbbott tours a fifty percent cut\nTwenty-twenty-six, Lubbock microphone\nNill Bye appraising the old sessions\nCompression talks, then a smaller trim\nYou sold a hymn, delivered a coupon\nRenters get none of the choir\nBusiness personal, still a maze\nYour miracle is a levy with a smile\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nGina's race made affordability the issue\nSo you retuned the property hymn\nAbbott found religion in the tax-roll\nAfter years of the same complaint\nNill Bye checking the effective rate\nTexas ranks high on the property bite\nYou point at California like a shield\nWhile Austin ISD eats the raise\nA fifty percent pitch is a poster\nA certified roll is a kitchen table\nI want the levy cut in code\nYou want it cut in a stump speech\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nLocal governments catch the blame\nYou capped them, then underfunded schools\nAbbott calls it discipline\nDistricts call it a squeeze play\nNill Bye following the recapture\nRobin Hood with a campaign overlay\nThe hymn never mentions the appraisal district\nOr the freeze that skips the renter\nOil pays a severance story\nHouseholds pay the monthly truth\nYou brand the absence of income tax\nAnd hide the presence of the levy\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[verse]\nTwenty-twenty-six affordability tour\nHealth costs, tuition, the homestead too\nNill Bye filing the property hymn\nAbbott still conducting the choir\nA cut you can campaign is not a cut you passed\nUntil the roll actually moves\nI score the levy, you score the primary\nNo income tax is a bumper sticker\nThe appraisal is the body of the song\nYou keep remixing the chorus\nBring a statute, drop the hymnal\nThe kitchen table already knows the key\n\n[chorus]\nProperty hymn\nNill Bye on the appraisal\nAbbott sings no income tax\nThe homestead still gets the bill\nFifty percent in a campaign key\nYour relief is a verse you defer\n\n[outro]\nstrings mute\nlevy stays\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/06-property-hymn"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

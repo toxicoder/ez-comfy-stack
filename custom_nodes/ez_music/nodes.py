@@ -63,6 +63,13 @@ def _log(message: str) -> None:
     print(f"[ez_music] {message}", file=sys.stderr)
 
 
+def _sample_combo() -> tuple:
+    _ensure_lab_custom_nodes_path()
+    from ez_prompt_enhance.samples import CUSTOM, sample_labels
+
+    return (sample_labels("rap_draft"), {"default": CUSTOM})
+
+
 def _ensure_lab_custom_nodes_path() -> None:
     """Make sibling ez_* packs importable under ComfyUI 0.34+ load_custom_node.
 
@@ -113,6 +120,7 @@ class EZRapLyrics:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": _sample_combo(),
                 "lyrics": (
                     "STRING",
                     {
@@ -125,6 +133,7 @@ class EZRapLyrics:
                     "BOOLEAN",
                     {"default": True, "label_on": "On", "label_off": "Off"},
                 ),
+                "catalog": ("STRING", {"default": "", "multiline": False}),
             },
             "optional": {
                 "context": (
@@ -146,8 +155,16 @@ class EZRapLyrics:
         "invents the vocal timbre from tags plus lyrics."
     )
 
-    def run(self, lyrics, enhance=False, context=""):
-        original = lyrics if isinstance(lyrics, str) else str(lyrics)
+    def run(self, lyrics, enhance=False, context="", sample="custom", catalog=""):
+        _ensure_lab_custom_nodes_path()
+        from ez_prompt_enhance.samples import resolve_prompt
+
+        original = resolve_prompt(
+            catalog,
+            sample,
+            lyrics,
+            node_type="EZRapLyrics",
+        )
         ctx = context if isinstance(context, str) else str(context or "")
         if not _as_bool(enhance):
             return _pack_text(original, "enhance off")

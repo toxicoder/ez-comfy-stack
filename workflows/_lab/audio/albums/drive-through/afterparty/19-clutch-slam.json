@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "tearout, warped bass, trap hats, dirty dubstep, dual-action pedal bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 168 bpm",
         "[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0]\n\n[inst - metal hats roll, growl sustain, grid 577 1]\n\n[drop - harder formant drop, sub crush, chest 808, grid 577 2]\n\n[inst - pedal 808 hold, trap hats roll, grid 577 3]\n\n[drop - full send drop, stacked growl wreck, warped clutch, grid 577 4]\n\n[inst - snare roll, 808 punch, grid 577 5]\n\n[drop - harder stacked drop, chest 808 wreck, tearout warp, grid 577 6]\n\n[drop - full send drop, low rumble wreck, pedal growl, grid 577 7]\n\n[outro - kick holds, hats denser, growl ride, grid 577 8]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/19-clutch-slam"
       ],
       "title": "ez_edm_prompt"
     },

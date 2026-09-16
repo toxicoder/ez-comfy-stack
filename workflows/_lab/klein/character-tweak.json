@@ -463,11 +463,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Keep this character's face, wardrobe, and proportions. Change only what this prompt names.",
         true,
         "edit",
         "Instagram 4:5 character edit",
-        "none"
+        "none",
+        "klein/character-tweak"
       ],
       "title": "Klein Prompt Enhance (edit)"
     },
@@ -756,6 +758,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           12,
           "prompt",

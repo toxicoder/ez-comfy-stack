@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nwah guitar\nfeed loading\nNill Bye ranking\n\n[verse]\nRake chased the algorithm for rank\nWah guitar under a hungry tank\nFeed loading, the metric blinks first\nI want a song, you want a burst\nClavinet chop on a timeline leash\nYour cool is a vector the ranking can teach\nNill Bye ranking what the click cannot\nHe smiles at a token the feed just bought\nTight snare, the scroll owns the hour\nYou traded a voice for a engagement shower\nAlgorithm closed when the metric yawns\nChasing the feed till the person is gone\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nYou tuned a bar to a ranking whim\nThen you panicked when the scroll went dim\nRake with a feed in a clenched-up fist\nNill Bye pulling the clavinet twist\nWah cries out, the token spends\nI want a line, you want a trend's\nTimeline leash on a borrowed groove\nYour metric master will not let you move\nFunk stays tight, the algorithm feeds\nYou chewed a rank till it chewed your needs\nClick for a life, then the ranking shifts\nHe still refreshing the numerical gifts\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nClavinet talks while you chase a vector\nI want a pocket that can actually correct her\nNill Bye logging the owned-out breath\nRake still serving a algorithmic death\nTight snare waiting, the feed is loud-ish\nYou wanted a burst more than a vow, this\nScroll till morning, the metric is king-like\nThat's an algorithm, not a mic-strike\nToken spent, the ranking cools\nI keep the funk, you keep the rules\nWah guitar out, the leash is lapsed\nLeave the feed, the owner is you\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nRake at the timeline with a hungry thumb\nNill Bye posting the metric's sum\nAlgorithm first, the pocket can idle\nYou wanted a rank for a sold-out fate\nClavinet fades, the scroll still begs\nI close the feed, you ask for the dregs\nChasing the metric till it owns the chest\nFunk tells the truth, the ranking is dressed\nTight snare hush, the token fizzles\nLeave the algorithm, keep the tries\nHe still hunting a numerical hug\nI file the feed as a decorative drug\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[outro]\nfeed paused\nmetric owned\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/11-algorithm"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "funk, wah guitar, tight snare, clavinet, male rap vocals, dry booth, no autotune, 114 bpm",
         "[intro]\nwah guitar\nfeed loading\nNill Bye ranking\n\n[verse]\nRake chased the algorithm for rank\nWah guitar under a hungry tank\nFeed loading, the metric blinks first\nI want a song, you want a burst\nClavinet chop on a timeline leash\nYour cool is a vector the ranking can teach\nNill Bye ranking what the click cannot\nHe smiles at a token the feed just bought\nTight snare, the scroll owns the hour\nYou traded a voice for a engagement shower\nAlgorithm closed when the metric yawns\nChasing the feed till the person is gone\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nYou tuned a bar to a ranking whim\nThen you panicked when the scroll went dim\nRake with a feed in a clenched-up fist\nNill Bye pulling the clavinet twist\nWah cries out, the token spends\nI want a line, you want a trend's\nTimeline leash on a borrowed groove\nYour metric master will not let you move\nFunk stays tight, the algorithm feeds\nYou chewed a rank till it chewed your needs\nClick for a life, then the ranking shifts\nHe still refreshing the numerical gifts\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nClavinet talks while you chase a vector\nI want a pocket that can actually correct her\nNill Bye logging the owned-out breath\nRake still serving a algorithmic death\nTight snare waiting, the feed is loud-ish\nYou wanted a burst more than a vow, this\nScroll till morning, the metric is king-like\nThat's an algorithm, not a mic-strike\nToken spent, the ranking cools\nI keep the funk, you keep the rules\nWah guitar out, the leash is lapsed\nLeave the feed, the owner is you\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[verse]\nRake at the timeline with a hungry thumb\nNill Bye posting the metric's sum\nAlgorithm first, the pocket can idle\nYou wanted a rank for a sold-out fate\nClavinet fades, the scroll still begs\nI close the feed, you ask for the dregs\nChasing the metric till it owns the chest\nFunk tells the truth, the ranking is dressed\nTight snare hush, the token fizzles\nLeave the algorithm, keep the tries\nHe still hunting a numerical hug\nI file the feed as a decorative drug\n\n[chorus]\nAlgorithm\nYou chased the feed till it owned the breath\nNill Bye on the clavinet\nRake sold a rank as a death\nFunk-tight snare, the metric is boss\nLeave the scroll or serve the algorithm\n\n[outro]\nfeed paused\nmetric owned\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/11-algorithm"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

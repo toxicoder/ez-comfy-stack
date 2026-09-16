@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy wobble drop, dirty dubstep wreck, sub crush, grid 227 0]\n\n[inst - metal hats roll, wobble sustain, grid 227 1]\n\n[drop - harder growl drop, stacked 808 warp, chest rumble, grid 227 2]\n\n[inst - trap hats denser, 808 punch hold, grid 227 3]\n\n[drop - full send drop, warped wobble wreck, low sub, grid 227 4]\n\n[inst - snare roll, growl hold, grid 227 5]\n\n[drop - harder warped drop, chest 808 wreck, dubstep grind, grid 227 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 227 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/08-overpass"
       ],
       "title": "ez_edm_prompt"
     },

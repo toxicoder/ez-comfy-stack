@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nchopped percussion\nkick drums\nNill Bye reading HB\n\n[verse]\nSeptember first, twenty-twenty-one\nHB nineteen-twenty-seven went live\nAbbott signed permitless carry\nOpen or concealed, no exam, no range-time\nNill Bye reading the penal rewrite\nForty-six-oh-two used to mean a license\nYou deleted the ticket and kept the gun\nClub bounce on a statute that shrugs\nTraining became a vibe\nA class A became a lifestyle\nYou called it constitutional\nIt was a primary gift with a holster\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nEight months later Robb had a legal purchase\nEighteen, two rifles, a store that followed the new weather\nAbbott said more laws would not have mattered\nHe had just subtracted one\nNill Bye mad at a bounce with no brake\nYou cannot loosen the carry and then point at the statute pile\nThe pile is smaller because you took a brick out\nPermitless is the brick\nKick drums on a policy that skipped the qualifier\nWho should carry is a question you retired\nAnyone twenty-one not already banned\nIs a standard you can print on a hat\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nOther states kept the class and the range\nYou kept the presser\nAbbott still sells the holster as liberty\nLiberty without a qualifier is a slogan\nNill Bye filing permitless\nA bounce that does not ask if you can hit a target\nOnly if you can buy one\nThe chopped percussion is the loophole\nYou did not wait for Robb to freeze the statute\nThe bill was already the weather\nAfterward you froze the reform instead\nA special session for doors, not for carry\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nClub-bed bounce, no permit in the mix\nBed squeaks, statute shrugs, kick on one\nNill Bye posting the holster statute\nAbbott still sure a class is tyranny\nA class is a minimum\nYou removed the floor and kept the slogan\nI want a range, you want a rally\nI want a qualifier, you want a vibe\nKeep the bounce, lose the shrug\nNineteen-twenty-seven is the quiet preload\nThe next purchase does not need your blessing\nYou already gave it\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[outro]\nkicks rest\nholster law\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/07-permitless"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry booth, no autotune, 140 bpm",
         "[intro]\nchopped percussion\nkick drums\nNill Bye reading HB\n\n[verse]\nSeptember first, twenty-twenty-one\nHB nineteen-twenty-seven went live\nAbbott signed permitless carry\nOpen or concealed, no exam, no range-time\nNill Bye reading the penal rewrite\nForty-six-oh-two used to mean a license\nYou deleted the ticket and kept the gun\nClub bounce on a statute that shrugs\nTraining became a vibe\nA class A became a lifestyle\nYou called it constitutional\nIt was a primary gift with a holster\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nEight months later Robb had a legal purchase\nEighteen, two rifles, a store that followed the new weather\nAbbott said more laws would not have mattered\nHe had just subtracted one\nNill Bye mad at a bounce with no brake\nYou cannot loosen the carry and then point at the statute pile\nThe pile is smaller because you took a brick out\nPermitless is the brick\nKick drums on a policy that skipped the qualifier\nWho should carry is a question you retired\nAnyone twenty-one not already banned\nIs a standard you can print on a hat\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nOther states kept the class and the range\nYou kept the presser\nAbbott still sells the holster as liberty\nLiberty without a qualifier is a slogan\nNill Bye filing permitless\nA bounce that does not ask if you can hit a target\nOnly if you can buy one\nThe chopped percussion is the loophole\nYou did not wait for Robb to freeze the statute\nThe bill was already the weather\nAfterward you froze the reform instead\nA special session for doors, not for carry\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[verse]\nClub-bed bounce, no permit in the mix\nBed squeaks, statute shrugs, kick on one\nNill Bye posting the holster statute\nAbbott still sure a class is tyranny\nA class is a minimum\nYou removed the floor and kept the slogan\nI want a range, you want a rally\nI want a qualifier, you want a vibe\nKeep the bounce, lose the shrug\nNineteen-twenty-seven is the quiet preload\nThe next purchase does not need your blessing\nYou already gave it\n\n[chorus]\nPermitless\nNill Bye on nineteen-twenty-seven\nAbbott made the license optional\nTwenty-one and a holster, no class\nThen a school with a legal rifle\nYour freedom skipped the range\n\n[outro]\nkicks rest\nholster law\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/07-permitless"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

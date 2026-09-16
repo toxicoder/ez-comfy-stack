@@ -70,7 +70,8 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
-    assert labels[0] == "Prompt"
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Prompt"
     assert "Context" in labels
     assert "Klein prompt" not in labels
     assert "Wan prompt" not in labels
@@ -105,8 +106,9 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
         names.append(entry[1])
-    assert names == ["prompt", "mode", "web_search", "subagents", "history"]
-    assert labels[0] == "Message"
+    assert names == ["sample", "prompt", "mode", "web_search", "subagents", "history"]
+    assert labels[0] == "Sample prompt"
+    assert labels[1] == "Message"
     assert "Web search" in labels
     assert "Subagents" in labels
     assert len(labels) == len(set(labels)), labels
@@ -119,15 +121,21 @@ def test_character_draft_is_t2i_without_reference() -> None:
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     assert "klein/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert enh["widgets_values"][2] == "t2i"
-    assert enh["widgets_values"][1] is True
+    values = enh["widgets_values"]
+    if len(values) >= 7:
+        assert values[3] == "t2i"
+        assert values[2] is True
+    else:
+        assert values[2] == "t2i"
+        assert values[1] is True
     latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][:2] == [1024, 1280]
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_character"
     assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "prompt"
+    assert names[0] == "sample"
+    assert names[1] == "prompt"
     assert "style" in names
     assert "shot" not in names
     _assert_no_overlap(graph)
@@ -137,7 +145,9 @@ def test_character_tweak_wires_reference_latent() -> None:
     graph = _load("klein/character-tweak")
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert enh["widgets_values"][2] == "edit"
+    values = enh["widgets_values"]
+    mode = values[3] if len(values) >= 7 else values[2]
+    assert mode == "edit"
     assert any(n.get("type") == "VAEEncode" for n in graph["nodes"])
     assert any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
@@ -145,7 +155,8 @@ def test_character_tweak_wires_reference_latent() -> None:
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_character_tweak"
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "prompt"
+    assert names[0] == "sample"
+    assert names[1] == "prompt"
     assert "image" in names
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
     by_id = {int(n["id"]): n for n in graph["nodes"]}
@@ -163,12 +174,17 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     for heavy in HEAVY:
         assert heavy not in types, heavy
     primitives = [n for n in graph["nodes"] if n.get("type") == "PrimitiveNode"]
-    assert len(primitives) == 22
+    assert len(primitives) == 21
     titles = [n.get("title") for n in primitives]
-    assert titles[:4] == ["Logline", "Script", "Audio policy", "Score"]
+    assert titles[:3] == ["Script", "Audio policy", "Score"]
+    assert any(n.get("type") == "EZSamplePrompt" for n in graph["nodes"])
     ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
     assert len(ltx) == 18
-    assert all(n["widgets_values"][1] is True for n in ltx)
+    assert all(
+        (n["widgets_values"][2] if len(n["widgets_values"]) >= 8 else n["widgets_values"][1])
+        is True
+        for n in ltx
+    )
     note = graph["extra"]["lab_note"]
     blob = json.dumps(graph)
     for key in YAML_KEYS:
@@ -191,5 +207,8 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
     titles = [n.get("title") for n in primitives]
-    assert labels == titles
+    for title in titles:
+        assert title in labels
+    assert "Sample prompt" in labels
+    assert "Logline" in labels
     _assert_no_overlap(graph)

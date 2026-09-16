@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[spoken word]\nBorder disaster\nMonthly since twenty-twenty-one\nStill wet in twenty-twenty-six\nThe stamp is the government\n\n[intro]\ndry kick\nacid line\nNill Bye inking\n\n[verse]\nEvery month the same ink\nA border emergency that outlived the peak\nAbbott treats a stamp like a standing army\nTDEM paper as a second legislature\nNill Bye inking the calendar\nCOVID taught the forever order\nHis own party tried to clip that habit\nThen the river gave it a second life\nTechno kick on a bureaucratic cheat\nYou cannot lose a vote you never take\nA proclamation skips the bid, skips the sunset\nDemocracy as a rubber date\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nApril twenty-twenty-six, still quietly renewed\nCrossings off the highs, stamp on the highs\nAbbott needs the paper to keep the spend legal-ish\nAnd to loan troopers to someone else's city\nNill Bye mad at a monthly miracle\nAn emergency that can wait for the printer\nIs not an emergency\nIt is a subscription\nAcid line under a seal\nHealth agencies told to track status\nA gang designated by press release\nThe stamp makes any noun a crisis\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nLegislature side-eye, then another check\nBecause arguing with a disaster poll is expensive\nAbbott learned the COVID lesson backward\nKeep the pen, lose the humility\nNill Bye filing the forever seal\nFive years is a regime, not a moment\nYou bypassed contracting in the name of haste\nHaste that had time to become a franchise\nA true disaster ends\nYours files a continuation\nI want a vote, you want a date-seal\nThe kick already knows which one is cheaper\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nHat offbeats on a forever seal\nDry as the process you skipped\nNill Bye posting the proclamation\nAbbott still sure the river justifies the ink\nA river is weather\nA stamp is a choice\nKeep the techno, lose the standing emergency\nFive years in, the disaster is the government\nNot the crossing, not the cartel slide\nThe government that will not put the pen down\nInk dry, power wet\nYour habit has a seal\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[outro]\nkick dry\nseal holds\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/09-disaster-stamp"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autotune, 132 bpm",
         "[spoken word]\nBorder disaster\nMonthly since twenty-twenty-one\nStill wet in twenty-twenty-six\nThe stamp is the government\n\n[intro]\ndry kick\nacid line\nNill Bye inking\n\n[verse]\nEvery month the same ink\nA border emergency that outlived the peak\nAbbott treats a stamp like a standing army\nTDEM paper as a second legislature\nNill Bye inking the calendar\nCOVID taught the forever order\nHis own party tried to clip that habit\nThen the river gave it a second life\nTechno kick on a bureaucratic cheat\nYou cannot lose a vote you never take\nA proclamation skips the bid, skips the sunset\nDemocracy as a rubber date\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nApril twenty-twenty-six, still quietly renewed\nCrossings off the highs, stamp on the highs\nAbbott needs the paper to keep the spend legal-ish\nAnd to loan troopers to someone else's city\nNill Bye mad at a monthly miracle\nAn emergency that can wait for the printer\nIs not an emergency\nIt is a subscription\nAcid line under a seal\nHealth agencies told to track status\nA gang designated by press release\nThe stamp makes any noun a crisis\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nLegislature side-eye, then another check\nBecause arguing with a disaster poll is expensive\nAbbott learned the COVID lesson backward\nKeep the pen, lose the humility\nNill Bye filing the forever seal\nFive years is a regime, not a moment\nYou bypassed contracting in the name of haste\nHaste that had time to become a franchise\nA true disaster ends\nYours files a continuation\nI want a vote, you want a date-seal\nThe kick already knows which one is cheaper\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[verse]\nHat offbeats on a forever seal\nDry as the process you skipped\nNill Bye posting the proclamation\nAbbott still sure the river justifies the ink\nA river is weather\nA stamp is a choice\nKeep the techno, lose the standing emergency\nFive years in, the disaster is the government\nNot the crossing, not the cartel slide\nThe government that will not put the pen down\nInk dry, power wet\nYour habit has a seal\n\n[chorus]\nDisaster stamp\nNill Bye on the proclamation\nAbbott renews a five-year emergency\nContracting rules on pause\nA month is a loophole if you repeat it\nYour disaster is a habit\n\n[outro]\nkick dry\nseal holds\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/09-disaster-stamp"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nflash burst\nblink gone\nboast missing\n\n[verse]\nRake talks big in a white-hot strobe\nBetween the flashes, it's a cheap probe\nDry kick ticking, the boast is a blink\nAcid line humming on a vanishing brink\nI wait in the dark for a solid pulse\nYou only exist in a strobe convulse\nHat offbeats catch a vanishing image\nThat's a king with a disposable voltage\nNill Bye standing when the bulbs go black\nYour whole claim is a strobe attack\nFlash, then nothing, then a cheaper flicker\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nYou sell a win like a lightning shutter\nThen you vanish when the blackout clutters\nTechno pulse, the flex is a phosphor\nAcid drip on a disappearing author\nI want a bar that can hold a minute\nYou want a blink with a rumor in it\nStrobe claim king on a duty cycle\nNo body there, just a white-hot idol\nNill Bye timing the dark between flashes\nRake melting soon as the bulbs go ashes\nPulse looks busy, the substance flickers\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nFlash left, flash right, still no fixture\nYour legend lives in a flicker picture\nI clock the dark, I clock the burst\nI clock a flex that the blackout cursed\nNill Bye filing a blink-and-gone blot\nRake still selling a strobe as plot\nWhite-hot hiss dressed as a brief\nThe bulbs cut out, and so did the grief\nHold the pulse or drop the strobe\nYour claim never sat in the globe\nDark in the middle, the boast looks cheap\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nHouse lights up, the strobe looks weak\nBlink erased, the legend's asleep\nHats go even, the flash gets boxed\nNo substance logged, the boast was foxed\nNill Bye tagging a disposable burst\nRake still calling it a universe\nStrobe king with a rented pulse\nThe body never paid the dues\nFile the blink, keep the dark\nFlash chemistry is a party spark\nBulbs dead, the booth stays level\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[outro]\nflash dead\nblink filed\nboast gone\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/07-strobe-claim"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "techno, dry kick, hat offbeats, acid line, male rap vocals, dry booth, no autotune, 132 bpm",
         "[intro]\nflash burst\nblink gone\nboast missing\n\n[verse]\nRake talks big in a white-hot strobe\nBetween the flashes, it's a cheap probe\nDry kick ticking, the boast is a blink\nAcid line humming on a vanishing brink\nI wait in the dark for a solid pulse\nYou only exist in a strobe convulse\nHat offbeats catch a vanishing image\nThat's a king with a disposable voltage\nNill Bye standing when the bulbs go black\nYour whole claim is a strobe attack\nFlash, then nothing, then a cheaper flicker\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nYou sell a win like a lightning shutter\nThen you vanish when the blackout clutters\nTechno pulse, the flex is a phosphor\nAcid drip on a disappearing author\nI want a bar that can hold a minute\nYou want a blink with a rumor in it\nStrobe claim king on a duty cycle\nNo body there, just a white-hot idol\nNill Bye timing the dark between flashes\nRake melting soon as the bulbs go ashes\nPulse looks busy, the substance flickers\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nFlash left, flash right, still no fixture\nYour legend lives in a flicker picture\nI clock the dark, I clock the burst\nI clock a flex that the blackout cursed\nNill Bye filing a blink-and-gone blot\nRake still selling a strobe as plot\nWhite-hot hiss dressed as a brief\nThe bulbs cut out, and so did the grief\nHold the pulse or drop the strobe\nYour claim never sat in the globe\nDark in the middle, the boast looks cheap\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[verse]\nHouse lights up, the strobe looks weak\nBlink erased, the legend's asleep\nHats go even, the flash gets boxed\nNo substance logged, the boast was foxed\nNill Bye tagging a disposable burst\nRake still calling it a universe\nStrobe king with a rented pulse\nThe body never paid the dues\nFile the blink, keep the dark\nFlash chemistry is a party spark\nBulbs dead, the booth stays level\n\n[chorus]\nStrobe claim\nBlink and the boast is gone\nNill Bye stands in the dark\nRake lives in a flash\nNo substance, only pulse\nYour legend is a blink\n\n[outro]\nflash dead\nblink filed\nboast gone\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/07-strobe-claim"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

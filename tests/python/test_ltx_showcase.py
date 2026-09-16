@@ -90,7 +90,9 @@ def test_showcase_files_prefixes_and_occupancy() -> None:
             assert "preview" in (node.get("title") or "").lower()
         enhance = _by_type(graph, "EZLTXPromptEnhance")
         assert enhance, stem
-        assert enhance[0]["widgets_values"][1] is False
+        values = enhance[0]["widgets_values"]
+        flag = values[2] if len(values) >= 8 else values[1]
+        assert flag is False
 
 
 def test_dialogue_and_multishot_are_t2v_av() -> None:

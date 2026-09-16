@@ -249,14 +249,15 @@ d=json.load(open('${draft}'))
 h=json.load(open('${hero}'))
 def pos(g):
     enh=next(n for n in g['nodes'] if n.get('type')=='EZKleinPromptEnhance')
-    return enh['widgets_values'][0]
+    v=enh['widgets_values']
+    return v[1] if len(v)>=7 else v[0]
 assert pos(d)==pos(h)
 assert 'photoreal still' in pos(d)
 assert 'techno wizard' in pos(d)
 assert 'no logos, no text' not in pos(d)
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 for n in d['nodes'])
 assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][2]==2 for n in d['nodes'])
-assert any(n.get('type')=='EZKleinPromptEnhance' and n['widgets_values'][1] is True for n in d['nodes'])
+assert any(n.get('type')=='EZKleinPromptEnhance' and (n['widgets_values'][2] if len(n['widgets_values'])>=7 else n['widgets_values'][1]) is True for n in d['nodes'])
 "
   [ "${status}" -eq 0 ]
 }
@@ -304,17 +305,21 @@ assert loads[0].get('mode')==0
 look=[n for n in d['nodes'] if n.get('type')=='CLIPTextEncode' and n.get('title')=='Positive']
 assert not look
 enh=next(n for n in d['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is True
-assert enh['widgets_values'][2]=='i2v'
-assert 'dollies' in enh['widgets_values'][0].lower() or 'dolly' in enh['widgets_values'][0].lower() or 'push' in enh['widgets_values'][0].lower()
+ev=enh['widgets_values']
+assert (ev[2] if len(ev)>=7 else ev[1]) is True
+assert (ev[3] if len(ev)>=7 else ev[2])=='i2v'
+et=(ev[1] if len(ev)>=7 else ev[0]).lower()
+assert 'dollies' in et or 'dolly' in et or 'push' in et
 t=json.load(open('${t2v}'))
 tl=[n for n in t['nodes'] if n.get('type')=='LoadImage']
 assert tl and tl[0].get('mode')==4
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert tenh['widgets_values'][2]=='t2v'
-assert 'dollies' in tenh['widgets_values'][0].lower() or 'dolly' in tenh['widgets_values'][0].lower() or 'camera' in tenh['widgets_values'][0].lower()
-assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
-assert 'score' not in tenh['widgets_values'][0].lower()
+tv=tenh['widgets_values']
+tt=(tv[1] if len(tv)>=7 else tv[0])
+assert (tv[3] if len(tv)>=7 else tv[2])=='t2v'
+assert 'dollies' in tt.lower() or 'dolly' in tt.lower() or 'camera' in tt.lower()
+assert 'YouTube 16:9 still:' not in tt
+assert 'score' not in tt.lower()
 "
   [ "${status}" -eq 0 ]
 }
@@ -365,15 +370,18 @@ d=json.load(open('${i2v}'))
 loads=[n for n in d['nodes'] if n.get('type')=='LoadImage']
 assert loads and loads[0]['widgets_values'][0]=='example.png'
 enh=next(n for n in d['nodes'] if n.get('type')=='EZLTXPromptEnhance')
-assert enh['widgets_values'][1] is True
-assert enh['widgets_values'][2]=='i2v'
-text=enh['widgets_values'][0].lower()
+ev=enh['widgets_values']
+assert (ev[2] if len(ev)>=8 else ev[1]) is True
+assert (ev[3] if len(ev)>=8 else ev[2])=='i2v'
+text=(ev[1] if len(ev)>=8 else ev[0]).lower()
 assert 'footsteps' in text or 'wind' in text or 'breeze' in text
 assert 'no score' in text or 'no music' in text
 t=json.load(open('${t2v}'))
 tenh=next(n for n in t['nodes'] if n.get('type')=='EZLTXPromptEnhance')
-assert 'YouTube 16:9 still:' not in tenh['widgets_values'][0]
-assert 'wind' in tenh['widgets_values'][0].lower() or 'traffic' in tenh['widgets_values'][0].lower()
+tv=tenh['widgets_values']
+tt=(tv[1] if len(tv)>=8 else tv[0])
+assert 'YouTube 16:9 still:' not in tt
+assert 'wind' in tt.lower() or 'traffic' in tt.lower()
 "
   [ "${status}" -eq 0 ]
 }
@@ -553,7 +561,7 @@ assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[
 assert any(n.get('type')=='KSampler' and n['widgets_values'][2]==4 and float(n['widgets_values'][3])==1.0 for n in s['nodes'])
 assert any(n.get('type')=='SaveImage' and n['widgets_values'][0]=='ez_still_app' for n in s['nodes'])
 enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
-assert enh['widgets_values'][1] is True
+assert (enh['widgets_values'][2] if len(enh['widgets_values'])>=7 else enh['widgets_values'][1]) is True
 unet=next(n for n in s['nodes'] if n.get('type')=='UNETLoader')
 assert 'swap' in (unet.get('title') or '').lower()
 note=next(n for n in s['nodes'] if n.get('type') in ('Note','MarkdownNote'))
@@ -587,9 +595,10 @@ assert float(wv['frame_rate'])==12
 assert wv['save_output'] is True
 assert 'ez_gif_loop' in str(wv['filename_prefix'])
 enh=next(n for n in g['nodes'] if n.get('type')=='EZWanPromptEnhance')
-assert enh['widgets_values'][1] is False
-assert enh['widgets_values'][2]=='i2v'
-motion=enh['widgets_values'][0].lower()
+ev=enh['widgets_values']
+assert (ev[2] if len(ev)>=7 else ev[1]) is False
+assert (ev[3] if len(ev)>=7 else ev[2])=='i2v'
+motion=(ev[1] if len(ev)>=7 else ev[0]).lower()
 assert 'locked' in motion or 'lock' in motion
 assert 'dolly' not in motion and 'walk' not in motion
 assert 'breeze' in motion or 'curtain' in motion or 'leaves' in motion
@@ -623,10 +632,11 @@ assert all(
 )
 enh=[n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance']
 assert len(enh)==1
-assert enh[0]['widgets_values'][1] is True
-assert enh[0]['widgets_values'][2]=='identity'
-assert enh[0]['widgets_values'][3]=='Instagram 4:5 still'
-ident=enh[0]['widgets_values'][0]
+hv=enh[0]['widgets_values']
+assert (hv[2] if len(hv)>=7 else hv[1]) is True
+assert (hv[3] if len(hv)>=7 else hv[2])=='identity'
+assert (hv[4] if len(hv)>=7 else hv[3])=='Instagram 4:5 still'
+ident=(hv[1] if len(hv)>=7 else hv[0])
 ident_l=ident.lower()
 assert 'warm-glass' in ident_l and 'crown penthouse' in ident_l
 assert 'wraparound terrace' in ident_l and 'three-bay' in ident_l
@@ -686,7 +696,8 @@ assert prefs==[f'ez_dream_house_clay_{i:02d}' for i in range(1,11)]
 loads=sorted((n for n in d['nodes'] if n.get('type')=='LoadImage'), key=lambda n: n['id'])
 assert [n['widgets_values'][0] for n in loads]==[f'ez_house_clay_{i:02d}.png' for i in range(1,11)]
 enh=next(n for n in d['nodes'] if n.get('type')=='EZKleinPromptEnhance')
-assert enh['widgets_values'][2]=='identity'
+hv=enh['widgets_values']
+assert (hv[3] if len(hv)>=7 else hv[2])=='identity'
 note=str(next(n for n in d['nodes'] if n.get('type') in ('Note','MarkdownNote'))['widgets_values'][0]).lower()
 assert 'house-views' in note
 assert 'occupancy' in note

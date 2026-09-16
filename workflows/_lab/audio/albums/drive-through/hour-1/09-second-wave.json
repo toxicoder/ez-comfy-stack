@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, bass growl, chest sub, rave, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
         "[drop - heavy warped drop, hybrid trap growl wreck, 808 stack, grid 241 0]\n\n[inst - trap hats roll, 808 slide, grid 241 1]\n\n[chorus]\ngo\n\n[drop - harder double drop, full send bass warp, formant wreck, grid 241 3]\n\n[drop - full send drop, chest 808 wreck, warped trap, grid 241 4]\n\n[outro - kick holds, trap hats roll, growl ride, grid 241 5]",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/drive-through/hour-1/09-second-wave"
       ],
       "title": "ez_edm_prompt"
     },

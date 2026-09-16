@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "tearout, warped bass, trap hats, bass growl, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
         "[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0]\n\n[inst - metal hats roll, growl sustain, grid 463 1]\n\n[drop - harder formant drop, sub crush, chest 808, grid 463 2]\n\n[inst - trap hats denser, growl hold, grid 463 3]\n\n[drop - full send drop, stacked growl wreck, tearout warp, grid 463 4]\n\n[drop - harder growl drop, low 808 wreck, axle grind, grid 463 5]\n\n[outro - kick holds, hats denser, growl ride, grid 463 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/03-axle-grind"
       ],
       "title": "ez_edm_prompt"
     },

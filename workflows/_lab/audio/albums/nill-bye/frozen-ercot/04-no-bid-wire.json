@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ninvoice hum\nNill Bye auditing\n\n[verse]\nDisaster order every month since twenty-one\nA border emergency that never sunsets\nThat stamp skips the bid table\nBillions move on a proclamation\nAbbott wrote a no-bid wire\nObserver caught three-point-five unbid\nNill Bye auditing the purchase orders\nConcertina, buoys, base camps, buses\nNew Yorker mapped the donor-contractors\nCampaign cash in, state checks out\nWatchdogs said a billion steered to friends\nYour emergency is a procurement trick\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nBorder spend north of eleven billion\nStill asking D.C. to reimburse the spree\nAbbott calls it Washington's failure\nThen he spends like a blank check\nNill Bye circling the no-bid wire\nEagle Pass base in the hundreds of millions\nSeventy thousand rolls of razor\nA wall in pieces that do not meet\nLegislature side-eyed the forever seal\nCOVID taught him the proclamation habit\nSame tool, new enemy, same vendors\nYour disaster is a business model\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nPublic Citizen ran the donor overlay\nExecutives giving, then getting contracts\nAbbott says the border is the mission-text\nThe invoice says the brief is the invoice\nNill Bye matching PACs to purchase-codes\nNo competition, no sunlight, no shame\nA monthly stamp is a loophole with a seal\nFive years in, the emergency is the franchise\nYou skipped the bid to skip the questions\nThen billed the questions as disloyalty\nI want a bid, you want a presser\nThe wire is the method, not the fence\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nTwenty-twenty-six, still stamping disaster\nCrossings down, the contracts up\nNill Bye closing the procurement file\nAbbott still posing on the riverbank\nA buoy is a photo, a bid is a rule\nYou picked the photo every cycle\nEleven billion and a donor web\nThat is not security, that is a tab\nI audit the wire, you audit the polls\nNo-bid is the quiet border barrier\nIt runs through Austin, not the river\nYour emergency never had a sunset\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[outro]\nstamp dry\ninvoice open\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/04-no-bid-wire"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "industrial hip-hop, metal percussion, distorted bass, male rap vocals, dry booth, no autotune, 108 bpm",
         "[intro]\ninvoice hum\nNill Bye auditing\n\n[verse]\nDisaster order every month since twenty-one\nA border emergency that never sunsets\nThat stamp skips the bid table\nBillions move on a proclamation\nAbbott wrote a no-bid wire\nObserver caught three-point-five unbid\nNill Bye auditing the purchase orders\nConcertina, buoys, base camps, buses\nNew Yorker mapped the donor-contractors\nCampaign cash in, state checks out\nWatchdogs said a billion steered to friends\nYour emergency is a procurement trick\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nBorder spend north of eleven billion\nStill asking D.C. to reimburse the spree\nAbbott calls it Washington's failure\nThen he spends like a blank check\nNill Bye circling the no-bid wire\nEagle Pass base in the hundreds of millions\nSeventy thousand rolls of razor\nA wall in pieces that do not meet\nLegislature side-eyed the forever seal\nCOVID taught him the proclamation habit\nSame tool, new enemy, same vendors\nYour disaster is a business model\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nPublic Citizen ran the donor overlay\nExecutives giving, then getting contracts\nAbbott says the border is the mission-text\nThe invoice says the brief is the invoice\nNill Bye matching PACs to purchase-codes\nNo competition, no sunlight, no shame\nA monthly stamp is a loophole with a seal\nFive years in, the emergency is the franchise\nYou skipped the bid to skip the questions\nThen billed the questions as disloyalty\nI want a bid, you want a presser\nThe wire is the method, not the fence\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[verse]\nTwenty-twenty-six, still stamping disaster\nCrossings down, the contracts up\nNill Bye closing the procurement file\nAbbott still posing on the riverbank\nA buoy is a photo, a bid is a rule\nYou picked the photo every cycle\nEleven billion and a donor web\nThat is not security, that is a tab\nI audit the wire, you audit the polls\nNo-bid is the quiet border barrier\nIt runs through Austin, not the river\nYour emergency never had a sunset\n\n[chorus]\nNo-bid wire\nNill Bye on the ledger\nAbbott stamped emergency\nContracts skip the bidding\nThree-point-five in the dark-fund\nYour donors got the wire\n\n[outro]\nstamp dry\ninvoice open\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/04-no-bid-wire"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

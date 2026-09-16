@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nbrushed snare\nsource missing\nNill Bye citing\n\n[verse]\nRake drops a claim with no cite\nNo footnote, just a boast\nI ask the source, you stall\nI ask the issue, you dodge\nMuted horn on a missing cite\nUpright bass on a ghosted site\nNill Bye citing what you hide\nHe sent a screenshot, no DOI\nibid blank, the volume vanished\nYour paper is a dangling pawn\nBring a DOI or step aside\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nYou treat a handle like a cite\nThat's a username, not a write\nYou treat a high like a journal prize\nThat's a vibe with no ISSN\nBrushed drums, the booth stays matte\nI hold the book, you hold a bluff\nNill Bye stamping every byte\nRake riding a ghost cite\nWrite the author, drop the throne\nNo issue year, no cornerstone\nJazz hop truth, the stack is slack\nYour scholarship never came back\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nTrumpet mute on a rumor grid\nYou drew a king with crayon ink\nNill Bye talking from the annex\nRake folds when the cite goes blank\nFeelings filed, the source has left\nLights stay on, the cite is wrong\nBring a footnote, drop the skit\nOne of us sourced, one of us split\nScience will not barter cites\nYour claim arrived late\nBlank field where the volume sits\nThat's a boast with no exhibits\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nRake at the blank-cite gap\nNill Bye posting the footnote law\nNo author listed, no issue year\nJust a screenshot and borrowed cheer\nFootnote missing, it did not persist\nKeep the cite on the working list\nCitation closed, that is the mark\nThe record stands, the thread is vapor\nHe still leaking through a broken yoke\nBlank cite filed, the horn goes dry\nShow the paper or step aside\nJazz hop closed, the rumor died\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[outro]\nsource missing\nblank cite filed\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/01-citation-needed"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth, no autotune, 90 bpm",
         "[intro]\nbrushed snare\nsource missing\nNill Bye citing\n\n[verse]\nRake drops a claim with no cite\nNo footnote, just a boast\nI ask the source, you stall\nI ask the issue, you dodge\nMuted horn on a missing cite\nUpright bass on a ghosted site\nNill Bye citing what you hide\nHe sent a screenshot, no DOI\nibid blank, the volume vanished\nYour paper is a dangling pawn\nBring a DOI or step aside\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nYou treat a handle like a cite\nThat's a username, not a write\nYou treat a high like a journal prize\nThat's a vibe with no ISSN\nBrushed drums, the booth stays matte\nI hold the book, you hold a bluff\nNill Bye stamping every byte\nRake riding a ghost cite\nWrite the author, drop the throne\nNo issue year, no cornerstone\nJazz hop truth, the stack is slack\nYour scholarship never came back\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nTrumpet mute on a rumor grid\nYou drew a king with crayon ink\nNill Bye talking from the annex\nRake folds when the cite goes blank\nFeelings filed, the source has left\nLights stay on, the cite is wrong\nBring a footnote, drop the skit\nOne of us sourced, one of us split\nScience will not barter cites\nYour claim arrived late\nBlank field where the volume sits\nThat's a boast with no exhibits\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[verse]\nRake at the blank-cite gap\nNill Bye posting the footnote law\nNo author listed, no issue year\nJust a screenshot and borrowed cheer\nFootnote missing, it did not persist\nKeep the cite on the working list\nCitation closed, that is the mark\nThe record stands, the thread is vapor\nHe still leaking through a broken yoke\nBlank cite filed, the horn goes dry\nShow the paper or step aside\nJazz hop closed, the rumor died\n\n[chorus]\nCitation needed\nNill Bye stamps the ibid\nRake with a blank cite\nNo DOI in the thread\nJazz hop, the field is bare\nA screenshot is not a cite\n\n[outro]\nsource missing\nblank cite filed\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/01-citation-needed"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

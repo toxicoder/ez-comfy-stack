@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nanalog bass\nclap on two\nNill Bye tracing wires\n\n[verse]\nEighteen races, a TV flood\nHearst ran the tape: turnout spiked where he spent\nAbbott put Yass money on rural incumbents' throats\nMembers who voted no on the ESA\nNill Bye tracing the wires\nJanis Holt over Bailes in a fourteen-point bury\nSeven hundred thousand on one seat\nBorder ads for a school measure\nYou did not argue the classroom\nYou argued loyalty\nElectro house on a purge\nThe clap is the donor\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nPaxton hunted his impeachers the same season\nHe spent none of his own and won less\nAbbott spent and won near four-fifths\nA governor as a PAC with a seal\nNill Bye mad at a purchased caucus\nThe House that said no became a House that said yes\nThat is not persuasion\nThat is a buyout\nRural districts that needed the public campus\nGot a primary instead of a formula\nYou called it the will of the voters\nAfter you bought the weather the voters walked through\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nClap on two and four, analog growl\nA dance-floor for a political funeral\nAbbott still sells it as school choice energy\nEnergy that came from Pennsylvania\nNill Bye filing the Yass primary\nTen million as a rumor until the filings landed\nThen it was a fact with a receipt\nYou cannot un-spend a burial\nA member who would not loot kids' campuses\nIs not a RINO. He is a constituent-listener\nYou made listening a firing offense\nThe electro already wrote the pink slip\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nThe ESA followed the new majority\nAs designed, as purchased\nNill Bye posting the out-of-state cash\nAbbott still sure Texas asked for this\nTexas asked in ads he paid for\nThat is a loop, not a mandate\nI want a caucus, you want a cart\nI want a vote, you want a wire\nKeep the clap, print the donor\nYass should be in the caption every time\nThe primary was not a conversation\nIt was a transaction with a receipt\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[outro]\nclaps stop\nwires show\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/11-yass-primary"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "electro house, analog bass, clap on 2 and 4, male rap vocals, dry booth, no autotune, 128 bpm",
         "[intro]\nanalog bass\nclap on two\nNill Bye tracing wires\n\n[verse]\nEighteen races, a TV flood\nHearst ran the tape: turnout spiked where he spent\nAbbott put Yass money on rural incumbents' throats\nMembers who voted no on the ESA\nNill Bye tracing the wires\nJanis Holt over Bailes in a fourteen-point bury\nSeven hundred thousand on one seat\nBorder ads for a school measure\nYou did not argue the classroom\nYou argued loyalty\nElectro house on a purge\nThe clap is the donor\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nPaxton hunted his impeachers the same season\nHe spent none of his own and won less\nAbbott spent and won near four-fifths\nA governor as a PAC with a seal\nNill Bye mad at a purchased caucus\nThe House that said no became a House that said yes\nThat is not persuasion\nThat is a buyout\nRural districts that needed the public campus\nGot a primary instead of a formula\nYou called it the will of the voters\nAfter you bought the weather the voters walked through\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nClap on two and four, analog growl\nA dance-floor for a political funeral\nAbbott still sells it as school choice energy\nEnergy that came from Pennsylvania\nNill Bye filing the Yass primary\nTen million as a rumor until the filings landed\nThen it was a fact with a receipt\nYou cannot un-spend a burial\nA member who would not loot kids' campuses\nIs not a RINO. He is a constituent-listener\nYou made listening a firing offense\nThe electro already wrote the pink slip\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[verse]\nThe ESA followed the new majority\nAs designed, as purchased\nNill Bye posting the out-of-state cash\nAbbott still sure Texas asked for this\nTexas asked in ads he paid for\nThat is a loop, not a mandate\nI want a caucus, you want a cart\nI want a vote, you want a wire\nKeep the clap, print the donor\nYass should be in the caption every time\nThe primary was not a conversation\nIt was a transaction with a receipt\n\n[chorus]\nYass primary\nNill Bye on the out-of-state cash\nAbbott spent millions beating his own\nRural GOP who would not raid the campus\nA billionaire from Pennsylvania\nYour party is a purchased caucus\n\n[outro]\nclaps stop\nwires show\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/11-yass-primary"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

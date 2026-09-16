@@ -1,0 +1,102 @@
+[
+  {
+    "id": "rooftop-lazy",
+    "label": "Rooftop wizard",
+    "prompt": "A techno wizard on a sunny tropical city rooftop."
+  },
+  {
+    "id": "night-rail",
+    "label": "Night rail",
+    "prompt": "A techno wizard on a night rooftop rail over a tropical bay."
+  },
+  {
+    "id": "rain-terrace",
+    "label": "Rain terrace",
+    "prompt": "A techno wizard under a terrace overhang in tropical rain."
+  },
+  {
+    "id": "workshop",
+    "label": "Workshop",
+    "prompt": "A techno wizard at a teak workbench with glyph rings."
+  },
+  {
+    "id": "harbor-fog",
+    "label": "Harbor fog",
+    "prompt": "A techno wizard on an unmarked foggy pier."
+  },
+  {
+    "id": "ridge-dawn",
+    "label": "Ridge dawn",
+    "prompt": "A techno wizard on a high switchback at first light."
+  },
+  {
+    "id": "greenhouse",
+    "label": "Greenhouse",
+    "prompt": "A techno wizard walking a greenhouse aisle of palms."
+  },
+  {
+    "id": "mesa-dusk",
+    "label": "Mesa dusk",
+    "prompt": "A techno wizard on a desert mesa at dusk."
+  },
+  {
+    "id": "library",
+    "label": "Library",
+    "prompt": "A techno wizard between unmarked wood stacks."
+  },
+  {
+    "id": "platform",
+    "label": "Platform",
+    "prompt": "A techno wizard waiting on an unmarked night platform."
+  },
+  {
+    "id": "cliff",
+    "label": "Cliff",
+    "prompt": "A techno wizard on a coastal cliff path in wind."
+  },
+  {
+    "id": "snow",
+    "label": "Snow ridge",
+    "prompt": "A techno wizard on a snow pine ridge."
+  },
+  {
+    "id": "alley",
+    "label": "Covered alley",
+    "prompt": "A techno wizard in a narrow unmarked alley."
+  },
+  {
+    "id": "ferry",
+    "label": "Ferry",
+    "prompt": "A techno wizard at a ferry rail at dusk."
+  },
+  {
+    "id": "arcade",
+    "label": "Arcade",
+    "prompt": "A techno wizard in an unmarked indoor arcade."
+  },
+  {
+    "id": "courtyard",
+    "label": "Courtyard",
+    "prompt": "A techno wizard at a stone fountain in a courtyard."
+  },
+  {
+    "id": "concourse",
+    "label": "Concourse",
+    "prompt": "A techno wizard mid-stride in a vast unmarked concourse."
+  },
+  {
+    "id": "storm",
+    "label": "Storm rooftop",
+    "prompt": "A techno wizard in a storm-cloak on a windy rooftop."
+  },
+  {
+    "id": "studio",
+    "label": "Quiet studio",
+    "prompt": "A techno wizard at a teak desk with a blank notebook."
+  },
+  {
+    "id": "observatory",
+    "label": "Observatory",
+    "prompt": "A techno wizard inside an unmarked dome at night."
+  }
+]

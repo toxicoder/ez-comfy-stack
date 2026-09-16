@@ -699,12 +699,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a medium close-up of the glyph rings over the staff, motes drifting across the teal coat, the breeze continuing across the cut while traffic muffles. The wizard's mouth stays closed. A match cut connects to a low wide of the same terrace looking out at the bay, the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, empty of lettering. No music and no score. Five seconds.",
         false,
         "t2v",
         "5 seconds, 24 fps",
         "terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score",
-        "none"
+        "none",
+        "ltx/multishot-5s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -989,6 +991,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

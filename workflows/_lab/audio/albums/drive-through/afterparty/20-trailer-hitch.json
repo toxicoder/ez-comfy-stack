@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
         "[drop - heavy warped drop, chest 808 wreck, hitch grind, grid 587 0]\n\n[inst - trap hats roll, 808 slide, grid 587 1]\n\n[drop - harder stacked drop, rolling 808 wall, hybrid formant, grid 587 2]\n\n[inst - snare roll, chest 808 punch, grid 587 3]\n\n[drop - full send drop, body bass wreck, trap warp, grid 587 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]\n\n[drop - full send drop, chest sub wreck, warped hitch, grid 587 6]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 587 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/20-trailer-hitch"
       ],
       "title": "ez_edm_prompt"
     },

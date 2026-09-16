@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\norgan swell\nhand clap\nNill Bye reading\n\n[verse]\nAugust twenty-twenty-six, a letter to Justice\nFoot-washing stations at two airports\nAbbott reached for Jim Crow to smear a rinse\nHe put a prayer next to a segregated tap\nNill Bye reading the DOJ note\nMuslim travelers rinse before prayer\nThat is water, not a caste system\nYou reached for the ugliest simile on purpose\nA governor who knows the Fourteenth\nUsed it as a punchline against a basin\nGospel organ under a bad-faith memo\nYour piety is a press release\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nAirports host chapels of every kind\nA sink is not a segregated lunch counter\nAbbott needed a midterm villain\nSo a courtesy became a culture stage\nNill Bye mad at a smeared stall\nYou equated a ritual rinse with a banned tap\nThat is not lawyering, that is a rally\nThe letter is a campaign ad with a caption\nIAH did not reopen Reconstruction\nDFW did not pass a racial code\nTravelers washed a foot and you wrote history wrong\nKeep the organ, lose the libel\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nHand claps on a culture sermon\nChoir vowels over a DOJ seal\nAbbott still selling common sense\nCommon sense that cannot tell a basin from a ban\nNill Bye filing the wudu letter\nYou asked Washington to police a sink\nWhile your own grid and wards went begging\nPriorities in a single paragraph\nA foot-wash is a courtesy\nA segregated restroom was a crime\nRhyming them is the tell\nYou wanted the heat, not the holding\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nConvention week you previewed the plank\nBan this, demolish that, rinse, repeat\nNill Bye posting the airport memo\nAbbott still allergic to a plural gate\nTexas has more faiths than your letter admits\nA basin does not rewrite the Constitution\nI want a governor who can read a ritual\nYou want a governor who can trend a slur\nSeal on the page, stain on the analogy\nThe stall will still be there at dawn\nYour letter will still be the smear\nWudu is water. You made it a war\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[outro]\norgan rest\nstall stays\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/13-wudu-letter"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "gospel, organ, hand claps, choir vowels, male rap vocals, dry booth, no autotune, 78 bpm",
         "[intro]\norgan swell\nhand clap\nNill Bye reading\n\n[verse]\nAugust twenty-twenty-six, a letter to Justice\nFoot-washing stations at two airports\nAbbott reached for Jim Crow to smear a rinse\nHe put a prayer next to a segregated tap\nNill Bye reading the DOJ note\nMuslim travelers rinse before prayer\nThat is water, not a caste system\nYou reached for the ugliest simile on purpose\nA governor who knows the Fourteenth\nUsed it as a punchline against a basin\nGospel organ under a bad-faith memo\nYour piety is a press release\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nAirports host chapels of every kind\nA sink is not a segregated lunch counter\nAbbott needed a midterm villain\nSo a courtesy became a culture stage\nNill Bye mad at a smeared stall\nYou equated a ritual rinse with a banned tap\nThat is not lawyering, that is a rally\nThe letter is a campaign ad with a caption\nIAH did not reopen Reconstruction\nDFW did not pass a racial code\nTravelers washed a foot and you wrote history wrong\nKeep the organ, lose the libel\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nHand claps on a culture sermon\nChoir vowels over a DOJ seal\nAbbott still selling common sense\nCommon sense that cannot tell a basin from a ban\nNill Bye filing the wudu letter\nYou asked Washington to police a sink\nWhile your own grid and wards went begging\nPriorities in a single paragraph\nA foot-wash is a courtesy\nA segregated restroom was a crime\nRhyming them is the tell\nYou wanted the heat, not the holding\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[verse]\nConvention week you previewed the plank\nBan this, demolish that, rinse, repeat\nNill Bye posting the airport memo\nAbbott still allergic to a plural gate\nTexas has more faiths than your letter admits\nA basin does not rewrite the Constitution\nI want a governor who can read a ritual\nYou want a governor who can trend a slur\nSeal on the page, stain on the analogy\nThe stall will still be there at dawn\nYour letter will still be the smear\nWudu is water. You made it a war\n\n[chorus]\nWudu letter\nNill Bye on the DOJ note\nAbbott smeared a prayer rinse\nA basin is not a ban\nTravelers washing before prayer\nYour analogy is a smear with a seal\n\n[outro]\norgan rest\nstall stays\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/13-wudu-letter"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

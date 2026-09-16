@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nneon bass\nNill Bye watt-counting\n\n[verse]\nFirst the tax break, then the halo\nTexas as an AI epicenter pitch\nAbbott rolled the red carpet for the racks\nAbatements, cheap land, cheap power stories\nNill Bye watt-counting the megawatt lease\nTowns learned the draw on the aquifer\nHalf the state said not in my grid-yard\nPolls turned, so the governor found religion\nTwenty-twenty-six, a sudden audit\nKeep them off the community water\nKeep them off the ERCOT bus\nYou don't get to light the fuse and play marshal\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nDemocrats called the hypocrisy on sight\nYou built the boom, then the brake\nAbbott swore the racks would lower bills\nIf they generate more than they eat\nNill Bye reading the interconnect queue\nA server farm is a baseload with a PR team\nUri already taught the watt math\nNow you add a 24-hour tenant\nRatepayers eat the transmission\nThe campus eats the press release\nA crackdown after the abatement\nIs a campaign, not a grid plan\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nSynthwave on a server aisle\nNeon pads, dry booth, hot transformers\nAbbott wants the headline both ways\nPioneer of AI, defender of the creek\nNill Bye mad at a rack tax shuffle\nIncentives out, rhetoric in\nYou cannot abate the levy and claim thrift\nThe town still pays the peak\nWater that was promised to farms\nGets recoded as coolant\nThen a memo says the creek is sacred\nAfter the groundbreaking photo\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nAg commissioner said the brake is fake\nThe order doesn't stop the interconnect\nNill Bye filing the rack tax\nAbbott still posing with a cooling tower\nAn audit is not a moratorium\nA directive is not a watt\nI want a load that pays its keep\nYou want a boom that pays your ads\nThe barn will still hum at 3 a.m.\nThe town will still see the invoice\nKeep the neon, lose the shrug\nYour epicenter has a water problem\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[outro]\npads close\nracks hum\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/12-rack-tax"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no autotune, 104 bpm",
         "[intro]\nneon bass\nNill Bye watt-counting\n\n[verse]\nFirst the tax break, then the halo\nTexas as an AI epicenter pitch\nAbbott rolled the red carpet for the racks\nAbatements, cheap land, cheap power stories\nNill Bye watt-counting the megawatt lease\nTowns learned the draw on the aquifer\nHalf the state said not in my grid-yard\nPolls turned, so the governor found religion\nTwenty-twenty-six, a sudden audit\nKeep them off the community water\nKeep them off the ERCOT bus\nYou don't get to light the fuse and play marshal\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nDemocrats called the hypocrisy on sight\nYou built the boom, then the brake\nAbbott swore the racks would lower bills\nIf they generate more than they eat\nNill Bye reading the interconnect queue\nA server farm is a baseload with a PR team\nUri already taught the watt math\nNow you add a 24-hour tenant\nRatepayers eat the transmission\nThe campus eats the press release\nA crackdown after the abatement\nIs a campaign, not a grid plan\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nSynthwave on a server aisle\nNeon pads, dry booth, hot transformers\nAbbott wants the headline both ways\nPioneer of AI, defender of the creek\nNill Bye mad at a rack tax shuffle\nIncentives out, rhetoric in\nYou cannot abate the levy and claim thrift\nThe town still pays the peak\nWater that was promised to farms\nGets recoded as coolant\nThen a memo says the creek is sacred\nAfter the groundbreaking photo\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[verse]\nAg commissioner said the brake is fake\nThe order doesn't stop the interconnect\nNill Bye filing the rack tax\nAbbott still posing with a cooling tower\nAn audit is not a moratorium\nA directive is not a watt\nI want a load that pays its keep\nYou want a boom that pays your ads\nThe barn will still hum at 3 a.m.\nThe town will still see the invoice\nKeep the neon, lose the shrug\nYour epicenter has a water problem\n\n[chorus]\nRack tax\nNill Bye on the megawatt lease\nAbbott courted the data barn\nThen audited it when the towns revolted\nWater and watts for a server farm\nYour AI boom is a rate-hike\n\n[outro]\npads close\nracks hum\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/12-rack-tax"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

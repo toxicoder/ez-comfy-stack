@@ -240,7 +240,7 @@ def test_prompt_forge_shares_one_prompt_and_context() -> None:
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
-        if n.get("type") == "PrimitiveNode"
+        if n.get("type") in {"PrimitiveNode", "EZSamplePrompt"}
     }
     assert set(prims) >= {"Prompt", "Context"}
     families = [
@@ -262,7 +262,7 @@ def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
     prims = {
         str(n.get("title")): n
         for n in graph["nodes"]
-        if n.get("type") == "PrimitiveNode"
+        if n.get("type") in {"PrimitiveNode", "EZSamplePrompt"}
     }
     for title in ("Logline", "Script", "Audio policy", "Score"):
         assert title in prims

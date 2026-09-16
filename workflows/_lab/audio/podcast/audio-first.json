@@ -84,9 +84,11 @@
         "Node name for S&R": "EZPodcastScript"
       },
       "widgets_values": [
+        "custom",
         "Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us.\nSpeaker B: No cloud voices. No rented music. If the card dies, the show dies with it.\nSpeaker A: That is the point. A small studio should own the weights and the cuts.\nSpeaker B: Edit the script before you generate speech. The edit is the human part.",
         false,
-        "podcast_two_host"
+        "podcast_two_host",
+        "audio/podcast/audio-first"
       ],
       "title": "ez_podcast_script"
     },
@@ -643,10 +645,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "instrumental lo-fi bed, warm analog keys, light drums, no vocals, instrumental",
         "",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/podcast/audio-first"
       ],
       "title": "ez_podcast_bed enhance"
     }
@@ -876,6 +880,22 @@
     },
     "linearData": {
       "inputs": [
+        [
+          2,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Script sample"
+          }
+        ],
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Bed sample"
+          }
+        ],
         [
           2,
           "prompt",

@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0]\n\n[drop - harder growl drop, analog 808 stack, warped color, grid 283 1]\n\n[inst - trap hats denser, color 808 sustain span, grid 283 2]\n\n[drop - full send drop, stacked color wreck, warped sub, grid 283 3]\n\n[outro - kick holds, hats denser, color ride, grid 283 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/04-colour-span"
       ],
       "title": "ez_edm_prompt"
     },

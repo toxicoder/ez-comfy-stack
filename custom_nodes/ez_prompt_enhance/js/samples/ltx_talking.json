@@ -1,0 +1,102 @@
+[
+  {
+    "id": "hold-speaks",
+    "label": "Hold and speak",
+    "prompt": "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits under the voice. No music and no score."
+  },
+  {
+    "id": "one-line",
+    "label": "One short line",
+    "prompt": "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "nod-line",
+    "label": "Nod then line",
+    "prompt": "The start image holds as the first frame. A small nod, then one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "look-lens-line",
+    "label": "Look to lens",
+    "prompt": "The start image holds as the first frame. The subject looks to lens and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "look-off-line",
+    "label": "Look off, line",
+    "prompt": "The start image holds as the first frame. The subject looks off-frame, then speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "breath-line",
+    "label": "Breath then line",
+    "prompt": "The start image holds as the first frame. A breath, then one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hands-still",
+    "label": "Hands still",
+    "prompt": "The start image holds as the first frame. Hands still. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "tiny-push-line",
+    "label": "Tiny push, line",
+    "prompt": "The start image holds as the first frame. A tiny push-in while the subject speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Slow push-in. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "sit-line",
+    "label": "Sit and speak",
+    "prompt": "The start image holds as the first frame. Seated. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "stand-line",
+    "label": "Stand and speak",
+    "prompt": "The start image holds as the first frame. Standing. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "night-line",
+    "label": "Night line",
+    "prompt": "The start image holds as the first frame. Night practicals. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rain-line",
+    "label": "Rain line",
+    "prompt": "The start image holds as the first frame. Rain on glass. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "desk-line",
+    "label": "Desk line",
+    "prompt": "The start image holds as the first frame. At a desk. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rail-line",
+    "label": "Rail line",
+    "prompt": "The start image holds as the first frame. At a rail. One short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "soft-line",
+    "label": "Soft line",
+    "prompt": "The start image holds as the first frame. Very small mouth motion. One short line. Wardrobe and set stay locked. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "pause-line",
+    "label": "Pause then line",
+    "prompt": "The start image holds as the first frame. A pause, then one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "smile-line",
+    "label": "Small smile, line",
+    "prompt": "The start image holds as the first frame. A small smile, then one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "two-beats",
+    "label": "Two short beats",
+    "prompt": "The start image holds as the first frame. Two short spoken beats, modest mouth motion. Wardrobe and set stay locked. Fixed camera. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "end-still-talk",
+    "label": "End still",
+    "prompt": "The start image holds as the first frame. One short line, then the last frames hold still. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera then hold. Room tone matching the start image, modest speech, no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "no-score-talk",
+    "label": "No score talk",
+    "prompt": "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech. No music and no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "local-signal",
+    "label": "Local Signal cold open",
+    "prompt": "Speaker A: Welcome back to Local Signal. Today we stay on the machine in front of us.\nSpeaker B: No cloud voices. No rented music. If the card dies, the show dies with it.\nSpeaker A: That is the point. A small studio should own the weights and the cuts.\nSpeaker B: Edit the script before you generate speech. The edit is the human part."
+  },
+  {
+    "id": "weights-disk",
+    "label": "Weights on disk",
+    "prompt": "Speaker A: The weights live on disk in this room.\nSpeaker B: If the card dies, the show dies with it.\nSpeaker A: That is the bargain we keep.\nSpeaker B: Edit the script before you generate speech."
+  },
+  {
+    "id": "no-cloud",
+    "label": "No cloud voices",
+    "prompt": "Speaker A: No cloud voices on this hour.\nSpeaker B: No rented music either.\nSpeaker A: The bed is local. The cut is local.\nSpeaker B: If we cannot own it, we do not air it."
+  },
+  {
+    "id": "one-job",
+    "label": "One job",
+    "prompt": "Speaker A: One heavy job on this box.\nSpeaker B: Then we stop and we listen.\nSpeaker A: That is how the street stays up.\nSpeaker B: Print later. Write now."
+  },
+  {
+    "id": "edit-human",
+    "label": "The edit is human",
+    "prompt": "Speaker A: The rewrite is a tool.\nSpeaker B: The edit is the human part.\nSpeaker A: Read it out loud before Queue.\nSpeaker B: If it sounds rented, cut it."
+  },
+  {
+    "id": "booth-small",
+    "label": "Small booth",
+    "prompt": "Speaker A: The booth is a closet with a fan.\nSpeaker B: That is enough.\nSpeaker A: We do not need a borrowed room.\nSpeaker B: We need a true line."
+  },
+  {
+    "id": "disclosure",
+    "label": "Say the bumper",
+    "prompt": "Speaker A: Voices on this show are synthesized.\nSpeaker B: The hosts are original characters.\nSpeaker A: We say that because it is true.\nSpeaker B: Then we do the work."
+  },
+  {
+    "id": "rain-hour",
+    "label": "Rain hour",
+    "prompt": "Speaker A: Rain on the glass, fan in the hall.\nSpeaker B: Good weather for a local hour.\nSpeaker A: Keep the bed instrumental.\nSpeaker B: Keep the talk honest."
+  },
+  {
+    "id": "night-desk",
+    "label": "Night desk",
+    "prompt": "Speaker A: Night desk, one lamp, no audience.\nSpeaker B: The audience is later.\nSpeaker A: Right now the script is the guest.\nSpeaker B: Then we record."
+  },
+  {
+    "id": "card-hot",
+    "label": "Card runs hot",
+    "prompt": "Speaker A: The card runs hot. That is the point.\nSpeaker B: We do not hide the heat.\nSpeaker A: We schedule around it.\nSpeaker B: One job. Then air."
+  },
+  {
+    "id": "no-rented-bed",
+    "label": "No rented bed",
+    "prompt": "Speaker A: The bed is ours or it is silent.\nSpeaker B: Silence is honest.\nSpeaker A: A rented bed is not.\nSpeaker B: Cue local only."
+  },
+  {
+    "id": "look-twice",
+    "label": "Look twice",
+    "prompt": "Speaker A: Look twice before you print a take.\nSpeaker B: Words are cheap. Prints are not.\nSpeaker A: That is why we read it first.\nSpeaker B: Then Queue."
+  },
+  {
+    "id": "harbor",
+    "label": "Harbor hour",
+    "prompt": "Speaker A: Fog on the harbor, fan in the rack.\nSpeaker B: We stay on the machine in front of us.\nSpeaker A: The city can wait.\nSpeaker B: The cut cannot."
+  },
+  {
+    "id": "workshop",
+    "label": "Workshop hour",
+    "prompt": "Speaker A: This hour is a workbench.\nSpeaker B: Tools on the table, no theater.\nSpeaker A: Name the tool. Name the limit.\nSpeaker B: Then use it well."
+  },
+  {
+    "id": "quiet-street",
+    "label": "Quiet street",
+    "prompt": "Speaker A: Quiet street, loud fan.\nSpeaker B: That is our room tone.\nSpeaker A: We do not fake a hall.\nSpeaker B: We keep the closet."
+  },
+  {
+    "id": "stop-first",
+    "label": "Stop first",
+    "prompt": "Speaker A: Stop the other occupancy first.\nSpeaker B: One GB10 job.\nSpeaker A: That sentence is the show.\nSpeaker B: Then we talk."
+  },
+  {
+    "id": "script-first",
+    "label": "Script first",
+    "prompt": "Speaker A: Script first, voice second.\nSpeaker B: If the line is weak, do not clone it.\nSpeaker A: Fix the line.\nSpeaker B: Then generate."
+  },
+  {
+    "id": "own-silence",
+    "label": "Own the silence",
+    "prompt": "Speaker A: Own the silence between the words.\nSpeaker B: Do not fill it with a rented swell.\nSpeaker A: The street is enough.\nSpeaker B: Let it sit."
+  },
+  {
+    "id": "end-on-work",
+    "label": "End on the work",
+    "prompt": "Speaker A: We end on the work, not a slogan.\nSpeaker B: What did we make.\nSpeaker A: A local hour.\nSpeaker B: Cut."
+  },
+  {
+    "id": "welcome-back",
+    "label": "Welcome back",
+    "prompt": "Speaker A: Welcome back to Local Signal.\nSpeaker B: Same box. Same bargain.\nSpeaker A: No cloud voices.\nSpeaker B: Edit before you generate."
+  }
+]

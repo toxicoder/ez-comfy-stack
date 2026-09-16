@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nreverse punch\nsplit dummy\ndata missing\n\n[verse]\nRake splits a kick like a magic trick\nTalks two halves that he never picked\nReverse racing, the data stays dummy\nScreech lead humming on a rumor tummy\nI wait for the other arm after the punch\nYou loop the split and you call it crunch\nHats in a hurry, the halves won't lock\nThat's a king with a ghost in the sock\nNill Bye counting the missing half\nYour whole kick-split is a rumor craft\nReverse punch, then a cheaper hush\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nYou name a split like a vintage stamp\nThen you freeze when I ask who logged the ramp\nHardstyle ticking, the arms stay lonely\nScreech underneath on a story only\nI want a half that can close the phrase\nYou want a kick with a rumor glaze\nSplit king on a looped reverse\nNo second arm, just a flying verse\nNill Bye marking the empty split\nRake riding reverse like a stolen hit\nKick looks busy, the data still lags\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nHalf left, half right, still no partner\nYour legend lives in a reverse barter\nI clock the reverse, I clock the dummy\nI clock a flex with a missing tummy\nNill Bye filing a no-data folder\nRake still selling a split as sculpture\nGhost arm dressed as a pamphlet\nThe punch runs out, and so do the boasts\nHold the kick or drop the stack\nYour rumor never sat in the rack\nEmpty in the middle, the boast looks dummy\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nMorning comes, the reverse is weary\nHalf never came, the rumor faded\nHats go even, the split gets archived\nNo data logged, the boast was carved\nNill Bye tagging a ghosted punch\nRake still calling it a crunch\nKick king with a rented half\nThe arm never paid the craft\nFile the reverse, keep the dummy\nDummy split is a party sticker\nScreech dead, the booth stays stacked\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[outro]\nreverse dies\nsplit dummy\ndata none\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/14-kick-split"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hardstyle, reverse bass, kick split, screech lead, male rap vocals, dry booth, no autotune, 150 bpm",
         "[intro]\nreverse punch\nsplit dummy\ndata missing\n\n[verse]\nRake splits a kick like a magic trick\nTalks two halves that he never picked\nReverse racing, the data stays dummy\nScreech lead humming on a rumor tummy\nI wait for the other arm after the punch\nYou loop the split and you call it crunch\nHats in a hurry, the halves won't lock\nThat's a king with a ghost in the sock\nNill Bye counting the missing half\nYour whole kick-split is a rumor craft\nReverse punch, then a cheaper hush\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nYou name a split like a vintage stamp\nThen you freeze when I ask who logged the ramp\nHardstyle ticking, the arms stay lonely\nScreech underneath on a story only\nI want a half that can close the phrase\nYou want a kick with a rumor glaze\nSplit king on a looped reverse\nNo second arm, just a flying verse\nNill Bye marking the empty split\nRake riding reverse like a stolen hit\nKick looks busy, the data still lags\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nHalf left, half right, still no partner\nYour legend lives in a reverse barter\nI clock the reverse, I clock the dummy\nI clock a flex with a missing tummy\nNill Bye filing a no-data folder\nRake still selling a split as sculpture\nGhost arm dressed as a pamphlet\nThe punch runs out, and so do the boasts\nHold the kick or drop the stack\nYour rumor never sat in the rack\nEmpty in the middle, the boast looks dummy\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[verse]\nMorning comes, the reverse is weary\nHalf never came, the rumor faded\nHats go even, the split gets archived\nNo data logged, the boast was carved\nNill Bye tagging a ghosted punch\nRake still calling it a crunch\nKick king with a rented half\nThe arm never paid the craft\nFile the reverse, keep the dummy\nDummy split is a party sticker\nScreech dead, the booth stays stacked\n\n[chorus]\nKick-split myth\nReverse punch, no data\nNill Bye wants both halves\nRake splits a rumor\nDummy split, empty arms\nYour kick is a story\n\n[outro]\nreverse dies\nsplit dummy\ndata none\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/14-kick-split"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

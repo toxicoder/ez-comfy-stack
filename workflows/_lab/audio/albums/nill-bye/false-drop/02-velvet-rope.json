@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nstanchion up\nlist blank\nwristband fake\n\n[verse]\nRake leans on velvet like a borrowed stanchion\nName not written, he still wants the zone\nStanchion up, the clipboard stares\nYour VIP is a vacant chair\nI hold the list, you hold a pose\nWristband missing, the bouncer knows\nCamera ready, the queue is none\nThat's a king with a lanyard undone\nNill Bye reading a blank-name card\nYour whole guest is a velvet shard\nPose for a rope that will not part\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou sell a lanyard like a bloodline pass\nThen you fold when they check the glass\nFestival bass, the rope stays shut\nYour whole cool is a borrowed strut\nI stamp the real, you stamp a ghost\nThe velvet knows who paid the most\nBring a name or don't join the line\nThe rope is short and the list is mine\nNill Bye keeps the clipboard tight\nRake posing VIP with no invite\nEmpty chair humming under the lights\nYour whole flex is a velvet slight\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou treat the rope like a personality\nThen you crash when they ask for ID\nI clock the stanchion, I clock the queue\nI clock a brand that never came through\nEmpty list humming under the bass\nThat's a VIP with a vacant face\nNill Bye filing the blank-name slot\nRake looping a pose the door forgot\nKeep the pose, lose the velvet\nThe list don't owe you a credit\nWristband missing, the bouncer shrugs\nYour soundtrack snapped on a velvet tug\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou print a lanyard off a printer\nThen you ask the rope to be nicer\nFestival lights on an empty rail\nPose for a camera that will not hail\nI keep the clipboard, you keep the skit\nYou name a hit that the door won't admit\nNill Bye shutting the empty slot\nRake wants a throne for a name he dropped\nPut the lanyard back on the tray\nThe rope don't score a vacant play\nStanchion stays, the file is closed\nYour soundtrack snapped on a velvet close\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[outro]\nstanchion stays\nbouncer shrugs\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/02-velvet-rope"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "festival trap, 808 bass, crowd-bed, supersaw stab, male rap vocals, dry booth, no autotune, 150 bpm",
         "[intro]\nstanchion up\nlist blank\nwristband fake\n\n[verse]\nRake leans on velvet like a borrowed stanchion\nName not written, he still wants the zone\nStanchion up, the clipboard stares\nYour VIP is a vacant chair\nI hold the list, you hold a pose\nWristband missing, the bouncer knows\nCamera ready, the queue is none\nThat's a king with a lanyard undone\nNill Bye reading a blank-name card\nYour whole guest is a velvet shard\nPose for a rope that will not part\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou sell a lanyard like a bloodline pass\nThen you fold when they check the glass\nFestival bass, the rope stays shut\nYour whole cool is a borrowed strut\nI stamp the real, you stamp a ghost\nThe velvet knows who paid the most\nBring a name or don't join the line\nThe rope is short and the list is mine\nNill Bye keeps the clipboard tight\nRake posing VIP with no invite\nEmpty chair humming under the lights\nYour whole flex is a velvet slight\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou treat the rope like a personality\nThen you crash when they ask for ID\nI clock the stanchion, I clock the queue\nI clock a brand that never came through\nEmpty list humming under the bass\nThat's a VIP with a vacant face\nNill Bye filing the blank-name slot\nRake looping a pose the door forgot\nKeep the pose, lose the velvet\nThe list don't owe you a credit\nWristband missing, the bouncer shrugs\nYour soundtrack snapped on a velvet tug\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[verse]\nYou print a lanyard off a printer\nThen you ask the rope to be nicer\nFestival lights on an empty rail\nPose for a camera that will not hail\nI keep the clipboard, you keep the skit\nYou name a hit that the door won't admit\nNill Bye shutting the empty slot\nRake wants a throne for a name he dropped\nPut the lanyard back on the tray\nThe rope don't score a vacant play\nStanchion stays, the file is closed\nYour soundtrack snapped on a velvet close\n\n[chorus]\nVelvet rope\nBlank name on the rail\nNill Bye holds the list\nRake poses VIP\nEmpty queue, clipboard dry\nNo stamp, no entry\n\n[outro]\nstanchion stays\nbouncer shrugs\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/02-velvet-rope"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

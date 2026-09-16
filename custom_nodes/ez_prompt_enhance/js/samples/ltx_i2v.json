@@ -1,0 +1,102 @@
+[
+  {
+    "id": "start-push",
+    "label": "Start-image push",
+    "prompt": "The start image holds as the first frame. The camera moves slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hold-push",
+    "label": "Hold then push",
+    "prompt": "The start image holds as the first frame. The camera holds, then eases in. Fabric or foliage drifts. Slow push-in. Light wind and world SFX matching the start image sit under the action. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "pan-right",
+    "label": "Pan right",
+    "prompt": "The start image holds as the first frame. Fabric drifts. World SFX matching the start image. The camera pans right slowly. A warm breeze sits under the pan. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "pan-left",
+    "label": "Pan left",
+    "prompt": "The start image holds as the first frame. Fabric drifts. World SFX matching the start image. The camera pans left slowly. A warm breeze sits under the pan. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "fixed-breeze",
+    "label": "Fixed breeze",
+    "prompt": "The start image holds as the first frame. Locked framing. Gentle cyclic breeze in fabric or leaves. The camera holds a fixed frame. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "track-right",
+    "label": "Track right",
+    "prompt": "The start image holds as the first frame. Gentle subject sway. The camera tracks a few degrees right. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "dolly-out",
+    "label": "Dolly out",
+    "prompt": "The start image holds as the first frame. Fabric hush as the frame widens a little. The camera dollies out slowly. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rain-hold",
+    "label": "Rain hold",
+    "prompt": "The start image holds as the first frame. Rain beads on fabric. Gentle head motion only. The camera holds a fixed frame. Rain ticks matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "night-hold",
+    "label": "Night hold",
+    "prompt": "The start image holds as the first frame. Practicals shimmer. Gentle fabric. The camera holds a fixed frame. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "dawn-push",
+    "label": "Dawn push",
+    "prompt": "The start image holds as the first frame. Light warms a degree. Gentle fabric. The camera dollies in slowly. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "breath-close",
+    "label": "Close breath",
+    "prompt": "The start image holds as the first frame. Subtle breath and fabric hush. The camera holds, then eases in. Close-mic breath under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "look-off",
+    "label": "Look off",
+    "prompt": "The start image holds as the first frame. The subject glances off-frame then back. Mouth closed. The camera holds a fixed frame. World SFX matching the start image. No speech. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "staff-motes",
+    "label": "Staff motes",
+    "prompt": "The start image holds as the first frame. Glyph motes drift and settle. The camera holds a fixed frame. A single glyph chime under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "wind-pan",
+    "label": "Wind pan",
+    "prompt": "The start image holds as the first frame. A harder breeze pulls coat hem. The camera pans right slowly. Wind matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "track-forward",
+    "label": "Track forward",
+    "prompt": "The start image holds as the first frame. Gentle stride energy without leaving the start pose far. The camera tracks forward slowly. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "settle",
+    "label": "Settle",
+    "prompt": "The start image holds as the first frame. Motion settles. Last frames hold. The camera holds a fixed frame. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "parallax",
+    "label": "Slight parallax",
+    "prompt": "The start image holds as the first frame. Near fabric drifts against the far plane. The camera slides a few degrees laterally. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "cloak-stream",
+    "label": "Cloak stream",
+    "prompt": "The start image holds as the first frame. Cloak lining streams then settles. The camera holds a fixed frame. Wind matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "indoor-hush",
+    "label": "Indoor hush",
+    "prompt": "The start image holds as the first frame. Room tone. Tiny fabric. The camera dollies in slowly. Room tone matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "end-hold",
+    "label": "End hold",
+    "prompt": "The start image holds as the first frame. A small move then the last frames hold still for the next I2V. The camera eases then holds. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

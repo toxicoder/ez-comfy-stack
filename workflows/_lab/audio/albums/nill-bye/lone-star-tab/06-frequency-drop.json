@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\namen break\nsub reese\nNill Bye counting hertz\n\n[verse]\nERCOT ordered the big shed\nTwenty thousand megawatts off the bus\nAbbott's isolated island had no neighbor\nFrequency falling toward the cliff\nNill Bye counting the hertz as they sagged\nA few minutes from a black-start nightmare\nWeeks of dark if the relays had gone\nDrum-and-bass on a near-death grid\nYou got a drop you did not want\nOperators did, so the state still exists\nA club drop is a joke\nThis one almost took the lights for a month\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nAmen break under a control-room panic\nReese bass like a turbine trip\nAbbott was on TV selling a wind story\nWhile the frequency was the only story\nNill Bye mad at a governor off-beat\nThe drop is physics, not a culture war\nSixty hertz or you lose the machine\nYou cannot Fox-News a relay\nLoad-shed is a last tool\nYou made it a lifestyle for four days\nRolling blackouts that did not roll, they stuck\nThe amen already told the truth\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nLargest manually controlled shed on the books\nFERC wrote it like a eulogy for luck\nAbbott later called the grid flawless\nA sequel with amnesia\nNill Bye filing the frequency drop\nYou cannot brag a save you almost fumbled\nThe operators held the cliff\nYou held a microphone\nA reese does not care about your trademark\nNeither does sixty hertz\nI want weatherize, you want a drop that photographs\nThe control room does not do encore\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nWhen the next arctic sits on DFW\nThe same island, the same math\nNill Bye posting the load-shed\nAbbott still dancing like the amen was a trophy\nA drop you survive is not a drop you designed\nIt is a warning with a body-count nearby\nKeep the break, lose the swagger\nTwenty thousand off is not a flex\nIt is the sound of a state that almost ended\nThe sub is the remaining margin\nDon't DJ a collapse\nThe frequency already dropped you\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[outro]\namen halt\nhertz holds\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/06-frequency-drop"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, 174 bpm",
         "[intro]\namen break\nsub reese\nNill Bye counting hertz\n\n[verse]\nERCOT ordered the big shed\nTwenty thousand megawatts off the bus\nAbbott's isolated island had no neighbor\nFrequency falling toward the cliff\nNill Bye counting the hertz as they sagged\nA few minutes from a black-start nightmare\nWeeks of dark if the relays had gone\nDrum-and-bass on a near-death grid\nYou got a drop you did not want\nOperators did, so the state still exists\nA club drop is a joke\nThis one almost took the lights for a month\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nAmen break under a control-room panic\nReese bass like a turbine trip\nAbbott was on TV selling a wind story\nWhile the frequency was the only story\nNill Bye mad at a governor off-beat\nThe drop is physics, not a culture war\nSixty hertz or you lose the machine\nYou cannot Fox-News a relay\nLoad-shed is a last tool\nYou made it a lifestyle for four days\nRolling blackouts that did not roll, they stuck\nThe amen already told the truth\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nLargest manually controlled shed on the books\nFERC wrote it like a eulogy for luck\nAbbott later called the grid flawless\nA sequel with amnesia\nNill Bye filing the frequency drop\nYou cannot brag a save you almost fumbled\nThe operators held the cliff\nYou held a microphone\nA reese does not care about your trademark\nNeither does sixty hertz\nI want weatherize, you want a drop that photographs\nThe control room does not do encore\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[verse]\nWhen the next arctic sits on DFW\nThe same island, the same math\nNill Bye posting the load-shed\nAbbott still dancing like the amen was a trophy\nA drop you survive is not a drop you designed\nIt is a warning with a body-count nearby\nKeep the break, lose the swagger\nTwenty thousand off is not a flex\nIt is the sound of a state that almost ended\nThe sub is the remaining margin\nDon't DJ a collapse\nThe frequency already dropped you\n\n[chorus]\nFrequency drop\nNill Bye on the load-shed\nAbbott's grid kissed collapse\nTwenty thousand megawatts yanked\nLargest manual cut in the country\nYour drop almost went dark forever\n\n[outro]\namen halt\nhertz holds\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/06-frequency-drop"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

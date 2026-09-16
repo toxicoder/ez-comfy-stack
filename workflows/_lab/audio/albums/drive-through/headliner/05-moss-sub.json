@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy dirty drop, chest sub warp, trap 808 wreck, grid 389 0]\n\n[inst - trap hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, rolling 808 wall, grid 389 2]\n\n[inst - hats denser, chest 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 389 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/05-moss-sub"
       ],
       "title": "ez_edm_prompt"
     },

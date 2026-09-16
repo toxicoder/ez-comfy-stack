@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ntimpani roll\nNill Bye enumerating\n\n[verse]\nNovember twenty-five he filed again\nA fourth term no Texas governor takes\nAbbott wants the chair through twenty-thirty\nPrecedent is a thing you preach at others\nNill Bye enumerating the unprecedented\nPrimary in March, eighty-one percent\nThe base still claps, the middle frays\nPolls tighter than any cycle since ninety-four\nGina from McAllen on public school\nYou on the border and the levy reprise\nA dynasty dressed as a job application\nThe mansion is not a birthright\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nThree terms of the same special session\nCulture, wire, clock, map, raid\nAbbott says the Texas miracle\nJobs number one, coverage last\nNill Bye scoring the fourth term ask\nTime-for-a-change is a math problem now\nYou spent the year boosting other tickets\nThen noticed affordability in September\nA convert in quarter four is still a record\nThe record is the campaign's opponent\nHinojosa does not have to invent you\nYou wrote the dossier in statutes\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nCinematic strings on a long sit\nTimpani under a tired trademark\nAbbott still selling common sense versus crazy\nA binary that expired with the third lap\nNill Bye mad at an incumbency argument\nBeing there is not a method\nA fourth term is a habit with a letterhead\nTexas is allowed to rotate the chair\nYou treat rotation like a threat\nAs if the seal were a personal mark\nGovernors leave. That is the design\nYou are arguing with the calendar\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nNovember three will weigh the unprecedented\nNot the ads, the aftertaste\nNill Bye posting the fourth term\nAbbott still sure the map will hold him\nSafe is a feeling you had in twenty-two\nTwenty-six came with a grocery receipt\nI want a limit, you want a sequel\nThe chair is a lease, not a relic\nRun if you want, own the dossier\nDon't call it destiny\nDon't call it humble service\nA fourth lap is a choice to not leave\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[outro]\ntimpani rest\nlease ends\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/14-fourth-term"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune, 76 bpm",
         "[intro]\ntimpani roll\nNill Bye enumerating\n\n[verse]\nNovember twenty-five he filed again\nA fourth term no Texas governor takes\nAbbott wants the chair through twenty-thirty\nPrecedent is a thing you preach at others\nNill Bye enumerating the unprecedented\nPrimary in March, eighty-one percent\nThe base still claps, the middle frays\nPolls tighter than any cycle since ninety-four\nGina from McAllen on public school\nYou on the border and the levy reprise\nA dynasty dressed as a job application\nThe mansion is not a birthright\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nThree terms of the same special session\nCulture, wire, clock, map, raid\nAbbott says the Texas miracle\nJobs number one, coverage last\nNill Bye scoring the fourth term ask\nTime-for-a-change is a math problem now\nYou spent the year boosting other tickets\nThen noticed affordability in September\nA convert in quarter four is still a record\nThe record is the campaign's opponent\nHinojosa does not have to invent you\nYou wrote the dossier in statutes\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nCinematic strings on a long sit\nTimpani under a tired trademark\nAbbott still selling common sense versus crazy\nA binary that expired with the third lap\nNill Bye mad at an incumbency argument\nBeing there is not a method\nA fourth term is a habit with a letterhead\nTexas is allowed to rotate the chair\nYou treat rotation like a threat\nAs if the seal were a personal mark\nGovernors leave. That is the design\nYou are arguing with the calendar\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[verse]\nNovember three will weigh the unprecedented\nNot the ads, the aftertaste\nNill Bye posting the fourth term\nAbbott still sure the map will hold him\nSafe is a feeling you had in twenty-two\nTwenty-six came with a grocery receipt\nI want a limit, you want a sequel\nThe chair is a lease, not a relic\nRun if you want, own the dossier\nDon't call it destiny\nDon't call it humble service\nA fourth lap is a choice to not leave\n\n[chorus]\nFourth term\nNill Bye on the unprecedented\nAbbott wants a fourth mansion lap\nHinojosa in the tighter race\nSince ninety-four the map felt safer\nYour incumbency is the argument\n\n[outro]\ntimpani rest\nlease ends\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/14-fourth-term"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

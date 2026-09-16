@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nstrings swell\nradar ping\nNill Bye tracking\n\n[verse]\nRake sold a mood forecast of sun\nStrings swell under a drizzle he spun\nStorm-then-sun brand on a timpani roll\nI read the radar, you read the poll\nLow brass under a humidity pitch\nYour feeling is weather you cannot stitch\nNill Bye tracking the pressure drop\nHe smiles at a squall he refused to stop\nCirrus talk on a Doppler fib\nYou wanted an outlook money could buy\nMood forecast closed when the isobar shifts\nStorm-then-sun is a costume of gifts\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nYou called for clear, then you booked a squall\nThen you asked for cover when the pressure crawled\nRake with a forecast taped to his sleeve\nNill Bye reading what the radar would not believe\nTimpani rolls on a humidity swell\nI want a climate, you want a next\nBarometer falling, the brand stays bright\nYour storm is a product, your sun is a light\nCinematic swell, the drizzle is hired\nMood forecast truth, the outlook expired\nIsobar bent on a feeling you sold\nI keep the radar, you keep the gold\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nStrings hold a front you cannot name-drop\nI want a sky that will actually nonstop\nNill Bye clocking the Doppler spin-out\nRake still selling a storm-then-sun route\nLow brass warns, the humidity lingers\nYou wanted a climate that a caption pays\nSquall on cue, then a sudden clear\nThat's a mood forecast, not a year\nRadar ping, the outlook sags\nI file the weather, you file the gilts\nCirrus fading, the brand is mist\nHe still promising a sun I missed\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nRake at the radar with a painted sky\nNill Bye posting the pressure spike\nMood forecast first, the climate can idle\nYou wanted a squall for a sold-out date\nTimpani out, the drizzle thins\nI close the map, you ask me why the surprise\nStorm-then-sun is a rented front\nBarometer honest, the brand is blunt\nCinematic hush, the forecast fails\nRead the sky, the feeling derails\nHe still hunting a profitable breeze\nI file the weather as a costume sneeze\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[outro]\nradar clear\nforecast wrong\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/10-mood-forecast"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune, 76 bpm",
         "[intro]\nstrings swell\nradar ping\nNill Bye tracking\n\n[verse]\nRake sold a mood forecast of sun\nStrings swell under a drizzle he spun\nStorm-then-sun brand on a timpani roll\nI read the radar, you read the poll\nLow brass under a humidity pitch\nYour feeling is weather you cannot stitch\nNill Bye tracking the pressure drop\nHe smiles at a squall he refused to stop\nCirrus talk on a Doppler fib\nYou wanted an outlook money could buy\nMood forecast closed when the isobar shifts\nStorm-then-sun is a costume of gifts\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nYou called for clear, then you booked a squall\nThen you asked for cover when the pressure crawled\nRake with a forecast taped to his sleeve\nNill Bye reading what the radar would not believe\nTimpani rolls on a humidity swell\nI want a climate, you want a next\nBarometer falling, the brand stays bright\nYour storm is a product, your sun is a light\nCinematic swell, the drizzle is hired\nMood forecast truth, the outlook expired\nIsobar bent on a feeling you sold\nI keep the radar, you keep the gold\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nStrings hold a front you cannot name-drop\nI want a sky that will actually nonstop\nNill Bye clocking the Doppler spin-out\nRake still selling a storm-then-sun route\nLow brass warns, the humidity lingers\nYou wanted a climate that a caption pays\nSquall on cue, then a sudden clear\nThat's a mood forecast, not a year\nRadar ping, the outlook sags\nI file the weather, you file the gilts\nCirrus fading, the brand is mist\nHe still promising a sun I missed\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[verse]\nRake at the radar with a painted sky\nNill Bye posting the pressure spike\nMood forecast first, the climate can idle\nYou wanted a squall for a sold-out date\nTimpani out, the drizzle thins\nI close the map, you ask me why the surprise\nStorm-then-sun is a rented front\nBarometer honest, the brand is blunt\nCinematic hush, the forecast fails\nRead the sky, the feeling derails\nHe still hunting a profitable breeze\nI file the weather as a costume sneeze\n\n[chorus]\nMood forecast\nStorm then sun on a rented map\nNill Bye on the barometer\nRake sold a squall as a nap\nCinematic pressure, the radar lies\nRead the sky or lose the forecast\n\n[outro]\nradar clear\nforecast wrong\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/10-mood-forecast"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

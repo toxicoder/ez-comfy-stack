@@ -16,12 +16,13 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - Negative CLIP nodes go through **Negative Prompt Enhance** (positive CLIP string as context) so canned `illustration` / `Pixar` terms cannot fight the intended look
 - Rewriter **context** sockets carry a bible, logline, research brief, or episode script. Enhance **off** ignores context so authored recipes stay pinned
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
+- Sample prompt dropdown: 20 lab recipes per graph family plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit.
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
 **What this enables**
 
 - Writing (or pasting) a prompt that matches Klein 4B, Wan 2.2, or LTX-2.5 instead of SD1.5 tag soup
-- Typing a lazy sentence and letting the on-box Qwen3 rewriter expand it for Klein / Wan / LTX
+- Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX
 - Optional style dropdown (50 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
 
 !!! tip "Lab graphs already ship model-native prompts"
@@ -113,7 +114,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 STRING out → CLIPTextEncode `text` input.
 
 1. `./scripts/manage.sh download-models` (includes `comfy/llm/Qwen3-4B-Instruct-2507-Q4_K_M.gguf`).
-2. Type a lazy sentence (or leave the canned paragraph). **Enhance** defaults **on**.
+2. Pick a **Sample prompt** (20 lab recipes) or **Custom** to type a lazy sentence (the canned paragraph stays until you pick a sample). **Enhance** defaults **on**.
 3. Optional: pick a **style** (photorealistic, anime, cartoon, … — 50 ids, or `none`).
 4. Queue. On the Enhance node, read the dim **CLIP prompt** box — that is the text CLIP encoded. The top prompt widget stays as you typed it. If the 4B rewriter was skipped, **Enhance status** says why (missing GGUF, missing llama.cpp, timeout) and generation still runs. A selected style should read as that medium (cel, watercolor, oil on canvas, …), not a 3D/photo paragraph with a style trailer.
 

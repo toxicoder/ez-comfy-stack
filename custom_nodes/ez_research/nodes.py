@@ -2,6 +2,15 @@
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
+_root = str(Path(__file__).resolve().parent.parent)
+if _root not in sys.path:
+    sys.path.insert(0, _root)
+
+from ez_prompt_enhance.samples import CUSTOM, resolve_prompt, sample_labels
+
 from .pipeline import ResearchResult, run_chat, run_research, write_brief
 
 _WEB_SEARCH_BOOL = (
@@ -43,6 +52,7 @@ class EZCreativeResearch:
     def INPUT_TYPES(cls) -> dict:
         return {
             "required": {
+                "sample": (sample_labels("research_chat"), {"default": CUSTOM}),
                 "prompt": (
                     "STRING",
                     {
@@ -58,6 +68,7 @@ class EZCreativeResearch:
                     "STRING",
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
+                "catalog": ("STRING", {"default": "", "multiline": False}),
             }
         }
 
@@ -79,8 +90,16 @@ class EZCreativeResearch:
         web_search: object = True,
         subagents: object = 2,
         history: object = "",
+        sample: object = CUSTOM,
+        catalog: object = "",
     ) -> dict:
-        message = prompt if isinstance(prompt, str) else str(prompt or "")
+        message = resolve_prompt(
+            catalog,
+            sample,
+            prompt,
+            node_type="EZCreativeResearch",
+            mode=str(mode or ""),
+        )
         hist = history if isinstance(history, str) else str(history or "")
         kind = str(mode or "research").strip().lower()
         do_search = _as_bool(web_search)

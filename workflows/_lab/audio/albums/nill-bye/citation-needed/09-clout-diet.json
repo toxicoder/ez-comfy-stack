@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ndusty break\nlikes as food\nNill Bye scanning\n\n[verse]\nRake ate a clout diet of likes\nDusty break under a hollow spike\nCalories counted in a double-tap gram\nI want a protein, you want a ham\nSpy keys click on an empty macro\nYour hunger is a feed, your plate is a tableau\nNill Bye reading what the serving hid\nHe smiles at a calorie that never did\nSub bass low, the portion shrinks\nYou fasted on applause till the body blinks\nClout diet closed when the likes run dry\nEmpty macros, a decorative pie\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nYou plated a metric and called it a meal\nThen you crashed when the hunger got stark\nRake with a clout diet, no fiber in\nNill Bye weighing the hollow grin\nTrip-hop dust, the snack is air\nI want a gram, you want a stare\nLikes as calories, the scale is fake\nYour protein is a caption you cannot bake\nSpy keys wait on a fasting boast\nYou sold a diet that was mostly ghost\nEmpty macros on a pretty dish\nClout diet truth, you swallowed a wish\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nDusty break while you chase a serving\nI want a portion that is actually deserving\nNill Bye logging the missing gram\nRake still chewing a numerical jam\nSub bass under a calorie mirage\nYou wanted a bulk from a borrowed collage\nHunger first, then the flex, then the crash-out\nThat's a clout diet, not a workout\nFiber none, the plate is styled\nI keep the ledger, you keep it wild\nLikes unpaid, the macros vacant\nHe still ordering a decorative bacon\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nRake at the empty-plate bar\nNill Bye posting the diet's scar\nClout diet first, the work can idle\nYou wanted a bulk from a hungry bait\nTrip-hop fades, the serving's gone\nI close the scale, you ask what went wrong\nCalories of clout do not rebuild\nEmpty macros, the hunger filled\nSpy keys out, the snack is lapsed\nEat the work, the likes are untrue\nHe still hunting a numerical feast\nI file the diet as a decorative beast\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[outro]\nlikes unpaid\nmacros empty\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/09-clout-diet"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trip-hop, dusty break, sub bass, spy keys, male rap vocals, dry booth, no autotune, 86 bpm",
         "[intro]\ndusty break\nlikes as food\nNill Bye scanning\n\n[verse]\nRake ate a clout diet of likes\nDusty break under a hollow spike\nCalories counted in a double-tap gram\nI want a protein, you want a ham\nSpy keys click on an empty macro\nYour hunger is a feed, your plate is a tableau\nNill Bye reading what the serving hid\nHe smiles at a calorie that never did\nSub bass low, the portion shrinks\nYou fasted on applause till the body blinks\nClout diet closed when the likes run dry\nEmpty macros, a decorative pie\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nYou plated a metric and called it a meal\nThen you crashed when the hunger got stark\nRake with a clout diet, no fiber in\nNill Bye weighing the hollow grin\nTrip-hop dust, the snack is air\nI want a gram, you want a stare\nLikes as calories, the scale is fake\nYour protein is a caption you cannot bake\nSpy keys wait on a fasting boast\nYou sold a diet that was mostly ghost\nEmpty macros on a pretty dish\nClout diet truth, you swallowed a wish\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nDusty break while you chase a serving\nI want a portion that is actually deserving\nNill Bye logging the missing gram\nRake still chewing a numerical jam\nSub bass under a calorie mirage\nYou wanted a bulk from a borrowed collage\nHunger first, then the flex, then the crash-out\nThat's a clout diet, not a workout\nFiber none, the plate is styled\nI keep the ledger, you keep it wild\nLikes unpaid, the macros vacant\nHe still ordering a decorative bacon\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[verse]\nRake at the empty-plate bar\nNill Bye posting the diet's scar\nClout diet first, the work can idle\nYou wanted a bulk from a hungry bait\nTrip-hop fades, the serving's gone\nI close the scale, you ask what went wrong\nCalories of clout do not rebuild\nEmpty macros, the hunger filled\nSpy keys out, the snack is lapsed\nEat the work, the likes are untrue\nHe still hunting a numerical feast\nI file the diet as a decorative beast\n\n[chorus]\nClout diet\nLikes as calories, macros none\nNill Bye on the empty plate\nRake chewed a metric for fun\nTrip-hop hunger, the serving's air\nEat the work or starve the diet\n\n[outro]\nlikes unpaid\nmacros empty\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/09-clout-diet"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

@@ -699,12 +699,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds.",
         true,
         "t2v",
         "5 seconds, 24 fps",
         "tropical rain, thunder far off, water on glass, palm slap, no score",
-        "none"
+        "none",
+        "ltx/weather-broll"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -989,6 +991,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "orbit-tick",
+    "label": "Orbit and glass tick",
+    "prompt": "The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "orbit-left",
+    "label": "Orbit left",
+    "prompt": "The start image holds as the first frame. The camera orbits a few degrees left around the product on the table. Slow orbit left. Soft room tone, a glass tick, a fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "push-product",
+    "label": "Push to product",
+    "prompt": "The start image holds as the first frame. The camera eases in toward the product. Identity locked. Slow push-in. Soft room tone, a fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "fixed-shimmer",
+    "label": "Fixed shimmer",
+    "prompt": "The start image holds as the first frame. Locked camera. A light shimmer on glaze. Fixed camera. Soft room tone. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "slide-rim",
+    "label": "Slide along rim",
+    "prompt": "The start image holds as the first frame. A slight lateral slide so the rim drifts against the far plane. Slight slide. Soft room tone, a glass tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "mug-chip",
+    "label": "Mug chip",
+    "prompt": "The start image holds as the first frame. Orbit a few degrees around a chipped ceramic mug. Slow orbit right. Soft room tone, a ceramic tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "staff-table",
+    "label": "Staff on table",
+    "prompt": "The start image holds as the first frame. Orbit a compact unmarked data-staff on pale stone. Motes idle. Slow orbit right. Soft room tone, a glyph chime once. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "bottle-caustic",
+    "label": "Bottle caustic",
+    "prompt": "The start image holds as the first frame. Orbit a clear unmarked carafe. Caustics crawl. Slow orbit right. Soft room tone, a glass tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "bowl-water",
+    "label": "Bowl water",
+    "prompt": "The start image holds as the first frame. Locked camera. Water in a stone bowl ticks once. Fixed camera. Soft room tone, a water tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "notebook",
+    "label": "Notebook",
+    "prompt": "The start image holds as the first frame. A tiny push toward an unmarked linen notebook. Slow push-in. Soft room tone, a paper tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "lantern",
+    "label": "Lantern",
+    "prompt": "The start image holds as the first frame. Orbit an unmarked brass lantern, unlit. Slow orbit right. Soft room tone, a metal tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "glove-pair",
+    "label": "Glove pair",
+    "prompt": "The start image holds as the first frame. A slight slide across blank matte gloves. Slight slide. Soft room tone, a fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "vase",
+    "label": "Vase",
+    "prompt": "The start image holds as the first frame. Orbit an unmarked sand ceramic vase. Slow orbit left. Soft room tone. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "flask",
+    "label": "Flask",
+    "prompt": "The start image holds as the first frame. Orbit an unmarked brushed-steel flask. Slow orbit right. Soft room tone, a metal tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "planter",
+    "label": "Planter",
+    "prompt": "The start image holds as the first frame. Locked camera. A palm pup leaf ticks. Fixed camera. Soft room tone, a leaf tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "coat-peg",
+    "label": "Coat on peg",
+    "prompt": "The start image holds as the first frame. Fabric on a peg breathes. Tiny push. Slow push-in. Soft room tone, a fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "two-mugs",
+    "label": "Two mugs",
+    "prompt": "The start image holds as the first frame. Orbit a pair of unmarked stone mugs. Slow orbit right. Soft room tone, a ceramic tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rope",
+    "label": "Rope coil",
+    "prompt": "The start image holds as the first frame. A slight slide across an unmarked rope coil. Slight slide. Soft room tone, a fiber hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "ink-pot",
+    "label": "Ink pot",
+    "prompt": "The start image holds as the first frame. Locked camera. A dip pen shadow crawls. Fixed camera. Soft room tone. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "end-hold-product",
+    "label": "End hold",
+    "prompt": "The start image holds as the first frame. A small orbit then the last frames hold. Orbit then hold. Soft room tone, a glass tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

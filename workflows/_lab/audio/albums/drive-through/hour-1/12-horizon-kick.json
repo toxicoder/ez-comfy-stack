@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "tearout, warped bass, trap hats, bass growl, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
         "[drop - heavy tearout drop, kick split wreck, warped growl, grid 263 0]\n\n[inst - trap hats roll, growl sustain, grid 263 1]\n\n[drop - harder stacked drop, formant reverse wreck, chest 808, grid 263 2]\n\n[inst - 808 triplets, hats denser, grid 263 3]\n\n[drop - full send drop, chest sub wreck, tearout warp, grid 263 4]\n\n[drop - harder growl drop, low rumble wreck, 808 punch, grid 263 5]\n\n[outro - kick holds, trap hats roll, growl ride, grid 263 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/12-horizon-kick"
       ],
       "title": "ez_edm_prompt"
     },

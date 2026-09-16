@@ -216,18 +216,31 @@ def _as_enhance_flag(value: object) -> bool:
     return True
 
 
+def _catalog_for_graph(graph: dict[str, Any]) -> str:
+    extra = graph.get("extra") or {}
+    return str(extra.get("lab_rel") or graph.get("id") or "")
+
+
 def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
     """Pad enhance-node widgets. Default enhance true. Identity titles use identity mode."""
-    graph_id = str(graph.get("id") or "")
+    graph_id = str((graph.get("extra") or {}).get("lab_rel") or graph.get("id") or "")
+    catalog = _catalog_for_graph(graph)
     for node in graph["nodes"]:
         ntype = node.get("type")
         values = list(node.get("widgets_values") or [])
         title = str(node.get("title") or "")
         if ntype in ("EZKleinPromptEnhance", "EZWanPromptEnhance"):
-            prompt = values[0] if values else ""
-            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
-            default_mode = "t2i" if ntype == "EZKleinPromptEnhance" else "t2v"
-            mode = values[2] if len(values) > 2 else default_mode
+            if len(values) >= 7:
+                sample, prompt, enhance, mode, hint, style, cat = values[:7]
+            else:
+                sample, cat = "custom", catalog
+                prompt = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                default_mode = "t2i" if ntype == "EZKleinPromptEnhance" else "t2v"
+                mode = values[2] if len(values) > 2 else default_mode
+                hint = values[3] if len(values) > 3 else ""
+                style = values[4] if len(values) > 4 else "none"
+            enhance = _as_enhance_flag(enhance)
             if ntype == "EZKleinPromptEnhance":
                 if "IDENTITY" in title.upper() or mode == "identity":
                     mode = "identity"
@@ -240,24 +253,55 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                     mode = "vace"
                 elif mode not in ("t2v", "i2v", "flf", "vace"):
                     mode = "t2v"
-            hint = values[3] if len(values) > 3 else ""
-            style = values[4] if len(values) > 4 else "none"
-            node["widgets_values"] = [prompt, enhance, mode, hint, style if style else "none"]
+            node["widgets_values"] = [
+                sample or "custom",
+                prompt,
+                enhance,
+                mode,
+                hint,
+                style if style else "none",
+                cat or catalog,
+            ]
         elif ntype == "EZLTXPromptEnhance":
-            prompt = values[0] if values else ""
-            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
-            mode = values[2] if len(values) > 2 else "t2v"
-            hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
-            audio = values[4] if len(values) > 4 else ""
-            style = values[5] if len(values) > 5 else "none"
-            node["widgets_values"] = [prompt, enhance, mode, hint, audio, style if style else "none"]
+            if len(values) >= 8:
+                sample, prompt, enhance, mode, hint, audio, style, cat = values[:8]
+            else:
+                sample, cat = "custom", catalog
+                prompt = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                mode = values[2] if len(values) > 2 else "t2v"
+                hint = values[3] if len(values) > 3 else "5 seconds, 24 fps"
+                audio = values[4] if len(values) > 4 else ""
+                style = values[5] if len(values) > 5 else "none"
+            node["widgets_values"] = [
+                sample or "custom",
+                prompt,
+                _as_enhance_flag(enhance),
+                mode,
+                hint,
+                audio,
+                style if style else "none",
+                cat or catalog,
+            ]
         elif ntype == "EZAceStepPromptEnhance":
-            tags = values[0] if values else ""
-            lyrics = values[1] if len(values) > 1 else ""
-            mode = values[3] if len(values) > 3 else "vocal"
+            if len(values) >= 6:
+                sample, tags, lyrics, enhance, mode, cat = values[:6]
+            else:
+                sample, cat = "custom", catalog
+                tags = values[0] if values else ""
+                lyrics = values[1] if len(values) > 1 else ""
+                enhance = True
+                mode = values[3] if len(values) > 3 else "vocal"
             if mode not in ("vocal", "instrumental"):
                 mode = "vocal"
-            node["widgets_values"] = [tags, lyrics, True, mode]
+            node["widgets_values"] = [
+                sample or "custom",
+                tags,
+                lyrics,
+                _as_enhance_flag(enhance),
+                mode,
+                cat or catalog,
+            ]
         elif ntype == "EZNegativePromptEnhance":
             prompt = values[0] if values else ""
             enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
@@ -265,10 +309,60 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
             if family not in POS_ENHANCE_FAMILY.values():
                 family = "klein"
             node["widgets_values"] = [prompt, enhance, family]
-        elif ntype in ("EZRapLyrics", "EZPodcastScript"):
-            text = values[0] if values else ""
-            rest = list(values[2:]) if len(values) > 2 else []
-            node["widgets_values"] = [text, True, *rest]
+        elif ntype == "EZRapLyrics":
+            if len(values) >= 4:
+                sample, text, enhance, cat = values[0], values[1], values[2], values[3]
+            else:
+                sample, cat = "custom", catalog
+                text = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+            node["widgets_values"] = [
+                sample or "custom",
+                text,
+                _as_enhance_flag(enhance),
+                cat or catalog,
+            ]
+        elif ntype == "EZPodcastScript":
+            if len(values) >= 5:
+                sample, text, enhance, flavor, cat = values[:5]
+            else:
+                sample, cat = "custom", catalog
+                text = values[0] if values else ""
+                enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+                flavor = values[2] if len(values) > 2 else "podcast_two_host"
+            node["widgets_values"] = [
+                sample or "custom",
+                text,
+                _as_enhance_flag(enhance),
+                flavor,
+                cat or catalog,
+            ]
+        elif ntype == "EZCreativeResearch":
+            if len(values) >= 7:
+                sample, text, mode, web, sub, hist, cat = values[:7]
+            else:
+                sample, cat = "custom", catalog
+                text = values[0] if values else ""
+                mode = values[1] if len(values) > 1 else "research"
+                web = values[2] if len(values) > 2 else True
+                sub = values[3] if len(values) > 3 else 2
+                hist = values[4] if len(values) > 4 else ""
+            node["widgets_values"] = [
+                sample or "custom",
+                text,
+                mode,
+                web,
+                sub,
+                hist,
+                cat or catalog,
+            ]
+        elif ntype == "EZSamplePrompt":
+            if len(values) >= 3:
+                sample, text, cat = values[0], values[1], values[2]
+            else:
+                sample, cat = "custom", catalog
+                text = values[0] if values else ""
+            node["widgets_values"] = [sample or "custom", text, cat or catalog]
 
 
 def append_note(graph: dict[str, Any]) -> None:
@@ -908,23 +1002,30 @@ def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
     ntype = node.get("type")
     values = list(node.get("widgets_values") or [])
     flag = bool(on)
-    if ntype in (
-        "EZKleinPromptEnhance",
-        "EZWanPromptEnhance",
-        "EZLTXPromptEnhance",
-        "EZNegativePromptEnhance",
-        "EZRapLyrics",
-        "EZPodcastScript",
-        "EZDubScript",
-    ):
+    if ntype == "EZNegativePromptEnhance" or ntype == "EZDubScript":
         while len(values) < 2:
             values.append(flag)
         values[1] = flag
         node["widgets_values"] = values
-    elif ntype == "EZAceStepPromptEnhance":
-        while len(values) < 3:
+        return
+    if ntype in (
+        "EZKleinPromptEnhance",
+        "EZWanPromptEnhance",
+        "EZLTXPromptEnhance",
+        "EZRapLyrics",
+        "EZPodcastScript",
+    ):
+        idx = 2 if len(values) >= 4 else 1
+        while len(values) <= idx:
             values.append(flag)
-        values[2] = flag
+        values[idx] = flag
+        node["widgets_values"] = values
+        return
+    if ntype == "EZAceStepPromptEnhance":
+        idx = 3 if len(values) >= 6 else 2
+        while len(values) <= idx:
+            values.append(flag)
+        values[idx] = flag
         node["widgets_values"] = values
 
 

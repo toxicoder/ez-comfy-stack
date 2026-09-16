@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "color bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
         "[drop - heavy color drop, warped 808 wreck, vault grind, grid 613 0]\n\n[inst - trap hats roll, color 808 hold vault, grid 613 1]\n\n[drop - harder growl drop, chest analog wreck, formant 808, grid 613 2]\n\n[inst - snare roll, chest 808 punch, grid 613 3]\n\n[drop - full send drop, stacked color wreck, warped sub, grid 613 4]\n\n[outro - kick holds, hats denser, color ride, grid 613 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/secret-homage/05-fog-vault"
       ],
       "title": "ez_edm_prompt"
     },

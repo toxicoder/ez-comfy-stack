@@ -1,0 +1,102 @@
+[
+  {
+    "id": "breeze-cycle",
+    "label": "Breeze cycle",
+    "prompt": "Locked camera. Gentle cyclic breeze in fabric or leaves. Lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "leaves-cycle",
+    "label": "Leaves cycle",
+    "prompt": "Locked camera. Gentle cyclic breeze in leaves. Lights shimmer, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "fabric-cycle",
+    "label": "Fabric cycle",
+    "prompt": "Locked camera. Coat hem lifts and falls in a cyclic breeze. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "curtain-cycle",
+    "label": "Curtain cycle",
+    "prompt": "Locked camera. A curtain breathes in and out. No walk. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "water-cycle",
+    "label": "Water cycle",
+    "prompt": "Locked camera. Water beads and a fountain pulse, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "lantern-cycle",
+    "label": "Lantern cycle",
+    "prompt": "Locked camera. Lanterns shimmer, then settle. Fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "glyph-cycle",
+    "label": "Glyph cycle",
+    "prompt": "Locked camera. Glyph motes orbit once and return. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "rain-cycle",
+    "label": "Rain cycle",
+    "prompt": "Locked camera. Rain beads form and roll, then the pattern repeats. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "fog-cycle",
+    "label": "Fog cycle",
+    "prompt": "Locked camera. Fog thickens and thins. Fabric hush. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "palm-cycle",
+    "label": "Palm cycle",
+    "prompt": "Locked camera. Palm fronds lift and drop in a cyclic breeze. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "steam-cycle",
+    "label": "Steam cycle",
+    "prompt": "Locked camera. Steam lifts and folds back. No walk. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "flag-cycle",
+    "label": "Cloth cycle",
+    "prompt": "Locked camera. A hanging cloth waves and returns. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "spark-cycle",
+    "label": "Spark cycle",
+    "prompt": "Locked camera. Tiny warm motes rise and fade in place. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "shadow-cycle",
+    "label": "Shadow cycle",
+    "prompt": "Locked camera. Leaf shadow crawls and returns on stone. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "neon-cycle",
+    "label": "Practical cycle",
+    "prompt": "Locked camera. Practicals pulse softly, then settle. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "dust-cycle",
+    "label": "Dust cycle",
+    "prompt": "Locked camera. Dust turns in a window shaft and settles. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "wave-cycle",
+    "label": "Surf cycle",
+    "prompt": "Locked camera. Distant surf pulses. Coat hem cyclic. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "snow-cycle",
+    "label": "Snow cycle",
+    "prompt": "Locked camera. Snow sifts and pauses. Breath cyclic. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "heat-cycle",
+    "label": "Heat cycle",
+    "prompt": "Locked camera. Heat shimmer over stone, then still. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  },
+  {
+    "id": "idle-cycle",
+    "label": "Idle cycle",
+    "prompt": "Locked camera. Tiny fabric and light idle. No walk. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. Gentle cyclic motion for a looping GIF."
+  }
+]

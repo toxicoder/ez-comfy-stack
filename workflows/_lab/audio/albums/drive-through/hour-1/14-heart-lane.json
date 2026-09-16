@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
         "[drop - heavy wave drop, chest 808 warp, fold wreck, grid 223 0]\n\n[inst - trap hats roll, wave 808 sustain lane, grid 223 1]\n\n[drop - harder formant drop, full send kick wreck, 808 slide, grid 223 2]\n\n[inst - snare roll, chest 808, grid 223 3]\n\n[drop - full send drop, stacked wave bass, warped rumble, grid 223 4]\n\n[outro - kick holds, trap hats roll, wave ride, grid 223 5]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-1/14-heart-lane"
       ],
       "title": "ez_edm_prompt"
     },

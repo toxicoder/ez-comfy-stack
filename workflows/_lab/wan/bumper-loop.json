@@ -590,11 +590,13 @@
         "Node name for S&R": "EZWanPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Locked camera bumper loop. Soft cyclic breeze on leaves and fabric. Motion returns near the start pose for seamless ping-pong. Keep start-image identity locked. No walk, no dolly. Keep every object and surface from the start image; do not redesign.",
         false,
         "i2v",
         "looping bumper, 12 fps",
-        "none"
+        "none",
+        "wan/bumper-loop"
       ],
       "title": "Wan Prompt Enhance"
     },
@@ -857,6 +859,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          15,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           15,
           "prompt",

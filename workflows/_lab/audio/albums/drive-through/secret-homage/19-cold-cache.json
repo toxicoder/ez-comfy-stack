@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "hybrid trap, warped bass, trap hats, dirty 808, chest sub, trap bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
         "[drop - heavy hybrid drop, warped 808 wreck, cache grind, grid 701 0]\n\n[inst - trap hats roll, 808 slide, grid 701 1]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 701 2]\n\n[inst - snare roll, chest 808 punch, grid 701 3]\n\n[inst - hats denser, cache 808 hold, grid 701 4]\n\n[inst - 808 triplets, hybrid growl sustain, grid 701 5]\n\n[drop - full send drop, chest sub wreck, hybrid warp, grid 701 6]\n\n[outro - kick holds, hats denser, 808 ride, grid 701 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/secret-homage/19-cold-cache"
       ],
       "title": "ez_edm_prompt"
     },

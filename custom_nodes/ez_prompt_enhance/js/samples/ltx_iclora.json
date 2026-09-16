@@ -1,0 +1,102 @@
+[
+  {
+    "id": "envelope-hold",
+    "label": "Envelope hold",
+    "prompt": "The start image holds as the first frame. Motion under the guide envelope. Gentle fabric. Camera stays with the clay blocking. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-breeze",
+    "label": "Envelope breeze",
+    "prompt": "The start image holds as the first frame. Gentle breeze in fabric or leaves. Camera stays with the clay blocking. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-push",
+    "label": "Envelope push",
+    "prompt": "The start image holds as the first frame. A slow push that stays inside the guide envelope. Slow push-in along the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-pan",
+    "label": "Envelope pan",
+    "prompt": "The start image holds as the first frame. A slow pan that stays inside the guide envelope. Slow pan along the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-track",
+    "label": "Envelope track",
+    "prompt": "The start image holds as the first frame. A short track that stays inside the guide envelope. Track along the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-fixed",
+    "label": "Envelope fixed",
+    "prompt": "The start image holds as the first frame. Fixed camera. Motion is fabric and light only. Blocking from the guide. Fixed camera. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-rain",
+    "label": "Envelope rain",
+    "prompt": "The start image holds as the first frame. Rain beads. Camera stays with the clay blocking. Camera follows the guide. Rain matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-night",
+    "label": "Envelope night",
+    "prompt": "The start image holds as the first frame. Night practicals. Camera stays with the clay blocking. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-dawn",
+    "label": "Envelope dawn",
+    "prompt": "The start image holds as the first frame. Dawn light. Camera stays with the clay blocking. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-crowd-far",
+    "label": "Envelope far crowd",
+    "prompt": "The start image holds as the first frame. Far motion only. Near blocking from the guide. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-hands",
+    "label": "Envelope hands",
+    "prompt": "The start image holds as the first frame. Modest hand motion. Silhouette from the guide. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-walk",
+    "label": "Envelope walk",
+    "prompt": "The start image holds as the first frame. A short walk that stays inside the guide path. Camera follows the guide. Footfalls under world SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-settle",
+    "label": "Envelope settle",
+    "prompt": "The start image holds as the first frame. Motion settles. Last frames hold. Blocking from the guide. Camera follows the guide then holds. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-canny",
+    "label": "Envelope canny",
+    "prompt": "The start image holds as the first frame. Stay inside the canny edges. Gentle fabric. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-depth",
+    "label": "Envelope depth",
+    "prompt": "The start image holds as the first frame. Stay inside the depth envelope. Gentle fabric. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-shorts",
+    "label": "Envelope vertical",
+    "prompt": "The start image holds as the first frame. Vertical Shorts framing. Motion under the guide envelope. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-indoor",
+    "label": "Envelope indoor",
+    "prompt": "The start image holds as the first frame. Indoor practicals. Camera stays with the clay blocking. Camera follows the guide. Room tone matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-wind",
+    "label": "Envelope wind",
+    "prompt": "The start image holds as the first frame. Wind pulls fabric. Camera stays with the clay blocking. Camera follows the guide. Wind matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-no-redesign",
+    "label": "No redesign",
+    "prompt": "The start image holds as the first frame. Do not redesign layout. Motion only under the guide. Camera follows the guide. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "envelope-end-hold",
+    "label": "Envelope end hold",
+    "prompt": "The start image holds as the first frame. Motion under the guide, last frames hold for the next shot. Camera follows the guide then holds. World SFX matching the start image. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

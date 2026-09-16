@@ -73,7 +73,8 @@ def test_talking_head_graph() -> None:
     assert "wav2lip" not in blob.lower()
     assert any(n.get("type") == "VHS_VideoCombine" for n in graph["nodes"])
     ltx = next(n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance")
-    assert ltx["widgets_values"][1] is False
+    lv = ltx["widgets_values"]
+    assert (lv[2] if len(lv) >= 8 else lv[1]) is False
 
 
 def test_identity_sheet_seed_and_size() -> None:
@@ -89,7 +90,8 @@ def test_identity_sheet_seed_and_size() -> None:
             assert int(node["widgets_values"][0]) == 1280
             assert int(node["widgets_values"][1]) == 704
         if node.get("type") == "EZKleinPromptEnhance":
-            assert node["widgets_values"][1] is True
+            values = node["widgets_values"]
+            assert (values[2] if len(values) >= 7 else values[1]) is True
         if node.get("type") == "KSampler":
             assert int(node["widgets_values"][0]) == 42
     blob = json.dumps(graph)

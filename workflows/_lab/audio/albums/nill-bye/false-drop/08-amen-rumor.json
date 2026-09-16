@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nbreak empty\nfill missing\nrumor racing\n\n[verse]\nRake chops an amen like a headline\nTalks a fill that he never signed\nBreak racing, the barline's empty\nSub reese humming on a rumor plenty\nI wait for the answer after the snare\nYou loop the chop and you call it prayer\nHats in a hurry, the fill won't click\nThat's a king with a ghost in the stick\nNill Bye counting the missing fill\nYour whole amen is a hollow drill\nFast chop, then a cheaper hush\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nYou name a break like a vintage stamp\nThen you freeze when I ask who filled the gap\nDrum-and-bass ticking, the snare stays lonely\nReese underneath on a story only\nI want a fill that can close the phrase\nYou want a chop with a rumor glaze\nAmen king on a looped excuse\nNo answer bar, just a flying ruse\nNill Bye marking the empty bar\nRake riding chops like a stolen car\nBreak looks busy, the fill still lags\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nChop left, chop right, still no answer\nYour legend lives in a break you rented\nI clock the snare, I clock the gap\nI clock a flex with a missing clap\nNill Bye filing a no-fill docket\nRake still selling a break as canvas\nGhost bar dressed as a lecture\nThe chop runs out, and so do the verses\nHold the amen or drop the mic\nYour rumor never sat in the kick\nEmpty in the middle, the boast looks hollow\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nMorning comes, the break is tired\nFill never came, the rumor fired\nHats go even, the chop gets shelved\nNo answer logged, the boast was delved\nNill Bye tagging a ghosted fill\nRake still calling it a skill\nAmen king with a rented snare\nThe bar never paid the fare\nFile the chop, keep the gap\nFast rumor is a party map\nBreak dead, the booth stays sober\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[outro]\nbreak stops\nfill never\nrumor dies\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/08-amen-rumor"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, 174 bpm",
         "[intro]\nbreak empty\nfill missing\nrumor racing\n\n[verse]\nRake chops an amen like a headline\nTalks a fill that he never signed\nBreak racing, the barline's empty\nSub reese humming on a rumor plenty\nI wait for the answer after the snare\nYou loop the chop and you call it prayer\nHats in a hurry, the fill won't click\nThat's a king with a ghost in the stick\nNill Bye counting the missing fill\nYour whole amen is a hollow drill\nFast chop, then a cheaper hush\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nYou name a break like a vintage stamp\nThen you freeze when I ask who filled the gap\nDrum-and-bass ticking, the snare stays lonely\nReese underneath on a story only\nI want a fill that can close the phrase\nYou want a chop with a rumor glaze\nAmen king on a looped excuse\nNo answer bar, just a flying ruse\nNill Bye marking the empty bar\nRake riding chops like a stolen car\nBreak looks busy, the fill still lags\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nChop left, chop right, still no answer\nYour legend lives in a break you rented\nI clock the snare, I clock the gap\nI clock a flex with a missing clap\nNill Bye filing a no-fill docket\nRake still selling a break as canvas\nGhost bar dressed as a lecture\nThe chop runs out, and so do the verses\nHold the amen or drop the mic\nYour rumor never sat in the kick\nEmpty in the middle, the boast looks hollow\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[verse]\nMorning comes, the break is tired\nFill never came, the rumor fired\nHats go even, the chop gets shelved\nNo answer logged, the boast was delved\nNill Bye tagging a ghosted fill\nRake still calling it a skill\nAmen king with a rented snare\nThe bar never paid the fare\nFile the chop, keep the gap\nFast rumor is a party map\nBreak dead, the booth stays sober\n\n[chorus]\nAmen rumor\nFast chop, empty bar\nNill Bye wants a fill\nRake loops a ghost\nBreak with no answer\nRumor riding the snare\n\n[outro]\nbreak stops\nfill never\nrumor dies\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/08-amen-rumor"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

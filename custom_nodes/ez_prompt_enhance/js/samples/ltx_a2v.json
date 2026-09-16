@@ -1,0 +1,102 @@
+[
+  {
+    "id": "listen-move",
+    "label": "Listen and move",
+    "prompt": "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Five seconds."
+  },
+  {
+    "id": "head-nod",
+    "label": "Head nod",
+    "prompt": "The start image holds as the first frame. The subject listens and nods with the loaded soundtrack. Modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "sway",
+    "label": "Sway",
+    "prompt": "The start image holds as the first frame. The subject sways with the loaded clip. Fabric hush. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hands",
+    "label": "Hands with the bed",
+    "prompt": "The start image holds as the first frame. Hands move with the loaded clip. Modest motion. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "breath",
+    "label": "Breath with the bed",
+    "prompt": "The start image holds as the first frame. Breath and tiny head motion with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "look-off-a2v",
+    "label": "Look off",
+    "prompt": "The start image holds as the first frame. The subject looks off-frame with the loaded clip, then back. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "staff-idle-a2v",
+    "label": "Staff idle",
+    "prompt": "The start image holds as the first frame. Glyph motes idle with the loaded clip. Modest body motion. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "sit-listen",
+    "label": "Sit and listen",
+    "prompt": "The start image holds as the first frame. Seated listen. Modest head motion with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "stand-listen",
+    "label": "Stand and listen",
+    "prompt": "The start image holds as the first frame. Standing listen. Modest sway with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "tiny-push",
+    "label": "Tiny push",
+    "prompt": "The start image holds as the first frame. A tiny push-in while the subject listens to the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Slow push-in. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hold-freeze",
+    "label": "Hold freeze",
+    "prompt": "The start image holds as the first frame. Almost still. Picture follows the loaded clip. Locked wardrobe and set. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "fabric-only",
+    "label": "Fabric only",
+    "prompt": "The start image holds as the first frame. Fabric hush with the loaded clip. Body almost still. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "night-listen",
+    "label": "Night listen",
+    "prompt": "The start image holds as the first frame. Night practicals. Modest head motion with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rain-listen",
+    "label": "Rain listen",
+    "prompt": "The start image holds as the first frame. Rain beads. Modest motion with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "desk-listen",
+    "label": "Desk listen",
+    "prompt": "The start image holds as the first frame. At a desk. Modest head motion with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rail-listen",
+    "label": "Rail listen",
+    "prompt": "The start image holds as the first frame. At a rail. Modest sway with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "eyes-closed",
+    "label": "Eyes closed",
+    "prompt": "The start image holds as the first frame. Eyes close then open with the loaded clip. Modest motion. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "shoulder",
+    "label": "Shoulder roll",
+    "prompt": "The start image holds as the first frame. A small shoulder roll with the loaded clip. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "end-still",
+    "label": "End still",
+    "prompt": "The start image holds as the first frame. Motion with the loaded clip, last frames still. Locked wardrobe and set. Picture follows the audio. Mouths will not match. Fixed camera then hold. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "no-extra-score",
+    "label": "No extra score",
+    "prompt": "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack only. Locked wardrobe and set. Picture follows the audio. Mouths will not match. No extra music. Fixed camera. Use the loaded clip; do not invent a score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

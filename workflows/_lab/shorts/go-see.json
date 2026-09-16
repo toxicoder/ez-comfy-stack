@@ -441,11 +441,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A chest-mounted first-person body-cam still, eye-level, already at a dead sprint across a golden-hour tropical rooftop terrace, looking straight ahead at a wide rooftop gap that already fills the center. Only the wearer's own ink-black fitted running sleeves and blank matte-black gloves enter from the bottom edge: contralateral pump, left glove hip-to-chest, empty palms, hands free. An open short storm-cloak in matte charcoal with a warm-gold inner lining streams at the left and right frame edges. Tiny floating warm-gold rune motes hover near the wrists only. Unmarked palm trees and glass towers rush toward a bright bay beyond the gap. Late-sun rim light, fabric weave and stone grit, mild film grain. Wide 24mm body-cam, slight barrel, a full-bleed photographic plate in YouTube 16:9 with bare frame edges and a clean unmarked lens, empty of lettering.",
         false,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -1064,12 +1066,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Race-pace footfalls strike terrace stone as the dead sprint continues, warm wind and grit ticks with each stride, close-mic breath on the contralateral pump. First-person eye-level body-cam tracks forward, horizon bobbing, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. The rooftop gap already in the start frame grows dead ahead. Last frames hold the gap in the center until it fills the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b1 s1 LTX I2V enhance"
     },
@@ -1650,12 +1654,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. A takeoff inhale, then wind roar as the tucked front flip crosses the rooftop gap already filling the start frame; look at the far terrace lip before launch, the horizon rolls once, a boot slam and camera dip, effort breath, lip grit. First-person eye-level body-cam tracks through the roll, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the low unmarked bulkhead in the center. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b1 s2 LTX I2V enhance"
     },
@@ -2236,12 +2242,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Both blank matte-black gloves plant the low unmarked bulkhead already in the start frame, fabric snap as hips pass between the arms for a kong vault, then a three-step parkour wall-run on glass, wall ticks and wind rush, effort breath on the drop. First-person eye-level body-cam tracks over the lip and down, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms after the plant. Last frames hold the glowing unmarked waterfront skybridge in the center, metal grating filling the view. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b1 s3 LTX I2V enhance"
     },
@@ -2822,12 +2830,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Dead sprint along the unmarked maglev skybridge already in the start frame; boots hammer metal grating ticks, storm-cloak snap, wind, close-mic breath. First-person eye-level body-cam tracks along the spine, unmarked glass towers streaking past, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms, contralateral pump. Last frames hold the next gantry gap in the center until it fills the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b2 s1 LTX I2V enhance"
     },
@@ -3408,12 +3418,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. A cat leap between unmarked gantry segments already in the start frame; blank matte-black gloves wrap a metal rail with a clang, wind shear as the body swings through, boots flash the lower frame, effort breath. First-person eye-level body-cam tracks the swing, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms after the grab. Last frames hold the vertical glass canyon in the center. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b2 s2 LTX I2V enhance"
     },
@@ -3994,12 +4006,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Dive off the last gantry already in the start frame into the vertical glass canyon; camera pitches down, wind roar and falling rush, fabric snap, close-mic breath, boots kick the lower frame. First-person eye-level body-cam tracks downward, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the palms in the center as they rush up and fill the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b2 s3 LTX I2V enhance"
     },
@@ -4580,12 +4594,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Parkour wall-run on unmarked canyon glass among real tropical plants already in the start frame; inside boot kicks wet stone, glass ticks, tunnel wind, kicking boots, close-mic breath, palms streak past. First-person eye-level body-cam tracks along the glass, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the garden terrace lip in the center. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b3 s1 LTX I2V enhance"
     },
@@ -5166,12 +5182,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Tic-tac and speed vault across hanging unmarked garden terraces already in the start frame; outside boot kicks the wet-stone riser, both blank matte-black gloves plant the next lip, cloth slap, wrist sparks, close-mic breath. First-person eye-level body-cam tracks forward, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms after the plant. Last frames hold the water curtain in the center, dead ahead. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b3 s2 LTX I2V enhance"
     },
@@ -5752,12 +5770,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Parkour burst through the garden water curtain already filling the start frame; water explodes at the lens, splash, wind, close-mic breath, boots splash the lower frame. First-person eye-level body-cam tracks through the sheet, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the storm-lit unmarked causeway in the center, rain streaks on the lens, until it fills the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b3 s3 LTX I2V enhance"
     },
@@ -6338,12 +6358,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Dead sprint on the rain-slick unmarked causeway already in the start frame; rain on storm-cloak, wet footfalls, distant thunder, close-mic breath, visible rain streaks on the lens. First-person eye-level body-cam tracks the wet stone, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the squall gap in the center. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b4 s1 LTX I2V enhance"
     },
@@ -6924,12 +6946,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Precision leap across the squall gap already filling the start frame; look at the far lip before launch, wind shear, rain ticks, camera pitches then dips on landing, close-mic inhale. First-person eye-level body-cam tracks the jump, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the coastal cliffs in the center. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b4 s2 LTX I2V enhance"
     },
@@ -7510,12 +7534,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Dash vault the last unmarked causeway lip already in the start frame toward the coastal cliffs; both blank matte-black gloves plant the edge, body dives through, knees flash, vault plant, grit, thinning rain, close-mic breath. First-person eye-level body-cam tracks through the plant, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms after the plant. Last frames hold the unmarked ridge stone in the center under the boots. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b4 s3 LTX I2V enhance"
     },
@@ -8096,12 +8122,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Dead sprint a narrow wet-stone ridge already in the start frame, drops on both sides; wet-stone footfalls, wind, grit ticks, close-mic breath. First-person eye-level body-cam tracks the knife-edge, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the wet root arch in the center until it fills the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b5 s1 LTX I2V enhance"
     },
@@ -8682,12 +8710,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Slide under the wet root arch already filling the start frame; blank matte-black gloves, one grazes the wood, wood scrape, wind through the arch, kick, close-mic breath, boots kick the lower frame, then both arms pop back into a pump. First-person eye-level body-cam tracks through the arch, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms. Last frames hold the serrated climb line of wet stone in the center ahead. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b5 s2 LTX I2V enhance"
     },
@@ -9268,12 +9298,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Parkour climb-run the serrated coastal ridge already in the start frame; blank matte-black gloves grab a wet-stone ledge, ledge grit, wind shear, grabbing gloves, close-mic effort breath, boots kick the next hold, warm city lights bloom over the tropical bay. First-person eye-level body-cam tracks up the holds, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms after each grab. Last frames hold the warm-night ridge in the center, drops on both sides. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b5 s3 LTX I2V enhance"
     },
@@ -9854,12 +9886,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Last all-out sprint along the warm-night ridge already in the start frame, unmarked stone dropping away on both sides toward the bay; stone footfalls, night wind, close-mic breath. First-person eye-level body-cam tracks the ridge, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge, empty palms. Last frames hold the unmarked overlook rail in the center until it fills the frame. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b6 s1 LTX I2V enhance"
     },
@@ -10440,12 +10474,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Leap onto the unmarked overlook rail already filling the start frame; both blank matte-black gloves wrap the weathered wood, leap wind, boot land, rail creak, slowing breath, camera dips and settles over warm tropical bay lights. First-person eye-level body-cam tracks from leap to plant, no cut. The wearer's own ink-black sleeves stay along the bottom edge, empty palms wrapping wood. Last frames hold the hold in the center as both gloves stay on the rail. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b6 s2 LTX I2V enhance"
     },
@@ -11026,12 +11062,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. Wordless mix: silent mouth. Hold on the weathered unmarked rail already in the start frame; the run is over, camera still, slowing close-mic breath, distant wind, one rail creak. First-person eye-level body-cam, fixed camera, no cut. The wearer's own ink-black sleeves and blank matte-black gloves stay along the bottom edge on the rail, empty palms wrapping wood. Last frames hold the still view in the center, gloves on the rail over warm tropical bay lights. No speech. No music and no score.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "",
-        "none"
+        "none",
+        "shorts/go-see"
       ],
       "title": "b6 s3 LTX I2V enhance"
     },
@@ -15543,6 +15581,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          11,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           11,
           "prompt",

@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
         "[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]\n\n[inst - trap hats roll, reese sustain, grid 313 1]\n\n[drop - harder stacked drop, formant 808 wall, chest sub, grid 313 2]\n\n[drop - full send drop, chest sub wreck, neuro warp, grid 313 3]\n\n[outro - kick holds, trap hats roll, reese ride, grid 313 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/08-psy-median"
       ],
       "title": "ez_edm_prompt"
     },

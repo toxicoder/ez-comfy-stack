@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nink still wet\nNill Bye logging\n\n[verse]\nRake cites a night with no line item\nScreenshot lore from a vanished time\nI cite a row with a time and chem\nChain of custody on a stopper stem\nYour thread deleted, my margin dated\nYour legend lives in a rumor that faded\nI want the page that can hold a year\nYou want a screenshot and a borrowed cheer\nNill Bye logging what the dates engage\nHe still flipping a vanished page\nInk or it did not exist\nGroup-chat science is a rumor mist\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nYou cite a night with a missing row\nI cite a timestamp, then I let it show\nCustody broken, the story walks\nMy book is bound, your lore just talks\nWrite it down or get off the spit\nPencil-thin legend, I don't buy it\nI log the crash, you log the show\nI log the date, you log a glow\nNill Bye with the bound black book\nRake with a screenshot look\nBring the notebook, drop the myth\nDated ink is a rumor gift\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nMonday 9:12, the flask was clean\nMonday 9:40, you wrecked the scene\nI wrote the miss in a tighter hand\nYou wrote a saga in the group-chat sand\nPage corner folded, the witness signed\nYour whole archive is a disappearing mind\nNill Bye filing what the dates engage\nRake still hunting a vanished page\nShow the leaf or leave the spit\nReceipts or it did not exist\nBlack book closed, the lore got thin\nYour night never made it in\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nI ask the date, you send a meme\nI ask the row, you send a dream\nCustody chain on a stopper lid\nYour chain of story did what it did\nNill Bye out, the record stands\nRake still leaking through his hands\nInk dry now, the rumor smudged\nGroup-chat gospel got quietly judged\nBring a page number, drop the throne\nA screenshot is not a cornerstone\nLab book wins, the thread gets tossed\nYour legend is a message you lost\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[outro]\nink dry\npage closed\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/peer-review/10-lab-notebook"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 92 bpm",
         "[intro]\nink still wet\nNill Bye logging\n\n[verse]\nRake cites a night with no line item\nScreenshot lore from a vanished time\nI cite a row with a time and chem\nChain of custody on a stopper stem\nYour thread deleted, my margin dated\nYour legend lives in a rumor that faded\nI want the page that can hold a year\nYou want a screenshot and a borrowed cheer\nNill Bye logging what the dates engage\nHe still flipping a vanished page\nInk or it did not exist\nGroup-chat science is a rumor mist\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nYou cite a night with a missing row\nI cite a timestamp, then I let it show\nCustody broken, the story walks\nMy book is bound, your lore just talks\nWrite it down or get off the spit\nPencil-thin legend, I don't buy it\nI log the crash, you log the show\nI log the date, you log a glow\nNill Bye with the bound black book\nRake with a screenshot look\nBring the notebook, drop the myth\nDated ink is a rumor gift\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nMonday 9:12, the flask was clean\nMonday 9:40, you wrecked the scene\nI wrote the miss in a tighter hand\nYou wrote a saga in the group-chat sand\nPage corner folded, the witness signed\nYour whole archive is a disappearing mind\nNill Bye filing what the dates engage\nRake still hunting a vanished page\nShow the leaf or leave the spit\nReceipts or it did not exist\nBlack book closed, the lore got thin\nYour night never made it in\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[verse]\nI ask the date, you send a meme\nI ask the row, you send a dream\nCustody chain on a stopper lid\nYour chain of story did what it did\nNill Bye out, the record stands\nRake still leaking through his hands\nInk dry now, the rumor smudged\nGroup-chat gospel got quietly judged\nBring a page number, drop the throne\nA screenshot is not a cornerstone\nLab book wins, the thread gets tossed\nYour legend is a message you lost\n\n[chorus]\nNill Bye with the lab book\nRake with the group chat\nDated ink vs a rumor stack\nShow the page or send it back\nScience writes, the gossip fades\nYour legend lives in the deleted shades\n\n[outro]\nink dry\npage closed\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/peer-review/10-lab-notebook"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

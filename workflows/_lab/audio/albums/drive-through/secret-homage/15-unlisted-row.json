@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 176 bpm",
         "[drop - heavy amen drop, reese wreck, warped row, grid 673 0]\n\n[inst - amen chops, trap hats 808 row, grid 673 1]\n\n[drop - harder stacked drop, chest reese wreck, formant 808, grid 673 2]\n\n[inst - hats denser, reese hold, grid 673 3]\n\n[drop - full send drop, stacked amen wreck, 808 warp, grid 673 4]\n\n[inst - snare roll, chest 808 punch, grid 673 5]\n\n[drop - harder growl drop, chest 808 wreck, drumstep grind, grid 673 6]\n\n[outro - kick holds, amen keep, reese ride, grid 673 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/secret-homage/15-unlisted-row"
       ],
       "title": "ez_edm_prompt"
     },

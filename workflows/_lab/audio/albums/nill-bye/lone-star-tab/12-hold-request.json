@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nshuffled hats\norgan stab\nNill Bye filing\n\n[verse]\nAugust twenty-twenty-six, a suit from Minnesota\nAn ICE officer accused of wounding a man\nAbbott declined the hold request\nKeep the agent, skip the trial\nNill Bye filing the extradite\nUK-garage shuffle on a custody fight\nYou preach law and order until the badge is yours\nThen the order becomes a shield\nA shooting in another state is still a shooting\nA lie in a report is still a lie\nYou made Texas a dock for a federal gun\nAnd called it sovereignty\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nThe AG in Minnesota asked a judge to compel\nBecause asking you politely had failed\nAbbott likes a compact when it buses people out\nNot when it sends a shooter back\nNill Bye mad at a two-way federalism\nExport the buses, import the impunity\nA shuffled garage on a double standard\nYou cannot brag the rule of statutes\nAnd then sit on the warrant\nA hold is a courtesy among states\nYou spent it on a faction\nThe organ stab is the tell\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nMinneapolis crackdown, a man wounded\nThe report allegedly cleaned the facts\nAbbott heard ICE and stopped hearing the victim\nA letterhead as a hiding place\nNill Bye reading the complaint\nExtradition is not a vibe\nIt is a statute you like when it hunts the other direction\nHere the direction was inconvenient\nSo the request went to a file\nAnd the agent stayed in the friendly state\nThat is not comity\nThat is a club with a star on the door\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nShuffled hats, sub under a standoff\nTwo states, one badge, zero spine from Austin\nNill Bye posting the hold request\nAbbott still sure a federal agent is above a state charge\nIf the charge is real, send him\nIf the charge is not, beat it in court\nHiding is a third option for the guilty-adjacent\nI want a trial, you want a dock\nKeep the shuffle, lose the shelter\nMinnesota should not have to sue a governor\nTo knock on a door\nYour federalism only opens one way\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[outro]\nhats hush\ndock full\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/12-hold-request"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "UK garage, shuffled hats, organ stab, sub bass, male rap vocals, dry booth, no autotune, 130 bpm",
         "[intro]\nshuffled hats\norgan stab\nNill Bye filing\n\n[verse]\nAugust twenty-twenty-six, a suit from Minnesota\nAn ICE officer accused of wounding a man\nAbbott declined the hold request\nKeep the agent, skip the trial\nNill Bye filing the extradite\nUK-garage shuffle on a custody fight\nYou preach law and order until the badge is yours\nThen the order becomes a shield\nA shooting in another state is still a shooting\nA lie in a report is still a lie\nYou made Texas a dock for a federal gun\nAnd called it sovereignty\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nThe AG in Minnesota asked a judge to compel\nBecause asking you politely had failed\nAbbott likes a compact when it buses people out\nNot when it sends a shooter back\nNill Bye mad at a two-way federalism\nExport the buses, import the impunity\nA shuffled garage on a double standard\nYou cannot brag the rule of statutes\nAnd then sit on the warrant\nA hold is a courtesy among states\nYou spent it on a faction\nThe organ stab is the tell\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nMinneapolis crackdown, a man wounded\nThe report allegedly cleaned the facts\nAbbott heard ICE and stopped hearing the victim\nA letterhead as a hiding place\nNill Bye reading the complaint\nExtradition is not a vibe\nIt is a statute you like when it hunts the other direction\nHere the direction was inconvenient\nSo the request went to a file\nAnd the agent stayed in the friendly state\nThat is not comity\nThat is a club with a star on the door\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[verse]\nShuffled hats, sub under a standoff\nTwo states, one badge, zero spine from Austin\nNill Bye posting the hold request\nAbbott still sure a federal agent is above a state charge\nIf the charge is real, send him\nIf the charge is not, beat it in court\nHiding is a third option for the guilty-adjacent\nI want a trial, you want a dock\nKeep the shuffle, lose the shelter\nMinnesota should not have to sue a governor\nTo knock on a door\nYour federalism only opens one way\n\n[chorus]\nHold request\nNill Bye on the extradite\nAbbott would not send the agent back\nMinnesota charged a shooting and a lie\nA governor as a shelter\nYour federalism is a hiding place\n\n[outro]\nhats hush\ndock full\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/12-hold-request"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

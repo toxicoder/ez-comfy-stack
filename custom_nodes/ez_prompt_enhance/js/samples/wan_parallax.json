@@ -1,0 +1,102 @@
+[
+  {
+    "id": "lab-parallax",
+    "label": "Lab parallax",
+    "prompt": "Locked camera with a slight lateral slide so near objects drift against the far plane. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "slide-right",
+    "label": "Slide right",
+    "prompt": "Slight slide right. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "slide-left",
+    "label": "Slide left",
+    "prompt": "Slight slide left. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "near-far",
+    "label": "Near against far",
+    "prompt": "Near objects drift against the far plane. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "rail-slide",
+    "label": "Rail slide",
+    "prompt": "Slide along a rail; near posts drift. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "aisle-slide",
+    "label": "Aisle slide",
+    "prompt": "Slide in an aisle; near leaves drift. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "terrace-slide",
+    "label": "Terrace slide",
+    "prompt": "Slide on a terrace. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "indoor-slide",
+    "label": "Indoor slide",
+    "prompt": "Slide indoors; near furniture drifts. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "night-slide",
+    "label": "Night slide",
+    "prompt": "Slide under night practicals. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "dawn-slide",
+    "label": "Dawn slide",
+    "prompt": "Slide in first light. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "rain-slide",
+    "label": "Rain slide",
+    "prompt": "Slide; rain beads hold. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "fog-slide",
+    "label": "Fog slide",
+    "prompt": "Slide in fog; near posts drift. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "crowd-far",
+    "label": "Far crowd",
+    "prompt": "Far crowd smears; near identity locked. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "fabric-slide",
+    "label": "Fabric slide",
+    "prompt": "Slide; fabric hush. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "tiny-slide",
+    "label": "Tiny slide",
+    "prompt": "A very small lateral slide. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "settle-slide",
+    "label": "Slide then settle",
+    "prompt": "Slide then settle. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "lock-slide",
+    "label": "Hard lock slide",
+    "prompt": "Slide; identity locked hard. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "table-slide",
+    "label": "Table slide",
+    "prompt": "Slide a tabletop; near rim drifts. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "window-slide",
+    "label": "Window slide",
+    "prompt": "Slide; near frame vs far glass. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "end-hold",
+    "label": "End hold",
+    "prompt": "Slide and hold the last frames. Gentle breeze in fabric or leaves. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  }
+]

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nstick lit\npretty burn\nyield zero\n\n[verse]\nRake lights a stick like a breakthrough\nTalks a reaction he never knew\nSparks climb pretty, the yield stays zero\nThat's a party trick in a tourist hero\nI want a product, you want a fizz\nYou want a photo of a pretty hiss\nWire burning, nothing in the pan\nAsh on the table, that was the plan\nNill Bye weighing a dead sparkler\nYour whole reaction is a tourist dollar\nPretty burn, then the stick goes dull\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nYou name a spark like a published find\nThen you fold when I ask the yield behind\nHats keep ticking, the stick keeps wasting\nDark pads waiting while the ash is tasting\nI want a gram that can hit a scale\nYou want a glitter that can fill a tale\nSparkler king on a wire diet\nNo compound, just a camera riot\nNill Bye bagging the pretty waste\nRake calling fireworks a dataset\nBurn looks busy, the pan stays clean\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nSparks jump left, then they jump right\nStill no product in the morning light\nI clock the wire, I clock the ash\nI clock a flex with a tourist splash\nNill Bye filing a zero-yield blotter\nRake still selling a backyard starter\nPretty hiss dressed as a breakthrough\nThe stick burned out, and so did you\nHold the sparkler or drop the claim\nYour reaction never left the frame\nAsh in a pile, the boast looks tiny\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nMorning hits, the wire is cold\nGlitter gone, the story sold\nHats go quiet, the stick gets binned\nNo yield logged, the boast was skinned\nNill Bye tagging a tourist burn\nRake still calling it a return\nSparkler king with a rented fizz\nThe product never paid the biz\nFile the ash, keep the stick\nPretty chemistry is a party trick\nWire dead, the pan stays even\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[outro]\nstick dead\nash cools\nyield none\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/05-sparkler"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune, 145 bpm",
         "[intro]\nstick lit\npretty burn\nyield zero\n\n[verse]\nRake lights a stick like a breakthrough\nTalks a reaction he never knew\nSparks climb pretty, the yield stays zero\nThat's a party trick in a tourist hero\nI want a product, you want a fizz\nYou want a photo of a pretty hiss\nWire burning, nothing in the pan\nAsh on the table, that was the plan\nNill Bye weighing a dead sparkler\nYour whole reaction is a tourist dollar\nPretty burn, then the stick goes dull\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nYou name a spark like a published find\nThen you fold when I ask the yield behind\nHats keep ticking, the stick keeps wasting\nDark pads waiting while the ash is tasting\nI want a gram that can hit a scale\nYou want a glitter that can fill a tale\nSparkler king on a wire diet\nNo compound, just a camera riot\nNill Bye bagging the pretty waste\nRake calling fireworks a dataset\nBurn looks busy, the pan stays clean\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nSparks jump left, then they jump right\nStill no product in the morning light\nI clock the wire, I clock the ash\nI clock a flex with a tourist splash\nNill Bye filing a zero-yield blotter\nRake still selling a backyard starter\nPretty hiss dressed as a breakthrough\nThe stick burned out, and so did you\nHold the sparkler or drop the claim\nYour reaction never left the frame\nAsh in a pile, the boast looks tiny\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[verse]\nMorning hits, the wire is cold\nGlitter gone, the story sold\nHats go quiet, the stick gets binned\nNo yield logged, the boast was skinned\nNill Bye tagging a tourist burn\nRake still calling it a return\nSparkler king with a rented fizz\nThe product never paid the biz\nFile the ash, keep the stick\nPretty chemistry is a party trick\nWire dead, the pan stays even\n\n[chorus]\nSparkler science\nPretty burn, no yield\nNill Bye wants a reaction\nRake sold a stick\nSparks are not a product\nAsh is all you built\n\n[outro]\nstick dead\nash cools\nyield none\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/05-sparkler"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

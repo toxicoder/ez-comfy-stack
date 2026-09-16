@@ -460,11 +460,13 @@
         "Node name for S&R": "EZKleinPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celebrity, no photograph",
         true,
         "t2i",
         "YouTube 16:9 still",
-        "none"
+        "none",
+        "audio/albums/nill-bye/frozen-ercot/cover"
       ],
       "title": "Klein Prompt Enhance"
     },
@@ -686,6 +688,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           12,
           "prompt",

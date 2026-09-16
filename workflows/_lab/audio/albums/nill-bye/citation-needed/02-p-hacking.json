@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nsynth bass\ncherry pick\nNill Bye slicing\n\n[verse]\nRake ran the hours till it smiled\nThrew the rest in a junk-file pile\nTalkbox keys on a cherry plot\nYou kept the spike, you dumped the lot\nI want the full run, you send a slice\nI want the miss that you won't splice\nNill Bye mad at a trimmed readout\nHe hid a miss in a rented cult\nDry claps pop, your curve is cooked\nG-funk bounce on a cherry hook\nShow the misses or sit aside\nThe slice you sold is a drought\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nYou slice the hours till the curve looks ripe\nThen you crash when I ask the reel\nGirls as points you decided to keep\nNights as trophies you put to sleep\nRake p-hacks a p of none\nNill Bye running the count till done\nTalkbox lead, the boast stays cheap\nSynth bass waiting to cash the cheat\nBring the raw file, drop the throne\nCherry-pick science is inverted\nI log the trash you stuffed below\nYour whole paper is a highlight reel\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nI ask the n, you send a taste\nI ask the miss, you change the case\nUnderpowered, overclaimed\nThat is the brand you tried to keep\nNill Bye talking from the plot grid\nRake keeps folding when the notes get sparse\nYou flex first, then you hide the miss\nThat's a p-hack loop I have mapped\nCut the slice, keep the batch\nP-hack drought, now pay the debt\nHide a miss, the flex looks huge\nShow a miss, the flex looks cheap\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nRake at the junk-file bin\nNill Bye posting the uncut law\nYou want a trophy from a trim\nI want a line that survives the audit\nHide the miss, the flex looks huge\nShow the miss, the flex looks cheap\nI walk in with the uncut stack\nYou walk in with a rumor pack\nThe slicing stops, the legend slumps\nNumbers shift when the junk-file tilts\nHe still picking through the range\nP-hack closed on a cooked exchange\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[outro]\nslice denied\nfull set in\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/02-p-hacking"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "g-funk, synth bass, dry claps, talkbox lead, male rap vocals, dry booth, no autotune, 98 bpm",
         "[intro]\nsynth bass\ncherry pick\nNill Bye slicing\n\n[verse]\nRake ran the hours till it smiled\nThrew the rest in a junk-file pile\nTalkbox keys on a cherry plot\nYou kept the spike, you dumped the lot\nI want the full run, you send a slice\nI want the miss that you won't splice\nNill Bye mad at a trimmed readout\nHe hid a miss in a rented cult\nDry claps pop, your curve is cooked\nG-funk bounce on a cherry hook\nShow the misses or sit aside\nThe slice you sold is a drought\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nYou slice the hours till the curve looks ripe\nThen you crash when I ask the reel\nGirls as points you decided to keep\nNights as trophies you put to sleep\nRake p-hacks a p of none\nNill Bye running the count till done\nTalkbox lead, the boast stays cheap\nSynth bass waiting to cash the cheat\nBring the raw file, drop the throne\nCherry-pick science is inverted\nI log the trash you stuffed below\nYour whole paper is a highlight reel\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nI ask the n, you send a taste\nI ask the miss, you change the case\nUnderpowered, overclaimed\nThat is the brand you tried to keep\nNill Bye talking from the plot grid\nRake keeps folding when the notes get sparse\nYou flex first, then you hide the miss\nThat's a p-hack loop I have mapped\nCut the slice, keep the batch\nP-hack drought, now pay the debt\nHide a miss, the flex looks huge\nShow a miss, the flex looks cheap\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[verse]\nRake at the junk-file bin\nNill Bye posting the uncut law\nYou want a trophy from a trim\nI want a line that survives the audit\nHide the miss, the flex looks huge\nShow the miss, the flex looks cheap\nI walk in with the uncut stack\nYou walk in with a rumor pack\nThe slicing stops, the legend slumps\nNumbers shift when the junk-file tilts\nHe still picking through the range\nP-hack closed on a cooked exchange\n\n[chorus]\nP-hacking king\nYour night is a slice\nNill Bye on the uncut batch\nRake paid the price\nPick the crest, hide the miss\nThat is a p-hack, kid\n\n[outro]\nslice denied\nfull set in\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/02-p-hacking"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

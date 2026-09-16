@@ -1,0 +1,102 @@
+[
+  {
+    "id": "terrace-ambient",
+    "label": "Terrace ambient",
+    "prompt": "Locked-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, a glyph chime once. photoreal shot, unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "storm-weather",
+    "label": "Storm weather",
+    "prompt": "Locked-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "interior-room",
+    "label": "Interior room tone",
+    "prompt": "Locked-camera ambient interior of an unmarked teak room. Curtain breath, dust in a window shaft. The camera holds a fixed frame. Room tone, a distant drip, fabric hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "palm-lock",
+    "label": "Palm lock",
+    "prompt": "Locked-camera palms on an unmarked terrace. The camera holds a fixed frame. Palm rustle and a warm breeze. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "rain-glass",
+    "label": "Rain on glass",
+    "prompt": "Locked-camera rain sheeting on unmarked glass. The camera holds a fixed frame. Rain on glass, thunder far off. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "harbor-lap",
+    "label": "Harbor lap",
+    "prompt": "Locked-camera unmarked pier, water lap in fog. The camera holds a fixed frame. Water lap, fog hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "fountain",
+    "label": "Fountain",
+    "prompt": "Locked-camera unmarked stone fountain. The camera holds a fixed frame. Water beads, courtyard hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "workshop-idle",
+    "label": "Workshop idle",
+    "prompt": "Locked-camera teak bench, glyph motes idle. The camera holds a fixed frame. Lamp hum, a single metal tick. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "night-lanterns",
+    "label": "Night lanterns",
+    "prompt": "Locked-camera terrace lanterns at night. The camera holds a fixed frame. Insect hush, distant traffic. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "dawn-ridge",
+    "label": "Dawn ridge wind",
+    "prompt": "Locked-camera high unmarked ridge at first light. The camera holds a fixed frame. Thin wind, grit. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "snow-sift",
+    "label": "Snow sift",
+    "prompt": "Locked-camera pines, snow sift. The camera holds a fixed frame. Thin wind, snow. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "arcade-hum",
+    "label": "Arcade hum",
+    "prompt": "Locked-camera unmarked arcade practicals. The camera holds a fixed frame. Soft cabinet hum. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "ferry-water",
+    "label": "Ferry water",
+    "prompt": "Locked-camera unmarked ferry rail, water glitter. The camera holds a fixed frame. Water slap, a distant bell. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "concourse-hush",
+    "label": "Concourse hush",
+    "prompt": "Locked-camera unmarked concourse, far figures. The camera holds a fixed frame. Far crowd hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "library-dust",
+    "label": "Library dust",
+    "prompt": "Locked-camera unmarked stacks, dust in a shaft. The camera holds a fixed frame. Paper hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "greenhouse-drip",
+    "label": "Greenhouse drip",
+    "prompt": "Locked-camera unmarked greenhouse aisle. The camera holds a fixed frame. Drip, leaf rustle. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "mesa-wind",
+    "label": "Mesa wind",
+    "prompt": "Locked-camera unmarked mesa at dusk. The camera holds a fixed frame. Dry wind, grit. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "studio-paper",
+    "label": "Studio paper",
+    "prompt": "Locked-camera unmarked teak desk, paper stir. The camera holds a fixed frame. Room tone, paper tick. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "cloak-idle",
+    "label": "Cloak idle",
+    "prompt": "Locked-camera storm-cloak on a rail, lining idle. The camera holds a fixed frame. Wind, fabric hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "glyph-idle",
+    "label": "Glyph idle",
+    "prompt": "Locked-camera compact unmarked data-staff, motes idle. The camera holds a fixed frame. A single glyph chime, then hush. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  }
+]

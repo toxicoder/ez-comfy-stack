@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dirty bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 160 bpm",
         "[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 569 1]\n\n[drop - harder growl drop, chest 808 wall, formant crush, grid 569 2]\n\n[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 569 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/afterparty/17-last-exit"
       ],
       "title": "ez_edm_prompt"
     },

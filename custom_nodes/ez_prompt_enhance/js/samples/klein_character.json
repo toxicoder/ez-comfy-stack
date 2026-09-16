@@ -1,0 +1,102 @@
+[
+  {
+    "id": "lab-original",
+    "label": "Lab original",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, wardrobe, and one signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "teal-runner",
+    "label": "Teal runner",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed teal technical running coat with faint circuit-thread seams, blank gloves, compact unmarked data-staff as the signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "storm-cloak",
+    "label": "Storm cloak",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked charcoal storm-cloak with warm-gold lining, ink-black running layer, blank matte gloves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "workshop-maker",
+    "label": "Workshop maker",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked worn teal shop coat, leather apron, rolled sleeves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "field-botanist",
+    "label": "Field botanist",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-faded olive field coat, cloth roll of unmarked tools. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "night-operator",
+    "label": "Night operator",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked matte-black technical coat, faint circuit-thread seams. Signature prop: compact unmarked data-staff with dim gold rings. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "ferry-hand",
+    "label": "Ferry hand",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked waxed teal coat, salt-dull hardware. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "winter-ridge",
+    "label": "Winter ridge",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked heavy teal parka, blank gloves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "desert-guide",
+    "label": "Desert guide",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed sand-teal coat, dust on seams. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "library-reader",
+    "label": "Library reader",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark teal wool coat. Signature prop: compact unmarked data-staff used as a quiet pointer. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "greenhouse-keeper",
+    "label": "Greenhouse keeper",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked light teal linen coat, damp hems. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "platform-commuter",
+    "label": "Platform commuter",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat, blank gloves. Signature prop: compact unmarked data-staff tucked at the hip. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "cliff-walker",
+    "label": "Cliff walker",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat snapping in wind. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "arcade-night",
+    "label": "Arcade night",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat under mixed practical color. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "courtyard-rest",
+    "label": "Courtyard rest",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat, seated then standing pose, staff across the body. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "studio-quiet",
+    "label": "Studio quiet",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat, calm hands. Signature prop: compact unmarked data-staff beside a blank notebook. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "rain-sprint",
+    "label": "Rain sprint",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat beaded with rain, mid-stride. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "harbor-fog",
+    "label": "Harbor fog",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat beaded with fog. Signature prop: compact unmarked data-staff dim. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "ridge-dawn",
+    "label": "Ridge dawn",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat, first-light rim. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  },
+  {
+    "id": "mesa-staff",
+    "label": "Mesa staff",
+    "prompt": "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed teal coat, staff raised with warm-gold glyph rings. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm."
+  }
+]

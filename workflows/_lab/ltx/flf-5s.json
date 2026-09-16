@@ -703,12 +703,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Five seconds. Keep every object and surface from the start image; do not redesign.",
         false,
         "i2v",
         "5 seconds, 24 fps",
         "terrace breeze, palm rustle, distant bay traffic, glyph chime at the last frame, no score",
-        "none"
+        "none",
+        "ltx/flf-5s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1388,6 +1390,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

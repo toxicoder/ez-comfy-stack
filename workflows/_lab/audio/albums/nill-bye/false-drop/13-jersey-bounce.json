@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nsqueaks up\nbounce hollow\nchops flying\n\n[verse]\nRake chops a squeak like a headline\nTalks a body that he never signed\nBounce racing, the bedframe's empty\nKick drums humming on a rumor plenty\nI wait for a body after the chop\nYou loop the squeak and you call it pop\nHats in a hurry, the proof won't land\nThat's a king with a ghost in the bed\nNill Bye counting the missing body\nYour whole bounce is a hollow copy\nFast chop, then a cheaper silence\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nYou name a bounce like a clubbed-in win\nThen you freeze when I ask who lived in\nJersey ticking, the mattress stays lonely\nSqueaks underneath on a story only\nI want a body that can close the phrase\nYou want a squeak with a rumor glaze\nBounce king on a looped bedframe\nNo living bar, just a flying claim\nNill Bye marking the empty bed\nRake riding chops like a stolen thread\nBounce looks busy, the proof still lags\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nChop left, chop right, still no body\nYour legend lives in a squeak you copied\nI clock the squeak, I clock the mattress\nI clock a flex with a missing address\nNill Bye filing a no-body docket\nRake still selling a bounce as product\nGhost bed dressed as a lecture\nThe squeak runs out, and so do the verses\nHold the bounce or drop the mic\nYour rumor never sat in the bed\nEmpty in the middle, the boast looks copied\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nMorning comes, the bounce is tired\nBody never came, the rumor fired\nHats go even, the bounce gets shelved\nNo claim logged, the boast was delved\nNill Bye tagging a ghosted squeak\nRake still calling it a technique\nJersey king with a rented bed\nThe bar never paid the thread\nFile the squeak, keep the gap\nFast bounce is a party map\nSqueak dead, the booth stays sober\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[outro]\nbounce stops\nchops mute\nhollow filed\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/13-jersey-bounce"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry booth, no autotune, 140 bpm",
         "[intro]\nsqueaks up\nbounce hollow\nchops flying\n\n[verse]\nRake chops a squeak like a headline\nTalks a body that he never signed\nBounce racing, the bedframe's empty\nKick drums humming on a rumor plenty\nI wait for a body after the chop\nYou loop the squeak and you call it pop\nHats in a hurry, the proof won't land\nThat's a king with a ghost in the bed\nNill Bye counting the missing body\nYour whole bounce is a hollow copy\nFast chop, then a cheaper silence\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nYou name a bounce like a clubbed-in win\nThen you freeze when I ask who lived in\nJersey ticking, the mattress stays lonely\nSqueaks underneath on a story only\nI want a body that can close the phrase\nYou want a squeak with a rumor glaze\nBounce king on a looped bedframe\nNo living bar, just a flying claim\nNill Bye marking the empty bed\nRake riding chops like a stolen thread\nBounce looks busy, the proof still lags\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nChop left, chop right, still no body\nYour legend lives in a squeak you copied\nI clock the squeak, I clock the mattress\nI clock a flex with a missing address\nNill Bye filing a no-body docket\nRake still selling a bounce as product\nGhost bed dressed as a lecture\nThe squeak runs out, and so do the verses\nHold the bounce or drop the mic\nYour rumor never sat in the bed\nEmpty in the middle, the boast looks copied\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[verse]\nMorning comes, the bounce is tired\nBody never came, the rumor fired\nHats go even, the bounce gets shelved\nNo claim logged, the boast was delved\nNill Bye tagging a ghosted squeak\nRake still calling it a technique\nJersey king with a rented bed\nThe bar never paid the thread\nFile the squeak, keep the gap\nFast bounce is a party map\nSqueak dead, the booth stays sober\n\n[chorus]\nJersey bounce\nBounce with no proof\nNill Bye wants a body\nRake chops an empty bed\nSqueaks without a claim\nYour bounce is a hollow\n\n[outro]\nbounce stops\nchops mute\nhollow filed\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/13-jersey-bounce"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

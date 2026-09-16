@@ -780,12 +780,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "The start image holds as the first frame. The camera moves slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.",
         true,
         "i2v",
         "5 seconds, 24 fps",
         "world SFX matching the start image, no score",
-        "none"
+        "none",
+        "ltx/i2v-5s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1102,6 +1104,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          19,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           19,
           "prompt",

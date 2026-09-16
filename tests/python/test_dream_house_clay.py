@@ -42,8 +42,13 @@ def test_dream_house_clay_contract() -> None:
     names = [load["widgets_values"][0] for load in loads]
     assert names == [f"ez_house_clay_{i:02d}.png" for i in range(1, 11)]
     ident = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert ident["widgets_values"][2] == "identity"
-    assert ident["widgets_values"][1] is True
+    values = ident["widgets_values"]
+    if len(values) >= 7:
+        assert values[3] == "identity"
+        assert values[2] is True
+    else:
+        assert values[2] == "identity"
+        assert values[1] is True
     note = extra["lab_note"].lower()
     assert "house-views" in note
     assert "occupancy" in note

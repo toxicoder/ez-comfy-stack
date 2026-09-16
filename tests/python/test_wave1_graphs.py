@@ -34,7 +34,9 @@ def test_identity_enhance_on() -> None:
     ):
         graph = _load(name)
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-        assert node["widgets_values"][1] is True
+        values = node["widgets_values"]
+        flag = values[2] if len(values) >= 7 else values[1]
+        assert flag is True
 
 
 def test_klein_i2v_feeders_are_1280x704() -> None:

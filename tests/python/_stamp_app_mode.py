@@ -226,7 +226,17 @@ ENHANCE_TYPES = (
     "EZAceStepPromptEnhance",
     "EZRapLyrics",
     "EZPodcastScript",
+    "EZSamplePrompt",
+    "EZCreativeResearch",
 )
+
+
+def _graph_hides_sample(graph: Mapping[str, Any]) -> bool:
+    extra = graph.get("extra") or {}
+    rel = str(extra.get("lab_rel") or "")
+    from ez_prompt_enhance.samples import album_hides_sample
+
+    return album_hides_sample(rel)
 
 
 # App Mode widget order: the thing the user types first, then look, then Run knobs.
@@ -243,6 +253,7 @@ WIDGET_ORDER = (
     "plate",
     "layer",
     "required_mode",
+    "sample",
     "prompt",
     "web_search",
     "subagents",
@@ -287,7 +298,7 @@ WIDGET_ORDER = (
     "cfg",
     "unet_name",
 )
-HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock"})
+HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock", "catalog"})
 STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace"})
 NODE_MODE_ALWAYS = 0
 WIDGET_HEIGHTS = {
@@ -299,6 +310,7 @@ WIDGET_HEIGHTS = {
     "history": 80,
 }
 GENERIC_LABELS = {
+    "sample": "Sample prompt",
     "prompt": "Prompt",
     "web_search": "Web search",
     "subagents": "Subagents",
@@ -354,6 +366,7 @@ GENERIC_LABELS = {
     "spoken_disclosure": "Spoken disclosure",
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
+    "sample": "Pick a lab recipe, or Custom to type your own.",
     "prompt": "What to generate. Rewrite prompt expands this for the model.",
     "web_search": "On: Wikipedia + DuckDuckGo snippets. Off: on-box GGUF only.",
     "subagents": "Planner search count (1–3). Sequential CPU workers.",
@@ -429,9 +442,11 @@ def _enhance_mode(node: Mapping[str, Any]) -> str:
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
     ):
-        return str(values[2]) if len(values) > 2 else ""
+        idx = 3 if len(values) >= 7 else 2
+        return str(values[idx]) if len(values) > idx else ""
     if ntype == "EZAceStepPromptEnhance":
-        return str(values[3]) if len(values) > 3 else ""
+        idx = 4 if len(values) >= 6 else 3
+        return str(values[idx]) if len(values) > idx else ""
     return ""
 
 
@@ -502,14 +517,30 @@ def display_label(
         return title or "Duration (seconds)"
     if ntype == "EZCreativeResearch":
         return {
+            "sample": "Sample prompt",
             "prompt": "Message",
             "mode": "Mode",
             "web_search": "Web search",
             "subagents": "Subagents",
             "history": "History",
         }.get(name, generic)
+    if ntype == "EZSamplePrompt":
+        if name == "prompt":
+            return title or generic
+        if name == "sample":
+            return generic
+    if ntype == "EZRapLyrics":
+        return {
+            "sample": "Lyrics sample",
+            "lyrics": "Lyrics",
+            "enhance": "Rewrite lyrics",
+        }.get(name, generic)
     if ntype == "EZPodcastScript":
-        return {"prompt": "Script", "enhance": "Rewrite script"}.get(name, generic)
+        return {
+            "sample": "Script sample",
+            "prompt": "Script",
+            "enhance": "Rewrite script",
+        }.get(name, generic)
     if ntype == "EZDubIngest":
         return {
             "source": "Source file",
@@ -552,11 +583,14 @@ def display_label(
             kind = "Bed"
         if kind:
             return {
+                "sample": f"{kind} sample",
                 "tags": f"{kind} tags",
                 "lyrics": f"{kind} lyrics",
                 "enhance": f"Rewrite {kind.lower()}",
                 "mode": f"{kind} mode",
             }.get(name, generic)
+        if name == "sample":
+            return "Sample prompt"
         if name == "mode":
             return "Vocal / instrumental"
     if collide and ntype in ENHANCE_TYPES:
@@ -567,6 +601,7 @@ def display_label(
                 break
         if family:
             return {
+                "sample": f"{family} sample",
                 "prompt": f"{family} prompt",
                 "style": f"{family} style",
                 "enhance": f"Rewrite {family}",
@@ -576,6 +611,8 @@ def display_label(
             }.get(name, generic)
         if title:
             return f"{title} — {generic}"
+    if collide and name == "sample" and title:
+        return f"{title} — Sample prompt"
     if collide and title:
         return f"{title} — {generic}"
     return generic
@@ -1064,10 +1101,13 @@ def _collect_raw_inputs(
 ) -> list[tuple[NodeRef, str, dict]]:
     """(node id, widget name, node) in graph order. No labels yet."""
     raw: list[tuple[NodeRef, str, dict]] = []
+    hide_sample = _graph_hides_sample(graph)
     if spec.get("film_minimal"):
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZKleinPromptEnhance":
                 nid = node["id"]
+                if not hide_sample:
+                    raw.append((nid, "sample", node))
                 raw.extend(
                     (
                         (nid, "prompt", node),
@@ -1085,13 +1125,23 @@ def _collect_raw_inputs(
 
     if spec.get("primitive_strings"):
         for node in graph.get("nodes") or []:
-            if node.get("type") == "PrimitiveNode":
+            if node.get("type") == "EZSamplePrompt":
+                nid = node["id"]
+                if not hide_sample:
+                    raw.append((nid, "sample", node))
+                raw.append((nid, "prompt", node))
+            elif node.get("type") == "PrimitiveNode":
                 raw.append((node["id"], "value", node))
         return raw
 
     if spec.get("forge_widgets"):
         for node in graph.get("nodes") or []:
-            if node.get("type") == "PrimitiveNode":
+            if node.get("type") == "EZSamplePrompt":
+                nid = node["id"]
+                if not hide_sample:
+                    raw.append((nid, "sample", node))
+                raw.append((nid, "prompt", node))
+            elif node.get("type") == "PrimitiveNode":
                 raw.append((node["id"], "value", node))
         for node in graph.get("nodes") or []:
             ntype = node.get("type")
@@ -1116,6 +1166,8 @@ def _collect_raw_inputs(
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZCreativeResearch":
                 nid = node["id"]
+                if not hide_sample:
+                    raw.append((nid, "sample", node))
                 raw.extend(
                     (
                         (nid, "prompt", node),
@@ -1138,6 +1190,8 @@ def _collect_raw_inputs(
             )
             mode = _enhance_mode(node)
             show_score = mode != "instrumental" or spec.get("ace_instrumental_score")
+            if not hide_sample:
+                raw.append((nid, "sample", node))
             raw.append((nid, "tags", node))
             if show_score and not has_rap:
                 raw.append((nid, "lyrics", node))
@@ -1147,18 +1201,26 @@ def _collect_raw_inputs(
                 raw.append((nid, "mode", node))
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             widget = "lyrics" if ntype == "EZRapLyrics" else "prompt"
+            if not hide_sample:
+                raw.append((nid, "sample", node))
             raw.extend(
                 (
                     (nid, widget, node),
                     (nid, "enhance", node),
                 )
             )
+        elif ntype == "EZSamplePrompt":
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.append((nid, "prompt", node))
         elif ntype in ENHANCE_TYPES:
             if not spec.get("forge_widgets") and saw_primary_enhance:
                 continue
             saw_primary_enhance = True
             mode = _enhance_mode(node)
             skip_style = (not spec.get("forge_widgets")) and mode in STYLE_IGNORED_MODES
+            if not hide_sample:
+                raw.append((nid, "sample", node))
             raw.append((nid, "prompt", node))
             if not skip_style:
                 raw.append((nid, "style", node))
@@ -1368,8 +1430,9 @@ def stamp_suite_graph(graph: dict) -> dict:
     if spec is None:
         spec = STAMP_SPECS.get(str(graph.get("id") or ""))
     if spec is None:
-        from _wire_prompt_enhance import apply_enhance_policy
+        from _wire_prompt_enhance import apply_enhance_policy, normalize_enhance_widgets
 
+        normalize_enhance_widgets(graph)
         apply_enhance_policy(graph)
         return apply_lab_completeness_flags(graph)
     outputs = infer_suite_outputs(graph, spec)
@@ -1389,8 +1452,9 @@ def stamp_suite_graph(graph: dict) -> dict:
         default_view=spec["default_view"],
         enhance_off_identity=spec["enhance_off_identity"],
     )
-    from _wire_prompt_enhance import apply_enhance_policy
+    from _wire_prompt_enhance import apply_enhance_policy, normalize_enhance_widgets
 
+    normalize_enhance_widgets(graph)
     apply_enhance_policy(graph)
     return apply_lab_completeness_flags(graph)
 

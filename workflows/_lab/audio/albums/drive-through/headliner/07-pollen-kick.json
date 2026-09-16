@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "drumstep, warped bass, trap hats, amen break, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
         "[drop - heavy amen drop, trap 808 warp, chest wreck, grid 401 0]\n\n[inst - amen chops, trap hats 808 pollen, grid 401 1]\n\n[drop - harder stacked drop, reese 808 wreck, chest formant, grid 401 2]\n\n[inst - hats denser, reese hold, grid 401 3]\n\n[drop - full send drop, stacked amen 808 wreck, warped trap, grid 401 4]\n\n[inst - snare roll, 808 punch, grid 401 5]\n\n[drop - harder growl drop, chest trap wreck, reese wall, grid 401 6]\n\n[outro - kick holds, amen keep, reese ride, grid 401 7]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/07-pollen-kick"
       ],
       "title": "ez_edm_prompt"
     },

@@ -699,12 +699,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "Locked-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, a glyph chime once. photoreal shot, unmarked surfaces, empty of lettering. No music and no score. Five seconds.",
         true,
         "t2v",
         "5 seconds, 24 fps, locked camera B-roll",
         "warm terrace breeze, palm rustle, distant bay traffic, glyph chime, no score",
-        "none"
+        "none",
+        "ltx/broll-ambient"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -989,6 +991,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "three-cars-rain",
+    "label": "Three cars in rain",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast under one yard lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "one-lamp",
+    "label": "One yard lamp",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. One yard lamp, rain in the glow. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "wet-ballast",
+    "label": "Wet ballast",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Wet ballast shining, empty of railroad marks. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "three-cars",
+    "label": "Three boxcars",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Three generic unmarked boxcars. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "between-cars",
+    "label": "Between cars",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. The slot between unmarked cars is the center. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "puddle",
+    "label": "Puddle lamp",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. A puddle holds the lamp. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "gravel-walk",
+    "label": "Gravel walk still",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Already mid-walk on wet gravel, still a still. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "breath-cold",
+    "label": "Cold breath",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Breath in cold air implied in the still. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "no-marks",
+    "label": "No company marks",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Empty of railroad company marks. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "closer-steel",
+    "label": "Closer steel",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Closer on unmarked wet steel. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "wider-yard",
+    "label": "Wider yard",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Wider on the yard, cars still the hero. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "fog-mix",
+    "label": "Fog mix",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Rain and fog, lamp still the key. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "dawn-yard",
+    "label": "Dawn yard",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. First light plus the lamp, still raining. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "night-only",
+    "label": "Night only",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Night only, one lamp, rain. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "coupling-far",
+    "label": "Far coupling",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. A distant coupling in the still, generic. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "no-chase",
+    "label": "Not a chase",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. A walk, not a chase, still frame. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "empty-palms",
+    "label": "Empty frame of people",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. No faces, cars and lamp only. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "grain",
+    "label": "Mild grain",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Mild film grain, wet grit. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "24mm",
+    "label": "24mm yard",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. Eye-level 24mm, youtube 16:9. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  },
+  {
+    "id": "end-still",
+    "label": "End still",
+    "prompt": "A photoreal night freight-yard still in rain. Three generic unmarked boxcars sit on wet ballast. The lamp and cars hold for the next i2v. Rain streaks in the lamp glow, gravel shining, empty of railroad company marks. Eye-level on a 24mm lens, framed for YouTube 16:9. Clean unmarked steel, empty of lettering."
+  }
+]

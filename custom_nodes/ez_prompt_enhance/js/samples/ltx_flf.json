@@ -1,0 +1,102 @@
+[
+  {
+    "id": "step-through",
+    "label": "Step through",
+    "prompt": "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "ease-last",
+    "label": "Ease to last",
+    "prompt": "The start image holds as the first frame. The first frame holds, then the body eases toward the last-frame pose. No cut. Camera eases with the motion. A warm breeze and palm rustle, then a glyph chime as the last frame lands. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "turn-last",
+    "label": "Turn to last",
+    "prompt": "The start image holds as the first frame. A slow turn from the first still into the last-frame pose. No cut. Camera eases with the turn. World SFX matching both stills, then a glyph chime. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "staff-last",
+    "label": "Staff to last",
+    "prompt": "The start image holds as the first frame. Glyph rings bloom as the last pose lands. No cut. Camera eases in. A glyph chime as the last frame lands. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "cloak-last",
+    "label": "Cloak to last",
+    "prompt": "The start image holds as the first frame. The cloak opens on the travel toward the last still. No cut. Camera eases with the motion. Wind matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rail-last",
+    "label": "Rail to last",
+    "prompt": "The start image holds as the first frame. A short walk along the rail from first to last still. No cut. Camera tracks with the walk. Footfalls and breeze, then a chime. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "sit-last",
+    "label": "Sit to last",
+    "prompt": "The start image holds as the first frame. Rise or settle between the two stills. No cut. Camera holds then eases. Room tone, fabric hush, then a tick. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "weather-last",
+    "label": "Weather to last",
+    "prompt": "The start image holds as the first frame. Light and weather ease from first still toward last. Small body travel. No cut. Camera holds. World SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "push-last",
+    "label": "Push to last",
+    "prompt": "The start image holds as the first frame. Camera eases in as the last pose lands. No cut. Slow push-in. World SFX, then a glyph chime. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "dolly-last",
+    "label": "Dolly to last",
+    "prompt": "The start image holds as the first frame. Camera eases out as the last pose lands. No cut. Slow dolly out. World SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "pan-last",
+    "label": "Pan to last",
+    "prompt": "The start image holds as the first frame. A slow pan links first still to last pose. No cut. Slow pan. World SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "fixed-last",
+    "label": "Fixed to last",
+    "prompt": "The start image holds as the first frame. Fixed camera. The body travels to the last pose. No cut. Fixed camera. World SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hands-last",
+    "label": "Hands to last",
+    "prompt": "The start image holds as the first frame. Hands travel to the staff as the last pose lands. No cut. Camera eases in. A fabric hush, then a chime. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "wind-last",
+    "label": "Wind to last",
+    "prompt": "The start image holds as the first frame. Wind builds from first still to last. No cut. Camera holds. Wind matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "night-last",
+    "label": "Night to last",
+    "prompt": "The start image holds as the first frame. Light eases while the body travels to the last pose. No cut. Camera eases. Night world SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "indoor-last",
+    "label": "Indoor to last",
+    "prompt": "The start image holds as the first frame. A short indoor cross from first still to last pose. No cut. Camera eases. Room tone matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "rain-last",
+    "label": "Rain to last",
+    "prompt": "The start image holds as the first frame. Rain holds while the body travels to the last pose. No cut. Camera holds. Rain matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "fog-last",
+    "label": "Fog to last",
+    "prompt": "The start image holds as the first frame. Fog eases while the last pose lands. No cut. Camera eases in. Fog hush matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "chime-last",
+    "label": "Chime on last",
+    "prompt": "The start image holds as the first frame. Travel to the last pose. A glyph chime as the last frame lands. No cut. Camera eases with the motion. World SFX, then a glyph chime. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "hold-last",
+    "label": "Hold last frames",
+    "prompt": "The start image holds as the first frame. Ease into the last-frame pose and hold the last frames still. No cut. Camera eases then holds. World SFX matching the stills. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  }
+]

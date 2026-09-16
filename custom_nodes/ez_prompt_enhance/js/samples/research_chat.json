@@ -1,0 +1,102 @@
+[
+  {
+    "id": "rooftop-light",
+    "label": "Rooftop lighting language",
+    "prompt": "What lighting and camera language fits a night rooftop still of a techno wizard in a tropical city?"
+  },
+  {
+    "id": "night-practicals",
+    "label": "Night practicals",
+    "prompt": "What lighting language fits a night rooftop still of a techno wizard, lanterns only, no score, unmarked surfaces?"
+  },
+  {
+    "id": "i2v-motion",
+    "label": "I2V motion only",
+    "prompt": "How should a Wan I2V prompt describe motion and one camera without restating look from the start image?"
+  },
+  {
+    "id": "ltx-audio",
+    "label": "LTX audio interleave",
+    "prompt": "How do I interleave world SFX into an LTX-2.5 present-tense paragraph without writing a sound trailer?"
+  },
+  {
+    "id": "identity-bible",
+    "label": "Identity bible",
+    "prompt": "What belongs in a Klein identity bible versus a shot card for a three-angle sheet?"
+  },
+  {
+    "id": "dream-house",
+    "label": "Dream-house rooms",
+    "prompt": "How should a camera-free place bible name rooms and backdrops for a ten-still walkthrough?"
+  },
+  {
+    "id": "loop-safe",
+    "label": "GIF loop safe",
+    "prompt": "What motion is ping-pong safe for a locked-camera Wan GIF loop?"
+  },
+  {
+    "id": "packshot",
+    "label": "Packshot still",
+    "prompt": "How do I prompt a Klein 1:1 product packshot with unmarked surfaces and honest contact shadow?"
+  },
+  {
+    "id": "clay-edit",
+    "label": "Clay edit",
+    "prompt": "What should a Klein edit prompt say so it restyles clay without redesigning layout?"
+  },
+  {
+    "id": "dialogue-quotes",
+    "label": "Dialogue quotes",
+    "prompt": "When should an LTX prompt use quoted speech, and how do I keep world SFX under the line?"
+  },
+  {
+    "id": "multishot",
+    "label": "Named cuts",
+    "prompt": "How do I name hard cut and match cut in one LTX-2.5 five-second paragraph?"
+  },
+  {
+    "id": "a2v-freeze",
+    "label": "A2V freeze",
+    "prompt": "How do I prompt LTX A2V so the loaded wav owns timing and mouths are not expected to match?"
+  },
+  {
+    "id": "go-see",
+    "label": "Body-cam still",
+    "prompt": "What first-person body-cam grammar keeps sleeves and gloves on the bottom edge with empty palms?"
+  },
+  {
+    "id": "negative",
+    "label": "Negative that helps",
+    "prompt": "What negative terms help Klein without fighting a photoreal look?"
+  },
+  {
+    "id": "style-dropdown",
+    "label": "Style dropdown",
+    "prompt": "How does the style dropdown interact with a lazy Klein prompt when Enhance is on?"
+  },
+  {
+    "id": "one-camera",
+    "label": "One camera verb",
+    "prompt": "Give Wan T2V camera-verb choices that stay at one move for five seconds."
+  },
+  {
+    "id": "no-score",
+    "label": "No score shorts",
+    "prompt": "How do I keep LTX shorts world-SFX-only so distilled AV does not invent a score?"
+  },
+  {
+    "id": "character-tweak",
+    "label": "Character tweak",
+    "prompt": "What belongs in a Klein character-tweak prompt so face and wardrobe lock?"
+  },
+  {
+    "id": "handoff",
+    "label": "Still to motion",
+    "prompt": "What should I copy from a Spark Still into Wan I2V versus LTX I2V?"
+  },
+  {
+    "id": "forge-context",
+    "label": "Forge context",
+    "prompt": "What should I paste into Prompt Forge Context from a research brief?"
+  }
+]

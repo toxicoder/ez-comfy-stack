@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ncowbell\ndrifted 808\nNill Bye punching\n\n[verse]\nMore than a hundred thousand on a coach\nDestinations picked for the headline\nAbbott signed a bus receipt\nPodium cities picked for the yell\nNill Bye punching the manifest\nPhonk cowbell on a one-way errand\nYou called it sharing the burden\nIt was exporting a photo-op\nCities that asked for coordination got a drop-off\nNo notice, winter, a podium waiting\nA person is not a parcel\nYour waybill is the cruelty\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nThe spreadsheet had a media column\nWhich mayor would yell on cable\nAbbott played dispatcher for a narrative\nAsylum as a prop in a blue city\nNill Bye mad at a ticket-as-taunt\nYou can move a person and miss a policy\nA coach does not adjudicate a claim\nIt just relocates the camera\nTexas spent the fare and kept the talking point\nReceiving cities spent the shelter\nThat is not federalism\nThat is a chain letter with a diesel engine\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nPhonk drift on a midnight arrival\nCrunchy sample, no welcome script\nAbbott still brags the receipt\nAs if a bus were a border solution\nNill Bye reading the drop-off logs\nSome sent to VP's door for the clip\nA human being as a tagged parcel\nYou wrapped the insult in a travel voucher\nCoordination would have been government\nAmbush is a campaign\nI want a process, you want a mayor on defense\nThe manifest is the method\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nYears of coaches, same stunt, new city\nThe tab hid inside the bigger burn\nNill Bye posting the bus receipt\nAbbott still treating a passenger as a payload\nA waybill is not a welcome\nA drop-off is not a hearing\nKeep the cowbell, lose the parcel act\nPeople get off a coach tired, not converted\nYour message landed on a sidewalk\nThe policy never did\nFile the receipt, file the stunt\nThe phonk already told on you\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[outro]\ncowbell rest\nmanifest cold\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/03-bus-receipt"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no autotune, 132 bpm",
         "[intro]\ncowbell\ndrifted 808\nNill Bye punching\n\n[verse]\nMore than a hundred thousand on a coach\nDestinations picked for the headline\nAbbott signed a bus receipt\nPodium cities picked for the yell\nNill Bye punching the manifest\nPhonk cowbell on a one-way errand\nYou called it sharing the burden\nIt was exporting a photo-op\nCities that asked for coordination got a drop-off\nNo notice, winter, a podium waiting\nA person is not a parcel\nYour waybill is the cruelty\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nThe spreadsheet had a media column\nWhich mayor would yell on cable\nAbbott played dispatcher for a narrative\nAsylum as a prop in a blue city\nNill Bye mad at a ticket-as-taunt\nYou can move a person and miss a policy\nA coach does not adjudicate a claim\nIt just relocates the camera\nTexas spent the fare and kept the talking point\nReceiving cities spent the shelter\nThat is not federalism\nThat is a chain letter with a diesel engine\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nPhonk drift on a midnight arrival\nCrunchy sample, no welcome script\nAbbott still brags the receipt\nAs if a bus were a border solution\nNill Bye reading the drop-off logs\nSome sent to VP's door for the clip\nA human being as a tagged parcel\nYou wrapped the insult in a travel voucher\nCoordination would have been government\nAmbush is a campaign\nI want a process, you want a mayor on defense\nThe manifest is the method\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[verse]\nYears of coaches, same stunt, new city\nThe tab hid inside the bigger burn\nNill Bye posting the bus receipt\nAbbott still treating a passenger as a payload\nA waybill is not a welcome\nA drop-off is not a hearing\nKeep the cowbell, lose the parcel act\nPeople get off a coach tired, not converted\nYour message landed on a sidewalk\nThe policy never did\nFile the receipt, file the stunt\nThe phonk already told on you\n\n[chorus]\nBus receipt\nNill Bye on the manifest\nAbbott mailed people like a presser\nNYC, D.C., Chicago on a ticket\nA person is not a payload\nYour compassion is a waybill\n\n[outro]\ncowbell rest\nmanifest cold\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/03-bus-receipt"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

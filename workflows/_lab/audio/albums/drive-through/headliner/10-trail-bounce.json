@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "color bass, warped bass, trap hats, body bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy color drop, trap 808 warp, chest trail wreck, grid 421 0]\n\n[inst - trap hats roll, 808 punch hold, grid 421 1]\n\n[drop - harder stacked drop, chest color wreck, warped 808, grid 421 2]\n\n[inst - snare roll, chest 808, grid 421 3]\n\n[drop - full send drop, body 808 wreck, color warp, grid 421 4]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 421 5]\n\n[outro - kick holds, trap hats roll, color ride, grid 421 6]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/headliner/10-trail-bounce"
       ],
       "title": "ez_edm_prompt"
     },

@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nharmonica sting\nNill Bye charting\n\n[verse]\nTexas never took the expansion\nOne-point-four million left off the roll\nAbbott calls it a Washington trap\nThe ER calls it uncompensated care\nNill Bye charting the coverage gap\nHighest uninsured in the country for years\nKids worst in the nation, twelve percent\nHouston the metro with the hollow CHIP\nFour hundred thousand eligible, not enrolled\nA form is harder than a slogan\nYou refused the federal match\nThen billed the poor for the ideology\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nUnwinding, Texas chose speed\nTwo-point-five million dropped, most of any state\nAbbott's HHSC front-loaded the cuts\nProcedural disenroll, kids in the pile\nNill Bye reading the KFF tracker\nA year in, a million-plus children off\nFederal guidance said go slow, auto-renew\nYou picked the shredder\nBacklog of two hundred thousand applications\nEligible people hunting a portal\nRural wards close when the uninsured walk in\nYour blues are a policy instrument\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nPregnancy in Texas is a coverage cliff\nHighest uninsured women of reproductive age\nAbbott stacked that on the clinic chill\nA ward is not a talking point\nNill Bye staying on the coverage gap\nA third of reproductive-age women bare\nBorder counties near forty percent\nYou export the risk to the county hospital\nExpress-lane bills died in the hopper\nEven TPPF said the enrollment was broken\nBipartisan House, then a quiet burial\nYour ideology eats the paperwork\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nTwenty-twenty-six you pitched health-cost relief\nAfter you built the uninsured blues\nNill Bye filing the expansion refusal\nAbbott still allergic to the match-rate\nNinety percent federal, you said no\nThen you toured affordability like a convert\nA hospital bill is not a freedom anthem\nA closed ward is not a market trophy\nI want coverage, you want a talking point\nThe blues keep the same twelve-bar\nHighest uninsured, still the trademark\nYour miracle skips the waiting-bay\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[outro]\nharp fade\ngap stays\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/08-uninsured-blues"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no autotune, 74 bpm",
         "[intro]\nharmonica sting\nNill Bye charting\n\n[verse]\nTexas never took the expansion\nOne-point-four million left off the roll\nAbbott calls it a Washington trap\nThe ER calls it uncompensated care\nNill Bye charting the coverage gap\nHighest uninsured in the country for years\nKids worst in the nation, twelve percent\nHouston the metro with the hollow CHIP\nFour hundred thousand eligible, not enrolled\nA form is harder than a slogan\nYou refused the federal match\nThen billed the poor for the ideology\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nUnwinding, Texas chose speed\nTwo-point-five million dropped, most of any state\nAbbott's HHSC front-loaded the cuts\nProcedural disenroll, kids in the pile\nNill Bye reading the KFF tracker\nA year in, a million-plus children off\nFederal guidance said go slow, auto-renew\nYou picked the shredder\nBacklog of two hundred thousand applications\nEligible people hunting a portal\nRural wards close when the uninsured walk in\nYour blues are a policy instrument\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nPregnancy in Texas is a coverage cliff\nHighest uninsured women of reproductive age\nAbbott stacked that on the clinic chill\nA ward is not a talking point\nNill Bye staying on the coverage gap\nA third of reproductive-age women bare\nBorder counties near forty percent\nYou export the risk to the county hospital\nExpress-lane bills died in the hopper\nEven TPPF said the enrollment was broken\nBipartisan House, then a quiet burial\nYour ideology eats the paperwork\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[verse]\nTwenty-twenty-six you pitched health-cost relief\nAfter you built the uninsured blues\nNill Bye filing the expansion refusal\nAbbott still allergic to the match-rate\nNinety percent federal, you said no\nThen you toured affordability like a convert\nA hospital bill is not a freedom anthem\nA closed ward is not a market trophy\nI want coverage, you want a talking point\nThe blues keep the same twelve-bar\nHighest uninsured, still the trademark\nYour miracle skips the waiting-bay\n\n[chorus]\nUninsured blues\nNill Bye on the coverage gap\nAbbott never expanded Medicaid\nKids first in the unwind\nHighest uninsured in the union\nYour freedom is a hospital bill\n\n[outro]\nharp fade\ngap stays\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/08-uninsured-blues"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

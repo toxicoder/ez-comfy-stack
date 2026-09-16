@@ -146,9 +146,15 @@ def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "stat
         (n for n in enhance if "IDENTITY" in str(n.get("title") or "").upper()),
         enhance[0],
     )
-    assert ident["widgets_values"][1] is True
-    assert ident["widgets_values"][2] in ("identity", "t2i")
-    assert ident["widgets_values"][-1] == "none"
+    values = ident["widgets_values"]
+    if len(values) >= 7:
+        assert values[2] is True
+        assert values[3] in ("identity", "t2i")
+        assert values[5] == "none"
+    else:
+        assert values[1] is True
+        assert values[2] in ("identity", "t2i")
+        assert values[-1] == "none"
     joins = [n for n in graph["nodes"] if n.get("type") == "EZPromptJoin"]
     assert len(joins) == len(prefixes)
     for join in joins:
@@ -291,7 +297,9 @@ def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
     assert graph["extra"]["lab_app_mode"]["enhance_off_identity"] is False
     assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
     enhance = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
-    assert enhance["widgets_values"][1] is True
+    values = enhance["widgets_values"]
+    flag = values[2] if len(values) >= 7 else values[1]
+    assert flag is True
     saves = {
         n["widgets_values"][0]: n
         for n in graph["nodes"]
@@ -335,6 +343,7 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
                 name
                 for name in names
                 if name in {
+                    "sample",
                     "prompt",
                     "tags",
                     "lyrics",
@@ -348,6 +357,8 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             None,
         )
         assert creator is not None, graph["id"]
+        if "sample" in names and "prompt" in names:
+            assert names.index("sample") < names.index("prompt"), graph["id"]
         if "seed" in names:
             assert names.index(creator) < names.index("seed"), graph["id"]
         if "width" in names or "unet_name" in names:
@@ -373,9 +384,11 @@ def _enhance_mode(graph: dict) -> str:
             "EZWanPromptEnhance",
             "EZLTXPromptEnhance",
         ):
-            return str(values[2]) if len(values) > 2 else ""
+            idx = 3 if len(values) >= 7 else 2
+            return str(values[idx]) if len(values) > idx else ""
         if ntype == "EZAceStepPromptEnhance":
-            return str(values[3]) if len(values) > 3 else ""
+            idx = 4 if len(values) >= 6 else 3
+            return str(values[idx]) if len(values) > idx else ""
     return ""
 
 

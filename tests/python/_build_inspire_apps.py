@@ -192,7 +192,7 @@ def _linked_context(lid: int) -> dict:
 def build_prompt_forge() -> dict:
     note_h = 320.0
     note_group_h = note_h + GROUP_TITLE_INSET
-    desk_h = 140.0
+    desk_h = 200.0
     desk_group_top = LAB_GROUP_Y0 + note_group_h
     desk_y = desk_group_top + GROUP_TITLE_INSET
     enh_group_top = desk_group_top + desk_h + GROUP_TITLE_INSET + 20.0
@@ -210,14 +210,15 @@ def build_prompt_forge() -> dict:
     )
     prompt = _node(
         5,
-        "PrimitiveNode",
+        "EZSamplePrompt",
         [40, desk_y],
         [420, desk_h],
         "Prompt",
-        [LAZY, "fixed"],
+        ["custom", LAZY, "inspire/prompt-forge"],
         1,
-        _prim_out(prompt_links),
+        _str_out("prompt"),
     )
+    prompt["outputs"][0]["links"] = prompt_links
     context = _node(
         6,
         "PrimitiveNode",
@@ -306,7 +307,7 @@ def build_prompt_forge() -> dict:
 def build_beat_sheet() -> dict:
     note_h = 460.0
     card_w, card_h = 420.0, 160.0
-    desk_h = 140.0
+    desk_h = 200.0
     enh_h = 280.0
     gap = 40.0
     desk_y = LAB_NODE_Y0 + note_h + GROUP_TITLE_INSET + 20.0
@@ -354,26 +355,40 @@ def build_beat_sheet() -> dict:
     )
     for col, (title, placeholder) in enumerate(desk_cards):
         x = 40 + col * (card_w + gap)
-        nodes.append(
-            _node(
-                nid,
-                "PrimitiveNode",
-                [x, desk_y],
-                [card_w, desk_h],
-                title,
-                [placeholder, "fixed"],
-                nid - 1,
-                [
-                    {
-                        "name": "STRING",
-                        "type": "STRING",
-                        "links": None,
-                        "widget": {"name": "value"},
-                        "slot_index": 0,
-                    }
-                ],
+        if title == "Logline":
+            nodes.append(
+                _node(
+                    nid,
+                    "EZSamplePrompt",
+                    [x, desk_y],
+                    [card_w, desk_h],
+                    title,
+                    ["custom", placeholder, "inspire/beat-sheet"],
+                    nid - 1,
+                    _str_out("prompt"),
+                )
             )
-        )
+        else:
+            nodes.append(
+                _node(
+                    nid,
+                    "PrimitiveNode",
+                    [x, desk_y],
+                    [card_w, desk_h],
+                    title,
+                    [placeholder, "fixed"],
+                    nid - 1,
+                    [
+                        {
+                            "name": "STRING",
+                            "type": "STRING",
+                            "links": None,
+                            "widget": {"name": "value"},
+                            "slot_index": 0,
+                        }
+                    ],
+                )
+            )
         nid += 1
     links: list[list] = []
     lid = 1
@@ -530,7 +545,7 @@ def build_research_chat() -> dict:
         [40, desk_y],
         [720, desk_h],
         "Creative research",
-        [RESEARCH_MESSAGE, "research", True, 2, ""],
+        ["custom", RESEARCH_MESSAGE, "research", True, 2, "", "inspire/research-chat"],
         1,
         [{"name": "reply", "type": "STRING", "links": None, "slot_index": 0}],
     )

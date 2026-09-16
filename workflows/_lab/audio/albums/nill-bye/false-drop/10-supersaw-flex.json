@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ndetune stacked\npatch flexing\npaper missing\n\n[verse]\nRake stacks a saw like a diploma\nTalks a paper he never authored\nDetune climbing, the resume's empty\nPitched chords humming on a rumor surplus\nI ask for a patch, you send a flex\nYou send a unison and you call it text\nHats in a hurry, the paper won't print\nThat's a king with a preset imprint\nNill Bye reading a blank-patch file\nYour whole supersaw is costume vinyl\nStacked detune, then a cheaper quiet\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nYou name a chord like a vintage bank\nThen you freeze when I ask who wrote the patch\nFuture-bass ticking, the stack stays vacant\nBass stacked under a borrowed fable\nI want a note that can close the measure\nYou want a saw with a rumor varnish\nSupersaw king on a looped preset\nNo paper trail, just a flying fib\nNill Bye marking the empty patch\nRake riding stacks like a stolen hatch\nChord looks busy, the paper still idles\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nDetune left, detune right, still no sheet\nYour legend lives in a preset you cheat\nI clock the stack, I clock the unison\nI clock a flex with a missing author\nNill Bye filing a no-paper folder\nRake still selling a saw as sculpture\nGhost patch dressed as a pamphlet\nThe stack runs out, and so do the boasts\nHold the unison or drop the stack\nYour flex never sat in the rack\nEmpty in the middle, the boast looks lazy\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nMorning comes, the saw is weary\nPaper never came, the rumor faded\nHats go even, the stack gets archived\nNo note logged, the boast was carved\nNill Bye tagging a ghosted patch\nRake still calling it a catch\nSaw king with a rented chord\nThe file never paid the board\nFile the detune, keep the unison\nStacked rumor is a party sticker\nPatch dead, the booth stays stacked\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[outro]\ndetune dies\npatch folds\nflex filed\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/10-supersaw-flex"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry booth, no autotune, 148 bpm",
         "[intro]\ndetune stacked\npatch flexing\npaper missing\n\n[verse]\nRake stacks a saw like a diploma\nTalks a paper he never authored\nDetune climbing, the resume's empty\nPitched chords humming on a rumor surplus\nI ask for a patch, you send a flex\nYou send a unison and you call it text\nHats in a hurry, the paper won't print\nThat's a king with a preset imprint\nNill Bye reading a blank-patch file\nYour whole supersaw is costume vinyl\nStacked detune, then a cheaper quiet\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nYou name a chord like a vintage bank\nThen you freeze when I ask who wrote the patch\nFuture-bass ticking, the stack stays vacant\nBass stacked under a borrowed fable\nI want a note that can close the measure\nYou want a saw with a rumor varnish\nSupersaw king on a looped preset\nNo paper trail, just a flying fib\nNill Bye marking the empty patch\nRake riding stacks like a stolen hatch\nChord looks busy, the paper still idles\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nDetune left, detune right, still no sheet\nYour legend lives in a preset you cheat\nI clock the stack, I clock the unison\nI clock a flex with a missing author\nNill Bye filing a no-paper folder\nRake still selling a saw as sculpture\nGhost patch dressed as a pamphlet\nThe stack runs out, and so do the boasts\nHold the unison or drop the stack\nYour flex never sat in the rack\nEmpty in the middle, the boast looks lazy\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[verse]\nMorning comes, the saw is weary\nPaper never came, the rumor faded\nHats go even, the stack gets archived\nNo note logged, the boast was carved\nNill Bye tagging a ghosted patch\nRake still calling it a catch\nSaw king with a rented chord\nThe file never paid the board\nFile the detune, keep the unison\nStacked rumor is a party sticker\nPatch dead, the booth stays stacked\n\n[chorus]\nSupersaw flex\nStacked detune, no paper\nNill Bye asks for a patch note\nRake flexes a unison\nSaw stack is not a resume\nYour flex is a preset\n\n[outro]\ndetune dies\npatch folds\nflex filed\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/10-supersaw-flex"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

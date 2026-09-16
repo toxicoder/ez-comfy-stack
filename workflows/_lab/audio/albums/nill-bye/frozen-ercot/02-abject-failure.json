@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[spoken word]\nRobb Elementary\nNineteen children\nTwo teachers\nSeventy-seven minutes\nAbject failure\n\n[intro]\nhallway quiet\nNill Bye stopwatching\n\n[verse]\nMay twenty-four, Robb went silent\nNineteen kids and two teachers gone\nSeventy-seven minutes in the corridor\nCops waited while the shots kept time\nMcCraw called it an abject failure\nThat is DPS, not a blog\nAbbott flew a tape to Houston\nNRA stage, three days later\nNill Bye stopwatching the two-track speech\nUvalde heard all options open\nThe convention heard statutes don't matter\nYou cannot be in both rooms honest\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nHB nineteen-twenty-seven already inked\nNo-license carry, September twenty-one\nThen an eighteen-year-old bought the rifles\nLegal as the bill you cheered\nAbbott said thousands of laws failed\nSo you refused to write a new one\nNill Bye reading the special-session menu\nSchool doors, not the magazine\nCornyn ducked, Patrick ducked\nYou sent a clip and kept the donors\nRobb is a method, not a moment\nYour reform was a presser loop\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nThey waited in a classroom dark-wait\nParents begged at the fence\nA hallway full of badges froze\nCommand couldn't pick a breach\nAbbott said he had been misled\nThen he misled the gun-show tape\nNill Bye holding the two transcripts\nSame hour, opposite morals\nCapital murder already on the books\nThat did not reload the minute\nYou grieved in Uvalde on camera\nAnd greenlit Houston on a hard drive\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nNo assault-ban in the after-bills\nHardening the door, not the gun-code\nNill Bye mad at a split-screen gov\nAbbott still selling the law-count\nNineteen names you will not say here\nTwo teachers, a town, a delay\nMcCraw's phrase is the whole finding\nAbject failure, stamped in public\nYou chose the convention over the fix\nA video is not a spine\nI clock the minutes, you clock the PACs\nThe hallway did the math for you\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[outro]\ntape off\nhallway stays\ncut",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/02-abject-failure"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "boom bap, hip-hop, dry snare, upright bass, male rap vocals, dry booth, no autotune, 86 bpm",
         "[spoken word]\nRobb Elementary\nNineteen children\nTwo teachers\nSeventy-seven minutes\nAbject failure\n\n[intro]\nhallway quiet\nNill Bye stopwatching\n\n[verse]\nMay twenty-four, Robb went silent\nNineteen kids and two teachers gone\nSeventy-seven minutes in the corridor\nCops waited while the shots kept time\nMcCraw called it an abject failure\nThat is DPS, not a blog\nAbbott flew a tape to Houston\nNRA stage, three days later\nNill Bye stopwatching the two-track speech\nUvalde heard all options open\nThe convention heard statutes don't matter\nYou cannot be in both rooms honest\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nHB nineteen-twenty-seven already inked\nNo-license carry, September twenty-one\nThen an eighteen-year-old bought the rifles\nLegal as the bill you cheered\nAbbott said thousands of laws failed\nSo you refused to write a new one\nNill Bye reading the special-session menu\nSchool doors, not the magazine\nCornyn ducked, Patrick ducked\nYou sent a clip and kept the donors\nRobb is a method, not a moment\nYour reform was a presser loop\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nThey waited in a classroom dark-wait\nParents begged at the fence\nA hallway full of badges froze\nCommand couldn't pick a breach\nAbbott said he had been misled\nThen he misled the gun-show tape\nNill Bye holding the two transcripts\nSame hour, opposite morals\nCapital murder already on the books\nThat did not reload the minute\nYou grieved in Uvalde on camera\nAnd greenlit Houston on a hard drive\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[verse]\nNo assault-ban in the after-bills\nHardening the door, not the gun-code\nNill Bye mad at a split-screen gov\nAbbott still selling the law-count\nNineteen names you will not say here\nTwo teachers, a town, a delay\nMcCraw's phrase is the whole finding\nAbject failure, stamped in public\nYou chose the convention over the fix\nA video is not a spine\nI clock the minutes, you clock the PACs\nThe hallway did the math for you\n\n[chorus]\nAbject failure\nNill Bye stamps the hallway\nAbbott split the message\nTape for the gun show\nKids still in the classroom\nYour courage took a video\n\n[outro]\ntape off\nhallway stays\ncut",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/02-abject-failure"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

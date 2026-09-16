@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nanalog growl\nreturn-by\nNill Bye tagging\n\n[verse]\nRake wore a rented drip to strut\nReturn-by tag hanging off the next\nAnalog bass on a neon lease\nI scan the stitch, you scan for peace\nGated snare, the zipper shines\nYour cool is a costume with overdue fines\nNill Bye tagging what the hanger kept\nHe struts in a look that the shop still prepped\nSynthwave pads on a mannequin loan\nYou rented a myth and you called it a throne\nDeposit due when the lights go mild\nRented drip is a weekend child\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nYou cinched a jacket with a plastic tag\nThen you froze when I read the bag\nRake in a costume cool he cannot keep\nNill Bye clocking the return-by beep\nNeon pads, the stitch is temporary\nI want a fit that is actually hereditary\nHanger still warm from the shop you robbed\nYour analog glow is a leased-out job\nSynthwave night on a zipper lease\nScan the tag, the swagger will cease\nReturn-by morning, the drip goes home\nYou were a mannequin in a rented poem\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nGated snare while you chase a invoice\nI want a stitch that can actually join us\nNill Bye reading the tiny tag\nRake still posing in a costume brag\nAnalog bass, the deposit waits\nYou sold a neon that the shop dictates\nZipper talks, the hanger scores\nRented drip is a weekend's sins\nLease expired, the pads go dim\nI file the receipt, you want a hymn\nMannequin cool on a borrowed rack\nHe still hoping I will not track\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nRake at the return-by desk-less bay\nNill Bye posting the tag anyway\nCostume cool with a scanned-out stitch\nYou wanted a forever from a weekend pitch\nSynthwave fades, the zipper rusts\nI keep the receipt, you keep the gusts\nRented drip back on the hanger hook\nYour neon story is a shopkeeper's book\nAnalog out, the lease is lapsed\nScan the tag, the myth is untrue\nHe still asking to extend the night-wear\nI close the till on the costume affair\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[outro]\ntag scanned\ndrip returned\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/citation-needed/08-rented-drip"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no autotune, 104 bpm",
         "[intro]\nanalog growl\nreturn-by\nNill Bye tagging\n\n[verse]\nRake wore a rented drip to strut\nReturn-by tag hanging off the next\nAnalog bass on a neon lease\nI scan the stitch, you scan for peace\nGated snare, the zipper shines\nYour cool is a costume with overdue fines\nNill Bye tagging what the hanger kept\nHe struts in a look that the shop still prepped\nSynthwave pads on a mannequin loan\nYou rented a myth and you called it a throne\nDeposit due when the lights go mild\nRented drip is a weekend child\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nYou cinched a jacket with a plastic tag\nThen you froze when I read the bag\nRake in a costume cool he cannot keep\nNill Bye clocking the return-by beep\nNeon pads, the stitch is temporary\nI want a fit that is actually hereditary\nHanger still warm from the shop you robbed\nYour analog glow is a leased-out job\nSynthwave night on a zipper lease\nScan the tag, the swagger will cease\nReturn-by morning, the drip goes home\nYou were a mannequin in a rented poem\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nGated snare while you chase a invoice\nI want a stitch that can actually join us\nNill Bye reading the tiny tag\nRake still posing in a costume brag\nAnalog bass, the deposit waits\nYou sold a neon that the shop dictates\nZipper talks, the hanger scores\nRented drip is a weekend's sins\nLease expired, the pads go dim\nI file the receipt, you want a hymn\nMannequin cool on a borrowed rack\nHe still hoping I will not track\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[verse]\nRake at the return-by desk-less bay\nNill Bye posting the tag anyway\nCostume cool with a scanned-out stitch\nYou wanted a forever from a weekend pitch\nSynthwave fades, the zipper rusts\nI keep the receipt, you keep the gusts\nRented drip back on the hanger hook\nYour neon story is a shopkeeper's book\nAnalog out, the lease is lapsed\nScan the tag, the myth is untrue\nHe still asking to extend the night-wear\nI close the till on the costume affair\n\n[chorus]\nRented drip\nReturn-by tag on a costume cool\nNill Bye on the analog bass\nRake leased a look for the vestibule\nSynthwave neon, the zipper talks\nScan the tag or lose the drip\n\n[outro]\ntag scanned\ndrip returned\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/citation-needed/08-rented-drip"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

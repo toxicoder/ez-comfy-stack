@@ -1,0 +1,102 @@
+[
+  {
+    "id": "tools-here",
+    "label": "Tools are here",
+    "prompt": "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings hovering over a compact unmarked data-staff. The camera holds, then eases in as the wizard turns toward lens, eyes bright, and says, \"The tools are already here \u2014 we just have to use them well.\" A warm terrace breeze and palm rustle sit under distant bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, empty of lettering. No music and no score. Five seconds."
+  },
+  {
+    "id": "use-them-well",
+    "label": "Use them well",
+    "prompt": "A medium photoreal shot of a tropical rooftop terrace at golden hour. An original techno wizard in an unmarked teal running coat turns toward lens and says, \"Use the tools in front of you well.\" A warm terrace breeze and palm rustle sit under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "stay-on-box",
+    "label": "Stay on the box",
+    "prompt": "A medium photoreal shot at an unmarked teak desk. The wizard looks to lens and says, \"Stay on the machine in front of us.\" Room tone under a close voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "weights-local",
+    "label": "Weights stay local",
+    "prompt": "A medium photoreal shot on a terrace at night. The wizard says, \"The weights stay on this box.\" Lantern hush under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "cut-is-ours",
+    "label": "The cut is ours",
+    "prompt": "A medium photoreal shot in an unmarked workshop. The wizard says, \"If it ships from here, the cut is ours.\" A lamp hum under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "no-rented-beat",
+    "label": "No rented beat",
+    "prompt": "A medium photoreal shot at a teak bench. The wizard says, \"No rented beat. The booth is local.\" Room tone under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "card-hot",
+    "label": "Card runs hot",
+    "prompt": "A medium photoreal shot, coat hem in a breeze. The wizard says, \"The card runs hot. That is the point.\" Wind under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "own-the-silence",
+    "label": "Own the silence",
+    "prompt": "A medium photoreal shot at a fountain. The wizard says, \"Own the silence between the words.\" Water beads under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "one-job",
+    "label": "One job",
+    "prompt": "A medium photoreal shot on a ridge. The wizard says, \"One job on this box. Then we stop.\" Thin wind under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "look-twice",
+    "label": "Look twice",
+    "prompt": "A medium photoreal shot at unmarked glass. The wizard says, \"Look twice before you print.\" Distant traffic under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "keep-the-bible",
+    "label": "Keep the bible",
+    "prompt": "A medium photoreal shot in an unmarked study. The wizard says, \"Keep the bible. Change only the shot.\" Paper hush under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "hands-free",
+    "label": "Hands stay free",
+    "prompt": "A medium photoreal shot, empty palms visible. The wizard says, \"Hands stay free. The staff is enough.\" Fabric hush under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "print-later",
+    "label": "Print later",
+    "prompt": "A medium photoreal shot at first light. The wizard says, \"Write cheap. Print later.\" Soft wind under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "no-score-line",
+    "label": "World only",
+    "prompt": "A medium photoreal shot on a terrace. The wizard says, \"World sound only. Let the street talk.\" Palm rustle under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "fog-line",
+    "label": "Fog line",
+    "prompt": "A medium photoreal shot on an unmarked pier. The wizard says, \"The harbor will wait.\" Water lap under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "rain-line",
+    "label": "Rain line",
+    "prompt": "A medium photoreal shot under an overhang. The wizard says, \"Let the rain finish the take.\" Rain on glass under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "night-line",
+    "label": "Night line",
+    "prompt": "A medium photoreal shot under lanterns. The wizard says, \"Hold the last frame.\" Insect hush under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "desk-line",
+    "label": "Desk line",
+    "prompt": "A medium photoreal shot at a blank notebook. The wizard says, \"The notebook stays empty until the shot is true.\" Room tone under the voice. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "staff-line",
+    "label": "Staff line",
+    "prompt": "A medium photoreal shot, glyph rings idle. The wizard says, \"The staff is a tool, not a trick.\" A glyph chime after the line. Unmarked surfaces. No music and no score. Five seconds."
+  },
+  {
+    "id": "close-line",
+    "label": "Close line",
+    "prompt": "A medium close photoreal shot. The wizard says, \"We are already at the work.\" Close voice, world SFX under. Unmarked surfaces. No music and no score. Five seconds."
+  }
+]

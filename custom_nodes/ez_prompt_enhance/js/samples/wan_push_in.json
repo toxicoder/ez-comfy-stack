@@ -1,0 +1,102 @@
+[
+  {
+    "id": "lab-push",
+    "label": "Lab push-in",
+    "prompt": "Slow push-in toward the start-image subject. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "slow-push",
+    "label": "Very slow push",
+    "prompt": "Very slow push-in. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "hold-push",
+    "label": "Hold then push",
+    "prompt": "Hold, then push-in. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-eyes",
+    "label": "Push to eyes",
+    "prompt": "Push-in toward the eyes. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-staff",
+    "label": "Push to staff",
+    "prompt": "Push-in toward the staff. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-product",
+    "label": "Push to product",
+    "prompt": "Push-in toward the product. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-mug",
+    "label": "Push to mug",
+    "prompt": "Push-in toward the mug. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-fabric",
+    "label": "Push fabric",
+    "prompt": "Push-in; fabric hush. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-night",
+    "label": "Night push",
+    "prompt": "Push-in under night practicals. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-dawn",
+    "label": "Dawn push",
+    "prompt": "Push-in in first light. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-rain",
+    "label": "Rain push",
+    "prompt": "Push-in; rain beads. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-indoor",
+    "label": "Indoor push",
+    "prompt": "Push-in in an unmarked room. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-terrace",
+    "label": "Terrace push",
+    "prompt": "Push-in on a terrace. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-settle",
+    "label": "Push then settle",
+    "prompt": "Push-in then settle. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-lights",
+    "label": "Push lights",
+    "prompt": "Push-in; lights shimmer then settle. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-breath",
+    "label": "Push breath",
+    "prompt": "Push-in; subtle breath. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-lock",
+    "label": "Hard lock push",
+    "prompt": "Push-in; identity locked hard. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-table",
+    "label": "Table push",
+    "prompt": "Push-in on a tabletop. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-no-walk",
+    "label": "No walk push",
+    "prompt": "Push-in only. No walk. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  },
+  {
+    "id": "push-end-hold",
+    "label": "End hold",
+    "prompt": "Push-in and hold the last frames. Gentle motion in fabric, hair, or foliage. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. One continuous five-second take at 24 fps. No audio."
+  }
+]

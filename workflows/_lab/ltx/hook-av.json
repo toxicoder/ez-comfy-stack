@@ -699,12 +699,14 @@
         "Node name for S&R": "EZLTXPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score.",
         true,
         "t2v",
         "5 seconds, 24 fps",
         "world SFX matching the start image, no score",
-        "none"
+        "none",
+        "ltx/hook-av"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -989,6 +991,14 @@
     },
     "linearData": {
       "inputs": [
+        [
+          17,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
         [
           17,
           "prompt",

@@ -1,0 +1,142 @@
+[
+  {
+    "id": "booth-stack",
+    "label": "Booth stack",
+    "prompt": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "quiet-street",
+    "label": "Quiet street",
+    "prompt": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "solo-take",
+    "label": "Solo take",
+    "prompt": "[intro]\nyeah\nlocal signal\n\n[verse]\nRack light blinks on a solo take\nNo rented hook, no leased name\nBars stay tight, the booth stays mine\nStamp the master, keep the line\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[intro]\nyeah\nlocal signal\n\n[verse]\nRack light blinks on a solo take\nNo rented hook, no leased name\nBars stay tight, the booth stays mine\nStamp the master, keep the line\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track"
+  },
+  {
+    "id": "weights-disk",
+    "label": "Weights on disk",
+    "prompt": "[verse]\nWeights on disk, the fan in the hall\nNo cloud verse, no rented call\nIf the card dies the show dies too\nThat is the bargain, that is the proof\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nWeights on disk, the fan in the hall\nNo cloud verse, no rented call\nIf the card dies the show dies too\nThat is the bargain, that is the proof\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "cut-clean",
+    "label": "Cut stays clean",
+    "prompt": "[verse]\nCut stays clean when the room stays small\nNo ghost in the hook, no borrowed call\nStamp it local, leave it plain\nIf it leaves this box it keeps my name\n\n[chorus]\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nCut stays clean when the room stays small\nNo ghost in the hook, no borrowed call\nStamp it local, leave it plain\nIf it leaves this box it keeps my name\n\n[chorus]\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "no-autotune",
+    "label": "Dry booth",
+    "prompt": "[verse]\nDry booth, dry snare, no polish pass\nThe take is the take, let the air be glass\nIf it shakes it shakes, if it hits it hits\nI do not rent a throat for this\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nDry booth, dry snare, no polish pass\nThe take is the take, let the air be glass\nIf it shakes it shakes, if it hits it hits\nI do not rent a throat for this\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "night-rack",
+    "label": "Night rack",
+    "prompt": "[verse]\nNight rack hum, the street is thin\nI write the bar where the solder sits\nNo leased hook, no borrowed grin\nThe master stays where the spark begins\n\n[chorus]\nNo ghost in the hook, no borrowed track",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nNight rack hum, the street is thin\nI write the bar where the solder sits\nNo leased hook, no borrowed grin\nThe master stays where the spark begins\n\n[chorus]\nNo ghost in the hook, no borrowed track"
+  },
+  {
+    "id": "hall-fan",
+    "label": "Hall fan",
+    "prompt": "[verse]\nHall fan loud, the neighbor sleeps\nI keep the verse in a local keep\nNo wire in, no wire out\nIf it ships it ships from this house\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nHall fan loud, the neighbor sleeps\nI keep the verse in a local keep\nNo wire in, no wire out\nIf it ships it ships from this house\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "stamp-plain",
+    "label": "Stamp it plain",
+    "prompt": "[verse]\nStamp it plain, no sticker shine\nThe bar is a bolt, the hook is a line\nI do not borrow a famous climb\nI build the stair and I take my time\n\n[chorus]\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nStamp it plain, no sticker shine\nThe bar is a bolt, the hook is a line\nI do not borrow a famous climb\nI build the stair and I take my time\n\n[chorus]\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "card-tab",
+    "label": "Card tab",
+    "prompt": "[verse]\nCard tab hot, the meter true\nI pay the watts, I keep the room\nNo rented booth, no leased perfume\nThe cut is sweat and a local tune\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nCard tab hot, the meter true\nI pay the watts, I keep the room\nNo rented booth, no leased perfume\nThe cut is sweat and a local tune\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "quiet-hook",
+    "label": "Quiet hook",
+    "prompt": "[verse]\nQuiet hook, no fireworks lie\nThe chorus is a door, not a sky\nI say the work, I say the why\nThen I sit down and let it dry\n\n[chorus]\nNo ghost in the hook, no borrowed track",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nQuiet hook, no fireworks lie\nThe chorus is a door, not a sky\nI say the work, I say the why\nThen I sit down and let it dry\n\n[chorus]\nNo ghost in the hook, no borrowed track"
+  },
+  {
+    "id": "floor-dust",
+    "label": "Floor dust",
+    "prompt": "[verse]\nFloor dust, cable, a dented case\nThe booth is a closet that learned a bass\nI do not tour, I do not chase\nI print the bar and I give it space\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nFloor dust, cable, a dented case\nThe booth is a closet that learned a bass\nI do not tour, I do not chase\nI print the bar and I give it space\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "one-mic",
+    "label": "One mic",
+    "prompt": "[verse]\nOne mic, one take, one cheap stand\nThe room is the verb, the rack is the hand\nNo borrowed silk, no rented band\nIf it lives it lives where the solder lands\n\n[chorus]\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nOne mic, one take, one cheap stand\nThe room is the verb, the rack is the hand\nNo borrowed silk, no rented band\nIf it lives it lives where the solder lands\n\n[chorus]\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "street-light",
+    "label": "Street light",
+    "prompt": "[verse]\nStreet light through a dusty blind\nThe verse is a walk I do not rewind\nI keep the time, I keep the kind\nLocal signal, local mind\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nStreet light through a dusty blind\nThe verse is a walk I do not rewind\nI keep the time, I keep the kind\nLocal signal, local mind\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "no-ghost",
+    "label": "No ghost",
+    "prompt": "[verse]\nNo ghost in the hook, I said it twice\nI do not rent a famous vice\nThe booth is a box, the box is a life\nThe master comes back and it stays my slice\n\n[chorus]\nNo ghost in the hook, no borrowed track",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nNo ghost in the hook, I said it twice\nI do not rent a famous vice\nThe booth is a box, the box is a life\nThe master comes back and it stays my slice\n\n[chorus]\nNo ghost in the hook, no borrowed track"
+  },
+  {
+    "id": "solder",
+    "label": "Solder",
+    "prompt": "[verse]\nSolder smell, a window cracked\nThe bar is a circuit I do not wrap\nI test the line, I hear it snap\nThen I print the take and I do not look back\n\n[chorus]\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nSolder smell, a window cracked\nThe bar is a circuit I do not wrap\nI test the line, I hear it snap\nThen I print the take and I do not look back\n\n[chorus]\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "keep-line",
+    "label": "Keep the line",
+    "prompt": "[verse]\nKeep the line, keep the fault\nThe honest miss is part of the vault\nI do not auto the human salt\nI leave the air and I call it adult\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nKeep the line, keep the fault\nThe honest miss is part of the vault\nI do not auto the human salt\nI leave the air and I call it adult\n\n[chorus]\nOwn the booth, own the stack"
+  },
+  {
+    "id": "small-room",
+    "label": "Small room",
+    "prompt": "[verse]\nSmall room, big fan, no crowd noise\nThe hook is a tool, not a toy\nI write for the rack, I write for the choice\nTo keep the cut in a local voice\n\n[chorus]\nNo ghost in the hook, no borrowed track",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nSmall room, big fan, no crowd noise\nThe hook is a tool, not a toy\nI write for the rack, I write for the choice\nTo keep the cut in a local voice\n\n[chorus]\nNo ghost in the hook, no borrowed track"
+  },
+  {
+    "id": "last-pass",
+    "label": "Last pass",
+    "prompt": "[verse]\nLast pass, the meter still true\nI do not gild what the first take knew\nStamp the master, leave the glue\nIf it ships from here it stays my proof\n\n[chorus]\nSpark in the rack, the master comes back",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[verse]\nLast pass, the meter still true\nI do not gild what the first take knew\nStamp the master, leave the glue\nIf it ships from here it stays my proof\n\n[chorus]\nSpark in the rack, the master comes back"
+  },
+  {
+    "id": "signal",
+    "label": "Local signal",
+    "prompt": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nLocal signal, local heat\nThe booth is a closet on a quiet street\nNo rented throat, no borrowed beat\nThe master comes back and the cut stays sweet\n\n[chorus]\nOwn the booth, own the stack",
+    "tags": "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
+    "lyrics": "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nLocal signal, local heat\nThe booth is a closet on a quiet street\nNo rented throat, no borrowed beat\nThe master comes back and the cut stays sweet\n\n[chorus]\nOwn the booth, own the stack"
+  }
+]

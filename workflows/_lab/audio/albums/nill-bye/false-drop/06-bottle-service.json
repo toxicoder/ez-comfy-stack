@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\nmagnum rented\ntab borrowed\nice theater\n\n[verse]\nRake pops a cork like he owns the suite\nTab in a name that he never wore\nIce bucket shining, the magnum's rented\nWaiter hovering, the flex invented\nPiano stab, the sidechain pumps\nYou toast a life that the ledger dumps\nI read the check, you read the booth\nFour-on-the-floor while you spend perfume\nNill Bye adding the stranger's check\nYour whole bottle is a costume flex\nCork in the air, the ice is theater\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nYou name a vintage like a bloodline cork\nThen you freeze when they ask who signed\nHouse hats ticking, the ice stays pretty\nSidechain pumping a borrowed city\nI want a tab that can match the toast\nYou want a photo with a magnum ghost\nRented bottles in a stranger's script\nYou sip a flex that the card won't tip\nNill Bye circling the fake account\nRake toasting debt like a fountain\nIce melts faster than the story does\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nWaiter knows the name on the slip\nIt is not yours, you still take a sip\nI clock the bucket, I clock the pour\nI clock a king at a rented rail\nNill Bye filing the borrowed tab\nRake still posing with a magnum grab\nHouse lights low, the toast looks expensive\nThe ledger says you are a guest detective\nKeep the ice, lose the costume pour\nYour service never paid the store\nCork on the table, the bill on a stranger\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nMorning comes, the ice is water\nMagnum gone, the toast is fodder\nHats go quiet, the waiter blinks\nTab bounced back on a trail of plugs\nNill Bye bagging a rented cork\nRake still calling it a masterwork\nBottle king with a costume sip\nThe card declined on a phantom tip\nPut the magnum back in the cage\nYour whole toast is a rented stage\nIce dumped, the theater closes\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[outro]\nmagnum back\ntab bounced\nice dumped\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/false-drop/06-bottle-service"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "house, four-on-the-floor, piano stab, sidechain bass, male rap vocals, dry booth, no autotune, 126 bpm",
         "[intro]\nmagnum rented\ntab borrowed\nice theater\n\n[verse]\nRake pops a cork like he owns the suite\nTab in a name that he never wore\nIce bucket shining, the magnum's rented\nWaiter hovering, the flex invented\nPiano stab, the sidechain pumps\nYou toast a life that the ledger dumps\nI read the check, you read the booth\nFour-on-the-floor while you spend perfume\nNill Bye adding the stranger's check\nYour whole bottle is a costume flex\nCork in the air, the ice is theater\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nYou name a vintage like a bloodline cork\nThen you freeze when they ask who signed\nHouse hats ticking, the ice stays pretty\nSidechain pumping a borrowed city\nI want a tab that can match the toast\nYou want a photo with a magnum ghost\nRented bottles in a stranger's script\nYou sip a flex that the card won't tip\nNill Bye circling the fake account\nRake toasting debt like a fountain\nIce melts faster than the story does\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nWaiter knows the name on the slip\nIt is not yours, you still take a sip\nI clock the bucket, I clock the pour\nI clock a king at a rented rail\nNill Bye filing the borrowed tab\nRake still posing with a magnum grab\nHouse lights low, the toast looks expensive\nThe ledger says you are a guest detective\nKeep the ice, lose the costume pour\nYour service never paid the store\nCork on the table, the bill on a stranger\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[verse]\nMorning comes, the ice is water\nMagnum gone, the toast is fodder\nHats go quiet, the waiter blinks\nTab bounced back on a trail of plugs\nNill Bye bagging a rented cork\nRake still calling it a masterwork\nBottle king with a costume sip\nThe card declined on a phantom tip\nPut the magnum back in the cage\nYour whole toast is a rented stage\nIce dumped, the theater closes\n\n[chorus]\nBottle service\nRented magnum, fake tab\nNill Bye reads the check\nRake toasts on a stranger\nIce bucket theater\nThe bill is not yours\n\n[outro]\nmagnum back\ntab bounced\nice dumped\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/false-drop/06-bottle-service"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

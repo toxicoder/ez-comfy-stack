@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\n808\nhalf-time\nNill Bye summing\n\n[verse]\nMarch twenty-twenty-one, the operation opened\nTroopers, Guard, a trespass workaround\nAbbott built a Lone Star tab\nEleven billion and climbing\nNill Bye summing the weekly burn\nTwo-point-five million a week at the peak\nTen thousand troops on a state order\nNo GI bill, no federal shield\nYou said Washington failed the river\nThen you billed Texas for a forever mission\nA disaster that renews like a subscription\nThe tab is the policy\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nHRW called it expensive, ineffective, abusive\nYou called it denying cartels a lane\nAbbott still wants a federal reimbursement\nEleven billion as an IOU to himself\nNill Bye reading the appropriation\nHouse writers cutting checks they already regret\nA mission that grew faster than a memo\nPay delayed, camps dirty, troops sent home in waves\nYou cannot measure success if the stamp never ends\nA peak in crossings, a peak in spend, no sunset\nDark trap on a blank-check war\nYour security is a line item\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nTrespass charges as an immigration hack\nState cops doing a federal job by nickname\nAbbott needed a workaround to the Supremacy Clause\nSo a rancher's complaint became a docket\nNill Bye mad at a tab with no ledger-goal\nFelony counts on a press release\nEighty percent of smuggling bookings were citizens\nTeenagers in a ten-year minimum\nThat is not a cartel takedown\nThat is a volume business in a courtroom\nYou export the photo, keep the invoice\nLone Star is a brand with a burn rate\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nTwenty-twenty-six, still declaring the emergency\nWhite House flipped, crossings down, stamp still wet\nNill Bye posting the Lone Star tab\nAbbott still posing on a riverbank tour\nA program that cannot end because ending is the tell\nSuccess would kill the appropriation\nSo success is never declared, only funded\nI want a metric, you want a renewal\nEleven billion is a confession\nThe border was the excuse\nThe tab was the point\nKeep the 808, lose the forever war\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[outro]\nhats cease\ntab open\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/lone-star-tab/01-lone-star-tab"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no autotune, 140 bpm",
         "[intro]\n808\nhalf-time\nNill Bye summing\n\n[verse]\nMarch twenty-twenty-one, the operation opened\nTroopers, Guard, a trespass workaround\nAbbott built a Lone Star tab\nEleven billion and climbing\nNill Bye summing the weekly burn\nTwo-point-five million a week at the peak\nTen thousand troops on a state order\nNo GI bill, no federal shield\nYou said Washington failed the river\nThen you billed Texas for a forever mission\nA disaster that renews like a subscription\nThe tab is the policy\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nHRW called it expensive, ineffective, abusive\nYou called it denying cartels a lane\nAbbott still wants a federal reimbursement\nEleven billion as an IOU to himself\nNill Bye reading the appropriation\nHouse writers cutting checks they already regret\nA mission that grew faster than a memo\nPay delayed, camps dirty, troops sent home in waves\nYou cannot measure success if the stamp never ends\nA peak in crossings, a peak in spend, no sunset\nDark trap on a blank-check war\nYour security is a line item\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nTrespass charges as an immigration hack\nState cops doing a federal job by nickname\nAbbott needed a workaround to the Supremacy Clause\nSo a rancher's complaint became a docket\nNill Bye mad at a tab with no ledger-goal\nFelony counts on a press release\nEighty percent of smuggling bookings were citizens\nTeenagers in a ten-year minimum\nThat is not a cartel takedown\nThat is a volume business in a courtroom\nYou export the photo, keep the invoice\nLone Star is a brand with a burn rate\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[verse]\nTwenty-twenty-six, still declaring the emergency\nWhite House flipped, crossings down, stamp still wet\nNill Bye posting the Lone Star tab\nAbbott still posing on a riverbank tour\nA program that cannot end because ending is the tell\nSuccess would kill the appropriation\nSo success is never declared, only funded\nI want a metric, you want a renewal\nEleven billion is a confession\nThe border was the excuse\nThe tab was the point\nKeep the 808, lose the forever war\n\n[chorus]\nLone Star tab\nNill Bye on the eleven-billion\nAbbott still renews the disaster\nFive years in, the crossing peaked\nA mission without a metric\nYour border is a budget\n\n[outro]\nhats cease\ntab open\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/lone-star-tab/01-lone-star-tab"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [

@@ -210,10 +210,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
         "[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]\n\n[drop - harder warped drop, chest 808 stack, tearout grind, grid 331 1]\n\n[inst - trap hats denser, growl sustain, grid 331 2]\n\n[drop - full send drop, dirty analog wreck, warped 808, grid 331 3]\n\n[outro - kick holds, trap hats roll, growl ride, grid 331 4]",
         false,
-        "instrumental"
+        "instrumental",
+        "audio/albums/drive-through/hour-2/10-donk-ramp"
       ],
       "title": "ez_edm_prompt"
     },

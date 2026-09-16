@@ -202,8 +202,10 @@
         "Node name for S&R": "EZRapLyrics"
       },
       "widgets_values": [
+        "custom",
         "[intro]\ndusty loop\nNill Bye shelving\n\n[verse]\nSchool boards got a raid of lists\nBooks pulled on a parent form\nAbbott framed it as parental rights\nThe stack got a padlock\nNill Bye shelving what you banned\nDEI offices closed on cue\nUniversity programs told to fold\nA culture session with a statute hammer\nLibrarians treated like smugglers\nA graphic novel as contraband\nYou don't have to burn it if you lock it\nThe hearing is the bonfire with better lighting\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nHB this, SB that, a pile of culture bills\nDon't Say, don't teach, don't catalog\nAbbott signed the stack closed\nThen posed with a classroom prop\nNill Bye reading the pull-list\nHistory shrinks to a pamphlet\nGender, race, a chapter too honest\nOff the shelf, onto the outrage feed\nYou call it protecting childhood\nIt is a loyalty ritual with a barcode\nTeachers self-censor to keep the job\nThe lock is cheaper than a curriculum\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nLo-fi beat on a quiet ban\nRhodes under a confiscation\nAbbott needed a session villain\nThe librarian drew the short straw\nNill Bye mad at a locked shelf-row\nPublic school as a suspect package\nYou audited pronouns harder than the grid\nA DEI office is not a cartel\nBut it photographs worse for your base\nSo the stack became the border\nIdeas in a restricted section\nYour Texas history skips the parts that sting\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nKids still find the text online\nYou only trained them that the state is scared\nNill Bye posting the locked stacks\nAbbott still touring the parental-rights fair\nA ban is a tell: the page might land\nSo you padlock the chance it does\nI want a shelf, you want a hearing\nI want a teacher, you want a scout\nCulture war is a legislative filler\nWhen the levy and the ward are ugly\nKeep the lock, lose the thread\nThe stack remembers who closed it\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[outro]\nshelf dark\nlock clicks\ncut\nyeah",
-        false
+        false,
+        "audio/albums/nill-bye/frozen-ercot/09-locked-stacks"
       ],
       "title": "Rap lyrics"
     },
@@ -253,10 +255,12 @@
         "Node name for S&R": "EZAceStepPromptEnhance"
       },
       "widgets_values": [
+        "custom",
         "lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, no autotune, 86 bpm",
         "[intro]\ndusty loop\nNill Bye shelving\n\n[verse]\nSchool boards got a raid of lists\nBooks pulled on a parent form\nAbbott framed it as parental rights\nThe stack got a padlock\nNill Bye shelving what you banned\nDEI offices closed on cue\nUniversity programs told to fold\nA culture session with a statute hammer\nLibrarians treated like smugglers\nA graphic novel as contraband\nYou don't have to burn it if you lock it\nThe hearing is the bonfire with better lighting\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nHB this, SB that, a pile of culture bills\nDon't Say, don't teach, don't catalog\nAbbott signed the stack closed\nThen posed with a classroom prop\nNill Bye reading the pull-list\nHistory shrinks to a pamphlet\nGender, race, a chapter too honest\nOff the shelf, onto the outrage feed\nYou call it protecting childhood\nIt is a loyalty ritual with a barcode\nTeachers self-censor to keep the job\nThe lock is cheaper than a curriculum\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nLo-fi beat on a quiet ban\nRhodes under a confiscation\nAbbott needed a session villain\nThe librarian drew the short straw\nNill Bye mad at a locked shelf-row\nPublic school as a suspect package\nYou audited pronouns harder than the grid\nA DEI office is not a cartel\nBut it photographs worse for your base\nSo the stack became the border\nIdeas in a restricted section\nYour Texas history skips the parts that sting\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[verse]\nKids still find the text online\nYou only trained them that the state is scared\nNill Bye posting the locked stacks\nAbbott still touring the parental-rights fair\nA ban is a tell: the page might land\nSo you padlock the chance it does\nI want a shelf, you want a hearing\nI want a teacher, you want a scout\nCulture war is a legislative filler\nWhen the levy and the ward are ugly\nKeep the lock, lose the thread\nThe stack remembers who closed it\n\n[chorus]\nLocked stacks\nNill Bye on the library ban\nAbbott blessed the pull-list\nTitles vanish for a hearing\nKids lose the shelf, PACs gain a clip\nYour curriculum is a confiscation\n\n[outro]\nshelf dark\nlock clicks\ncut\nyeah",
         false,
-        "vocal"
+        "vocal",
+        "audio/albums/nill-bye/frozen-ercot/09-locked-stacks"
       ],
       "title": "ez_rap_prompt"
     },
@@ -904,7 +908,7 @@
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
-            "label": "Rewrite prompt"
+            "label": "Rewrite lyrics"
           }
         ],
         [
