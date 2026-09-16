@@ -1431,6 +1431,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#quality-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#lab-app-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -12359,6 +12370,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#quality-widget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quality widget
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#lab-app-mode" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -14164,7 +14186,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 16:35 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T16:35:14+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 17:08 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T17:08:44+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -14384,7 +14406,11 @@
 <p><strong>See also:</strong> <a href="#queue">Queue</a> · <a href="#workflow">workflow</a> · <a href="#enhance">Enhance</a> · <a href="#app-mode">App Mode</a></p>
 <h3 id="app-mode">App Mode<a class="headerlink" href="#app-mode" title="Permanent link">&para;</a></h3>
 <p>App Mode shows the creator widgets listed in <code>extra.linearData</code> (Prompt, Style, Rewrite prompt, seed; LoadImage on I2V; size/UNET only on the daily still). Persist is <code>[nodeId, widgetName, config]</code> with an integer node id — frontend 1.49.6+ upgrades that to a live WidgetId. Two-part <code>11:prompt</code> ids are dropped and the side panel looks empty. It is not a second frontend. The lab contract is <code>lab_app_mode</code>. Multi-shot Apps expose one identity prompt, not per-shot cards. Film graphs may open in graph view. On start, App Mode graphs seed as <code>*.app.json</code> so they appear in Comfy's Apps sidebar as well as Workflows. See <a href="../studio-apps/">ComfyUI Apps</a> and <a href="../learn/comfyui/">ComfyUI basics</a>.</p>
-<p><strong>See also:</strong> <a href="#lab-app-mode">lab_app_mode</a> · <a href="#widget">widget</a> · <a href="#occupancy">occupancy</a> · <a href="#workflow">workflow</a> · <a href="#studio-ui">studio-ui</a></p>
+<p><strong>See also:</strong> <a href="#lab-app-mode">lab_app_mode</a> · <a href="#widget">widget</a> · <a href="#occupancy">occupancy</a> · <a href="#workflow">workflow</a> · <a href="#studio-ui">studio-ui</a> · <a href="#quality-widget">Quality widget</a></p>
+<h3 id="quality-widget">Quality widget<a class="headerlink" href="#quality-widget" title="Permanent link">&para;</a></h3>
+<p>Every <code>_lab</code> graph has an <code>EZQuality</code> combo stamped first in App Mode. <strong>Lab</strong> keeps authored widgets. <strong>Draft</strong> is faster (fewer steps). <strong>High</strong> is slower (more steps; Klein base 4B + CFG 3.5 only when that UNET is on disk). It does not change size, length, CLIP, or VAE, and it never selects banned weights. LTX <code>--tier quality</code> is a 2.3 download alias, not this widget. See <a href="../studio-apps/">ComfyUI Apps</a>.</p>
+<p><strong>Also called:</strong> <code>Quality dropdown</code>, <code>EZQuality</code>, <code>Lab / Draft / High</code></p>
+<p><strong>See also:</strong> <a href="#app-mode">App Mode</a> · <a href="#cfg">CFG</a> · <a href="#download-tier">--tier</a> · <a href="#sampler">KSampler</a></p>
 <h3 id="lab-app-mode">lab_app_mode<a class="headerlink" href="#lab-app-mode" title="Permanent link">&para;</a></h3>
 <p><code>extra.lab_app_mode</code> marks a seeded graph as an App (<code>enabled</code>, <code>default_view</code>, <code>lane</code> inspire/produce/audio/film/dcc/optional, <code>occupancy</code>, <code>handoff</code>). <code>default_view: app</code> seeds as <code>*.app.json</code> (Apps + Workflows sidebars). Do not require <code>extra.linearMode</code> — Comfy upstream does not write it. See <a href="../studio-apps/">ComfyUI Apps</a>.</p>
 <p><strong>See also:</strong> <a href="#app-mode">App Mode</a> · <a href="#occupancy">occupancy</a> · <a href="#lab-example">lab-example</a></p>
