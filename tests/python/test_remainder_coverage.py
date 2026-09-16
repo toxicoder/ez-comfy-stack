@@ -108,6 +108,10 @@ def test_client_wheel_url_unknown_and_amd64(monkeypatch: pytest.MonkeyPatch) -> 
     assert "x86_64" in url
     monkeypatch.setattr(client.platform, "machine", lambda: "x86_64")
     assert "x86_64" in client.llama_cpp_direct_wheel_url()
+    monkeypatch.setattr(client.platform, "machine", lambda: "arm64")
+    assert "aarch64" in client.llama_cpp_direct_wheel_url()
+    monkeypatch.setattr(client.platform, "machine", lambda: "aarch64")
+    assert "aarch64" in client.llama_cpp_direct_wheel_url()
 
 
 def test_client_pip_timeout_and_short_error(monkeypatch: pytest.MonkeyPatch) -> None:
