@@ -1,8 +1,8 @@
 {
   "id": "before-after",
-  "revision": 1,
-  "last_node_id": 21,
-  "last_link_id": 27,
+  "revision": 2,
+  "last_node_id": 22,
+  "last_link_id": 29,
   "nodes": [
     {
       "id": 1,
@@ -132,7 +132,8 @@
           "type": "STRING",
           "links": [
             5,
-            16
+            16,
+            29
           ],
           "slot_index": 0
         }
@@ -168,6 +169,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 1
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 28,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -818,6 +827,47 @@
       },
       "widgets_values": [],
       "title": "Ref from 01 (AFTER)"
+    },
+    {
+      "id": 22,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        1770.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            28
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -1036,6 +1086,22 @@
       20,
       0,
       "IMAGE"
+    ],
+    [
+      28,
+      22,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      29,
+      4,
+      0,
+      22,
+      0,
+      "STRING"
     ]
   ],
   "groups": [

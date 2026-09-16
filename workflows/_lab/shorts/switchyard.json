@@ -1,8 +1,8 @@
 {
   "id": "switchyard",
-  "revision": 5,
-  "last_node_id": 901,
-  "last_link_id": 446,
+  "revision": 7,
+  "last_node_id": 903,
+  "last_link_id": 450,
   "nodes": [
     {
       "id": 1,
@@ -173,6 +173,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 447,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -405,7 +413,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            10
+            10,
+            448
           ],
           "slot_index": 0
         }
@@ -725,6 +734,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 12
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 449,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -972,7 +989,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            15
+            15,
+            450
           ],
           "slot_index": 0
         }
@@ -11423,6 +11441,88 @@
         ""
       ],
       "title": "LTX AI-media disclosure (end-card)"
+    },
+    {
+      "id": 902,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        2850.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 448
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            447
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        false,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 903,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        3180.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 103,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 450
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            449
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        false,
+        "ltx"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -14992,6 +15092,38 @@
       0,
       900,
       18,
+      "STRING"
+    ],
+    [
+      447,
+      902,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      448,
+      11,
+      0,
+      902,
+      0,
+      "STRING"
+    ],
+    [
+      449,
+      903,
+      0,
+      104,
+      1,
+      "STRING"
+    ],
+    [
+      450,
+      211,
+      0,
+      903,
+      0,
       "STRING"
     ]
   ],

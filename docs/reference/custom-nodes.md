@@ -48,7 +48,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
-| `ez_prompt_enhance` | 5 nodes | Klein / Wan / LTX / join / ACE-Step |
+| `ez_prompt_enhance` | 6 nodes | Klein / Wan / LTX / negative / join / ACE-Step |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
@@ -148,6 +148,7 @@ Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft withou
 | `EZKleinPromptEnhance` | Klein Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible |
 | `EZWanPromptEnhance` | Wan Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint. **No audio**. Style ignored on I2V/flf/vace |
 | `EZLTXPromptEnhance` | LTX Prompt Enhance | `prompt`, `enhance`, `mode` combo `t2v` `i2v` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. Style ignored on I2V |
+| `EZNegativePromptEnhance` | Negative Prompt Enhance | `prompt` STRING, `enhance` BOOLEAN (default on), `family` combo `klein` `wan` `ltx` (default `klein`); optional `positive` STRING (forceInput) | `STRING` prompt | CPU GGUF | Rewrites the negative against the enhanced positive so look terms cannot fight. Keeps watermarks / melt / flicker. Fail-soft; a deterministic complement still runs |
 | `EZPromptJoin` | Prompt Join | `identity` STRING, `shot` STRING, `inventory` STRING, `lock` combo `view` `state` (default `view`) | `STRING` prompt | — | `view` front-loads the shot; `state` keeps framing and changes only light/grade/named action. Inventory is a locked object list |
 | `EZAceStepPromptEnhance` | ACE-Step Prompt Enhance | `tags` STRING, `lyrics` STRING, `enhance` BOOLEAN (default on), `mode` combo `vocal` `instrumental` (default `vocal`) | `STRING` tags, `STRING` lyrics | CPU GGUF | Instrumental mode forces no-vocals tags and empty-body `[inst]` / `[drop]` lyrics (free-text lines fold into the brackets so ACE does not sing them) |
 

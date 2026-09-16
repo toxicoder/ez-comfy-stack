@@ -77,7 +77,7 @@
         "id": "7c3e9b10-6a21-4f0a-9c11-00000000aa01",
         "name": "klein-t2i-backbone",
         "version": 1,
-        "revision": 4,
+        "revision": 5,
         "config": {},
         "extra": {
           "lab_occupancy": "klein",
@@ -291,6 +291,14 @@
                 "name": "clip",
                 "type": "CLIP",
                 "link": 3
+              },
+              {
+                "name": "text",
+                "type": "STRING",
+                "link": 11,
+                "widget": {
+                  "name": "text"
+                }
               }
             ],
             "outputs": [
@@ -522,7 +530,8 @@
                 "name": "prompt",
                 "type": "STRING",
                 "links": [
-                  10
+                  10,
+                  12
                 ],
                 "slot_index": 0
               }
@@ -538,6 +547,47 @@
               "none"
             ],
             "title": "Klein Prompt Enhance"
+          },
+          {
+            "id": 12,
+            "type": "EZNegativePromptEnhance",
+            "pos": [
+              480.0,
+              930.0
+            ],
+            "size": [
+              420,
+              280
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+              {
+                "name": "positive",
+                "type": "STRING",
+                "link": 12
+              }
+            ],
+            "outputs": [
+              {
+                "name": "prompt",
+                "type": "STRING",
+                "links": [
+                  11
+                ],
+                "slot_index": 0
+              }
+            ],
+            "properties": {
+              "Node name for S&R": "EZNegativePromptEnhance"
+            },
+            "widgets_values": [
+              "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+              true,
+              "klein"
+            ],
+            "title": "Negative Prompt Enhance"
           }
         ],
         "links": [
@@ -619,6 +669,22 @@
             0,
             4,
             1,
+            "STRING"
+          ],
+          [
+            11,
+            12,
+            0,
+            5,
+            1,
+            "STRING"
+          ],
+          [
+            12,
+            11,
+            0,
+            12,
+            0,
             "STRING"
           ]
         ]

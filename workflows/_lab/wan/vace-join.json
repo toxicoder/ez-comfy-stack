@@ -1,8 +1,8 @@
 {
   "id": "vace-join",
-  "revision": 1,
-  "last_node_id": 16,
-  "last_link_id": 16,
+  "revision": 2,
+  "last_node_id": 17,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -219,6 +219,14 @@
           "name": "clip",
           "type": "CLIP",
           "link": 15
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 17,
+          "widget": {
+            "name": "text"
+          }
         }
       ],
       "outputs": [
@@ -572,7 +580,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            16
+            16,
+            18
           ],
           "slot_index": 0
         }
@@ -627,6 +636,47 @@
         "image"
       ],
       "title": "Shot B first frame (join)"
+    },
+    {
+      "id": 17,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480.0,
+        620.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            17
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "wan"
+      ],
+      "title": "Negative Prompt Enhance"
     }
   ],
   "links": [
@@ -740,6 +790,22 @@
       0,
       6,
       1,
+      "STRING"
+    ],
+    [
+      17,
+      17,
+      0,
+      7,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      15,
+      0,
+      17,
+      0,
       "STRING"
     ]
   ],

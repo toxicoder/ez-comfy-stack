@@ -13,6 +13,7 @@ tags: [prompting, klein, wan, ltx, comfyui]
 - GIF loop motion and dream-house world bible (one place prompt; walkthrough shot cards per room — lens, height, a distinct room program, near/far; Prompt Join lock=view). Clay tour: same bible, Klein restyles Blender stills
 - Character draft then tweak (style dropdown; generated still as the next reference)
 - Lazy path: Prompt Enhance nodes (on-box Qwen3-4B-Instruct-2507). Seeded graphs pin Enhance **on** for lazy CLIP printers and **off** when the string is already a recipe, script, or film shot.
+- Negative CLIP nodes go through **Negative Prompt Enhance** (positive CLIP string as context) so canned `illustration` / `Pixar` terms cannot fight the intended look
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
@@ -104,6 +105,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 | **Wan Prompt Enhance** | `t2v`, `i2v`, `flf`, `vace` | wan-i2v-5s / wan-t2v-5s / wan-flf-5s / wan-vace-join |
 | **LTX Prompt Enhance** | `t2v`, `i2v` | ltx-i2v-5s / ltx-t2v-5s / each 90s film shot |
 | **ACE-Step Prompt Enhance** | `vocal`, `instrumental` | music-rap-* tags+lyrics; music-edm-drive-through-* scores; podcast instrumental beds |
+| **Negative Prompt Enhance** | family `klein` `wan` `ltx` | every CLIP **Negative** — reads the enhanced positive so the negative cannot fight the intended medium, lighting, or subject |
 | **Prompt Join** | `lock=view`: shot + lock + bible + inventory + closer (camera-first walkthrough; this still is only the room and backdrop the shot names). `lock=state`: bible + inventory + lock + shot | dream-house (view) and lighting/before-after (state) |
 
 STRING out → CLIPTextEncode `text` input.
@@ -144,6 +146,7 @@ When Enhance is **on** and a style is selected (t2i / t2v / Klein edit / identit
 - Each preset is a short reference (medium, light, color, texture, camera or projection) tuned for Klein prose, Wan aesthetic+stylization, or LTX lighting/surface in the flowing paragraph.
 - CLIP text stays generic: no camera/film/studio brand names. Labels such as **Pixar-like 3D** still weave as “stylized feature 3D”.
 - The dropdown wins in the CLIP string even if the 4B rewriter ignores the hint or the GGUF passthroughs: conflicting medium words are dropped and the catalog medium is front-loaded.
+- **Negative Prompt Enhance** takes that CLIP string as context. A canned `illustration` / `Pixar` negative is dropped when the positive is watercolor or stylized feature 3D; watermarks and melt/flicker stay. Distilled Klein is still CFG 1.0 (negatives ignored unless you raise CFG or swap UNET). Authored graphs pin this Enhance **off** with the rest.
 - After Queue, the **CLIP prompt** box on the node is the preview. First deploy: restart the container so `js/` is copied, then hard-refresh the Comfy tab.
 
 After Queue the node is an output: the **CLIP prompt** widget is the CLIP string (no `[passthrough:` prefix). **Enhance status** is empty when the rewriter ran, or a next step when it did not.

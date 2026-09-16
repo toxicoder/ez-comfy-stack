@@ -253,6 +253,13 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
             if mode not in ("vocal", "instrumental"):
                 mode = "vocal"
             node["widgets_values"] = [tags, lyrics, True, mode]
+        elif ntype == "EZNegativePromptEnhance":
+            prompt = values[0] if values else ""
+            enhance = _as_enhance_flag(values[1]) if len(values) > 1 else True
+            family = values[2] if len(values) > 2 else "klein"
+            if family not in POS_ENHANCE_FAMILY.values():
+                family = "klein"
+            node["widgets_values"] = [prompt, enhance, family]
         elif ntype in ("EZRapLyrics", "EZPodcastScript"):
             text = values[0] if values else ""
             rest = list(values[2:]) if len(values) > 2 else []
@@ -491,6 +498,222 @@ def ltx_t2v(path: Path) -> None:
     save(path, graph)
 
 
+POS_ENHANCE_FAMILY = {
+    "EZKleinPromptEnhance": "klein",
+    "EZWanPromptEnhance": "wan",
+    "EZLTXPromptEnhance": "ltx",
+}
+NEG_ENHANCE_H = 280
+
+
+def _node_width(node: dict[str, Any]) -> float:
+    size = node.get("size", [420, 120])
+    if isinstance(size, dict):
+        return float(size.get("0", 420))
+    return float(size[0])
+
+
+def _clip_loader_id(
+    graph: dict[str, Any],
+    clip: dict[str, Any],
+    links_by_id: dict[int, list],
+) -> int | None:
+    inp = next((i for i in clip.get("inputs") or [] if i.get("name") == "clip"), None)
+    if not inp or inp.get("link") is None:
+        return None
+    link = links_by_id.get(int(inp["link"]))
+    if link is None:
+        return None
+    return int(link[1])
+
+
+def _positive_enhance_source(
+    graph: dict[str, Any],
+    neg_clip: dict[str, Any],
+) -> dict[str, Any] | None:
+    links_by_id = {int(link[0]): link for link in graph.get("links") or []}
+    by_id = {int(n["id"]): n for n in graph["nodes"]}
+    loader = _clip_loader_id(graph, neg_clip, links_by_id)
+    candidates: list[dict[str, Any]] = []
+    for clip in graph["nodes"]:
+        if clip.get("type") != "CLIPTextEncode":
+            continue
+        if int(clip["id"]) == int(neg_clip["id"]):
+            continue
+        if "neg" in str(clip.get("title") or "").lower():
+            continue
+        if loader is not None and _clip_loader_id(graph, clip, links_by_id) != loader:
+            continue
+        src = _clip_text_source(graph, clip)
+        if src is None:
+            continue
+        if src.get("type") in POS_ENHANCE_FAMILY:
+            candidates.append(src)
+            continue
+        if src.get("type") != "EZPromptJoin":
+            continue
+        ident_inp = next(
+            (i for i in src.get("inputs") or [] if i.get("name") == "identity"),
+            None,
+        )
+        if ident_inp is None or ident_inp.get("link") is None:
+            continue
+        ident_link = links_by_id.get(int(ident_inp["link"]))
+        if ident_link is None:
+            continue
+        ident_src = by_id.get(int(ident_link[1]))
+        if ident_src and ident_src.get("type") in POS_ENHANCE_FAMILY:
+            candidates.append(ident_src)
+    if candidates:
+        return candidates[0]
+    for node in graph["nodes"]:
+        if node.get("type") in POS_ENHANCE_FAMILY:
+            return node
+    return None
+
+
+def _family_for_negative(
+    graph: dict[str, Any],
+    pos_enh: dict[str, Any] | None,
+) -> str:
+    if pos_enh is not None:
+        mapped = POS_ENHANCE_FAMILY.get(str(pos_enh.get("type") or ""))
+        if mapped:
+            return mapped
+    occ = str((graph.get("extra") or {}).get("lab_occupancy") or "").lower()
+    if occ in POS_ENHANCE_FAMILY.values():
+        return occ
+    return "klein"
+
+
+def _nudge_clear(graph: dict[str, Any], node: dict[str, Any]) -> None:
+    nid = str(node["id"])
+    for _ in range(36):
+        hits = [hit for hit in overlap_hits(graph) if nid + "(" in hit]
+        if not hits:
+            return
+        node["pos"][1] = float(node["pos"][1]) + 80
+    for _ in range(12):
+        hits = [hit for hit in overlap_hits(graph) if nid + "(" in hit]
+        if not hits:
+            return
+        node["pos"][0] = float(node["pos"][0]) + 40
+
+
+def _link_positive_to_negative(
+    graph: dict[str, Any],
+    pos_enh: dict[str, Any],
+    neg_enh: dict[str, Any],
+    lid: int,
+) -> None:
+    outputs = pos_enh.setdefault("outputs", [])
+    if not outputs:
+        outputs.append(
+            {
+                "name": "prompt",
+                "type": "STRING",
+                "links": [lid],
+                "slot_index": 0,
+            }
+        )
+    else:
+        links = outputs[0].setdefault("links", [])
+        if not isinstance(links, list):
+            outputs[0]["links"] = [lid]
+        else:
+            links.append(lid)
+    inputs = neg_enh.setdefault("inputs", [])
+    pos_inp = next((i for i in inputs if i.get("name") == "positive"), None)
+    if pos_inp is None:
+        inputs.append({"name": "positive", "type": "STRING", "link": lid})
+        dest_slot = len(inputs) - 1
+    else:
+        pos_inp["link"] = lid
+        dest_slot = inputs.index(pos_inp)
+    graph.setdefault("links", []).append(
+        [lid, int(pos_enh["id"]), 0, int(neg_enh["id"]), dest_slot, "STRING"]
+    )
+
+
+def insert_negative_enhance(graph: dict[str, Any]) -> None:
+    """Wire EZNegativePromptEnhance into every CLIP Negative encoder."""
+    pending: list[dict[str, Any]] = []
+    for clip in graph["nodes"]:
+        if clip.get("type") != "CLIPTextEncode":
+            continue
+        if "neg" not in str(clip.get("title") or "").lower():
+            continue
+        src = _clip_text_source(graph, clip)
+        if src is not None and src.get("type") == "EZNegativePromptEnhance":
+            continue
+        pending.append(clip)
+    for clip in pending:
+        seed = ""
+        values = clip.get("widgets_values") or []
+        if values:
+            seed = str(values[0] or "")
+        pos_enh = _positive_enhance_source(graph, clip)
+        family = _family_for_negative(graph, pos_enh)
+        clip_x = float(clip["pos"][0])
+        clip_y = float(clip["pos"][1])
+        if clip_x >= SHIFT:
+            origin_x, origin_y = clip_x - SHIFT, clip_y
+        else:
+            origin_x, origin_y = clip_x + _node_width(clip) + 20, clip_y
+        nid, lid = next_ids(graph)
+        pos_lid = lid + 1
+        enhance: dict[str, Any] = {
+            "id": nid,
+            "type": "EZNegativePromptEnhance",
+            "pos": [origin_x, origin_y],
+            "size": [420, NEG_ENHANCE_H],
+            "flags": {},
+            "order": max(int(clip.get("order") or 0) - 1, 0),
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "links": [lid],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZNegativePromptEnhance"},
+            "widgets_values": [seed, True, family],
+            "title": "Negative Prompt Enhance",
+        }
+        graph["nodes"].append(enhance)
+        text_inp = next(
+            (i for i in clip.get("inputs") or [] if i.get("name") == "text"),
+            None,
+        )
+        if text_inp is None:
+            clip.setdefault("inputs", []).append(
+                {
+                    "name": "text",
+                    "type": "STRING",
+                    "link": lid,
+                    "widget": {"name": "text"},
+                }
+            )
+            dest_slot = len(clip["inputs"]) - 1
+        else:
+            text_inp["link"] = lid
+            dest_slot = clip["inputs"].index(text_inp)
+        graph.setdefault("links", []).append(
+            [lid, nid, 0, int(clip["id"]), dest_slot, "STRING"]
+        )
+        if pos_enh is not None:
+            _link_positive_to_negative(graph, pos_enh, enhance, pos_lid)
+            graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), lid, pos_lid)
+        else:
+            graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), lid)
+        graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), nid)
+        graph["revision"] = int(graph.get("revision") or 0) + 1
+        _nudge_clear(graph, enhance)
+
+
 def _clip_text_source(graph: dict[str, Any], clip: dict[str, Any]) -> dict[str, Any] | None:
     text_inp = next((i for i in clip.get("inputs") or [] if i.get("name") == "text"), None)
     if not text_inp or text_inp.get("link") is None:
@@ -684,6 +907,7 @@ def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZNegativePromptEnhance",
         "EZRapLyrics",
         "EZPodcastScript",
         "EZDubScript",
@@ -713,6 +937,7 @@ def apply_enhance_policy(graph: dict[str, Any]) -> None:
             "EZKleinPromptEnhance",
             "EZWanPromptEnhance",
             "EZLTXPromptEnhance",
+            "EZNegativePromptEnhance",
             "EZAceStepPromptEnhance",
             "EZRapLyrics",
             "EZPodcastScript",
@@ -735,6 +960,7 @@ def apply_enhance_policy(graph: dict[str, Any]) -> None:
 def enable_lab_graph(graph: dict[str, Any]) -> None:
     """Wire ACE tags, normalize widgets, then apply the on/off enhance policy."""
     insert_ace_enhance(graph)
+    insert_negative_enhance(graph)
     normalize_enhance_widgets(graph)
     apply_enhance_policy(graph)
     extra = graph.setdefault("extra", {})
@@ -777,6 +1003,15 @@ def main() -> None:
         "Motion / prompt",
     )
     print("wired prompt-enhance nodes")
+    from _lab_paths import lab_graph_paths
+
+    for path in lab_graph_paths():
+        graph = load(path)
+        insert_negative_enhance(graph)
+        normalize_enhance_widgets(graph)
+        apply_enhance_policy(graph)
+        save(path, graph)
+    print("wired negative-enhance nodes")
 
 
 if __name__ == "__main__":

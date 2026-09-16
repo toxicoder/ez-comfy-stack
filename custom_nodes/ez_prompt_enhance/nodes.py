@@ -5,12 +5,16 @@ from __future__ import annotations
 from .client import (
     LOCK_IDS,
     LOCK_VIEW,
+    NEGATIVE_FAMILIES,
+    NEGATIVE_MAX_TOKENS,
     STYLE_IGNORED_MODES,
     STYLE_NONE,
     EnhanceResult,
     _log,
     apply_style_to_prompt,
+    complement_negative,
     complete,
+    compose_negative_user,
     enhance_prompt,
     flavor_for_system,
     format_style_instruction,
@@ -36,6 +40,14 @@ def _as_bool(value: object) -> bool:
     if isinstance(value, str):
         return value.strip().lower() in {"1", "true", "yes", "on"}
     return False
+
+
+def _family_id(value: object) -> str:
+    raw = value if isinstance(value, str) else str(value or "klein")
+    cleaned = raw.strip().lower()
+    if cleaned in NEGATIVE_FAMILIES:
+        return cleaned
+    return "klein"
 
 
 def _style_id(value: object) -> str:
@@ -446,10 +458,77 @@ class EZAceStepPromptEnhance:
         return _pack_ace(rewritten_tags, rewritten_lyrics, status)
 
 
+class EZNegativePromptEnhance:
+    """Rewrite a negative CLIP seed so it does not fight the positive."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> dict:
+        return {
+            "required": {
+                "prompt": (
+                    "STRING",
+                    {"multiline": True, "default": "", "dynamicPrompts": False},
+                ),
+                "enhance": _ENHANCE_BOOL,
+                "family": (list(NEGATIVE_FAMILIES), {"default": "klein"}),
+            },
+            "optional": {
+                "positive": (
+                    "STRING",
+                    {"forceInput": True, "dynamicPrompts": False},
+                ),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Rewrites a negative CLIP seed against the enhanced positive so the "
+        "negative does not fight the intended medium, lighting, or subject. "
+        "Keeps watermarks and melt/flicker artifacts. Enhance defaults on. "
+        "Fail-soft without a GGUF; a deterministic complement still runs."
+    )
+
+    def run(self, prompt, enhance, family="klein", positive=""):
+        original = prompt if isinstance(prompt, str) else str(prompt or "")
+        pos = positive if isinstance(positive, str) else str(positive or "")
+        fam = _family_id(family)
+        do_enhance = _as_bool(enhance)
+        text = original
+        status = ""
+        if do_enhance:
+            try:
+                system = load_system_prompt(f"negative_{fam}")
+            except FileNotFoundError as exc:
+                _log(f"negative system prompt missing: {exc}")
+                system = ""
+            if system:
+                user = compose_negative_user(original, pos)
+                rewritten, reason = complete(
+                    system,
+                    user,
+                    max_tokens=NEGATIVE_MAX_TOKENS,
+                )
+                if (rewritten or "").strip():
+                    text = rewritten.strip()
+                else:
+                    status = reason or "passthrough"
+            else:
+                status = "passthrough"
+        else:
+            status = "enhance off"
+        text = complement_negative(text, pos)
+        return _pack(EnhanceResult(text, status))
+
+
 NODE_CLASS_MAPPINGS = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
+    "EZNegativePromptEnhance": EZNegativePromptEnhance,
     "EZPromptJoin": EZPromptJoin,
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
 }
@@ -458,6 +537,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",
+    "EZNegativePromptEnhance": "Negative Prompt Enhance",
     "EZPromptJoin": "Prompt Join",
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",
 }

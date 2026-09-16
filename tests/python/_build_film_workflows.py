@@ -14,7 +14,7 @@ from pathlib import Path
 from _lab_layout import GROUP_TITLE_INSET, ensure_group_title_inset, group as _group
 from _lab_paths import apply_lab_identity, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
-from _wire_prompt_enhance import normalize_enhance_widgets
+from _wire_prompt_enhance import enable_lab_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -750,7 +750,7 @@ def build_one_click_film(
         },
     }
     graph["version"] = 0.4
-    normalize_enhance_widgets(graph)
+    enable_lab_graph(graph)
     return graph
 
 
