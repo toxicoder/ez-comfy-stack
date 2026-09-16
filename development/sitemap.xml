@@ -237,7 +237,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/finish/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/stem-mix/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -297,7 +297,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/dub/localize/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/dub/clone-translate/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -309,51 +309,51 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/podcast/audio-first/</loc>
-         <lastmod>2026-09-16</lastmod>
-    </url>
-    <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/podcast/radio-drama/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/from-canny/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/audio/podcast/two-host-episode/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/from-clay-plates/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/canny-hero/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/from-clay/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/clay-hero/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/from-guide-loader/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/clay-plates/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/iclora-canny-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/klein/guide-still/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/iclora-depth-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/canny-control-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/iclora-depth-shorts/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/depth-control-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/iclora-from-guide-loader/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/depth-control-shorts/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/trellis/from-klein-still/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/ltx/depth-from-loader/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/wan/flf-from-guide/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/trellis/still-to-mesh/</loc>
+         <lastmod>2026-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/dcc/wan/first-last-from-guide/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -425,7 +425,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/ig-square/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/instagram-square/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -437,7 +437,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/og-blog/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/open-graph/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -525,59 +525,59 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/fb-post/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/facebook-post/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-carousel-5/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-carousel-5/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-grid-3up/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-grid-3up/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-highlight/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-highlight/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-landscape/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-landscape/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-portrait/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-portrait/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-profile/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-profile/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-reel-cover/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-reel-cover/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/ig-story/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/instagram-story/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/li-article/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/linkedin-article/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/li-banner/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/linkedin-banner/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/li-carousel-5/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/linkedin-carousel-5/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/li-landscape/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/linkedin-landscape/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/li-post/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/linkedin-post/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -601,11 +601,11 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/pin-standard/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/pinterest-pin/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/pin-story/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/pinterest-story/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -637,11 +637,11 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/tt-cover/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/tiktok-cover/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/tt-shop/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/tiktok-shop/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -689,31 +689,31 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-channel-art/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-channel-art/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-channel-icon/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-channel-icon/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-chapter-card/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-chapter-card/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-community/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-community/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-end-screen/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-end-screen/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-shorts-thumb/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-shorts-thumb/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/yt-subscribe-plate/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/klein/creator/youtube-subscribe-plate/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -721,7 +721,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/a2v-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/audio-to-video-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -733,19 +733,11 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/flf-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/first-last-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
          <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/hook-av/</loc>
-         <lastmod>2026-09-16</lastmod>
-    </url>
-    <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/i2v-5s/</loc>
-         <lastmod>2026-09-16</lastmod>
-    </url>
-    <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/i2v-shot/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -761,11 +753,19 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/shorts-i2v/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/shorts-still-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/t2v-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/still-to-shot/</loc>
+         <lastmod>2026-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/still-to-video-5s/</loc>
+         <lastmod>2026-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/text-to-video-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -793,7 +793,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/ig-reel-lifestyle/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/instagram-reel-lifestyle/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -821,11 +821,11 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/travel-establishing/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/tiktok-broll/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/tt-broll/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/travel-establishing/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -841,7 +841,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/yt-outro-av/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/ltx/creator/youtube-outro-av/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -853,7 +853,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/optional/wan/i2v-a14b/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/optional/wan/still-to-video-a14b/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -973,7 +973,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/flf-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/first-last-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -981,27 +981,19 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/i2v-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/orbit-still-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/i2v-shot/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/parallax-still-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/orbit-i2v/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/push-in-still-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/parallax-i2v/</loc>
-         <lastmod>2026-09-16</lastmod>
-    </url>
-    <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/push-in-i2v/</loc>
-         <lastmod>2026-09-16</lastmod>
-    </url>
-    <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/shorts-i2v/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/shorts-still-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -1009,7 +1001,15 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/t2v-5s/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/still-to-shot/</loc>
+         <lastmod>2026-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/still-to-video-5s/</loc>
+         <lastmod>2026-09-16</lastmod>
+    </url>
+    <url>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/text-to-video-5s/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -1037,7 +1037,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/ig-story-loop/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/instagram-story-loop/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -1085,11 +1085,11 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/tilt-reveal/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/tiktok-hook/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/tt-hook/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/tilt-reveal/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
@@ -1109,7 +1109,7 @@
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>
-         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/yt-subscribe-bump/</loc>
+         <loc>https://toxicoder.github.io/ez-comfy-stack/development/generated/workflows/wan/creator/youtube-subscribe-bump/</loc>
          <lastmod>2026-09-16</lastmod>
     </url>
     <url>

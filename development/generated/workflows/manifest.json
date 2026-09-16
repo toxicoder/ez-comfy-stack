@@ -7,14 +7,8 @@
       "kind": "index"
     },
     {
-      "id": "audio/dub/localize",
-      "path": "generated/workflows/audio/dub/localize.md",
-      "lane": "audio",
-      "kind": "graph"
-    },
-    {
-      "id": "audio/finish",
-      "path": "generated/workflows/audio/finish.md",
+      "id": "audio/dub/clone-translate",
+      "path": "generated/workflows/audio/dub/clone-translate.md",
       "lane": "audio",
       "kind": "graph"
     },
@@ -31,74 +25,80 @@
       "kind": "graph"
     },
     {
-      "id": "audio/podcast/audio-first",
-      "path": "generated/workflows/audio/podcast/audio-first.md",
-      "lane": "audio",
-      "kind": "graph"
-    },
-    {
       "id": "audio/podcast/radio-drama",
       "path": "generated/workflows/audio/podcast/radio-drama.md",
       "lane": "audio",
       "kind": "graph"
     },
     {
-      "id": "dcc/klein/from-canny",
-      "path": "generated/workflows/dcc/klein/from-canny.md",
+      "id": "audio/podcast/two-host-episode",
+      "path": "generated/workflows/audio/podcast/two-host-episode.md",
+      "lane": "audio",
+      "kind": "graph"
+    },
+    {
+      "id": "audio/stem-mix",
+      "path": "generated/workflows/audio/stem-mix.md",
+      "lane": "audio",
+      "kind": "graph"
+    },
+    {
+      "id": "dcc/klein/canny-hero",
+      "path": "generated/workflows/dcc/klein/canny-hero.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/klein/from-clay-plates",
-      "path": "generated/workflows/dcc/klein/from-clay-plates.md",
+      "id": "dcc/klein/clay-hero",
+      "path": "generated/workflows/dcc/klein/clay-hero.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/klein/from-clay",
-      "path": "generated/workflows/dcc/klein/from-clay.md",
+      "id": "dcc/klein/clay-plates",
+      "path": "generated/workflows/dcc/klein/clay-plates.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/klein/from-guide-loader",
-      "path": "generated/workflows/dcc/klein/from-guide-loader.md",
+      "id": "dcc/klein/guide-still",
+      "path": "generated/workflows/dcc/klein/guide-still.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/ltx/iclora-canny-5s",
-      "path": "generated/workflows/dcc/ltx/iclora-canny-5s.md",
+      "id": "dcc/ltx/canny-control-5s",
+      "path": "generated/workflows/dcc/ltx/canny-control-5s.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/ltx/iclora-depth-5s",
-      "path": "generated/workflows/dcc/ltx/iclora-depth-5s.md",
+      "id": "dcc/ltx/depth-control-5s",
+      "path": "generated/workflows/dcc/ltx/depth-control-5s.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/ltx/iclora-depth-shorts",
-      "path": "generated/workflows/dcc/ltx/iclora-depth-shorts.md",
+      "id": "dcc/ltx/depth-control-shorts",
+      "path": "generated/workflows/dcc/ltx/depth-control-shorts.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/ltx/iclora-from-guide-loader",
-      "path": "generated/workflows/dcc/ltx/iclora-from-guide-loader.md",
+      "id": "dcc/ltx/depth-from-loader",
+      "path": "generated/workflows/dcc/ltx/depth-from-loader.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/trellis/from-klein-still",
-      "path": "generated/workflows/dcc/trellis/from-klein-still.md",
+      "id": "dcc/trellis/still-to-mesh",
+      "path": "generated/workflows/dcc/trellis/still-to-mesh.md",
       "lane": "dcc",
       "kind": "graph"
     },
     {
-      "id": "dcc/wan/flf-from-guide",
-      "path": "generated/workflows/dcc/wan/flf-from-guide.md",
+      "id": "dcc/wan/first-last-from-guide",
+      "path": "generated/workflows/dcc/wan/first-last-from-guide.md",
       "lane": "dcc",
       "kind": "graph"
     },
@@ -217,86 +217,86 @@
       "kind": "graph"
     },
     {
-      "id": "klein/creator/fb-post",
-      "path": "generated/workflows/klein/creator/fb-post.md",
+      "id": "klein/creator/facebook-post",
+      "path": "generated/workflows/klein/creator/facebook-post.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-carousel-5",
-      "path": "generated/workflows/klein/creator/ig-carousel-5.md",
+      "id": "klein/creator/instagram-carousel-5",
+      "path": "generated/workflows/klein/creator/instagram-carousel-5.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-grid-3up",
-      "path": "generated/workflows/klein/creator/ig-grid-3up.md",
+      "id": "klein/creator/instagram-grid-3up",
+      "path": "generated/workflows/klein/creator/instagram-grid-3up.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-highlight",
-      "path": "generated/workflows/klein/creator/ig-highlight.md",
+      "id": "klein/creator/instagram-highlight",
+      "path": "generated/workflows/klein/creator/instagram-highlight.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-landscape",
-      "path": "generated/workflows/klein/creator/ig-landscape.md",
+      "id": "klein/creator/instagram-landscape",
+      "path": "generated/workflows/klein/creator/instagram-landscape.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-portrait",
-      "path": "generated/workflows/klein/creator/ig-portrait.md",
+      "id": "klein/creator/instagram-portrait",
+      "path": "generated/workflows/klein/creator/instagram-portrait.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-profile",
-      "path": "generated/workflows/klein/creator/ig-profile.md",
+      "id": "klein/creator/instagram-profile",
+      "path": "generated/workflows/klein/creator/instagram-profile.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-reel-cover",
-      "path": "generated/workflows/klein/creator/ig-reel-cover.md",
+      "id": "klein/creator/instagram-reel-cover",
+      "path": "generated/workflows/klein/creator/instagram-reel-cover.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/ig-story",
-      "path": "generated/workflows/klein/creator/ig-story.md",
+      "id": "klein/creator/instagram-story",
+      "path": "generated/workflows/klein/creator/instagram-story.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/li-article",
-      "path": "generated/workflows/klein/creator/li-article.md",
+      "id": "klein/creator/linkedin-article",
+      "path": "generated/workflows/klein/creator/linkedin-article.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/li-banner",
-      "path": "generated/workflows/klein/creator/li-banner.md",
+      "id": "klein/creator/linkedin-banner",
+      "path": "generated/workflows/klein/creator/linkedin-banner.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/li-carousel-5",
-      "path": "generated/workflows/klein/creator/li-carousel-5.md",
+      "id": "klein/creator/linkedin-carousel-5",
+      "path": "generated/workflows/klein/creator/linkedin-carousel-5.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/li-landscape",
-      "path": "generated/workflows/klein/creator/li-landscape.md",
+      "id": "klein/creator/linkedin-landscape",
+      "path": "generated/workflows/klein/creator/linkedin-landscape.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/li-post",
-      "path": "generated/workflows/klein/creator/li-post.md",
+      "id": "klein/creator/linkedin-post",
+      "path": "generated/workflows/klein/creator/linkedin-post.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -331,14 +331,14 @@
       "kind": "graph"
     },
     {
-      "id": "klein/creator/pin-standard",
-      "path": "generated/workflows/klein/creator/pin-standard.md",
+      "id": "klein/creator/pinterest-pin",
+      "path": "generated/workflows/klein/creator/pinterest-pin.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/pin-story",
-      "path": "generated/workflows/klein/creator/pin-story.md",
+      "id": "klein/creator/pinterest-story",
+      "path": "generated/workflows/klein/creator/pinterest-story.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -385,14 +385,14 @@
       "kind": "graph"
     },
     {
-      "id": "klein/creator/tt-cover",
-      "path": "generated/workflows/klein/creator/tt-cover.md",
+      "id": "klein/creator/tiktok-cover",
+      "path": "generated/workflows/klein/creator/tiktok-cover.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/tt-shop",
-      "path": "generated/workflows/klein/creator/tt-shop.md",
+      "id": "klein/creator/tiktok-shop",
+      "path": "generated/workflows/klein/creator/tiktok-shop.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -463,44 +463,44 @@
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-channel-art",
-      "path": "generated/workflows/klein/creator/yt-channel-art.md",
+      "id": "klein/creator/youtube-channel-art",
+      "path": "generated/workflows/klein/creator/youtube-channel-art.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-channel-icon",
-      "path": "generated/workflows/klein/creator/yt-channel-icon.md",
+      "id": "klein/creator/youtube-channel-icon",
+      "path": "generated/workflows/klein/creator/youtube-channel-icon.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-chapter-card",
-      "path": "generated/workflows/klein/creator/yt-chapter-card.md",
+      "id": "klein/creator/youtube-chapter-card",
+      "path": "generated/workflows/klein/creator/youtube-chapter-card.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-community",
-      "path": "generated/workflows/klein/creator/yt-community.md",
+      "id": "klein/creator/youtube-community",
+      "path": "generated/workflows/klein/creator/youtube-community.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-end-screen",
-      "path": "generated/workflows/klein/creator/yt-end-screen.md",
+      "id": "klein/creator/youtube-end-screen",
+      "path": "generated/workflows/klein/creator/youtube-end-screen.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-shorts-thumb",
-      "path": "generated/workflows/klein/creator/yt-shorts-thumb.md",
+      "id": "klein/creator/youtube-shorts-thumb",
+      "path": "generated/workflows/klein/creator/youtube-shorts-thumb.md",
       "lane": "klein",
       "kind": "graph"
     },
     {
-      "id": "klein/creator/yt-subscribe-plate",
-      "path": "generated/workflows/klein/creator/yt-subscribe-plate.md",
+      "id": "klein/creator/youtube-subscribe-plate",
+      "path": "generated/workflows/klein/creator/youtube-subscribe-plate.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -547,8 +547,8 @@
       "kind": "graph"
     },
     {
-      "id": "klein/ig-square",
-      "path": "generated/workflows/klein/ig-square.md",
+      "id": "klein/instagram-square",
+      "path": "generated/workflows/klein/instagram-square.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -565,8 +565,8 @@
       "kind": "graph"
     },
     {
-      "id": "klein/og-blog",
-      "path": "generated/workflows/klein/og-blog.md",
+      "id": "klein/open-graph",
+      "path": "generated/workflows/klein/open-graph.md",
       "lane": "klein",
       "kind": "graph"
     },
@@ -649,8 +649,8 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/a2v-5s",
-      "path": "generated/workflows/ltx/a2v-5s.md",
+      "id": "ltx/audio-to-video-5s",
+      "path": "generated/workflows/ltx/audio-to-video-5s.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -691,8 +691,8 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/creator/ig-reel-lifestyle",
-      "path": "generated/workflows/ltx/creator/ig-reel-lifestyle.md",
+      "id": "ltx/creator/instagram-reel-lifestyle",
+      "path": "generated/workflows/ltx/creator/instagram-reel-lifestyle.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -733,14 +733,14 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/creator/travel-establishing",
-      "path": "generated/workflows/ltx/creator/travel-establishing.md",
+      "id": "ltx/creator/tiktok-broll",
+      "path": "generated/workflows/ltx/creator/tiktok-broll.md",
       "lane": "ltx",
       "kind": "graph"
     },
     {
-      "id": "ltx/creator/tt-broll",
-      "path": "generated/workflows/ltx/creator/tt-broll.md",
+      "id": "ltx/creator/travel-establishing",
+      "path": "generated/workflows/ltx/creator/travel-establishing.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -763,8 +763,8 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/creator/yt-outro-av",
-      "path": "generated/workflows/ltx/creator/yt-outro-av.md",
+      "id": "ltx/creator/youtube-outro-av",
+      "path": "generated/workflows/ltx/creator/youtube-outro-av.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -775,26 +775,14 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/flf-5s",
-      "path": "generated/workflows/ltx/flf-5s.md",
+      "id": "ltx/first-last-5s",
+      "path": "generated/workflows/ltx/first-last-5s.md",
       "lane": "ltx",
       "kind": "graph"
     },
     {
       "id": "ltx/hook-av",
       "path": "generated/workflows/ltx/hook-av.md",
-      "lane": "ltx",
-      "kind": "graph"
-    },
-    {
-      "id": "ltx/i2v-5s",
-      "path": "generated/workflows/ltx/i2v-5s.md",
-      "lane": "ltx",
-      "kind": "graph"
-    },
-    {
-      "id": "ltx/i2v-shot",
-      "path": "generated/workflows/ltx/i2v-shot.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -817,14 +805,26 @@
       "kind": "graph"
     },
     {
-      "id": "ltx/shorts-i2v",
-      "path": "generated/workflows/ltx/shorts-i2v.md",
+      "id": "ltx/shorts-still-5s",
+      "path": "generated/workflows/ltx/shorts-still-5s.md",
       "lane": "ltx",
       "kind": "graph"
     },
     {
-      "id": "ltx/t2v-5s",
-      "path": "generated/workflows/ltx/t2v-5s.md",
+      "id": "ltx/still-to-shot",
+      "path": "generated/workflows/ltx/still-to-shot.md",
+      "lane": "ltx",
+      "kind": "graph"
+    },
+    {
+      "id": "ltx/still-to-video-5s",
+      "path": "generated/workflows/ltx/still-to-video-5s.md",
+      "lane": "ltx",
+      "kind": "graph"
+    },
+    {
+      "id": "ltx/text-to-video-5s",
+      "path": "generated/workflows/ltx/text-to-video-5s.md",
       "lane": "ltx",
       "kind": "graph"
     },
@@ -847,8 +847,8 @@
       "kind": "graph"
     },
     {
-      "id": "optional/wan/i2v-a14b",
-      "path": "generated/workflows/optional/wan/i2v-a14b.md",
+      "id": "optional/wan/still-to-video-a14b",
+      "path": "generated/workflows/optional/wan/still-to-video-a14b.md",
       "lane": "optional",
       "kind": "graph"
     },
@@ -1057,8 +1057,8 @@
       "kind": "graph"
     },
     {
-      "id": "wan/creator/ig-story-loop",
-      "path": "generated/workflows/wan/creator/ig-story-loop.md",
+      "id": "wan/creator/instagram-story-loop",
+      "path": "generated/workflows/wan/creator/instagram-story-loop.md",
       "lane": "wan",
       "kind": "graph"
     },
@@ -1129,14 +1129,14 @@
       "kind": "graph"
     },
     {
-      "id": "wan/creator/tilt-reveal",
-      "path": "generated/workflows/wan/creator/tilt-reveal.md",
+      "id": "wan/creator/tiktok-hook",
+      "path": "generated/workflows/wan/creator/tiktok-hook.md",
       "lane": "wan",
       "kind": "graph"
     },
     {
-      "id": "wan/creator/tt-hook",
-      "path": "generated/workflows/wan/creator/tt-hook.md",
+      "id": "wan/creator/tilt-reveal",
+      "path": "generated/workflows/wan/creator/tilt-reveal.md",
       "lane": "wan",
       "kind": "graph"
     },
@@ -1165,8 +1165,8 @@
       "kind": "graph"
     },
     {
-      "id": "wan/creator/yt-subscribe-bump",
-      "path": "generated/workflows/wan/creator/yt-subscribe-bump.md",
+      "id": "wan/creator/youtube-subscribe-bump",
+      "path": "generated/workflows/wan/creator/youtube-subscribe-bump.md",
       "lane": "wan",
       "kind": "graph"
     },
@@ -1177,8 +1177,8 @@
       "kind": "graph"
     },
     {
-      "id": "wan/flf-5s",
-      "path": "generated/workflows/wan/flf-5s.md",
+      "id": "wan/first-last-5s",
+      "path": "generated/workflows/wan/first-last-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
@@ -1189,38 +1189,26 @@
       "kind": "graph"
     },
     {
-      "id": "wan/i2v-5s",
-      "path": "generated/workflows/wan/i2v-5s.md",
+      "id": "wan/orbit-still-5s",
+      "path": "generated/workflows/wan/orbit-still-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
     {
-      "id": "wan/i2v-shot",
-      "path": "generated/workflows/wan/i2v-shot.md",
+      "id": "wan/parallax-still-5s",
+      "path": "generated/workflows/wan/parallax-still-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
     {
-      "id": "wan/orbit-i2v",
-      "path": "generated/workflows/wan/orbit-i2v.md",
+      "id": "wan/push-in-still-5s",
+      "path": "generated/workflows/wan/push-in-still-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
     {
-      "id": "wan/parallax-i2v",
-      "path": "generated/workflows/wan/parallax-i2v.md",
-      "lane": "wan",
-      "kind": "graph"
-    },
-    {
-      "id": "wan/push-in-i2v",
-      "path": "generated/workflows/wan/push-in-i2v.md",
-      "lane": "wan",
-      "kind": "graph"
-    },
-    {
-      "id": "wan/shorts-i2v",
-      "path": "generated/workflows/wan/shorts-i2v.md",
+      "id": "wan/shorts-still-5s",
+      "path": "generated/workflows/wan/shorts-still-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
@@ -1231,8 +1219,20 @@
       "kind": "graph"
     },
     {
-      "id": "wan/t2v-5s",
-      "path": "generated/workflows/wan/t2v-5s.md",
+      "id": "wan/still-to-shot",
+      "path": "generated/workflows/wan/still-to-shot.md",
+      "lane": "wan",
+      "kind": "graph"
+    },
+    {
+      "id": "wan/still-to-video-5s",
+      "path": "generated/workflows/wan/still-to-video-5s.md",
+      "lane": "wan",
+      "kind": "graph"
+    },
+    {
+      "id": "wan/text-to-video-5s",
+      "path": "generated/workflows/wan/text-to-video-5s.md",
       "lane": "wan",
       "kind": "graph"
     },
