@@ -567,6 +567,16 @@
       "flags": []
     },
     {
+      "id": "studio-mcp",
+      "title": "studio-mcp",
+      "description": "In-tree studio MCP (clone _lab graphs into live _user/; generate_app). CPU GGUF. No execute_code. Does not Queue.",
+      "argv": [
+        "./scripts/manage.sh",
+        "studio-mcp"
+      ],
+      "flags": []
+    },
+    {
       "id": "ssh-forward",
       "title": "SSH port-forward",
       "description": "Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.",

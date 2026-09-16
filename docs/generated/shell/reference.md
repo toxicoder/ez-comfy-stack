@@ -381,6 +381,10 @@ In-tree Blender MCP (typed tools, occupancy-aware).
 
 In-tree creative research MCP (typed tools, occupancy-aware).
 
+### Command: studio-mcp
+
+In-tree studio MCP (clone lab graphs into _user/; no Queue).
+
 ### Command: blender-llm
 
 Optional on-box Qwen3-4B CPU client for blender-mcp.
@@ -1851,6 +1855,22 @@ Exit codes:
   0 mix written; 1 usage / missing ffmpeg / mix fail.
 
 ### Command: stem-mix
+
+<!-- source: scripts/utilities/studio-mcp.sh -->
+## studio-mcp
+
+In-tree studio MCP (typed tools, no execute_code, no telemetry, no Queue).
+Clones shipped _lab graphs into live _user/. CPU GGUF optional.
+Does not refuse a GPU Comfy session.
+
+```bash
+Usage:
+  ./scripts/utilities/studio-mcp.sh [--stdio]
+  ./scripts/utilities/studio-mcp.sh --list-tools
+  ./scripts/utilities/studio-mcp.sh --call TOOL [JSON]
+```
+
+### Command: studio-mcp
 
 <!-- source: scripts/utilities/take-promote.sh -->
 ## take-promote

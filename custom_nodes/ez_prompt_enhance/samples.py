@@ -34,6 +34,7 @@ _FAMILY_FOR_MODE: dict[tuple[str, str], str] = {
     ("EZPodcastScript", "radio_drama"): "podcast_radio",
     ("EZRapLyrics", ""): "rap_draft",
     ("EZCreativeResearch", ""): "research_chat",
+    ("EZAppForge", ""): "app_forge",
     ("EZSamplePrompt", ""): "forge_lazy",
 }
 

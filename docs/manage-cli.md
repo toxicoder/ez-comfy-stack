@@ -59,6 +59,7 @@ id: doctor
 | `llm-sidecar status\|start\|stop` | Host llama-server for occupancy `llm-desk` (`127.0.0.1:30000`). Prefer `occupancy enter llm-desk`. Never in Dockerfile | Bind `0.0.0.0`; start while klein/wan/ltx is the GPU job |
 | `blender-mcp` | In-tree typed Blender MCP (stdio / `--call`). bpy tools need blender-desk | Vendor ahujasid; `execute_code`; telemetry |
 | `research-mcp` | In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF | `execute_code`; arbitrary URL fetch; GPU-offload llama |
+| `studio-mcp` | In-tree studio MCP (clone `_lab` graphs into live `_user/`; `generate_app`). CPU GGUF | `execute_code`; Queue / `run_workflow`; write `_lab`; Comfy Cloud MCP |
 | `blender-llm` | Optional host Qwen3-4B CPU → blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |
 | `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
 | `blender-install` | Host apt install of Ubuntu `blender` (universe). Never in the Dockerfile. Occupancy does not install Blender | Add Blender to `docker/Dockerfile`; unofficial aarch64 CUDA tarballs |
@@ -94,6 +95,6 @@ Safety is unchanged: `restart: "no"`, heavy confirm on `start`, headroom preflig
 | Throttle details | [Download limit](download-limit.md) |
 | Symptom → fix | [Troubleshooting](troubleshooting.md) |
 | Occupancy mode × jobs | [Occupancy matrix](operate/occupancy-matrix.md) |
-| blender-mcp / research-mcp | [MCP](operate/mcp.md) |
+| blender-mcp / research-mcp / studio-mcp | [MCP](operate/mcp.md) |
 | What `cleanup` deletes | [Backup and restore](operate/backup-restore.md) |
 | Lab `ez_*` nodes | [Custom nodes](reference/custom-nodes.md) |

@@ -1,7 +1,7 @@
 ---
 title: MCP
-description: In-tree blender-mcp and research-mcp typed tools, Path D SSH tunnels, occupancy, no execute_code.
-tags: [mcp, blender, research, occupancy, ssh]
+description: In-tree blender-mcp, research-mcp, and studio-mcp typed tools, Path D SSH tunnels, occupancy, no execute_code.
+tags: [mcp, blender, research, studio, occupancy, ssh]
 ---
 
 # MCP
@@ -10,6 +10,7 @@ tags: [mcp, blender, research, occupancy, ssh]
 
 - **blender-mcp** typed tools (occupancy + host Blender) — no `execute_code`
 - **research-mcp** typed tools (chat, search, lab apps) — no `execute_code`
+- **studio-mcp** typed tools (clone lab graphs into `_user/`) — no `execute_code`, no Queue
 - **Path D** SSH tunnels with session vars
 - **Occupancy** — bpy needs `blender-desk`; research-mcp is CPU GGUF and does not refuse a GPU session
 
@@ -32,7 +33,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 !!! danger "No execute_code"
 
-    In-tree MCP is typed-tool stdio (`scripts/lib/blender_mcp.py`, `research_mcp.py`). **No** `execute_code`, **no** telemetry, **no** arbitrary `fetch_url`. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the Comfy launch path). Host only — never in `docker/Dockerfile`.
+    In-tree MCP is typed-tool stdio (`scripts/lib/blender_mcp.py`, `research_mcp.py`, `studio_mcp.py`). **No** `execute_code`, **no** telemetry, **no** arbitrary `fetch_url`. Official Comfy Cloud MCP / `comfy-mcp` stay out of the image (`manage.sh start` is the Comfy launch path). Host only — never in `docker/Dockerfile`.
 
 ---
 
@@ -106,6 +107,32 @@ CPU Qwen3-4B + SSRF-safe HTTPS search (Wikipedia + DuckDuckGo). **Does not refus
 Briefs: `${COMFY_OUTPUT_DIR}/research/`. Copy prompt ingredients into Prompt Forge, then Spark Still.
 
 When `llm-desk` is up, graph occupancy **llm** may use the host sidecar (`http://127.0.0.1:30000/v1`; `host.docker.internal` from Comfy). CPU 4B is the OOM-safe path next to Wan / LTX / TRELLIS. Research-mcp itself does not GPU-offload llama.
+
+---
+
+## studio-mcp
+
+Wrappers: `scripts/utilities/studio-mcp.sh` → `scripts/lib/studio_mcp.py`. Server name `ez-studio`.
+
+Clones shipped `_lab` graphs into live `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/`. **Does not Queue Comfy.** **Does not refuse a GPU session.** Recording `mcp_pid` does **not** remap `idle` → `blender-desk`. Same pipeline as **inspire/app-forge**. Official Comfy Cloud MCP stays out of tree.
+
+| Tool | Args | What |
+| --- | --- | --- |
+| `occupancy_status` | — | Read occupancy JSON |
+| `search_templates` | optional `query`, `occupancy`, `lane` | Lab Apps + studio-block ids |
+| `get_template` / `describe_app` | `stem` | Occupancy, widgets, handoff |
+| `apply_slots` | `stem`, `slots` | Patch widgets on a clone (no write) |
+| `validate_workflow` | `stem` or `graph` | Banned strings, Vue-corrected, integer widget ids |
+| `save_workflow` | `stem`, `slug` | Write `_user/` only |
+| `create_app` | `stem`, `slug` | Write `*.app.json` |
+| `generate_app` | `brief`, optional `template`, `slug` | Planner or keyword heuristic → clone → save |
+
+```bash
+./scripts/manage.sh studio-mcp --stdio
+./scripts/manage.sh studio-mcp --call generate_app '{"brief":"1:1 IG still of a mug","slug":"mug-ig"}'
+```
+
+Not included: `run_workflow`, `execute_code`, partner APIs, Comfy Cloud.
 
 ---
 

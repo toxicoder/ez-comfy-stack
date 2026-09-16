@@ -1,0 +1,102 @@
+[
+  {
+    "id": "mug-ig",
+    "label": "Mug IG square",
+    "prompt": "1:1 IG still of a chipped cobalt mug on pale stone, unmarked surfaces."
+  },
+  {
+    "id": "rooftop-still",
+    "label": "Rooftop still",
+    "prompt": "Spark still of a techno wizard on a tropical rooftop at golden hour."
+  },
+  {
+    "id": "silent-i2v",
+    "label": "Silent I2V",
+    "prompt": "silent 5s from a still of a wizard mid-stride on a terrace."
+  },
+  {
+    "id": "gif-palms",
+    "label": "GIF palms",
+    "prompt": "gif loop of palms and glyph motes, locked camera, ping-pong safe."
+  },
+  {
+    "id": "ltx-av",
+    "label": "LTX AV",
+    "prompt": "ltx 5s AV of a terrace with world foley, no score."
+  },
+  {
+    "id": "dialogue",
+    "label": "Dialogue 5s",
+    "prompt": "dialogue 5s with one quoted line and world SFX under."
+  },
+  {
+    "id": "thumbnail",
+    "label": "YouTube thumb",
+    "prompt": "thumbnail of a wizard and a chipped mug, 1280x720, unmarked."
+  },
+  {
+    "id": "banner",
+    "label": "Wide banner",
+    "prompt": "banner-wide still of a tropical bay between unmarked towers."
+  },
+  {
+    "id": "packshot",
+    "label": "Packshot",
+    "prompt": "packshot of one cobalt mug, 1:1, honest contact shadow."
+  },
+  {
+    "id": "podcast",
+    "label": "Podcast desk",
+    "prompt": "podcast two-host local hour about keeping the master on the box."
+  },
+  {
+    "id": "rap-draft",
+    "label": "Rap draft",
+    "prompt": "rap draft boom-bap booth take, dry vocals, no autotune."
+  },
+  {
+    "id": "beat-sheet",
+    "label": "Beat sheet",
+    "prompt": "beat-sheet logline for a rooftop sprint, world SFX only."
+  },
+  {
+    "id": "og-blog",
+    "label": "OG blog",
+    "prompt": "og-blog still of a teak desk and blank notebook, 1216x640."
+  },
+  {
+    "id": "character",
+    "label": "Character still",
+    "prompt": "character still of the techno wizard, 1024x1280, identity lock."
+  },
+  {
+    "id": "hook-still",
+    "label": "Hook still",
+    "prompt": "9:16 hook still of a wizard at a night rail, lanterns only."
+  },
+  {
+    "id": "a2v",
+    "label": "A2V freeze",
+    "prompt": "a2v freeze a 5s wav of rain on a terrace, picture follows audio."
+  },
+  {
+    "id": "bumper",
+    "label": "Bumper loop",
+    "prompt": "bumper loop MP4 of glyph rings, ping-pong."
+  },
+  {
+    "id": "weather-broll",
+    "label": "Weather B-roll",
+    "prompt": "ltx weather b-roll of tropical rain on unmarked stone."
+  },
+  {
+    "id": "clay-edit",
+    "label": "Clay edit",
+    "prompt": "Klein edit of clay first.png without moving the camera."
+  },
+  {
+    "id": "research-next",
+    "label": "Research next",
+    "prompt": "still of prompt ingredients from a night rooftop lighting brief."
+  }
+]

@@ -93,6 +93,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
 | **inspire/cinema-rack** | No UNET. Pick cinematography axes (shot size, move, light, …) and splice Klein / Wan / LTX prompts. Occupancy **llm** (CPU GGUF). [Cinema Rack](create/cinema-rack.md) |
 | **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
+| **inspire/app-forge** | No UNET. Clone a shipped lab graph into live `_user/` as a new App. Occupancy **llm** (CPU GGUF). Laptop agents: `studio-mcp`. [App Forge](create/app-forge.md) |
 | **inspire/beat-sheet** | Script desk. Logline / script / audio policy / score pack into every card rewrite. 18 cards (`action \| camera \| world SFX \| dialogue`). `shot-sheet` writes `films/<slug>/shots.yaml`. Occupancy **none** |
 
 ---

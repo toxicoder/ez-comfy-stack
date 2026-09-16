@@ -10,6 +10,7 @@ CUSTOM = ROOT / "custom_nodes"
 PREVIEW_JS = (
     CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js",
     CUSTOM / "ez_research" / "js" / "ez_research.js",
+    CUSTOM / "ez_studio_forge" / "js" / "ez_studio_forge.js",
     CUSTOM / "ez_dub" / "js" / "ez_dub_status.js",
 )
 INGEST_JS = CUSTOM / "ez_dub" / "js" / "ez_dub_ingest.js"
