@@ -1087,8 +1087,10 @@ Limit host download bandwidth so multi‑GB model pulls cannot starve remote SSH
 
 Purpose:
   Apply kernel traffic shaping via wondershaper on the default-route interface.
-  Supports fixed Mbps caps and an **auto** mode that runs a speedtest and applies
-  floor(0.85 × measured_download_mbps). Apply is verified via tc qdisc (or mocks).
+  Supports fixed Mbps caps and an **auto** mode that measures download Mbps
+  (duration HTTP probe first, then Ookla, then speedtest-cli) and applies
+  floor(0.85 × measured_download_mbps). Auto measurements are cached 24h on the
+  host (not MODELS_DIR). Apply is verified via tc qdisc (or mocks).
   The wrap subcommand always clears limits on EXIT/INT/TERM so a killed download
   cannot leave the host permanently throttled. If apply fails, wrap soft-fails
   (warn + continue unthrottled) unless DOWNLOAD_LIMIT_REQUIRE=1.
@@ -1101,10 +1103,10 @@ Audience:
 Usage:
 ```
 
-  download-limit.sh status [--json]
-  download-limit.sh run --limit auto|N [--fallback N]
+  download-limit.sh status [--json] [--refresh]
+  download-limit.sh run --limit auto|N [--fallback N] [--refresh]
   download-limit.sh clear
-  download-limit.sh wrap --limit auto|N -- <command...>
+  download-limit.sh wrap --limit auto|N [--refresh] -- <command...>
 
 Requirements:
 
@@ -1118,7 +1120,8 @@ Requirements:
 
 Test hooks:
   LAB_MOCK_IFACE, LAB_MOCK_WONDERSHAPER, LAB_MOCK_SPEEDTEST_MBPS,
-  LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO, DOWNLOAD_LIMIT_REQUIRE
+  LAB_MOCK_HTTP_SPEED_MBPS, LAB_MOCK_LIMITS_ACTIVE, LAB_NO_SUDO,
+  DOWNLOAD_LIMIT_REQUIRE, DOWNLOAD_LIMIT_CACHE_DIR, DOWNLOAD_LIMIT_CACHE_TTL_SEC
 
 Units:
   Limits are megabits per second (Mbps), not MB/s. 40 Mbps ≈ 5 MB/s.

@@ -120,7 +120,7 @@ Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Session 
 | **No auto-start** | Compose `restart: "no"` after reboot |
 | **Heavy confirmation** | Type `yes` on `start` |
 | **Headroom preflight** | Free host RAM/disk checked before start |
-| **Download throttle** | `download-limit auto` = **85%** of speedtest (when HTB works) |
+| **Download throttle** | `download-limit auto` = **85%** of measured Mbps, cached 24h (when HTB works) |
 
 ```mermaid
 flowchart LR

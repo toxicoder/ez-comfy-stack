@@ -64,6 +64,9 @@ setup_repo_env() {
   export LAB_MOCK_IFACE=eth0
   export LAB_MOCK_WONDERSHAPER=1
   export LAB_NO_SUDO=1
+  # Host-local speed cache must not touch the developer ~/.cache (and stays per-test).
+  export DOWNLOAD_LIMIT_CACHE_DIR="${TEST_TMP_DIR}/dl-speed-cache"
+  mkdir -p "${DOWNLOAD_LIMIT_CACHE_DIR}"
   export LAB_MOCK_HF_DOWNLOAD=1
   # Default speed/probe mocks — tests must not hit real network (curl/speedtest).
   export LAB_MOCK_HTTP_SPEED_MBPS="${LAB_MOCK_HTTP_SPEED_MBPS:-100}"

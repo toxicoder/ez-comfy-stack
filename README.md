@@ -12,7 +12,7 @@
 | Runtime | Docker Compose, one ComfyUI service |
 | US-safe models | Klein 4B + Wan 2.2 + LTX-2.5 |
 | Occupancy | One heavy GPU job (XOR) |
-| Downloads | `download-limit auto` = **85%** of speedtest |
+| Downloads | `download-limit auto` = **85%** of measured Mbps (24h host cache) |
 | Restart | `restart: "no"` — type **yes** on start |
 | Tests | Hermetic **100%** coverage gate |
 
