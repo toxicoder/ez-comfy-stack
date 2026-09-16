@@ -62,6 +62,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N15["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -83,23 +84,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/hour-2/01-rumble-strip` | 14 | audio |
-| `audio/albums/drive-through/hour-2/02-low-lane` | 14 | audio |
-| `audio/albums/drive-through/hour-2/03-warm-merge` | 14 | audio |
-| `audio/albums/drive-through/hour-2/04-colour-span` | 14 | audio |
-| `audio/albums/drive-through/hour-2/05-garage-ticket` | 14 | audio |
-| `audio/albums/drive-through/hour-2/06-liquid-grade` | 14 | audio |
-| `audio/albums/drive-through/hour-2/07-jump-bay` | 14 | audio |
-| `audio/albums/drive-through/hour-2/08-psy-median` | 14 | audio |
-| `audio/albums/drive-through/hour-2/09-groove-mile` | 14 | audio |
-| `audio/albums/drive-through/hour-2/10-donk-ramp` | 14 | audio |
-| `audio/albums/drive-through/hour-2/11-bounce-booth` | 14 | audio |
-| `audio/albums/drive-through/hour-2/12-toll-growl` | 14 | audio |
-| `audio/albums/drive-through/hour-2/13-night-oil` | 14 | audio |
-| `audio/albums/drive-through/hour-2/14-chest-pass` | 14 | audio |
-| `audio/albums/drive-through/hour-2/15-sunrise-sub` | 14 | audio |
-| `audio/albums/drive-through/hour-2/album` | 2 | none |
-| `audio/albums/drive-through/hour-2/cover` | 13 | klein |
+| `audio/albums/drive-through/hour-2/01-rumble-strip` | 15 | audio |
+| `audio/albums/drive-through/hour-2/02-low-lane` | 15 | audio |
+| `audio/albums/drive-through/hour-2/03-warm-merge` | 15 | audio |
+| `audio/albums/drive-through/hour-2/04-colour-span` | 15 | audio |
+| `audio/albums/drive-through/hour-2/05-garage-ticket` | 15 | audio |
+| `audio/albums/drive-through/hour-2/06-liquid-grade` | 15 | audio |
+| `audio/albums/drive-through/hour-2/07-jump-bay` | 15 | audio |
+| `audio/albums/drive-through/hour-2/08-psy-median` | 15 | audio |
+| `audio/albums/drive-through/hour-2/09-groove-mile` | 15 | audio |
+| `audio/albums/drive-through/hour-2/10-donk-ramp` | 15 | audio |
+| `audio/albums/drive-through/hour-2/11-bounce-booth` | 15 | audio |
+| `audio/albums/drive-through/hour-2/12-toll-growl` | 15 | audio |
+| `audio/albums/drive-through/hour-2/13-night-oil` | 15 | audio |
+| `audio/albums/drive-through/hour-2/14-chest-pass` | 15 | audio |
+| `audio/albums/drive-through/hour-2/15-sunrise-sub` | 15 | audio |
+| `audio/albums/drive-through/hour-2/album` | 3 | none |
+| `audio/albums/drive-through/hour-2/cover` | 14 | klein |
 
 ## `01-rumble-strip`
 
@@ -245,6 +246,12 @@ hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, in
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Rumble Strip` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-low-lane`
 
@@ -395,6 +402,12 @@ riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no v
 | 6 | `skip` |
 | 7 | `02 - Low Lane` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-warm-merge`
 
 Catalog id `audio/albums/drive-through/hour-2/03-warm-merge`.
@@ -540,6 +553,12 @@ wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no 
 | 6 | `skip` |
 | 7 | `03 - Warm Merge` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-colour-span`
 
 Catalog id `audio/albums/drive-through/hour-2/04-colour-span`.
@@ -680,6 +699,12 @@ color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Colour Span` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-garage-ticket`
 
@@ -825,6 +850,12 @@ festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental,
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `05 - Garage Ticket` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `06-liquid-grade`
 
@@ -974,6 +1005,12 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Liquid Grade` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-jump-bay`
 
@@ -1128,6 +1165,12 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 | 6 | `skip` |
 | 7 | `07 - Jump Bay` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-psy-median`
 
 Catalog id `audio/albums/drive-through/hour-2/08-psy-median`.
@@ -1268,6 +1311,12 @@ neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, in
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Psy Median` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-groove-mile`
 
@@ -1414,6 +1463,12 @@ hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n
 | 6 | `skip` |
 | 7 | `09 - Groove Mile` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-donk-ramp`
 
 Catalog id `audio/albums/drive-through/hour-2/10-donk-ramp`.
@@ -1554,6 +1609,12 @@ tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no v
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Donk Ramp` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-bounce-booth`
 
@@ -1699,6 +1760,12 @@ chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `11 - Bounce Booth` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `12-toll-growl`
 
@@ -1853,6 +1920,12 @@ riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrument
 | 6 | `skip` |
 | 7 | `12 - Toll Growl` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `13-night-oil`
 
 Catalog id `audio/albums/drive-through/hour-2/13-night-oil`.
@@ -1993,6 +2066,12 @@ hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, i
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `13 - Night Oil` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `14-chest-pass`
 
@@ -2139,6 +2218,12 @@ dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 808
 | 6 | `skip` |
 | 7 | `14 - Chest Pass` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `15-sunrise-sub`
 
 Catalog id `audio/albums/drive-through/hour-2/15-sunrise-sub`.
@@ -2280,6 +2365,12 @@ wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no 
 | 6 | `skip` |
 | 7 | `15 - Sunrise Sub` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/hour-2/album`.
@@ -2293,6 +2384,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Drive-through` |
 | 1 | `Hour 2` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -2401,6 +2498,12 @@ square album cover, graphic print, toll booth glow, chest-sub night, long exposu
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -3522,6 +3625,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Night Oil` |
 | Album metadata | `14 - Chest Pass` |
 | Album metadata | `15 - Sunrise Sub` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

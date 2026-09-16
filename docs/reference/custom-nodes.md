@@ -8,7 +8,7 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 **What's on this page**
 
-- **Every pack** under `custom_nodes/` (`ez_common` … `ez_studio_blocks`)
+- **Every pack** under `custom_nodes/` (`ez_common` … `ez_quality` … `ez_studio_blocks`)
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
 - **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, subgraphs
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
@@ -49,6 +49,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 12 nodes | Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack |
+| `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
@@ -180,6 +181,16 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZAppForge` | App Forge | `sample` combo, `prompt` STRING (default 1:1 mug brief), `template` combo (`auto` + lab ids), `slug` STRING, `as_app` BOOLEAN (default on), `overwrite` BOOLEAN (default off), `catalog` STRING | `STRING` path | graph **`llm`** (not CLI `occupancy enter llm`) | Clones a shipped lab graph. Does not Queue. Fail-soft without a GGUF (keyword heuristic). Banned MiniMax / Klein 9B / FLUX.2-dev |
+
+---
+
+## ez_quality (Quality combo)
+
+Category `ez-comfy`. One combo on every `_lab` graph. Python does not walk sibling nodes; `ez_quality.js` writes KSampler steps/CFG and Klein 4B UNET on change and again `beforeQueued`. Nodes 2.0: `widget.value`, no `node_widget`.
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZQuality` | Quality | `quality` combo `lab` `draft` `high` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | Lab is authored widgets. Never writes banned UNETs. Klein base High needs `download-image --tier base`. Not `--tier quality`. Does not change size, length, CLIP, or VAE. Inspire/llm is a visible no-op |
 
 ---
 

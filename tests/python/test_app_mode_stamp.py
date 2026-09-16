@@ -150,7 +150,7 @@ def _widget_names(graph: dict) -> list[str]:
 
 def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
     names = _widget_names(_load("klein/still-draft.json"))
-    assert names[:5] == ["sample", "prompt", "style", "enhance", "seed"]
+    assert names[:6] == ["quality", "sample", "prompt", "style", "enhance", "seed"]
     assert "width" not in names
     assert "height" not in names
     assert "batch_size" not in names
@@ -160,8 +160,9 @@ def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
 
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
     names = _widget_names(_load("klein/still-daily.json"))
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     assert names.index("prompt") < names.index("seed")
     assert names.index("style") < names.index("enhance")
     assert "width" in names
@@ -174,8 +175,9 @@ def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
 def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
     names = _widget_names(_load("klein/dream-house.json"))
     assert names.count("prompt") == 1
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     for hidden in HIDDEN_APP_WIDGETS:
         assert hidden not in names
     assert "width" not in names
@@ -184,8 +186,9 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
 def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
     names = _widget_names(_load("klein/dream-house-clay.json"))
     assert names.count("prompt") == 1
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     assert "image" not in names
     for hidden in HIDDEN_APP_WIDGETS:
         assert hidden not in names
@@ -193,37 +196,49 @@ def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
 
 def test_beat_sheet_exposes_only_shot_cards() -> None:
     names = _widget_names(_load("inspire/beat-sheet.json"))
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     assert names.count("value") == 21
 
 
 def test_research_chat_exposes_message_mode_search() -> None:
     names = _widget_names(_load("inspire/research-chat.json"))
-    assert names == ["sample", "prompt", "mode", "web_search", "subagents", "history"]
+    assert names == [
+        "quality",
+        "sample",
+        "prompt",
+        "mode",
+        "web_search",
+        "subagents",
+        "history",
+    ]
     labels = _labels(_load("inspire/research-chat.json"))
-    assert labels[0] == "Sample prompt"
-    assert labels[1] == "Message"
+    assert labels[0] == "Quality"
+    assert labels[1] == "Sample prompt"
+    assert labels[2] == "Message"
     assert "Web search" in labels
     assert len(labels) == len(set(labels)), labels
 
 
 def test_cinema_rack_exposes_subject_and_axes() -> None:
     names = _widget_names(_load("inspire/cinema-rack.json"))
-    assert names[0] == "subject"
+    assert names[0] == "quality"
+    assert names[1] == "subject"
     assert "recipe" in names
     assert "camera_movement" in names
     assert names.count("style") == 3
     assert names.count("enhance") == 3
     labels = _labels(_load("inspire/cinema-rack.json"))
-    assert labels[0] == "Subject"
+    assert labels[0] == "Quality"
+    assert labels[1] == "Subject"
     assert "Camera move" in labels
     assert len(labels) == len(set(labels)), labels
 
 
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
-    assert names[:3] == ["sample", "prompt", "value"]
+    assert names[:4] == ["quality", "sample", "prompt", "value"]
     assert names.count("prompt") == 1
     assert names.count("style") == 6
     assert names.count("enhance") == 6
@@ -294,15 +309,17 @@ def test_i2v_hides_style_t2v_keeps_it() -> None:
     assert "style" in ltx_t2v
     still = _widget_names(_load("klein/still-draft.json"))
     assert "style" in still
-    assert still[0] == "sample"
-    assert still[1] == "prompt"
+    assert still[0] == "quality"
+    assert still[1] == "sample"
+    assert still[2] == "prompt"
 
 
 def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names.count("style") == 6
     labels = _labels(_load("inspire/prompt-forge.json"))
-    assert labels[0] == "Sample prompt"
+    assert labels[0] == "Quality"
+    assert labels[1] == "Sample prompt"
     assert "Prompt" in labels
     assert "Context" in labels
     assert "Klein prompt" not in labels
@@ -313,7 +330,7 @@ def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
 def test_beat_sheet_labels_are_node_titles() -> None:
     graph = _load("inspire/beat-sheet.json")
     labels = _labels(graph)
-    assert labels[0] == "Sample prompt"
+    assert labels[0] == "Quality"
     titles = [
         n.get("title")
         for n in graph["nodes"]
@@ -327,7 +344,8 @@ def test_beat_sheet_labels_are_node_titles() -> None:
 
 def test_music_exposes_duration_and_vocal_mode() -> None:
     names = _widget_names(_load("audio/music/rap-draft.json"))
-    assert names[0] == "sample"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
     assert "tags" in names
     assert "lyrics" in names
     assert "seconds" in names

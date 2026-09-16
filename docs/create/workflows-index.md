@@ -58,7 +58,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | Page | What it lists |
 | --- | --- |
 | [All generated graphs](../generated/workflows/index.md) | Every details page by lane |
-| [Node parameter encyclopedia](../reference/workflow-nodes.md) | All 78 types used in `_lab`, not tied to one graph |
+| [Node parameter encyclopedia](../reference/workflow-nodes.md) | All 79 types used in `_lab`, not tied to one graph |
 | [Stills catalog](workflows-stills.md) | Klein scan table |
 | [Motion catalog](workflows-motion.md) | Wan / LTX scan table |
 | [Creator pack](workflows-creator.md) | Platform stills, loops, and AV jobs |
@@ -74,6 +74,7 @@ Album JSON (`cover.json`, `album.json`) is documented on the album page even tho
 
 | Widget | Lab default | What goes wrong |
 | --- | --- | --- |
+| **Quality** | **lab** | Not `--tier quality`. Draft/High only change family sampler (and Klein 4B UNET). Distilled Klein High without Klein base keeps CFG 1.0 |
 | Klein **cfg** | **1.0** | Raising CFG is not a quality knob on distilled Klein — change the Positive prompt or use still-hero |
 | LTX **height** | **704** | 720 and 1080 are not ÷32; `ez_ltx_spatial` snaps them |
 | LTX **length** | **121** (`1+8n`) | Do not Queue a 90 s latent. 90s films stitch 18 × 5.00 s |

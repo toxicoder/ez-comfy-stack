@@ -12,6 +12,7 @@ from _stamp_app_mode import BANNED, NODE_MODE_BYPASS, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
 NOTE_TYPES = {"Note", "MarkdownNote"}
+ISOLATE_OK = NOTE_TYPES | {"EZQuality"}
 LTX_LATENT_TYPES = {
     "LTXVImgToVideo",
     "EmptyLTXVLatentVideo",
@@ -170,7 +171,7 @@ def test_lab_graph_completeness(path: Path) -> None:
     isolates = [
         n
         for n in graph["nodes"]
-        if n.get("type") not in NOTE_TYPES and int(n["id"]) not in wired
+        if n.get("type") not in ISOLATE_OK and int(n["id"]) not in wired
     ]
     unexpected = [n for n in isolates if n.get("type") not in allowed]
     assert not unexpected, (

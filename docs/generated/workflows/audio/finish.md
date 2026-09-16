@@ -68,6 +68,7 @@ flowchart LR
   N5["Include FX"]
   N6["Include MX"]
   N7["Save stem mix (host stem-mix.sh)"]
+  N8["Quality"]
 ```
 
 ## Nodes on this graph
@@ -81,6 +82,7 @@ flowchart LR
 | 5 | Include FX | `PrimitiveNode` | STEMS |
 | 6 | Include MX | `PrimitiveNode` | STEMS |
 | 7 | Save stem mix (host stem-mix.sh) | `SaveAudio` | Ungrouped |
+| 8 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -195,3 +197,33 @@ Save stem.
 **How it affects generation:** Album tracks use NN - Song Title. Tags come from EZAudioMetadata.
 
 **This graph:** `ez_stem_mix`
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

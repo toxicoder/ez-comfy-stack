@@ -1,7 +1,7 @@
 {
   "id": "macro-product",
   "revision": 1,
-  "last_node_id": 16,
+  "last_node_id": 17,
   "last_link_id": 18,
   "nodes": [
     {
@@ -640,6 +640,37 @@
         "wan"
       ],
       "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 17,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -834,6 +865,14 @@
     "linearData": {
       "inputs": [
         [
+          17,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           15,
           "sample",
           {
@@ -882,7 +921,10 @@
     },
     "linearMode": true,
     "lab_rel": "wan/creator/macro-product",
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

@@ -1,7 +1,7 @@
 {
   "id": "i2v-a14b",
   "revision": 4,
-  "last_node_id": 17,
+  "last_node_id": 18,
   "last_link_id": 18,
   "nodes": [
     {
@@ -673,6 +673,37 @@
         "wan"
       ],
       "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 18,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -881,6 +912,14 @@
     "linearData": {
       "inputs": [
         [
+          18,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           15,
           "sample",
           {
@@ -931,7 +970,10 @@
       "UNETLoader"
     ],
     "lab_rel": "optional/wan/i2v-a14b",
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

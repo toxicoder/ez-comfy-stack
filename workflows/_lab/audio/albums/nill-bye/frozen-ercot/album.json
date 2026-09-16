@@ -1,7 +1,7 @@
 {
   "id": "album",
   "revision": 1,
-  "last_node_id": 2,
+  "last_node_id": 3,
   "last_link_id": 0,
   "nodes": [
     {
@@ -59,6 +59,37 @@
         "Frozen Ercot"
       ],
       "title": "Pack album zip"
+    },
+    {
+      "id": 3,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [],
@@ -142,6 +173,14 @@
     "linearData": {
       "inputs": [
         [
+          3,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           2,
           "artist",
           {
@@ -162,7 +201,10 @@
         2
       ]
     },
-    "linearMode": true
+    "linearMode": true,
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

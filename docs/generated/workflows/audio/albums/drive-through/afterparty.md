@@ -62,6 +62,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N15["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -83,28 +84,28 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/afterparty/01-brake-fade` | 14 | audio |
-| `audio/albums/drive-through/afterparty/02-diesel-hum` | 14 | audio |
-| `audio/albums/drive-through/afterparty/03-axle-grind` | 14 | audio |
-| `audio/albums/drive-through/afterparty/04-weigh-station` | 14 | audio |
-| `audio/albums/drive-through/afterparty/05-black-ice` | 14 | audio |
-| `audio/albums/drive-through/afterparty/06-high-beams` | 14 | audio |
-| `audio/albums/drive-through/afterparty/07-chain-hook` | 14 | audio |
-| `audio/albums/drive-through/afterparty/08-grit-plate` | 14 | audio |
-| `audio/albums/drive-through/afterparty/09-steel-grate` | 14 | audio |
-| `audio/albums/drive-through/afterparty/10-rest-bay` | 14 | audio |
-| `audio/albums/drive-through/afterparty/11-haul-crate` | 14 | audio |
-| `audio/albums/drive-through/afterparty/12-night-splice` | 14 | audio |
-| `audio/albums/drive-through/afterparty/13-torque-bay` | 14 | audio |
-| `audio/albums/drive-through/afterparty/14-spare-drum` | 14 | audio |
-| `audio/albums/drive-through/afterparty/15-oil-pan` | 14 | audio |
-| `audio/albums/drive-through/afterparty/16-curb-check` | 14 | audio |
-| `audio/albums/drive-through/afterparty/17-last-exit` | 14 | audio |
-| `audio/albums/drive-through/afterparty/18-asphalt-heart` | 14 | audio |
-| `audio/albums/drive-through/afterparty/19-clutch-slam` | 14 | audio |
-| `audio/albums/drive-through/afterparty/20-trailer-hitch` | 14 | audio |
-| `audio/albums/drive-through/afterparty/album` | 2 | none |
-| `audio/albums/drive-through/afterparty/cover` | 13 | klein |
+| `audio/albums/drive-through/afterparty/01-brake-fade` | 15 | audio |
+| `audio/albums/drive-through/afterparty/02-diesel-hum` | 15 | audio |
+| `audio/albums/drive-through/afterparty/03-axle-grind` | 15 | audio |
+| `audio/albums/drive-through/afterparty/04-weigh-station` | 15 | audio |
+| `audio/albums/drive-through/afterparty/05-black-ice` | 15 | audio |
+| `audio/albums/drive-through/afterparty/06-high-beams` | 15 | audio |
+| `audio/albums/drive-through/afterparty/07-chain-hook` | 15 | audio |
+| `audio/albums/drive-through/afterparty/08-grit-plate` | 15 | audio |
+| `audio/albums/drive-through/afterparty/09-steel-grate` | 15 | audio |
+| `audio/albums/drive-through/afterparty/10-rest-bay` | 15 | audio |
+| `audio/albums/drive-through/afterparty/11-haul-crate` | 15 | audio |
+| `audio/albums/drive-through/afterparty/12-night-splice` | 15 | audio |
+| `audio/albums/drive-through/afterparty/13-torque-bay` | 15 | audio |
+| `audio/albums/drive-through/afterparty/14-spare-drum` | 15 | audio |
+| `audio/albums/drive-through/afterparty/15-oil-pan` | 15 | audio |
+| `audio/albums/drive-through/afterparty/16-curb-check` | 15 | audio |
+| `audio/albums/drive-through/afterparty/17-last-exit` | 15 | audio |
+| `audio/albums/drive-through/afterparty/18-asphalt-heart` | 15 | audio |
+| `audio/albums/drive-through/afterparty/19-clutch-slam` | 15 | audio |
+| `audio/albums/drive-through/afterparty/20-trailer-hitch` | 15 | audio |
+| `audio/albums/drive-through/afterparty/album` | 3 | none |
+| `audio/albums/drive-through/afterparty/cover` | 14 | klein |
 
 ## `01-brake-fade`
 
@@ -251,6 +252,12 @@ dirty bass, warped bass, trap hats, chest sub, stacked 808, rave, instrumental, 
 | 6 | `skip` |
 | 7 | `01 - Brake Fade` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `02-diesel-hum`
 
 Catalog id `audio/albums/drive-through/afterparty/02-diesel-hum`.
@@ -391,6 +398,12 @@ hybrid trap, warped bass, trap hats, dual-action pedal bass, chest sub, rave, in
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `02 - Diesel Hum` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `03-axle-grind`
 
@@ -541,6 +554,12 @@ tearout, warped bass, trap hats, bass growl, dirty 808, rave, instrumental, no v
 | 6 | `skip` |
 | 7 | `03 - Axle Grind` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-weigh-station`
 
 Catalog id `audio/albums/drive-through/afterparty/04-weigh-station`.
@@ -685,6 +704,12 @@ brostep, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - Weigh Station` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-black-ice`
 
@@ -839,6 +864,12 @@ riddim, warped bass, trap hats, wobble bass, chest 808, rave, instrumental, no v
 | 6 | `skip` |
 | 7 | `05 - Black Ice` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-high-beams`
 
 Catalog id `audio/albums/drive-through/afterparty/06-high-beams`.
@@ -988,6 +1019,12 @@ color bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, ins
 | 6 | `skip` |
 | 7 | `06 - High Beams` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `07-chain-hook`
 
 Catalog id `audio/albums/drive-through/afterparty/07-chain-hook`.
@@ -1124,6 +1161,12 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `07 - Chain Hook` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `08-grit-plate`
 
@@ -1265,6 +1308,12 @@ wave bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Grit Plate` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-steel-grate`
 
@@ -1423,6 +1472,12 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 | 6 | `skip` |
 | 7 | `09 - Steel Grate` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-rest-bay`
 
 Catalog id `audio/albums/drive-through/afterparty/10-rest-bay`.
@@ -1572,6 +1627,12 @@ chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, ins
 | 6 | `skip` |
 | 7 | `10 - Rest Bay` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `11-haul-crate`
 
 Catalog id `audio/albums/drive-through/afterparty/11-haul-crate`.
@@ -1717,6 +1778,12 @@ hybrid trap, warped bass, trap hats, festival trap, trap 808, dirty bass, rave, 
 | 6 | `skip` |
 | 7 | `11 - Haul Crate` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-night-splice`
 
 Catalog id `audio/albums/drive-through/afterparty/12-night-splice`.
@@ -1857,6 +1924,12 @@ wave bass, warped bass, trap hats, chest 808, low rumble, rave, instrumental, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Night Splice` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-torque-bay`
 
@@ -2007,6 +2080,12 @@ neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instr
 | 6 | `skip` |
 | 7 | `13 - Torque Bay` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-spare-drum`
 
 Catalog id `audio/albums/drive-through/afterparty/14-spare-drum`.
@@ -2151,6 +2230,12 @@ brostep, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instru
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Spare Drum` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-oil-pan`
 
@@ -2300,6 +2385,12 @@ color bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `15 - Oil Pan` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `16-curb-check`
 
@@ -2454,6 +2545,12 @@ drumstep, warped bass, trap hats, amen break, chest sub, rave, instrumental, no 
 | 6 | `skip` |
 | 7 | `16 - Curb Check` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `17-last-exit`
 
 Catalog id `audio/albums/drive-through/afterparty/17-last-exit`.
@@ -2595,6 +2692,12 @@ dirty bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, ins
 | 6 | `skip` |
 | 7 | `17 - Last Exit` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `18-asphalt-heart`
 
 Catalog id `audio/albums/drive-through/afterparty/18-asphalt-heart`.
@@ -2731,6 +2834,12 @@ chest bass, warped bass, trap hats, stacked 808, body bass, rave, instrumental, 
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `18 - Asphalt Heart` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `19-clutch-slam`
 
@@ -2889,6 +2998,12 @@ tearout, warped bass, trap hats, dirty dubstep, dual-action pedal bass, heavy su
 | 6 | `skip` |
 | 7 | `19 - Clutch Slam` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `20-trailer-hitch`
 
 Catalog id `audio/albums/drive-through/afterparty/20-trailer-hitch`.
@@ -3042,6 +3157,12 @@ hybrid trap, warped bass, trap hats, stacked 808, chest sub, rave, instrumental,
 | 6 | `skip` |
 | 7 | `20 - Trailer Hitch` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/afterparty/album`.
@@ -3055,6 +3176,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Drive-through` |
 | 1 | `Afterparty` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -3163,6 +3290,12 @@ square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit s
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -4359,6 +4492,36 @@ SaveAudio stem to stamp.
 | Album metadata | `18 - Asphalt Heart` |
 | Album metadata | `19 - Clutch Slam` |
 | Album metadata | `20 - Trailer Hitch` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 22 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

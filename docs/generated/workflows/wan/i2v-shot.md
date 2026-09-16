@@ -82,6 +82,7 @@ flowchart LR
   N16["Save last frame"]
   N17["Wan Prompt Enhance"]
   N18["Negative Prompt Enhance"]
+  N19["Quality"]
   N1 --> N9
   N2 --> N6
   N2 --> N7
@@ -123,6 +124,7 @@ flowchart LR
 | 16 | Save last frame | `SaveImage` | DRAFT Wan 5s |
 | 17 | Wan Prompt Enhance | `EZWanPromptEnhance` | DRAFT Wan 5s |
 | 18 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 19 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1006,3 +1008,33 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

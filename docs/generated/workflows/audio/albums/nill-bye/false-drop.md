@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/false-drop/01-false-drop` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/02-velvet-rope` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/03-fog-machine` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/04-guest-list` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/05-sparkler` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/06-bottle-service` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/07-strobe-claim` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/08-amen-rumor` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/09-wobble-alibi` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/10-supersaw-flex` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/11-laser-show` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/12-two-step` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/13-jersey-bounce` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/14-kick-split` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/15-uplift-rumor` | 15 | audio |
-| `audio/albums/nill-bye/false-drop/album` | 2 | none |
-| `audio/albums/nill-bye/false-drop/cover` | 13 | klein |
+| `audio/albums/nill-bye/false-drop/01-false-drop` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/02-velvet-rope` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/03-fog-machine` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/04-guest-list` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/05-sparkler` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/06-bottle-service` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/07-strobe-claim` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/08-amen-rumor` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/09-wobble-alibi` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/10-supersaw-flex` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/11-laser-show` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/12-two-step` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/13-jersey-bounce` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/14-kick-split` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/15-uplift-rumor` | 16 | audio |
+| `audio/albums/nill-bye/false-drop/album` | 3 | none |
+| `audio/albums/nill-bye/false-drop/cover` | 14 | klein |
 
 ## `01-false-drop`
 
@@ -521,6 +522,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - False Drop` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-velvet-rope`
 
@@ -948,6 +955,12 @@ yeah
 | 6 | `skip` |
 | 7 | `02 - Velvet Rope` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-fog-machine`
 
 Catalog id `audio/albums/nill-bye/false-drop/03-fog-machine`.
@@ -1367,6 +1380,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `03 - Fog Machine` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `04-guest-list`
 
@@ -1794,6 +1813,12 @@ yeah
 | 6 | `skip` |
 | 7 | `04 - Guest List` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `05-sparkler`
 
 Catalog id `audio/albums/nill-bye/false-drop/05-sparkler`.
@@ -2210,6 +2235,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `05 - Sparkler Science` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `06-bottle-service`
 
@@ -2628,6 +2659,12 @@ yeah
 | 6 | `skip` |
 | 7 | `06 - Bottle Service` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `07-strobe-claim`
 
 Catalog id `audio/albums/nill-bye/false-drop/07-strobe-claim`.
@@ -3044,6 +3081,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `07 - Strobe Claim` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `08-amen-rumor`
 
@@ -3462,6 +3505,12 @@ yeah
 | 6 | `skip` |
 | 7 | `08 - Amen Rumor` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `09-wobble-alibi`
 
 Catalog id `audio/albums/nill-bye/false-drop/09-wobble-alibi`.
@@ -3878,6 +3927,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `09 - Wobble Alibi` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `10-supersaw-flex`
 
@@ -4296,6 +4351,12 @@ yeah
 | 6 | `skip` |
 | 7 | `10 - Supersaw Flex` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `11-laser-show`
 
 Catalog id `audio/albums/nill-bye/false-drop/11-laser-show`.
@@ -4712,6 +4773,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `11 - Laser Show` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `12-two-step`
 
@@ -5130,6 +5197,12 @@ yeah
 | 6 | `skip` |
 | 7 | `12 - Two-Step Alibi` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `13-jersey-bounce`
 
 Catalog id `audio/albums/nill-bye/false-drop/13-jersey-bounce`.
@@ -5546,6 +5619,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `13 - Jersey Bounce` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `14-kick-split`
 
@@ -5964,6 +6043,12 @@ yeah
 | 6 | `skip` |
 | 7 | `14 - Kick-Split Myth` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `15-uplift-rumor`
 
 Catalog id `audio/albums/nill-bye/false-drop/15-uplift-rumor`.
@@ -6381,6 +6466,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Uplifting Rumor` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/false-drop/album`.
@@ -6394,6 +6485,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `False Drop` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6502,6 +6599,12 @@ square album cover, graphic print, club fog, dry booth silhouette, magenta strob
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7704,6 +7807,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Jersey Bounce` |
 | Album metadata | `14 - Kick-Split Myth` |
 | Album metadata | `15 - Uplifting Rumor` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

@@ -75,6 +75,7 @@ flowchart LR
   N21["Negative Prompt Enhance"]
   N22["Audio file"]
   N23["Encode + freeze bed"]
+  N24["Quality"]
   N1 --> N9
   N2 --> N7
   N2 --> N10
@@ -124,6 +125,7 @@ flowchart LR
 | 21 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 22 | Audio file | `LoadAudio` | Ungrouped |
 | 23 | Encode + freeze bed | `LTXVAudioVAEEncode` | Ungrouped |
+| 24 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1034,3 +1036,33 @@ Encode a wav into the LTX audio latent (A2V freeze).
 | `Latent` | out | `LATENT` | Frozen audio latent concatenated before sample. |
 
 No widgets. Sockets only.
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

@@ -73,8 +73,9 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
-    assert labels[0] == "Sample prompt"
-    assert labels[1] == "Prompt"
+    assert labels[0] == "Quality"
+    assert labels[1] == "Sample prompt"
+    assert labels[2] == "Prompt"
     assert "Context" in labels
     assert "Klein prompt" not in labels
     assert "Wan prompt" not in labels
@@ -104,7 +105,8 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
-    assert names[0] == "subject"
+    assert names[0] == "quality"
+    assert names[1] == "subject"
     assert "recipe" in names
     assert "camera_movement" in names
     _assert_no_overlap(graph)
@@ -135,9 +137,18 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
         config = entry[2] if len(entry) > 2 else {}
         labels.append((config or {}).get("label") or entry[1])
         names.append(entry[1])
-    assert names == ["sample", "prompt", "mode", "web_search", "subagents", "history"]
-    assert labels[0] == "Sample prompt"
-    assert labels[1] == "Message"
+    assert names == [
+        "quality",
+        "sample",
+        "prompt",
+        "mode",
+        "web_search",
+        "subagents",
+        "history",
+    ]
+    assert labels[0] == "Quality"
+    assert labels[1] == "Sample prompt"
+    assert labels[2] == "Message"
     assert "Web search" in labels
     assert "Subagents" in labels
     assert len(labels) == len(set(labels)), labels
@@ -170,6 +181,7 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
         labels.append((config or {}).get("label") or entry[1])
         names.append(entry[1])
     assert names == [
+        "quality",
         "sample",
         "prompt",
         "template",
@@ -177,8 +189,9 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
         "as_app",
         "overwrite",
     ]
-    assert labels[0] == "Sample prompt"
-    assert labels[1] == "Brief"
+    assert labels[0] == "Quality"
+    assert labels[1] == "Sample prompt"
+    assert labels[2] == "Brief"
     assert "Template" in labels
     assert "Slug" in labels
     assert "As app" in labels
@@ -205,8 +218,9 @@ def test_character_draft_is_t2i_without_reference() -> None:
     assert save["widgets_values"][0] == "ez_character"
     assert not any(n.get("type") == "ReferenceLatent" for n in graph["nodes"])
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     assert "style" in names
     assert "shot" not in names
     _assert_no_overlap(graph)
@@ -226,8 +240,9 @@ def test_character_tweak_wires_reference_latent() -> None:
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_character_tweak"
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "sample"
-    assert names[1] == "prompt"
+    assert names[0] == "quality"
+    assert names[1] == "sample"
+    assert names[2] == "prompt"
     assert "image" in names
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
     by_id = {int(n["id"]): n for n in graph["nodes"]}

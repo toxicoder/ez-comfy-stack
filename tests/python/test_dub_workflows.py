@@ -90,7 +90,8 @@ def test_dub_localize_graph() -> None:
     for needle in BANNED:
         assert needle not in blob, needle
     names = _app_names(graph)
-    assert names[0] == "source"
+    assert names[0] == "quality"
+    assert names[1] == "source"
     assert "upload" in names
     assert "source_url" in names
     assert "have_rights" in names
@@ -134,7 +135,8 @@ def test_ingest_widgets_values_stay_four_wide() -> None:
     assert isinstance(values[2], str)
     assert isinstance(values[3], str)
     names = _app_names(graph)
-    assert names[0] == "source"
+    assert names[0] == "quality"
+    assert names[1] == "source"
     assert "upload" in names
     labels = _app_labels(graph)
     assert "Upload media" in labels

@@ -48,64 +48,6 @@ LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not str
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
-## Graph
-
-```mermaid
-flowchart LR
-  N1["LTX-2.5 distilled INT8-convrot"]
-  N2["LTX-2.5 video VAE"]
-  N3["Gemma4-with-proj (ltxv)"]
-  N4["Load guide still"]
-  N5["Motion + audio"]
-  N6["Negative"]
-  N7["LTX Img→Video condition"]
-  N8["LTX frame rate cond"]
-  N9["KSampler"]
-  N10["VAE Decode"]
-  N12["Save ez_iclora_guide"]
-  N13["LTX-2.5 audio VAE"]
-  N14["Empty LTX audio latent"]
-  N15["Concat AV latents"]
-  N16["Separate AV latents"]
-  N17["Operator note"]
-  N18["Save video (MP4) — open node for preview"]
-  N19["Last frame"]
-  N20["Save ez_iclora_guide"]
-  N21["LTX Prompt Enhance"]
-  N22["Audio VAE Decode"]
-  N23["LTX AI-media disclosure (end-card)"]
-  N24["Occupancy gate (ltx)"]
-  N25["Load guide video path"]
-  N26["Negative Prompt Enhance"]
-  N1 --> N9
-  N2 --> N7
-  N2 --> N10
-  N3 --> N5
-  N3 --> N6
-  N4 --> N24
-  N5 --> N7
-  N6 --> N7
-  N7 --> N8
-  N7 --> N15
-  N8 --> N9
-  N9 --> N16
-  N10 --> N12
-  N10 --> N18
-  N10 --> N19
-  N13 --> N14
-  N13 --> N22
-  N14 --> N15
-  N15 --> N9
-  N16 --> N10
-  N16 --> N22
-  N19 --> N20
-  N21 --> N5
-  N21 --> N26
-  N22 --> N18
-  N24 --> N7
-  N26 --> N6
-```
-
 ## Nodes on this graph
 
 | Id | Title | Type | Group |
@@ -135,6 +77,7 @@ flowchart LR
 | 24 | Occupancy gate (ltx) | `EZDCCOccupancyGate` | Ungrouped |
 | 25 | Load guide video path | `EZDCCLoadGuideVideo` | Ungrouped |
 | 26 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 27 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1208,3 +1151,33 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph:** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |

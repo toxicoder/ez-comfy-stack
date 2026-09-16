@@ -1,7 +1,7 @@
 {
   "id": "pin-standard",
   "revision": 1,
-  "last_node_id": 12,
+  "last_node_id": 13,
   "last_link_id": 12,
   "nodes": [
     {
@@ -472,6 +472,37 @@
         "klein"
       ],
       "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 13,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -651,6 +682,14 @@
     "linearData": {
       "inputs": [
         [
+          13,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           11,
           "sample",
           {
@@ -698,7 +737,10 @@
     },
     "linearMode": true,
     "lab_rel": "klein/creator/pin-standard",
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }

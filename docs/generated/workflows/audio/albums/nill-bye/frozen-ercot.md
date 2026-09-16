@@ -65,6 +65,7 @@ flowchart LR
   N12["Operator note"]
   N13["Cover image"]
   N14["Album metadata"]
+  N16["Quality"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -87,23 +88,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/02-abject-failure` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/06-property-hymn` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/10-mask-order` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/12-rack-tax` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/14-fourth-term` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` | 15 | audio |
-| `audio/albums/nill-bye/frozen-ercot/album` | 2 | none |
-| `audio/albums/nill-bye/frozen-ercot/cover` | 13 | klein |
+| `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/02-abject-failure` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/06-property-hymn` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/10-mask-order` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/12-rack-tax` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/14-fourth-term` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` | 16 | audio |
+| `audio/albums/nill-bye/frozen-ercot/album` | 3 | none |
+| `audio/albums/nill-bye/frozen-ercot/cover` | 14 | klein |
 
 ## `01-frozen-ercot`
 
@@ -533,6 +534,12 @@ yeah
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `01 - Frozen Ercot` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `02-abject-failure`
 
@@ -978,6 +985,12 @@ cut
 | 6 | `skip` |
 | 7 | `02 - Abject Failure` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `03-six-week-clock`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/03-six-week-clock`.
@@ -1407,6 +1420,12 @@ yeah
 | 6 | `skip` |
 | 7 | `03 - Six Week Clock` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `04-no-bid-wire`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire`.
@@ -1829,6 +1848,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `04 - No-Bid Wire` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `05-gavel-theater`
 
@@ -2259,6 +2284,12 @@ yeah
 | 6 | `skip` |
 | 7 | `05 - Gavel Theater` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `06-property-hymn`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/06-property-hymn`.
@@ -2681,6 +2712,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `06 - Property Hymn` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `07-voucher-raid`
 
@@ -3108,6 +3145,12 @@ yeah
 | 6 | `skip` |
 | 7 | `07 - Voucher Raid` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `08-uninsured-blues`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues`.
@@ -3530,6 +3573,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `08 - Uninsured Blues` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `09-locked-stacks`
 
@@ -3957,6 +4006,12 @@ yeah
 | 6 | `skip` |
 | 7 | `09 - Locked Stacks` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `10-mask-order`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/10-mask-order`.
@@ -4379,6 +4434,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `10 - Mask Order` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `11-mid-decade-map`
 
@@ -4806,6 +4867,12 @@ yeah
 | 6 | `skip` |
 | 7 | `11 - Mid Decade Map` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `12-rack-tax`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/12-rack-tax`.
@@ -5228,6 +5295,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `12 - Rack Tax` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `13-wudu-letter`
 
@@ -5658,6 +5731,12 @@ yeah
 | 6 | `skip` |
 | 7 | `13 - Wudu Letter` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `14-fourth-term`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/14-fourth-term`.
@@ -6080,6 +6159,12 @@ cut
 | 5 | `2026` |
 | 6 | `skip` |
 | 7 | `14 - Fourth Term` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `15-campus-cordon`
 
@@ -6510,6 +6595,12 @@ yeah
 | 6 | `skip` |
 | 7 | `15 - Campus Cordon` |
 
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/album`.
@@ -6523,6 +6614,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `Nill Bye` |
 | 1 | `Frozen Ercot` |
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## `cover`
 
@@ -6631,6 +6728,12 @@ square album cover, graphic print, iced power lines, Texas winter grid, cold blu
 ```text
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
+
+**Quality** (`EZQuality`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `lab` |
 
 ## Node parameter reference
 
@@ -7833,6 +7936,36 @@ SaveAudio stem to stamp.
 | Album metadata | `13 - Wudu Letter` |
 | Album metadata | `14 - Fourth Term` |
 | Album metadata | `15 - Campus Cordon` |
+
+### `EZQuality` — Quality
+
+Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+
+!!! warning "Lab notes"
+
+    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+
+#### `quality`
+
+Type `COMBO`. Range / default: lab.
+
+Lab default, Draft (faster), or High (slower).
+
+**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+
+**This graph (all 17 instances):** `lab`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `lab` | Authored lab widgets. Default. |
+| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
+| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
 
 ### `EZAlbumPack` — Album Pack
 

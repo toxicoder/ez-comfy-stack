@@ -1,7 +1,7 @@
 {
   "id": "a2v-5s",
   "revision": 9,
-  "last_node_id": 23,
+  "last_node_id": 24,
   "last_link_id": 35,
   "nodes": [
     {
@@ -863,6 +863,37 @@
       "title": "Encode + freeze bed",
       "id": 23,
       "order": 21
+    },
+    {
+      "id": 24,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
     }
   ],
   "links": [
@@ -1087,6 +1118,14 @@
     "linearData": {
       "inputs": [
         [
+          24,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+          }
+        ],
+        [
           19,
           "sample",
           {
@@ -1152,7 +1191,10 @@
     },
     "linearMode": true,
     "lab_rel": "ltx/a2v-5s",
-    "workflowRendererVersion": "Vue-corrected"
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
   },
   "version": 0.4
 }
