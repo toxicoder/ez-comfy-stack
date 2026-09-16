@@ -1173,15 +1173,21 @@ exit 0
   unset BLENDER_BIN
   export PATH="${TEST_TMP_DIR}/empty:/usr/bin:/bin"
   mkdir -p "${TEST_TMP_DIR}/empty"
+  hash -r
+  export LAB_HERMETIC=1
   run blender_host_candidates
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"${HOME}/.local/bin/blender"* ]]
-  [[ "${output}" != *"/opt/blender/blender"* ]]
+  local hermetic_cands="${output}"
+  [[ "${hermetic_cands}" == *"${HOME}/.local/bin/blender"* ]]
+  # Line-exact: ${HOME}/.local/opt/blender/blender contains the substring
+  # /opt/blender/blender, which bash 5 [[ *glob* ]] matches across newlines.
+  ! grep -Fxq "/opt/blender/blender" <<<"${hermetic_cands}"
+  ! grep -Fxq "/usr/bin/blender" <<<"${hermetic_cands}"
   unset LAB_HERMETIC
   run blender_host_candidates
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"/opt/blender/blender"* ]]
-  [[ "${output}" == *"/usr/bin/blender"* ]]
+  grep -Fxq "/opt/blender/blender" <<<"${output}"
+  grep -Fxq "/usr/bin/blender" <<<"${output}"
   export LAB_HERMETIC=1
   run blender_host_bin
   [ "${status}" -eq 1 ]
