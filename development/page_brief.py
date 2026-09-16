@@ -11,6 +11,7 @@ from __future__ import annotations
 import html
 import re
 
+# Scan-list labels, HTML matchers, and Material-style icons for the brief card.
 ON_PAGE_LABEL = "What's on this page"
 ENABLES_LABEL = "What this enables"
 

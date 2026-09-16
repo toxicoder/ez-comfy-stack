@@ -38,6 +38,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+# Lazy-loaded sibling modules (commands, glossary, page-brief).
 _GLOSSARY_MOD = None
 _COMMANDS_MOD = None
 _PAGE_BRIEF_MOD = None
@@ -99,11 +100,13 @@ def _page_brief_mod() -> Any:
         _PAGE_BRIEF_MOD = module
     return _PAGE_BRIEF_MOD
 
+# GitHub slug, repo root, and sentinel for the unpublished-cache miss path.
 _REPO = "toxicoder/ez-comfy-stack"
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _UNSET = object()
 _published_cache: datetime | None | object = _UNSET
 
+# Published-chip SVG, git-ref placeholder, development banner, and GitHub URL rewrite.
 _CALENDAR_SVG = (
     '<svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" '
     'viewBox="0 0 24 24" aria-hidden="true" focusable="false">'
@@ -406,6 +409,14 @@ def inject_cinema_nav(config: dict[str, Any]) -> dict[str, Any]:
             children.append({label: path})
 
     def _walk(items: list[Any]) -> list[Any]:
+        """Rebuild a nav list, substituting the Cinema Rack subtree.
+
+        Args:
+            items: MkDocs nav entries (strings or single-key dicts).
+
+        Returns:
+            A new nav list with generated children under Cinema Rack.
+        """
         out: list[Any] = []
         for item in items:
             if isinstance(item, dict) and set(item.keys()) == {"Cinema Rack"}:
