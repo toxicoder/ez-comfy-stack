@@ -4,7 +4,7 @@ Upstream: [Lightricks/ComfyUI-LTXVideo `example_workflows/2.5/`](https://github.
 
 Those JSON files are **Comfy subgraphs** (UUID node types). Load them from Comfy **Templates → LTX-2.5**, or clone ComfyUI-LTXVideo. This tree does **not** vendor the 150–240 KB subgraph blobs (they will not Queue without the matching subgraph pack).
 
-Lab **default printers stay 5.00 s / 121 frames / 1280×704** (`ltx/i2v-5s.json` and the 90s one-click films). Duration-head 8 / 10 / 12 s is opt-in behind `ez_film.ltx_timing.preflight_duration_s` (`1+8n` frames; even latents refuse). Do not queue a 30/60/90 s latent on GB10.
+Lab **default printers stay 5.00 s / 121 frames / 1280×704** (`ltx/i2v-5s.json` and the 90s one-click films). Showcase Apps (`ltx/dialogue-5s`, `ltx/multishot-5s`, `ltx/product-hero`, `ltx/flf-5s`, `ltx/a2v-5s`) use the same envelope with core nodes only (`LTXVModalityGuidance`, `LTXVAddGuide` / `LTXVCropGuides`, `LTXVAudioVAEEncode`). Duration-head 8 / 10 / 12 s is opt-in behind `ez_film.ltx_timing.preflight_duration_s` (`1+8n` frames; even latents refuse). Do not queue a 30/60/90 s latent on GB10.
 
 | Official graph | Lab role |
 | --- | --- |

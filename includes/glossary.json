@@ -310,8 +310,8 @@
     "title": "A2V",
     "aliases": ["audio-to-video", "A2V"],
     "category": "Modalities",
-    "short": "Audio-to-video: picture follows a soundtrack (talking-head freeze, not lip-sync OSS).",
-    "long": "`klein/talking-head` smokes LTX A2V freeze. Banned lip-sync OSS (Wav2Lip) stays out. See [Workflow catalog](studio-workflows.md).",
+    "short": "Audio-to-video: picture follows a soundtrack (audio freeze, not lip-sync OSS).",
+    "long": "`ltx/a2v-5s` encodes a ~5 s wav and muxes the original waveform. `klein/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates → LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
     "see_also": ["s2v", "ltx"]
   },
   {

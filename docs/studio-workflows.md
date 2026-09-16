@@ -30,7 +30,7 @@ user/default/workflows/
   _lab/
     klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, …
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot
-    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot
+    ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot, dialogue, multishot, product, FLF, A2V
     shorts/    go-see, still-here, switchyard (90s one-click)
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2

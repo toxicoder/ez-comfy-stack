@@ -68,7 +68,7 @@ Printers stay **5.00 s / 1280×704 / 121 frames (`1+8n`) @ 24 fps**. Do not type
 | No Blender / Path D not ready | Film clay dump. Look plate owns composition. Overlay QC is skipped, not faked. Instagram clay tour still Queues on `start` / `--seed-inputs` layout plates; language-only → **klein/dream-house**. |
 | Empty dialogue | DX stem |
 | Shorts “world SFX, no score” | MX. Do not load ACE-Step next to LTX. |
-| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`klein/talking-head`). Mouths will not match. |
+| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`ltx/a2v-5s`). Mouths will not match. |
 
 ---
 

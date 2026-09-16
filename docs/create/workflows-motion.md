@@ -10,6 +10,7 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 - **Motion (Wan 2.2 5B)** silent I2V / T2V, FLF, VACE, A14B, TRELLIS
 - **AV hero (LTX-2.5)** I2V / T2V and the ÷32 size warning
+- **Showcase (LTX-2.5)** dialogue, native multishot, product hero, first-last-frame, A2V freeze
 - **Creator toolkit** motion and AV plates (orbit, bumper, B-roll, hook)
 
 **What this enables**
@@ -43,6 +44,20 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 | --- | --- |
 | **ltx/i2v-5s** | ~5 s I2V, **1280×704**, native audio (Community License, $10M cap) |
 | **ltx/t2v-5s** | ~5 s T2V AV, **1280×704** |
+
+---
+
+## Showcase (LTX-2.5)
+
+Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 5.00 s / 121 / **1280×704** printer as the heroes. Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
+
+| Workflow | What it does |
+| --- | --- |
+| **ltx/dialogue-5s** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
+| **ltx/multishot-5s** | Native multishot T2V: named hard cut + match cut in one 5 s clip. Prefix `ez_ltx_multishot` |
+| **ltx/product-hero** | I2V from **klein/product-packshot** (`ez_packshot_*.png`). Slow orbit + table SFX. Prefix `ez_ltx_product` |
+| **ltx/flf-5s** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
+| **ltx/a2v-5s** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
 
 !!! warning "LTX width/height must be divisible by 32"
 

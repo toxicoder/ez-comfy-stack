@@ -439,7 +439,9 @@ for p in sorted((root / '_lab').rglob('*.json')):
         assert prefix.startswith('ez_'), (p.name, prefix)
         assert 'preview' in (vhs.get('title') or '').lower(), p.name
     if any(n.get('type')=='LTXVSeparateAVLatent' for n in d['nodes']):
-        assert any(n.get('type')=='LTXVAudioVAEDecode' for n in d['nodes']), p.name
+        has_decode = any(n.get('type')=='LTXVAudioVAEDecode' for n in d['nodes'])
+        has_load = any(n.get('type')=='LoadAudio' for n in d['nodes'])
+        assert has_decode or has_load, p.name
         for vhs in vhs_nodes:
             audio = next(i for i in vhs['inputs'] if i.get('name')=='audio')
             assert audio.get('link') is not None, p.name
@@ -481,7 +483,12 @@ assert video >= 7, video
     wan/sticker-loop.json \
     ltx/weather-broll.json \
     ltx/interior-ambience.json \
-    ltx/hook-av.json; do
+    ltx/hook-av.json \
+    ltx/dialogue-5s.json \
+    ltx/multishot-5s.json \
+    ltx/product-hero.json \
+    ltx/flf-5s.json \
+    ltx/a2v-5s.json; do
     [[ -f $(lab_wf "${wf}") ]]
   done
 }

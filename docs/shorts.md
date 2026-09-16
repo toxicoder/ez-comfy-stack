@@ -190,7 +190,7 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 
-Identity sheet: `klein/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein/talking-head` (LTX A2V freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s.
+Identity sheet: `klein/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein/talking-head` (I2V smoke) or **`ltx/a2v-5s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
 
 ```bash
 ./scripts/manage.sh stop

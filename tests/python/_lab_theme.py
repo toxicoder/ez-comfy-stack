@@ -188,6 +188,56 @@ LTX_TALKING_HEAD = (
     "short line. Wardrobe and set stay locked. Mouth motion is modest. Room tone sits "
     "under the voice. No music and no score."
 )
+LTX_DIALOGUE_AUDIO = (
+    "warm terrace breeze, palm rustle, distant bay traffic, one spoken line, glyph chime, no score"
+)
+LTX_DIALOGUE = (
+    "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. "
+    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings "
+    "hovering over a compact unmarked data-staff. The camera holds, then eases in as the "
+    "wizard turns toward lens, eyes bright, and says, \"The tools are already here — we "
+    "just have to use them well.\" A warm terrace breeze and palm rustle sit under distant "
+    "bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, "
+    "empty of lettering. No music and no score. Five seconds."
+)
+LTX_MULTISHOT_AUDIO = (
+    "terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score"
+)
+LTX_MULTISHOT = (
+    "A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. "
+    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings "
+    "bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright "
+    "bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a "
+    "medium close-up of the glyph rings over the staff, motes drifting across the teal coat, "
+    "the breeze continuing across the cut while traffic muffles. The wizard's mouth stays "
+    "closed. A match cut connects to a low wide of the same terrace looking out at the bay, "
+    "the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, "
+    "empty of lettering. No music and no score. Five seconds."
+)
+LTX_PRODUCT_AUDIO = "soft tabletop room tone, a glass tick, fabric hush, no score"
+LTX_PRODUCT_HERO = (
+    "The start image holds as the first frame. The camera orbits a few degrees right around "
+    "the product on the table while keeping identity locked. Soft room tone sits under a "
+    "single glass tick and a fabric hush. Keep every object and surface from the start "
+    "image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds."
+)
+LTX_FLF_AUDIO = "terrace breeze, palm rustle, distant bay traffic, glyph chime at the last frame, no score"
+LTX_FLF = (
+    "The first frame holds, then the wizard steps through the terrace toward the last-frame "
+    "pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm "
+    "breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last "
+    "frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music "
+    "and no score. Five seconds."
+)
+LTX_A2V_AUDIO = "use the loaded clip; do not invent a score"
+LTX_A2V = (
+    "The start image holds as the first frame. The subject listens and moves with the loaded "
+    "soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows "
+    "the audio. Keep every object and surface from the start image; do not redesign. "
+    "Mouths will not match. No extra music. Five seconds."
+)
 
 STORYBOARD = (
     ("ez_board_01", "Wide establishing of this scene, 24mm."),
