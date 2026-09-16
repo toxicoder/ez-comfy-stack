@@ -5,15 +5,26 @@ from __future__ import annotations
 import re
 from typing import Any
 
-# Film bible: slugs, print templates, shot-card enums, and YAML keys.
-FILM_SLUGS = {
-    "go-see": "gosee",
-    "still-here": "stillhere",
-    "switchyard": "switchyard",
-}
-FILM_CHOICES = tuple(FILM_SLUGS)
-SHOT_COUNT = 18
-DEFAULT_CAP_SECONDS = 90.0
+from .catalog import (  # noqa: F401 — re-export for existing importers
+    DEFAULT_CAP_SECONDS,
+    FILM_CHOICES,
+    FILM_SLUGS,
+    LONG_FILMS,
+    NINETY_S_FILMS,
+    ONE_CLICK_SHOT_COUNT,
+    film_acts,
+    film_beats,
+    film_id_for_slug,
+    film_publish_cap,
+    film_row,
+    film_slug,
+    film_total_shots,
+    known_films,
+    master_filename,
+)
+
+# One-click / EZFilmConcat contract: 18 VHS inputs, 90s cap.
+SHOT_COUNT = ONE_CLICK_SHOT_COUNT
 META_KEYS = (
     "film",
     "slug",
@@ -84,22 +95,6 @@ def print_template(mode: str) -> str:
         "print must be ltx|dfr|ltx-iclora-depth|wan-flf|dcc-final, got "
         f"{mode!r}"
     )
-
-
-def film_slug(film: str) -> str:
-    """Map film id to output prefix slug.
-
-    Args:
-        film: go-see, still-here, or switchyard.
-    Returns:
-        Slug string (gosee, stillhere, switchyard).
-    Raises:
-        ValueError: unknown film id.
-    """
-    slug = FILM_SLUGS.get(film)
-    if slug is None:
-        raise ValueError(f"unknown film: {film} (go-see|still-here|switchyard)")
-    return slug
 
 
 def _block_field(body: str, name: str) -> str:
@@ -297,9 +292,11 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
     Args:
         text: File contents of ``{film}.shots.yaml``.
     Returns:
-        Dict with ``meta``, ``identity``, and ``shots`` (18 dicts).
+        Dict with ``meta``, ``identity``, and ``shots`` (length =
+        ``total_shots``).
     Raises:
-        ValueError: missing required keys or empty prompt blocks.
+        ValueError: missing required keys, empty prompt blocks, or a
+            shot-count / catalog mismatch.
     """
     meta: dict[str, str] = {}
     for key in META_KEYS:
@@ -352,7 +349,46 @@ def parse_shots_yaml(text: str) -> dict[str, Any]:
         }
         shots.append(shot)
     parsed = {"meta": meta, "identity": identity, "shots": shots}
-    return apply_shot_card_defaults(parsed)
+    apply_shot_card_defaults(parsed)
+    _validate_meta_counts(parsed)
+    return parsed
+
+
+def _validate_meta_counts(parsed: dict[str, Any]) -> None:
+    """Refuse bibles whose shot list disagrees with meta or the catalog.
+
+    Args:
+        parsed: Dict with ``meta`` and ``shots``.
+
+    Raises:
+        ValueError: count mismatch or unknown film / slug.
+    """
+    meta = parsed["meta"]
+    film = str(meta["film"])
+    slug = str(meta["slug"])
+    row = film_row(film)
+    if row["slug"] != slug:
+        raise ValueError(f"slug mismatch for {film}: {slug} (catalog {row['slug']})")
+    try:
+        total = int(str(meta["total_shots"]).split(".")[0])
+        beats = int(str(meta["beats"]).split(".")[0])
+        per = int(str(meta["shots_per_beat"]).split(".")[0])
+        cap = float(meta["publish_cap_s"])
+    except ValueError as exc:
+        raise ValueError(f"invalid shot-count meta: {exc}") from exc
+    shots = parsed["shots"]
+    if total != len(shots) or beats * per != total:
+        raise ValueError(
+            f"shot count mismatch: total_shots={total} beats={beats} "
+            f"per={per} rows={len(shots)}"
+        )
+    if (
+        total != row["total_shots"]
+        or beats != row["beats"]
+        or per != row["shots_per_beat"]
+        or abs(cap - float(row["publish_cap_s"])) > 0.001
+    ):
+        raise ValueError(f"{film} meta does not match catalog")
 
 
 def _yaml_quote(value: str) -> str:

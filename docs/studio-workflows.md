@@ -31,7 +31,7 @@ user/default/workflows/
     klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, creator/…
     wan/       silent 5s, gif/bumper/sticker, flf, vace, shot, creator/…
     ltx/       AV 5s, hook, b-roll, interior, weather, shorts I2V, shot, dialogue, multishot, product, FLF, A2V, creator/…
-    shorts/    go-see, still-here, switchyard (90s one-click)
+    shorts/    go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05 (7.5 min)
     dcc/       clay → print, plates, canny, iclora envelopes, FLF from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
     audio/     podcast, dub, music/rap-draft, music/rap-full
@@ -87,7 +87,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 
     ---
 
-    One-click 90s shorts plus clay → print, IC-LoRA envelopes, and in-canvas guide loaders.
+    One-click 90s shorts, five-act 7.5 min films, plus clay → print, IC-LoRA envelopes, and in-canvas guide loaders.
 
     [:octicons-arrow-right-24: Film catalog](create/workflows-film.md)
 
@@ -109,7 +109,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 
 </div>
 
-Playbooks: [Still to motion to AV](visual-generative-ai.md), [90s shorts](shorts.md), [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md). Outputs land under `${COMFY_OUTPUT_DIR}`.
+Playbooks: [Still to motion to AV](visual-generative-ai.md), [Short films](shorts.md), [Local podcast](podcast.md), [Local dub](dub.md), [Local music](music.md). Outputs land under `${COMFY_OUTPUT_DIR}`.
 
 === "License"
 

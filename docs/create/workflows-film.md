@@ -9,6 +9,7 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 **What's on this page**
 
 - **90s shorts** one-click films (go-see, still-here, switchyard)
+- **7.5 min shorts** five-act graphs (tide-table, night-oven, glasshouse, last-lane, breakwater)
 - **DCC (clay → print)** Klein-from-clay, IC-LoRA envelopes, in-canvas loaders
 
 **What this enables**
@@ -27,8 +28,15 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 | **[shorts/go-see](../generated/workflows/shorts/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
 | **[shorts/still-here](../generated/workflows/shorts/still-here.md)** | **One-click** household morning 90s (same shape) |
 | **[shorts/switchyard](../generated/workflows/shorts/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
+| **[shorts/tide-table/act-01](../generated/workflows/shorts/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02…05; concat 450s) |
+| **[shorts/night-oven/act-01](../generated/workflows/shorts/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
+| **[shorts/glasshouse/act-01](../generated/workflows/shorts/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
+| **[shorts/last-lane/act-01](../generated/workflows/shorts/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
+| **[shorts/breakwater/act-01](../generated/workflows/shorts/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
 | **[wan/i2v-shot](../generated/workflows/wan/i2v-shot.md)** | Optional silent rehearsal / six-shot concat demo |
 | **[ltx/i2v-shot](../generated/workflows/ltx/i2v-shot.md)** | Generic 5.00 s AV print (non-film) |
+
+Act graphs (Queue in order, then `concat-shots.sh --film`): `shorts/tide-table/act-01` `shorts/tide-table/act-02` `shorts/tide-table/act-03` `shorts/tide-table/act-04` `shorts/tide-table/act-05` · `shorts/night-oven/act-01` `shorts/night-oven/act-02` `shorts/night-oven/act-03` `shorts/night-oven/act-04` `shorts/night-oven/act-05` · `shorts/glasshouse/act-01` `shorts/glasshouse/act-02` `shorts/glasshouse/act-03` `shorts/glasshouse/act-04` `shorts/glasshouse/act-05` · `shorts/last-lane/act-01` `shorts/last-lane/act-02` `shorts/last-lane/act-03` `shorts/last-lane/act-04` `shorts/last-lane/act-05` · `shorts/breakwater/act-01` `shorts/breakwater/act-02` `shorts/breakwater/act-03` `shorts/breakwater/act-04` `shorts/breakwater/act-05`.
 
 Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave LTX **1280×704**. Do **not** set 241+ frames.
 

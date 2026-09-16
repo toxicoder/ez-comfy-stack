@@ -6,22 +6,22 @@
 #
 # Purpose:
 #   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
-#   files. --film joins the 18-shot US-safe 90s shorts (go-see / still-here /
-#   switchyard) in beat/shot order and caps the result at 90 s. Video is
+#   files. --film joins a catalog film in beat/shot order (18×5s / 90s, or
+#   90×5s / 450s) and caps at the film's publish_cap_s. Video is
 #   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube loudnorm +
 #   faststart (same contract as EZFilmConcat).
 #
 # Usage:
 #   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
 #   ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
-#   ./scripts/utilities/concat-shots.sh --film go-see|still-here|switchyard [--yes]
+#   ./scripts/utilities/concat-shots.sh --film FILM [--yes]
 #   ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
 #
 # Environment:
 #   COMFY_OUTPUT_DIR — default /mnt/comfy-output
 #   Default glob: ez_shot_0{1..6}*.mp4
-#   --film: ez_<slug>_b{1..6}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
-#   --cap-seconds: publish cap (default 90)
+#   --film: ez_<slug>_b{1..beats}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
+#   --cap-seconds: publish cap (default from catalog, else 90)
 #
 # Safety:
 #   Does not start Docker. Dry-run by default unless --yes.
@@ -39,6 +39,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 SHOT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
 OUT_MP4=""
@@ -46,13 +48,14 @@ DRY_RUN=1
 FILE_CSV=""
 FILM=""
 CAP_SECONDS="90"
+CAP_EXPLICIT=0
 XFADE_CS=0
 SKIP_ACCEPT=0
 
 #######################################
 # Parse CLI flags.
 # Globals:
-#   SHOT_DIR, OUT_MP4, DRY_RUN, FILE_CSV, FILM, CAP_SECONDS, XFADE_CS
+#   SHOT_DIR, OUT_MP4, DRY_RUN, FILE_CSV, FILM, CAP_SECONDS, CAP_EXPLICIT, XFADE_CS
 # Arguments:
 #   $@
 # Outputs:
@@ -81,6 +84,7 @@ parse_args() {
         ;;
       --cap-seconds)
         CAP_SECONDS="${2:?}"
+        CAP_EXPLICIT=1
         shift
         ;;
       --xfade)
@@ -91,7 +95,7 @@ parse_args() {
       --yes | -y) DRY_RUN=0 ;;
       --skip-accept) SKIP_ACCEPT=1 ;;
       -h | --help)
-        echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film go-see|still-here|switchyard] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
+        echo "Usage: $0 [--dir DIR] [--out FILE] [--files a.mp4,b.mp4] [--film FILM] [--cap-seconds N] [--xfade CS] [--dry-run|--yes]" >&2
         echo "  --xfade CS  audio acrossfade in centiseconds (10 = 0.10s, overlap off). Default 0 (hard cut)." >&2
         echo "              Video is a hard cut (H.264). Requires audio on every shot (LTX, not Wan-silent)." >&2
         echo "  --film --yes runs film-accept first (duration/res/audio). --skip-accept bypasses." >&2
@@ -104,24 +108,6 @@ parse_args() {
     esac
     shift
   done
-}
-
-#######################################
-# Map --film name to prefix slug.
-# Arguments:
-#   $1  go-see|still-here|switchyard
-# Outputs:
-#   slug on stdout
-# Returns:
-#   0 known; 1 unknown
-#######################################
-film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
 }
 
 #######################################
@@ -183,7 +169,7 @@ best_shot_mp4() {
 }
 
 #######################################
-# Collect 18 US-safe short MP4s in beat/shot order.
+# Collect catalog-film MP4s in beat/shot order.
 # Prefers LTX print; falls back to Wan rehearsal.
 # Globals:
 #   SHOT_DIR, FILM
@@ -193,9 +179,10 @@ best_shot_mp4() {
 #   0
 #######################################
 list_film_shot_files() {
-  local slug b s ltx wan
+  local slug b s ltx wan beats
   slug="$(film_slug "${FILM}")" || return 1
-  for b in 1 2 3 4 5 6; do
+  beats="$(film_beats "${FILM}")" || return 1
+  for b in $(seq 1 "${beats}"); do
     for s in 1 2 3; do
       ltx="$(best_shot_mp4 "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_ltx_video*.mp4")"
       wan="$(best_shot_mp4 "${SHOT_DIR}/ez_${slug}_b${b}_s${s}_wan_video*.mp4")"
@@ -549,9 +536,13 @@ cmd_run() {
   local -a files=()
   # slug="" so bash 4.4+ set -u is safe when FILM is empty (CI).
   local line slug=""
+  local expected="" master=""
   if [[ -n ${FILM} ]] && ! slug="$(film_slug "${FILM}")"; then
-    err "Unknown film: ${FILM} (go-see|still-here|switchyard)"
+    err "Unknown film: ${FILM}"
     return 1
+  fi
+  if [[ -n ${FILM} && ${CAP_EXPLICIT} -eq 0 ]]; then
+    CAP_SECONDS="$(film_publish_cap "${FILM}")" || return 1
   fi
   while IFS= read -r line; do
     [[ -n ${line} ]] && files+=("${line}")
@@ -560,13 +551,17 @@ cmd_run() {
     err "No shot MP4s found under ${SHOT_DIR} (expected ez_shot_01*.mp4 or --film prefixes) and --files is empty"
     return 1
   fi
-  if [[ -n ${FILM} ]] && [[ ${#files[@]} -ne 18 ]]; then
-    err "film ${FILM} expected 18 shots, found ${#files[@]}"
-    return 1
+  if [[ -n ${FILM} ]]; then
+    expected="$(film_total_shots "${FILM}")" || return 1
+    if [[ ${#files[@]} -ne ${expected} ]]; then
+      err "film ${FILM} expected ${expected} shots, found ${#files[@]}"
+      return 1
+    fi
   fi
   if [[ -z ${OUT_MP4} ]]; then
-    if [[ -n ${slug} ]]; then
-      OUT_MP4="${SHOT_DIR}/ez_${slug}_90s.mp4"
+    if [[ -n ${FILM} ]]; then
+      master="$(film_master_name "${FILM}")" || return 1
+      OUT_MP4="${SHOT_DIR}/${master}"
     else
       OUT_MP4="${SHOT_DIR}/ez_concat_shots.mp4"
     fi

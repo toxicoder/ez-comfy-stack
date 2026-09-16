@@ -128,14 +128,14 @@ def test_film_concat_node_refuses_empty_and_missing(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     shots = {f"shot_{i:02d}": str(tmp_path / f"s{i:02d}.mp4") for i in range(1, 19)}
     with pytest.raises(RuntimeError, match="missing or unreadable"):
-        EZFilmConcat().run("go-see", 90.0, 0, "", **shots)
+        EZFilmConcat().run("go-see", 90.0, 0, disclosure="", act=0, **shots)
     empty = tmp_path / "s01.mp4"
     empty.write_bytes(b"")
     shots["shot_01"] = str(empty)
     for index in range(2, 19):
         Path(shots[f"shot_{index:02d}"]).write_bytes(b"x")
     with pytest.raises(RuntimeError, match="missing or unreadable"):
-        EZFilmConcat().run("go-see", 90.0, 0, "", **shots)
+        EZFilmConcat().run("go-see", 90.0, 0, disclosure="", act=0, **shots)
 
 
 def test_output_directory_fallbacks(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -909,6 +909,7 @@ def test_shots_parse_emit_and_validation() -> None:
     [
         "ez_film.accept",
         "ez_film.animatic",
+        "ez_film.catalog",
         "ez_film.jobstore",
         "ez_film.overlay",
         "ez_film.otio_export",

@@ -19,7 +19,12 @@ from typing import Any
 
 from .jobstore import DURATION_S, DURATION_TOL
 from .ltx_timing import ltx_decoded_frames
-from .shots import DEFAULT_CAP_SECONDS, SHOT_COUNT, film_slug
+from .shots import (
+    DEFAULT_CAP_SECONDS,
+    SHOT_COUNT,
+    film_slug,
+    master_filename,
+)
 
 # ffmpeg/x264 stitch: loudnorm, AAC, H.264, FPS, pad, and path suffixes.
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
@@ -989,6 +994,7 @@ def validate_stitch_stems(
     *,
     ffprobe: str | None = None,
     run: Any = None,
+    expected_count: int | None = None,
 ) -> None:
     """Refuse missing, unreadable, short, or silent stems before ffmpeg.
 
@@ -996,12 +1002,14 @@ def validate_stitch_stems(
         shot_paths: Candidate MP4 paths in beat/shot order.
         ffprobe: Optional ffprobe executable.
         run: Override ``subprocess.run``.
+        expected_count: Required stem count (default 18 for 90s one-click).
     Raises:
         ValueError: wrong shot count.
         RuntimeError: a stem is missing, unreadable, or off-contract.
     """
-    if len(shot_paths) != SHOT_COUNT:
-        raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    count = SHOT_COUNT if expected_count is None else int(expected_count)
+    if len(shot_paths) != count:
+        raise ValueError(f"expected {count} shots, found {len(shot_paths)}")
     exe = ffprobe if ffprobe is not None else find_ffprobe()
     if not exe:
         raise RuntimeError("ffprobe required to validate shots")
@@ -1027,9 +1035,9 @@ def validate_stitch_stems(
         if not probe_has_audio(path, ffprobe=exe, run=run):
             raise RuntimeError(f"shot missing audio ({path})")
         valid.append(path)
-    if len(valid) != SHOT_COUNT:
+    if len(valid) != count:
         raise RuntimeError(
-            f"expected {SHOT_COUNT} valid shots, found {len(valid)}; "
+            f"expected {count} valid shots, found {len(valid)}; "
             "refusing to write a short master"
         )
 
@@ -1135,8 +1143,9 @@ def stitch_film(
     ffprobe: str | None = None,
     run: Any = None,
     xfade_cs: int = 0,
+    expected_count: int | None = None,
 ) -> str:
-    """Concat 18 shot MP4s, cap duration, fail closed on short or long masters.
+    """Concat N shot MP4s, cap duration, fail closed on short or long masters.
 
     Default (``xfade_cs=0``) is concat-demuxer + libx264 CRF 18 + AAC +
     ``+faststart`` so browsers can play and download the master. ``xfade_cs``
@@ -1149,24 +1158,26 @@ def stitch_film(
     Illegal LTX ``length=120`` files (113 frames / 4.708s) are padded to
     5.00s (cloned last frame) before the duration gate. After stitch the
     master must be ``cap±0.10`` s with audio within 50 ms of picture. A
-    failed master is deleted so a 17-shot file cannot publish.
+    failed master is deleted so a short stem list cannot publish.
 
     Args:
-        shot_paths: Exactly 18 MP4 paths in beat/shot order (not VHS metadata PNGs).
+        shot_paths: MP4 paths in beat/shot order (not VHS metadata PNGs).
         out_mp4: Destination path.
         cap_seconds: Publish cap (default 90).
         ffmpeg: Override ffmpeg path.
         ffprobe: Override ffprobe path.
         run: Override ``subprocess.run`` (tests).
         xfade_cs: Audio acrossfade in centiseconds (overlap off); 0 disables.
+        expected_count: Required stem count (default 18 for 90s one-click).
     Returns:
         ``out_mp4``.
     Raises:
         ValueError: wrong shot count or invalid xfade_cs.
         RuntimeError: ffmpeg missing/fails, missing/short stems, or duration off cap.
     """
-    if len(shot_paths) != SHOT_COUNT:
-        raise ValueError(f"expected {SHOT_COUNT} shots, found {len(shot_paths)}")
+    count = SHOT_COUNT if expected_count is None else int(expected_count)
+    if len(shot_paths) != count:
+        raise ValueError(f"expected {count} shots, found {len(shot_paths)}")
     for path in shot_paths:
         if _is_image_path(path):
             raise RuntimeError(
@@ -1180,7 +1191,9 @@ def stitch_film(
         shot_paths, ffmpeg=exe, ffprobe=ffprobe, run=run
     )
     try:
-        validate_stitch_stems(work_paths, ffprobe=ffprobe, run=run)
+        validate_stitch_stems(
+            work_paths, ffprobe=ffprobe, run=run, expected_count=count
+        )
         log(f"stitching {len(work_paths)} shots → {out_mp4}")
         try:
             root = str(Path(__file__).resolve().parent.parent)
@@ -1266,14 +1279,24 @@ def stitch_film(
     return out_mp4
 
 
-def publish_path(film: str, output_dir: Path | None = None) -> Path:
-    """``ez_{slug}_90s.mp4`` under the output directory.
+def publish_path(
+    film: str,
+    output_dir: Path | None = None,
+    *,
+    act: int = 0,
+) -> Path:
+    """Published master path under the output directory.
+
+    90s films write ``ez_{slug}_90s.mp4``. Five-act films write
+    ``ez_{slug}_450s.mp4`` for the whole film, or
+    ``ez_{slug}_actN_90s.mp4`` when ``act`` is 1–5.
 
     Args:
         film: Film id.
         output_dir: Override output directory.
+        act: 1-based act index; 0 means the film master.
     Returns:
         Destination path.
     """
     dest = output_dir if output_dir is not None else output_directory()
-    return dest / f"ez_{film_slug(film)}_90s.mp4"
+    return dest / master_filename(film, act=act)

@@ -1,6 +1,6 @@
 ---
-title: 90s shorts
-description: Queue one film graph per short to print 18 × 5.00s LTX shots, stitch in-graph, and preview a 90s MP4 with world audio.
+title: Short films
+description: Queue 90s one-click films, or five 90s acts that concat to a 7.5 min master, all on 5.00s LTX printers.
 tags: [shorts, wan, ltx, klein, youtube, comfyui]
 ---
 
@@ -8,10 +8,10 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 **What's on this page**
 
-- Why 18 × 5.00s shots instead of one 90s denoise
-- One-click Comfy graph per film (Klein identity + 18 LTX prints + stitch)
-- Play/download: overlay, `ez_*_90s.html`, studio-ui `/watch/<slug>`
-- Shot maps for go-see (first-person parkour), still-here, and switchyard
+- Why 18 × 5.00s shots instead of one 90s (or 7.5 min) denoise
+- One-click Comfy graph per 90s film, or five 90s **acts** for a 7.5 min film
+- Play/download: overlay, HTML sidecar, studio-ui `/watch/<slug>`
+- Shot maps for go-see, still-here, switchyard, and five 7.5 min films
 - Model-native Klein / LTX prompts ([Prompting](prompting.md))
 - Spark farm: optional parallel 5s Queues, local concat
 - Shot resume, OTIO export, NVENC proxies, take-promote, Fun InP / SeedVR2 opt-in
@@ -22,7 +22,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
 **What this enables**
 
-- Three continuous ~90s films (first-person parkour go-see, still-here, switchyard) on the **US-safe local pack**
+- Three continuous ~90s films (go-see, still-here, switchyard) plus five 7.5 min act-composed films on the **US-safe local pack**
 - Last-frame continuity without a 90s denoise
 - A 90.00s publish cap (in-graph `EZFilmConcat` faststart H.264, or host `ffmpeg -t 90`)
 - One Queue per film — identity, 18 prints, stitch, play, download
@@ -256,6 +256,58 @@ First-person **go-see** is **camera language**, not licensed IP. Same SFW / no u
     | 6 | Lamp hold | Look down the dark string of cars, quiet laugh |
 
 Prefixes: `ez_gosee_b{1..6}_s{1..3}`, `ez_stillhere_…`, `ez_switchyard_…`. Machine-readable lists: `workflows/shorts/*.shots.yaml` (`identity_look` for Klein, `ltx_i2v` for each print).
+
+---
+
+## 7.5 minute films (five acts)
+
+Five festival-length titles share the same 5.00s LTX printer. Each film is **5 × 90s acts** (90 shots, `publish_cap_s: 450.00`). Do **not** put 90 printers on one canvas and do **not** Queue a 7.5 min latent.
+
+| Film | Graph | Identity | Master |
+| --- | --- | --- | --- |
+| **tide-table** | `shorts/tide-table/act-01` … `act-05` | Unmarked skiff bow | `ez_tidetable_450s.mp4` |
+| **night-oven** | `shorts/night-oven/act-01` … `act-05` | Flour-dusted linen apron | `ez_nightoven_450s.mp4` |
+| **glasshouse** | `shorts/glasshouse/act-01` … `act-05` | Unmarked copper watering can | `ez_glasshouse_450s.mp4` |
+| **last-lane** | `shorts/last-lane/act-01` … `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
+| **breakwater** | `shorts/breakwater/act-01` … `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
+
+1. `./scripts/utilities/compile-film.sh tide-table` (any of the five ids).
+2. Queue **act-01**. Klein identity, then 18 prints. Overlay writes `ez_<slug>_act1_90s.mp4`.
+3. Queue **act-02** … **act-05**. Acts 2–5 `LoadImage` the previous act last frame (`ez_<slug>_b6_s3_last_*.png` after act 1, then b12, b18, b24).
+4. `./scripts/manage.sh film-resume tide-table` skips ok 5.00s stems if SSH dropped.
+5. `./scripts/manage.sh film-accept tide-table` then `./scripts/utilities/concat-shots.sh --film tide-table --yes` → `ez_tidetable_450s.mp4` (fail closed if probe is not 450.00±0.10s).
+
+Wall-clock is five sequential 90s Queues (hours). Peak VRAM is still one 5s LTX print. Safety unchanged: `restart: "no"`, heavy confirm, headroom, download-limit wrap.
+
+=== "tide-table"
+
+    Dawn unmarked skiff from a stone hard into tide pools, fog, a spit, and home. Identity: weathered unmarked skiff bow. World-only water / hull / wind. No score.
+
+    | Act | Title | Beats |
+    | --- | --- | --- |
+    | 1 | Launch from the hard | hard, cut, first pool, shelf, fog, lost shore |
+    | 2 | Tide tables | table, macro pool, light leak, channel, spit, turn |
+    | 3 | Fog and spit | lane, piles, tie, quiet, hold, still water |
+    | 4 | Home the cut | home plate, ease back, last light, night edge, hold two, warm wood |
+    | 5 | Night on the bow | coil, splash, dark shape, silence, still frame, close |
+
+=== "night-oven"
+
+    Overnight unmarked bakery. Identity: flour-dusted linen apron on a steel bench. Tungsten vs sodium alley.
+
+=== "glasshouse"
+
+    Storm in an unmarked botanical glasshouse. Identity: copper watering can on wet flagstone.
+
+=== "last-lane"
+
+    Dashboard POV on an unmarked desert two-lane. Blank gloves on an unmarked wheel. Radio is static only — no licensed song. Wordless mix.
+
+=== "breakwater"
+
+    Chest-cam walk of a storm wall (walking/weather, **not** parkour). Yellow unmarked slicker sleeves + blank gloves, no second body. Generic foghorn. Wordless mix.
+
+YAML: `workflows/shorts/tide-table.shots.yaml` (and the other four). 30 beats × 3 shots. Prefixes `ez_<slug>_b{1..30}_s{1..3}`.
 
 ---
 

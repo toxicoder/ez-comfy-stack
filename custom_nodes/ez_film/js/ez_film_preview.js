@@ -1,5 +1,5 @@
 /**
- * EZFilmConcat frontend: overlay a downloadable 90s MP4 after Queue.
+ * EZFilmConcat frontend: overlay a downloadable film MP4 after Queue.
  *
  * Nodes 2.0: DOM overlay via document.createElement. Does not touch LiteGraph
  * canvas drawing or require inputEl.
@@ -51,7 +51,7 @@ function ensureOverlay() {
   el = document.createElement("div");
   el.id = OVERLAY_ID;
   el.setAttribute("role", "dialog");
-  el.setAttribute("aria-label", "90s film ready");
+  el.setAttribute("aria-label", "Film ready");
   el.style.cssText = [
     "position:fixed",
     "right:16px",
@@ -80,7 +80,7 @@ function renderOverlay(item) {
   const name = item.filename;
   el.innerHTML = "";
   const title = document.createElement("div");
-  title.textContent = "90s film ready";
+  title.textContent = "Film ready";
   title.style.cssText = "font-weight:600;margin-bottom:8px";
   const video = document.createElement("video");
   video.controls = true;

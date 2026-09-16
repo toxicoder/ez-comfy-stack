@@ -21,6 +21,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 FILM=""
 SHOT_ID=""
@@ -34,12 +36,7 @@ VIDEO=""
 # Map film id to slug.
 #######################################
 mix_film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
+  film_slug "${1:-}"
 }
 
 #######################################

@@ -1,0 +1,1724 @@
+film: tide-table
+slug: tidetable
+frames: 121
+fps: 24
+duration_s: 5.00
+beats: 30
+shots_per_beat: 3
+total_shots: 90
+publish_cap_s: 450.00
+print: ltx
+audio_policy: world-only
+score: none
+identity_seed: 42
+identity_enhance: true
+identity_look: |
+  A photoreal third-person dawn still. A weathered unmarked wooden skiff bow fills the
+  lower third, wet grain and a blank painter coil on the thwart, looking out from a stone
+  hard toward a cut of unmarked piles and grey-pink water. Eye-level 35mm lens, framed for
+  YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_tidetable_b1_s1
+    load_from: identity
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Hands untie the painter from a wet ring
+    dialogue: ""
+    audio_world: "rope ticks, metal click"
+    end_state: open cut between piles
+    ltx_i2v: |
+      The start image holds as the first frame. Hands untie the painter from a wet ring rope
+      ticks, metal click The camera tracks forward, no cut. The weathered unmarked skiff bow
+      stays in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold
+      open cut between piles. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Hands untie the painter from a wet
+      ring tracking, no cut, locked identity. Last frames hold open cut between piles.
+  - beat: 1
+    shot: 2
+    prefix: ez_tidetable_b1_s2
+    load_from: ez_tidetable_b1_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The skiff is pushed off the stone
+    dialogue: ""
+    audio_world: "hull knock, grit scrape"
+    end_state: bow in the cut
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff is pushed off the stone hull knock,
+      grit scrape The camera tracks forward, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold bow in the
+      cut. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff is pushed off the stone
+      tracking, no cut, locked identity. Last frames hold bow in the cut.
+  - beat: 1
+    shot: 3
+    prefix: ez_tidetable_b1_s3
+    load_from: ez_tidetable_b1_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The bow clears the last pile
+    dialogue: ""
+    audio_world: "water splash, wind"
+    end_state: grey-pink channel
+    ltx_i2v: |
+      The start image holds as the first frame. The bow clears the last pile water splash,
+      wind The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold grey-pink
+      channel. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow clears the last pile
+      tracking, no cut, locked identity. Last frames hold grey-pink channel.
+  - beat: 2
+    shot: 1
+    prefix: ez_tidetable_b2_s1
+    load_from: ez_tidetable_b1_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The skiff noses into slack water
+    dialogue: ""
+    audio_world: "hull tick, wind"
+    end_state: unmarked spar ahead
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff noses into slack water hull tick,
+      wind The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold unmarked spar ahead.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff noses into slack water
+      dolly in, no cut, locked identity. Last frames hold unmarked spar ahead.
+  - beat: 2
+    shot: 2
+    prefix: ez_tidetable_b2_s2
+    load_from: ez_tidetable_b2_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Oarlocks creak on a slow pull
+    dialogue: ""
+    audio_world: "wood creak, splash"
+    end_state: mid-channel light
+    ltx_i2v: |
+      The start image holds as the first frame. Oarlocks creak on a slow pull wood creak,
+      splash The camera dollies in, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold mid-channel
+      light. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Oarlocks creak on a slow pull dolly
+      in, no cut, locked identity. Last frames hold mid-channel light.
+  - beat: 2
+    shot: 3
+    prefix: ez_tidetable_b2_s3
+    load_from: ez_tidetable_b2_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bow aims at a dark pool
+    dialogue: ""
+    audio_world: "water tick, cloth"
+    end_state: tide-pool lip
+    ltx_i2v: |
+      The start image holds as the first frame. The bow aims at a dark pool water tick, cloth
+      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold tide-pool lip. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow aims at a dark pool dolly
+      in, no cut, locked identity. Last frames hold tide-pool lip.
+  - beat: 3
+    shot: 1
+    prefix: ez_tidetable_b3_s1
+    load_from: ez_tidetable_b2_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The hull kisses a rock shelf
+    dialogue: ""
+    audio_world: "gravel scrape, splash"
+    end_state: green pool
+    ltx_i2v: |
+      The start image holds as the first frame. The hull kisses a rock shelf gravel scrape,
+      splash The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold green pool. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hull kisses a rock shelf pan
+      left, no cut, locked identity. Last frames hold green pool.
+  - beat: 3
+    shot: 2
+    prefix: ez_tidetable_b3_s2
+    load_from: ez_tidetable_b3_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A look down into unmarked weed
+    dialogue: ""
+    audio_world: "water tick, wind"
+    end_state: pale crab-shadow (no face)
+    ltx_i2v: |
+      The start image holds as the first frame. A look down into unmarked weed water tick,
+      wind The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold pale crab-shadow (no
+      face). No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A look down into unmarked weed pan
+      left, no cut, locked identity. Last frames hold pale crab-shadow (no face).
+  - beat: 3
+    shot: 3
+    prefix: ez_tidetable_b3_s3
+    load_from: ez_tidetable_b3_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The bow slides along the shelf
+    dialogue: ""
+    audio_world: "hull knock, grit"
+    end_state: next pool mouth
+    ltx_i2v: |
+      The start image holds as the first frame. The bow slides along the shelf hull knock,
+      grit The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold next pool mouth. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow slides along the shelf pan
+      left, no cut, locked identity. Last frames hold next pool mouth.
+  - beat: 4
+    shot: 1
+    prefix: ez_tidetable_b4_s1
+    load_from: ez_tidetable_b3_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The skiff tracks the wet granite
+    dialogue: ""
+    audio_world: "wind, metal tick"
+    end_state: narrow slot
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff tracks the wet granite wind, metal
+      tick The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold narrow slot. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff tracks the wet granite pan
+      right, no cut, locked identity. Last frames hold narrow slot.
+  - beat: 4
+    shot: 2
+    prefix: ez_tidetable_b4_s2
+    load_from: ez_tidetable_b4_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A drip from the gunwale
+    dialogue: ""
+    audio_world: "water tick, cloth"
+    end_state: dark slot
+    ltx_i2v: |
+      The start image holds as the first frame. A drip from the gunwale water tick, cloth The
+      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold dark slot. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A drip from the gunwale pan right,
+      no cut, locked identity. Last frames hold dark slot.
+  - beat: 4
+    shot: 3
+    prefix: ez_tidetable_b4_s3
+    load_from: ez_tidetable_b4_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The bow enters the slot
+    dialogue: ""
+    audio_world: "hull scrape, splash"
+    end_state: fog on the far lip
+    ltx_i2v: |
+      The start image holds as the first frame. The bow enters the slot hull scrape, splash
+      The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold fog on the far lip.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow enters the slot pan right,
+      no cut, locked identity. Last frames hold fog on the far lip.
+  - beat: 5
+    shot: 1
+    prefix: ez_tidetable_b5_s1
+    load_from: ez_tidetable_b4_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Mist takes the far piles
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: pale fog wall
+    ltx_i2v: |
+      The start image holds as the first frame. Mist takes the far piles wind, water tick The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold pale fog wall. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Mist takes the far piles fixed
+      camera, no cut, locked identity. Last frames hold pale fog wall.
+  - beat: 5
+    shot: 2
+    prefix: ez_tidetable_b5_s2
+    load_from: ez_tidetable_b5_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The bow holds a compass heading
+    dialogue: ""
+    audio_world: "cloth, hull knock"
+    end_state: one unmarked spar
+    ltx_i2v: |
+      The start image holds as the first frame. The bow holds a compass heading cloth, hull
+      knock The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold one unmarked
+      spar. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow holds a compass heading
+      fixed camera, no cut, locked identity. Last frames hold one unmarked spar.
+  - beat: 5
+    shot: 3
+    prefix: ez_tidetable_b5_s3
+    load_from: ez_tidetable_b5_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The spar slides past
+    dialogue: ""
+    audio_world: "wood creak, splash"
+    end_state: open fog
+    ltx_i2v: |
+      The start image holds as the first frame. The spar slides past wood creak, splash The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold open fog. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The spar slides past fixed camera,
+      no cut, locked identity. Last frames hold open fog.
+  - beat: 6
+    shot: 1
+    prefix: ez_tidetable_b6_s1
+    load_from: ez_tidetable_b5_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The hard vanishes astern
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: empty grey
+    ltx_i2v: |
+      The start image holds as the first frame. The hard vanishes astern wind, water tick The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold empty grey. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hard vanishes astern dolly out,
+      no cut, locked identity. Last frames hold empty grey.
+  - beat: 6
+    shot: 2
+    prefix: ez_tidetable_b6_s2
+    load_from: ez_tidetable_b6_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A slow pull in the fog
+    dialogue: ""
+    audio_world: "creak, splash"
+    end_state: a second spar
+    ltx_i2v: |
+      The start image holds as the first frame. A slow pull in the fog creak, splash The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold a second spar. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A slow pull in the fog dolly out, no
+      cut, locked identity. Last frames hold a second spar.
+  - beat: 6
+    shot: 3
+    prefix: ez_tidetable_b6_s3
+    load_from: ez_tidetable_b6_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The bow finds a wider pool
+    dialogue: ""
+    audio_world: "hull tick, grit"
+    end_state: tide-table of rock
+    ltx_i2v: |
+      The start image holds as the first frame. The bow finds a wider pool hull tick, grit The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold tide-table of rock. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow finds a wider pool dolly
+      out, no cut, locked identity. Last frames hold tide-table of rock.
+  - beat: 7
+    shot: 1
+    prefix: ez_tidetable_b7_s1
+    load_from: ez_tidetable_b6_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The skiff grounds on a wet table
+    dialogue: ""
+    audio_world: "gravel scrape, splash"
+    end_state: flat rock
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff grounds on a wet table gravel
+      scrape, splash The camera tracks forward, no cut. The weathered unmarked skiff bow stays
+      in the lower third, wet thwart grain sharp, empty of lettering. Last frames hold flat
+      rock. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff grounds on a wet table
+      tracking, no cut, locked identity. Last frames hold flat rock.
+  - beat: 7
+    shot: 2
+    prefix: ez_tidetable_b7_s2
+    load_from: ez_tidetable_b7_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Hands hold the thwart
+    dialogue: ""
+    audio_world: "cloth, wood creak"
+    end_state: anemone-dark water
+    ltx_i2v: |
+      The start image holds as the first frame. Hands hold the thwart cloth, wood creak The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold anemone-dark water.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Hands hold the thwart tracking, no
+      cut, locked identity. Last frames hold anemone-dark water.
+  - beat: 7
+    shot: 3
+    prefix: ez_tidetable_b7_s3
+    load_from: ez_tidetable_b7_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The bow points at a second table
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: higher table
+    ltx_i2v: |
+      The start image holds as the first frame. The bow points at a second table wind, water
+      tick The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold higher table.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow points at a second table
+      tracking, no cut, locked identity. Last frames hold higher table.
+  - beat: 8
+    shot: 1
+    prefix: ez_tidetable_b8_s1
+    load_from: ez_tidetable_b7_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A look into a clear unmarked pool
+    dialogue: ""
+    audio_world: "water tick, wind"
+    end_state: tiny shells
+    ltx_i2v: |
+      The start image holds as the first frame. A look into a clear unmarked pool water tick,
+      wind The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold tiny shells. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A look into a clear unmarked pool
+      dolly in, no cut, locked identity. Last frames hold tiny shells.
+  - beat: 8
+    shot: 2
+    prefix: ez_tidetable_b8_s2
+    load_from: ez_tidetable_b8_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A drip rings the pool
+    dialogue: ""
+    audio_world: "splash, tick"
+    end_state: pool center
+    ltx_i2v: |
+      The start image holds as the first frame. A drip rings the pool splash, tick The camera
+      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold pool center. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A drip rings the pool dolly in, no
+      cut, locked identity. Last frames hold pool center.
+  - beat: 8
+    shot: 3
+    prefix: ez_tidetable_b8_s3
+    load_from: ez_tidetable_b8_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bow lifts on a swell
+    dialogue: ""
+    audio_world: "hull knock, wind"
+    end_state: fog thinning
+    ltx_i2v: |
+      The start image holds as the first frame. The bow lifts on a swell hull knock, wind The
+      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold fog thinning. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow lifts on a swell dolly in,
+      no cut, locked identity. Last frames hold fog thinning.
+  - beat: 9
+    shot: 1
+    prefix: ez_tidetable_b9_s1
+    load_from: ez_tidetable_b8_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A pale sun bar finds the thwart
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: gold grain
+    ltx_i2v: |
+      The start image holds as the first frame. A pale sun bar finds the thwart wind, cloth
+      The camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold gold grain. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A pale sun bar finds the thwart pan
+      left, no cut, locked identity. Last frames hold gold grain.
+  - beat: 9
+    shot: 2
+    prefix: ez_tidetable_b9_s2
+    load_from: ez_tidetable_b9_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Steam of cold water in sun
+    dialogue: ""
+    audio_world: "steam, splash"
+    end_state: bright lip
+    ltx_i2v: |
+      The start image holds as the first frame. Steam of cold water in sun steam, splash The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold bright lip. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Steam of cold water in sun pan left,
+      no cut, locked identity. Last frames hold bright lip.
+  - beat: 9
+    shot: 3
+    prefix: ez_tidetable_b9_s3
+    load_from: ez_tidetable_b9_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The skiff slides off the table
+    dialogue: ""
+    audio_world: "gravel scrape, hull tick"
+    end_state: deeper cut
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff slides off the table gravel scrape,
+      hull tick The camera pans left, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold deeper cut. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff slides off the table pan
+      left, no cut, locked identity. Last frames hold deeper cut.
+  - beat: 10
+    shot: 1
+    prefix: ez_tidetable_b10_s1
+    load_from: ez_tidetable_b9_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The cut opens to a wider reach
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: distant unmarked spit
+    ltx_i2v: |
+      The start image holds as the first frame. The cut opens to a wider reach wind, splash
+      The camera pans right, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold distant unmarked
+      spit. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The cut opens to a wider reach pan
+      right, no cut, locked identity. Last frames hold distant unmarked spit.
+  - beat: 10
+    shot: 2
+    prefix: ez_tidetable_b10_s2
+    load_from: ez_tidetable_b10_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A long pull
+    dialogue: ""
+    audio_world: "creak, water tick"
+    end_state: spit closer
+    ltx_i2v: |
+      The start image holds as the first frame. A long pull creak, water tick The camera pans
+      right, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold spit closer. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A long pull pan right, no cut,
+      locked identity. Last frames hold spit closer.
+  - beat: 10
+    shot: 3
+    prefix: ez_tidetable_b10_s3
+    load_from: ez_tidetable_b10_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The bow aims at the spit
+    dialogue: ""
+    audio_world: "hull knock, grit"
+    end_state: spit rocks
+    ltx_i2v: |
+      The start image holds as the first frame. The bow aims at the spit hull knock, grit The
+      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold spit rocks. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow aims at the spit pan right,
+      no cut, locked identity. Last frames hold spit rocks.
+  - beat: 11
+    shot: 1
+    prefix: ez_tidetable_b11_s1
+    load_from: ez_tidetable_b10_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The hull kisses spit gravel
+    dialogue: ""
+    audio_world: "gravel scrape, splash"
+    end_state: driftwood unmarked
+    ltx_i2v: |
+      The start image holds as the first frame. The hull kisses spit gravel gravel scrape,
+      splash The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold driftwood
+      unmarked. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hull kisses spit gravel fixed
+      camera, no cut, locked identity. Last frames hold driftwood unmarked.
+  - beat: 11
+    shot: 2
+    prefix: ez_tidetable_b11_s2
+    load_from: ez_tidetable_b11_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A walk of the eye along the spit
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: far hard ghost
+    ltx_i2v: |
+      The start image holds as the first frame. A walk of the eye along the spit wind, cloth
+      The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold far hard ghost. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A walk of the eye along the spit
+      fixed camera, no cut, locked identity. Last frames hold far hard ghost.
+  - beat: 11
+    shot: 3
+    prefix: ez_tidetable_b11_s3
+    load_from: ez_tidetable_b11_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The bow turns for home
+    dialogue: ""
+    audio_world: "hull tick, creak"
+    end_state: fog lane home
+    ltx_i2v: |
+      The start image holds as the first frame. The bow turns for home hull tick, creak The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold fog lane home. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow turns for home fixed camera,
+      no cut, locked identity. Last frames hold fog lane home.
+  - beat: 12
+    shot: 1
+    prefix: ez_tidetable_b12_s1
+    load_from: ez_tidetable_b11_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The skiff comes about in slack
+    dialogue: ""
+    audio_world: "splash, wood creak"
+    end_state: painter coil
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff comes about in slack splash, wood
+      creak The camera dollies out, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold painter coil.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff comes about in slack dolly
+      out, no cut, locked identity. Last frames hold painter coil.
+  - beat: 12
+    shot: 2
+    prefix: ez_tidetable_b12_s2
+    load_from: ez_tidetable_b12_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The coil sits wet on the thwart
+    dialogue: ""
+    audio_world: "cloth, water tick"
+    end_state: home bearing
+    ltx_i2v: |
+      The start image holds as the first frame. The coil sits wet on the thwart cloth, water
+      tick The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold home bearing. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The coil sits wet on the thwart
+      dolly out, no cut, locked identity. Last frames hold home bearing.
+  - beat: 12
+    shot: 3
+    prefix: ez_tidetable_b12_s3
+    load_from: ez_tidetable_b12_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The bow takes the lane
+    dialogue: ""
+    audio_world: "wind, hull knock"
+    end_state: fog lane
+    ltx_i2v: |
+      The start image holds as the first frame. The bow takes the lane wind, hull knock The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold fog lane. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow takes the lane dolly out, no
+      cut, locked identity. Last frames hold fog lane.
+  - beat: 13
+    shot: 1
+    prefix: ez_tidetable_b13_s1
+    load_from: ez_tidetable_b12_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Piles return as pale marks
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: first pile
+    ltx_i2v: |
+      The start image holds as the first frame. Piles return as pale marks wind, water tick
+      The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold first pile. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Piles return as pale marks tracking,
+      no cut, locked identity. Last frames hold first pile.
+  - beat: 13
+    shot: 2
+    prefix: ez_tidetable_b13_s2
+    load_from: ez_tidetable_b13_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The pile slides past
+    dialogue: ""
+    audio_world: "hull scrape, splash"
+    end_state: second pile
+    ltx_i2v: |
+      The start image holds as the first frame. The pile slides past hull scrape, splash The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold second pile. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The pile slides past tracking, no
+      cut, locked identity. Last frames hold second pile.
+  - beat: 13
+    shot: 3
+    prefix: ez_tidetable_b13_s3
+    load_from: ez_tidetable_b13_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The cut narrows
+    dialogue: ""
+    audio_world: "creak, grit"
+    end_state: stone hard ghost
+    ltx_i2v: |
+      The start image holds as the first frame. The cut narrows creak, grit The camera tracks
+      forward, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold stone hard ghost. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The cut narrows tracking, no cut,
+      locked identity. Last frames hold stone hard ghost.
+  - beat: 14
+    shot: 1
+    prefix: ez_tidetable_b14_s1
+    load_from: ez_tidetable_b13_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The hard is a grey bar ahead
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: ring on the wall
+    ltx_i2v: |
+      The start image holds as the first frame. The hard is a grey bar ahead wind, splash The
+      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold ring on the wall. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hard is a grey bar ahead dolly
+      in, no cut, locked identity. Last frames hold ring on the wall.
+  - beat: 14
+    shot: 2
+    prefix: ez_tidetable_b14_s2
+    load_from: ez_tidetable_b14_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bow aims at the ring
+    dialogue: ""
+    audio_world: "hull tick, cloth"
+    end_state: wet ring
+    ltx_i2v: |
+      The start image holds as the first frame. The bow aims at the ring hull tick, cloth The
+      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold wet ring. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow aims at the ring dolly in,
+      no cut, locked identity. Last frames hold wet ring.
+  - beat: 14
+    shot: 3
+    prefix: ez_tidetable_b14_s3
+    load_from: ez_tidetable_b14_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The hull kisses stone
+    dialogue: ""
+    audio_world: "gravel scrape, metal click"
+    end_state: painter in hand
+    ltx_i2v: |
+      The start image holds as the first frame. The hull kisses stone gravel scrape, metal
+      click The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold painter in hand. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hull kisses stone dolly in, no
+      cut, locked identity. Last frames hold painter in hand.
+  - beat: 15
+    shot: 1
+    prefix: ez_tidetable_b15_s1
+    load_from: ez_tidetable_b14_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Hands take the painter
+    dialogue: ""
+    audio_world: "rope ticks, cloth"
+    end_state: ring close
+    ltx_i2v: |
+      The start image holds as the first frame. Hands take the painter rope ticks, cloth The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold ring close. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Hands take the painter pan left, no
+      cut, locked identity. Last frames hold ring close.
+  - beat: 15
+    shot: 2
+    prefix: ez_tidetable_b15_s2
+    load_from: ez_tidetable_b15_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The hitch is made
+    dialogue: ""
+    audio_world: "metal click, wood creak"
+    end_state: tied bow
+    ltx_i2v: |
+      The start image holds as the first frame. The hitch is made metal click, wood creak The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold tied bow. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hitch is made pan left, no cut,
+      locked identity. Last frames hold tied bow.
+  - beat: 15
+    shot: 3
+    prefix: ez_tidetable_b15_s3
+    load_from: ez_tidetable_b15_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The thwart holds still
+    dialogue: ""
+    audio_world: "water tick, wind"
+    end_state: quiet hard
+    ltx_i2v: |
+      The start image holds as the first frame. The thwart holds still water tick, wind The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold quiet hard. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The thwart holds still pan left, no
+      cut, locked identity. Last frames hold quiet hard.
+  - beat: 16
+    shot: 1
+    prefix: ez_tidetable_b16_s1
+    load_from: ez_tidetable_b15_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The skiff rests against stone
+    dialogue: ""
+    audio_world: "hull knock, water tick"
+    end_state: wet grain
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff rests against stone hull knock,
+      water tick The camera pans right, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold wet grain. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff rests against stone pan
+      right, no cut, locked identity. Last frames hold wet grain.
+  - beat: 16
+    shot: 2
+    prefix: ez_tidetable_b16_s2
+    load_from: ez_tidetable_b16_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A last look down the cut
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: empty channel
+    ltx_i2v: |
+      The start image holds as the first frame. A last look down the cut wind, splash The
+      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold empty channel. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A last look down the cut pan right,
+      no cut, locked identity. Last frames hold empty channel.
+  - beat: 16
+    shot: 3
+    prefix: ez_tidetable_b16_s3
+    load_from: ez_tidetable_b16_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Hands leave the thwart
+    dialogue: ""
+    audio_world: "cloth, creak"
+    end_state: empty bow
+    ltx_i2v: |
+      The start image holds as the first frame. Hands leave the thwart cloth, creak The camera
+      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold empty bow. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Hands leave the thwart pan right, no
+      cut, locked identity. Last frames hold empty bow.
+  - beat: 17
+    shot: 1
+    prefix: ez_tidetable_b17_s1
+    load_from: ez_tidetable_b16_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The unmarked bow sits in first real sun
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: gold thwart
+    ltx_i2v: |
+      The start image holds as the first frame. The unmarked bow sits in first real sun wind,
+      water tick The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold gold thwart.
+      No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The unmarked bow sits in first real
+      sun fixed camera, no cut, locked identity. Last frames hold gold thwart.
+  - beat: 17
+    shot: 2
+    prefix: ez_tidetable_b17_s2
+    load_from: ez_tidetable_b17_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Steam lifts off wet wood
+    dialogue: ""
+    audio_world: "steam, cloth"
+    end_state: bright coil
+    ltx_i2v: |
+      The start image holds as the first frame. Steam lifts off wet wood steam, cloth The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold bright coil. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Steam lifts off wet wood fixed
+      camera, no cut, locked identity. Last frames hold bright coil.
+  - beat: 17
+    shot: 3
+    prefix: ez_tidetable_b17_s3
+    load_from: ez_tidetable_b17_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The camera holds the bow
+    dialogue: ""
+    audio_world: "hull tick, grit"
+    end_state: still water
+    ltx_i2v: |
+      The start image holds as the first frame. The camera holds the bow hull tick, grit The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold still water. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The camera holds the bow fixed
+      camera, no cut, locked identity. Last frames hold still water.
+  - beat: 18
+    shot: 1
+    prefix: ez_tidetable_b18_s1
+    load_from: ez_tidetable_b17_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Ripples die against stone
+    dialogue: ""
+    audio_world: "splash, wind"
+    end_state: mirror cut
+    ltx_i2v: |
+      The start image holds as the first frame. Ripples die against stone splash, wind The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold mirror cut. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Ripples die against stone dolly out,
+      no cut, locked identity. Last frames hold mirror cut.
+  - beat: 18
+    shot: 2
+    prefix: ez_tidetable_b18_s2
+    load_from: ez_tidetable_b18_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A gull-less empty sky
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: open sky
+    ltx_i2v: |
+      The start image holds as the first frame. A gull-less empty sky wind, cloth The camera
+      dollies out, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold open sky. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A gull-less empty sky dolly out, no
+      cut, locked identity. Last frames hold open sky.
+  - beat: 18
+    shot: 3
+    prefix: ez_tidetable_b18_s3
+    load_from: ez_tidetable_b18_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The bow and the hard together
+    dialogue: ""
+    audio_world: "wood creak, water tick"
+    end_state: home plate
+    ltx_i2v: |
+      The start image holds as the first frame. The bow and the hard together wood creak,
+      water tick The camera dollies out, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold home plate. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow and the hard together dolly
+      out, no cut, locked identity. Last frames hold home plate.
+  - beat: 19
+    shot: 1
+    prefix: ez_tidetable_b19_s1
+    load_from: ez_tidetable_b18_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The hard is dry above the ring
+    dialogue: ""
+    audio_world: "grit, wind"
+    end_state: dry stone
+    ltx_i2v: |
+      The start image holds as the first frame. The hard is dry above the ring grit, wind The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold dry stone. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hard is dry above the ring
+      tracking, no cut, locked identity. Last frames hold dry stone.
+  - beat: 19
+    shot: 2
+    prefix: ez_tidetable_b19_s2
+    load_from: ez_tidetable_b19_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The painter drips once
+    dialogue: ""
+    audio_world: "water tick, metal click"
+    end_state: dark ring
+    ltx_i2v: |
+      The start image holds as the first frame. The painter drips once water tick, metal click
+      The camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold dark ring. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The painter drips once tracking, no
+      cut, locked identity. Last frames hold dark ring.
+  - beat: 19
+    shot: 3
+    prefix: ez_tidetable_b19_s3
+    load_from: ez_tidetable_b19_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The camera eases back
+    dialogue: ""
+    audio_world: "cloth, hull knock"
+    end_state: whole skiff
+    ltx_i2v: |
+      The start image holds as the first frame. The camera eases back cloth, hull knock The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold whole skiff. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The camera eases back tracking, no
+      cut, locked identity. Last frames hold whole skiff.
+  - beat: 20
+    shot: 1
+    prefix: ez_tidetable_b20_s1
+    load_from: ez_tidetable_b19_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The whole unmarked skiff in frame
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: skiff and hard
+    ltx_i2v: |
+      The start image holds as the first frame. The whole unmarked skiff in frame wind, splash
+      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold skiff and hard. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The whole unmarked skiff in frame
+      dolly in, no cut, locked identity. Last frames hold skiff and hard.
+  - beat: 20
+    shot: 2
+    prefix: ez_tidetable_b20_s2
+    load_from: ez_tidetable_b20_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A slow hold
+    dialogue: ""
+    audio_world: "water tick, creak"
+    end_state: bow grain
+    ltx_i2v: |
+      The start image holds as the first frame. A slow hold water tick, creak The camera
+      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold bow grain. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A slow hold dolly in, no cut, locked
+      identity. Last frames hold bow grain.
+  - beat: 20
+    shot: 3
+    prefix: ez_tidetable_b20_s3
+    load_from: ez_tidetable_b20_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Last light on the thwart
+    dialogue: ""
+    audio_world: "steam, cloth"
+    end_state: warm grain
+    ltx_i2v: |
+      The start image holds as the first frame. Last light on the thwart steam, cloth The
+      camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold warm grain. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Last light on the thwart dolly in,
+      no cut, locked identity. Last frames hold warm grain.
+  - beat: 21
+    shot: 1
+    prefix: ez_tidetable_b21_s1
+    load_from: ez_tidetable_b20_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Sun leaves the cut
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: cool bow
+    ltx_i2v: |
+      The start image holds as the first frame. Sun leaves the cut wind, water tick The camera
+      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold cool bow. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Sun leaves the cut pan left, no cut,
+      locked identity. Last frames hold cool bow.
+  - beat: 21
+    shot: 2
+    prefix: ez_tidetable_b21_s2
+    load_from: ez_tidetable_b21_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The coil darkens
+    dialogue: ""
+    audio_world: "cloth, hull tick"
+    end_state: dark painter
+    ltx_i2v: |
+      The start image holds as the first frame. The coil darkens cloth, hull tick The camera
+      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold dark painter. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The coil darkens pan left, no cut,
+      locked identity. Last frames hold dark painter.
+  - beat: 21
+    shot: 3
+    prefix: ez_tidetable_b21_s3
+    load_from: ez_tidetable_b21_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The ring is a black mark
+    dialogue: ""
+    audio_world: "metal click, grit"
+    end_state: night-edge stone
+    ltx_i2v: |
+      The start image holds as the first frame. The ring is a black mark metal click, grit The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold night-edge stone. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The ring is a black mark pan left,
+      no cut, locked identity. Last frames hold night-edge stone.
+  - beat: 22
+    shot: 1
+    prefix: ez_tidetable_b22_s1
+    load_from: ez_tidetable_b21_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The hard goes blue
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: blue stone
+    ltx_i2v: |
+      The start image holds as the first frame. The hard goes blue wind, splash The camera
+      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold blue stone. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hard goes blue pan right, no
+      cut, locked identity. Last frames hold blue stone.
+  - beat: 22
+    shot: 2
+    prefix: ez_tidetable_b22_s2
+    load_from: ez_tidetable_b22_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: One last drip
+    dialogue: ""
+    audio_world: "water tick, creak"
+    end_state: quiet hull
+    ltx_i2v: |
+      The start image holds as the first frame. One last drip water tick, creak The camera
+      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold quiet hull. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. One last drip pan right, no cut,
+      locked identity. Last frames hold quiet hull.
+  - beat: 22
+    shot: 3
+    prefix: ez_tidetable_b22_s3
+    load_from: ez_tidetable_b22_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The camera holds
+    dialogue: ""
+    audio_world: "cloth, hull knock"
+    end_state: still bow
+    ltx_i2v: |
+      The start image holds as the first frame. The camera holds cloth, hull knock The camera
+      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold still bow. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The camera holds pan right, no cut,
+      locked identity. Last frames hold still bow.
+  - beat: 23
+    shot: 1
+    prefix: ez_tidetable_b23_s1
+    load_from: ez_tidetable_b22_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: No one in frame but the skiff
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: empty thwart
+    ltx_i2v: |
+      The start image holds as the first frame. No one in frame but the skiff wind, water tick
+      The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold empty thwart. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. No one in frame but the skiff fixed
+      camera, no cut, locked identity. Last frames hold empty thwart.
+  - beat: 23
+    shot: 2
+    prefix: ez_tidetable_b23_s2
+    load_from: ez_tidetable_b23_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The cut is a dark ribbon
+    dialogue: ""
+    audio_world: "splash, grit"
+    end_state: dark ribbon
+    ltx_i2v: |
+      The start image holds as the first frame. The cut is a dark ribbon splash, grit The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold dark ribbon. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The cut is a dark ribbon fixed
+      camera, no cut, locked identity. Last frames hold dark ribbon.
+  - beat: 23
+    shot: 3
+    prefix: ez_tidetable_b23_s3
+    load_from: ez_tidetable_b23_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The bow is the only warm wood
+    dialogue: ""
+    audio_world: "wood creak, cloth"
+    end_state: warm wood
+    ltx_i2v: |
+      The start image holds as the first frame. The bow is the only warm wood wood creak,
+      cloth The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the
+      lower third, wet thwart grain sharp, empty of lettering. Last frames hold warm wood. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow is the only warm wood fixed
+      camera, no cut, locked identity. Last frames hold warm wood.
+  - beat: 24
+    shot: 1
+    prefix: ez_tidetable_b24_s1
+    load_from: ez_tidetable_b23_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Grain of the thwart in close
+    dialogue: ""
+    audio_world: "cloth, hull tick"
+    end_state: wet grain
+    ltx_i2v: |
+      The start image holds as the first frame. Grain of the thwart in close cloth, hull tick
+      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold wet grain. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Grain of the thwart in close dolly
+      out, no cut, locked identity. Last frames hold wet grain.
+  - beat: 24
+    shot: 2
+    prefix: ez_tidetable_b24_s2
+    load_from: ez_tidetable_b24_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "A hairline scratch, unmarked"
+    dialogue: ""
+    audio_world: "grit, water tick"
+    end_state: scratch
+    ltx_i2v: |
+      The start image holds as the first frame. A hairline scratch, unmarked grit, water tick
+      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold scratch. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A hairline scratch, unmarked dolly
+      out, no cut, locked identity. Last frames hold scratch.
+  - beat: 24
+    shot: 3
+    prefix: ez_tidetable_b24_s3
+    load_from: ez_tidetable_b24_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The camera holds the scratch
+    dialogue: ""
+    audio_world: "wind, creak"
+    end_state: scratch and coil
+    ltx_i2v: |
+      The start image holds as the first frame. The camera holds the scratch wind, creak The
+      camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold scratch and coil. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The camera holds the scratch dolly
+      out, no cut, locked identity. Last frames hold scratch and coil.
+  - beat: 25
+    shot: 1
+    prefix: ez_tidetable_b25_s1
+    load_from: ez_tidetable_b24_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The blank painter coil fills the frame
+    dialogue: ""
+    audio_world: "cloth, rope ticks"
+    end_state: coil
+    ltx_i2v: |
+      The start image holds as the first frame. The blank painter coil fills the frame cloth,
+      rope ticks The camera tracks forward, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold coil. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The blank painter coil fills the
+      frame tracking, no cut, locked identity. Last frames hold coil.
+  - beat: 25
+    shot: 2
+    prefix: ez_tidetable_b25_s2
+    load_from: ez_tidetable_b25_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A drip from the coil
+    dialogue: ""
+    audio_world: "water tick, splash"
+    end_state: drip
+    ltx_i2v: |
+      The start image holds as the first frame. A drip from the coil water tick, splash The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold drip. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A drip from the coil tracking, no
+      cut, locked identity. Last frames hold drip.
+  - beat: 25
+    shot: 3
+    prefix: ez_tidetable_b25_s3
+    load_from: ez_tidetable_b25_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The drip hits stone
+    dialogue: ""
+    audio_world: "grit, metal click"
+    end_state: stone splash
+    ltx_i2v: |
+      The start image holds as the first frame. The drip hits stone grit, metal click The
+      camera tracks forward, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold stone splash. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The drip hits stone tracking, no
+      cut, locked identity. Last frames hold stone splash.
+  - beat: 26
+    shot: 1
+    prefix: ez_tidetable_b26_s1
+    load_from: ez_tidetable_b25_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The splash dies
+    dialogue: ""
+    audio_world: "water tick, wind"
+    end_state: quiet stone
+    ltx_i2v: |
+      The start image holds as the first frame. The splash dies water tick, wind The camera
+      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold quiet stone. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The splash dies dolly in, no cut,
+      locked identity. Last frames hold quiet stone.
+  - beat: 26
+    shot: 2
+    prefix: ez_tidetable_b26_s2
+    load_from: ez_tidetable_b26_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The hard is empty
+    dialogue: ""
+    audio_world: "grit, cloth"
+    end_state: empty hard
+    ltx_i2v: |
+      The start image holds as the first frame. The hard is empty grit, cloth The camera
+      dollies in, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold empty hard. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The hard is empty dolly in, no cut,
+      locked identity. Last frames hold empty hard.
+  - beat: 26
+    shot: 3
+    prefix: ez_tidetable_b26_s3
+    load_from: ez_tidetable_b26_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The skiff is a dark shape
+    dialogue: ""
+    audio_world: "hull knock, creak"
+    end_state: dark shape
+    ltx_i2v: |
+      The start image holds as the first frame. The skiff is a dark shape hull knock, creak
+      The camera dollies in, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold dark shape. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The skiff is a dark shape dolly in,
+      no cut, locked identity. Last frames hold dark shape.
+  - beat: 27
+    shot: 1
+    prefix: ez_tidetable_b27_s1
+    load_from: ez_tidetable_b26_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Night takes the cut
+    dialogue: ""
+    audio_world: "wind, splash"
+    end_state: black water
+    ltx_i2v: |
+      The start image holds as the first frame. Night takes the cut wind, splash The camera
+      pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold black water. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Night takes the cut pan left, no
+      cut, locked identity. Last frames hold black water.
+  - beat: 27
+    shot: 2
+    prefix: ez_tidetable_b27_s2
+    load_from: ez_tidetable_b27_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The bow is a silhouette
+    dialogue: ""
+    audio_world: "hull tick, cloth"
+    end_state: silhouette
+    ltx_i2v: |
+      The start image holds as the first frame. The bow is a silhouette hull tick, cloth The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold silhouette. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The bow is a silhouette pan left, no
+      cut, locked identity. Last frames hold silhouette.
+  - beat: 27
+    shot: 3
+    prefix: ez_tidetable_b27_s3
+    load_from: ez_tidetable_b27_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A last hull knock
+    dialogue: ""
+    audio_world: "wood creak, water tick"
+    end_state: silence
+    ltx_i2v: |
+      The start image holds as the first frame. A last hull knock wood creak, water tick The
+      camera pans left, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold silence. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A last hull knock pan left, no cut,
+      locked identity. Last frames hold silence.
+  - beat: 28
+    shot: 1
+    prefix: ez_tidetable_b28_s1
+    load_from: ez_tidetable_b27_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The unmarked skiff waits
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: waiting bow
+    ltx_i2v: |
+      The start image holds as the first frame. The unmarked skiff waits wind, cloth The
+      camera pans right, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold waiting bow. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The unmarked skiff waits pan right,
+      no cut, locked identity. Last frames hold waiting bow.
+  - beat: 28
+    shot: 2
+    prefix: ez_tidetable_b28_s2
+    load_from: ez_tidetable_b28_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: "No oar, no voice"
+    dialogue: ""
+    audio_world: "water tick, grit"
+    end_state: still coil
+    ltx_i2v: |
+      The start image holds as the first frame. No oar, no voice water tick, grit The camera
+      pans right, no cut. The weathered unmarked skiff bow stays in the lower third, wet
+      thwart grain sharp, empty of lettering. Last frames hold still coil. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. No oar, no voice pan right, no cut,
+      locked identity. Last frames hold still coil.
+  - beat: 28
+    shot: 3
+    prefix: ez_tidetable_b28_s3
+    load_from: ez_tidetable_b28_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The camera holds until the frame is still
+    dialogue: ""
+    audio_world: "hull knock, creak"
+    end_state: still frame
+    ltx_i2v: |
+      The start image holds as the first frame. The camera holds until the frame is still hull
+      knock, creak The camera pans right, no cut. The weathered unmarked skiff bow stays in
+      the lower third, wet thwart grain sharp, empty of lettering. Last frames hold still
+      frame. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The camera holds until the frame is
+      still pan right, no cut, locked identity. Last frames hold still frame.
+  - beat: 29
+    shot: 1
+    prefix: ez_tidetable_b29_s1
+    load_from: ez_tidetable_b28_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Dawn is gone; the plate is night
+    dialogue: ""
+    audio_world: "wind, water tick"
+    end_state: night plate
+    ltx_i2v: |
+      The start image holds as the first frame. Dawn is gone; the plate is night wind, water
+      tick The camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold night plate. No
+      music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. Dawn is gone; the plate is night
+      fixed camera, no cut, locked identity. Last frames hold night plate.
+  - beat: 29
+    shot: 2
+    prefix: ez_tidetable_b29_s2
+    load_from: ez_tidetable_b29_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The ring glints once
+    dialogue: ""
+    audio_world: "metal click, cloth"
+    end_state: glint
+    ltx_i2v: |
+      The start image holds as the first frame. The ring glints once metal click, cloth The
+      camera stays fixed, no cut. The weathered unmarked skiff bow stays in the lower third,
+      wet thwart grain sharp, empty of lettering. Last frames hold glint. No music and no
+      score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The ring glints once fixed camera,
+      no cut, locked identity. Last frames hold glint.
+  - beat: 29
+    shot: 3
+    prefix: ez_tidetable_b29_s3
+    load_from: ez_tidetable_b29_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The glint dies
+    dialogue: ""
+    audio_world: "grit, splash"
+    end_state: dark ring
+    ltx_i2v: |
+      The start image holds as the first frame. The glint dies grit, splash The camera stays
+      fixed, no cut. The weathered unmarked skiff bow stays in the lower third, wet thwart
+      grain sharp, empty of lettering. Last frames hold dark ring. No music and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The glint dies fixed camera, no cut,
+      locked identity. Last frames hold dark ring.
+  - beat: 30
+    shot: 1
+    prefix: ez_tidetable_b30_s1
+    load_from: ez_tidetable_b29_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The weathered unmarked bow in night
+    dialogue: ""
+    audio_world: "hull tick, wind"
+    end_state: night bow
+    ltx_i2v: |
+      The start image holds as the first frame. The weathered unmarked bow in night hull tick,
+      wind The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold night bow. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The weathered unmarked bow in night
+      dolly out, no cut, locked identity. Last frames hold night bow.
+  - beat: 30
+    shot: 2
+    prefix: ez_tidetable_b30_s2
+    load_from: ez_tidetable_b30_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A final hold on wet grain
+    dialogue: ""
+    audio_world: "cloth, water tick"
+    end_state: grain
+    ltx_i2v: |
+      The start image holds as the first frame. A final hold on wet grain cloth, water tick
+      The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold grain. No music and
+      no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. A final hold on wet grain dolly out,
+      no cut, locked identity. Last frames hold grain.
+  - beat: 30
+    shot: 3
+    prefix: ez_tidetable_b30_s3
+    load_from: ez_tidetable_b30_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The frame holds and does not cut
+    dialogue: ""
+    audio_world: "wood creak, grit"
+    end_state: held bow
+    ltx_i2v: |
+      The start image holds as the first frame. The frame holds and does not cut wood creak,
+      grit The camera dollies out, no cut. The weathered unmarked skiff bow stays in the lower
+      third, wet thwart grain sharp, empty of lettering. Last frames hold held bow. No music
+      and no score.
+    wan_i2v: |
+      Third-person unmarked skiff bow in the lower third. The frame holds and does not cut
+      dolly out, no cut, locked identity. Last frames hold held bow.

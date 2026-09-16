@@ -29,6 +29,8 @@ setup() {
   source "${REPO_ROOT}/scripts/lib/compose.sh"
   # shellcheck disable=SC1091
   source "${REPO_ROOT}/scripts/lib/blender_host.sh"
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/lib/films.sh"
 }
 
 teardown() {
@@ -1234,4 +1236,35 @@ exit 0
   run blender_host_bin
   [ "${status}" -eq 0 ]
   [ "${output}" = "${HOME}/.local/bin/blender" ]
+}
+
+@test "films: ez_film_catalog film_slug film_publish_cap film_total_shots film_beats film_acts film_master_name" {
+  run ez_film_catalog ids
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"go-see"* ]]
+  [[ "${output}" == *"tide-table"* ]]
+  run film_slug go-see
+  [ "${output}" = "gosee" ]
+  run film_slug tide-table
+  [ "${output}" = "tidetable" ]
+  run film_slug nope
+  [ "${status}" -ne 0 ]
+  run film_publish_cap go-see
+  [ "${output}" = "90.00" ]
+  run film_publish_cap breakwater
+  [ "${output}" = "450.00" ]
+  run film_total_shots still-here
+  [ "${output}" = "18" ]
+  run film_total_shots night-oven
+  [ "${output}" = "90" ]
+  run film_beats glasshouse
+  [ "${output}" = "30" ]
+  run film_acts last-lane
+  [ "${output}" = "5" ]
+  run film_master_name go-see
+  [ "${output}" = "ez_gosee_90s.mp4" ]
+  run film_master_name tide-table
+  [ "${output}" = "ez_tidetable_450s.mp4" ]
+  run film_master_name tide-table --act 2
+  [ "${output}" = "ez_tidetable_act2_90s.mp4" ]
 }

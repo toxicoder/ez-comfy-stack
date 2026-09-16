@@ -211,9 +211,34 @@ tags: [workflows, generated, comfyui]
 
 | Graph | Page |
 | --- | --- |
+| `shorts/breakwater/act-01` | [shorts/breakwater/act-01.md](shorts/breakwater/act-01.md) |
+| `shorts/breakwater/act-02` | [shorts/breakwater/act-02.md](shorts/breakwater/act-02.md) |
+| `shorts/breakwater/act-03` | [shorts/breakwater/act-03.md](shorts/breakwater/act-03.md) |
+| `shorts/breakwater/act-04` | [shorts/breakwater/act-04.md](shorts/breakwater/act-04.md) |
+| `shorts/breakwater/act-05` | [shorts/breakwater/act-05.md](shorts/breakwater/act-05.md) |
+| `shorts/glasshouse/act-01` | [shorts/glasshouse/act-01.md](shorts/glasshouse/act-01.md) |
+| `shorts/glasshouse/act-02` | [shorts/glasshouse/act-02.md](shorts/glasshouse/act-02.md) |
+| `shorts/glasshouse/act-03` | [shorts/glasshouse/act-03.md](shorts/glasshouse/act-03.md) |
+| `shorts/glasshouse/act-04` | [shorts/glasshouse/act-04.md](shorts/glasshouse/act-04.md) |
+| `shorts/glasshouse/act-05` | [shorts/glasshouse/act-05.md](shorts/glasshouse/act-05.md) |
 | `shorts/go-see` | [shorts/go-see.md](shorts/go-see.md) |
+| `shorts/last-lane/act-01` | [shorts/last-lane/act-01.md](shorts/last-lane/act-01.md) |
+| `shorts/last-lane/act-02` | [shorts/last-lane/act-02.md](shorts/last-lane/act-02.md) |
+| `shorts/last-lane/act-03` | [shorts/last-lane/act-03.md](shorts/last-lane/act-03.md) |
+| `shorts/last-lane/act-04` | [shorts/last-lane/act-04.md](shorts/last-lane/act-04.md) |
+| `shorts/last-lane/act-05` | [shorts/last-lane/act-05.md](shorts/last-lane/act-05.md) |
+| `shorts/night-oven/act-01` | [shorts/night-oven/act-01.md](shorts/night-oven/act-01.md) |
+| `shorts/night-oven/act-02` | [shorts/night-oven/act-02.md](shorts/night-oven/act-02.md) |
+| `shorts/night-oven/act-03` | [shorts/night-oven/act-03.md](shorts/night-oven/act-03.md) |
+| `shorts/night-oven/act-04` | [shorts/night-oven/act-04.md](shorts/night-oven/act-04.md) |
+| `shorts/night-oven/act-05` | [shorts/night-oven/act-05.md](shorts/night-oven/act-05.md) |
 | `shorts/still-here` | [shorts/still-here.md](shorts/still-here.md) |
 | `shorts/switchyard` | [shorts/switchyard.md](shorts/switchyard.md) |
+| `shorts/tide-table/act-01` | [shorts/tide-table/act-01.md](shorts/tide-table/act-01.md) |
+| `shorts/tide-table/act-02` | [shorts/tide-table/act-02.md](shorts/tide-table/act-02.md) |
+| `shorts/tide-table/act-03` | [shorts/tide-table/act-03.md](shorts/tide-table/act-03.md) |
+| `shorts/tide-table/act-04` | [shorts/tide-table/act-04.md](shorts/tide-table/act-04.md) |
+| `shorts/tide-table/act-05` | [shorts/tide-table/act-05.md](shorts/tide-table/act-05.md) |
 
 ## wan
 

@@ -63,6 +63,8 @@ teardown() {
   [ "${output}" = "stillhere" ]
   run film_slug switchyard
   [ "${output}" = "switchyard" ]
+  run film_slug tide-table
+  [ "${output}" = "tidetable" ]
   run film_slug nope
   [ "${status}" -ne 0 ]
   local b s

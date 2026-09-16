@@ -628,6 +628,22 @@ Source after common.sh. Not executable.
       Does not delete. Realpath jail. Hermetic tests set LAB_HERMETIC=1 and
       DISK_WIZARD_HOME so $HOME is never walked on a developer laptop.
 
+<!-- source: scripts/lib/films.sh -->
+## films
+
+Shared film catalog helpers for host utilities (slug, cap, shot count).
+
+Purpose:
+  One lookup for shipped film ids so concat / accept / compile / print-shot
+  do not copy go-see|still-here|switchyard case maps. Reads
+  custom_nodes/ez_film/catalog.py via python3.
+
+Audience:
+  Sourced by film utilities after common.sh. Requires REPO_ROOT.
+
+Style:
+  Google Shell Style Guide (project deviations in docs/project-conventions.md).
+
 <!-- source: scripts/lib/models.sh -->
 ## models
 
@@ -928,7 +944,7 @@ Purpose:
 
 ```bash
 Usage:
-  ./scripts/utilities/compile-film.sh go-see|still-here|switchyard
+  ./scripts/utilities/compile-film.sh FILM
 
 ```
 
@@ -947,8 +963,8 @@ Concatenate approved 5 s lab MP4s with ffmpeg (host / spark-farm fallback).
 
 Purpose:
   Concatenate approved 5.00 s lab MP4s. Default glob is six ez_shot_01..06
-  files. --film joins the 18-shot US-safe 90s shorts (go-see / still-here /
-  switchyard) in beat/shot order and caps the result at 90 s. Video is
+  files. --film joins a catalog film in beat/shot order (18×5s / 90s, or
+  90×5s / 450s) and caps at the film's publish_cap_s. Video is
   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube loudnorm +
   faststart (same contract as EZFilmConcat).
 
@@ -956,7 +972,7 @@ Purpose:
 Usage:
   ./scripts/utilities/concat-shots.sh [--dir DIR] [--out FILE] [--dry-run|--yes]
   ./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 [--out FILE]
-  ./scripts/utilities/concat-shots.sh --film go-see|still-here|switchyard [--yes]
+  ./scripts/utilities/concat-shots.sh --film FILM [--yes]
   ./scripts/utilities/concat-shots.sh --film go-see --xfade 10 --yes
 
 ```
@@ -964,8 +980,8 @@ Usage:
 Environment:
   COMFY_OUTPUT_DIR — default /mnt/comfy-output
   Default glob: ez_shot_0{1..6}*.mp4
-  --film: ez_<slug>_b{1..6}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
-  --cap-seconds: publish cap (default 90)
+  --film: ez_<slug>_b{1..beats}_s{1..3}_ltx_video*.mp4 (prefers *-audio.mp4; fallback _wan_video)
+  --cap-seconds: publish cap (default from catalog, else 90)
 
 !!! warning
 

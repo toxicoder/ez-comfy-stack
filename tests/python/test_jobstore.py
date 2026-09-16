@@ -26,6 +26,7 @@ def test_shot_id_and_new_state() -> None:
     assert js.shot_id(6, 3) == "18"
     with pytest.raises(ValueError):
         js.shot_id(7, 1)
+    assert js.shot_id(30, 3, total=90) == "90"
     state = js.new_state("go-see", "gosee")
     assert len(state["shots"]) == SHOT_COUNT
     assert state["shots"][0]["status"] == "pending"

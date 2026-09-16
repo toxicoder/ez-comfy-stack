@@ -160,8 +160,9 @@ def build_animatic(
         "cap_s": cap,
         "defects": [],
     }
-    if len(rows) != SHOT_COUNT:
-        report["defects"].append(f"shot count {len(rows)} (need {SHOT_COUNT})")
+    expected = int(str(parsed["meta"].get("total_shots") or SHOT_COUNT).split(".")[0])
+    if len(rows) != expected:
+        report["defects"].append(f"shot count {len(rows)} (need {expected})")
     if missing:
         report["defects"].append("missing sources: " + ",".join(missing))
     exe = ffmpeg or find_ffmpeg()

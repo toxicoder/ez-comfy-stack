@@ -99,7 +99,7 @@ Category `ez-comfy/dub`. Output nodes. No celebrity refs. [Local dub](../dub.md)
 
 ## ez_film
 
-Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard`. [90s shorts](../shorts.md).
+Category `ez-comfy/film`. Films: `go-see`, `still-here`, `switchyard` (90s) and `tide-table`, `night-oven`, `glasshouse`, `last-lane`, `breakwater` (7.5 min). [Short films](../shorts.md).
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |

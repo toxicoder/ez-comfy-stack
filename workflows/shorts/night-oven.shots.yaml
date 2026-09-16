@@ -1,0 +1,1707 @@
+film: night-oven
+slug: nightoven
+frames: 121
+fps: 24
+duration_s: 5.00
+beats: 30
+shots_per_beat: 3
+total_shots: 90
+publish_cap_s: 450.00
+print: ltx
+audio_policy: world-only
+score: none
+identity_seed: 42
+identity_enhance: true
+identity_look: |
+  A photoreal third-person bakery still at 2 a.m. A flour-dusted linen apron hangs on a
+  steel bench in the foreground, unmarked mixer bowls and a dark oven mouth behind. Warm
+  tungsten versus a sodium alley through one high window. Eye-level 35mm lens, framed for
+  YouTube 16:9, empty of lettering, mild film grain, clean unmarked lens.
+shots:
+  - beat: 1
+    shot: 1
+    prefix: ez_nightoven_b1_s1
+    load_from: identity
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The apron hangs still in tungsten
+    dialogue: ""
+    audio_world: "cloth, hum"
+    end_state: apron on steel
+    ltx_i2v: |
+      The start image holds as the first frame. The apron hangs still in tungsten cloth, hum
+      The camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays
+      in the foreground, unmarked, empty of lettering. Last frames hold apron on steel. No
+      music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron hangs still in
+      tungsten tracking, no cut, locked identity. Last frames hold apron on steel.
+  - beat: 1
+    shot: 2
+    prefix: ez_nightoven_b1_s2
+    load_from: ez_nightoven_b1_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A hand lifts the apron
+    dialogue: ""
+    audio_world: "cloth, metal tick"
+    end_state: apron in hand
+    ltx_i2v: |
+      The start image holds as the first frame. A hand lifts the apron cloth, metal tick The
+      camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in
+      the foreground, unmarked, empty of lettering. Last frames hold apron in hand. No music
+      and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A hand lifts the apron tracking,
+      no cut, locked identity. Last frames hold apron in hand.
+  - beat: 1
+    shot: 3
+    prefix: ez_nightoven_b1_s3
+    load_from: ez_nightoven_b1_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The apron is tied
+    dialogue: ""
+    audio_world: "fabric, click"
+    end_state: tied waist
+    ltx_i2v: |
+      The start image holds as the first frame. The apron is tied fabric, click The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold tied waist. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron is tied tracking, no
+      cut, locked identity. Last frames hold tied waist.
+  - beat: 2
+    shot: 1
+    prefix: ez_nightoven_b2_s1
+    load_from: ez_nightoven_b1_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The knot sits at the waist
+    dialogue: ""
+    audio_world: "cloth, hum"
+    end_state: knot
+    ltx_i2v: |
+      The start image holds as the first frame. The knot sits at the waist cloth, hum The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold knot. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The knot sits at the waist dolly
+      in, no cut, locked identity. Last frames hold knot.
+  - beat: 2
+    shot: 2
+    prefix: ez_nightoven_b2_s2
+    load_from: ez_nightoven_b2_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Flour dust lifts
+    dialogue: ""
+    audio_world: "grit, steam"
+    end_state: dust in tungsten
+    ltx_i2v: |
+      The start image holds as the first frame. Flour dust lifts grit, steam The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dust in tungsten. No music
+      and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Flour dust lifts dolly in, no
+      cut, locked identity. Last frames hold dust in tungsten.
+  - beat: 2
+    shot: 3
+    prefix: ez_nightoven_b2_s3
+    load_from: ez_nightoven_b2_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bench is empty
+    dialogue: ""
+    audio_world: "metal scrape, tick"
+    end_state: empty steel
+    ltx_i2v: |
+      The start image holds as the first frame. The bench is empty metal scrape, tick The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold empty steel. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bench is empty dolly in, no
+      cut, locked identity. Last frames hold empty steel.
+  - beat: 3
+    shot: 1
+    prefix: ez_nightoven_b3_s1
+    load_from: ez_nightoven_b2_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Bowls wait unmarked
+    dialogue: ""
+    audio_world: "metal tick, hum"
+    end_state: bowls
+    ltx_i2v: |
+      The start image holds as the first frame. Bowls wait unmarked metal tick, hum The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold bowls. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Bowls wait unmarked pan left, no
+      cut, locked identity. Last frames hold bowls.
+  - beat: 3
+    shot: 2
+    prefix: ez_nightoven_b3_s2
+    load_from: ez_nightoven_b3_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A pour of water
+    dialogue: ""
+    audio_world: "pour, splash"
+    end_state: wet bowl
+    ltx_i2v: |
+      The start image holds as the first frame. A pour of water pour, splash The camera pans
+      left, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold wet bowl. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A pour of water pan left, no
+      cut, locked identity. Last frames hold wet bowl.
+  - beat: 3
+    shot: 3
+    prefix: ez_nightoven_b3_s3
+    load_from: ez_nightoven_b3_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A mixer starts
+    dialogue: ""
+    audio_world: "hum, metal"
+    end_state: turning bowl
+    ltx_i2v: |
+      The start image holds as the first frame. A mixer starts hum, metal The camera pans
+      left, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold turning bowl. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A mixer starts pan left, no cut,
+      locked identity. Last frames hold turning bowl.
+  - beat: 4
+    shot: 1
+    prefix: ez_nightoven_b4_s1
+    load_from: ez_nightoven_b3_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The bowl turns slow
+    dialogue: ""
+    audio_world: "hum, scrape"
+    end_state: dough
+    ltx_i2v: |
+      The start image holds as the first frame. The bowl turns slow hum, scrape The camera
+      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dough. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bowl turns slow pan right,
+      no cut, locked identity. Last frames hold dough.
+  - beat: 4
+    shot: 2
+    prefix: ez_nightoven_b4_s2
+    load_from: ez_nightoven_b4_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A scrape of the hook
+    dialogue: ""
+    audio_world: "metal scrape, tick"
+    end_state: hook
+    ltx_i2v: |
+      The start image holds as the first frame. A scrape of the hook metal scrape, tick The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hook. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A scrape of the hook pan right,
+      no cut, locked identity. Last frames hold hook.
+  - beat: 4
+    shot: 3
+    prefix: ez_nightoven_b4_s3
+    load_from: ez_nightoven_b4_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The mixer stops
+    dialogue: ""
+    audio_world: "click, hum"
+    end_state: resting dough
+    ltx_i2v: |
+      The start image holds as the first frame. The mixer stops click, hum The camera pans
+      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold resting dough. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The mixer stops pan right, no
+      cut, locked identity. Last frames hold resting dough.
+  - beat: 5
+    shot: 1
+    prefix: ez_nightoven_b5_s1
+    load_from: ez_nightoven_b4_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Hands fold the dough
+    dialogue: ""
+    audio_world: "cloth, scrape"
+    end_state: folded dough
+    ltx_i2v: |
+      The start image holds as the first frame. Hands fold the dough cloth, scrape The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold folded dough. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Hands fold the dough fixed
+      camera, no cut, locked identity. Last frames hold folded dough.
+  - beat: 5
+    shot: 2
+    prefix: ez_nightoven_b5_s2
+    load_from: ez_nightoven_b5_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A dust of flour
+    dialogue: ""
+    audio_world: "grit, cloth"
+    end_state: white bench
+    ltx_i2v: |
+      The start image holds as the first frame. A dust of flour grit, cloth The camera stays
+      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold white bench. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A dust of flour fixed camera, no
+      cut, locked identity. Last frames hold white bench.
+  - beat: 5
+    shot: 3
+    prefix: ez_nightoven_b5_s3
+    load_from: ez_nightoven_b5_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The dough rests
+    dialogue: ""
+    audio_world: "hum, tick"
+    end_state: resting mound
+    ltx_i2v: |
+      The start image holds as the first frame. The dough rests hum, tick The camera stays
+      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold resting mound. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The dough rests fixed camera, no
+      cut, locked identity. Last frames hold resting mound.
+  - beat: 6
+    shot: 1
+    prefix: ez_nightoven_b6_s1
+    load_from: ez_nightoven_b5_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The oven mouth is dark
+    dialogue: ""
+    audio_world: "hum, metal tick"
+    end_state: dark mouth
+    ltx_i2v: |
+      The start image holds as the first frame. The oven mouth is dark hum, metal tick The
+      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dark mouth. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The oven mouth is dark dolly
+      out, no cut, locked identity. Last frames hold dark mouth.
+  - beat: 6
+    shot: 2
+    prefix: ez_nightoven_b6_s2
+    load_from: ez_nightoven_b6_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A match of warmth
+    dialogue: ""
+    audio_world: "steam, click"
+    end_state: warm door
+    ltx_i2v: |
+      The start image holds as the first frame. A match of warmth steam, click The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold warm door. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A match of warmth dolly out, no
+      cut, locked identity. Last frames hold warm door.
+  - beat: 6
+    shot: 3
+    prefix: ez_nightoven_b6_s3
+    load_from: ez_nightoven_b6_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The door opens
+    dialogue: ""
+    audio_world: "metal scrape, steam"
+    end_state: open oven
+    ltx_i2v: |
+      The start image holds as the first frame. The door opens metal scrape, steam The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold open oven. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The door opens dolly out, no
+      cut, locked identity. Last frames hold open oven.
+  - beat: 7
+    shot: 1
+    prefix: ez_nightoven_b7_s1
+    load_from: ez_nightoven_b6_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Heat rolls out
+    dialogue: ""
+    audio_world: "steam, hum"
+    end_state: orange mouth
+    ltx_i2v: |
+      The start image holds as the first frame. Heat rolls out steam, hum The camera tracks
+      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold orange mouth. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Heat rolls out tracking, no cut,
+      locked identity. Last frames hold orange mouth.
+  - beat: 7
+    shot: 2
+    prefix: ez_nightoven_b7_s2
+    load_from: ez_nightoven_b7_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A tray slides in
+    dialogue: ""
+    audio_world: "metal scrape, tick"
+    end_state: tray in
+    ltx_i2v: |
+      The start image holds as the first frame. A tray slides in metal scrape, tick The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold tray in. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A tray slides in tracking, no
+      cut, locked identity. Last frames hold tray in.
+  - beat: 7
+    shot: 3
+    prefix: ez_nightoven_b7_s3
+    load_from: ez_nightoven_b7_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The door shuts
+    dialogue: ""
+    audio_world: "click, steam"
+    end_state: closed door
+    ltx_i2v: |
+      The start image holds as the first frame. The door shuts click, steam The camera tracks
+      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold closed door. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The door shuts tracking, no cut,
+      locked identity. Last frames hold closed door.
+  - beat: 8
+    shot: 1
+    prefix: ez_nightoven_b8_s1
+    load_from: ez_nightoven_b7_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The window shows sodium alley
+    dialogue: ""
+    audio_world: "hum, wind"
+    end_state: orange window
+    ltx_i2v: |
+      The start image holds as the first frame. The window shows sodium alley hum, wind The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold orange window. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The window shows sodium alley
+      dolly in, no cut, locked identity. Last frames hold orange window.
+  - beat: 8
+    shot: 2
+    prefix: ez_nightoven_b8_s2
+    load_from: ez_nightoven_b8_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A look at the alley
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: wet asphalt
+    ltx_i2v: |
+      The start image holds as the first frame. A look at the alley wind, grit The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold wet asphalt. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A look at the alley dolly in, no
+      cut, locked identity. Last frames hold wet asphalt.
+  - beat: 8
+    shot: 3
+    prefix: ez_nightoven_b8_s3
+    load_from: ez_nightoven_b8_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Back to the oven
+    dialogue: ""
+    audio_world: "steam, cloth"
+    end_state: oven door
+    ltx_i2v: |
+      The start image holds as the first frame. Back to the oven steam, cloth The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold oven door. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Back to the oven dolly in, no
+      cut, locked identity. Last frames hold oven door.
+  - beat: 9
+    shot: 1
+    prefix: ez_nightoven_b9_s1
+    load_from: ez_nightoven_b8_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Sodium light on steel
+    dialogue: ""
+    audio_world: "hum, metal tick"
+    end_state: steel bar
+    ltx_i2v: |
+      The start image holds as the first frame. Sodium light on steel hum, metal tick The
+      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold steel bar. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Sodium light on steel pan left,
+      no cut, locked identity. Last frames hold steel bar.
+  - beat: 9
+    shot: 2
+    prefix: ez_nightoven_b9_s2
+    load_from: ez_nightoven_b9_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The apron is a pale shape
+    dialogue: ""
+    audio_world: "cloth, grit"
+    end_state: pale apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron is a pale shape cloth, grit The
+      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold pale apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron is a pale shape pan
+      left, no cut, locked identity. Last frames hold pale apron.
+  - beat: 9
+    shot: 3
+    prefix: ez_nightoven_b9_s3
+    load_from: ez_nightoven_b9_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Hands check the door
+    dialogue: ""
+    audio_world: "click, steam"
+    end_state: hot handle
+    ltx_i2v: |
+      The start image holds as the first frame. Hands check the door click, steam The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hot handle. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Hands check the door pan left,
+      no cut, locked identity. Last frames hold hot handle.
+  - beat: 10
+    shot: 1
+    prefix: ez_nightoven_b10_s1
+    load_from: ez_nightoven_b9_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The handle is too hot
+    dialogue: ""
+    audio_world: "metal tick, cloth"
+    end_state: cloth on handle
+    ltx_i2v: |
+      The start image holds as the first frame. The handle is too hot metal tick, cloth The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold cloth on handle. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The handle is too hot pan right,
+      no cut, locked identity. Last frames hold cloth on handle.
+  - beat: 10
+    shot: 2
+    prefix: ez_nightoven_b10_s2
+    load_from: ez_nightoven_b10_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A wait
+    dialogue: ""
+    audio_world: "hum, steam"
+    end_state: waiting door
+    ltx_i2v: |
+      The start image holds as the first frame. A wait hum, steam The camera pans right, no
+      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
+      empty of lettering. Last frames hold waiting door. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A wait pan right, no cut, locked
+      identity. Last frames hold waiting door.
+  - beat: 10
+    shot: 3
+    prefix: ez_nightoven_b10_s3
+    load_from: ez_nightoven_b10_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The door opens again
+    dialogue: ""
+    audio_world: "scrape, steam"
+    end_state: gold bread
+    ltx_i2v: |
+      The start image holds as the first frame. The door opens again scrape, steam The camera
+      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold gold bread. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The door opens again pan right,
+      no cut, locked identity. Last frames hold gold bread.
+  - beat: 11
+    shot: 1
+    prefix: ez_nightoven_b11_s1
+    load_from: ez_nightoven_b10_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: "Unmarked loaves, no brand"
+    dialogue: ""
+    audio_world: "steam, tick"
+    end_state: loaves
+    ltx_i2v: |
+      The start image holds as the first frame. Unmarked loaves, no brand steam, tick The
+      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold loaves. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Unmarked loaves, no brand fixed
+      camera, no cut, locked identity. Last frames hold loaves.
+  - beat: 11
+    shot: 2
+    prefix: ez_nightoven_b11_s2
+    load_from: ez_nightoven_b11_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: A tray slides out
+    dialogue: ""
+    audio_world: "metal scrape, cloth"
+    end_state: tray on bench
+    ltx_i2v: |
+      The start image holds as the first frame. A tray slides out metal scrape, cloth The
+      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold tray on bench. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A tray slides out fixed camera,
+      no cut, locked identity. Last frames hold tray on bench.
+  - beat: 11
+    shot: 3
+    prefix: ez_nightoven_b11_s3
+    load_from: ez_nightoven_b11_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The apron is dusted again
+    dialogue: ""
+    audio_world: "grit, fabric"
+    end_state: dusted apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron is dusted again grit, fabric The
+      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dusted apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron is dusted again fixed
+      camera, no cut, locked identity. Last frames hold dusted apron.
+  - beat: 12
+    shot: 1
+    prefix: ez_nightoven_b12_s1
+    load_from: ez_nightoven_b11_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: "Cooling rack, unmarked"
+    dialogue: ""
+    audio_world: "hum, metal tick"
+    end_state: rack
+    ltx_i2v: |
+      The start image holds as the first frame. Cooling rack, unmarked hum, metal tick The
+      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold rack. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Cooling rack, unmarked dolly
+      out, no cut, locked identity. Last frames hold rack.
+  - beat: 12
+    shot: 2
+    prefix: ez_nightoven_b12_s2
+    load_from: ez_nightoven_b12_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A loaf is set down
+    dialogue: ""
+    audio_world: "tick, steam"
+    end_state: one loaf
+    ltx_i2v: |
+      The start image holds as the first frame. A loaf is set down tick, steam The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold one loaf. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A loaf is set down dolly out, no
+      cut, locked identity. Last frames hold one loaf.
+  - beat: 12
+    shot: 3
+    prefix: ez_nightoven_b12_s3
+    load_from: ez_nightoven_b12_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The alley window brightens
+    dialogue: ""
+    audio_world: "wind, hum"
+    end_state: pale sodium
+    ltx_i2v: |
+      The start image holds as the first frame. The alley window brightens wind, hum The
+      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold pale sodium. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The alley window brightens dolly
+      out, no cut, locked identity. Last frames hold pale sodium.
+  - beat: 13
+    shot: 1
+    prefix: ez_nightoven_b13_s1
+    load_from: ez_nightoven_b12_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Night thinning
+    dialogue: ""
+    audio_world: "wind, cloth"
+    end_state: grey alley
+    ltx_i2v: |
+      The start image holds as the first frame. Night thinning wind, cloth The camera tracks
+      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold grey alley. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Night thinning tracking, no cut,
+      locked identity. Last frames hold grey alley.
+  - beat: 13
+    shot: 2
+    prefix: ez_nightoven_b13_s2
+    load_from: ez_nightoven_b13_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The mixer is washed
+    dialogue: ""
+    audio_world: "pour, splash"
+    end_state: wet steel
+    ltx_i2v: |
+      The start image holds as the first frame. The mixer is washed pour, splash The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold wet steel. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The mixer is washed tracking, no
+      cut, locked identity. Last frames hold wet steel.
+  - beat: 13
+    shot: 3
+    prefix: ez_nightoven_b13_s3
+    load_from: ez_nightoven_b13_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A cloth on the bench
+    dialogue: ""
+    audio_world: "cloth, scrape"
+    end_state: clean steel
+    ltx_i2v: |
+      The start image holds as the first frame. A cloth on the bench cloth, scrape The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold clean steel. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A cloth on the bench tracking,
+      no cut, locked identity. Last frames hold clean steel.
+  - beat: 14
+    shot: 1
+    prefix: ez_nightoven_b14_s1
+    load_from: ez_nightoven_b13_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Water on steel
+    dialogue: ""
+    audio_world: "pour, splash"
+    end_state: sheet of water
+    ltx_i2v: |
+      The start image holds as the first frame. Water on steel pour, splash The camera dollies
+      in, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold sheet of water. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Water on steel dolly in, no cut,
+      locked identity. Last frames hold sheet of water.
+  - beat: 14
+    shot: 2
+    prefix: ez_nightoven_b14_s2
+    load_from: ez_nightoven_b14_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: A wring of the cloth
+    dialogue: ""
+    audio_world: "cloth, tick"
+    end_state: wrung cloth
+    ltx_i2v: |
+      The start image holds as the first frame. A wring of the cloth cloth, tick The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold wrung cloth. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A wring of the cloth dolly in,
+      no cut, locked identity. Last frames hold wrung cloth.
+  - beat: 14
+    shot: 3
+    prefix: ez_nightoven_b14_s3
+    load_from: ez_nightoven_b14_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The apron is untied
+    dialogue: ""
+    audio_world: "fabric, click"
+    end_state: untied apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron is untied fabric, click The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold untied apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron is untied dolly in, no
+      cut, locked identity. Last frames hold untied apron.
+  - beat: 15
+    shot: 1
+    prefix: ez_nightoven_b15_s1
+    load_from: ez_nightoven_b14_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The apron returns to the hook
+    dialogue: ""
+    audio_world: "cloth, metal tick"
+    end_state: hook
+    ltx_i2v: |
+      The start image holds as the first frame. The apron returns to the hook cloth, metal
+      tick The camera pans left, no cut. The flour-dusted linen apron on the steel bench stays
+      in the foreground, unmarked, empty of lettering. Last frames hold hook. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron returns to the hook
+      pan left, no cut, locked identity. Last frames hold hook.
+  - beat: 15
+    shot: 2
+    prefix: ez_nightoven_b15_s2
+    load_from: ez_nightoven_b15_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: It hangs
+    dialogue: ""
+    audio_world: "hum, grit"
+    end_state: hanging apron
+    ltx_i2v: |
+      The start image holds as the first frame. It hangs hum, grit The camera pans left, no
+      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
+      empty of lettering. Last frames hold hanging apron. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. It hangs pan left, no cut,
+      locked identity. Last frames hold hanging apron.
+  - beat: 15
+    shot: 3
+    prefix: ez_nightoven_b15_s3
+    load_from: ez_nightoven_b15_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The oven is dark again
+    dialogue: ""
+    audio_world: "click, steam"
+    end_state: dark mouth
+    ltx_i2v: |
+      The start image holds as the first frame. The oven is dark again click, steam The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dark mouth. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The oven is dark again pan left,
+      no cut, locked identity. Last frames hold dark mouth.
+  - beat: 16
+    shot: 1
+    prefix: ez_nightoven_b16_s1
+    load_from: ez_nightoven_b15_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The bakery is almost still
+    dialogue: ""
+    audio_world: "hum, tick"
+    end_state: still bowls
+    ltx_i2v: |
+      The start image holds as the first frame. The bakery is almost still hum, tick The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold still bowls. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bakery is almost still pan
+      right, no cut, locked identity. Last frames hold still bowls.
+  - beat: 16
+    shot: 2
+    prefix: ez_nightoven_b16_s2
+    load_from: ez_nightoven_b16_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A last look at the loaf
+    dialogue: ""
+    audio_world: "steam, cloth"
+    end_state: one loaf
+    ltx_i2v: |
+      The start image holds as the first frame. A last look at the loaf steam, cloth The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold one loaf. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A last look at the loaf pan
+      right, no cut, locked identity. Last frames hold one loaf.
+  - beat: 16
+    shot: 3
+    prefix: ez_nightoven_b16_s3
+    load_from: ez_nightoven_b16_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The window goes towards dawn
+    dialogue: ""
+    audio_world: "wind, hum"
+    end_state: blue window
+    ltx_i2v: |
+      The start image holds as the first frame. The window goes towards dawn wind, hum The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold blue window. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The window goes towards dawn pan
+      right, no cut, locked identity. Last frames hold blue window.
+  - beat: 17
+    shot: 1
+    prefix: ez_nightoven_b17_s1
+    load_from: ez_nightoven_b16_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Tungsten loses to blue
+    dialogue: ""
+    audio_world: "hum, cloth"
+    end_state: blue steel
+    ltx_i2v: |
+      The start image holds as the first frame. Tungsten loses to blue hum, cloth The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold blue steel. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Tungsten loses to blue fixed
+      camera, no cut, locked identity. Last frames hold blue steel.
+  - beat: 17
+    shot: 2
+    prefix: ez_nightoven_b17_s2
+    load_from: ez_nightoven_b17_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The loaf sits
+    dialogue: ""
+    audio_world: "tick, steam"
+    end_state: loaf
+    ltx_i2v: |
+      The start image holds as the first frame. The loaf sits tick, steam The camera stays
+      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold loaf. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The loaf sits fixed camera, no
+      cut, locked identity. Last frames hold loaf.
+  - beat: 17
+    shot: 3
+    prefix: ez_nightoven_b17_s3
+    load_from: ez_nightoven_b17_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: Hands do not take it
+    dialogue: ""
+    audio_world: "cloth, grit"
+    end_state: untouched loaf
+    ltx_i2v: |
+      The start image holds as the first frame. Hands do not take it cloth, grit The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold untouched loaf. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Hands do not take it fixed
+      camera, no cut, locked identity. Last frames hold untouched loaf.
+  - beat: 18
+    shot: 1
+    prefix: ez_nightoven_b18_s1
+    load_from: ez_nightoven_b17_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The apron on the hook
+    dialogue: ""
+    audio_world: "fabric, hum"
+    end_state: hooked apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron on the hook fabric, hum The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hooked apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron on the hook dolly out,
+      no cut, locked identity. Last frames hold hooked apron.
+  - beat: 18
+    shot: 2
+    prefix: ez_nightoven_b18_s2
+    load_from: ez_nightoven_b18_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Flour on the floor
+    dialogue: ""
+    audio_world: "grit, tick"
+    end_state: floor dust
+    ltx_i2v: |
+      The start image holds as the first frame. Flour on the floor grit, tick The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold floor dust. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Flour on the floor dolly out, no
+      cut, locked identity. Last frames hold floor dust.
+  - beat: 18
+    shot: 3
+    prefix: ez_nightoven_b18_s3
+    load_from: ez_nightoven_b18_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A broom somewhere off
+    dialogue: ""
+    audio_world: "scrape, cloth"
+    end_state: clean path
+    ltx_i2v: |
+      The start image holds as the first frame. A broom somewhere off scrape, cloth The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold clean path. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A broom somewhere off dolly out,
+      no cut, locked identity. Last frames hold clean path.
+  - beat: 19
+    shot: 1
+    prefix: ez_nightoven_b19_s1
+    load_from: ez_nightoven_b18_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The path to the door
+    dialogue: ""
+    audio_world: "grit, hum"
+    end_state: door
+    ltx_i2v: |
+      The start image holds as the first frame. The path to the door grit, hum The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold door. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The path to the door tracking,
+      no cut, locked identity. Last frames hold door.
+  - beat: 19
+    shot: 2
+    prefix: ez_nightoven_b19_s2
+    load_from: ez_nightoven_b19_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The door is unmarked
+    dialogue: ""
+    audio_world: "click, wind"
+    end_state: closed door
+    ltx_i2v: |
+      The start image holds as the first frame. The door is unmarked click, wind The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold closed door. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The door is unmarked tracking,
+      no cut, locked identity. Last frames hold closed door.
+  - beat: 19
+    shot: 3
+    prefix: ez_nightoven_b19_s3
+    load_from: ez_nightoven_b19_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A pause at the door
+    dialogue: ""
+    audio_world: "cloth, tick"
+    end_state: hand on door
+    ltx_i2v: |
+      The start image holds as the first frame. A pause at the door cloth, tick The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hand on door. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A pause at the door tracking, no
+      cut, locked identity. Last frames hold hand on door.
+  - beat: 20
+    shot: 1
+    prefix: ez_nightoven_b20_s1
+    load_from: ez_nightoven_b19_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The door opens on the alley
+    dialogue: ""
+    audio_world: "wind, click"
+    end_state: sodium alley
+    ltx_i2v: |
+      The start image holds as the first frame. The door opens on the alley wind, click The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold sodium alley. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The door opens on the alley
+      dolly in, no cut, locked identity. Last frames hold sodium alley.
+  - beat: 20
+    shot: 2
+    prefix: ez_nightoven_b20_s2
+    load_from: ez_nightoven_b20_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Steam of cold in the alley
+    dialogue: ""
+    audio_world: "steam, wind"
+    end_state: cold steam
+    ltx_i2v: |
+      The start image holds as the first frame. Steam of cold in the alley steam, wind The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold cold steam. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Steam of cold in the alley dolly
+      in, no cut, locked identity. Last frames hold cold steam.
+  - beat: 20
+    shot: 3
+    prefix: ez_nightoven_b20_s3
+    load_from: ez_nightoven_b20_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bakery stays behind
+    dialogue: ""
+    audio_world: "hum, metal tick"
+    end_state: warm interior
+    ltx_i2v: |
+      The start image holds as the first frame. The bakery stays behind hum, metal tick The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold warm interior. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bakery stays behind dolly
+      in, no cut, locked identity. Last frames hold warm interior.
+  - beat: 21
+    shot: 1
+    prefix: ez_nightoven_b21_s1
+    load_from: ez_nightoven_b20_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: "Wet asphalt, unmarked"
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: asphalt
+    ltx_i2v: |
+      The start image holds as the first frame. Wet asphalt, unmarked wind, grit The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold asphalt. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Wet asphalt, unmarked pan left,
+      no cut, locked identity. Last frames hold asphalt.
+  - beat: 21
+    shot: 2
+    prefix: ez_nightoven_b21_s2
+    load_from: ez_nightoven_b21_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: A look back at the window
+    dialogue: ""
+    audio_world: "hum, cloth"
+    end_state: warm window
+    ltx_i2v: |
+      The start image holds as the first frame. A look back at the window hum, cloth The
+      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold warm window. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A look back at the window pan
+      left, no cut, locked identity. Last frames hold warm window.
+  - beat: 21
+    shot: 3
+    prefix: ez_nightoven_b21_s3
+    load_from: ez_nightoven_b21_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The window holds the apron
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: apron in window
+    ltx_i2v: |
+      The start image holds as the first frame. The window holds the apron fabric, tick The
+      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold apron in window. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The window holds the apron pan
+      left, no cut, locked identity. Last frames hold apron in window.
+  - beat: 22
+    shot: 1
+    prefix: ez_nightoven_b22_s1
+    load_from: ez_nightoven_b21_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The apron is a pale square
+    dialogue: ""
+    audio_world: "cloth, wind"
+    end_state: pale square
+    ltx_i2v: |
+      The start image holds as the first frame. The apron is a pale square cloth, wind The
+      camera pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold pale square. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron is a pale square pan
+      right, no cut, locked identity. Last frames hold pale square.
+  - beat: 22
+    shot: 2
+    prefix: ez_nightoven_b22_s2
+    load_from: ez_nightoven_b22_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A hold
+    dialogue: ""
+    audio_world: "hum, grit"
+    end_state: held square
+    ltx_i2v: |
+      The start image holds as the first frame. A hold hum, grit The camera pans right, no
+      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
+      empty of lettering. Last frames hold held square. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A hold pan right, no cut, locked
+      identity. Last frames hold held square.
+  - beat: 22
+    shot: 3
+    prefix: ez_nightoven_b22_s3
+    load_from: ez_nightoven_b22_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: Dawn lifts the sodium
+    dialogue: ""
+    audio_world: "wind, steam"
+    end_state: grey dawn
+    ltx_i2v: |
+      The start image holds as the first frame. Dawn lifts the sodium wind, steam The camera
+      pans right, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold grey dawn. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Dawn lifts the sodium pan right,
+      no cut, locked identity. Last frames hold grey dawn.
+  - beat: 23
+    shot: 1
+    prefix: ez_nightoven_b23_s1
+    load_from: ez_nightoven_b22_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The alley goes grey
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: grey brick
+    ltx_i2v: |
+      The start image holds as the first frame. The alley goes grey wind, grit The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold grey brick. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The alley goes grey fixed
+      camera, no cut, locked identity. Last frames hold grey brick.
+  - beat: 23
+    shot: 2
+    prefix: ez_nightoven_b23_s2
+    load_from: ez_nightoven_b23_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: No signage
+    dialogue: ""
+    audio_world: "tick, cloth"
+    end_state: blank brick
+    ltx_i2v: |
+      The start image holds as the first frame. No signage tick, cloth The camera stays fixed,
+      no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold blank brick. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. No signage fixed camera, no cut,
+      locked identity. Last frames hold blank brick.
+  - beat: 23
+    shot: 3
+    prefix: ez_nightoven_b23_s3
+    load_from: ez_nightoven_b23_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The bakery window cools
+    dialogue: ""
+    audio_world: "hum, steam"
+    end_state: cool glass
+    ltx_i2v: |
+      The start image holds as the first frame. The bakery window cools hum, steam The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold cool glass. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bakery window cools fixed
+      camera, no cut, locked identity. Last frames hold cool glass.
+  - beat: 24
+    shot: 1
+    prefix: ez_nightoven_b24_s1
+    load_from: ez_nightoven_b23_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The loaf is a silhouette
+    dialogue: ""
+    audio_world: "tick, cloth"
+    end_state: silhouette loaf
+    ltx_i2v: |
+      The start image holds as the first frame. The loaf is a silhouette tick, cloth The
+      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold silhouette loaf. No music and
+      no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The loaf is a silhouette dolly
+      out, no cut, locked identity. Last frames hold silhouette loaf.
+  - beat: 24
+    shot: 2
+    prefix: ez_nightoven_b24_s2
+    load_from: ez_nightoven_b24_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The apron still hangs
+    dialogue: ""
+    audio_world: "fabric, hum"
+    end_state: hanging
+    ltx_i2v: |
+      The start image holds as the first frame. The apron still hangs fabric, hum The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hanging. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron still hangs dolly out,
+      no cut, locked identity. Last frames hold hanging.
+  - beat: 24
+    shot: 3
+    prefix: ez_nightoven_b24_s3
+    load_from: ez_nightoven_b24_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: A last tungsten click
+    dialogue: ""
+    audio_world: "click, metal"
+    end_state: dark shop
+    ltx_i2v: |
+      The start image holds as the first frame. A last tungsten click click, metal The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dark shop. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A last tungsten click dolly out,
+      no cut, locked identity. Last frames hold dark shop.
+  - beat: 25
+    shot: 1
+    prefix: ez_nightoven_b25_s1
+    load_from: ez_nightoven_b24_s3_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: Lights out
+    dialogue: ""
+    audio_world: "click, hum"
+    end_state: dark bench
+    ltx_i2v: |
+      The start image holds as the first frame. Lights out click, hum The camera tracks
+      forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dark bench. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Lights out tracking, no cut,
+      locked identity. Last frames hold dark bench.
+  - beat: 25
+    shot: 2
+    prefix: ez_nightoven_b25_s2
+    load_from: ez_nightoven_b25_s1_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: The apron in the dark
+    dialogue: ""
+    audio_world: "cloth, grit"
+    end_state: dark apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron in the dark cloth, grit The camera
+      tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold dark apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron in the dark tracking,
+      no cut, locked identity. Last frames hold dark apron.
+  - beat: 25
+    shot: 3
+    prefix: ez_nightoven_b25_s3
+    load_from: ez_nightoven_b25_s2_last
+    clay: skip
+    audio_lock: none
+    camera: tracking
+    script: A hold on the hook
+    dialogue: ""
+    audio_world: "metal tick, fabric"
+    end_state: hook
+    ltx_i2v: |
+      The start image holds as the first frame. A hold on the hook metal tick, fabric The
+      camera tracks forward, no cut. The flour-dusted linen apron on the steel bench stays in
+      the foreground, unmarked, empty of lettering. Last frames hold hook. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A hold on the hook tracking, no
+      cut, locked identity. Last frames hold hook.
+  - beat: 26
+    shot: 1
+    prefix: ez_nightoven_b26_s1
+    load_from: ez_nightoven_b25_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The hook is a black mark
+    dialogue: ""
+    audio_world: "metal tick, cloth"
+    end_state: hook
+    ltx_i2v: |
+      The start image holds as the first frame. The hook is a black mark metal tick, cloth The
+      camera dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold hook. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The hook is a black mark dolly
+      in, no cut, locked identity. Last frames hold hook.
+  - beat: 26
+    shot: 2
+    prefix: ez_nightoven_b26_s2
+    load_from: ez_nightoven_b26_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: Flour dust settles
+    dialogue: ""
+    audio_world: "grit, steam"
+    end_state: settled dust
+    ltx_i2v: |
+      The start image holds as the first frame. Flour dust settles grit, steam The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold settled dust. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Flour dust settles dolly in, no
+      cut, locked identity. Last frames hold settled dust.
+  - beat: 26
+    shot: 3
+    prefix: ez_nightoven_b26_s3
+    load_from: ez_nightoven_b26_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly in
+    script: The bench is empty
+    dialogue: ""
+    audio_world: "hum, scrape"
+    end_state: empty bench
+    ltx_i2v: |
+      The start image holds as the first frame. The bench is empty hum, scrape The camera
+      dollies in, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold empty bench. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The bench is empty dolly in, no
+      cut, locked identity. Last frames hold empty bench.
+  - beat: 27
+    shot: 1
+    prefix: ez_nightoven_b27_s1
+    load_from: ez_nightoven_b26_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: Steel and night
+    dialogue: ""
+    audio_world: "metal tick, wind"
+    end_state: steel
+    ltx_i2v: |
+      The start image holds as the first frame. Steel and night metal tick, wind The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold steel. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Steel and night pan left, no
+      cut, locked identity. Last frames hold steel.
+  - beat: 27
+    shot: 2
+    prefix: ez_nightoven_b27_s2
+    load_from: ez_nightoven_b27_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The mixer is a shape
+    dialogue: ""
+    audio_world: "hum, scrape"
+    end_state: mixer shape
+    ltx_i2v: |
+      The start image holds as the first frame. The mixer is a shape hum, scrape The camera
+      pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold mixer shape. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The mixer is a shape pan left,
+      no cut, locked identity. Last frames hold mixer shape.
+  - beat: 27
+    shot: 3
+    prefix: ez_nightoven_b27_s3
+    load_from: ez_nightoven_b27_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan left
+    script: The oven mouth is black
+    dialogue: ""
+    audio_world: "click, steam"
+    end_state: black mouth
+    ltx_i2v: |
+      The start image holds as the first frame. The oven mouth is black click, steam The
+      camera pans left, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold black mouth. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The oven mouth is black pan
+      left, no cut, locked identity. Last frames hold black mouth.
+  - beat: 28
+    shot: 1
+    prefix: ez_nightoven_b28_s1
+    load_from: ez_nightoven_b27_s3_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: No fire
+    dialogue: ""
+    audio_world: "tick, cloth"
+    end_state: cold door
+    ltx_i2v: |
+      The start image holds as the first frame. No fire tick, cloth The camera pans right, no
+      cut. The flour-dusted linen apron on the steel bench stays in the foreground, unmarked,
+      empty of lettering. Last frames hold cold door. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. No fire pan right, no cut,
+      locked identity. Last frames hold cold door.
+  - beat: 28
+    shot: 2
+    prefix: ez_nightoven_b28_s2
+    load_from: ez_nightoven_b28_s1_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: A last steam ghost
+    dialogue: ""
+    audio_world: "steam, hum"
+    end_state: ghost
+    ltx_i2v: |
+      The start image holds as the first frame. A last steam ghost steam, hum The camera pans
+      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold ghost. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. A last steam ghost pan right, no
+      cut, locked identity. Last frames hold ghost.
+  - beat: 28
+    shot: 3
+    prefix: ez_nightoven_b28_s3
+    load_from: ez_nightoven_b28_s2_last
+    clay: skip
+    audio_lock: none
+    camera: pan right
+    script: The ghost dies
+    dialogue: ""
+    audio_world: "wind, grit"
+    end_state: still air
+    ltx_i2v: |
+      The start image holds as the first frame. The ghost dies wind, grit The camera pans
+      right, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold still air. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The ghost dies pan right, no
+      cut, locked identity. Last frames hold still air.
+  - beat: 29
+    shot: 1
+    prefix: ez_nightoven_b29_s1
+    load_from: ez_nightoven_b28_s3_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The unmarked bakery waits
+    dialogue: ""
+    audio_world: "hum, cloth"
+    end_state: waiting shop
+    ltx_i2v: |
+      The start image holds as the first frame. The unmarked bakery waits hum, cloth The
+      camera stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold waiting shop. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The unmarked bakery waits fixed
+      camera, no cut, locked identity. Last frames hold waiting shop.
+  - beat: 29
+    shot: 2
+    prefix: ez_nightoven_b29_s2
+    load_from: ez_nightoven_b29_s1_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The apron waits
+    dialogue: ""
+    audio_world: "fabric, tick"
+    end_state: waiting apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron waits fabric, tick The camera stays
+      fixed, no cut. The flour-dusted linen apron on the steel bench stays in the foreground,
+      unmarked, empty of lettering. Last frames hold waiting apron. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron waits fixed camera, no
+      cut, locked identity. Last frames hold waiting apron.
+  - beat: 29
+    shot: 3
+    prefix: ez_nightoven_b29_s3
+    load_from: ez_nightoven_b29_s2_last
+    clay: skip
+    audio_lock: none
+    camera: fixed camera
+    script: The camera holds
+    dialogue: ""
+    audio_world: "metal tick, grit"
+    end_state: held apron
+    ltx_i2v: |
+      The start image holds as the first frame. The camera holds metal tick, grit The camera
+      stays fixed, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold held apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The camera holds fixed camera,
+      no cut, locked identity. Last frames hold held apron.
+  - beat: 30
+    shot: 1
+    prefix: ez_nightoven_b30_s1
+    load_from: ez_nightoven_b29_s3_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: Dawn at the high window only
+    dialogue: ""
+    audio_world: "wind, steam"
+    end_state: high window
+    ltx_i2v: |
+      The start image holds as the first frame. Dawn at the high window only wind, steam The
+      camera dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold high window. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. Dawn at the high window only
+      dolly out, no cut, locked identity. Last frames hold high window.
+  - beat: 30
+    shot: 2
+    prefix: ez_nightoven_b30_s2
+    load_from: ez_nightoven_b30_s1_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The apron in first grey
+    dialogue: ""
+    audio_world: "cloth, hum"
+    end_state: grey apron
+    ltx_i2v: |
+      The start image holds as the first frame. The apron in first grey cloth, hum The camera
+      dollies out, no cut. The flour-dusted linen apron on the steel bench stays in the
+      foreground, unmarked, empty of lettering. Last frames hold grey apron. No music and no
+      score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The apron in first grey dolly
+      out, no cut, locked identity. Last frames hold grey apron.
+  - beat: 30
+    shot: 3
+    prefix: ez_nightoven_b30_s3
+    load_from: ez_nightoven_b30_s2_last
+    clay: skip
+    audio_lock: none
+    camera: dolly out
+    script: The frame holds the apron on steel
+    dialogue: ""
+    audio_world: "fabric, metal tick"
+    end_state: held bench
+    ltx_i2v: |
+      The start image holds as the first frame. The frame holds the apron on steel fabric,
+      metal tick The camera dollies out, no cut. The flour-dusted linen apron on the steel
+      bench stays in the foreground, unmarked, empty of lettering. Last frames hold held
+      bench. No music and no score.
+    wan_i2v: |
+      Third-person flour-dusted linen apron on a steel bench. The frame holds the apron on
+      steel dolly out, no cut, locked identity. Last frames hold held bench.

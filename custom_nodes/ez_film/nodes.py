@@ -1,4 +1,4 @@
-"""ComfyUI nodes: unload models between Klein/LTX, stitch 18 film shots."""
+"""ComfyUI nodes: unload models between Klein/LTX, stitch film shots."""
 
 from __future__ import annotations
 
@@ -86,14 +86,14 @@ class EZUnloadModels:
 
 
 class EZFilmConcat:
-    """Stitch 18 LTX shot MP4s into ``ez_{slug}_90s.mp4`` with a 90s cap."""
+    """Stitch 18 LTX shot MP4s into a 90s act or 90s film master."""
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
         """Return the Comfy widget schema.
 
         Returns:
-            Film, cap, xfade, 18 VHS shots, and optional disclosure.
+            Film, cap, xfade, act, 18 VHS shots, and optional disclosure.
         """
         required: dict[str, Any] = {
             "film": (list(FILM_CHOICES), {"default": "go-see"}),
@@ -115,6 +115,15 @@ class EZFilmConcat:
                     "step": 1,
                 },
             ),
+            "act": (
+                "INT",
+                {
+                    "default": 0,
+                    "min": 0,
+                    "max": 5,
+                    "step": 1,
+                },
+            ),
         }
         for index in range(1, SHOT_COUNT + 1):
             required[f"shot_{index:02d}"] = ("VHS_FILENAMES",)
@@ -133,9 +142,10 @@ class EZFilmConcat:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Concat 18 LTX 5.00s MP4s in beat/shot order. H.264 CRF 18 + AAC + "
-        "YouTube loudnorm + faststart, cap 90s. xfade_cs is audio-only "
-        "acrossfade (10 = 0.10s, overlap off so duration stays on picture); "
-        "0 is a hard cut. A play/download overlay "
+        "YouTube loudnorm + faststart, cap 90s. act=0 writes the 90s film "
+        "master; act=1–5 writes ez_<slug>_actN_90s.mp4 for festival shorts. "
+        "xfade_cs is audio-only acrossfade (10 = 0.10s, overlap off so "
+        "duration stays on picture); 0 is a hard cut. A play/download overlay "
         "appears when Queue finishes."
     )
 
@@ -145,14 +155,17 @@ class EZFilmConcat:
         cap_seconds: float = DEFAULT_CAP_SECONDS,
         xfade_cs: int = 0,
         disclosure: str = "",
+        *,
+        act: int = 0,
         **shots: object,
     ) -> dict[str, Any]:
         """Stitch 18 shot MP4s and return a VHS-style preview payload.
 
         Args:
-            film: Film id (go-see, still-here, switchyard).
-            cap_seconds: Publish duration cap (default 90).
+            film: Film id from the catalog.
+            cap_seconds: Publish duration cap (default 90; widget max 90).
             xfade_cs: Audio acrossfade in centiseconds; 0 is a hard cut.
+            act: 0 = 90s film master; 1–5 = act master for 7.5 min films.
             disclosure: Optional LTX disclosure text for the sidecar.
             shots: ``shot_01`` … ``shot_18`` VHS_FILENAMES payloads.
 
@@ -171,12 +184,12 @@ class EZFilmConcat:
             paths.append(path)
         dest_dir = output_directory()
         dest_dir.mkdir(parents=True, exist_ok=True)
-        out_mp4 = str(publish_path(film, dest_dir))
+        out_mp4 = str(publish_path(film, dest_dir, act=int(act)))
         stitch_film(paths, out_mp4, float(cap_seconds), xfade_cs=int(xfade_cs))
         write_disclosure_sidecar(out_mp4, disclosure)
         write_preview_html(out_mp4)
         copy_publish_master(out_mp4, film, dest_dir)
-        filename = publish_path(film, dest_dir).name
+        filename = publish_path(film, dest_dir, act=int(act)).name
         return {
             "ui": {
                 "gifs": [

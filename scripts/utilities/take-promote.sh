@@ -20,18 +20,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
-
-#######################################
-# Map film id to jobstore slug.
-#######################################
-film_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
-}
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 #######################################
 # Promote take N for shot id.
@@ -46,7 +36,7 @@ promote_run() {
   local take="${3:-}"
   local slug dest
   if [[ -z ${film} || -z ${sid} || -z ${take} ]]; then
-    err "Usage: take-promote.sh go-see|still-here|switchyard <id> <take>"
+    err "Usage: take-promote.sh FILM <id> <take>"
     return 1
   fi
   slug="$(film_slug "${film}")" || {

@@ -12,7 +12,13 @@ from pathlib import Path
 from typing import Any
 
 from .prompt_enums import shot_card
-from .shots import FILM_SLUGS, SHOT_COUNT, parse_shots_yaml, print_template
+from .shots import (
+    SHOT_COUNT,
+    film_publish_cap,
+    film_total_shots,
+    parse_shots_yaml,
+    print_template,
+)
 
 # Jobstore statuses, 5.00 s shot contract, take strip, and pin file.
 STATUSES = ("pending", "running", "ok", "failed", "skipped")
@@ -22,18 +28,19 @@ TAKE_KEEP = 8
 PINS_REL = Path("comfy") / ".lab-model-pins.json"
 
 
-def shot_id(beat: int, shot: int) -> str:
-    """Map YAML beat/shot (1-based) to ``01``…``18``.
+def shot_id(beat: int, shot: int, *, total: int = SHOT_COUNT) -> str:
+    """Map YAML beat/shot (1-based) to ``01``…``total``.
 
     Args:
         beat: 1-based beat index.
         shot: 1-based shot within the beat.
+        total: Inclusive max shot index (18 for 90s; 90 for 7.5 min).
 
     Returns:
         Two-digit shot id.
     """
     n = (beat - 1) * 3 + shot
-    if n < 1 or n > SHOT_COUNT:
+    if n < 1 or n > total:
         raise ValueError(f"shot index {n} out of range")
     return f"{n:02d}"
 
@@ -91,24 +98,36 @@ def new_state(
     *,
     audio_policy: str = "world-only",
     score: str = "none",
+    total_shots: int | None = None,
+    publish_cap_s: float | None = None,
 ) -> dict[str, Any]:
-    """Fresh 18-shot pending state.
+    """Fresh pending state with one row per shot.
 
     Args:
         film: Film id.
         slug: Output slug.
         audio_policy: ``world-only``, ``stems``, or ``a2v-lock``.
         score: Score mode (``none`` or ``acestep-instrumental``).
+        total_shots: Override printer count; default from catalog.
+        publish_cap_s: Override publish cap; default from catalog.
 
     Returns:
         New state dict.
     """
-    shots = [empty_shot(f"{i:02d}") for i in range(1, SHOT_COUNT + 1)]
+    count = int(total_shots) if total_shots is not None else film_total_shots(film)
+    cap = (
+        float(publish_cap_s)
+        if publish_cap_s is not None
+        else film_publish_cap(film)
+    )
+    shots = [empty_shot(f"{i:02d}") for i in range(1, count + 1)]
     return {
         "film": film,
         "slug": slug,
         "audio_policy": audio_policy,
         "score": score,
+        "total_shots": count,
+        "publish_cap_s": cap,
         "shots": shots,
     }
 
@@ -505,24 +524,25 @@ def compile_film(
     meta = parsed["meta"]
     film = str(meta["film"])
     slug = str(meta["slug"])
-    if FILM_SLUGS.get(film) != slug:
-        raise ValueError(f"slug mismatch for {film}: {slug}")
     chosen = template or print_template(meta["print"])
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "shots").mkdir(exist_ok=True)
     (dest / "takes").mkdir(exist_ok=True)
     (dest / "stems").mkdir(exist_ok=True)
     (dest / "film.yaml").write_text(yaml_text, encoding="utf-8")
+    total = film_total_shots(film)
     state = new_state(
         film,
         slug,
         audio_policy=str(meta.get("audio_policy") or "world-only"),
         score=str(meta.get("score") or "none"),
+        total_shots=total,
+        publish_cap_s=film_publish_cap(film),
     )
     for yaml_shot in parsed["shots"]:
         beat = int(yaml_shot["beat"])
         shot = int(yaml_shot["shot"])
-        sid = shot_id(beat, shot)
+        sid = shot_id(beat, shot, total=total)
         payload = {
             "id": sid,
             "template": chosen,

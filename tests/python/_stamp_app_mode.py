@@ -1024,6 +1024,23 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         film_minimal=True,
         enhance_off_identity=True,
     ),
+    **{
+        f"shorts/{film}/act-0{act}": _spec(
+            "film",
+            "film",
+            default_view="graph",
+            film_minimal=True,
+            enhance_off_identity=True,
+        )
+        for film in (
+            "tide-table",
+            "night-oven",
+            "glasshouse",
+            "last-lane",
+            "breakwater",
+        )
+        for act in range(1, 6)
+    },
     "audio/podcast/audio-first": _spec("audio", "audio"),
     "audio/podcast/radio-drama": _spec("audio", "audio"),
     "audio/dub/localize": _spec("audio", "audio"),

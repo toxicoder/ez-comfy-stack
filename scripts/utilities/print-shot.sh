@@ -33,6 +33,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
+# shellcheck source=../lib/films.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/films.sh"
 
 COMFY_URL="${COMFY_URL:-http://127.0.0.1:${COMFY_PORT:-8188}}"
 RESUME=0
@@ -49,12 +51,7 @@ SHOT_ID=""
 #   0 known; 1 unknown
 #######################################
 print_shot_slug() {
-  case "${1}" in
-    go-see) echo gosee ;;
-    still-here) echo stillhere ;;
-    switchyard) echo switchyard ;;
-    *) return 1 ;;
-  esac
+  film_slug "${1:-}"
 }
 
 #######################################
@@ -86,7 +83,7 @@ parse_args() {
       --resume) RESUME=1 ;;
       -h | --help)
         echo "Usage: $0 <film> <id> | $0 --resume <film>" >&2
-        echo "  film: go-see|still-here|switchyard   id: 01..18" >&2
+        echo "  film: catalog id   id: 01..N (18 or 90)" >&2
         exit 0
         ;;
       --*)
