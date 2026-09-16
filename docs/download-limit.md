@@ -67,7 +67,7 @@ Via manage:
 ./scripts/manage.sh download-models --limit off     # no throttle (SSH risk)
 ```
 
-`--limit N` is integer **Mbps** (not MB/s). 40 Mbps ≈ 5 MB/s. `.env` `DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still **clears on exit**.
+`--limit N` is integer **Mbps** (not MB/s). 40 Mbps ≈ 5 MB/s. `.env` `DOWNLOAD_LIMIT=40` is the persistent default; the flag wins for one invocation. Wrap still **clears on exit**. `--limit` is not `--tier` — pack ids live on [Download tiers](download-tiers.md).
 
 ```mermaid
 flowchart TB

@@ -301,9 +301,9 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps th
 
 - Source of truth: `includes/glossary.json` (JSON, not YAML — CI pytest does not install PyYAML)
 - Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`
-- `short` is one line (modal + `title=` tooltip); `long` is markdown on [glossary.md](glossary.md)
+- `short` is one line (CSS hover bubble via `data-short` / `data-category`, dialog body, and `title=` fallback); `long` is markdown on [glossary.md](glossary.md)
 - First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
-- `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>`
+- `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>` with a category line
 - Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
 - Do **not** enable `content.instant` unless you re-test the glossary modal, `javascripts/commands.js`, **and** `javascripts/tables.js` on client-side navigation
 

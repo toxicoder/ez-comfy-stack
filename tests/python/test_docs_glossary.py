@@ -187,6 +187,8 @@ def test_wrap_sets_relative_href_and_title(gloss) -> None:
     out = gloss.wrap_html(html, _lab_terms(gloss), page_url="learn/pipeline/")
     assert 'data-href="../../glossary/#klein"' in out
     assert 'title="Apache still-image model."' in out
+    assert 'data-short="Apache still-image model."' in out
+    assert 'data-category="Models"' in out
     assert 'role="button"' in out
     assert 'aria-haspopup="dialog"' in out
 
@@ -212,7 +214,10 @@ def test_inject_dialog_once_when_terms_wrapped(gloss) -> None:
     payload = json.loads(match.group(1))
     assert payload["klein"]["title"] == "Klein 4B"
     assert payload["klein"]["short"] == "Apache still-image model."
+    assert payload["klein"]["category"] == "Models"
     assert payload["klein"]["see_also"] == ["wan"]
+    assert "ez-glossary-dialog__category" in out
+    assert 'id="ez-glossary-category"' in out
 
 
 def test_skip_glossary_page(gloss) -> None:
@@ -289,7 +294,7 @@ def test_real_glossary_json_schema() -> None:
     """Shipped includes/glossary.json is unique, linked, and complete."""
     gloss = _load_glossary_mod()
     terms = gloss.load_glossary(GLOSSARY_JSON)
-    assert len(terms) >= 50
+    assert len(terms) >= 140
     ids = [t.id for t in terms]
     assert len(ids) == len(set(ids))
     aliases_lower = []
@@ -355,6 +360,58 @@ def test_extra_css_styles_modal_without_hiding_header() -> None:
     assert ".ez-glossary-dialog" in css
     assert "prefers-reduced-motion" in css
     assert re.search(r"display\s*:\s*none", css) is None
+
+
+def test_category_order_includes_downloads(gloss) -> None:
+    """Downloads is a first-class glossary group for pack/CLI terms."""
+    assert "Downloads" in gloss.CATEGORY_ORDER
+
+
+def test_enhance_long_does_not_claim_every_lab_graph() -> None:
+    """Seeded graphs pin Enhance off for authored recipes."""
+    gloss = _load_glossary_mod()
+    terms = {term.id: term for term in gloss.load_glossary(GLOSSARY_JSON)}
+    assert "enhance" in terms
+    long = terms["enhance"].long.lower()
+    assert "every lab graph" not in long
+    assert "off" in long
+    assert "90s" in long or "film" in long
+
+
+def test_wrap_new_operator_aliases(gloss) -> None:
+    """IC-LoRA, NVFP4, Hugging Face, and Blender wrap as distinct terms."""
+    terms = gloss.load_glossary(GLOSSARY_JSON)
+    html = (
+        "<p>Queue IC-LoRA after an NVFP4 still. "
+        "Hugging Face is gated. Park Blender first.</p>"
+    )
+    out = gloss.wrap_html(html, terms, page_url="download-tiers/")
+    assert 'data-term="ic-lora"' in out
+    assert 'data-term="nvfp4"' in out
+    assert 'data-term="huggingface"' in out
+    assert 'data-term="blender"' in out
+    assert ">IC-LoRA<" in out or ">IC-LoRA</span>" in out
+    assert "NVFP4" in out
+    assert "Hugging Face" in out
+    assert "Blender" in out
+
+
+def test_glossary_js_fills_category() -> None:
+    """Modal script writes the category line from the JSON payload."""
+    js = GLOSSARY_JS.read_text(encoding="utf-8")
+    assert "ez-glossary-category" in js
+    assert "term.category" in js
+    assert "data-short" in js
+
+
+def test_extra_css_hover_tooltip_without_hiding() -> None:
+    """Hover bubble uses opacity, not display:none / visibility:hidden."""
+    css = EXTRA_CSS.read_text(encoding="utf-8")
+    assert "data-short" in css
+    assert ".ez-term::after" in css or ".ez-term[data-short]::after" in css
+    assert "opacity" in css
+    assert re.search(r"display\s*:\s*none", css) is None
+    assert re.search(r"visibility\s*:\s*hidden", css) is None
 
 
 def test_hooks_source_calls_glossary() -> None:

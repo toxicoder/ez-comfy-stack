@@ -61,6 +61,7 @@
     dialog.setAttribute("data-ez-bound", "1");
 
     var titleEl = document.getElementById("ez-glossary-title");
+    var catEl = document.getElementById("ez-glossary-category");
     var bodyEl = document.getElementById("ez-glossary-body");
     var seeEl = document.getElementById("ez-glossary-see");
     var linkEl = document.getElementById("ez-glossary-link");
@@ -79,6 +80,10 @@
         return false;
       }
       titleEl.textContent = term.title;
+      if (catEl) {
+        catEl.textContent = term.category || "";
+        catEl.hidden = !term.category;
+      }
       bodyEl.textContent = term.short;
       var base = glossaryBase(href || linkEl.getAttribute("href") || "");
       linkEl.setAttribute("href", base + "#" + id);
@@ -147,6 +152,36 @@
       }
     }
 
+    document.addEventListener(
+      "mouseenter",
+      function (ev) {
+        var trigger = ev.target && ev.target.closest ? ev.target.closest(".ez-term") : null;
+        if (!trigger) {
+          return;
+        }
+        // CSS hover bubble reads data-short / data-category. Drop title=
+        // while hovered so the native tooltip does not stack on top.
+        if (!trigger.getAttribute("data-native-title")) {
+          trigger.setAttribute("data-native-title", trigger.getAttribute("title") || "");
+        }
+        trigger.removeAttribute("title");
+      },
+      true
+    );
+    document.addEventListener(
+      "mouseleave",
+      function (ev) {
+        var trigger = ev.target && ev.target.closest ? ev.target.closest(".ez-term") : null;
+        if (!trigger) {
+          return;
+        }
+        var stored = trigger.getAttribute("data-native-title");
+        if (stored) {
+          trigger.setAttribute("title", stored);
+        }
+      },
+      true
+    );
     document.addEventListener("click", function (ev) {
       var trigger = ev.target.closest ? ev.target.closest(".ez-term") : null;
       if (trigger) {
