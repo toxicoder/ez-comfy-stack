@@ -8901,7 +8901,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 08:18 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T08:18:29+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 08:34 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T08:34:50+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -18892,7 +18892,7 @@ Prompt enhance is <strong>off</strong> so authored text (recipe, script labels, 
 <h4 id="art_mode"><code>art_mode</code><a class="headerlink" href="#art_mode" title="Permanent link">&para;</a></h4>
 <p>Type <code>COMBO</code>. Range / default: skip.</p>
 <p>Cover art policy.</p>
-<p><strong>How it affects generation:</strong> skip on every audio Queue. generate is klein occupancy — later session. upload needs Cover image wired.</p>
+<p><strong>How it affects generation:</strong> skip on every audio Queue (Cover <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loadimage" data-href="../../../../../../glossary/#loadimage" data-short="Node that feeds a PNG into I2V. Point it at your still, not only example.png." data-category="Studio" title="Node that feeds a PNG into I2V. Point it at your still, not only example.png.">LoadImage</span> is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.</p>
 <p><strong>This graph (all 20 instances):</strong> <code>skip</code></p>
 <p><strong>Other choices</strong></p>
 <table>
@@ -18909,7 +18909,7 @@ Prompt enhance is <strong>off</strong> so authored text (recipe, script labels, 
 </tr>
 <tr>
 <td><code>upload</code></td>
-<td>Use the Cover image socket.</td>
+<td>Un-bypass Cover image and wire the socket.</td>
 </tr>
 <tr>
 <td><code>generate</code></td>
