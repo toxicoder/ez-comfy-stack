@@ -244,7 +244,7 @@ class EZKleinPromptEnhance:
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
-        """Return Comfy widget specs for Klein t2i/edit/identity.
+        """Return Comfy widget specs for Klein t2i/edit/identity/text_swap.
 
         Returns:
             Required and optional widget map.
@@ -257,7 +257,7 @@ class EZKleinPromptEnhance:
                     {"multiline": True, "default": "", "dynamicPrompts": False},
                 ),
                 "enhance": _ENHANCE_BOOL,
-                "mode": (["t2i", "edit", "identity"], {"default": "t2i"}),
+                "mode": (["t2i", "edit", "identity", "text_swap"], {"default": "t2i"}),
                 "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
                 "style": (style_ids(), {"default": STYLE_NONE}),
                 "catalog": _CATALOG_INPUT,
@@ -276,7 +276,7 @@ class EZKleinPromptEnhance:
     DESCRIPTION = (
         "Rewrites a lazy prompt for Klein 4B / Qwen3-4B with the on-box "
         "Qwen3-4B-Instruct-2507 GGUF. Modes: t2i, edit, identity (camera-free "
-        "bible). Optional context is bible/research (ignored when Enhance is "
+        "bible), text_swap (glyph-lock lettering). Optional context is bible/research (ignored when Enhance is "
         "off). Enhance defaults on. After Queue the CLIP prompt box is the "
         "CLIP string; Enhance status explains passthrough. Fail-soft without "
         "a GGUF (run download-models)."
@@ -298,7 +298,7 @@ class EZKleinPromptEnhance:
         Args:
             prompt: Custom textarea used when sample is Custom.
             enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
-            mode: ``t2i``, ``edit``, or ``identity``.
+            mode: ``t2i``, ``edit``, ``identity``, or ``text_swap``.
             duration_hint: Framing line (e.g. YouTube 16:9 still).
             style: Style catalog id or none.
             context: Optional bible/research STRING.
@@ -312,6 +312,8 @@ class EZKleinPromptEnhance:
             name = "klein_edit"
         elif mode == "identity":
             name = "klein_identity"
+        elif mode == "text_swap":
+            name = "klein_text_swap"
         else:
             name = "klein_t2i"
         return _run(

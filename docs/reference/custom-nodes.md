@@ -49,6 +49,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 12 nodes | Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack |
+| `ez_image` | 2 nodes | Snap a still to the Klein ÷16 grid; restore source pixel size |
 | `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
@@ -147,7 +148,7 @@ Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft withou
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZKleinPromptEnhance` | Klein Prompt Enhance | `sample` combo (union of every `js/samples/` catalog + `custom`; JS shows 20 for this graph), `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo, `catalog` STRING (hidden); optional `context` STRING (forceInput) | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. Context is bible/research; ignored when Enhance is off. Sample recipes live in `js/samples/`. The Python combo is a union so Comfy accepts graph catalogs such as `klein_place` (Cliff villa on **klein/dream-house**) |
+| `EZKleinPromptEnhance` | Klein Prompt Enhance | `sample` combo (union of every `js/samples/` catalog + `custom`; JS shows 20 for this graph), `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` `text_swap` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo, `catalog` STRING (hidden); optional `context` STRING (forceInput) | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. `text_swap` is glyph-lock lettering (style ignored; source still owns look). Context is bible/research; ignored when Enhance is off. Sample recipes live in `js/samples/`. The Python combo is a union so Comfy accepts graph catalogs such as `klein_place` (Cliff villa on **klein/dream-house**) |
 | `EZWanPromptEnhance` | Wan Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` `s2v` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint; `s2v` talking-head (wav owns lip-sync). **No audio** except s2v. Style ignored on I2V/flf/vace/s2v. Context ignored when Enhance is off |
 | `EZLTXPromptEnhance` | LTX Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `iclora` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. `iclora` describes look/materials, not the control type. Style ignored on I2V. Context (identity/logline) ignored when Enhance is off |
 | `EZSamplePrompt` | Sample Prompt | `sample` combo, `prompt` STRING, `catalog` STRING | `STRING` prompt | — | Recipe picker for Prompt Forge / Beat Sheet logline. **Custom** uses the textarea |
@@ -181,6 +182,17 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZAppForge` | App Forge | `sample` combo, `prompt` STRING (default 1:1 mug brief), `template` combo (`auto` + lab ids), `slug` STRING, `as_app` BOOLEAN (default on), `overwrite` BOOLEAN (default off), `catalog` STRING | `STRING` path | graph **`llm`** (not CLI `occupancy enter llm`) | Clones a shipped lab graph. Does not Queue. Fail-soft without a GGUF (keyword heuristic). Banned MiniMax / Klein 9B / FLUX.2-dev |
+
+---
+
+## ez_image
+
+Category `ez-comfy/image`. Size helpers for Klein edit graphs. Torch / Comfy `common_upscale` is lazy inside `run()`.
+
+| Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
+| --- | --- | --- | --- | --- | --- |
+| `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | — | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
+| `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | — | Lanczos-resize to `size_src` H×W. No-op when already equal |
 
 ---
 

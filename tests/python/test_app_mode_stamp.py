@@ -17,11 +17,13 @@ from _stamp_app_mode import (
     DEFAULT_WIDGET_DESCRIPTIONS,
     HIDDEN_APP_WIDGETS,
     STAMP_SPECS,
+    display_label,
     infer_suite_inputs,
     linear_input_node_id,
     stamp_app_mode,
     suite_json_paths,
     widget_config,
+    widget_description,
 )
 
 # ComfyUI_frontend v1.49.6 WidgetId: graphId:nodeId:name (three parts).
@@ -280,10 +282,26 @@ def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
 def test_wired_edit_and_i2v_keep_image() -> None:
     tweak = _widget_names(_load("klein/character-tweak.json"))
     assert "image" in tweak
+    swap = _widget_names(_load("klein/text-swap.json"))
+    assert "image" in swap
+    assert "style" not in swap
     i2v = _widget_names(_load("wan/still-to-video-5s.json"))
     assert "image" in i2v
     clay = _widget_names(_load("dcc/klein/clay-hero.json"))
     assert "image" in clay
+
+
+def test_text_swap_prompt_help_allows_missing_node() -> None:
+    assert widget_description("prompt") == DEFAULT_WIDGET_DESCRIPTIONS["prompt"]
+    assert display_label(None, "prompt") == "Prompt"
+    enh = next(
+        node
+        for node in _load("klein/text-swap.json")["nodes"]
+        if node.get("type") == "EZKleinPromptEnhance"
+    )
+    help_text = widget_description("prompt", enh) or ""
+    assert "Replacement lettering" in help_text
+    assert display_label(enh, "prompt") == "New lettering"
 
 
 def test_ltx_showcase_app_widgets() -> None:

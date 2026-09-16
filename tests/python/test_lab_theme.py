@@ -51,6 +51,7 @@ EXEMPT = {
     "klein/podcast-cover",
     "klein/food-tabletop",
     "klein/before-after",
+    "klein/text-swap",
     "ltx/interior-ambience",
     "shorts/still-here",
     "shorts/switchyard",

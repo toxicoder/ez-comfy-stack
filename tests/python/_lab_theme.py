@@ -294,3 +294,12 @@ CHARACTER_DRAFT = (
 CHARACTER_TWEAK = (
     "Keep this character's face, wardrobe, and proportions. Change only what this prompt names."
 )
+TEXT_SWAP = (
+    "Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, "
+    "size, tracking, perspective, material, lighting, and every other pixel of the image. "
+    "Spell HELLO exactly."
+)
+TEXT_SWAP_LOCK = (
+    "Keep the same typeface, weight, color, size, tracking, perspective, material, "
+    "lighting, and every other pixel of the image. Spell the new lettering exactly."
+)

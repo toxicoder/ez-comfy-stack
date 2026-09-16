@@ -123,6 +123,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swa
 | **ltx/first-last-5s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
 | **ltx/audio-to-video-5s** | ltx | Freeze a ~5 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **klein/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
+| **klein/text-swap** | klein | `ez_text_swap` — replace lettering, lock type/angle/look, match source size |
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/<lane>/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **klein/creator/instagram-portrait** → **wan/creator/instagram-story-loop** → **ltx/creator/instagram-reel-lifestyle**. Klein stills may use 1280×720; LTX feeders stay **1280×704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.
 

@@ -114,12 +114,16 @@ REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)
 REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
 REASON_STYLE_IGNORED_S2V = "style ignored in s2v (start image and wav own look)"
 REASON_STYLE_IGNORED_VC = "style ignored in vc (previous frames own look)"
+REASON_STYLE_IGNORED_TEXT_SWAP = (
+    "style ignored in text_swap (source still owns look)"
+)
 STYLE_IGNORED_MODES = {
     "i2v": REASON_STYLE_IGNORED_I2V,
     "flf": REASON_STYLE_IGNORED_FLF,
     "vace": REASON_STYLE_IGNORED_VACE,
     "s2v": REASON_STYLE_IGNORED_S2V,
     "vc": REASON_STYLE_IGNORED_VC,
+    "text_swap": REASON_STYLE_IGNORED_TEXT_SWAP,
 }
 
 _STYLES: dict[str, dict[str, Any]] | None = None

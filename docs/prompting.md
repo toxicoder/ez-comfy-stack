@@ -134,7 +134,7 @@ In-tree pack `custom_nodes/ez_prompt_enhance` (category **ez-comfy/prompt**). En
 
 | Node | Modes | Use on |
 | --- | --- | --- |
-| **Klein Prompt Enhance** | `t2i`, `edit`, `identity` | every Klein still / edit / identity bible (including 90s film identity). NVFP4 / base share this rewriter |
+| **Klein Prompt Enhance** | `t2i`, `edit`, `identity`, `text_swap` | every Klein still / edit / identity bible (including 90s film identity). `text_swap` is glyph-lock lettering on **klein/text-swap**. NVFP4 / base share this rewriter |
 | **Wan Prompt Enhance** | `t2v`, `i2v`, `flf`, `vace`, `s2v` | wan-i2v-5s / wan-t2v-5s / wan-flf-5s / wan-vace-join / A14B / S2V talking-head |
 | **LTX Prompt Enhance** | `t2v`, `i2v`, `iclora` | ltx-i2v-5s / ltx-t2v-5s / each 90s film shot / IC-LoRA (Enhance **off** on seeded envelopes) |
 | **Z-Image Prompt Enhance** | still | opt-in Z-Image Turbo. Preview on **inspire/prompt-forge**. No `z_image_turbo` lab printer |
@@ -201,4 +201,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **klein/still-draft** first ([Getting Started](getting-started.md)), or **klein/character-draft** then **klein/character-tweak** to iterate a still. Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein/still-draft** first ([Getting Started](getting-started.md)), or **klein/character-draft** then **klein/character-tweak** to iterate a still. Swap lettering on an existing plate with **klein/text-swap** (output matches the source size; style is off). Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

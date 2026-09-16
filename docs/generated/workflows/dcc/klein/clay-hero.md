@@ -640,11 +640,11 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet).
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
 
 **This graph:** `edit`
 
@@ -655,6 +655,7 @@ System prompt flavor.
 | `t2i` | New still. |
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
+| `text_swap` | Replace lettering; source still owns look and size. |
 
 #### `duration_hint`
 

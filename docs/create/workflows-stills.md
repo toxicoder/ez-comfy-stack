@@ -38,6 +38,7 @@ Lane B Klein stills (same occupancy **klein**):
 | --- | --- | --- |
 | **[klein/still-daily](../generated/workflows/klein/still-daily.md)** | klein | Daily still. Click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
 | **[klein/platform-pack](../generated/workflows/klein/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
+| **[klein/text-swap](../generated/workflows/klein/text-swap.md)** | klein | Lettering swap. Load a still, type new lettering, output matches source size. Prefix `ez_text_swap` |
 
 ---
 
