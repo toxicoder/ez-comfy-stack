@@ -89,7 +89,7 @@ teardown() {
   run cmd_run
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"ez_gosee_90s.mp4"* ]]
-  [[ "${output}" == *"cap 90s"* ]]
+  [[ "${output}" == *"cap 90.00s"* ]]
   DRY_RUN=0
   SKIP_ACCEPT=1
   OUT_MP4="${COMFY_OUTPUT_DIR}/cap.mp4"
