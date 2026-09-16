@@ -13,6 +13,7 @@ from _lab_paths import LAB_ROOT, lab_json
 from _stamp_app_mode import (
     DRIVE_THROUGH_STAMP_STEMS,
     NILL_BYE_STAMP_STEMS,
+    NODE_MODE_BYPASS,
     STAMP_SPECS,
 )
 
@@ -317,6 +318,7 @@ def test_music_apps_expose_duration_and_vocal_mode() -> None:
         assert "Album" in labels, stem
         load = next(n for n in graph["nodes"] if n["type"] == "LoadImage")
         assert load["title"] == "Cover image"
+        assert int(load.get("mode") or 0) == NODE_MODE_BYPASS, stem
         image_out = next(
             out for out in load["outputs"] if str(out.get("name") or "").upper() == "IMAGE"
         )

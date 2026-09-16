@@ -301,6 +301,7 @@ WIDGET_ORDER = (
 HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock", "catalog"})
 STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace"})
 NODE_MODE_ALWAYS = 0
+NODE_MODE_BYPASS = 4
 WIDGET_HEIGHTS = {
     "prompt": 140,
     "lyrics": 140,
@@ -387,7 +388,10 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "track": "Track number on the album.",
     "tracktotal": "Number of tracks on the album.",
     "year": "Album year.",
-    "art_mode": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
+    "art_mode": (
+        "skip (default). upload: graph view, Ctrl+B Cover image, then wire. "
+        "generate: Queue cover.json first."
+    ),
     "tags": "Genre-first ACE-Step tags.",
     "lyrics": "Lyrics, or [inst] for instrumental.",
     "audio_notes": "World SFX to interleave. No score unless you asked for music.",

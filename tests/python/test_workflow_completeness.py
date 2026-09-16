@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from _lab_paths import lab_example_paths, lab_json, load_lab_graph
-from _stamp_app_mode import BANNED, linear_input_node_id
+from _stamp_app_mode import BANNED, NODE_MODE_BYPASS, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
 NOTE_TYPES = {"Note", "MarkdownNote"}
@@ -173,6 +173,17 @@ def test_lab_graph_completeness(path: Path) -> None:
     assert not unexpected, (
         path.name,
         [(n["id"], n.get("type"), n.get("title")) for n in unexpected],
+    )
+    active_cover = [
+        n
+        for n in isolates
+        if n.get("type") == "LoadImage"
+        and str(n.get("title") or "") == "Cover image"
+        and int(n.get("mode") or 0) != NODE_MODE_BYPASS
+    ]
+    assert not active_cover, (
+        path.name,
+        [(n["id"], n.get("title"), n.get("mode")) for n in active_cover],
     )
 
     for node in graph["nodes"]:
