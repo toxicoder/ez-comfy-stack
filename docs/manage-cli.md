@@ -61,6 +61,7 @@ id: doctor
 | `research-mcp` | In-tree creative research MCP (chat, web_search, research, list_lab_apps). CPU GGUF | `execute_code`; arbitrary URL fetch; GPU-offload llama |
 | `blender-llm` | Optional host Qwen3-4B CPU → blender-mcp. Path D if llama.cpp missing | GPU-offload next to Comfy |
 | `blender` | Host Blender sidecar; Workbench in blender-desk; dies if Comfy is heavy | Cycles GPU while Compose is up |
+| `blender-install` | Host apt install of Ubuntu `blender` (universe). Never in the Dockerfile. Occupancy does not install Blender | Add Blender to `docker/Dockerfile`; unofficial aarch64 CUDA tarballs |
 | `export-guides` | Dump a 1280×704 (or 768×1280) / 120f clay+depth+canny pack; dies if Comfy is heavy. `--print ltx-iclora-depth\|ltx-iclora-canny\|wan-flf` | 1280×720; dump while Comfy is unparked |
 | `blender-stills` | Dump a single-frame clay/depth/canny still; dies if Comfy is heavy. `--size 1280x704\|768x1280\|1024x1280\|1024x1024\|1280x720`. `--install-inputs` copies `first.png` into `input/` (no Blender; compose may stay up) | 1080p; dump while Comfy is unparked; reuse `house-views` |
 | `house-views` | Dump 1024×1280 Instagram 4:5 clay stills + GLB; copies LoadImage plates into `COMFY_OUTPUT_DIR/input`. Dies if Comfy is heavy. `--install-inputs` copies an existing dump into `input/` (no Blender; compose may stay up). `--seed-inputs` copies a pack or renders the layout into `input/` (no Blender; compose may stay up). `start` also seeds missing plates | Reuse `export-guides`; dump while Comfy is unparked; Godot |

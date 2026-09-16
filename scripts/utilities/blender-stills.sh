@@ -30,6 +30,8 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 source "${REPO_ROOT}/scripts/lib/compose.sh"
 # shellcheck source=../lib/occupancy.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/occupancy.sh"
+# shellcheck source=../lib/blender_host.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/blender_host.sh"
 
 ENGINE="blender"
 FILM=""
@@ -178,26 +180,6 @@ default_input_dir() {
 }
 
 #######################################
-# Fail unless host blender is on PATH.
-# Globals:
-#   PATH
-# Arguments:
-#   None
-# Outputs:
-#   Install hint on stderr when missing
-# Returns:
-#   0 present; 1 missing
-#######################################
-require_blender() {
-  if ! command -v blender >/dev/null 2>&1; then
-    err "blender not on PATH. Host install only — never in docker/Dockerfile."
-    err "See docs/blender-gb10-sidecar.md"
-    return 1
-  fi
-  return 0
-}
-
-#######################################
 # Snap operator size to the still contract.
 # Globals:
 #   SIZE, WIDTH, HEIGHT
@@ -299,10 +281,11 @@ cmd_run() {
   fi
   require_still_size || return 1
   require_blender || return 1
-  local dest input
+  local dest input bin=""
   dest="${OUT_DIR:-$(default_out_dir)}"
   mkdir -p "${dest}"
-  local -a bcmd=(blender)
+  bin="$(blender_host_bin)" || return 1
+  local -a bcmd=("${bin}")
   if [[ -n ${BLEND} ]]; then
     bcmd+=("${BLEND}")
   fi

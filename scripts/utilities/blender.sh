@@ -23,6 +23,8 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 source "${REPO_ROOT}/scripts/lib/compose.sh"
 # shellcheck source=../lib/occupancy.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/occupancy.sh"
+# shellcheck source=../lib/blender_host.sh disable=SC1091
+source "${REPO_ROOT}/scripts/lib/blender_host.sh"
 
 #######################################
 # Launch host blender or print install hint.
@@ -39,6 +41,7 @@ cmd_run() {
   if [[ ${1:-} == "-h" || ${1:-} == "--help" ]]; then
     echo "Usage: blender.sh [--] [args]  (host Blender; Workbench in blender-desk)" >&2
     echo "  Never in docker/Dockerfile. occupancy enter blender-desk if compose is up." >&2
+    echo "  Missing binary: ./scripts/manage.sh blender-install" >&2
     echo "  See docs/occupancy.md and docs/blender-gb10-sidecar.md" >&2
     return 0
   fi
@@ -47,13 +50,13 @@ cmd_run() {
     shift
   fi
   refuse_cycles_while_compose "$@" || return $?
-  if ! command -v blender >/dev/null 2>&1; then
-    err "blender not on PATH. Host install only — never in docker/Dockerfile."
-    err "See docs/blender-gb10-sidecar.md"
+  local bin=""
+  if ! bin="$(blender_host_bin)"; then
+    print_blender_host_hint
     return 1
   fi
   occupancy_set_blender_pid $$
-  exec blender "$@"
+  exec "${bin}" "$@"
 }
 
 if [[ ${BASH_SOURCE[0]} == "${0}" ]]; then

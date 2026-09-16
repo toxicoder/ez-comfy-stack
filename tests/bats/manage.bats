@@ -79,6 +79,7 @@ FROZEN_MANAGE_VERBS=(
   blender-llm
   download-llm
   llm-sidecar
+  blender-install
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
@@ -315,6 +316,12 @@ FROZEN_MANAGE_VERBS=(
   run cmd_blender --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"host Blender"* ]]
+  run type cmd_blender_install
+  [ "${status}" -eq 0 ]
+  run cmd_blender_install --help
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Host apt"* ]]
+  [[ "${output}" == *"Dockerfile"* ]]
   run cmd_export_guides --help
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"guide pack"* || "${output}" == *"1280x704"* ]]

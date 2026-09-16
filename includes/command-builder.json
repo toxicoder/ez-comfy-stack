@@ -828,6 +828,16 @@
       "flags": []
     },
     {
+      "id": "blender-install",
+      "title": "blender-install",
+      "description": "Host apt install of Ubuntu blender (universe). Never in the Dockerfile. Occupancy does not install Blender.",
+      "argv": [
+        "./scripts/manage.sh",
+        "blender-install"
+      ],
+      "flags": []
+    },
+    {
       "id": "export-guides",
       "title": "export-guides",
       "description": "Dump a 1280x704 (or 768x1280) / 120f clay+depth+canny pack. Dies if Comfy is heavy.",

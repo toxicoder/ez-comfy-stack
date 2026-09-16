@@ -9,13 +9,13 @@ tags: [blender, sidecar, occupancy, gb10]
 **What's on this page**
 
 - Why Blender stays on the host
+- `manage.sh blender-install` (Ubuntu universe apt; never in the Dockerfile)
 - `manage.sh blender` occupancy refuse
 - Dump verbs: `export-guides` (5.00s pack) and `blender-stills` (creator plates)
-- Install hint (not a packager)
 
 **What this enables**
 
-- Optional DCC pass on the same Spark after Comfy is stopped
+- Optional DCC pass on the same Spark after Comfy is parked
 - No Blender layer in `docker/Dockerfile` (image stays Comfy + torch)
 
 !!! danger "One heavy GPU job"
@@ -23,6 +23,7 @@ tags: [blender, sidecar, occupancy, gb10]
     `blender.sh` **dies** if Compose is up and **not** parked. Park first:
 
     ```bash
+    ./scripts/manage.sh blender-install
     ./scripts/manage.sh occupancy enter blender-desk
     ./scripts/manage.sh blender -- --background
     ```
@@ -34,6 +35,7 @@ tags: [blender, sidecar, occupancy, gb10]
 ## Operator path
 
 ```bash
+./scripts/manage.sh blender-install
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh blender -- --background
 # or: ./scripts/utilities/blender.sh -- /path/to/scene.blend
@@ -42,7 +44,14 @@ tags: [blender, sidecar, occupancy, gb10]
 # hammer: ./scripts/manage.sh occupancy idle
 ```
 
-If `blender` is not on `PATH`, the script prints an install hint and exits 1. This stack does **not** apt/pip/Docker-install Blender. Ubuntu aarch64 `blender` is enough for Workbench. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only.
+`occupancy enter blender-desk` parks Comfy. It does **not** install Blender. If no host binary is found (`PATH`, `BLENDER_BIN`, or `~/.local/bin/blender`), dumps print an install hint and exit 1:
+
+```bash
+./scripts/manage.sh blender-install
+# or: sudo apt-get install -y blender
+```
+
+Never apt/pip inside the Comfy container or `docker/Dockerfile`. Ubuntu aarch64 universe `blender` (4.0.x) is enough for Workbench. Official blender.org Linux tarballs are x64 only. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only. No DCC → `house-views --seed-inputs` or **klein/dream-house**.
 
 Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 

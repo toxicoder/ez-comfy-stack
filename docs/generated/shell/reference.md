@@ -390,6 +390,10 @@ Optional on-box Qwen3-4B CPU client for blender-mcp.
 
 Host Blender sidecar (refuses if Comfy is a heavy job).
 
+### Command: blender-install
+
+Host apt install of Ubuntu blender (never in docker/Dockerfile).
+
 ### Command: export-guides
 
 Occupancy-gated Blender guide-pack dump (P0). Godot is P2.
@@ -531,6 +535,18 @@ Outputs:
   Status via log/warn/err
 Returns:
   0 on success/abort; 1 on hard confirm failure
+
+<!-- source: scripts/lib/blender_host.sh -->
+## blender_host
+
+Resolve a host Blender binary for Workbench dumps. Never in docker/Dockerfile.
+Source after scripts/lib/common.sh (uses err). Not executable.
+
+!!! warning
+
+    Safety:
+      Does not start Compose. Does not apt-install unless blender-install.sh
+      is invoked. Does not weaken restart: "no", headroom, or download-limit.
 
 <!-- source: scripts/lib/common.sh -->
 ## common
@@ -786,6 +802,32 @@ Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
 
 ### Command: export-guides
+
+<!-- source: scripts/utilities/blender-install.sh -->
+## blender-install
+
+Host apt install of Ubuntu blender for Workbench dumps. Never in
+docker/Dockerfile. Occupancy does not install Blender.
+
+```bash
+Usage:
+  ./scripts/utilities/blender-install.sh
+  ./scripts/manage.sh blender-install
+
+```
+
+!!! warning
+
+    Safety:
+      Host package only. Does not start Compose. Does not weaken restart: "no",
+      headroom, or download-limit clear-on-exit. Does not fetch unofficial
+      aarch64 CUDA tarballs.
+
+
+Environment:
+  BLENDER_BIN, LAB_MOCK_BLENDER_INSTALL, LAB_MOCK_BLENDER_BIN_DIR, LAB_NO_SUDO
+
+### Command: blender-install
 
 <!-- source: scripts/utilities/blender-llm.sh -->
 ## blender-llm
