@@ -223,6 +223,9 @@ ENHANCE_TYPES = (
     "EZKleinPromptEnhance",
     "EZWanPromptEnhance",
     "EZLTXPromptEnhance",
+    "EZZimagePromptEnhance",
+    "EZLongCatPromptEnhance",
+    "EZDreamXPromptEnhance",
     "EZAceStepPromptEnhance",
     "EZRapLyrics",
     "EZPodcastScript",
@@ -504,9 +507,14 @@ def _enhance_mode(node: Mapping[str, Any]) -> str:
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZLongCatPromptEnhance",
     ):
         idx = 3 if len(values) >= 7 else 2
         return str(values[idx]) if len(values) > idx else ""
+    if ntype == "EZZimagePromptEnhance":
+        return "t2i"
+    if ntype == "EZDreamXPromptEnhance":
+        return "i2v"
     if ntype == "EZAceStepPromptEnhance":
         idx = 4 if len(values) >= 6 else 3
         return str(values[idx]) if len(values) > idx else ""
@@ -667,7 +675,7 @@ def display_label(
             return "Vocal / instrumental"
     if collide and ntype in ENHANCE_TYPES:
         family = None
-        for token in ("Klein", "Wan", "LTX"):
+        for token in ("Klein", "Wan", "LTX", "Z-Image", "LongCat", "DreamX"):
             if token.lower() in title_l:
                 family = token
                 break
@@ -1128,6 +1136,9 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZZimagePromptEnhance",
+        "EZLongCatPromptEnhance",
+        "EZDreamXPromptEnhance",
     ),
     "inspire/cinema-rack": (
         "EZKleinPromptEnhance",
@@ -1298,6 +1309,9 @@ def _collect_raw_inputs(
                 "EZKleinPromptEnhance",
                 "EZWanPromptEnhance",
                 "EZLTXPromptEnhance",
+                "EZZimagePromptEnhance",
+                "EZLongCatPromptEnhance",
+                "EZDreamXPromptEnhance",
             ):
                 continue
             raw.extend(
@@ -1306,7 +1320,7 @@ def _collect_raw_inputs(
                     (nid, "enhance", node),
                 )
             )
-            if ntype == "EZLTXPromptEnhance":
+            if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
                 raw.append((nid, "audio_notes", node))
         return raw
 
@@ -1390,7 +1404,7 @@ def _collect_raw_inputs(
             if not skip_style:
                 raw.append((nid, "style", node))
             raw.append((nid, "enhance", node))
-            if ntype == "EZLTXPromptEnhance":
+            if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
                 raw.append((nid, "audio_notes", node))
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):
             if any(name == "width" for _nid, name, _node in raw):

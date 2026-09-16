@@ -436,7 +436,7 @@ id: stop
 | Need | Page |
 | --- | --- |
 | Concepts (ComfyUI, latents, why these models) | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
-| How to write Klein / Wan / LTX prompts | [Prompting](prompting.md) |
+| How to write Klein / Wan / LTX / opt-in prompts | [Prompting](prompting.md) |
 | Licenses, $10M LTX cap, banned models | [Model licenses](licenses.md) |
 | Still → Wan 5 s → LTX 5 s AV playbook | [Still to motion to AV](visual-generative-ai.md) |
 | `manage.sh` verbs | [manage.sh reference](manage-cli.md) |

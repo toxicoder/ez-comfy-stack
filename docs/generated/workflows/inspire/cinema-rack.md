@@ -506,7 +506,7 @@ Type `COMBO`.
 
 System flavor.
 
-**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace for those opt-in graphs.
+**How it affects generation:** i2v is the smoke. t2v when LoadImage is bypassed. flf / vace / s2v for those opt-in graphs.
 
 **This graph:** `t2v`
 
@@ -518,6 +518,7 @@ System flavor.
 | `i2v` | Start image owns look; prompt is motion. |
 | `flf` | First-last-frame. |
 | `vace` | VACE join. |
+| `s2v` | Speech-to-video; wav owns lip-sync. |
 
 #### `duration_hint`
 
@@ -651,9 +652,9 @@ Run the rewriter.
 
 Type `COMBO`.
 
-t2v vs i2v system prompt.
+t2v vs i2v vs iclora system prompt.
 
-**How it affects generation:** i2v when a start still is wired.
+**How it affects generation:** i2v when a start still is wired. iclora describes look, not the control type.
 
 **This graph:** `t2v`
 
@@ -663,6 +664,7 @@ t2v vs i2v system prompt.
 | --- | --- |
 | `t2v` | Text to AV. |
 | `i2v` | Start still owns look. |
+| `iclora` | Union Control look/materials; guide owns blocking. |
 
 #### `duration_hint`
 

@@ -90,7 +90,7 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 | **klein/hook-still** | Vertical 9:16 first-frame hook (`ez_hook_still`) |
 | **klein/character-draft** | Character still. Prompt + style, 1024×1280, prefix `ez_character` |
 | **klein/character-tweak** | Edit that still. LoadImage + change prompt, ReferenceLatent, prefix `ez_character_tweak` |
-| **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein + Wan + LTX enhance preview. Occupancy **llm** (CPU GGUF) |
+| **inspire/prompt-forge** | No UNET. One Prompt + optional Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview. Occupancy **llm** (CPU GGUF) |
 | **inspire/cinema-rack** | No UNET. Pick cinematography axes (shot size, move, light, …) and splice Klein / Wan / LTX prompts. Occupancy **llm** (CPU GGUF). [Cinema Rack](create/cinema-rack.md) |
 | **inspire/research-chat** | Creative-process chat with web search and sequential research subagents. Occupancy **llm** (CPU GGUF). Laptop agents: `research-mcp` |
 | **inspire/app-forge** | No UNET. Clone a shipped lab graph into live `_user/` as a new App. Occupancy **llm** (CPU GGUF). Laptop agents: `studio-mcp`. [App Forge](create/app-forge.md) |

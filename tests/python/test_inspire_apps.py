@@ -56,6 +56,9 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     assert "EZKleinPromptEnhance" in types
     assert "EZWanPromptEnhance" in types
     assert "EZLTXPromptEnhance" in types
+    assert "EZZimagePromptEnhance" in types
+    assert "EZLongCatPromptEnhance" in types
+    assert "EZDreamXPromptEnhance" in types
     blob = json.dumps(graph)
     for needle in BANNED:
         assert needle not in blob

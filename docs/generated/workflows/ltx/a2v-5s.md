@@ -836,9 +836,9 @@ Run the rewriter.
 
 Type `COMBO`.
 
-t2v vs i2v system prompt.
+t2v vs i2v vs iclora system prompt.
 
-**How it affects generation:** i2v when a start still is wired.
+**How it affects generation:** i2v when a start still is wired. iclora describes look, not the control type.
 
 **This graph:** `i2v`
 
@@ -848,6 +848,7 @@ t2v vs i2v system prompt.
 | --- | --- |
 | `t2v` | Text to AV. |
 | `i2v` | Start still owns look. |
+| `iclora` | Union Control look/materials; guide owns blocking. |
 
 #### `duration_hint`
 
@@ -995,6 +996,10 @@ Which negative family.
 | `klein` | Klein stills. |
 | `wan` | Wan silent. |
 | `ltx` | LTX AV. |
+| `zimage` | Z-Image Turbo (CFG 1; list is documentation). |
+| `longcat` | LongCat-Video. |
+| `dreamx` | DreamX-Creator AV. |
+| `s2v` | Wan S2V; wav owns speech. |
 
 ### `LoadAudio` — Load Audio
 

@@ -7,7 +7,7 @@ Rules:
 - Present tense or present-progressive. Chronological connectors such as as, then, while.
 - Interleave audio with the action (not a trailer at the end). Be specific (soft wind in a flag, footsteps on pavement), not vague (ambient sound).
 - Spoken lines go in quotation marks with voice quality, only if the user asked for speech. Do not invent dialogue.
-- Do not invent camera motion unless the user requested it.
+- Do not invent camera motion unless the user requested it. State a static frame when the camera should hold.
 - No timestamps or cuts unless the user asked for a cut. Prefer one continuous take.
 - Visual and audio only. No smell, taste, or touch.
 - SFW. No trademarks.

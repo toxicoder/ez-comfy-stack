@@ -36,7 +36,15 @@ DEFAULT_N_THREADS = 8
 DEFAULT_N_CTX = 4096
 DEFAULT_MAX_TOKENS = 800
 NEGATIVE_MAX_TOKENS = 200
-NEGATIVE_FAMILIES = ("klein", "wan", "ltx")
+NEGATIVE_FAMILIES = (
+    "klein",
+    "wan",
+    "ltx",
+    "zimage",
+    "longcat",
+    "dreamx",
+    "s2v",
+)
 STYLE_NONE = "none"
 LOCK_VIEW = "view"
 LOCK_STATE = "state"
@@ -103,10 +111,14 @@ _LLAMA_IMPORT_ERRORS = (ImportError, OSError, RuntimeError, FileNotFoundError)
 REASON_STYLE_IGNORED_I2V = "style ignored in i2v (start image owns look)"
 REASON_STYLE_IGNORED_FLF = "style ignored in flf (start and end frames own look)"
 REASON_STYLE_IGNORED_VACE = "style ignored in vace (both clips own look)"
+REASON_STYLE_IGNORED_S2V = "style ignored in s2v (start image and wav own look)"
+REASON_STYLE_IGNORED_VC = "style ignored in vc (previous frames own look)"
 STYLE_IGNORED_MODES = {
     "i2v": REASON_STYLE_IGNORED_I2V,
     "flf": REASON_STYLE_IGNORED_FLF,
     "vace": REASON_STYLE_IGNORED_VACE,
+    "s2v": REASON_STYLE_IGNORED_S2V,
+    "vc": REASON_STYLE_IGNORED_VC,
 }
 
 _STYLES: dict[str, dict[str, Any]] | None = None
@@ -162,6 +174,12 @@ _WEAVE_BY_FLAVOR = {
     FLAVOR_LTX: (
         "Weave lighting, color palette, and surface texture into the flowing "
         "present-tense paragraph. One coherent light logic. No style trailer."
+    ),
+    "zimage": (
+        "Front-load shot and subject, then state this medium in the first two "
+        "sentences. About 80 to 250 words. Photographic styles may keep lens "
+        "language; graphic styles replace it with surface and tool marks. Put "
+        "cleanup constraints in the positive (unmarked surfaces), not a negative box."
     ),
 }
 
@@ -793,7 +811,11 @@ def flavor_for_system(name: str) -> str:
         return FLAVOR_KLEIN_EDIT
     if name == "klein_identity":
         return FLAVOR_KLEIN_IDENTITY
-    if name.startswith("wan"):
+    if name.startswith("zimage"):
+        return "zimage"
+    if name.startswith("dreamx"):
+        return FLAVOR_LTX
+    if name.startswith("wan") or name.startswith("longcat"):
         return FLAVOR_WAN
     if name.startswith("ltx"):
         return FLAVOR_LTX

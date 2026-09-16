@@ -22,12 +22,15 @@ from ez_prompt_enhance import client  # noqa: E402
 from ez_prompt_enhance.nodes import (  # noqa: E402
     EZAceStepPromptEnhance,
     EZContextJoin,
+    EZDreamXPromptEnhance,
     EZKleinPromptEnhance,
+    EZLongCatPromptEnhance,
     EZLTXPromptEnhance,
     EZNegativePromptEnhance,
     EZPromptJoin,
     EZSamplePrompt,
     EZWanPromptEnhance,
+    EZZimagePromptEnhance,
     NODE_CLASS_MAPPINGS,
     sanitize_instrumental_lyrics,
 )
@@ -157,6 +160,49 @@ def test_system_prompts_encode_model_rules() -> None:
         assert "watermark" in neg.lower() or "artifact" in neg.lower()
     ltx_neg = client.load_system_prompt("negative_ltx")
     assert "audio" in ltx_neg.lower() or "foley" in ltx_neg.lower()
+    klein_neg = client.load_system_prompt("negative_klein")
+    assert "base" in klein_neg.lower()
+    wan_t2v_l = wan_t2v.lower()
+    assert "a14b" in wan_t2v_l
+    s2v = client.load_system_prompt("wan_s2v")
+    assert "wav" in s2v.lower()
+    assert "lip-sync" in s2v.lower() or "lip sync" in s2v.lower()
+    iclora = client.load_system_prompt("ltx_iclora")
+    assert "depth" in iclora.lower() or "canny" in iclora.lower()
+    assert "control type" in iclora.lower() or "pose" in iclora.lower()
+    zimage = client.load_system_prompt("zimage_t2i")
+    assert "Qwen3-4B" in zimage
+    assert "<|im_start|>" in zimage
+    assert "80" in zimage and "250" in zimage
+    assert "negative" in zimage.lower()
+    long_t2v = client.load_system_prompt("longcat_t2v")
+    assert "scene" in long_t2v.lower()
+    assert "cfg" in long_t2v.lower()
+    long_i2v = client.load_system_prompt("longcat_i2v")
+    assert "still" in long_i2v.lower() or "start image" in long_i2v.lower()
+    long_vc = client.load_system_prompt("longcat_vc")
+    assert "continuation" in long_vc.lower() or "previous" in long_vc.lower()
+    dreamx = client.load_system_prompt("dreamx_i2v")
+    assert "first frame" in dreamx.lower()
+    assert "audio" in dreamx.lower() or "acoustic" in dreamx.lower()
+    z_neg = client.load_system_prompt("negative_zimage")
+    assert "comma" in z_neg.lower()
+    assert "watermark" in z_neg.lower() or "artifact" in z_neg.lower()
+    lc_neg = client.load_system_prompt("negative_longcat")
+    assert "overexposed" in lc_neg.lower() or "static" in lc_neg.lower()
+    dx_neg = client.load_system_prompt("negative_dreamx")
+    assert "audio" in dx_neg.lower() or "foley" in dx_neg.lower()
+    s2v_neg = client.load_system_prompt("negative_wan_s2v")
+    assert "wav" in s2v_neg.lower()
+    assert client.NEGATIVE_FAMILIES == (
+        "klein",
+        "wan",
+        "ltx",
+        "zimage",
+        "longcat",
+        "dreamx",
+        "s2v",
+    )
 
 
 def test_style_catalog_is_fifty_unique() -> None:
@@ -290,7 +336,15 @@ def test_negative_prompt_enhance_uses_positive_context() -> None:
     node = EZNegativePromptEnhance()
     types = node.INPUT_TYPES()
     assert types["required"]["enhance"][1]["default"] is True
-    assert types["required"]["family"][0] == ["klein", "wan", "ltx"]
+    assert types["required"]["family"][0] == [
+        "klein",
+        "wan",
+        "ltx",
+        "zimage",
+        "longcat",
+        "dreamx",
+        "s2v",
+    ]
     assert types["optional"]["positive"][1]["forceInput"] is True
     assert node.OUTPUT_NODE is True
     watercolor = "Transparent watercolor on paper. A rooftop, wet-into-wet, paper tooth."
@@ -1417,6 +1471,9 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZZimagePromptEnhance",
+        "EZLongCatPromptEnhance",
+        "EZDreamXPromptEnhance",
         "EZNegativePromptEnhance",
         "EZPromptJoin",
         "EZAceStepPromptEnhance",
@@ -1529,7 +1586,30 @@ def test_node_mappings_modes_preview_and_style() -> None:
     klein_modes = klein.INPUT_TYPES()["required"]["mode"][0]
     assert "identity" in klein_modes
     wan_modes = wan.INPUT_TYPES()["required"]["mode"][0]
-    assert wan_modes == ["t2v", "i2v", "flf", "vace"]
+    assert wan_modes == ["t2v", "i2v", "flf", "vace", "s2v"]
+    ltx_modes = ltx.INPUT_TYPES()["required"]["mode"][0]
+    assert ltx_modes == ["t2v", "i2v", "iclora"]
+    zimage = EZZimagePromptEnhance()
+    longcat = EZLongCatPromptEnhance()
+    dreamx = EZDreamXPromptEnhance()
+    assert zimage.OUTPUT_NODE is True
+    assert longcat.INPUT_TYPES()["required"]["mode"][0] == ["t2v", "i2v", "vc"]
+    assert "audio_notes" in dreamx.INPUT_TYPES()["required"]
+    with patch.object(client, "complete", return_value=("z-still", None)) as mock:
+        zimage.run("a mug", True, "YouTube 16:9 still")
+    assert "Z-Image" in mock.call_args[0][0] or "Qwen3-4B" in mock.call_args[0][0]
+    with patch.object(client, "complete", return_value=("lc-t2v", None)) as mock:
+        longcat.run("a car", True, "t2v", "5 seconds, 30 fps")
+    assert "LongCat" in mock.call_args[0][0]
+    with patch.object(client, "complete", return_value=("dx-av", None)) as mock:
+        dreamx.run("wind on sand", True, "5 seconds, 24 fps", "wind, no score")
+    assert "DreamX" in mock.call_args[0][0]
+    with patch.object(client, "complete", return_value=("s2v-talk", None)) as mock:
+        wan.run("talking head", True, "s2v", "audio length")
+    assert "S2V" in mock.call_args[0][0] or "wav" in mock.call_args[0][0].lower()
+    with patch.object(client, "complete", return_value=("iclora-look", None)) as mock:
+        ltx.run("ornate brick", True, "iclora", "5 seconds, 24 fps")
+    assert "IC-LoRA" in mock.call_args[0][0] or "control" in mock.call_args[0][0].lower()
     with patch.object(client, "complete", return_value=("bible", None)) as mock:
         ident_out = klein.run("cedar cabin", True, "identity", "", "anime")
     ident_clip = ident_out["result"][0].lower()
@@ -1554,6 +1634,37 @@ def test_sanitize_instrumental_lyrics_folds_free_text() -> None:
         sanitize_instrumental_lyrics("[drop - warped 808]\ngrid 193 0")
         == "[drop - warped 808, grid 193 0]"
     )
+
+
+def test_opt_in_enhance_flavors_and_modes() -> None:
+    """Z-Image / LongCat / DreamX / IC-LoRA / S2V system prompts and modes."""
+    assert client.flavor_for_system("zimage_t2i") == "zimage"
+    assert client.flavor_for_system("dreamx_i2v") == client.FLAVOR_LTX
+    assert client.flavor_for_system("longcat_t2v") == client.FLAVOR_WAN
+    assert client.flavor_for_system("longcat_i2v") == client.FLAVOR_WAN
+    assert client.flavor_for_system("ltx_iclora") == client.FLAVOR_LTX
+    zimage = EZZimagePromptEnhance()
+    assert "prompt" in zimage.INPUT_TYPES()["required"]
+    longcat = EZLongCatPromptEnhance()
+    dreamx = EZDreamXPromptEnhance()
+    ltx = EZLTXPromptEnhance()
+    with patch.object(client, "complete", return_value=("lc-i2v", None)) as mock:
+        longcat.run("breeze", True, "i2v", "5 seconds, 30 fps")
+    assert "still" in mock.call_args[0][0].lower() or "start" in mock.call_args[0][0].lower()
+    with patch.object(client, "complete", return_value=("lc-vc", None)) as mock:
+        longcat.run("next beat", True, "vc", "5 seconds, 30 fps")
+    assert "continuation" in mock.call_args[0][0].lower() or "previous" in mock.call_args[0][0].lower()
+    with patch.object(client, "complete", return_value=("iclora-look", None)) as mock:
+        ltx.run("ornate brick", True, "iclora", "5 seconds, 24 fps")
+    assert "control" in mock.call_args[0][0].lower() or "IC-LoRA" in mock.call_args[0][0]
+    with patch.object(client, "complete", return_value=("ltx-i2v", None)) as mock:
+        ltx.run("from the first frame", True, "i2v", "5 seconds, 24 fps")
+    assert "first frame" in mock.call_args[0][0].lower()
+    with patch.object(client, "complete", return_value=("z-styled", None)) as mock:
+        zimage.run("a mug", True, "YouTube 16:9 still", "anime")
+    assert "Visual style" in mock.call_args[0][1]
+    off = dreamx.run("wind", False, "5 seconds, 24 fps")
+    assert off["ui"]["passthrough"][0] == "enhance off"
 
 
 def test_ace_step_enhance_node_defaults_and_modes() -> None:
@@ -1598,11 +1709,14 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
 
     from _lab_paths import lab_graph_paths
 
-    skip_ids = {"optional/longcat-video", "audio/finish"}
+    skip_ids = {"audio/finish"}
     enhance_types = {
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
+        "EZZimagePromptEnhance",
+        "EZLongCatPromptEnhance",
+        "EZDreamXPromptEnhance",
         "EZNegativePromptEnhance",
         "EZAceStepPromptEnhance",
         "EZRapLyrics",

@@ -225,9 +225,9 @@ def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names[:3] == ["sample", "prompt", "value"]
     assert names.count("prompt") == 1
-    assert names.count("style") == 3
-    assert names.count("enhance") == 3
-    assert "audio_notes" in names
+    assert names.count("style") == 6
+    assert names.count("enhance") == 6
+    assert names.count("audio_notes") == 2
     assert "mode" not in names
     assert "duration_hint" not in names
 
@@ -300,7 +300,7 @@ def test_i2v_hides_style_t2v_keeps_it() -> None:
 
 def test_prompt_forge_keeps_style_on_i2v_family_encoders() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
-    assert names.count("style") == 3
+    assert names.count("style") == 6
     labels = _labels(_load("inspire/prompt-forge.json"))
     assert labels[0] == "Sample prompt"
     assert "Prompt" in labels

@@ -115,7 +115,7 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 | Workflow | What it does |
 | --- | --- |
-| **[inspire/prompt-forge](generated/workflows/inspire/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX enhance preview (occupancy **llm**) |
+| **[inspire/prompt-forge](generated/workflows/inspire/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview (occupancy **llm**) |
 | **[inspire/cinema-rack](generated/workflows/inspire/cinema-rack.md)** | No UNET. Splice cinematography axes into Klein / Wan / LTX (occupancy **llm**). [Cinema Rack](create/cinema-rack.md) |
 | **[inspire/research-chat](generated/workflows/inspire/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
 | **[inspire/app-forge](generated/workflows/inspire/app-forge.md)** | No UNET. Clone a lab graph into live `_user/` (occupancy **llm**). [App Forge](create/app-forge.md) |

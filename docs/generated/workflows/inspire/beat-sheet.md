@@ -399,9 +399,9 @@ Run the rewriter.
 
 Type `COMBO`.
 
-t2v vs i2v system prompt.
+t2v vs i2v vs iclora system prompt.
 
-**How it affects generation:** i2v when a start still is wired.
+**How it affects generation:** i2v when a start still is wired. iclora describes look, not the control type.
 
 **This graph (all 18 instances):** `i2v`
 
@@ -411,6 +411,7 @@ t2v vs i2v system prompt.
 | --- | --- |
 | `t2v` | Text to AV. |
 | `i2v` | Start still owns look. |
+| `iclora` | Union Control look/materials; guide owns blocking. |
 
 #### `duration_hint`
 

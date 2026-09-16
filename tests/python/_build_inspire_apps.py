@@ -29,7 +29,7 @@ LAZY = LAZY_FORGE
 
 FORGE_NOTE = """## inspire/prompt-forge
 
-Prompt Forge — rewrite a lazy sentence for Klein, Wan, and LTX. No UNET, no VAE, no KSampler.
+Prompt Forge — rewrite a lazy sentence for every US-safe CLIP family. No UNET, no VAE, no KSampler.
 
 Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
 
@@ -39,11 +39,13 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 
 1. Type a lazy sentence once in **Prompt** (or leave the canned line).
 2. Optional **Context**: paste a research brief or bible. Empty is fine.
-3. Set family mode (t2i / i2v / t2v), style, and aspect / duration hint on each enhance node.
-4. Queue. Each Enhance node previews the rewritten STRING. All three families read the same Prompt and Context.
-5. Copy the family you need into **klein/still-draft** (Spark Still).
+3. Set family mode (t2i / i2v / t2v / s2v / iclora / vc), style, and aspect / duration hint on each enhance node.
+4. Queue. Each Enhance node previews the rewritten STRING. Klein, Wan, LTX, Z-Image, LongCat, and DreamX read the same Prompt and Context.
+5. Copy the family you need into **klein/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
+Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
+Wan S2V: wav owns lip-sync. DreamX: first frame owns look; paragraph is AV.
 """
 
 BEAT_NOTE = """## inspire/beat-sheet
@@ -239,15 +241,19 @@ def _linked_context(lid: int) -> dict:
 
 
 def build_prompt_forge() -> dict:
-    note_h = 320.0
+    note_h = 360.0
     note_group_h = note_h + GROUP_TITLE_INSET
     desk_h = 200.0
+    row1_h = 380.0
     desk_group_top = LAB_GROUP_Y0 + note_group_h
     desk_y = desk_group_top + GROUP_TITLE_INSET
     enh_group_top = desk_group_top + desk_h + GROUP_TITLE_INSET + 20.0
     enh_y = enh_group_top + GROUP_TITLE_INSET
-    prompt_links = [1, 2, 3]
-    ctx_links = [4, 5, 6]
+    row2_group_top = enh_group_top + row1_h + GROUP_TITLE_INSET + 20.0
+    row2_y = row2_group_top + GROUP_TITLE_INSET
+    prompt_links = [1, 2, 3, 7, 8, 9]
+    ctx_links = [4, 5, 6, 10, 11, 12]
+    cat = "inspire/prompt-forge"
     note = _node(
         1,
         "Note",
@@ -263,7 +269,7 @@ def build_prompt_forge() -> dict:
         [40, desk_y],
         [420, desk_h],
         "Prompt",
-        ["custom", LAZY, "inspire/prompt-forge"],
+        ["custom", LAZY, cat],
         1,
         _str_out("prompt"),
     )
@@ -284,7 +290,7 @@ def build_prompt_forge() -> dict:
         [40, enh_y],
         [420, 300],
         "Klein family",
-        [LAZY, True, "t2i", "YouTube 16:9 still", "none"],
+        ["custom", LAZY, True, "t2i", "YouTube 16:9 still", "none", cat],
         3,
         _str_out(),
     )
@@ -295,7 +301,7 @@ def build_prompt_forge() -> dict:
         [500, enh_y],
         [420, 300],
         "Wan family",
-        [LAZY, True, "i2v", "5 seconds, 24 fps", "none"],
+        ["custom", LAZY, True, "i2v", "5 seconds, 24 fps", "none", cat],
         4,
         _str_out(),
     )
@@ -306,11 +312,44 @@ def build_prompt_forge() -> dict:
         [960, enh_y],
         [420, 380],
         "LTX family",
-        [LAZY, True, "i2v", "5 seconds, 24 fps", "rooftop wind, no score", "none"],
+        ["custom", LAZY, True, "i2v", "5 seconds, 24 fps", "rooftop wind, no score", "none", cat],
         5,
         _str_out(),
     )
     ltx["inputs"] = [_linked_prompt(3), _linked_context(6)]
+    zimage = _node(
+        7,
+        "EZZimagePromptEnhance",
+        [40, row2_y],
+        [420, 280],
+        "Z-Image family",
+        ["custom", LAZY, True, "YouTube 16:9 still", "none", cat],
+        6,
+        _str_out(),
+    )
+    zimage["inputs"] = [_linked_prompt(7), _linked_context(10)]
+    longcat = _node(
+        8,
+        "EZLongCatPromptEnhance",
+        [500, row2_y],
+        [420, 300],
+        "LongCat family",
+        ["custom", LAZY, True, "t2v", "5 seconds, 30 fps", "none", cat],
+        7,
+        _str_out(),
+    )
+    longcat["inputs"] = [_linked_prompt(8), _linked_context(11)]
+    dreamx = _node(
+        9,
+        "EZDreamXPromptEnhance",
+        [960, row2_y],
+        [420, 380],
+        "DreamX family",
+        ["custom", LAZY, True, "5 seconds, 24 fps", "world SFX, no score", "none", cat],
+        8,
+        _str_out(),
+    )
+    dreamx["inputs"] = [_linked_prompt(9), _linked_context(12)]
     links = [
         [1, 5, 0, 2, 0, "STRING"],
         [2, 5, 0, 3, 0, "STRING"],
@@ -318,13 +357,19 @@ def build_prompt_forge() -> dict:
         [4, 6, 0, 2, 1, "STRING"],
         [5, 6, 0, 3, 1, "STRING"],
         [6, 6, 0, 4, 1, "STRING"],
+        [7, 5, 0, 7, 0, "STRING"],
+        [8, 5, 0, 8, 0, "STRING"],
+        [9, 5, 0, 9, 0, "STRING"],
+        [10, 6, 0, 7, 1, "STRING"],
+        [11, 6, 0, 8, 1, "STRING"],
+        [12, 6, 0, 9, 1, "STRING"],
     ]
     graph = {
         "id": "inspire/prompt-forge",
         "revision": 1,
-        "last_node_id": 6,
-        "last_link_id": 6,
-        "nodes": [note, prompt, context, klein, wan, ltx],
+        "last_node_id": 9,
+        "last_link_id": 12,
+        "nodes": [note, prompt, context, klein, wan, ltx, zimage, longcat, dreamx],
         "links": links,
         "groups": [
             _group(1, "NOTE", 20, LAB_GROUP_Y0, 1380, note_group_h, "#3f789e"),
@@ -340,12 +385,18 @@ def build_prompt_forge() -> dict:
             _group(3, "KLEIN", 20, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
             _group(4, "WAN", 480, enh_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
             _group(5, "LTX", 940, enh_group_top, 460, 380 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(6, "Z-IMAGE", 20, row2_group_top, 460, 280 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(7, "LONGCAT", 480, row2_group_top, 460, 300 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(8, "DREAMX", 940, row2_group_top, 460, 380 + GROUP_TITLE_INSET, "#3f789e"),
         ],
         "config": {},
         "extra": {
             "lab_profile": "inspire/prompt-forge",
             "lab_note": FORGE_NOTE,
-            "lab_description": "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX enhance preview",
+            "lab_description": (
+                "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX / "
+                "Z-Image / LongCat / DreamX enhance preview"
+            ),
             "ds": {"scale": 1, "offset": [0, 0]},
         },
         "version": 0.4,
@@ -825,12 +876,108 @@ def build_cinema_rack() -> dict:
     return graph
 
 
+LONGCAT_NOTE = """## optional/longcat-video
+
+Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
+
+Download: ./scripts/manage.sh download-longcat --tier video
+Context-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample — tensor-parallel LLMs belong in nvidia-dgx-spark-lab.
+Unload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.
+
+This canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.
+
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance off to pin the widget text.
+"""
+
+
+def build_longcat_stub() -> dict:
+    note_h = 360.0
+    cat = "optional/longcat-video"
+    note = _node(
+        1,
+        "Note",
+        [40, LAB_NODE_Y0],
+        [1340, note_h],
+        "Operator note",
+        [LONGCAT_NOTE],
+        0,
+    )
+    prompt = _node(
+        2,
+        "EZSamplePrompt",
+        [40, LAB_NODE_Y0 + note_h + 40],
+        [420, 200],
+        "Prompt",
+        ["custom", LAZY, cat],
+        1,
+        _str_out("prompt"),
+    )
+    prompt["outputs"][0]["links"] = [1]
+    enhance = _node(
+        3,
+        "EZLongCatPromptEnhance",
+        [500, LAB_NODE_Y0 + note_h + 40],
+        [420, 300],
+        "LongCat Prompt Enhance",
+        ["custom", LAZY, True, "t2v", "5 seconds, 30 fps", "none", cat],
+        2,
+        _str_out(),
+    )
+    enhance["inputs"] = [_linked_prompt(1)]
+    neg = _node(
+        4,
+        "EZNegativePromptEnhance",
+        [960, LAB_NODE_Y0 + note_h + 40],
+        [420, 280],
+        "Negative Prompt Enhance",
+        [
+            "overexposed, static, subtitles, extra fingers, still picture, watermark",
+            True,
+            "longcat",
+        ],
+        3,
+        _str_out(),
+    )
+    neg["inputs"] = [{"name": "positive", "type": "STRING", "link": 2}]
+    enhance["outputs"][0]["links"] = [2]
+    links = [
+        [1, 2, 0, 3, 0, "STRING"],
+        [2, 3, 0, 4, 0, "STRING"],
+    ]
+    graph = {
+        "id": "longcat-video",
+        "revision": 1,
+        "last_node_id": 4,
+        "last_link_id": 2,
+        "nodes": [note, prompt, enhance, neg],
+        "links": links,
+        "groups": [],
+        "config": {},
+        "extra": {
+            "lab_note": LONGCAT_NOTE,
+            "lab_profile": "optional/longcat-video",
+            "lab_description": "LongCat-Video MIT opt-in prompt preview. No NCCL. Not a 90s default.",
+            "lab_longcat": {
+                "enabled": True,
+                "nccl": False,
+                "context_parallel": "LAB_ALLOW_CONTEXT_PARALLEL=1",
+            },
+            "lab_stub": True,
+            "lab_rel": "optional/longcat-video",
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+    return graph
+
+
 def main() -> None:
     _dump(lab_json("inspire/prompt-forge.json"), build_prompt_forge())
     _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
     _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
     _dump(lab_dest("inspire/cinema-rack.json"), build_cinema_rack())
     _dump(lab_dest("inspire/app-forge.json"), build_app_forge())
+    _dump(lab_json("optional/longcat-video.json"), build_longcat_stub())
 
 
 if __name__ == "__main__":

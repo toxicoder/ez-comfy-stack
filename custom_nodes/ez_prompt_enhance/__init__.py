@@ -1,4 +1,4 @@
-"""ez-comfy model-specific prompt enhance nodes (Klein, Wan, LTX)."""
+"""ez-comfy model-specific prompt enhance nodes (Klein, Wan, LTX, opt-in)."""
 
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 
