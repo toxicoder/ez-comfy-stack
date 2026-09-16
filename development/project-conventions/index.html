@@ -3300,8 +3300,8 @@
   Extra["clear / wrap&lt;br/&gt;download-limit only"] --&gt; Safety["Always clear on exit"]</code></pre>
 <h2 id="docker">Docker<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h2>
 <ul>
-<li>One compose service for the unified stack  </li>
-<li>Multi-stage image: <strong>runtime</strong> builder stages + <strong>runtime</strong> final (no secrets/models; <code>CUDA_BASE_IMAGE=…devel</code> is an override)  </li>
+<li>One compose service for the unified stack</li>
+<li>Multi-stage image: <strong>runtime</strong> builder stages + <strong>runtime</strong> final (no secrets/models; <code>CUDA_BASE_IMAGE=…devel</code> is an override)</li>
 <li><strong>Layer cache contract</strong> (do not regress):</li>
 <li>Torch stage <code>COPY</code> is only <code>install-comfy/core.sh</code> + <code>phase-venv-torch.sh</code> (not <code>common.sh</code> / Comfy pins)</li>
 <li>Named stages <code>torch</code> → <code>comfy</code> → <code>nodes</code>; pin <code>ARG</code>s declared in the stage that uses them</li>
@@ -3310,10 +3310,10 @@
 <li>BuildKit <code># syntax=docker/dockerfile:1</code>, <code>COPY --link</code>, <code>COPY --chmod</code>, pip + apt cache mounts</li>
 <li>Compose bind-mounts ops scripts + <code>install-comfy/</code> for zero-rebuild iteration</li>
 <li><code>docker/.dockerignore</code> is <strong>whitelist-only</strong> (<code>*</code> then <code>!exceptions</code>). Every <code>COPY</code> source from the build context must have a matching <code>!</code> line or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ghcr" data-href="../glossary/#ghcr" title="GitHub Container Registry. Default start pulls a branch-aligned us-safe-studio image.">GHCR</span>/<code>docker build</code> fails with <code>not found</code></li>
-<li>GHCR channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.  </li>
-<li>Scripts as real files (not inline ConfigMap YAML)  </li>
-<li>Host model cache + named volume for Comfy state  </li>
-<li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code>  </li>
+<li>GHCR channel by long-lived branch: publish tags <code>us-safe-studio</code> (<code>main</code>) and <code>us-safe-studio-development</code>; <code>manage.sh</code> pulls the tag for the current git branch (feature branches use the development channel). Old <code>flux-to-ltx*</code> tags freeze on the previous image.</li>
+<li>Scripts as real files (not inline ConfigMap YAML)</li>
+<li>Host model cache + named volume for Comfy state</li>
+<li>Compose <code>restart: "no"</code>; explicit <code>mem_limit</code> / <code>mem_reservation</code></li>
 </ul>
 <pre class="mermaid"><code>flowchart TB
   Compose["docker-compose.yml"] --&gt; Svc["comfyui service"]
@@ -3324,16 +3324,16 @@
   Svc --&gt; Scripts["bind entrypoint · install · patch"]</code></pre>
 <h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
 <ul>
-<li>TDD for behavior changes  </li>
-<li>BATS for shell; pytest for Python; <strong>Pyright</strong> (Pylance) and <strong>mypy</strong> for first-party Python  </li>
+<li>TDD for behavior changes</li>
+<li>BATS for shell; pytest for Python; <strong>Pyright</strong> (Pylance) and <strong>mypy</strong> for first-party Python</li>
 <li><strong>Hermetic by default</strong>: <code>test_helper.bash</code> sets <code>LAB_HERMETIC=1</code>, speed/probe mocks, and <code>HF_PROGRESS=0</code> (no real curl/speedtest, no progress-monitor sleeps)</li>
 <li><strong>Parallel BATS</strong>: <code>bats --jobs</code> across files when GNU <code>parallel</code> is installed (<code>BATS_JOBS</code> override); serialize within files</li>
 <li><code>make coverage</code> enforces:</li>
 <li><strong>100% Python line coverage</strong> on <code>patch_get_free_memory</code> and <code>patch_unified_memory_copy</code></li>
 <li><strong>Pyright</strong> clean at <code>standard</code> and <strong>mypy</strong> clean (<code>tests/typecheck.sh</code>; Comfy/torch/bpy imports are not required)</li>
 <li><strong>Strict shell inventory</strong>: every function in <code>scripts/**/*.sh</code> and <code>docker/**/*.sh</code> must be <strong>named under <code>tests/</code></strong> (production-only references do not count)</li>
-<li>Full BATS suite green  </li>
-<li><strong>Tests ship with production code</strong> — same commit as the files under test  </li>
+<li>Full BATS suite green</li>
+<li><strong>Tests ship with production code</strong> — same commit as the files under test</li>
 <li><strong>Test shell style</strong>: <code>tests/bats/*.bats</code>, <code>tests/bats/*.bash</code>, and <code>tests/*.sh</code> follow the Google Shell Style Guide where applicable (quoted <code>"${var}"</code>, <code>[[ … ]]</code>, Google-style helper comments in <code>test_helper.bash</code>, 2-space indent / shfmt for <code>.sh</code> runners)</li>
 <li>Install test tools: <code>pip install -r tests/requirements.txt</code> (pytest, pytest-cov, pyright, mypy)</li>
 </ul>
@@ -3351,9 +3351,9 @@
   Lint --&gt; Pyright</code></pre>
 <h2 id="branches">Branches<a class="headerlink" href="#branches" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Feature work from <code>development</code>: <code>feature/&lt;short-description&gt;</code>  </li>
-<li>Conventional commit titles  </li>
-<li>PR into <code>development</code> first  </li>
+<li>Feature work from <code>development</code>: <code>feature/&lt;short-description&gt;</code></li>
+<li>Conventional commit titles</li>
+<li>PR into <code>development</code> first</li>
 </ul>
 <pre class="mermaid"><code>flowchart LR
   Feat["feature/* · fix/* · chore/* · docs/*"] --&gt; Dev["development"]
@@ -3381,6 +3381,7 @@
 </ul>
 <h3 id="docs-formatting-human-readability">Docs formatting (human readability)<a class="headerlink" href="#docs-formatting-human-readability" title="Permanent link">&para;</a></h3>
 <p>Readers <strong>scan</strong>. Prefer inverted pyramid: outcome and commands first, theory and edge cases later.</p>
+<p><strong>Source spacing</strong> (enforced by <code>tests/python/test_docs_markdown.py</code>): no trailing whitespace (including two-space hard breaks), at most one blank line between blocks, files end with a single newline, ATX headings and column-0 fences/tables/admonitions sit next to a blank line. Do not hand-edit <code>docs/generated/shell/reference.md</code> — <code>docs/generate_shell_docs.py</code> collapses extra blanks.</p>
 <p><strong>Required page chrome</strong> (every <code>docs/*.md</code> page, including <code>docs/learn/</code>):</p>
 <ol>
 <li>YAML frontmatter: <code>title</code>, <code>description</code>, <code>tags</code></li>
