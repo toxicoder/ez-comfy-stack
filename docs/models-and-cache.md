@@ -231,4 +231,3 @@ id: download-models
 ## Disk headroom
 
 `manage.sh doctor` / `start` require free disk ≥ `MIN_DISK_FREE_GIB` (default 40).
-

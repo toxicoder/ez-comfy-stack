@@ -52,6 +52,8 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` `on_post
 
 **Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
 
+**Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
+
 Safety callouts: `!!! danger` / `!!! warning` for occupancy XOR, `restart: "no"`, headroom, download-limit, licenses.
 
 Operator git clone / blob refs: write `__DOCS_GIT_REF__` (hooks stamp `main` or `development` for the published alias). Contributor workflow text (“branch from `development`”) stays literal.

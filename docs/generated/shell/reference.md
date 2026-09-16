@@ -53,7 +53,6 @@ Usage:
       See .env.example — MODELS_DIR, HF_TOKEN, MEM_LIMIT, DOWNLOAD_LIMIT,
       LAB_NON_INTERACTIVE, LAB_CONFIRM_TOKEN, MIN_HOST_FREE_GIB, etc.
 
-
 Exit codes:
   0 — success or interactive user abort on confirm
   1 — hard failure (preflight, docker, missing confirm token, unknown command)
@@ -716,7 +715,6 @@ Environment:
       Does not start Docker. Does not change restart: "no". Sequential Queue.
       generate unloads models (POST /free) between cover and tracks.
 
-
 Exit codes:
   0 success / dry-run; 1 usage / missing compose / queue failure.
 
@@ -772,7 +770,6 @@ Environment:
       Does not start Docker. CPU encode; compose may stay up. Fails if ffmpeg
       is missing. Does not load ACE-Step / Klein / Wan / LTX.
 
-
 Exit codes:
   0 success or dry-run; 1 usage / missing ffmpeg / mux failure.
 
@@ -796,7 +793,6 @@ Usage:
     Safety:
       Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.
       Software ffmpeg mux (pack-frames.sh) — not NVENC.
-
 
 Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
@@ -822,7 +818,6 @@ Usage:
       Host package only. Does not start Compose. Does not weaken restart: "no",
       headroom, or download-limit clear-on-exit. Does not fetch unofficial
       aarch64 CUDA tarballs.
-
 
 Environment:
   BLENDER_BIN, LAB_MOCK_BLENDER_INSTALL, LAB_MOCK_BLENDER_BIN_DIR, LAB_NO_SUDO
@@ -876,7 +871,6 @@ Usage:
     Safety:
       Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.
       --install-inputs copies first.png into COMFY_OUTPUT_DIR/input (compose may stay up).
-
 
 Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
@@ -951,7 +945,6 @@ Environment:
 
     Safety:
       Does not start Docker. Dry-run by default unless --yes.
-
 
 Exit codes:
   0 success / dry-run; 1 usage or ffmpeg failure.
@@ -1048,7 +1041,6 @@ Environment:
       Refuses F5-TTS, XTTS, Fish, MiniMax H3, NLLB, SeamlessM4T, Wav2Lip,
       TTS-Audio-Suite, celebrity clone flags.
 
-
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
 
@@ -1082,7 +1074,6 @@ Environment:
 
     Safety:
       Large downloads — use download-limit wrap on remote SSH.
-
 
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
@@ -1168,7 +1159,6 @@ Environment:
       wrap on remote SSH. Does not weaken restart: "no", headroom, or
       download-limit clear-on-exit.
 
-
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
 
@@ -1222,7 +1212,6 @@ Environment:
       cleanup defaults to --dry-run; --yes deletes only non-selective files under
       the tier local-dir (never other MODELS_DIR trees like FLUX).
 
-
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
 
@@ -1256,7 +1245,6 @@ Environment:
       Opt-in only. Use download-limit wrap on remote SSH.
       Refuses MiniMax Music 3, MiniMax H3, Suno, Udio, Stable Audio partner.
 
-
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
 
@@ -1288,7 +1276,6 @@ Environment:
     Safety:
       Opt-in only. Use download-limit wrap on remote SSH.
       Refuses F5-TTS, XTTS, Fish, MiniMax H3, Music 3, TTS-Audio-Suite, OldTimeRadio.
-
 
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
@@ -1347,7 +1334,6 @@ Environment:
     Safety:
       Large downloads — use download-limit wrap on remote SSH.
 
-
 Exit codes:
   0 success; 1 usage/tier/CLI errors.
 
@@ -1380,7 +1366,6 @@ Environment:
     Safety:
       Opt-in. Does not start Docker. Refuses empty/non-http URLs.
       Does not commit cookies. Occupancy unchanged.
-
 
 Exit codes:
   0 success; 1 usage / missing yt-dlp / fetch failure.
@@ -1474,7 +1459,6 @@ Usage:
       Host GPU job. Dies with exit 2 if compose is up. Does not start Comfy.
       Do not weaken restart: "no", headroom, or download-limit clear-on-exit.
 
-
 Exit codes:
   0 success; 1 usage / missing blender / QC fail; 2 compose running
 
@@ -1539,7 +1523,6 @@ Usage:
       Refuses if compose comfyui is running. Dry-run by default.
       Does not start Docker. Does not delete inputs.
 
-
 Exit codes:
   0 success / dry-run; 1 usage or refuse; 2 compose running
 
@@ -1585,7 +1568,6 @@ Usage:
     Safety:
       Does not start Docker. Fail-closed on 1280x704 mismatch.
 
-
 Exit codes:
   0 overlay written; 1 usage / QC fail.
 
@@ -1627,7 +1609,6 @@ Environment:
     Safety:
       Does not start Docker. Fails if ffmpeg is missing or loudnorm fails.
 
-
 Exit codes:
   0 success; 1 usage / missing ffmpeg / loudnorm failure.
 
@@ -1659,7 +1640,6 @@ Environment:
     Safety:
       Does not start compose. Does not Queue the 18-printer canvas.
 
-
 Exit codes:
   0 success / skip; 1 usage or Comfy/jobstore error
 
@@ -1685,7 +1665,6 @@ Environment:
     Safety:
       Never copies _lab into _user. Refuses banned model strings and a
       missing id.
-
 
 Exit codes:
   0 success; 1 usage / refuse
@@ -1750,7 +1729,6 @@ Usage:
     Safety:
       Host only. Does not start Docker. No GPU.
 
-
 Exit codes:
   0 success; 1 usage / parse / write failure.
 
@@ -1788,7 +1766,6 @@ Environment:
     Safety:
       Does not compose up remotely (heavy confirm stays local).
       rsync uses fabric IPs. restart: "no" unchanged.
-
 
 Exit codes:
   0 success; 1 usage / SSH / rsync / queue errors.

@@ -312,6 +312,21 @@ def _iter_script_files() -> list[Path]:
     return files
 
 
+def _collapse_blank_lines(text: str) -> str:
+    """Collapse runs of blank lines and guarantee a single trailing newline.
+
+    Args:
+        text: Markdown page text.
+
+    Returns:
+        Normalized page text.
+    """
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    while "\n\n\n" in normalized:
+        normalized = normalized.replace("\n\n\n", "\n\n")
+    return normalized.strip() + "\n"
+
+
 def render_reference(script_files: list[Path] | None = None) -> str:
     """Build the full reference Markdown (chrome + extracted blocks).
 
@@ -342,7 +357,7 @@ def render_reference(script_files: list[Path] | None = None) -> str:
             "Add `# ## Title`, `# @command name`, or `# @function name` in scripts.\n"
         )
 
-    text = "\n".join(parts).strip() + "\n"
+    text = _collapse_blank_lines("\n".join(parts))
     if "{{" in text and "PLACEHOLDER" in text:
         raise ValueError("generated reference must not emit lab {{PLACEHOLDER}} tokens")
     return text
