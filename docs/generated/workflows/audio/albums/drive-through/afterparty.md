@@ -4317,7 +4317,7 @@ Type `COMBO`. Range / default: skip.
 
 Cover art policy.
 
-**How it affects generation:** skip on every audio Queue. generate is klein occupancy — later session. upload needs Cover image wired.
+**How it affects generation:** skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.
 
 **This graph (all 20 instances):** `skip`
 
@@ -4326,7 +4326,7 @@ Cover art policy.
 | Choice | What it does |
 | --- | --- |
 | `skip` | Lab default. No cover required. |
-| `upload` | Use the Cover image socket. |
+| `upload` | Un-bypass Cover image and wire the socket. |
 | `generate` | Use cover.jpg from the album folder (klein session). |
 
 #### `prefix`

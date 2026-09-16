@@ -14,7 +14,7 @@ from pathlib import Path
 
 from _lab_layout import GROUP_TITLE_INSET, LAB_GROUP_Y0, ensure_group_title_inset, group as _group
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_dest, lab_json, write_lab_graph
-from _stamp_app_mode import stamp_suite_graph
+from _stamp_app_mode import NODE_MODE_BYPASS, stamp_suite_graph
 from _wire_prompt_enhance import enable_lab_graph
 from _wire_prompt_enhance import _rewrite_enhance_blurb
 
@@ -653,6 +653,7 @@ def _build_ace(
         [320, 80],
         "Cover image",
         ["cover.png", "image"],
+        mode=NODE_MODE_BYPASS,
         outputs=[g.out("IMAGE", "IMAGE", []), g.out("MASK", "MASK", [])],
     )
     g.add(

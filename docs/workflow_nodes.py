@@ -1159,7 +1159,7 @@ def encyclopedia() -> dict[str, Any]:
             _w("track", index=3, typ="INT", rng="1–99", desc="Track number.", gen="Numbered takes 01–20."),
             _w("tracktotal", index=4, typ="INT", desc="Album track count.", gen="15 or 20 depending on the album."),
             _w("year", index=5, typ="INT", rng="2026", desc="Tag year.", gen="Does not affect audio."),
-            _w("art_mode", index=6, typ="COMBO", rng="skip", desc="Cover art policy.", gen="skip on every audio Queue. generate is klein occupancy — later session. upload needs Cover image wired.", choices=[("skip", "Lab default. No cover required."), ("upload", "Use the Cover image socket."), ("generate", "Use cover.jpg from the album folder (klein session).")]),
+            _w("art_mode", index=6, typ="COMBO", rng="skip", desc="Cover art policy.", gen="skip on every audio Queue (Cover LoadImage is bypassed). generate is klein occupancy — later session. upload: graph view, Ctrl+B Cover image, then wire.", choices=[("skip", "Lab default. No cover required."), ("upload", "Un-bypass Cover image and wire the socket."), ("generate", "Use cover.jpg from the album folder (klein session).")]),
             _w("prefix", index=7, desc="SaveAudio stem to stamp.", gen="Must match SaveAudio / SaveAudioMP3."),
         ],
     )

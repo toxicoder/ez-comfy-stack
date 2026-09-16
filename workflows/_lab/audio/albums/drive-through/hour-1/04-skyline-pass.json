@@ -536,7 +536,7 @@
       ],
       "flags": {},
       "order": 12,
-      "mode": 0,
+      "mode": 4,
       "inputs": [],
       "outputs": [
         {
@@ -926,7 +926,7 @@
           14,
           "art_mode",
           {
-            "description": "skip (default). upload: wire Cover image in graph. generate: Queue cover.json first.",
+            "description": "skip (default). upload: graph view, Ctrl+B Cover image, then wire. generate: Queue cover.json first.",
             "label": "Album art"
           }
         ],
