@@ -2888,7 +2888,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 03:32 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T03:32:46+00:00">16 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 16 Sep 2026, 04:20 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-16T04:20:45+00:00">16 Sep 2026</time></span>
                 
                   
 
@@ -2968,8 +2968,8 @@
 </tr>
 <tr>
 <td><code>ez_prompt_enhance</code></td>
-<td>7 nodes</td>
-<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / LTX / negative / join / context join / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span></td>
+<td>8 nodes</td>
+<td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein" data-href="../../glossary/#klein" title="Apache still-image model. Distilled FP8, 4 steps, CFG 1.0. Default T2I engine.">Klein</span> / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="wan" data-href="../../glossary/#wan" title="Apache silent motion model (T2V + I2V). No native audio. Daily-driver 5 s clips.">Wan</span> / LTX / negative / join / context join / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="ace-step" data-href="../../glossary/#ace-step" title="MIT local music / bed engine. Opt-in ~10 GB AIO; do not co-resident with LTX.">ACE-Step</span> / sample prompt</td>
 </tr>
 <tr>
 <td><code>ez_research</code></td>
@@ -3179,10 +3179,10 @@
 <tr>
 <td><code>EZRapLyrics</code></td>
 <td>Rap Lyrics</td>
-<td><code>lyrics</code> STRING multiline, <code>enhance</code> BOOLEAN (default on); optional <code>context</code> STRING (forceInput)</td>
+<td><code>sample</code> combo, <code>lyrics</code> STRING multiline, <code>enhance</code> BOOLEAN (default on), <code>catalog</code>; optional <code>context</code> STRING (forceInput)</td>
 <td><code>STRING</code> lyrics</td>
 <td>graph <strong>audio</strong></td>
-<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. Missing GGUF passes widget text. <strong>Forbids living-MC names and famous hooks</strong>. ACE-Step still invents vocal timbre from tags plus lyrics. Context ignored when <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> is off</td>
+<td>On-box <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen" data-href="../../glossary/#qwen" title="Klein&#x27;s text encoder (CLIP type flux2) and the Prompt Enhance GGUF family.">Qwen3-4B</span>-Instruct GGUF. Missing GGUF passes widget text. <strong>Forbids living-MC names and famous hooks</strong>. ACE-Step still invents vocal timbre from tags plus lyrics. Context ignored when <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="enhance" data-href="../../glossary/#enhance" title="Toggle on Prompt Enhance. Off pins your widget text; on rewrites it for CLIP.">Enhance</span> is off. Album tracks hide Sample in App Mode</td>
 </tr>
 <tr>
 <td><code>EZAudioMetadata</code></td>
@@ -3220,7 +3220,7 @@
 <tr>
 <td><code>EZPodcastScript</code></td>
 <td>Podcast Script</td>
-<td><code>prompt</code> STRING multiline, <code>enhance</code> BOOLEAN (default on), <code>flavor</code> combo <code>podcast_two_host</code> <code>radio_drama</code> (default <code>podcast_two_host</code>); optional <code>context</code> STRING (forceInput)</td>
+<td><code>sample</code> combo, <code>prompt</code> STRING multiline, <code>enhance</code> BOOLEAN (default on), <code>flavor</code> combo <code>podcast_two_host</code> <code>radio_drama</code> (default <code>podcast_two_host</code>), <code>catalog</code>; optional <code>context</code> STRING (forceInput)</td>
 <td><code>STRING</code> script</td>
 <td>graph <strong>audio</strong></td>
 <td>On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. Unloads the writer after a rewrite so TTS can run in the same Queue. Context ignored when Enhance is off</td>
@@ -3261,15 +3261,15 @@
 <tr>
 <td><code>EZKleinPromptEnhance</code></td>
 <td>Klein <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="prompt-enhance" data-href="../../glossary/#prompt-enhance" title="In-tree nodes that rewrite a lazy sentence into model-native CLIP text via a CPU GGUF.">Prompt Enhance</span></td>
-<td><code>prompt</code> STRING, <code>enhance</code> BOOLEAN (default on), <code>mode</code> combo <code>t2i</code> <code>edit</code> <code>identity</code> (default <code>t2i</code>), <code>duration_hint</code> STRING (default <code>YouTube 16:9 still</code>), <code>style</code> combo; optional <code>context</code> STRING (forceInput)</td>
+<td><code>sample</code> combo (20 recipes + <code>custom</code>), <code>prompt</code> STRING, <code>enhance</code> BOOLEAN (default on), <code>mode</code> combo <code>t2i</code> <code>edit</code> <code>identity</code> (default <code>t2i</code>), <code>duration_hint</code> STRING (default <code>YouTube 16:9 still</code>), <code>style</code> combo, <code>catalog</code> STRING (hidden); optional <code>context</code> STRING (forceInput)</td>
 <td><code>STRING</code> prompt</td>
 <td>CPU GGUF (not a CLI occupancy mode)</td>
-<td>identity mode is camera-free bible. Context is bible/research; ignored when Enhance is off</td>
+<td>identity mode is camera-free bible. Context is bible/research; ignored when Enhance is off. Sample recipes live in <code>js/samples/</code></td>
 </tr>
 <tr>
 <td><code>EZWanPromptEnhance</code></td>
 <td>Wan Prompt Enhance</td>
-<td><code>prompt</code>, <code>enhance</code>, <code>mode</code> combo <code>t2v</code> <code>i2v</code> <code>flf</code> <code>vace</code> (default <code>t2v</code>), <code>duration_hint</code> (default <code>5 seconds, 24 fps</code>), <code>style</code>; optional <code>context</code></td>
+<td><code>sample</code>, <code>prompt</code>, <code>enhance</code>, <code>mode</code> combo <code>t2v</code> <code>i2v</code> <code>flf</code> <code>vace</code> (default <code>t2v</code>), <code>duration_hint</code> (default <code>5 seconds, 24 fps</code>), <code>style</code>, <code>catalog</code>; optional <code>context</code></td>
 <td><code>STRING</code> prompt</td>
 <td>CPU GGUF</td>
 <td><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2v" data-href="../../glossary/#t2v" title="Text-to-video: no start image. Wan T2V is silent; LTX T2V is joint AV.">T2V</span> look+motion+one camera; <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="i2v" data-href="../../glossary/#i2v" title="Image-to-video: a start still plus motion text becomes a clip. Start image owns look.">I2V</span> motion+camera only; <code>flf</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="fun-inp" data-href="../../glossary/#fun-inp" title="Optional Wan first-last-frame pack (~47 GB Apache). MagCache off.">Fun InP</span> first-last; <code>vace</code> join/inpaint. <strong>No audio</strong>. Style ignored on I2V/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="flf" data-href="../../glossary/#flf" title="Condition a clip on both a first and last still (Wan Fun InP).">flf</span>/<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="vace" data-href="../../glossary/#vace" title="Optional Wan 2.1 1.3B 17-frame join (1+8n). MagCache off. Unload LTX first.">vace</span>. Context ignored when Enhance is off</td>
@@ -3277,10 +3277,18 @@
 <tr>
 <td><code>EZLTXPromptEnhance</code></td>
 <td>LTX Prompt Enhance</td>
-<td><code>prompt</code>, <code>enhance</code>, <code>mode</code> combo <code>t2v</code> <code>i2v</code> (default <code>t2v</code>), <code>duration_hint</code>, <code>audio_notes</code> STRING, <code>style</code>; optional <code>context</code></td>
+<td><code>sample</code>, <code>prompt</code>, <code>enhance</code>, <code>mode</code> combo <code>t2v</code> <code>i2v</code> (default <code>t2v</code>), <code>duration_hint</code>, <code>audio_notes</code> STRING, <code>style</code>, <code>catalog</code>; optional <code>context</code></td>
 <td><code>STRING</code> prompt</td>
 <td>CPU GGUF</td>
 <td>Flowing present-tense paragraph with audio interleaved. Style ignored on I2V. Context (identity/logline) ignored when Enhance is off</td>
+</tr>
+<tr>
+<td><code>EZSamplePrompt</code></td>
+<td>Sample Prompt</td>
+<td><code>sample</code> combo, <code>prompt</code> STRING, <code>catalog</code> STRING</td>
+<td><code>STRING</code> prompt</td>
+<td>—</td>
+<td>Recipe picker for Prompt Forge / Beat Sheet logline. <strong>Custom</strong> uses the textarea</td>
 </tr>
 <tr>
 <td><code>EZNegativePromptEnhance</code></td>
@@ -3309,10 +3317,10 @@
 <tr>
 <td><code>EZAceStepPromptEnhance</code></td>
 <td>ACE-Step Prompt Enhance</td>
-<td><code>tags</code> STRING, <code>lyrics</code> STRING, <code>enhance</code> BOOLEAN (default on), <code>mode</code> combo <code>vocal</code> <code>instrumental</code> (default <code>vocal</code>); optional <code>context</code></td>
+<td><code>sample</code> combo, <code>tags</code> STRING, <code>lyrics</code> STRING, <code>enhance</code> BOOLEAN (default on), <code>mode</code> combo <code>vocal</code> <code>instrumental</code> (default <code>vocal</code>), <code>catalog</code>; optional <code>context</code></td>
 <td><code>STRING</code> tags, <code>STRING</code> lyrics</td>
 <td>CPU GGUF</td>
-<td>Instrumental mode forces no-vocals tags and empty-body <code>[inst]</code> / <code>[drop]</code> lyrics (free-text lines fold into the brackets so ACE does not sing them). Context (episode script) ignored when Enhance is off</td>
+<td>Instrumental mode forces no-vocals tags and empty-body <code>[inst]</code> / <code>[drop]</code> lyrics (free-text lines fold into the brackets so ACE does not sing them). Context (episode script) ignored when Enhance is off. Album tracks hide Sample in App Mode</td>
 </tr>
 </tbody>
 </table>
@@ -3334,7 +3342,7 @@
 <tr>
 <td><code>EZCreativeResearch</code></td>
 <td>Creative Research</td>
-<td><code>prompt</code> STRING (default night-rooftop lighting question), <code>mode</code> combo <code>chat</code> <code>research</code> (default <code>research</code>), <code>web_search</code> BOOLEAN (default on), <code>subagents</code> INT 1–3 (default 2), <code>history</code> STRING</td>
+<td><code>sample</code> combo, <code>prompt</code> STRING (default night-rooftop lighting question), <code>mode</code> combo <code>chat</code> <code>research</code> (default <code>research</code>), <code>web_search</code> BOOLEAN (default on), <code>subagents</code> INT 1–3 (default 2), <code>history</code> STRING, <code>catalog</code> STRING</td>
 <td><code>STRING</code> reply</td>
 <td>graph <strong><code>llm</code></strong> (not CLI <code>occupancy enter llm</code>)</td>
 <td>GPU 35B <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="sidecar" data-href="../../glossary/#sidecar" title="Host process (Blender, SuperSplat, NLE), not a Compose service. Occupancy with Comfy.">sidecar</span> when <code>llm-desk</code> is up, else on-box 4B. Fail-soft without a GGUF. HTTPS search is SSRF-guarded</td>
