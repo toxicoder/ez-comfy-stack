@@ -11,6 +11,7 @@ tags: [troubleshooting, downloads, bandwidth, huggingface, ltx]
 - **wondershaper / qdisc** soft-fail and stuck `download-limit`
 - **HF locks** and hung resume (`0 MiB/s`)
 - **Gated LTX license** — `HF_TOKEN` is not the license click
+- **Wrong `--tier`** — pack ids live on [Download tiers](../download-tiers.md); `--limit` is Mbps
 
 **What this enables**
 

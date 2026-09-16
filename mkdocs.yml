@@ -144,12 +144,12 @@ nav:
       - manage.sh reference: manage-cli.md
       - Generated shell reference: generated/shell/reference.md
       - Models and cache: models-and-cache.md
-      - Hugging Face tokens: operate/models-tokens.md
-      - Sharing MODELS_DIR: operate/models-sharing.md
-      - Per-family packs: operate/models-packs.md
-      - Disk wizard: disk-wizard.md
       - Download tiers: download-tiers.md
       - Download limit: download-limit.md
+      - Per-family packs: operate/models-packs.md
+      - Hugging Face tokens: operate/models-tokens.md
+      - Sharing MODELS_DIR: operate/models-sharing.md
+      - Disk wizard: disk-wizard.md
       - Backup and restore: operate/backup-restore.md
       - Reboot safety: reboot-safety.md
       - Spark farm: spark-farm.md

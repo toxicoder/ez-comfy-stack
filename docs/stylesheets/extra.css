@@ -123,6 +123,7 @@ html .md-typeset__table table {
 
 /* Glossary term triggers + definition dialog. Keep header controls visible. */
 .ez-term {
+  position: relative;
   border-bottom: 1px dotted var(--md-accent-fg-color);
   cursor: help;
 }
@@ -130,6 +131,34 @@ html .md-typeset__table table {
 .ez-term:focus {
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: 2px;
+}
+
+.ez-term[data-short]::after {
+  content: attr(data-category) " — " attr(data-short);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.35rem);
+  z-index: 3;
+  width: max-content;
+  max-width: min(22rem, 70vw);
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.25rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.8em;
+  line-height: 1.35;
+  white-space: normal;
+  box-shadow: var(--md-shadow-z3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.15rem);
+}
+
+.ez-term[data-short]:hover::after,
+.ez-term[data-short]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .ez-glossary-dialog {
@@ -165,6 +194,12 @@ html .md-typeset__table table {
   font-size: 1.1rem;
 }
 
+.ez-glossary-dialog__category {
+  margin: 0 0 0.5rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.85em;
+}
+
 .ez-glossary-dialog__body,
 .ez-glossary-dialog__see,
 .ez-glossary-dialog__more {
@@ -184,6 +219,10 @@ html .md-typeset__table table {
 @media (prefers-reduced-motion: reduce) {
   .ez-glossary-dialog {
     transition: none;
+  }
+
+  .ez-term[data-short]::after {
+    transform: none;
   }
 }
 

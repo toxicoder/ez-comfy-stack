@@ -81,9 +81,9 @@ Unknown ids fail the hermetic command tests. Do not invent recipe ids in prose.
 
 ## Glossary
 
-Source of truth: **`includes/glossary.json`** only (JSON, not YAML). Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`. `short` is one line; `long` is markdown on [glossary.md](../glossary.md).
+Source of truth: **`includes/glossary.json`** only (JSON, not YAML). Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`. `short` is one line (hover bubble + dialog); `long` is markdown on [glossary.md](../glossary.md). Wrap spans carry `data-short` and `data-category` for the CSS hover bubble (`title=` stays for no-JS).
 
-Do **not** inline a second glossary on a feature page. First occurrence per term per page; skip `code` / `pre` / headings / links / the glossary page itself.
+Do **not** inline a second glossary on a feature page. First occurrence per term per page; skip `code` / `pre` / headings / links / the glossary page itself. Prefer aliases that appear in **prose** (`IC-LoRA`, `NVFP4`, `Hugging Face`, `Blender`) so in-page tooltips actually fire.
 
 Do **not** enable Material `abbr` + snippets `auto_append`. Do **not** enable `content.instant` unless you re-test the glossary modal, `commands.js`, **and** `tables.js`.
 

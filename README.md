@@ -32,7 +32,7 @@ flowchart TB
   Learn --> L1["architecture · ComfyUI · pipeline · glossary"]
   Start --> S1["Getting Started · licenses · FAQ"]
   Create --> C1["still → motion → AV · workflows"]
-  Operate --> O1["occupancy · doctor · troubleshooting"]
+  Operate --> O1["occupancy · download tiers · doctor · troubleshooting"]
   Contribute --> N1["conventions · docs-style · tests"]
 ```
 

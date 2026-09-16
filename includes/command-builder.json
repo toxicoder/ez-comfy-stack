@@ -131,7 +131,7 @@
             },
             {
               "value": "fun-inp",
-              "label": "fun-inp \u2014 Fun InP A14B first-last-frame (~40 GB)"
+              "label": "fun-inp \u2014 Fun InP A14B first-last-frame (~47 GB, floor 40)"
             },
             {
               "value": "vace",
@@ -152,7 +152,7 @@
     {
       "id": "download-ltx",
       "title": "download-ltx --tier",
-      "description": "LTX generation selector, not \u201cbetter\u201d. 2.5 is the lab default. 2.3 is a retired fallback.",
+      "description": "LTX generation selector, not \u201cbetter\u201d. 2.5 is the lab default. balanced/quality are 2.3 aliases. all is 2.5+2.3+gemma (not iclora).",
       "argv": [
         "./scripts/utilities/download-ltx.sh",
         "run"
@@ -170,15 +170,27 @@
             },
             {
               "value": "2.3",
-              "label": "2.3 \u2014 retired distilled FP8 fallback (~20 GB)"
+              "label": "2.3 \u2014 retired distilled FP8 fallback (auto-includes gemma)"
+            },
+            {
+              "value": "balanced",
+              "label": "balanced \u2014 2.3 alias (FP8, auto-includes gemma)"
+            },
+            {
+              "value": "quality",
+              "label": "quality \u2014 2.3 BF16 alias (larger, auto-includes gemma)"
             },
             {
               "value": "iclora",
-              "label": "iclora \u2014 IC-LoRA Union Control (~1 GB, opt-in)"
+              "label": "iclora \u2014 IC-LoRA Union Control (~1 GB, not in all)"
             },
             {
               "value": "gemma",
               "label": "gemma \u2014 LTX-2.3 Gemma DualCLIP (~8 GB)"
+            },
+            {
+              "value": "all",
+              "label": "all \u2014 2.5 + 2.3 + gemma (not iclora)"
             }
           ]
         }
@@ -418,7 +430,7 @@
           "choices": [
             {
               "value": "creator",
-              "label": "creator \u2014 DreamX-Creator 1.0 Apache (~8 GB)"
+              "label": "creator \u2014 DreamX-Creator 1.0 Apache (~8 GB selective, full repo ~54 GB)"
             }
           ]
         }

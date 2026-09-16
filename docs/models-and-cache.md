@@ -43,6 +43,14 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 
     [:octicons-arrow-right-24: Sharing](operate/models-sharing.md)
 
+-   :material-flag:{ .lg .middle } **Which `--tier`**
+
+    ---
+
+    Pack id per downloader, not a quality ladder. `--limit` is Mbps.
+
+    [:octicons-arrow-right-24: Download tiers](download-tiers.md)
+
 -   :material-package-down:{ .lg .middle } **Download packs**
 
     ---

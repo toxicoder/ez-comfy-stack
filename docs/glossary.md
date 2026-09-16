@@ -8,14 +8,14 @@ tags: [glossary, comfyui, klein, wan, ltx, learning]
 
 **What's on this page**
 
-- How dotted terms and the definition dialog work
-- Every studio, model, and operator term in one place
-- Links from each entry to the guide that teaches it
+- **Dotted words** — hover for a short definition, click for the dialog
+- **Categories** — Models, Modalities, Studio, Downloads, Hardware and safety, Film, Audio, Licenses
+- **See also** — each entry links to the guide that teaches it
 
 **What this enables**
 
-- Looking up Klein, Wan, LTX, Queue, latent, headroom, and the rest without leaving the page
-- Teaching vocabulary once so Create and Operate pages can stay task-focused
+- **Looking up** Klein, Wan, LTX, `--tier`, Queue, latent, headroom, and the rest without leaving the page
+- **Teaching** vocabulary once so Create and Operate pages can stay task-focused
 
 !!! tip "Dotted words open a definition"
 
@@ -27,6 +27,8 @@ tags: [glossary, comfyui, klein, wan, ltx, learning]
     - ++esc++ or the backdrop closes the dialog
 
     Terms inside code, headings, and links stay plain so copy-paste and navigation do not fight the modal.
+
+    Categories below are Models, Modalities, Studio, Downloads, Hardware and safety, Film, Audio, then Licenses.
 
 ```mermaid
 flowchart LR
