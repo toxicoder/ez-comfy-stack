@@ -38,6 +38,7 @@ CMD="${1:-build}"
 docs_build() {
   python3 "${REPO_ROOT}/docs/generate_shell_docs.py"
   python3 "${REPO_ROOT}/docs/generate_workflow_docs.py"
+  python3 "${REPO_ROOT}/docs/generate_cinema_docs.py"
   NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
   touch "${REPO_ROOT}/site/.nojekyll"
 }
@@ -56,6 +57,7 @@ docs_build() {
 docs_serve() {
   python3 "${REPO_ROOT}/docs/generate_shell_docs.py"
   python3 "${REPO_ROOT}/docs/generate_workflow_docs.py"
+  python3 "${REPO_ROOT}/docs/generate_cinema_docs.py"
   NO_MKDOCS_2_WARNING=1 python3 -m mkdocs serve
 }
 
