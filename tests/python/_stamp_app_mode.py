@@ -409,7 +409,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "keep_bed": "On: keep original ambience in gaps. Off: speech-only mix.",
     "spoken_disclosure": (
         "Default off. On: localized bumper on ez_dub_mix only, not the YT wav. "
-        "Sidecar is always written."
+        "Off: mix starts on speech (no reserved hush). Sidecar is always written."
     ),
 }
 

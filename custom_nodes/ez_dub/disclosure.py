@@ -102,6 +102,15 @@ def _overlay_region(
         mix[i] = mix[i] * (1.0 - gain) + bumper[i] * gain
 
 
+def _crop_bumper_hush(bumper: list[float], rate: int) -> list[float]:
+    """Drop leading clone hush from a synthesized bumper. Empty means skip."""
+    if not bumper:
+        return []
+    from .pipeline import speech_onset_slice
+
+    return speech_onset_slice(bumper, rate)
+
+
 def _first_t0(turns: list[dict[str, Any]] | None) -> float:
     if not turns:
         return 0.0
@@ -142,6 +151,9 @@ def apply_spoken_disclosure(
         bumper = resample_linear(
             bumper, int(round(len(bumper) * sr / max(in_rate, 1)))
         )
+    cropped = _crop_bumper_hush(bumper, sr)
+    if cropped:
+        bumper = cropped
     dur_s = len(bumper) / float(sr)
     if dur_s > 4.0:
         bumper, _flags = fit_turn(bumper, sr, 4.0, spill_s=0.0)

@@ -1333,33 +1333,29 @@ def _frame_rms(
     return values, frame
 
 
-def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
-    """Drop leading/trailing near-silence using a relative onset.
-
-    Absolute RMS 0.008 keeps PerTh-watermarked hush (~0.01). This uses
-    ``max(ONSET_ABS, ONSET_REL * peak)`` and an 80 ms hold so watermark
-    floor and clicks do not count as speech.
+def _voiced_span(pcm: list[float], rate: int) -> tuple[int, int] | None:
+    """Sample span of voiced audio plus onset pad, or None if none.
 
     Arguments:
-        pcm: Mono clone PCM.
+        pcm: Mono PCM.
         rate: Sample rate.
     Returns:
-        Sliced PCM, or ``[]`` when no voiced burst is found.
+        ``(start, end)`` exclusive-end indices, or None.
     """
     if not pcm:
-        return []
+        return None
     sr = int(rate) or SAMPLE_RATE
     frames, frame = _frame_rms(pcm, sr)
     n = len(pcm)
     if not frames:
-        return [float(x) for x in pcm] if rms(pcm) >= ONSET_ABS else []
+        return (0, n) if rms(pcm) >= ONSET_ABS else None
     peak = max(frames)
     if peak < ONSET_ABS:
-        return []
+        return None
     thresh = max(ONSET_ABS, ONSET_REL * peak)
     hold = max(1, int(round(ONSET_HOLD_S * sr / frame)))
     if len(frames) < hold:
-        return [float(x) for x in pcm] if peak >= thresh else []
+        return (0, n) if peak >= thresh else None
 
     def _first_hold(seq: list[float]) -> int | None:
         run = 0
@@ -1374,7 +1370,7 @@ def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
 
     start_f = _first_hold(frames)
     if start_f is None:
-        return []
+        return None
     end_rev = _first_hold(list(reversed(frames)))
     if end_rev is None:
         last_f = len(frames) - 1
@@ -1384,8 +1380,52 @@ def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
     start = max(0, start_f * frame - pad)
     end = min(n, (last_f + 1) * frame + pad)
     if end <= start:
+        return None
+    return start, end
+
+
+def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
+    """Drop leading/trailing near-silence using a relative onset.
+
+    Absolute RMS 0.008 keeps PerTh-watermarked hush (~0.01). This uses
+    ``max(ONSET_ABS, ONSET_REL * peak)`` and an 80 ms hold so watermark
+    floor and clicks do not count as speech.
+
+    Arguments:
+        pcm: Mono clone PCM.
+        rate: Sample rate.
+    Returns:
+        Sliced PCM, or ``[]`` when no voiced burst is found.
+    """
+    span = _voiced_span(pcm, rate)
+    if span is None:
         return []
+    start, end = span
     return [float(x) for x in pcm[start:end]]
+
+
+def strip_leading_silence(pcm: list[float], rate: int) -> list[float]:
+    """Drop a leading hush prefix. Keep the tail.
+
+    Used when spoken disclosure is off so ``ez_dub_mix`` starts on speech.
+    Does not change ``ez_dub_yt.wav``. No-op when no voiced burst is found
+    (never returns empty for a non-empty mix).
+
+    Arguments:
+        pcm: Mono mix PCM.
+        rate: Sample rate.
+    Returns:
+        PCM with leading near-silence removed, or a copy of ``pcm``.
+    """
+    if not pcm:
+        return []
+    span = _voiced_span(pcm, rate)
+    if span is None:
+        return [float(x) for x in pcm]
+    start, _end = span
+    if start <= 0:
+        return [float(x) for x in pcm]
+    return [float(x) for x in pcm[start:]]
 
 
 def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
@@ -2390,7 +2430,9 @@ def render_mix(
     """Clone, align, mix, write stems/SRT/disclosure.
 
     Returns:
-        ``(mix, rate, status)``.
+        ``(mix_wav, rate, status)``. ``mix_wav`` is the listen clip
+        (``ez_dub_mix``): overlay when spoken disclosure is on, leading
+        hush stripped when it is off. ``ez_dub_yt.wav`` stays source-timed.
     """
     pace = float(speed) if speed else 1.0
     if pace < 0.5:
@@ -2634,6 +2676,8 @@ def render_mix(
             synthesize=synthesize_turn,
         )
         flags.append(disc_status)
+    else:
+        mix_wav = strip_leading_silence(mix, rate)
     write_wav(dest / "ez_dub_mix.wav", mix_wav, rate)
     peak = max((abs(float(x)) for x in mix), default=0.0)
     flags.append(f"peak={peak:.2f}")
@@ -2662,7 +2706,7 @@ def render_mix(
             "flags": flags,
         },
     )
-    return mix, rate, status
+    return mix_wav, rate, status
 
 
 def _spoken_clone_text(turn: dict[str, Any], payload: dict[str, Any]) -> str:
