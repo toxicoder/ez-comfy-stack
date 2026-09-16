@@ -116,6 +116,8 @@ nav:
       - Still to motion to AV: visual-generative-ai.md
       - ComfyUI Apps: studio-apps.md
       - Workflow catalog: studio-workflows.md
+      - Workflow details: create/workflows-index.md
+      - Node parameter encyclopedia: reference/workflow-nodes.md
       - Stills graphs: create/workflows-stills.md
       - Motion graphs: create/workflows-motion.md
       - Film graphs: create/workflows-film.md

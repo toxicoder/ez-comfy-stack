@@ -12,7 +12,7 @@ tags: [testing, coverage, mkdocs, mike, contributing]
 - **100% Python gate** — UM patches + `ez_ltx_spatial` (not the shell generator)
 - **Shell function inventory**
 - **`deploy-docs.yml` + mike** — `main` → `latest`, `development` → `development`
-- **`make docs`** — `docs/generate_shell_docs.py` then `mkdocs build --strict`
+- **`make docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` then `mkdocs build --strict`
 
 **What this enables**
 
@@ -80,11 +80,12 @@ Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **named unde
 
 ```bash
 python3 docs/generate_shell_docs.py
+python3 docs/generate_workflow_docs.py
 NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
 touch site/.nojekyll
 ```
 
-`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. Do not hand-edit that file. `--strict` treats MkDocs warnings as errors.
+`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. Do not hand-edit those files. `--strict` treats MkDocs warnings as errors.
 
 Pins: MkDocs **1.x** + Material (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x. Do **not** enable `header.autohide`. [Docs style](docs-style.md).
 

@@ -21,6 +21,7 @@ tags: [docs, contributing, mkdocs, style]
 - **Keeping** MkDocs 1.x + Material pins
 - **Matching** nvidia-dgx-spark-lab fenced line-height and inline terminal-green `code`
 - **Remembering** that **AI-drafted docs still need a human pass**
+- **Regenerating** `_lab` workflow pages from `docs/workflow_nodes.py` (do not hand-edit `docs/generated/workflows/`)
 
 Canonical conventions (shell, Docker, testing): [Project conventions](../project-conventions.md). Workflow: [Contributing](contributing.md).
 
@@ -51,6 +52,8 @@ Every `docs/**/*.md` page (including `docs/learn/`):
 Author those two lists as **bold + bullets** in source. `docs/hooks.py` `on_post_page` wraps the first pair after the page `h1` into `.ez-page-brief` via `docs/page_brief.py`. Titles stay `<p>`, not headings (they must not enter the TOC). Do not rewrite the pair as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card.
 
 **Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
+
+**Workflow details:** `python3 docs/generate_workflow_docs.py` (also `make docs`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.34.6 / lab `INPUT_TYPES`. Hooks inject the pages under Create → Workflow details from `manifest.json`.
 
 **Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
 
