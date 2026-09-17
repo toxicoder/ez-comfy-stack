@@ -25,11 +25,22 @@ from .client import (
     join_prompt,
     load_system_prompt,
     style_ids,
+    with_audio_system,
     with_cinema_system,
     with_context_system,
     with_style_system,
 )
 from .client import _close_llm
+from .audio import (
+    FLAVOR_ACE_VOCAL,
+    FLAVORS as AUDIO_FLAVORS,
+    NONE as AUDIO_NONE,
+    WIDGET_AXIS_ORDER as AUDIO_WIDGET_AXIS_ORDER,
+    combo_ids as audio_combo_ids,
+    format_notes as audio_format_notes,
+    recipe_combo_ids as audio_recipe_combo_ids,
+    splice as audio_splice,
+)
 from .cinema import (
     FLAVOR_KLEIN,
     FLAVORS,
@@ -832,6 +843,11 @@ class EZAceStepPromptEnhance:
         rewritten_lyrics = original_lyrics
         reason = None
         try:
+            tag_system = with_audio_system(
+                tag_system,
+                "ace_instrumental" if instrumental else "ace_tags",
+                mode,
+            )
             tag_system = with_context_system(tag_system, ctx)
             out_tags, reason = complete(
                 tag_system,
@@ -844,9 +860,10 @@ class EZAceStepPromptEnhance:
                     original_lyrics.strip() or "[inst]"
                 )
             elif original_lyrics.strip():
-                lyric_system = with_context_system(
-                    load_system_prompt("ace_lyrics"), ctx
+                lyric_system = with_audio_system(
+                    load_system_prompt("ace_lyrics"), "ace_lyrics", mode
                 )
+                lyric_system = with_context_system(lyric_system, ctx)
                 out_lyrics, lyric_reason = complete(
                     lyric_system,
                     compose_context_user(original_lyrics, ctx),
@@ -1302,6 +1319,76 @@ class EZCinemaRack:
         return (result.text, format_notes(result))
 
 
+class EZAudioRack:
+    """Pick one technique per audio axis and splice ACE tags and lyrics form."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for Audio Rack axes.
+
+        Returns:
+            Required widget map (brief, flavor, recipe, 13 axes).
+        """
+        required: dict[str, tuple[object, ...]] = {
+            "brief": (
+                "STRING",
+                {
+                    "multiline": True,
+                    "default": "",
+                    "dynamicPrompts": False,
+                },
+            ),
+            "flavor": (list(AUDIO_FLAVORS), {"default": FLAVOR_ACE_VOCAL}),
+            "recipe": (audio_recipe_combo_ids(), {"default": AUDIO_NONE}),
+        }
+        for axis_id in AUDIO_WIDGET_AXIS_ORDER:
+            required[axis_id] = (audio_combo_ids(axis_id), {"default": AUDIO_NONE})
+        return {"required": required}
+
+    # Comfy node registration fields.
+    RETURN_TYPES = ("STRING", "STRING", "STRING")
+    RETURN_NAMES = ("tags", "lyrics", "notes")
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Splice one pick per audio/music axis into ACE-Step tags and lyrics "
+        "form. Recipe fills empty axes only. Vocal identity is omitted on "
+        "instrumental and podcast-bed flavors. Instrumental forces no-vocals "
+        "tags and [inst] form. Exactly one BPM when tempo is picked. No LLM."
+    )
+
+    def run(
+        self,
+        brief: object,
+        flavor: object = FLAVOR_ACE_VOCAL,
+        recipe: object = AUDIO_NONE,
+        **axes: object,
+    ) -> tuple[str, str, str]:
+        """Splice axis picks into ACE tags and lyrics form.
+
+        Args:
+            brief: Optional lyrics seed. Ignored on instrumental flavors.
+            flavor: ace_vocal / ace_instrumental / podcast_bed.
+            recipe: Named splice that fills empty axes only.
+            **axes: One technique id per audio axis.
+
+        Returns:
+            Tags, lyrics form, and operator notes (drops, BPM).
+        """
+        picks = {
+            axis_id: str(axes.get(axis_id, AUDIO_NONE) or AUDIO_NONE)
+            for axis_id in AUDIO_WIDGET_AXIS_ORDER
+        }
+        result = audio_splice(
+            picks,
+            flavor=flavor if isinstance(flavor, str) else FLAVOR_ACE_VOCAL,
+            brief=brief if isinstance(brief, str) else str(brief or ""),
+            recipe=recipe if isinstance(recipe, str) else AUDIO_NONE,
+        )
+        return (result.tags, result.lyrics, audio_format_notes(result))
+
+
 # Comfy node registries.
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
@@ -1316,6 +1403,7 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
     "EZSamplePrompt": EZSamplePrompt,
     "EZCinemaRack": EZCinemaRack,
+    "EZAudioRack": EZAudioRack,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
@@ -1331,4 +1419,5 @@ NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",
     "EZSamplePrompt": "Sample Prompt",
     "EZCinemaRack": "Cinema Rack",
+    "EZAudioRack": "Audio Rack",
 }

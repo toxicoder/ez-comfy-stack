@@ -99,6 +99,31 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
     _assert_no_overlap(graph)
 
 
+def test_audio_rack_has_no_unet_and_stamps_llm() -> None:
+    graph = _load("inspire/audio-rack")
+    assert graph["id"] == "audio-rack"
+    assert graph["extra"].get("lab_rel") == "inspire/audio-rack"
+    types = {n.get("type") for n in graph["nodes"]}
+    for heavy in HEAVY:
+        assert heavy not in types, heavy
+    assert "EZAudioRack" in types
+    assert "EZAceStepPromptEnhance" in types
+    blob = json.dumps(graph)
+    for needle in BANNED:
+        assert needle not in blob
+    extra = graph["extra"]
+    assert extra["lab_app_mode"]["enabled"] is True
+    assert extra["lab_app_mode"]["lane"] == "inspire"
+    assert extra["lab_app_mode"]["occupancy"] == "llm"
+    assert "audio/music/rap-draft" in extra["lab_app_mode"]["handoff"]
+    names = [entry[1] for entry in extra["linearData"]["inputs"]]
+    assert names[0] == "quality"
+    assert names[1] == "brief"
+    assert "recipe" in names
+    assert "genre_style" in names
+    _assert_no_overlap(graph)
+
+
 def test_research_chat_has_no_unet_and_stamps_llm() -> None:
     graph = _load("inspire/research-chat")
     assert graph["id"] == "research-chat"

@@ -1,0 +1,256 @@
+[
+  {
+    "id": "rec_boom_bap_draft",
+    "label": "Boom-bap draft",
+    "axes": {
+      "genre_style": "gen_boom_bap",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_dusty_pocket",
+      "bass_low_end": "bass_upright",
+      "instruments_texture": "ins_piano_stab",
+      "vocal_identity": "voc_dry_booth",
+      "arrangement_form": "frm_intro_verse_chorus",
+      "mix_production": "mix_vinyl",
+      "space_ambience": "spa_booth_dry",
+      "mood_energy": "mood_laid_back",
+      "use_case": "use_draft_32"
+    }
+  },
+  {
+    "id": "rec_trap_halftime",
+    "label": "Trap half-time",
+    "axes": {
+      "genre_style": "gen_trap",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_slide_808",
+      "vocal_identity": "voc_dry_booth",
+      "arrangement_form": "frm_verse_chorus",
+      "mood_energy": "mood_menace",
+      "use_case": "use_full_96"
+    }
+  },
+  {
+    "id": "rec_lofi_night",
+    "label": "Lo-fi night",
+    "axes": {
+      "genre_style": "gen_lofi_hiphop",
+      "tempo_groove": "tmp_86",
+      "drums_rhythm": "drm_lofi_sleepy",
+      "instruments_texture": "ins_rhodes",
+      "mix_production": "mix_tape_hiss",
+      "mood_energy": "mood_nocturnal",
+      "use_case": "use_podcast_30"
+    }
+  },
+  {
+    "id": "rec_spoken_lecture",
+    "label": "Spoken lecture",
+    "axes": {
+      "genre_style": "gen_spoken_hop",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_dusty_pocket",
+      "vocal_identity": "voc_spoken",
+      "arrangement_form": "frm_spoken_intro",
+      "mood_energy": "mood_civic_serious",
+      "use_case": "use_lecture"
+    }
+  },
+  {
+    "id": "rec_club_rap_over",
+    "label": "Club rap-over",
+    "axes": {
+      "genre_style": "gen_trap",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_slide_808",
+      "vocal_identity": "voc_dry_booth",
+      "mix_production": "mix_club_loud",
+      "use_case": "use_club_drop"
+    }
+  },
+  {
+    "id": "rec_drive_through_drop",
+    "label": "Drive-through drop",
+    "axes": {
+      "genre_style": "gen_hybrid_trap",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_chest_sub",
+      "instruments_texture": "ins_warped_saw",
+      "arrangement_form": "frm_drop_first",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_podcast_explainer",
+    "label": "Podcast explainer bed",
+    "axes": {
+      "genre_style": "gen_podcast_lofi",
+      "tempo_groove": "tmp_86",
+      "drums_rhythm": "drm_podcast_tick",
+      "arrangement_form": "frm_podcast_loop",
+      "mix_production": "mix_podcast_duck",
+      "space_ambience": "spa_podcast_close",
+      "sound_design_fx": "sfx_bed_none",
+      "use_case": "use_podcast_30"
+    }
+  },
+  {
+    "id": "rec_radio_sting",
+    "label": "Radio sting",
+    "axes": {
+      "genre_style": "gen_radio_sting",
+      "arrangement_form": "frm_sting_form",
+      "mix_production": "mix_sting_bright",
+      "sound_design_fx": "sfx_sting_hit_fx",
+      "use_case": "use_radio_sting"
+    }
+  },
+  {
+    "id": "rec_jazz_rap_pocket",
+    "label": "Jazz-rap pocket",
+    "axes": {
+      "genre_style": "gen_jazz_rap",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_brushes",
+      "bass_low_end": "bass_walking",
+      "vocal_identity": "voc_dry_booth",
+      "harmony_mode": "hrm_dorian"
+    }
+  },
+  {
+    "id": "rec_gospel_stack",
+    "label": "Gospel stack",
+    "axes": {
+      "genre_style": "gen_gospel_rap",
+      "tempo_groove": "tmp_90",
+      "instruments_texture": "ins_organ_stabs",
+      "vocal_identity": "voc_choir",
+      "harmony_mode": "hrm_gospel_251",
+      "space_ambience": "spa_hall"
+    }
+  },
+  {
+    "id": "rec_dark_underscore",
+    "label": "Dark underscore",
+    "axes": {
+      "genre_style": "gen_underscore",
+      "drums_rhythm": "drm_underscore_none",
+      "bass_low_end": "bass_drone_fifth",
+      "harmony_mode": "hrm_phrygian",
+      "arrangement_form": "frm_inst_bed",
+      "mood_energy": "mood_menace",
+      "use_case": "use_underscore"
+    }
+  },
+  {
+    "id": "rec_four_floor_house",
+    "label": "Four-on-floor house",
+    "axes": {
+      "genre_style": "gen_four_on_floor",
+      "tempo_groove": "tmp_128",
+      "drums_rhythm": "drm_four_floor",
+      "bass_low_end": "bass_octave_disco",
+      "arrangement_form": "frm_inst_drop_outro",
+      "use_case": "use_club_drop"
+    }
+  },
+  {
+    "id": "rec_ambient_drone",
+    "label": "Ambient drone bed",
+    "axes": {
+      "genre_style": "gen_drone",
+      "drums_rhythm": "drm_underscore_none",
+      "bass_low_end": "bass_none_bass",
+      "arrangement_form": "frm_inst_bed",
+      "mood_energy": "mood_glacial",
+      "use_case": "use_underscore"
+    }
+  },
+  {
+    "id": "rec_drill_bounce",
+    "label": "Drill bounce",
+    "axes": {
+      "genre_style": "gen_drill",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_slide_808",
+      "vocal_identity": "voc_dry_booth",
+      "mood_energy": "mood_menace"
+    }
+  },
+  {
+    "id": "rec_civic_progress",
+    "label": "Civic progress",
+    "axes": {
+      "genre_style": "gen_spoken_hop",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_dusty_pocket",
+      "vocal_identity": "voc_spoken",
+      "arrangement_form": "frm_spoken_intro",
+      "mood_energy": "mood_civic_serious",
+      "harmony_mode": "hrm_dorian"
+    }
+  },
+  {
+    "id": "rec_dry_booth_double",
+    "label": "Dry booth double-time",
+    "axes": {
+      "genre_style": "gen_boom_bap",
+      "tempo_groove": "tmp_92",
+      "drums_rhythm": "drm_double_hats",
+      "vocal_identity": "voc_dry_booth",
+      "arrangement_form": "frm_verse_chorus",
+      "space_ambience": "spa_booth_dry"
+    }
+  },
+  {
+    "id": "rec_album_180",
+    "label": "Album-length form",
+    "axes": {
+      "genre_style": "gen_boom_bap",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_dusty_pocket",
+      "vocal_identity": "voc_dry_booth",
+      "arrangement_form": "frm_album_180",
+      "use_case": "use_album_180"
+    }
+  },
+  {
+    "id": "rec_short_bumper",
+    "label": "Short bumper sting",
+    "axes": {
+      "genre_style": "gen_radio_sting",
+      "arrangement_form": "frm_sting_form",
+      "sound_design_fx": "sfx_sting_hit_fx",
+      "use_case": "use_bumper",
+      "mix_production": "mix_sting_bright"
+    }
+  },
+  {
+    "id": "rec_vinyl_crate",
+    "label": "Vinyl crate",
+    "axes": {
+      "genre_style": "gen_boom_bap",
+      "tempo_groove": "tmp_88",
+      "drums_rhythm": "drm_dusty_pocket",
+      "mix_production": "mix_vinyl",
+      "instruments_texture": "ins_piano_stab",
+      "mood_energy": "mood_laid_back"
+    }
+  },
+  {
+    "id": "rec_warped_afterparty",
+    "label": "Warped bass afterparty",
+    "axes": {
+      "genre_style": "gen_hybrid_trap",
+      "tempo_groove": "tmp_140",
+      "bass_low_end": "bass_chest_sub",
+      "instruments_texture": "ins_warped_saw",
+      "arrangement_form": "frm_inst_drop_outro",
+      "use_case": "use_afterparty"
+    }
+  }
+]

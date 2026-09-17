@@ -226,6 +226,25 @@ def with_cinema_system(system: str, system_name: str = "", mode: str = "") -> st
     return f"{system.rstrip()}\n\n{addendum}"
 
 
+def with_audio_system(system: str, system_name: str = "", mode: str = "") -> str:
+    """Append the Audio Rack language block for ACE-Step families.
+
+    Args:
+        system: Family system prompt.
+        system_name: Prompt file stem (``ace_tags``, ``klein_t2i``, …).
+        mode: Optional node mode (``vocal``, ``instrumental``, …).
+
+    Returns:
+        System text. Unchanged for visual stems or when the addendum is empty.
+    """
+    from . import audio
+
+    addendum = audio.audio_language_addendum(system_name, mode)
+    if not addendum:
+        return system
+    return f"{system.rstrip()}\n\n{addendum}"
+
+
 def with_context_system(system: str, context: str) -> str:
     """Append the Context-block addendum when supporting text is present.
 

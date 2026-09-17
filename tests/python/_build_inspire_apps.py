@@ -145,6 +145,29 @@ Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Edi
 Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
 """
 
+AUDIO_NOTE = """## inspire/audio-rack
+
+Audio Rack — pick one audio/music technique per axis and splice ACE-Step tags and lyrics form. No UNET, no VAE, no KSampler.
+
+Occupancy: llm — graph label (not a CLI mode). Prefer GPU 35B:
+
+  ./scripts/manage.sh occupancy enter llm-desk --yes
+
+Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to Wan/LTX/TRELLIS.
+
+Do **not** load ACE-Step on this canvas. Copy tags/lyrics into audio/music/rap-draft or a podcast bed.
+
+1. Optional **Brief** (what the track is about). Ignored on instrumental / podcast-bed.
+2. Optional **Recipe** fills empty axes. Explicit dropdowns win.
+3. Pick at most one technique per axis (genre, tempo, drums, bass, …).
+4. Set **Family** (ace_vocal, ace_instrumental, or podcast_bed).
+5. Queue. Vocal / instrumental Enhance nodes preview rewritten tags and lyrics.
+6. Copy tags into **audio/music/rap-draft**. Match encoder BPM to the notes line.
+
+Instrumental forces no-vocals tags and [inst] / [drop] form. ACE sings any free-text under a section marker.
+Audio Rack is deterministic (no LLM). Enhance is optional downstream.
+"""
+
 RESEARCH_MESSAGE = (
     "What lighting and camera language fits a night rooftop still of a techno "
     "wizard in a tropical city?"
@@ -211,6 +234,15 @@ def _prim_out(links: list[int] | None = None) -> list[dict]:
             "slot_index": 0,
         }
     ]
+
+
+def _linked_named(name: str, lid: int) -> dict:
+    return {
+        "name": name,
+        "type": "STRING",
+        "link": lid,
+        "widget": {"name": name},
+    }
 
 
 def _linked_prompt(lid: int) -> dict:
@@ -862,6 +894,110 @@ def build_cinema_rack() -> dict:
     return graph
 
 
+def build_audio_rack() -> dict:
+    note_h = 400.0
+    note_group_h = note_h + GROUP_TITLE_INSET
+    rack_h = 460.0
+    desk_group_top = LAB_GROUP_Y0 + note_group_h
+    desk_y = desk_group_top + GROUP_TITLE_INSET
+    enh_group_top = desk_group_top + rack_h + GROUP_TITLE_INSET + 20.0
+    enh_y = enh_group_top + GROUP_TITLE_INSET
+    none = "none"
+    axis_nones = [none] * 13
+    note = _node(
+        1,
+        "Note",
+        [40, LAB_NODE_Y0],
+        [1340, note_h],
+        "Operator note",
+        [AUDIO_NOTE],
+        0,
+    )
+    rack = _node(
+        5,
+        "EZAudioRack",
+        [40, desk_y],
+        [1340, rack_h],
+        "Audio Rack",
+        ["local booth bars on a dusty pocket", "ace_vocal", none, *axis_nones],
+        1,
+        [
+            {"name": "tags", "type": "STRING", "links": [1, 3], "slot_index": 0},
+            {"name": "lyrics", "type": "STRING", "links": [2, 4], "slot_index": 1},
+            {"name": "notes", "type": "STRING", "links": [], "slot_index": 2},
+        ],
+    )
+    vocal = _node(
+        2,
+        "EZAceStepPromptEnhance",
+        [40, enh_y],
+        [640, 360],
+        "Vocal family",
+        ["custom", "", "", True, "vocal", "inspire/audio-rack"],
+        2,
+        [
+            {"name": "tags", "type": "STRING", "links": [], "slot_index": 0},
+            {"name": "lyrics", "type": "STRING", "links": [], "slot_index": 1},
+        ],
+    )
+    vocal["inputs"] = [_linked_named("tags", 1), _linked_named("lyrics", 2)]
+    instrumental = _node(
+        3,
+        "EZAceStepPromptEnhance",
+        [720, enh_y],
+        [640, 360],
+        "Instrumental family",
+        ["custom", "", "", True, "instrumental", "inspire/audio-rack"],
+        3,
+        [
+            {"name": "tags", "type": "STRING", "links": [], "slot_index": 0},
+            {"name": "lyrics", "type": "STRING", "links": [], "slot_index": 1},
+        ],
+    )
+    instrumental["inputs"] = [_linked_named("tags", 3), _linked_named("lyrics", 4)]
+    links = [
+        [1, 5, 0, 2, 0, "STRING"],
+        [2, 5, 1, 2, 1, "STRING"],
+        [3, 5, 0, 3, 0, "STRING"],
+        [4, 5, 1, 3, 1, "STRING"],
+    ]
+    graph = {
+        "id": "inspire/audio-rack",
+        "revision": 1,
+        "last_node_id": 5,
+        "last_link_id": 4,
+        "nodes": [note, rack, vocal, instrumental],
+        "links": links,
+        "groups": [
+            _group(1, "NOTE", 20, LAB_GROUP_Y0, 1380, note_group_h, "#3f789e"),
+            _group(
+                2,
+                "RACK",
+                20,
+                desk_group_top,
+                1380,
+                rack_h + GROUP_TITLE_INSET,
+                "#3f789e",
+            ),
+            _group(3, "VOCAL", 20, enh_group_top, 680, 360 + GROUP_TITLE_INSET, "#3f789e"),
+            _group(
+                4, "INST", 720, enh_group_top, 680, 360 + GROUP_TITLE_INSET, "#3f789e"
+            ),
+        ],
+        "config": {},
+        "extra": {
+            "lab_profile": "inspire/audio-rack",
+            "lab_note": AUDIO_NOTE,
+            "lab_description": (
+                "No-UNET Audio Rack: splice music axes into ACE-Step tags / lyrics"
+            ),
+            "ds": {"scale": 1, "offset": [0, 0]},
+        },
+        "version": 0.4,
+    }
+    return graph
+
+
 LONGCAT_NOTE = """## optional/longcat-video
 
 Opt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.
@@ -962,6 +1098,7 @@ def main() -> None:
     _dump(lab_json("inspire/beat-sheet.json"), build_beat_sheet())
     _dump(lab_dest("inspire/research-chat.json"), build_research_chat())
     _dump(lab_dest("inspire/cinema-rack.json"), build_cinema_rack())
+    _dump(lab_dest("inspire/audio-rack.json"), build_audio_rack())
     _dump(lab_dest("inspire/app-forge.json"), build_app_forge())
     _dump(lab_json("optional/longcat-video.json"), build_longcat_stub())
 

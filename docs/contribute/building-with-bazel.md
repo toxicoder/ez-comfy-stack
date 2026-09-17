@@ -64,7 +64,7 @@ bazelisk run //scripts:run-utility -- download-limit status
 | `//:test` | test-fast + strict MkDocs |
 | `//:lint` | ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools) |
 | `//:validate` | Git-aware core + docs slices |
-| `//docs:docs` | `generate_shell_docs.py` + `generate_workflow_docs.py` + `generate_cinema_docs.py` + `mkdocs build --strict` |
+| `//docs:docs` | `generate_shell_docs.py` + `generate_workflow_docs.py` + `generate_cinema_docs.py` + `generate_audio_docs.py` + `mkdocs build --strict` |
 
 Queries:
 

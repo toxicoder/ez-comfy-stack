@@ -13,6 +13,7 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 - **`download-music --tier turbo`** (same ACE-Step AIO as podcast acestep)
 - **Sequential Queue** and album art in a later Klein session
 - **Child pages** for RAP-FIRST albums, Drive-through EDM, and disclosure
+- **Audio Rack** (`inspire/audio-rack`) splices professional tags/lyrics on occupancy **llm** — copy into rap-draft; do not load ACE-Step on the rack canvas
 
 **What this enables**
 

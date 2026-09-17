@@ -97,6 +97,7 @@ EZ_WIDGET_ORDER: dict[str, tuple[str, ...]] = {
         "catalog",
     ),
     "EZCinemaRack": ("subject", "flavor", "recipe"),
+    "EZAudioRack": ("brief", "flavor", "recipe"),
 }
 
 SLOT_ALIASES = {

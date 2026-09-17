@@ -19,6 +19,8 @@ tags: [comfyui, workflows, audio, rap, edm, catalog]
 
 **Who this is for:** studio users after `download-podcast` / `download-dub` / `download-music`. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Playbooks: [Local podcast](../podcast.md), [Local dub](../dub.md), [Local music](../music.md). Outputs under `${COMFY_OUTPUT_DIR}`.
 
+Splice professional ACE tags on occupancy **llm** first: [Audio Rack](audio-rack.md) (`inspire/audio-rack`). Then Queue occupancy **audio** graphs below.
+
 Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `download-music`). Do not co-resident with Klein / Wan / LTX. Album art is skip (default) / upload / generate (`cover.json` is klein occupancy). Cover LoadImage is **bypassed** (and unwired) so App Queue does not require a file. Upload: graph view, **Ctrl+B** Cover image, then wire. Graphs save tagged FLAC + MP3; `album-render` zips the folder. YouTube still-image MP4 is host `audio-still-video` after Queue.
 
 | Workflow | What it does |

@@ -37,7 +37,7 @@ user/default/workflows/
     audio/     podcast (two-host, radio-drama, learn-episode), dub, music/rap-draft, music/rap-full
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  five Drive-through albums
-    inspire/   prompt-forge, cinema-rack, research-chat, app-forge, beat-sheet
+    inspire/   prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
   _user/       your graphs (never overwritten; `_rescued/` holds in-place lab edits)
 ```
 
@@ -125,6 +125,7 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 | --- | --- |
 | **[inspire/prompt-forge](generated/workflows/inspire/prompt-forge.md)** | No UNET. Shared Prompt + Context, then Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview (occupancy **llm**) |
 | **[inspire/cinema-rack](generated/workflows/inspire/cinema-rack.md)** | No UNET. Splice cinematography axes into Klein / Wan / LTX (occupancy **llm**). [Cinema Rack](create/cinema-rack.md) |
+| **[inspire/audio-rack](generated/workflows/inspire/audio-rack.md)** | No UNET. Splice audio/music axes into ACE-Step tags / lyrics (occupancy **llm**). [Audio Rack](create/audio-rack.md) |
 | **[inspire/research-chat](generated/workflows/inspire/research-chat.md)** | Creative-process chat + web search + research subagents (occupancy **llm**). Handoff Prompt Forge |
 | **[inspire/app-forge](generated/workflows/inspire/app-forge.md)** | No UNET. Clone a lab graph into live `_user/` (occupancy **llm**). [App Forge](create/app-forge.md) |
 | **[inspire/beat-sheet](generated/workflows/inspire/beat-sheet.md)** | Script desk. Logline + audio policy + 18 cards. `shot-sheet` writes `films/<slug>/shots.yaml` (occupancy **none**) |

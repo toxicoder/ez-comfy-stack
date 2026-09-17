@@ -1,0 +1,1947 @@
+[
+  {
+    "id": "gen_boom_bap",
+    "label": "Boom bap",
+    "clause": "Dusty kick-snare pocket with chopped-sample grammar and air between the hits.",
+    "tags": "boom bap, hip-hop",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "gen_four_on_floor",
+      "frm_drop_first"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_trap",
+    "label": "Trap",
+    "clause": "Sliding 808s and rapid hats under a half-time rap grid.",
+    "tags": "trap, 808 bass, rapid hi-hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_lofi_hiphop",
+    "label": "Lo-fi hip-hop",
+    "clause": "Tape-hiss hop with sleepy drums and a Rhodes that never quite locks.",
+    "tags": "lo-fi hip-hop, dusty drums, rhodes",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_drill",
+    "label": "Drill",
+    "clause": "Sliding bass and stuttered hats on a menacing bounce.",
+    "tags": "drill, sliding bass, stutter hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_jazz_rap",
+    "label": "Jazz rap",
+    "clause": "Walking upright and brushed ride under spoken-leaning bars.",
+    "tags": "jazz rap, upright bass, brushed drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_gospel_rap",
+    "label": "Gospel rap",
+    "clause": "Church-organ swells and choir pads under a testimony cadence.",
+    "tags": "gospel rap, organ, choir pads",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_spoken_hop",
+    "label": "Spoken hop",
+    "clause": "Lecture cadence over a spare boom-bap bed with almost no hook candy.",
+    "tags": "spoken word hip-hop, spare drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_hybrid_trap",
+    "label": "Hybrid trap",
+    "clause": "Warped bass drops into trap drums without a rap vocal.",
+    "tags": "warped hybrid-trap, trap drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_four_on_floor",
+    "label": "Four-on-floor house",
+    "clause": "Kick on every quarter with offbeat hats and a club body.",
+    "tags": "house, four-on-the-floor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_deep_house",
+    "label": "Deep house",
+    "clause": "Warm round kick, filtered chords, and late-night pad bloom.",
+    "tags": "deep house, warm kick, filtered chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_techno",
+    "label": "Techno",
+    "clause": "Hypnotic machine pulse with industrial hats and a dry warehouse kick.",
+    "tags": "techno, industrial hats, warehouse kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dnb",
+    "label": "Drum and bass",
+    "clause": "Amen-chop energy at sprint tempo with a rolling bassline.",
+    "tags": "drum and bass, rolling bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_jungle",
+    "label": "Jungle",
+    "clause": "Chopped break collage with ragga-leaning bass and sudden drops.",
+    "tags": "jungle, chopped breaks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_uk_garage",
+    "label": "UK garage",
+    "clause": "Shuffled two-step kick and skippy hats with a vocal chop as percussion.",
+    "tags": "uk garage, two-step, shuffled hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dubstep",
+    "label": "Dubstep",
+    "clause": "Half-time wobble bass and a sparse snare that lands like a door.",
+    "tags": "dubstep, wobble bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_uk_bass",
+    "label": "UK bass",
+    "clause": "Weight-first club music with broken drums and sub pressure.",
+    "tags": "uk bass, broken drums, sub pressure",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_ambient",
+    "label": "Ambient",
+    "clause": "Slow evolving pads with almost no grid, air as the instrument.",
+    "tags": "ambient, evolving pads, no drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_drone",
+    "label": "Drone",
+    "clause": "Held tones that beat against each other until the room changes color.",
+    "tags": "drone, held tones, beating harmonics",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_downtempo",
+    "label": "Downtempo",
+    "clause": "Late-night pulse under cinematic chords, drums that refuse to hurry.",
+    "tags": "downtempo, late-night pulse",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_trip_hop",
+    "label": "Trip hop",
+    "clause": "Dusty break, smeared vinyl, and a bassline that walks through smoke.",
+    "tags": "trip hop, dusty break, smeared vinyl",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_synthwave",
+    "label": "Synthwave",
+    "clause": "Analog-leaning supersaws, gated snare, and neon arpeggios.",
+    "tags": "synthwave, gated snare, analog supersaw",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_industrial",
+    "label": "Industrial",
+    "clause": "Metal hits, distorted kick, and machine hiss as rhythm.",
+    "tags": "industrial, metal hits, distorted kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_post_punk",
+    "label": "Post-punk",
+    "clause": "Dry snare, chorus bass, and angular guitar that refuses prettiness.",
+    "tags": "post-punk, chorus bass, angular guitar",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_shoegaze",
+    "label": "Shoegaze",
+    "clause": "Washed guitars bury the grid; cymbals bloom instead of counting.",
+    "tags": "shoegaze, washed guitars, blooming cymbals",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_folk",
+    "label": "Folk",
+    "clause": "Fingerpicked guitar, room mics, and a tempo that follows the lyric.",
+    "tags": "folk, fingerpicked guitar, room mics",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_country",
+    "label": "Country",
+    "clause": "Tele-leaning twang, train beat, and a story told on the two and four.",
+    "tags": "country, train beat, twang guitar",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_bluegrass",
+    "label": "Bluegrass",
+    "clause": "Scruggs-roll banjo, walking mandolin, and acoustic sprint chops.",
+    "tags": "bluegrass, banjo rolls, mandolin chops",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_blues",
+    "label": "Blues",
+    "clause": "Twelve-bar shuffle, bent thirds, and a guitar that answers the vocal.",
+    "tags": "blues, twelve-bar shuffle, bent thirds",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_soul",
+    "label": "Soul",
+    "clause": "Tambourine on two and four, stacked horns, and a pocket that leans back.",
+    "tags": "soul, tambourine, stacked horns",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_funk",
+    "label": "Funk",
+    "clause": "Sixteenth guitar chick, slap bass ghosts, and a kick that talks.",
+    "tags": "funk, sixteenth guitar, slap bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_disco",
+    "label": "Disco",
+    "clause": "Octave bass, four-floor kick, and string stabs that glitter on the offbeat.",
+    "tags": "disco, octave bass, string stabs",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_afrobeat",
+    "label": "Afrobeat",
+    "clause": "Interlocking guitars, talking-drum chatter, and a horn riff that never sits down.",
+    "tags": "afrobeat, interlocking guitars, talking drum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_highlife",
+    "label": "Highlife",
+    "clause": "Palm-wine guitar sparkle over a buoyant dance-band groove.",
+    "tags": "highlife, palm-wine guitar, dance-band groove",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_reggae",
+    "label": "Reggae",
+    "clause": "Skank guitar on the offbeat, one-drop kick, and bass as the melody.",
+    "tags": "reggae, one-drop, offbeat skank",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dancehall",
+    "label": "Dancehall",
+    "clause": "Digital riddim bounce with a sparse kick and a chat-ready pocket.",
+    "tags": "dancehall, digital riddim",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_ska",
+    "label": "Ska",
+    "clause": "Walking bass and offbeat chops at a bright clip.",
+    "tags": "ska, walking bass, offbeat chops",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_bossa",
+    "label": "Bossa nova",
+    "clause": "Nylon guitar syncopation, soft shaker, and a whisper-grid samba cousin.",
+    "tags": "bossa nova, nylon guitar, soft shaker",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_samba",
+    "label": "Samba",
+    "clause": "Surdo pulse, tamborim sparkle, and cavaquinho chatter.",
+    "tags": "samba, surdo, tamborim",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_cumbia",
+    "label": "Cumbia",
+    "clause": "Guacharaca scrape, two-side bass, and a mild clave lilt.",
+    "tags": "cumbia, guacharaca, two-side bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_salsa",
+    "label": "Salsa",
+    "clause": "Montuno piano, tumbao bass, and stacked timbale cascara.",
+    "tags": "salsa, montuno piano, tumbao bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_merengue",
+    "label": "Merengue",
+    "clause": "Accordion-or-sax riff over a relentless two-step tambora.",
+    "tags": "merengue, tambora two-step",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_mambo",
+    "label": "Mambo",
+    "clause": "Big-band brass punches and a mambo-bell pattern that drives dancers.",
+    "tags": "mambo, brass punches, mambo bell",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_tango",
+    "label": "Tango",
+    "clause": "Bandoneon sighs, dramatic stops, and a walking threat in the bass.",
+    "tags": "tango, bandoneon, dramatic stops",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_flamenco",
+    "label": "Flamenco",
+    "clause": "Palmas, rasgueado guitar, and a compas that snaps on twelve.",
+    "tags": "flamenco, palmas, rasgueado guitar",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_fado",
+    "label": "Fado",
+    "clause": "Portuguese guitar shimmer under a lament that sits almost unmetered.",
+    "tags": "fado, portuguese guitar, lament",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_celtic",
+    "label": "Celtic reel",
+    "clause": "Ornamented fiddle, bodhran pulse, and a drone that never quite cadences.",
+    "tags": "celtic, fiddle ornaments, bodhran",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_nordic_folk",
+    "label": "Nordic folk",
+    "clause": "Hardanger-leaning overtones, frame drum, and cold open fifths.",
+    "tags": "nordic folk, open fifths, frame drum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_brass_band",
+    "label": "Brass band",
+    "clause": "Sousaphone pump, snare buzz, and stacked horns in the street.",
+    "tags": "brass band, sousaphone, street snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_marching",
+    "label": "Marching cadence",
+    "clause": "Military snare rudiments and a bass-drum heartbeat in 2/4.",
+    "tags": "marching cadence, rudimental snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_choir_hymn",
+    "label": "Choir hymn",
+    "clause": "SATB stack, organ pedal, and a fermata that waits on the text.",
+    "tags": "choir hymn, SATB, organ pedal",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_organ_liturgy",
+    "label": "Organ liturgy",
+    "clause": "Pipe-organ mixtures and a pedal point that holds the room.",
+    "tags": "organ liturgy, pipe organ, pedal point",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_piano_ballad",
+    "label": "Piano ballad",
+    "clause": "Una-corda piano, rubato, and a left-hand that barely marks time.",
+    "tags": "piano ballad, una corda, rubato",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_acoustic_singer",
+    "label": "Acoustic singer",
+    "clause": "Capo'd steel-string, close vocal, and a foot-tap instead of drums.",
+    "tags": "acoustic singer-songwriter, steel-string",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_barbershop",
+    "label": "Barbershop",
+    "clause": "Close four-part harmony with ringing overtones and a tag ending.",
+    "tags": "barbershop, close harmony, ringing overtones",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_doo_wop",
+    "label": "Doo-wop",
+    "clause": "Bass vocal as the kick, finger snaps, and a nonsense-syllable bed.",
+    "tags": "doo-wop, finger snaps, vocal bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_sixties_soul",
+    "label": "Sixties soul",
+    "clause": "Horn stabs, tambourine, and a sixties-soul pocket that leans on two and four.",
+    "tags": "sixties soul, horn stabs, tambourine",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_northern_soul",
+    "label": "Northern soul",
+    "clause": "Four-floor stomp, stacked backing shouts, and a key change that lifts the floor.",
+    "tags": "northern soul, four-floor stomp",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_quiet_storm",
+    "label": "Quiet storm",
+    "clause": "Soft-focus R&B, muted guitar, and a bass that never raises its voice.",
+    "tags": "quiet storm, muted guitar, soft r&b",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_neo_soul",
+    "label": "Neo soul",
+    "clause": "Behind-the-beat drums, Rhodes, and stacked airy doubles that never quite land on the grid.",
+    "tags": "neo soul, rhodes, behind-the-beat drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_rnb_night",
+    "label": "Night R&B",
+    "clause": "Sparse 808, velvet chords, and a sung hook that sits late.",
+    "tags": "r&b, sparse 808, velvet chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_boom_bap_jazz",
+    "label": "Boom-bap jazz",
+    "clause": "Crate drums under a live-leaning horn loop and walking bass.",
+    "tags": "boom bap, jazz horns, walking bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_boom_bap_soul",
+    "label": "Boom-bap soul",
+    "clause": "Chopped vocal-pad chords on a dusty 88 grid.",
+    "tags": "boom bap, chopped soul chords, 88 bpm feel",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_trap_soul",
+    "label": "Trap soul",
+    "clause": "Sung R&B over trap hats with an 808 that glides into the chorus.",
+    "tags": "trap soul, 808 glide, sung hook",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_phonk",
+    "label": "Phonk",
+    "clause": "Cowbell bounce, chopped vocal tags, and a Memphis-leaning grit without naming a city brand.",
+    "tags": "phonk, cowbell bounce, chopped tags",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_bounce",
+    "label": "Bounce",
+    "clause": "Call-and-response chants, trill-leaning drums, and a second-line cousin in the hats.",
+    "tags": "bounce, call and response, trill drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_chopped_screwed",
+    "label": "Chopped and screwed",
+    "clause": "Pitched-down molasses hop with skipped repeats and a syrup-slow 808.",
+    "tags": "chopped and screwed, pitched down, molasses hop",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_cloud_rap",
+    "label": "Cloud rap",
+    "clause": "Washed pads, distant 808, and a vocal that floats above the grid.",
+    "tags": "cloud rap, washed pads, distant 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_melodic_rap",
+    "label": "Melodic rap",
+    "clause": "Sung-rap hybrid with simple chords and a hook that carries more than the verse.",
+    "tags": "melodic rap, simple chords, sung hook",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_drumless",
+    "label": "Drumless",
+    "clause": "No kit; bass and sample carry time so the vocal owns the grid.",
+    "tags": "drumless, bass and sample only",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_beat_tape",
+    "label": "Beat tape",
+    "clause": "Instrumental hop sketches, vinyl dirt, and a loop that could hold a verse.",
+    "tags": "instrumental beat tape, vinyl dirt, loop",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_crate_collage",
+    "label": "Crate collage",
+    "clause": "Stacked sample shards that never quite loop the same way twice.",
+    "tags": "sample collage, stacked shards",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_idm",
+    "label": "IDM",
+    "clause": "Broken machine drums, odd meters, and pads that refuse a dance floor.",
+    "tags": "idm, broken drums, odd meter",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_breakbeat",
+    "label": "Breakbeat",
+    "clause": "Funky break chops with a rave cousin in the filter.",
+    "tags": "breakbeat, funky chops",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_big_beat",
+    "label": "Big beat",
+    "clause": "Fat break, siren stabs, and a rock-weight kick on a rave grid.",
+    "tags": "big beat, fat break, siren stabs",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_acid_house",
+    "label": "Acid house",
+    "clause": "Resonant squelch bass, 303-leaning language without a brand, four-floor kick.",
+    "tags": "acid house, squelch bass, four-floor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_trance",
+    "label": "Trance",
+    "clause": "Long filter rises, supersaw stacks, and a breakdown that waits for the drop.",
+    "tags": "trance, supersaw stacks, long rises",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_prog_house",
+    "label": "Progressive house",
+    "clause": "Rolling bass, evolving chords, and a peak that arrives in minutes not bars.",
+    "tags": "progressive house, rolling bass, evolving chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_hard_techno",
+    "label": "Hard techno",
+    "clause": "Industrial four-floor at club-threat tempo with a dry clap.",
+    "tags": "hard techno, industrial four-floor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_footwork",
+    "label": "Footwork",
+    "clause": "Rapid kick patterns, chopped vocal percussion, and a battle-ready grid.",
+    "tags": "footwork, rapid kicks, chopped vocal percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_juke",
+    "label": "Juke",
+    "clause": "Chicago-leaning rapid hats and a bass that blinks rather than holds.",
+    "tags": "juke, rapid hats, blinking bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_gqom",
+    "label": "Gqom",
+    "clause": "Broken Zulu-house cousin, log-drum-adjacent punches, and a dark club kick.",
+    "tags": "gqom, broken kicks, dark club",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_amapiano",
+    "label": "Amapiano",
+    "clause": "Log drum bass, shaker haze, and a piano riff that arrives late.",
+    "tags": "amapiano, log drum, piano riff",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_kwaito",
+    "label": "Kwaito",
+    "clause": "Slowed house cousin with chant hooks and a laid township bounce.",
+    "tags": "kwaito, slowed house, chant hooks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_soukous",
+    "label": "Soukous",
+    "clause": "Sparkling guitar sebene and a bass that dances around the kick.",
+    "tags": "soukous, sebene guitar, dancing bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_calypso",
+    "label": "Calypso",
+    "clause": "Steel-adjacent sparkle, syncopated acoustic, and a carnival lilt.",
+    "tags": "calypso, syncopated acoustic, carnival lilt",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_steel_pan",
+    "label": "Steel pan",
+    "clause": "Pitched-pan melody over a soca cousin in the kick.",
+    "tags": "steel pan, soca cousin kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_zydeco",
+    "label": "Zydeco",
+    "clause": "Accordion riff, washboard scrape, and a two-step that will not sit.",
+    "tags": "zydeco, accordion, washboard",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_cajun_two_step",
+    "label": "Cajun two-step",
+    "clause": "Fiddle lead, triangle ding, and a dance-hall two that leans French-Louisiana.",
+    "tags": "cajun two-step, fiddle, triangle",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_polka",
+    "label": "Polka",
+    "clause": "Oom-pah bass, bright clarinet, and a bounce in 2/4.",
+    "tags": "polka, oom-pah bass, clarinet",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_waltz",
+    "label": "Waltz",
+    "clause": "One-two-three bass, brushed cymbal, and a turn that never lands on four.",
+    "tags": "waltz, one-two-three, brushed cymbal",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_tango_nuevo",
+    "label": "Nuevo tango",
+    "clause": "Bandoneon against a modern pulse, stops that feel cinematic without naming a film.",
+    "tags": "nuevo tango, bandoneon, modern pulse",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_lofi_house",
+    "label": "Lo-fi house",
+    "clause": "Dusty four-floor, muffled chords, and a filter that never fully opens.",
+    "tags": "lo-fi house, muffled chords, dusty four-floor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_organic_house",
+    "label": "Organic house",
+    "clause": "Shaker-led four-floor, live percussion, and chords that feel played not programmed.",
+    "tags": "organic house, live percussion, played chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_melodic_techno",
+    "label": "Melodic techno",
+    "clause": "Minor ostinato, rolling kick, and a breakdown that is almost ambient.",
+    "tags": "melodic techno, minor ostinato, rolling kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_liquid_dnb",
+    "label": "Liquid drum and bass",
+    "clause": "Pad-heavy sprint tempo with a rolling bass that stays pretty.",
+    "tags": "liquid drum and bass, pad-heavy, rolling bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_neurofunk",
+    "label": "Neurofunk",
+    "clause": "Surgical bass design, tight breaks, and a dark sci-fi grid.",
+    "tags": "neurofunk, surgical bass, tight breaks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_jump_up",
+    "label": "Jump-up",
+    "clause": "Bouncy dnb bass stabs and a crowd-chant energy in the drums.",
+    "tags": "jump-up, bouncy bass stabs",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_ragga_jungle",
+    "label": "Ragga jungle",
+    "clause": "Chopped breaks under a toasting-ready bass and a drop that rewinds.",
+    "tags": "ragga jungle, chopped breaks, toasting bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_reggaeton",
+    "label": "Reggaeton",
+    "clause": "Dembow kick-snare, sparse 808, and a sung-rap hook on the clave cousin.",
+    "tags": "reggaeton, dembow, sparse 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_baile",
+    "label": "Baile funk",
+    "clause": "Tamborz\u00e3o kick, shouted call, and a Rio-leaning bounce without naming a scene brand.",
+    "tags": "baile funk, tamborzao kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_afro_house",
+    "label": "Afro house",
+    "clause": "Organic percussion on a four-floor, log-drum cousin, and a late piano.",
+    "tags": "afro house, organic percussion, four-floor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_afro_tech",
+    "label": "Afro tech",
+    "clause": "Tribal percussion inside a techno grid with a dry warehouse kick.",
+    "tags": "afro tech, tribal percussion, warehouse kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_uk_funky",
+    "label": "UK funky",
+    "clause": "Syncopated kick, afro-leaning percussion, and a club vocal chop.",
+    "tags": "uk funky, syncopated kick, percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_grime",
+    "label": "Grime",
+    "clause": "Sparse square-bass stabs, syncopated 140, and a radio-set urgency.",
+    "tags": "grime, square bass, 140 bpm feel",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_uk_drill",
+    "label": "UK drill",
+    "clause": "Sliding 808, skippy hats, and a colder bounce than US drill.",
+    "tags": "uk drill, sliding 808, skippy hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_jersey_club",
+    "label": "Jersey club",
+    "clause": "Bed-squeak cousins as percussion, chopped vocals, and a kick that chatters.",
+    "tags": "jersey club, chopped vocals, chattering kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_baltimore_club",
+    "label": "Baltimore club",
+    "clause": "Breaks at club tempo, sampled shouts, and a kick that never rests.",
+    "tags": "baltimore club, sampled shouts, restless kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_g_funk_west",
+    "label": "West-coast funk rap",
+    "clause": "Talk-box cousin synth, lazy 808-free bounce, and a high whine lead without naming a person.",
+    "tags": "west-coast funk rap, talk-box synth, lazy bounce",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_east_boom",
+    "label": "East-coast boom bap",
+    "clause": "Hard kick, treble snare, and a sample loop that feels like a borough night without naming one.",
+    "tags": "east-coast boom bap, hard kick, treble snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_midwest_chop",
+    "label": "Midwest chop",
+    "clause": "Stuttered sample chops on a fast 16th grid with a dry snare.",
+    "tags": "midwest chop, stuttered chops, fast 16ths",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dirty_south",
+    "label": "Dirty south",
+    "clause": "Trill hats, trunk 808, and a sung ad-lib culture in the pocket.",
+    "tags": "dirty south, trill hats, trunk 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_hyphy",
+    "label": "Hyphy",
+    "clause": "Bouncy 808, party ad-libs, and a Bay-leaning ghost-ride energy without naming a city.",
+    "tags": "hyphy, bouncy 808, party ad-libs",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_crunk",
+    "label": "Crunk",
+    "clause": "Chant hooks, heavy 808, and a club shout that is the arrangement.",
+    "tags": "crunk, chant hooks, heavy 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_snap",
+    "label": "Snap",
+    "clause": "Finger-snap pocket, sparse 808, and a minimal chant hook.",
+    "tags": "snap, finger snaps, sparse 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_glitch_pop",
+    "label": "Glitch pop",
+    "clause": "Stuttered vocal grains, candy chords, and drums that skip like a bad disc.",
+    "tags": "glitch pop, stuttered grains, candy chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_hyper_club",
+    "label": "Hyper club",
+    "clause": "Maximal synth stacks, rush hats, and a drop that is all sugar and no rap.",
+    "tags": "hyper club pop, maximal synths, rush hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_podcast_lofi",
+    "label": "Podcast lo-fi bed",
+    "clause": "Quiet dusty loop under speech, no drop, no hook candy.",
+    "tags": "lo-fi hip-hop, quiet dusty loop, instrumental",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_radio_sting",
+    "label": "Radio sting",
+    "clause": "Two-bar ident with a bright hit and an immediate tail.",
+    "tags": "sting, bright hit, short ident",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_underscore",
+    "label": "Dark underscore",
+    "clause": "Held low fifths, almost no percussion, tension for picture.",
+    "tags": "dark underscore, low fifths, almost no percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_new_age_bed",
+    "label": "Soft bed",
+    "clause": "Gentle keys, no groove threat, a bed that will duck under speech.",
+    "tags": "soft keys, gentle bed, no groove threat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": false,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_boom_bap_gospel",
+    "label": "Boom-bap gospel",
+    "clause": "Dusty drums under organ stabs and a testimony cadence.",
+    "tags": "boom bap, organ stabs, gospel cadence",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  }
+]
