@@ -16,7 +16,7 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 - Negative CLIP nodes go through **Negative Prompt Enhance** (positive CLIP string as context) so canned `illustration` / `Pixar` terms cannot fight the intended look. Families: klein, wan, ltx, zimage, longcat, dreamx, s2v. Distilled CFG 1 models still get a list; fold real exclusions into the **positive**.
 - Rewriter **context** sockets carry a bible, logline, research brief, or episode script. Enhance **off** ignores context so authored recipes stay pinned
 - Style dropdown: research-backed look references; dropdown wins over style already in the source
-- Sample prompt dropdown: 20 lab recipes per graph family plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit. Place recipes (Cliff villa, Forest cabin, …) on **klein/dream-house** are valid Sample values — Comfy accepts every catalog label even though the App dropdown shows only this graph’s twenty.
+- Sample prompt dropdown: 20 lab recipes for **this graph** plus **Custom** to type your own. Default is Custom so the canned widget text still Queues. Pick a sample to fill (and lock) the Prompt box; pick Custom to edit. **klein/dream-house** lists place recipes (Cliff villa, Forest cabin, …), not Klein still or Wan motion recipes. Queue still accepts a stamped label from another catalog so specialized graphs do not fail validation.
 - After Queue, the dim **CLIP prompt** box is always visible and shows the string CLIP/ACE encoded
 
 **What this enables**
