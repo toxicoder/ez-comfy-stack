@@ -10893,6 +10893,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compress-cinema-clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compress-cinema-clip
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="compress-cinema-clip">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-compress-cinema-clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command: compress-cinema-clip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#concat-shots" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -13698,6 +13726,34 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#compress-cinema-clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compress-cinema-clip
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="compress-cinema-clip">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-compress-cinema-clip" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Command: compress-cinema-clip
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#concat-shots" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -14772,7 +14828,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 17 Sep 2026, 07:17 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-17T07:17:24+00:00">17 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 17 Sep 2026, 08:02 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-17T08:02:59+00:00">17 Sep 2026</time></span>
                 
                   
 
@@ -15509,6 +15565,26 @@ docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.</p>
 <p>Exit codes:
   0 success; 1 usage / parse error</p>
 <h3 id="command-compile-film">Command: compile-film<a class="headerlink" href="#command-compile-film" title="Permanent link">&para;</a></h3>
+<!-- source: scripts/utilities/compress-cinema-clip.sh -->
+<h2 id="compress-cinema-clip">compress-cinema-clip<a class="headerlink" href="#compress-cinema-clip" title="Permanent link">&para;</a></h2>
+<p>Re-encode a <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="cinema-rack" data-href="../../../glossary/#cinema-rack" data-short="Inspire App that splices cinematography dropdowns into Klein, Wan, and LTX prompts." data-category="Studio" title="Inspire App that splices cinematography dropdowns into Klein, Wan, and LTX prompts.">Cinema Rack</span> illustration MP4 to muted 854x480 H.264 and
+write a JPEG poster. Host ffmpeg. Does not start Docker.</p>
+<p>Purpose:
+  Keep encyclopedia clips small enough for Git LFS (target ≤512KiB).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Usage:
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span>./scripts/utilities/compress-cinema-clip.sh<span class="w"> </span>--in<span class="w"> </span>FILE<span class="w"> </span>--out<span class="w"> </span>FILE
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code>  [--poster FILE] [--crf 28] [--max-bytes 524288] [--dry-run]
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Safety:
+  Does not start Docker. CPU encode; compose may stay up. Fails if
+  ffmpeg is missing.</p>
+</div>
+<p>Exit codes:
+  0 success or dry-run; 1 usage / missing ffmpeg / size cap.</p>
+<h3 id="command-compress-cinema-clip">Command: compress-cinema-clip<a class="headerlink" href="#command-compress-cinema-clip" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/concat-shots.sh -->
 <h2 id="concat-shots">concat-shots<a class="headerlink" href="#concat-shots" title="Permanent link">&para;</a></h2>
 <p>Concatenate approved 5 s lab MP4s with ffmpeg (host / spark-farm fallback).</p>
@@ -15518,11 +15594,11 @@ docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.</p>
   90×5s / 450s) and caps at the film's publish_cap_s. Video is
   libx264 CRF 18 (stream-copy fallback); audio is AAC + YouTube <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="loudnorm" data-href="../../../glossary/#loudnorm" data-short="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14." data-category="Film" title="ffmpeg loudness pass. Comfy has no LUFS node. Podcast default −16; YouTube −14.">loudnorm</span> +
   faststart (same contract as EZFilmConcat).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Usage:
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span><span class="o">[</span>--dir<span class="w"> </span>DIR<span class="o">]</span><span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--files<span class="w"> </span>a.mp4,b.mp4<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span>FILM<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--xfade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--yes
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Usage:
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span><span class="o">[</span>--dir<span class="w"> </span>DIR<span class="o">]</span><span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--files<span class="w"> </span>a.mp4,b.mp4<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span>FILM<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span>./scripts/utilities/concat-shots.sh<span class="w"> </span>--film<span class="w"> </span>go-see<span class="w"> </span>--xfade<span class="w"> </span><span class="m">10</span><span class="w"> </span>--yes
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR — default /mnt/comfy-output
@@ -15541,11 +15617,11 @@ docker/Dockerfile — GB10 DCC stays on the host. See docs/occupancy.md.</p>
 <h2 id="disk-wizard">disk-wizard<a class="headerlink" href="#disk-wizard" title="Permanent link">&para;</a></h2>
 <p>Guided, plan-first reclaim for leftover AI experiment files on a DGX Spark.
 Does not overload manage.sh cleanup (volume-only) or reap-models (MODELS_DIR).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Usage:
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--plan
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--json
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--apply<span class="w"> </span>--yes
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.disk-quarantine/&lt;utc&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Usage:
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--plan
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--json
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>--apply<span class="w"> </span>--yes
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">  </span>./scripts/utilities/disk-wizard.sh<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.disk-quarantine/&lt;utc&gt;
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15561,8 +15637,8 @@ Does not overload manage.sh cleanup (volume-only) or reap-models (MODELS_DIR).</
 <p>Opt-in 3D packs: native Comfy-Org TRELLIS.2 INT8 (MIT, no <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvdiffrast" data-href="../../../glossary/#nvdiffrast" data-short="Banned 3D pip extra. TRELLIS.2 on this stack never needs it." data-category="Models" title="Banned 3D pip extra. TRELLIS.2 on this stack never needs it.">nvdiffrast</span>) and
 DA3-BASE (Apache). Never part of download-models. occupancy enter trellis
 first (unload LTX). <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="supersplat" data-href="../../../glossary/#supersplat" data-short="Host 3DGS viewer. Not a download pack and not a Compose service." data-category="Hardware and safety" title="Host 3DGS viewer. Not a download pack and not a Compose service.">SuperSplat</span> is a host viewer (docs/splat-sidecar.md).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Usage:
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span>./scripts/utilities/download-3d.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>trellis2<span class="p">|</span>da3-base<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Usage:
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>./scripts/utilities/download-3d.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>trellis2<span class="p">|</span>da3-base<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15576,8 +15652,8 @@ first (unload LTX). <span class="ez-term" tabindex="0" role="button" aria-haspop
 <h2 id="download-dreamx">download-dreamx<a class="headerlink" href="#download-dreamx" title="Permanent link">&para;</a></h2>
 <p>Opt-in DreamX-Creator 1.0 (Apache <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="av" data-href="../../../glossary/#av" data-short="Audio and video in one transformer pass. LTX-2.5&#x27;s job; Wan cannot do this." data-category="Modalities" title="Audio and video in one transformer pass. LTX-2.5&#x27;s job; Wan cannot do this.">joint AV</span>). Never <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dreamx-world" data-href="../../../glossary/#dreamx-world" data-short="Refused. download-dreamx is Apache Creator only." data-category="Licenses" title="Refused. download-dreamx is Apache Creator only.">DreamX-World</span>.
 Not download-models. Unload LTX first.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Usage:
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>./scripts/utilities/download-dreamx.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>creator<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Usage:
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span>./scripts/utilities/download-dreamx.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>creator<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <h3 id="command-download-dreamx_1">Command: download-dreamx<a class="headerlink" href="#command-download-dreamx_1" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/download-dub.sh -->
@@ -15589,8 +15665,8 @@ Not download-models. Unload LTX first.</p>
   doctor failure.</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-dub" data-href="../../../glossary/#download-dub" data-short="Opt-in ASR + multilingual clone packs for the dub App. Not download-models." data-category="Downloads" title="Opt-in ASR + multilingual clone packs for the dub App. Not download-models.">download-dub</span>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>Usage:
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span>./scripts/utilities/download-dub.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>asr<span class="p">|</span>clone<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Usage:
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>./scripts/utilities/download-dub.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>asr<span class="p">|</span>clone<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15613,10 +15689,10 @@ Not download-models. Unload LTX first.</p>
   Does not download <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="klein-9b" data-href="../../../glossary/#klein-9b" data-short="FLUX Non-Commercial 9B. Not the lab default. Distilled 4B Apache is." data-category="Licenses" title="FLUX Non-Commercial 9B. Not the lab default. Distilled 4B Apache is.">Klein 9B</span> or <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="flux2-dev" data-href="../../../glossary/#flux2-dev" data-short="Banned still weights. There is no quality image tier. Use Klein 4B Apache." data-category="Licenses" title="Banned still weights. There is no quality image tier. Use Klein 4B Apache.">FLUX.2-dev</span>.</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh download-models.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Usage:
-</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>fast<span class="p">|</span>nvfp4<span class="p">|</span>base<span class="p">|</span>zimage<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
-</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Usage:
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>fast<span class="p">|</span>nvfp4<span class="p">|</span>base<span class="p">|</span>zimage<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">  </span>./scripts/utilities/download-image.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15643,7 +15719,7 @@ Not download-models. Unload LTX first.</p>
 <p>Audience:
   Operators on remotely managed DGX Spark nodes; also invoked by manage.sh
   download-models.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>Usage:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Usage:
 </span></code></pre></div>
 <p>download-limit.sh status [--json] [--refresh]
   download-limit.sh run --limit auto|N [--fallback N] [--refresh]
@@ -15684,8 +15760,8 @@ Not download-models. Unload LTX first.</p>
   Opt-in qwen36-35b-a3b is occupancy llm-desk only (not download-models).</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-llm" data-href="../../../glossary/#download-llm" data-short="enhance is the 4B GGUF already in download-models. 35B is opt-in llm-desk." data-category="Downloads" title="enhance is the 4B GGUF already in download-models. 35B is opt-in llm-desk.">download-llm</span> / download-models.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>Usage:
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span>./scripts/utilities/download-llm.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="p">|</span>link<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>enhance<span class="p">|</span>qwen36-35b-a3b<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>Usage:
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span>./scripts/utilities/download-llm.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="p">|</span>link<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>enhance<span class="p">|</span>qwen36-35b-a3b<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15704,8 +15780,8 @@ Not download-models. Unload LTX first.</p>
 <p>Opt-in LongCat-Video (MIT). Second stack, not download-models.
 Context-parallel two-Spark only behind LAB_ALLOW_CONTEXT_PARALLEL=1.
 NCCL is out of this sample stack.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>Usage:
-</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span>./scripts/utilities/download-longcat.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>video<span class="p">|</span>avatar<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Usage:
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span>./scripts/utilities/download-longcat.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>video<span class="p">|</span>avatar<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <h3 id="command-download-longcat_1">Command: download-longcat<a class="headerlink" href="#command-download-longcat_1" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/download-ltx.sh -->
@@ -15719,10 +15795,10 @@ NCCL is out of this sample stack.</p>
 <p>Audience:
   Operators preparing a Spark host for manage.sh start. Prefer
   manage.sh download-models for throttled sequential flux+ltx pulls.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>Usage:
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="p">|</span><span class="m">2</span>.3<span class="p">|</span>balanced<span class="p">|</span>quality<span class="p">|</span>gemma<span class="p">|</span>iclora<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
-</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>Usage:
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span><span class="m">2</span>.5<span class="p">|</span><span class="m">2</span>.3<span class="p">|</span>balanced<span class="p">|</span>quality<span class="p">|</span>gemma<span class="p">|</span>iclora<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">  </span>./scripts/utilities/download-ltx.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD — same semantics as download-flux.
@@ -15746,8 +15822,8 @@ NCCL is out of this sample stack.</p>
   acestep snapshot so the ~10 GB AIO is not pulled twice.</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-music" data-href="../../../glossary/#download-music" data-short="Opt-in ACE-Step packs. turbo shares dest with podcast acestep; xl is larger." data-category="Downloads" title="Opt-in ACE-Step packs. turbo shares dest with podcast acestep; xl is larger.">download-music</span>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>Usage:
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>turbo<span class="p">|</span>xl<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>Usage:
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span>./scripts/utilities/download-music.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>turbo<span class="p">|</span>xl<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15768,8 +15844,8 @@ NCCL is out of this sample stack.</p>
   and optional Chatterbox / <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen3-tts" data-href="../../../glossary/#qwen3-tts" data-short="Optional Apache TTS + voice design. Not the Kokoro default." data-category="Models" title="Optional Apache TTS + voice design. Not the Kokoro default.">Qwen3-TTS</span> extras. Never part of download-models.</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-podcast" data-href="../../../glossary/#download-podcast" data-short="Opt-in audio packs. analog is Kokoro; acestep shares the music turbo AIO." data-category="Downloads" title="Opt-in audio packs. analog is Kokoro; acestep shares the music turbo AIO.">download-podcast</span>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>Usage:
-</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span>./scripts/utilities/download-podcast.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>analog<span class="p">|</span>acestep<span class="p">|</span>chatterbox<span class="p">|</span>qwen3tts<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>Usage:
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span>./scripts/utilities/download-podcast.sh<span class="w"> </span>status<span class="p">|</span>run<span class="p">|</span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>analog<span class="p">|</span>acestep<span class="p">|</span>chatterbox<span class="p">|</span>qwen3tts<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15786,9 +15862,9 @@ NCCL is out of this sample stack.</p>
 <h2 id="download-restore">download-restore<a class="headerlink" href="#download-restore" title="Permanent link">&para;</a></h2>
 <p>Opt-in post-concat restore pack (SeedVR2-3B Apache). Never part of
 download-models. Unload Comfy denoise first (occupancy).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>Usage:
-</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span>./scripts/utilities/download-restore.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>seedvr2-3b<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span>./scripts/utilities/download-restore.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>seedvr2-3b<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>Usage:
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span>./scripts/utilities/download-restore.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>seedvr2-3b<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span>./scripts/utilities/download-restore.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>seedvr2-3b<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15807,10 +15883,10 @@ download-models. Unload Comfy denoise first (occupancy).</p>
   No Wan 2.5+ API models.</p>
 <p>Audience:
   Operators on the Spark host. Prefer manage.sh download-models.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>Usage:
-</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>5b<span class="p">|</span>a14b<span class="p">|</span>fun-inp<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
-</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Usage:
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>5b<span class="p">|</span>a14b<span class="p">|</span>fun-inp<span class="p">|</span>all<span class="o">]</span><span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">  </span>./scripts/utilities/download-wan.sh<span class="w"> </span>cleanup<span class="w"> </span><span class="o">[</span>--tier<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="o">[</span>--dry-run<span class="p">|</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD</p>
@@ -15831,8 +15907,8 @@ download-models. Unload Comfy denoise first (occupancy).</p>
   Not baked into the Docker image.</p>
 <p>Audience:
   Operators on the Spark host.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>Usage:
-</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span>./scripts/utilities/dub-fetch.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span>--url<span class="w"> </span>URL<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>DIR<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>Usage:
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span>./scripts/utilities/dub-fetch.sh<span class="w"> </span>status<span class="p">|</span>run<span class="w"> </span>--url<span class="w"> </span>URL<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>DIR<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR, LAB_MOCK_YT_DLP</p>
@@ -15848,8 +15924,8 @@ download-models. Unload Comfy denoise first (occupancy).</p>
 <!-- source: scripts/utilities/film-accept.sh -->
 <h2 id="film-accept">film-accept<a class="headerlink" href="#film-accept" title="Permanent link">&para;</a></h2>
 <p>Fail-closed accept gate before 90s concat (duration, 1280×704, LTX audio).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>Usage:
-</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="w">  </span>./scripts/utilities/film-accept.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>Usage:
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span>./scripts/utilities/film-accept.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR</p>
@@ -15858,8 +15934,8 @@ download-models. Unload Comfy denoise first (occupancy).</p>
 <h2 id="film-animatic">film-animatic<a class="headerlink" href="#film-animatic" title="Permanent link">&para;</a></h2>
 <p>Cheap 90s animatic from clay.mp4 or held stills. Host ffmpeg, no GPU.
 May run while compose is up.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>Usage:
-</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="w">  </span>./scripts/utilities/film-animatic.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span><span class="o">[</span>--yaml<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--guides<span class="w"> </span>DIR<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>Usage:
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">  </span>./scripts/utilities/film-animatic.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span><span class="o">[</span>--yaml<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--guides<span class="w"> </span>DIR<span class="o">]</span>
 </span></code></pre></div>
 <p>Exit codes:
   0 written; 1 usage / missing sources / ffmpeg fail.</p>
@@ -15867,8 +15943,8 @@ May run while compose is up.</p>
 <!-- source: scripts/utilities/film-export-otio.sh -->
 <h2 id="film-export-otio">film-export-otio<a class="headerlink" href="#film-export-otio" title="Permanent link">&para;</a></h2>
 <p>Write films/<slug>/publish/<slug>.otio from jobstore state.json.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>Usage:
-</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="w">  </span>./scripts/utilities/film-export-otio.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>Usage:
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">  </span>./scripts/utilities/film-export-otio.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR</p>
@@ -15876,8 +15952,8 @@ May run while compose is up.</p>
 <!-- source: scripts/utilities/film-proxies.sh -->
 <h2 id="film-proxies">film-proxies<a class="headerlink" href="#film-proxies" title="Permanent link">&para;</a></h2>
 <p>Host h264_nvenc proxies for a film jobstore. Never rewrite masters.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>Usage:
-</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a><span class="w">  </span>./scripts/utilities/film-proxies.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Usage:
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">  </span>./scripts/utilities/film-proxies.sh<span class="w"> </span>go-see<span class="p">|</span>still-here<span class="p">|</span>switchyard<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15890,9 +15966,9 @@ May run while compose is up.</p>
 <h2 id="house-views">house-views<a class="headerlink" href="#house-views" title="Permanent link">&para;</a></h2>
 <p>Occupancy-gated Blender dump of an ez.house.views.v1 pack (ten Instagram
 4:5 Workbench clay + depth stills + greybox GLB). Never in docker/Dockerfile.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>Usage:
-</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="w">  </span>./scripts/utilities/house-views.sh<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse
-</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a><span class="w">  </span>./scripts/utilities/house-views.sh<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse<span class="w"> </span>--layout<span class="w"> </span>FILE
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Usage:
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span>./scripts/utilities/house-views.sh<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse
+</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span>./scripts/utilities/house-views.sh<span class="w"> </span>--slug<span class="w"> </span>lab-penthouse<span class="w"> </span>--layout<span class="w"> </span>FILE
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15907,10 +15983,10 @@ May run while compose is up.</p>
 <h2 id="llm-sidecar">llm-sidecar<a class="headerlink" href="#llm-sidecar" title="Permanent link">&para;</a></h2>
 <p>Host llama-server for the opt-in <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="qwen36" data-href="../../../glossary/#qwen36" data-short="Opt-in ~23 GB UD-Q4_K_XL GGUF for occupancy llm-desk. Not download-models." data-category="Models" title="Opt-in ~23 GB UD-Q4_K_XL GGUF for occupancy llm-desk. Not download-models.">Qwen3.6-35B</span>-A3B writing desk.
 Occupancy llm-desk is the public path. Never in docker/Dockerfile.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>Usage:
-</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-33-3"><a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>start
-</span><span id="__span-33-4"><a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>stop
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>Usage:
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>start
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="w">  </span>./scripts/utilities/llm-sidecar.sh<span class="w"> </span>stop
 </span></code></pre></div>
 <p>Environment:
   MODELS_DIR, COMFY_OUTPUT_DIR, EZ_LLM_SIDECAR_PORT, EZ_LLM_SIDECAR_CTX,
@@ -15925,8 +16001,8 @@ Occupancy llm-desk is the public path. Never in docker/Dockerfile.</p>
 <!-- source: scripts/utilities/models-manifest.sh -->
 <h2 id="models-manifest">models-manifest<a class="headerlink" href="#models-manifest" title="Permanent link">&para;</a></h2>
 <p>status | keep-set | render for config/model-manifest.yaml</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>Usage:
-</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="w">  </span>./scripts/utilities/models-manifest.sh<span class="w"> </span>status<span class="p">|</span>keep-set<span class="p">|</span>render
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>Usage:
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">  </span>./scripts/utilities/models-manifest.sh<span class="w"> </span>status<span class="p">|</span>keep-set<span class="p">|</span>render
 </span></code></pre></div>
 <h3 id="command-models-manifest">Command: models-manifest<a class="headerlink" href="#command-models-manifest" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/nvenc-preview.sh -->
@@ -15935,8 +16011,8 @@ Occupancy llm-desk is the public path. Never in docker/Dockerfile.</p>
 <p>Purpose:
   Encode a preview MP4 with the Spark NVENC engine when ComfyUI is stopped
   so preview encode does not fight LTX/Wan denoise for the encoder.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a>Usage:
-</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="w">  </span>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span>MASTER.mp4<span class="w"> </span>--out<span class="w"> </span>PREVIEW.mp4<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>Usage:
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span>./scripts/utilities/nvenc-preview.sh<span class="w"> </span>--in<span class="w"> </span>MASTER.mp4<span class="w"> </span>--out<span class="w"> </span>PREVIEW.mp4<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15951,9 +16027,9 @@ Occupancy llm-desk is the public path. Never in docker/Dockerfile.</p>
 <h2 id="occupancy_1">occupancy<a class="headerlink" href="#occupancy_1" title="Permanent link">&para;</a></h2>
 <p>Occupancy desk: park Comfy, run host Workbench Blender, then restore a
 heavy graph family (klein / trellis / wan / ltx). One GB10 GPU job.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a>Usage:
-</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="w">  </span>./scripts/utilities/occupancy.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">  </span>./scripts/utilities/occupancy.sh<span class="w"> </span>enter<span class="w"> </span>blender-desk<span class="p">|</span>llm-desk<span class="p">|</span>klein<span class="p">|</span>trellis<span class="p">|</span>wan<span class="p">|</span>ltx<span class="p">|</span>idle<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>Usage:
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">  </span>./scripts/utilities/occupancy.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">  </span>./scripts/utilities/occupancy.sh<span class="w"> </span>enter<span class="w"> </span>blender-desk<span class="p">|</span>llm-desk<span class="p">|</span>klein<span class="p">|</span>trellis<span class="p">|</span>wan<span class="p">|</span>ltx<span class="p">|</span>idle<span class="w"> </span><span class="o">[</span>--yes<span class="o">]</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15968,8 +16044,8 @@ heavy graph family (klein / trellis / wan / ltx). One GB10 GPU job.</p>
 <h2 id="overlay-qc">overlay-qc<a class="headerlink" href="#overlay-qc" title="Permanent link">&para;</a></h2>
 <p>50% blend of clay first.png vs Klein look plate. Host ffmpeg, no GPU.
 May run while compose is up (unlike export-guides).</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a>Usage:
-</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="w">  </span>./scripts/utilities/overlay-qc.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span>--shot<span class="w"> </span>ID<span class="w"> </span>--look<span class="w"> </span>PATH<span class="w"> </span><span class="o">[</span>--guides<span class="w"> </span>DIR<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>Usage:
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">  </span>./scripts/utilities/overlay-qc.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span>--shot<span class="w"> </span>ID<span class="w"> </span>--look<span class="w"> </span>PATH<span class="w"> </span><span class="o">[</span>--guides<span class="w"> </span>DIR<span class="o">]</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -15983,8 +16059,8 @@ May run while compose is up (unlike export-guides).</p>
 <h2 id="pack-frames">pack-frames<a class="headerlink" href="#pack-frames" title="Permanent link">&para;</a></h2>
 <p>Mux a PNG/EXR sequence to 24fps 1280x704 MP4 with software libx264.
 Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a>Usage:
-</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="w">  </span>./scripts/utilities/pack-frames.sh<span class="w"> </span>--in<span class="w"> </span>DIR<span class="w"> </span>--out<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--fps<span class="w"> </span><span class="m">24</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--pattern<span class="w"> </span><span class="s1">'%04d.png'</span><span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>Usage:
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">  </span>./scripts/utilities/pack-frames.sh<span class="w"> </span>--in<span class="w"> </span>DIR<span class="w"> </span>--out<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--fps<span class="w"> </span><span class="m">24</span><span class="o">]</span><span class="w"> </span><span class="o">[</span>--pattern<span class="w"> </span><span class="s1">'%04d.png'</span><span class="o">]</span>
 </span></code></pre></div>
 <h3 id="command-pack-frames">Command: pack-frames<a class="headerlink" href="#command-pack-frames" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/podcast-loudnorm.sh -->
@@ -15992,9 +16068,9 @@ Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
 <p>ffmpeg loudnorm for podcast / YouTube masters. Comfy cannot <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="lufs" data-href="../../../glossary/#lufs" data-short="Loudness units. Podcast default −16; YouTube −14. Comfy has no LUFS node — ffmpeg loudnorm." data-category="Audio" title="Loudness units. Podcast default −16; YouTube −14. Comfy has no LUFS node — ffmpeg loudnorm.">LUFS</span>-normalize.</p>
 <p>Purpose:
   Target −16 LUFS (podcast) or −14 LUFS (YouTube). Never silently skip.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a>Usage:
-</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="w">  </span>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-39-3"><a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="w">  </span>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--target<span class="w"> </span>podcast<span class="p">|</span>youtube<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>Usage:
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">  </span>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">  </span>./scripts/utilities/podcast-loudnorm.sh<span class="w"> </span>run<span class="w"> </span>--in<span class="w"> </span>FILE<span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>FILE<span class="o">]</span><span class="w"> </span><span class="o">[</span>--target<span class="w"> </span>podcast<span class="p">|</span>youtube<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR</p>
@@ -16013,9 +16089,9 @@ Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
   POST /prompt for films/<slug>/shots/NN.json, poll /history, copy the
   resulting MP4 to shots/NN.mp4, update state.json. <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="film-resume" data-href="../../../glossary/#film-resume" data-short="Skip ok 5.00 s shots in the jobstore after a dropped SSH session." data-category="Film" title="Skip ok 5.00 s shots in the jobstore after a dropped SSH session.">film-resume</span> skips
   ok shots whose duration is 5.00±0.05 s.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a>Usage:
-</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="w">  </span>./scripts/utilities/print-shot.sh<span class="w"> </span>&lt;film&gt;<span class="w"> </span>&lt;id&gt;
-</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="w">  </span>./scripts/utilities/print-shot.sh<span class="w"> </span>--resume<span class="w"> </span>&lt;film&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>Usage:
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">  </span>./scripts/utilities/print-shot.sh<span class="w"> </span>&lt;film&gt;<span class="w"> </span>&lt;id&gt;
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">  </span>./scripts/utilities/print-shot.sh<span class="w"> </span>--resume<span class="w"> </span>&lt;film&gt;
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR, COMFY_PORT (default 8188), MODELS_DIR
@@ -16031,9 +16107,9 @@ Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
 <!-- source: scripts/utilities/promote-workflow.sh -->
 <h2 id="promote-workflow">promote-workflow<a class="headerlink" href="#promote-workflow" title="Permanent link">&para;</a></h2>
 <p>Copy one live operator graph into the repo lab tree. Does not commit.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a>Usage:
-</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="w">  </span>./scripts/utilities/promote-workflow.sh<span class="w"> </span><span class="se">\</span>
-</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span>--from<span class="w"> </span>PATH<span class="w"> </span>--lane<span class="w"> </span>LANE<span class="w"> </span>--id<span class="w"> </span>STEM<span class="w"> </span><span class="o">[</span>--subdir<span class="w"> </span>REL<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>Usage:
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">  </span>./scripts/utilities/promote-workflow.sh<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="w">    </span>--from<span class="w"> </span>PATH<span class="w"> </span>--lane<span class="w"> </span>LANE<span class="w"> </span>--id<span class="w"> </span>STEM<span class="w"> </span><span class="o">[</span>--subdir<span class="w"> </span>REL<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   REPO_ROOT (optional)</p>
@@ -16049,13 +16125,13 @@ Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
 <!-- source: scripts/utilities/reap-models.sh -->
 <h2 id="reap-models">reap-models<a class="headerlink" href="#reap-models" title="Permanent link">&para;</a></h2>
 <p>Plan/apply/restore model cache cleanup. Never overloaded as manage.sh cleanup.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a>Usage:
-</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--plan
-</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>junk<span class="w"> </span>--yes
-</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>superseded<span class="w"> </span>--quarantine<span class="w"> </span>--yes
-</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--drop-pack<span class="w"> </span>triposplat<span class="w"> </span>--quarantine<span class="w"> </span>--yes
-</span><span id="__span-42-6"><a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.reap-quarantine/&lt;utc&gt;
-</span><span id="__span-42-7"><a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>drop-quarantine<span class="w"> </span>--older-than<span class="w"> </span>14d<span class="w"> </span>--yes
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>Usage:
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--plan
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>junk<span class="w"> </span>--yes
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--apply<span class="w"> </span>--class<span class="w"> </span>superseded<span class="w"> </span>--quarantine<span class="w"> </span>--yes
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>--drop-pack<span class="w"> </span>triposplat<span class="w"> </span>--quarantine<span class="w"> </span>--yes
+</span><span id="__span-43-6"><a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>restore<span class="w"> </span>--from<span class="w"> </span>.reap-quarantine/&lt;utc&gt;
+</span><span id="__span-43-7"><a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="w">  </span>./scripts/utilities/reap-models.sh<span class="w"> </span>drop-quarantine<span class="w"> </span>--older-than<span class="w"> </span>14d<span class="w"> </span>--yes
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -16069,17 +16145,17 @@ Not NVENC — may run while Comfy is up because it does not use the GPU.</p>
 <h2 id="research-mcp">research-mcp<a class="headerlink" href="#research-mcp" title="Permanent link">&para;</a></h2>
 <p>In-tree creative research MCP (typed tools, no execute_code, no telemetry).
 CPU GGUF + SSRF-safe HTTPS search. Does not refuse a GPU Comfy session.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a>Usage:
-</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span><span class="o">[</span>--stdio<span class="o">]</span>
-</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span>--list-tools
-</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span>--call<span class="w"> </span>TOOL<span class="w"> </span><span class="o">[</span>JSON<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>Usage:
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span><span class="o">[</span>--stdio<span class="o">]</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span>--list-tools
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="w">  </span>./scripts/utilities/research-mcp.sh<span class="w"> </span>--call<span class="w"> </span>TOOL<span class="w"> </span><span class="o">[</span>JSON<span class="o">]</span>
 </span></code></pre></div>
 <h3 id="command-research-mcp_1">Command: research-mcp<a class="headerlink" href="#command-research-mcp_1" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/runner.sh -->
 <h2 id="utility-runner-bazel-entry">Utility runner (Bazel entry)<a class="headerlink" href="#utility-runner-bazel-entry" title="Permanent link">&para;</a></h2>
 <p>Dispatches to <code>scripts/utilities/&lt;name&gt;.sh</code>.</p>
 <h3 id="command-run-utility">Command: run-utility<a class="headerlink" href="#command-run-utility" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a>Usage:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>Usage:
 </span></code></pre></div>
 <p><span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="bazelisk" data-href="../../../glossary/#bazelisk" data-short="Contributor launcher that pins Bazel 8.4.1. Official test/lint/docs entry point." data-category="Studio" title="Contributor launcher that pins Bazel 8.4.1. Official test/lint/docs entry point.">bazelisk</span> run //scripts:run-utility -- download-limit status
   bazelisk run //scripts:run-utility -- occupancy status</p>
@@ -16093,9 +16169,9 @@ CPU GGUF + SSRF-safe HTTPS search. Does not refuse a GPU Comfy session.</p>
 <h2 id="shot-sheet">shot-sheet<a class="headerlink" href="#shot-sheet" title="Permanent link">&para;</a></h2>
 <p>Write films/<slug>/shots.yaml from a lab bible with shot-card defaults.
 Does not mutate workflows/shorts/*.shots.yaml unless --<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="lab-example" data-href="../../../glossary/#lab-example" data-short="A seeded `_lab/&lt;lane&gt;/` graph. Load these; do not start from a blank canvas." data-category="Studio" title="A seeded `_lab/&lt;lane&gt;/` graph. Load these; do not start from a blank canvas.">lab-example</span>.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a>Usage:
-</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">  </span>./scripts/utilities/shot-sheet.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>SLUG<span class="o">]</span>
-</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">  </span>./scripts/utilities/shot-sheet.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span><span class="o">[</span>--from<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--lab-example<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>Usage:
+</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">  </span>./scripts/utilities/shot-sheet.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span><span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>SLUG<span class="o">]</span>
+</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">  </span>./scripts/utilities/shot-sheet.sh<span class="w"> </span>run<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span><span class="o">[</span>--from<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--out<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--lab-example<span class="o">]</span>
 </span></code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -16114,11 +16190,11 @@ Does not mutate workflows/shorts/*.shots.yaml unless --<span class="ez-term" tab
   run: refuses MiniMax H3 names; operators Queue wan/still-to-shot / ltx/still-to-shot
   graphs per host, then <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="concat-shots" data-href="../../../glossary/#concat-shots" data-short="Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path." data-category="Film" title="Host ffmpeg stitch for 5 s takes. In-graph EZFilmConcat is the one-click 90s path.">concat-shots</span>.sh locally.
   Never starts compose on a remote node — prints the local manage.sh start.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-46-1"><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a>Usage:
-</span><span id="__span-46-2"><a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-46-3"><a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
-</span><span id="__span-46-4"><a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>go-see<span class="o">]</span><span class="w"> </span><span class="o">[</span>--seeds<span class="w"> </span><span class="m">509201</span>,509211,509221<span class="o">]</span>
-</span><span id="__span-46-5"><a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>go-see<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>Usage:
+</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>status<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>sync-models
+</span><span id="__span-47-4"><a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>run<span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>go-see<span class="o">]</span><span class="w"> </span><span class="o">[</span>--seeds<span class="w"> </span><span class="m">509201</span>,509211,509221<span class="o">]</span>
+</span><span id="__span-47-5"><a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a><span class="w">  </span>./scripts/utilities/spark-farm.sh<span class="w"> </span>dispatch<span class="w"> </span><span class="o">[</span>--film<span class="w"> </span>go-see<span class="o">]</span>
 </span></code></pre></div>
 <div class="language-text highlight"><pre><span></span><code>Assign shots 01-06 / 07-12 / 13-18 (or even split). Each host runs
 local manage.sh print-shot. Never SSH-starts compose.
@@ -16139,9 +16215,9 @@ local manage.sh print-shot. Never SSH-starts compose.
 <h2 id="spark-timing">spark-timing<a class="headerlink" href="#spark-timing" title="Permanent link">&para;</a></h2>
 <p>Record wall-clock seconds for the three Kitchen smokes on a real Spark.
 CI has no GPU — this file is the operator timing table. Do not invent seconds.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-47-1"><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a>Usage:
-</span><span id="__span-47-2"><a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a><span class="w">  </span>./scripts/utilities/spark-timing.sh<span class="w"> </span>show<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
-</span><span id="__span-47-3"><a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="w">  </span>./scripts/utilities/spark-timing.sh<span class="w"> </span>record<span class="w"> </span>--klein<span class="w"> </span>N<span class="w"> </span>--wan<span class="w"> </span>N<span class="w"> </span>--ltx<span class="w"> </span>N<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>Usage:
+</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="w">  </span>./scripts/utilities/spark-timing.sh<span class="w"> </span>show<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
+</span><span id="__span-48-3"><a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="w">  </span>./scripts/utilities/spark-timing.sh<span class="w"> </span>record<span class="w"> </span>--klein<span class="w"> </span>N<span class="w"> </span>--wan<span class="w"> </span>N<span class="w"> </span>--ltx<span class="w"> </span>N<span class="w"> </span><span class="o">[</span>--json<span class="o">]</span>
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR (JSON lands at spark-timing.json; not git)</p>
@@ -16150,8 +16226,8 @@ CI has no GPU — this file is the operator timing table. Do not invent seconds.
 <h2 id="stem-mix">stem-mix<a class="headerlink" href="#stem-mix" title="Permanent link">&para;</a></h2>
 <p>Picture-lock stem mix (DX / BG / FX / MX). Duck -15 dB under DX, YouTube loudnorm.
 Occupancy: operator must already have stopped Klein/Wan/LTX. This script is CPU ffmpeg.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-48-1"><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a>Usage:
-</span><span id="__span-48-2"><a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a><span class="w">  </span>./scripts/utilities/stem-mix.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span>--shot<span class="w"> </span>ID<span class="w"> </span><span class="o">[</span>--dx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span>--bg<span class="w"> </span>PATH<span class="w"> </span><span class="o">[</span>--fx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--video<span class="w"> </span>PATH<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>Usage:
+</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="w">  </span>./scripts/utilities/stem-mix.sh<span class="w"> </span>--film<span class="w"> </span>SLUG<span class="w"> </span>--shot<span class="w"> </span>ID<span class="w"> </span><span class="o">[</span>--dx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span>--bg<span class="w"> </span>PATH<span class="w"> </span><span class="o">[</span>--fx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--mx<span class="w"> </span>PATH<span class="o">]</span><span class="w"> </span><span class="o">[</span>--video<span class="w"> </span>PATH<span class="o">]</span>
 </span></code></pre></div>
 <p>Exit codes:
   0 mix written; 1 usage / missing ffmpeg / mix fail.</p>
@@ -16161,17 +16237,17 @@ Occupancy: operator must already have stopped Klein/Wan/LTX. This script is CPU 
 <p>In-tree studio MCP (typed tools, no execute_code, no telemetry, no Queue).
 Clones shipped _lab graphs into live _user/. CPU GGUF optional.
 Does not refuse a GPU Comfy session.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-49-1"><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a>Usage:
-</span><span id="__span-49-2"><a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span><span class="o">[</span>--stdio<span class="o">]</span>
-</span><span id="__span-49-3"><a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span>--list-tools
-</span><span id="__span-49-4"><a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span>--call<span class="w"> </span>TOOL<span class="w"> </span><span class="o">[</span>JSON<span class="o">]</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>Usage:
+</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span><span class="o">[</span>--stdio<span class="o">]</span>
+</span><span id="__span-50-3"><a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span>--list-tools
+</span><span id="__span-50-4"><a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a><span class="w">  </span>./scripts/utilities/studio-mcp.sh<span class="w"> </span>--call<span class="w"> </span>TOOL<span class="w"> </span><span class="o">[</span>JSON<span class="o">]</span>
 </span></code></pre></div>
 <h3 id="command-studio-mcp_1">Command: studio-mcp<a class="headerlink" href="#command-studio-mcp_1" title="Permanent link">&para;</a></h3>
 <!-- source: scripts/utilities/take-promote.sh -->
 <h2 id="take-promote">take-promote<a class="headerlink" href="#take-promote" title="Permanent link">&para;</a></h2>
 <p>Promote a take from films/<slug>/takes/<id>/tNNN.mp4 to shots/<id>.mp4.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-50-1"><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a>Usage:
-</span><span id="__span-50-2"><a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a><span class="w">  </span>./scripts/utilities/take-promote.sh<span class="w"> </span>&lt;film&gt;<span class="w"> </span>&lt;id&gt;<span class="w"> </span>&lt;take&gt;
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-51-1"><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a>Usage:
+</span><span id="__span-51-2"><a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a><span class="w">  </span>./scripts/utilities/take-promote.sh<span class="w"> </span>&lt;film&gt;<span class="w"> </span>&lt;id&gt;<span class="w"> </span>&lt;take&gt;
 </span></code></pre></div>
 <p>Environment:
   COMFY_OUTPUT_DIR</p>

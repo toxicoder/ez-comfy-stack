@@ -9,6 +9,7 @@ _DOCS_COMMON_DATA = [
     "generate_shell_docs.py",
     "generate_workflow_docs.py",
     "generate_cinema_docs.py",
+    "cinema_clip_prompts.py",
     "generate_audio_docs.py",
     "glossary.py",
     "hooks.py",
