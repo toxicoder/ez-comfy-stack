@@ -1,6 +1,6 @@
 {
   "id": "08-overpass",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy wobble drop, dirty dubstep wreck, sub crush, grid 227 0]\n\n[inst - metal hats roll, wobble sustain, grid 227 1]\n\n[drop - harder growl drop, stacked 808 warp, chest rumble, grid 227 2]\n\n[inst - trap hats denser, 808 punch hold, grid 227 3]\n\n[drop - full send drop, warped wobble wreck, low sub, grid 227 4]\n\n[inst - snare roll, growl hold, grid 227 5]\n\n[drop - harder warped drop, chest 808 wreck, dubstep grind, grid 227 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 227 7]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy wobble drop, dirty dubstep wreck, sub crush, grid 227 0]\n\n[inst - metal hats roll, wobble sustain, grid 227 1]\n\n[drop - harder growl drop, stacked 808 warp, chest rumble, grid 227 2]\n\n[inst - rapid hi-hats denser, 808 punch hold, grid 227 3]\n\n[drop - full send drop, warped wobble wreck, low sub, grid 227 4]\n\n[inst - snare roll, growl hold, grid 227 5]\n\n[drop - harder warped drop, chest-sub 808 wreck, dubstep grind, grid 227 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 227 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-1/08-overpass"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy wobble drop, dirty dubstep wreck, sub crush, grid 227 0]\n\n[inst - metal hats roll, wobble sustain, grid 227 1]\n\n[drop - harder growl drop, stacked 808 warp, chest rumble, grid 227 2]\n\n[inst - trap hats denser, 808 punch hold, grid 227 3]\n\n[drop - full send drop, warped wobble wreck, low sub, grid 227 4]\n\n[inst - snare roll, growl hold, grid 227 5]\n\n[drop - harder warped drop, chest 808 wreck, dubstep grind, grid 227 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 227 7]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy wobble drop, dirty dubstep wreck, sub crush, grid 227 0]\n\n[inst - metal hats roll, wobble sustain, grid 227 1]\n\n[drop - harder growl drop, stacked 808 warp, chest rumble, grid 227 2]\n\n[inst - rapid hi-hats denser, 808 punch hold, grid 227 3]\n\n[drop - full send drop, warped wobble wreck, low sub, grid 227 4]\n\n[inst - snare roll, growl hold, grid 227 5]\n\n[drop - harder warped drop, chest-sub 808 wreck, dubstep grind, grid 227 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 227 7]",
         227,
         "fixed",
         150,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/08-overpass",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

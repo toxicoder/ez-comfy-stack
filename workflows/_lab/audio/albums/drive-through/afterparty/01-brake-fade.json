@@ -1,6 +1,6 @@
 {
   "id": "01-brake-fade",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty bass, warped bass, trap hats, chest sub, stacked 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy dirty drop, chest 808 warp, brake wreck, grid 457 0]\n\n[inst - trap hats roll, 808 slide, grid 457 1]\n\n[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]\n\n[inst - snare roll, chest 808 punch, grid 457 3]\n\n[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 457 5]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 457 1]\n\n[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 457 3]\n\n[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 457 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/01-brake-fade"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty bass, warped bass, trap hats, chest sub, stacked 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy dirty drop, chest 808 warp, brake wreck, grid 457 0]\n\n[inst - trap hats roll, 808 slide, grid 457 1]\n\n[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]\n\n[inst - snare roll, chest 808 punch, grid 457 3]\n\n[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 457 5]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 457 1]\n\n[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 457 3]\n\n[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 457 5]",
         457,
         "fixed",
         150,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/01-brake-fade",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

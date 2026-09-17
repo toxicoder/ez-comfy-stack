@@ -1,6 +1,6 @@
 {
   "id": "10-donk-ramp",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]\n\n[drop - harder warped drop, chest 808 stack, tearout grind, grid 331 1]\n\n[inst - trap hats denser, growl sustain, grid 331 2]\n\n[drop - full send drop, dirty analog wreck, warped 808, grid 331 3]\n\n[outro - kick holds, trap hats roll, growl ride, grid 331 4]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]\n\n[drop - harder warped drop, chest-sub 808 stack, tearout grind, grid 331 1]\n\n[inst - rapid hi-hats denser, growl sustain, grid 331 2]\n\n[drop - full send drop, dirty analog wreck, warped 808, grid 331 3]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 331 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-2/10-donk-ramp"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]\n\n[drop - harder warped drop, chest 808 stack, tearout grind, grid 331 1]\n\n[inst - trap hats denser, growl sustain, grid 331 2]\n\n[drop - full send drop, dirty analog wreck, warped 808, grid 331 3]\n\n[outro - kick holds, trap hats roll, growl ride, grid 331 4]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]\n\n[drop - harder warped drop, chest-sub 808 stack, tearout grind, grid 331 1]\n\n[inst - rapid hi-hats denser, growl sustain, grid 331 2]\n\n[drop - full send drop, dirty analog wreck, warped 808, grid 331 3]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 331 4]",
         331,
         "fixed",
         150,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-2/10-donk-ramp",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

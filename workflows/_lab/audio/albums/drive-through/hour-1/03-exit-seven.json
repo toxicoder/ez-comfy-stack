@@ -1,6 +1,6 @@
 {
   "id": "03-exit-seven",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "tearout, warped bass, trap hats, bass growl, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
-        "[drop - heavy tearout drop, growl wreck, formant scrape, grid 233 0]\n\n[inst - metal hats roll, 808 grind hold, grid 233 1]\n\n[drop - harder warped drop, sub crush 808, chest growl, grid 233 2]\n\n[inst - snare roll, tearout 808 sustain, grid 233 3]\n\n[drop - full send drop, stacked growl wreck, low rumble, grid 233 4]\n\n[inst - trap hats denser, mid growl hold, grid 233 5]\n\n[drop - harder growl drop, chest 808 warp, tearout wreck, grid 233 6]\n\n[outro - kick holds, trap hats roll, growl ride, grid 233 7]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, growl wreck, formant scrape, grid 233 0]\n\n[inst - metal hats roll, 808 grind hold, grid 233 1]\n\n[drop - harder warped drop, sub crush 808, chest growl, grid 233 2]\n\n[inst - snare roll, tearout 808 sustain, grid 233 3]\n\n[drop - full send drop, stacked growl wreck, low rumble, grid 233 4]\n\n[inst - rapid hi-hats denser, mid growl hold, grid 233 5]\n\n[drop - harder growl drop, chest-sub 808 warp, tearout wreck, grid 233 6]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 233 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-1/03-exit-seven"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "tearout, warped bass, trap hats, bass growl, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
-        "[drop - heavy tearout drop, growl wreck, formant scrape, grid 233 0]\n\n[inst - metal hats roll, 808 grind hold, grid 233 1]\n\n[drop - harder warped drop, sub crush 808, chest growl, grid 233 2]\n\n[inst - snare roll, tearout 808 sustain, grid 233 3]\n\n[drop - full send drop, stacked growl wreck, low rumble, grid 233 4]\n\n[inst - trap hats denser, mid growl hold, grid 233 5]\n\n[drop - harder growl drop, chest 808 warp, tearout wreck, grid 233 6]\n\n[outro - kick holds, trap hats roll, growl ride, grid 233 7]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, growl wreck, formant scrape, grid 233 0]\n\n[inst - metal hats roll, 808 grind hold, grid 233 1]\n\n[drop - harder warped drop, sub crush 808, chest growl, grid 233 2]\n\n[inst - snare roll, tearout 808 sustain, grid 233 3]\n\n[drop - full send drop, stacked growl wreck, low rumble, grid 233 4]\n\n[inst - rapid hi-hats denser, mid growl hold, grid 233 5]\n\n[drop - harder growl drop, chest-sub 808 warp, tearout wreck, grid 233 6]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 233 7]",
         233,
         "fixed",
         142,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/03-exit-seven",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

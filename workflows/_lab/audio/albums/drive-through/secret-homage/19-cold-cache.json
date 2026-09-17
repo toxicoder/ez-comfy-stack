@@ -1,6 +1,6 @@
 {
   "id": "19-cold-cache",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "hybrid trap, warped bass, trap hats, dirty 808, chest sub, trap bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
-        "[drop - heavy hybrid drop, warped 808 wreck, cache grind, grid 701 0]\n\n[inst - trap hats roll, 808 slide, grid 701 1]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 701 2]\n\n[inst - snare roll, chest 808 punch, grid 701 3]\n\n[inst - hats denser, cache 808 hold, grid 701 4]\n\n[inst - 808 triplets, hybrid growl sustain, grid 701 5]\n\n[drop - full send drop, chest sub wreck, hybrid warp, grid 701 6]\n\n[outro - kick holds, hats denser, 808 ride, grid 701 7]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals",
+        "[drop - heavy hybrid drop, warped 808 wreck, cache grind, grid 701 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 701 1]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 701 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 701 3]\n\n[inst - hats denser, cache 808 hold, grid 701 4]\n\n[inst - 808 triplets, hybrid growl sustain, grid 701 5]\n\n[drop - full send drop, chest-sub wreck, hybrid warp, grid 701 6]\n\n[outro - kick holds, hats denser, 808 ride, grid 701 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/19-cold-cache"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hybrid trap, warped bass, trap hats, dirty 808, chest sub, trap bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm",
-        "[drop - heavy hybrid drop, warped 808 wreck, cache grind, grid 701 0]\n\n[inst - trap hats roll, 808 slide, grid 701 1]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 701 2]\n\n[inst - snare roll, chest 808 punch, grid 701 3]\n\n[inst - hats denser, cache 808 hold, grid 701 4]\n\n[inst - 808 triplets, hybrid growl sustain, grid 701 5]\n\n[drop - full send drop, chest sub wreck, hybrid warp, grid 701 6]\n\n[outro - kick holds, hats denser, 808 ride, grid 701 7]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals",
+        "[drop - heavy hybrid drop, warped 808 wreck, cache grind, grid 701 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 701 1]\n\n[drop - harder growl drop, trap bass wall, chest formant, grid 701 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 701 3]\n\n[inst - hats denser, cache 808 hold, grid 701 4]\n\n[inst - 808 triplets, hybrid growl sustain, grid 701 5]\n\n[drop - full send drop, chest-sub wreck, hybrid warp, grid 701 6]\n\n[outro - kick holds, hats denser, 808 ride, grid 701 7]",
         701,
         "fixed",
         142,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/19-cold-cache",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

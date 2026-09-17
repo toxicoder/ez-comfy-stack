@@ -1,6 +1,6 @@
 ---
 title: Sound Design
-description: Audio Rack catalog — Sound Design (110 spliceable techniques).
+description: Audio Rack catalog — Sound Design (112 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 110 spliceable techniques for **Sound Design**
+- 112 spliceable techniques for **Sound Design**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -42,6 +42,8 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `sfx_sting_hit_fx` | Sting hit FX | sting hit | vocal, instrumental, podcast | — |
 | `sfx_bed_none` | Bed-safe none | no drop fx | instrumental, podcast | — |
 | `sfx_laser_zap` | Zap | zap fx | vocal, instrumental, podcast | — |
+| `sfx_formant_grind` | Formant grind | formant grind | vocal, instrumental | — |
+| `sfx_kick_split` | Kick split | kick split | vocal, instrumental | — |
 | `sfx_fill_00` | Design color 1 | design color 1 | vocal, instrumental, podcast | — |
 | `sfx_fill_01` | Design color 2 | design color 2 | vocal, instrumental, podcast | — |
 | `sfx_fill_02` | Design color 3 | design color 3 | vocal, instrumental, podcast | — |

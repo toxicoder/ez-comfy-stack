@@ -6,6 +6,7 @@ No living-artist names.
 
 from __future__ import annotations
 
+import re
 from typing import Literal, TypedDict
 
 from .albums import album_rel, drive_album_for_phase
@@ -63,6 +64,7 @@ HIPHOP_DRUM_NEEDLES = (
     "hats roll",
     "snare roll",
     "trap drums",
+    "rapid hi-hats",
 )
 HEADLINER_BOUNCE_NEEDLES = (
     "chest",
@@ -215,6 +217,8 @@ class EdmExample(TypedDict):
         tracktotal: Album track count.
         year: Release year.
         cover_prompt: US-safe cover-art prompt.
+        recipe: Audio Rack recipe id.
+        picks: Axis overrides spliced with the recipe.
     """
 
     stem: str
@@ -240,20 +244,74 @@ class EdmExample(TypedDict):
     tracktotal: int
     year: int
     cover_prompt: str
+    recipe: str
+    picks: dict[str, str]
 
 
-def drive_tags(*parts: str, bpm: int, treat: bool = False) -> str:
-    """Join style tags with the Drive-through bed lock and bpm.
+def _tempo_id(bpm: int) -> str:
+    """Audio Rack tempo id for a Drive-through BPM.
 
     Args:
-        parts: Genre and production tags for this take.
+        bpm: Integer tempo.
+
+    Returns:
+        ``tmp_<bpm>`` technique id.
+    """
+    return f"tmp_{int(bpm)}"
+
+
+def _splice_drive(
+    *,
+    bpm: int,
+    recipe: str,
+    picks: dict[str, str] | None,
+    treat: bool,
+) -> tuple[str, int, dict[str, str]]:
+    """Splice Audio Rack picks into Drive-through ACE tags.
+
+    Args:
+        bpm: Take tempo (written as ``tmp_<bpm>``).
+        recipe: Named recipe; fills empty axes only.
+        picks: Explicit axis overrides.
+        treat: If True, DJ-shout vocal flavor.
+
+    Returns:
+        Tags line, integer BPM from the splice, and the merged picks.
+    """
+    from ez_prompt_enhance.audio import (
+        FLAVOR_ACE_INSTRUMENTAL,
+        FLAVOR_ACE_VOCAL,
+        splice,
+    )
+
+    merged = {str(key): str(value) for key, value in dict(picks or {}).items()}
+    merged["tempo_groove"] = _tempo_id(bpm)
+    if treat:
+        merged.setdefault("vocal_identity", "voc_dj_shout")
+        merged.setdefault("mix_production", "mix_drive_treat")
+    else:
+        merged.setdefault("mix_production", "mix_drive_lock")
+    flavor = FLAVOR_ACE_VOCAL if treat else FLAVOR_ACE_INSTRUMENTAL
+    result = splice(merged, flavor=flavor, recipe=recipe)
+    token = str(result.bpm or "").strip() or f"{int(bpm)} bpm"
+    match = re.search(r"(\d{2,3})", token)
+    bpm_n = int(match.group(1)) if match else int(bpm)
+    return result.tags, bpm_n, merged
+
+
+def drive_tags(*, bpm: int, treat: bool = False, recipe: str = "") -> str:
+    """Splice Drive-through ACE tags from the Audio Rack lock recipe.
+
+    Args:
         bpm: Tempo written into the tags line.
-        treat: If True, use the sparse DJ-shout lock instead of no-vocals.
+        treat: If True, use the DJ-shout lock instead of no-vocals.
+        recipe: Optional recipe override.
     Returns:
         Comma-separated ACE-Step tags line.
     """
-    lock = DRIVE_TREAT_LOCK if treat else DRIVE_LOCK
-    return ", ".join([*parts, lock, f"{bpm} bpm"])
+    rid = recipe or ("rec_drive_dj_shout" if treat else "rec_drive_through_drop")
+    tags, _, _ = _splice_drive(bpm=bpm, recipe=rid, picks=None, treat=treat)
+    return tags
 
 
 def _desc(take: str, *, treat: bool = False) -> str:
@@ -281,11 +339,13 @@ def _ex(
     phase: int,
     take: str,
     lyrics: str,
-    *tag_parts: str,
+    *,
+    recipe: str,
+    picks: dict[str, str] | None = None,
     treat: bool = False,
     layout: str = "column",
 ) -> EdmExample:
-    """Build one Drive-through catalog row.
+    """Build one Drive-through catalog row from Audio Rack picks.
 
     Args:
         slug: Kebab title used in the lab stem.
@@ -295,7 +355,8 @@ def _ex(
         phase: Live-set hour index (maps to an album).
         take: Short blurb for the lab description.
         lyrics: Arrangement score from ``format_edm_score``.
-        tag_parts: Genre and production tags (warp bass + trap drums).
+        recipe: Audio Rack recipe id (fills empty axes).
+        picks: Axis overrides; tempo is always ``tmp_<bpm>``.
         treat: If True, sparse DJ-shout lock and vocal ACE mode.
         layout: Comfy node placement name (phase2+ experiments; default column).
     Returns:
@@ -305,14 +366,17 @@ def _ex(
     """
     if layout not in EDM_LAYOUTS:
         raise ValueError(f"unknown layout {layout}")
+    tags, bpm_n, merged = _splice_drive(
+        bpm=bpm, recipe=recipe, picks=picks, treat=treat
+    )
     return {
         "stem": slug,
         "slug": slug,
         "rel": "",
         "series": "drive-through",
         "title": title,
-        "tags": drive_tags(*tag_parts, bpm=bpm, treat=treat),
-        "bpm": bpm,
+        "tags": tags,
+        "bpm": bpm_n,
         "duration": EDM_DURATION_S,
         "seed": seed,
         "phase": phase,
@@ -329,6 +393,8 @@ def _ex(
         "tracktotal": 0,
         "year": 0,
         "cover_prompt": "",
+        "recipe": recipe,
+        "picks": merged,
     }
 
 
@@ -371,6 +437,37 @@ def _uniquify_score(seed: int, lyrics: str) -> str:
     return "\n\n".join(parts)
 
 
+# Unofficial score phrases rewritten onto Audio Rack tag spelling.
+_SCORE_SPELLING = (
+    ("hybrid trap", "warped hybrid-trap"),
+    ("trap hats", "rapid hi-hats"),
+    ("chest sub", "chest-sub"),
+    ("bass growl", "growl bass"),
+    ("amen chops", "amen break"),
+    ("amen keep", "amen break"),
+    ("trap 808", "trap drums 808"),
+    ("dirty 808", "dirty bass 808"),
+    ("chest 808", "chest-sub 808"),
+    ("rolling 808", "stacked 808"),
+    ("heavy sub", "heavy chest-sub"),
+)
+
+
+def _spell_score_body(text: str) -> str:
+    """Rewrite unofficial timbre phrases onto Audio Rack tag spelling.
+
+    Args:
+        text: Raw score body.
+
+    Returns:
+        Body with catalog-facing timbre tokens.
+    """
+    out = text
+    for old, new in _SCORE_SPELLING:
+        out = out.replace(old, new)
+    return out
+
+
 def format_edm_score(*sections: tuple[str, str]) -> str:
     """Build a 180s ACE-Step score from labeled sections.
 
@@ -398,7 +495,7 @@ def format_edm_score(*sections: tuple[str, str]) -> str:
     for index, (label, body) in enumerate(sections):
         if label not in SCORE_LABELS:
             raise ValueError(f"unknown score label {label}")
-        text = body.strip()
+        text = _spell_score_body(body.strip())
         if not text:
             raise ValueError(f"{label} body is empty")
         low = text.lower()

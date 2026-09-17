@@ -1,6 +1,6 @@
 {
   "id": "05-black-ice",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "riddim, warped bass, trap hats, wobble bass, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 160 bpm",
-        "[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]\n\n[inst - metal hats roll, wobble sustain, grid 479 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]\n\n[inst - trap hats denser, wobble hold, grid 479 3]\n\n[drop - full send drop, sub crush wreck, chest formant, grid 479 4]\n\n[inst - snare roll, bass growl hold, grid 479 5]\n\n[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 479 7]",
+        "riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 160 bpm, instrumental, no vocals",
+        "[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]\n\n[inst - metal hats roll, wobble sustain, grid 479 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]\n\n[inst - rapid hi-hats denser, wobble hold, grid 479 3]\n\n[drop - full send drop, sub crush wreck, chest formant, grid 479 4]\n\n[inst - snare roll, growl bass hold, grid 479 5]\n\n[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 479 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/05-black-ice"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "riddim, warped bass, trap hats, wobble bass, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 160 bpm",
-        "[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]\n\n[inst - metal hats roll, wobble sustain, grid 479 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]\n\n[inst - trap hats denser, wobble hold, grid 479 3]\n\n[drop - full send drop, sub crush wreck, chest formant, grid 479 4]\n\n[inst - snare roll, bass growl hold, grid 479 5]\n\n[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 479 7]",
+        "riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 160 bpm, instrumental, no vocals",
+        "[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]\n\n[inst - metal hats roll, wobble sustain, grid 479 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]\n\n[inst - rapid hi-hats denser, wobble hold, grid 479 3]\n\n[drop - full send drop, sub crush wreck, chest formant, grid 479 4]\n\n[inst - snare roll, growl bass hold, grid 479 5]\n\n[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]\n\n[outro - kick holds, hats denser, wobble ride, grid 479 7]",
         479,
         "fixed",
         160,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/05-black-ice",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -1,6 +1,6 @@
 ---
 title: Bass and Low End
-description: Audio Rack catalog — Bass and Low End (110 spliceable techniques).
+description: Audio Rack catalog — Bass and Low End (118 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 110 spliceable techniques for **Bass and Low End**
+- 118 spliceable techniques for **Bass and Low End**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -42,6 +42,14 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `bass_sub_only` | Sub only | sub only | vocal, instrumental, podcast | — |
 | `bass_picked` | Picked bass | picked bass | vocal, instrumental, podcast | — |
 | `bass_fretless` | Fretless bass | fretless bass | vocal, instrumental, podcast | — |
+| `bass_growl` | Growl bass | growl bass, chest-sub, 808 | vocal, instrumental | — |
+| `bass_reese` | Reese bass | reese bass, chest-sub | vocal, instrumental | — |
+| `bass_formant` | Formant bass | formant bass, chest-sub, 808 | vocal, instrumental | — |
+| `bass_warped` | Warped bass | warped bass, chest-sub | vocal, instrumental | — |
+| `bass_pedal_dual` | Dual-action pedal bass | dual-action pedal bass, chest-sub, 808 | vocal, instrumental | — |
+| `bass_fold` | Fold bass | fold bass, chest-sub, 808 | vocal, instrumental | — |
+| `bass_stacked_808` | Stacked 808 | stacked 808, chest-sub | vocal, instrumental | — |
+| `bass_body` | Body bass | body bass, chest-sub, 808 | vocal, instrumental | — |
 | `bass_fill_00` | Bass color 1 | bass color 1 | vocal, instrumental, podcast | — |
 | `bass_fill_01` | Bass color 2 | bass color 2 | vocal, instrumental, podcast | — |
 | `bass_fill_02` | Bass color 3 | bass color 3 | vocal, instrumental, podcast | — |

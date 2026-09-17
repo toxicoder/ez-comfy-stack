@@ -1,6 +1,6 @@
 {
   "id": "09-moon-ramp",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "wave bass, warped bass, trap hats, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
-        "[drop - heavy wave drop, trap 808 warp, chest fold wreck, grid 419 0]\n\n[inst - trap hats denser, wave 808 hold moon, grid 419 1]\n\n[drop - harder growl drop, chest 808 wall, warped wave, grid 419 2]\n\n[inst - snare roll, 808 slide, grid 419 3]\n\n[drop - full send drop, body wave wreck, trap formant, grid 419 4]\n\n[outro - kick holds, hats denser, wave ride, grid 419 5]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, trap drums 808 warp, chest fold wreck, grid 419 0]\n\n[inst - rapid hi-hats denser, wave 808 hold moon, grid 419 1]\n\n[drop - harder growl drop, chest-sub 808 wall, warped wave, grid 419 2]\n\n[inst - snare roll, 808 slide, grid 419 3]\n\n[drop - full send drop, body wave wreck, trap formant, grid 419 4]\n\n[outro - kick holds, hats denser, wave ride, grid 419 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/09-moon-ramp"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "wave bass, warped bass, trap hats, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
-        "[drop - heavy wave drop, trap 808 warp, chest fold wreck, grid 419 0]\n\n[inst - trap hats denser, wave 808 hold moon, grid 419 1]\n\n[drop - harder growl drop, chest 808 wall, warped wave, grid 419 2]\n\n[inst - snare roll, 808 slide, grid 419 3]\n\n[drop - full send drop, body wave wreck, trap formant, grid 419 4]\n\n[outro - kick holds, hats denser, wave ride, grid 419 5]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, trap drums 808 warp, chest fold wreck, grid 419 0]\n\n[inst - rapid hi-hats denser, wave 808 hold moon, grid 419 1]\n\n[drop - harder growl drop, chest-sub 808 wall, warped wave, grid 419 2]\n\n[inst - snare roll, 808 slide, grid 419 3]\n\n[drop - full send drop, body wave wreck, trap formant, grid 419 4]\n\n[outro - kick holds, hats denser, wave ride, grid 419 5]",
         419,
         "fixed",
         148,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/headliner/09-moon-ramp",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

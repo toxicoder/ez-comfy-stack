@@ -12,7 +12,7 @@
       "path": "generated/audio/genre_style.md",
       "kind": "axis",
       "label": "Genre",
-      "count": "121"
+      "count": "132"
     },
     {
       "id": "mood_energy",
@@ -26,21 +26,21 @@
       "path": "generated/audio/drums_rhythm.md",
       "kind": "axis",
       "label": "Drums and Rhythm",
-      "count": "115"
+      "count": "119"
     },
     {
       "id": "bass_low_end",
       "path": "generated/audio/bass_low_end.md",
       "kind": "axis",
       "label": "Bass and Low End",
-      "count": "110"
+      "count": "118"
     },
     {
       "id": "instruments_texture",
       "path": "generated/audio/instruments_texture.md",
       "kind": "axis",
       "label": "Instruments and Texture",
-      "count": "110"
+      "count": "111"
     },
     {
       "id": "harmony_mode",
@@ -54,14 +54,14 @@
       "path": "generated/audio/vocal_identity.md",
       "kind": "axis",
       "label": "Vocal Identity",
-      "count": "110"
+      "count": "111"
     },
     {
       "id": "mix_production",
       "path": "generated/audio/mix_production.md",
       "kind": "axis",
       "label": "Mix and Production",
-      "count": "110"
+      "count": "112"
     },
     {
       "id": "space_ambience",
@@ -75,7 +75,7 @@
       "path": "generated/audio/sound_design_fx.md",
       "kind": "axis",
       "label": "Sound Design",
-      "count": "110"
+      "count": "112"
     },
     {
       "id": "use_case",
@@ -89,14 +89,14 @@
       "path": "generated/audio/tempo_groove.md",
       "kind": "axis",
       "label": "Tempo and Groove",
-      "count": "110"
+      "count": "123"
     },
     {
       "id": "arrangement_form",
       "path": "generated/audio/arrangement_form.md",
       "kind": "axis",
       "label": "Form and Arrangement",
-      "count": "110"
+      "count": "111"
     }
   ]
 }

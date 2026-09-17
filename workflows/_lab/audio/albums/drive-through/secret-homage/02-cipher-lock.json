@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy growl drop, brostep wreck, warped lock, grid 599 0]\n\n[inst - metal hats roll, growl sustain, grid 599 1]\n\n[drop - harder dirty drop, sub crush, chest 808 formant, grid 599 2]\n\n[inst - trap hats denser, growl hold, grid 599 3]\n\n[drop - full send drop, stacked growl wreck, brostep warp, grid 599 4]\n\n[outro - kick holds, hats denser, growl ride, grid 599 5]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy growl drop, brostep wreck, warped lock, grid 599 0]\n\n[inst - metal hats roll, growl sustain, grid 599 1]\n\n[drop - harder dirty drop, sub crush, chest-sub 808 formant, grid 599 2]\n\n[inst - rapid hi-hats denser, growl hold, grid 599 3]\n\n[drop - full send drop, stacked growl wreck, brostep warp, grid 599 4]\n\n[outro - kick holds, hats denser, growl ride, grid 599 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/02-cipher-lock"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy growl drop, brostep wreck, warped lock, grid 599 0]\n\n[inst - metal hats roll, growl sustain, grid 599 1]\n\n[drop - harder dirty drop, sub crush, chest 808 formant, grid 599 2]\n\n[inst - trap hats denser, growl hold, grid 599 3]\n\n[drop - full send drop, stacked growl wreck, brostep warp, grid 599 4]\n\n[outro - kick holds, hats denser, growl ride, grid 599 5]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy growl drop, brostep wreck, warped lock, grid 599 0]\n\n[inst - metal hats roll, growl sustain, grid 599 1]\n\n[drop - harder dirty drop, sub crush, chest-sub 808 formant, grid 599 2]\n\n[inst - rapid hi-hats denser, growl hold, grid 599 3]\n\n[drop - full send drop, stacked growl wreck, brostep warp, grid 599 4]\n\n[outro - kick holds, hats denser, growl ride, grid 599 5]",
         599,
         "fixed",
         140,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/02-cipher-lock",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

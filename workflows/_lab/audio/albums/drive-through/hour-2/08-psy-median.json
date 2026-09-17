@@ -1,6 +1,6 @@
 {
   "id": "08-psy-median",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
-        "[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]\n\n[inst - trap hats roll, reese sustain, grid 313 1]\n\n[drop - harder stacked drop, formant 808 wall, chest sub, grid 313 2]\n\n[drop - full send drop, chest sub wreck, neuro warp, grid 313 3]\n\n[outro - kick holds, trap hats roll, reese ride, grid 313 4]",
+        "neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]\n\n[inst - rapid hi-hats roll, reese sustain, grid 313 1]\n\n[drop - harder stacked drop, formant 808 wall, chest-sub, grid 313 2]\n\n[drop - full send drop, chest-sub wreck, neuro warp, grid 313 3]\n\n[outro - kick holds, rapid hi-hats roll, reese ride, grid 313 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-2/08-psy-median"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
-        "[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]\n\n[inst - trap hats roll, reese sustain, grid 313 1]\n\n[drop - harder stacked drop, formant 808 wall, chest sub, grid 313 2]\n\n[drop - full send drop, chest sub wreck, neuro warp, grid 313 3]\n\n[outro - kick holds, trap hats roll, reese ride, grid 313 4]",
+        "neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]\n\n[inst - rapid hi-hats roll, reese sustain, grid 313 1]\n\n[drop - harder stacked drop, formant 808 wall, chest-sub, grid 313 2]\n\n[drop - full send drop, chest-sub wreck, neuro warp, grid 313 3]\n\n[outro - kick holds, rapid hi-hats roll, reese ride, grid 313 4]",
         313,
         "fixed",
         145,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-2/08-psy-median",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

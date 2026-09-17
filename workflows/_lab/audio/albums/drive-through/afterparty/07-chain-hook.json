@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 168 bpm",
-        "[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]\n\n[drop - harder dirty drop, dubstep wreck, chest 808 formant, grid 491 1]\n\n[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]\n\n[outro - kick holds, trap hats roll, growl ride, grid 491 3]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 168 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]\n\n[drop - harder dirty drop, dubstep wreck, chest-sub 808 formant, grid 491 1]\n\n[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 491 3]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/07-chain-hook"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 168 bpm",
-        "[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]\n\n[drop - harder dirty drop, dubstep wreck, chest 808 formant, grid 491 1]\n\n[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]\n\n[outro - kick holds, trap hats roll, growl ride, grid 491 3]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 168 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]\n\n[drop - harder dirty drop, dubstep wreck, chest-sub 808 formant, grid 491 1]\n\n[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 491 3]",
         491,
         "fixed",
         168,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/07-chain-hook",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -1,6 +1,6 @@
 {
   "id": "09-groove-mile",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm",
-        "[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0]\n\n[inst - trap hats roll, 808 bounce hold, grid 317 1]\n\n[drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]\n\n[inst - snare roll, chest 808, grid 317 3]\n\n[drop - full send drop, body bass wreck, warped trap, grid 317 4]\n\n[outro - kick holds, hats denser, 808 ride, grid 317 5]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid 317 0]\n\n[inst - rapid hi-hats roll, 808 bounce hold, grid 317 1]\n\n[drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]\n\n[inst - snare roll, chest-sub 808, grid 317 3]\n\n[drop - full send drop, body bass wreck, warped trap, grid 317 4]\n\n[outro - kick holds, hats denser, 808 ride, grid 317 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-2/09-groove-mile"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm",
-        "[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0]\n\n[inst - trap hats roll, 808 bounce hold, grid 317 1]\n\n[drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]\n\n[inst - snare roll, chest 808, grid 317 3]\n\n[drop - full send drop, body bass wreck, warped trap, grid 317 4]\n\n[outro - kick holds, hats denser, 808 ride, grid 317 5]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid 317 0]\n\n[inst - rapid hi-hats roll, 808 bounce hold, grid 317 1]\n\n[drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]\n\n[inst - snare roll, chest-sub 808, grid 317 3]\n\n[drop - full send drop, body bass wreck, warped trap, grid 317 4]\n\n[outro - kick holds, hats denser, 808 ride, grid 317 5]",
         317,
         "fixed",
         144,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-2/09-groove-mile",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

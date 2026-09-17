@@ -1,6 +1,6 @@
 {
   "id": "08-cedar-growl",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "tearout, warped bass, trap hats, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy tearout drop, trap growl wreck, chest 808 warp, grid 409 0]\n\n[inst - metal hats roll, growl sustain, grid 409 1]\n\n[drop - harder stacked drop, chest 808 wreck, warped trap, grid 409 2]\n\n[drop - full send drop, chest sub wreck, tearout warp, grid 409 3]\n\n[outro - kick holds, trap hats roll, growl ride, grid 409 4]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, trap growl wreck, chest-sub 808 warp, grid 409 0]\n\n[inst - metal hats roll, growl sustain, grid 409 1]\n\n[drop - harder stacked drop, chest-sub 808 wreck, warped trap, grid 409 2]\n\n[drop - full send drop, chest-sub wreck, tearout warp, grid 409 3]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 409 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/08-cedar-growl"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "tearout, warped bass, trap hats, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy tearout drop, trap growl wreck, chest 808 warp, grid 409 0]\n\n[inst - metal hats roll, growl sustain, grid 409 1]\n\n[drop - harder stacked drop, chest 808 wreck, warped trap, grid 409 2]\n\n[drop - full send drop, chest sub wreck, tearout warp, grid 409 3]\n\n[outro - kick holds, trap hats roll, growl ride, grid 409 4]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, trap growl wreck, chest-sub 808 warp, grid 409 0]\n\n[inst - metal hats roll, growl sustain, grid 409 1]\n\n[drop - harder stacked drop, chest-sub 808 wreck, warped trap, grid 409 2]\n\n[drop - full send drop, chest-sub wreck, tearout warp, grid 409 3]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 409 4]",
         409,
         "fixed",
         150,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/headliner/08-cedar-growl",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

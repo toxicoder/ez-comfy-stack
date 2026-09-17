@@ -1,6 +1,6 @@
 {
   "id": "09-steel-grate",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]\n\n[inst - amen chops, trap hats 808 grate, grid 503 1]\n\n[drop - harder growl drop, reese stack, chest 808, grid 503 2]\n\n[inst - hats denser, reese hold, grid 503 3]\n\n[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]\n\n[inst - snare roll, chest 808 punch, grid 503 5]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 503 6]\n\n[drop - full send drop, low rumble wreck, reese wall, grid 503 7]\n\n[outro - kick holds, amen keep, reese ride, grid 503 8]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]\n\n[inst - amen break, rapid hi-hats 808 grate, grid 503 1]\n\n[drop - harder growl drop, reese stack, chest-sub 808, grid 503 2]\n\n[inst - hats denser, reese hold, grid 503 3]\n\n[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]\n\n[inst - snare roll, chest-sub 808 punch, grid 503 5]\n\n[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 503 6]\n\n[drop - full send drop, low rumble wreck, reese wall, grid 503 7]\n\n[outro - kick holds, amen break, reese ride, grid 503 8]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/09-steel-grate"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]\n\n[inst - amen chops, trap hats 808 grate, grid 503 1]\n\n[drop - harder growl drop, reese stack, chest 808, grid 503 2]\n\n[inst - hats denser, reese hold, grid 503 3]\n\n[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]\n\n[inst - snare roll, chest 808 punch, grid 503 5]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 503 6]\n\n[drop - full send drop, low rumble wreck, reese wall, grid 503 7]\n\n[outro - kick holds, amen keep, reese ride, grid 503 8]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]\n\n[inst - amen break, rapid hi-hats 808 grate, grid 503 1]\n\n[drop - harder growl drop, reese stack, chest-sub 808, grid 503 2]\n\n[inst - hats denser, reese hold, grid 503 3]\n\n[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]\n\n[inst - snare roll, chest-sub 808 punch, grid 503 5]\n\n[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 503 6]\n\n[drop - full send drop, low rumble wreck, reese wall, grid 503 7]\n\n[outro - kick holds, amen break, reese ride, grid 503 8]",
         503,
         "fixed",
         172,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/09-steel-grate",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

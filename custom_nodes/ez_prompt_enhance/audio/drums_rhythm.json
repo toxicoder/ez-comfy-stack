@@ -1846,5 +1846,69 @@
     "tags_meta": [
       "drums"
     ]
+  },
+  {
+    "id": "drm_hat_roll",
+    "label": "Hat roll",
+    "clause": "Roll hats into the downbeat so the trap grid sprints without adding a new drum.",
+    "tags": "hat roll, rapid hi-hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_snare_roll",
+    "label": "Snare roll",
+    "clause": "Roll the snare into the drop so the hit is announced with skin not a riser toy.",
+    "tags": "snare roll",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_metal_hats",
+    "label": "Metal hats",
+    "clause": "Tick metal hats so the riddim snare stays sparse while the grid still chatters.",
+    "tags": "metal hats, trap drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_amen_chop",
+    "label": "Amen chop",
+    "clause": "Chop an amen cousin under bass-music weight so drumstep has freight without a liquid pad.",
+    "tags": "amen break, trap drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
   }
 ]

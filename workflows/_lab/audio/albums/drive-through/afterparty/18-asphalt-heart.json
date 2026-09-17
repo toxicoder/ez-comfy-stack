@@ -1,6 +1,6 @@
 {
   "id": "18-asphalt-heart",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -178,7 +178,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         40,
-        748
+        896
       ],
       "size": [
         400,
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "chest bass, warped bass, trap hats, stacked 808, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]\n\n[inst - trap hats denser, chest 808 hold, grid 571 1]\n\n[drop - full send drop, body chest wreck, warped 808, grid 571 2]\n\n[outro - kick holds, trap hats roll, chest ride, grid 571 3]",
+        "chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 155 bpm, instrumental, no vocals",
+        "[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]\n\n[inst - rapid hi-hats denser, chest-sub 808 hold, grid 571 1]\n\n[drop - full send drop, body chest wreck, warped 808, grid 571 2]\n\n[outro - kick holds, rapid hi-hats roll, chest ride, grid 571 3]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/18-asphalt-heart"
@@ -224,7 +224,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        1240
+        1388
       ],
       "size": [
         400,
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "chest bass, warped bass, trap hats, stacked 808, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]\n\n[inst - trap hats denser, chest 808 hold, grid 571 1]\n\n[drop - full send drop, body chest wreck, warped 808, grid 571 2]\n\n[outro - kick holds, trap hats roll, chest ride, grid 571 3]",
+        "chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 155 bpm, instrumental, no vocals",
+        "[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]\n\n[inst - rapid hi-hats denser, chest-sub 808 hold, grid 571 1]\n\n[drop - full send drop, body chest wreck, warped 808, grid 571 2]\n\n[outro - kick holds, rapid hi-hats roll, chest ride, grid 571 3]",
         571,
         "fixed",
         155,
@@ -302,7 +302,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         488,
-        748
+        896
       ],
       "size": [
         240,
@@ -339,7 +339,7 @@
       "type": "KSampler",
       "pos": [
         488,
-        866
+        1014
       ],
       "size": [
         330,
@@ -804,7 +804,7 @@
       "title": "PROMPT",
       "bounding": [
         20,
-        692,
+        840,
         818,
         1012
       ],
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/18-asphalt-heart",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

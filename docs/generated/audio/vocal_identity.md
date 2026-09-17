@@ -1,6 +1,6 @@
 ---
 title: Vocal Identity
-description: Audio Rack catalog — Vocal Identity (110 spliceable techniques).
+description: Audio Rack catalog — Vocal Identity (111 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 110 spliceable techniques for **Vocal Identity**
+- 111 spliceable techniques for **Vocal Identity**
 - Vocal include `True`; instrumental `False`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -42,6 +42,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `voc_call_response` | Call and response | call and response vocals | vocal | — |
 | `voc_no_vocal` | No vocal | no vocals | instrumental, podcast | — |
 | `voc_dry_female` | Dry booth sung | sung vocals, dry booth, no autotune | vocal | — |
+| `voc_dj_shout` | DJ shout chop | sparse vocal chop, DJ shout, no rap | vocal | — |
 | `voc_fill_00` | Vocal color 1 | vocal color 1 | vocal, instrumental, podcast | — |
 | `voc_fill_01` | Vocal color 2 | vocal color 2 | vocal, instrumental, podcast | — |
 | `voc_fill_02` | Vocal color 3 | vocal color 3 | vocal, instrumental, podcast | — |

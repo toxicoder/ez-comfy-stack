@@ -1,6 +1,6 @@
 ---
 title: Drums and Rhythm
-description: Audio Rack catalog — Drums and Rhythm (115 spliceable techniques).
+description: Audio Rack catalog — Drums and Rhythm (119 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 115 spliceable techniques for **Drums and Rhythm**
+- 119 spliceable techniques for **Drums and Rhythm**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -137,3 +137,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `drm_finger_roll` | Finger roll | finger roll snare | vocal, instrumental, podcast | — |
 | `drm_rim_scrape` | Rim scrape | rim scrape | vocal, instrumental, podcast | — |
 | `drm_shell_knock` | Shell knock | shell knock | vocal, instrumental, podcast | — |
+| `drm_hat_roll` | Hat roll | hat roll, rapid hi-hats | vocal, instrumental, podcast | — |
+| `drm_snare_roll` | Snare roll | snare roll | vocal, instrumental, podcast | — |
+| `drm_metal_hats` | Metal hats | metal hats, trap drums | vocal, instrumental, podcast | — |
+| `drm_amen_chop` | Amen chop | amen break, trap drums | vocal, instrumental, podcast | — |

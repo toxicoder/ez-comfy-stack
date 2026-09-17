@@ -1,6 +1,6 @@
 {
   "id": "01-hush-lane",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy wobble drop, dirty dubstep wreck, warped 808, grid 593 0]\n\n[inst - trap hats denser, wobble sustain, grid 593 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 593 2]\n\n[drop - full send drop, chest sub wreck, dubstep warp, grid 593 3]\n\n[outro - kick holds, trap hats roll, wobble ride, grid 593 4]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy wobble drop, dirty dubstep wreck, warped 808, grid 593 0]\n\n[inst - rapid hi-hats denser, wobble sustain, grid 593 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 593 2]\n\n[drop - full send drop, chest-sub wreck, dubstep warp, grid 593 3]\n\n[outro - kick holds, rapid hi-hats roll, wobble ride, grid 593 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/01-hush-lane"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty dubstep, warped bass, trap hats, wobble bass, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy wobble drop, dirty dubstep wreck, warped 808, grid 593 0]\n\n[inst - trap hats denser, wobble sustain, grid 593 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 593 2]\n\n[drop - full send drop, chest sub wreck, dubstep warp, grid 593 3]\n\n[outro - kick holds, trap hats roll, wobble ride, grid 593 4]",
+        "dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy wobble drop, dirty dubstep wreck, warped 808, grid 593 0]\n\n[inst - rapid hi-hats denser, wobble sustain, grid 593 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 593 2]\n\n[drop - full send drop, chest-sub wreck, dubstep warp, grid 593 3]\n\n[outro - kick holds, rapid hi-hats roll, wobble ride, grid 593 4]",
         593,
         "fixed",
         140,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/01-hush-lane",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

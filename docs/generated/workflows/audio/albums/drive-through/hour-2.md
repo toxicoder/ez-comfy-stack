@@ -140,20 +140,20 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, i…` |
-| 2 | `[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0] [in…` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
+| 2 | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, gr…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/01-rumble-strip` |
 
 ```text
-hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0]
+[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, grid 271 0]
 
-[inst - trap hats roll, 808 slide, grid 271 1]
+[inst - rapid hi-hats roll, 808 slide, grid 271 1]
 
 [drop - harder growl drop, dual-action pedal bass, stacked warp, grid 271 2]
 
@@ -161,15 +161,15 @@ hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, in
 
 [drop - full send drop, low rumble wreck, chest formant, grid 271 4]
 
-[outro - kick holds, trap hats roll, pedal ride, grid 271 5]
+[outro - kick holds, rapid hi-hats roll, pedal ride, grid 271 5]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, i…` |
-| 1 | `[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0] [in…` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
+| 1 | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, gr…` |
 | 2 | `271` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -185,13 +185,13 @@ hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, in
 | 14 | `0.0` |
 
 ```text
-hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0]
+[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, grid 271 0]
 
-[inst - trap hats roll, 808 slide, grid 271 1]
+[inst - rapid hi-hats roll, 808 slide, grid 271 1]
 
 [drop - harder growl drop, dual-action pedal bass, stacked warp, grid 271 2]
 
@@ -199,7 +199,7 @@ hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, in
 
 [drop - full send drop, low rumble wreck, chest formant, grid 271 4]
 
-[outro - kick holds, trap hats roll, pedal ride, grid 271 5]
+[outro - kick holds, rapid hi-hats roll, pedal ride, grid 271 5]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -291,24 +291,24 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no …` |
-| 2 | `[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0] [drop - …` |
+| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
+| 2 | `[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0] [drop - …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/02-low-lane` |
 
 ```text
-riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0]
+[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0]
 
-[drop - harder growl drop, rolling 808 wall, formant crush, grid 277 1]
+[drop - harder growl drop, stacked 808 wall, formant crush, grid 277 1]
 
-[inst - trap hats denser, wobble sustain, grid 277 2]
+[inst - rapid hi-hats denser, wobble sustain, grid 277 2]
 
-[inst - snare roll, chest 808, grid 277 3]
+[inst - snare roll, chest-sub 808, grid 277 3]
 
 [inst - 808 triplets, riddim growl hold, grid 277 4]
 
@@ -321,8 +321,8 @@ riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no v
 
 | Slot | Value |
 | --- | --- |
-| 0 | `riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no …` |
-| 1 | `[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0] [drop - …` |
+| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
+| 1 | `[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0] [drop - …` |
 | 2 | `277` |
 | 3 | `fixed` |
 | 4 | `144` |
@@ -338,17 +338,17 @@ riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no v
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0]
+[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0]
 
-[drop - harder growl drop, rolling 808 wall, formant crush, grid 277 1]
+[drop - harder growl drop, stacked 808 wall, formant crush, grid 277 1]
 
-[inst - trap hats denser, wobble sustain, grid 277 2]
+[inst - rapid hi-hats denser, wobble sustain, grid 277 2]
 
-[inst - snare roll, chest 808, grid 277 3]
+[inst - snare roll, chest-sub 808, grid 277 3]
 
 [inst - 808 triplets, riddim growl hold, grid 277 4]
 
@@ -446,36 +446,36 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no…` |
-| 2 | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - trap…` |
+| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
+| 2 | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - rapi…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/03-warm-merge` |
 
 ```text
-wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm
+wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0]
 
-[inst - trap hats roll, wave 808 hold merge, grid 281 1]
+[inst - rapid hi-hats roll, wave 808 hold merge, grid 281 1]
 
-[drop - harder formant drop, stacked wave bass, chest 808, grid 281 2]
+[drop - harder formant drop, stacked wave bass, chest-sub 808, grid 281 2]
 
 [inst - snare roll, 808 slide, grid 281 3]
 
 [drop - full send drop, low 808 wall, warped fold, grid 281 4]
 
-[outro - kick holds, trap hats roll, wave ride, grid 281 5]
+[outro - kick holds, rapid hi-hats roll, wave ride, grid 281 5]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no…` |
-| 1 | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - trap…` |
+| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
+| 1 | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - rapi…` |
 | 2 | `281` |
 | 3 | `fixed` |
 | 4 | `148` |
@@ -491,21 +491,21 @@ wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no 
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm
+wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0]
 
-[inst - trap hats roll, wave 808 hold merge, grid 281 1]
+[inst - rapid hi-hats roll, wave 808 hold merge, grid 281 1]
 
-[drop - harder formant drop, stacked wave bass, chest 808, grid 281 2]
+[drop - harder formant drop, stacked wave bass, chest-sub 808, grid 281 2]
 
 [inst - snare roll, 808 slide, grid 281 3]
 
 [drop - full send drop, low 808 wall, warped fold, grid 281 4]
 
-[outro - kick holds, trap hats roll, wave ride, grid 281 5]
+[outro - kick holds, rapid hi-hats roll, wave ride, grid 281 5]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -597,22 +597,22 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, n…` |
-| 2 | `[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0] [drop - ha…` |
+| 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
+| 2 | `[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0] [drop …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/04-colour-span` |
 
 ```text
-color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0]
+[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0]
 
 [drop - harder growl drop, analog 808 stack, warped color, grid 283 1]
 
-[inst - trap hats denser, color 808 sustain span, grid 283 2]
+[inst - rapid hi-hats denser, color 808 sustain span, grid 283 2]
 
 [drop - full send drop, stacked color wreck, warped sub, grid 283 3]
 
@@ -623,8 +623,8 @@ color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no
 
 | Slot | Value |
 | --- | --- |
-| 0 | `color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, n…` |
-| 1 | `[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0] [drop - ha…` |
+| 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
+| 1 | `[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0] [drop …` |
 | 2 | `283` |
 | 3 | `fixed` |
 | 4 | `150` |
@@ -640,15 +640,15 @@ color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no
 | 14 | `0.0` |
 
 ```text
-color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0]
+[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0]
 
 [drop - harder growl drop, analog 808 stack, warped color, grid 283 1]
 
-[inst - trap hats denser, color 808 sustain span, grid 283 2]
+[inst - rapid hi-hats denser, color 808 sustain span, grid 283 2]
 
 [drop - full send drop, stacked color wreck, warped sub, grid 283 3]
 
@@ -744,36 +744,36 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental…` |
-| 2 | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - t…` |
+| 1 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
+| 2 | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - r…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/05-garage-ticket` |
 
 ```text
-festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0]
 
-[inst - trap hats roll, 808 slide, grid 293 1]
+[inst - rapid hi-hats roll, 808 slide, grid 293 1]
 
 [drop - harder growl drop, stacked trap bass, chest warp, grid 293 2]
 
-[inst - snare roll, chest 808 punch, grid 293 3]
+[inst - snare roll, chest-sub 808 punch, grid 293 3]
 
-[drop - full send drop, chest 808 wall, warped trap, grid 293 4]
+[drop - full send drop, chest-sub 808 wall, warped trap, grid 293 4]
 
-[outro - kick holds, trap hats roll, 808 ride, grid 293 5]
+[outro - kick holds, rapid hi-hats roll, 808 ride, grid 293 5]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental…` |
-| 1 | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - t…` |
+| 0 | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
+| 1 | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - r…` |
 | 2 | `293` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -789,21 +789,21 @@ festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental,
 | 14 | `0.0` |
 
 ```text
-festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0]
 
-[inst - trap hats roll, 808 slide, grid 293 1]
+[inst - rapid hi-hats roll, 808 slide, grid 293 1]
 
 [drop - harder growl drop, stacked trap bass, chest warp, grid 293 2]
 
-[inst - snare roll, chest 808 punch, grid 293 3]
+[inst - snare roll, chest-sub 808 punch, grid 293 3]
 
-[drop - full send drop, chest 808 wall, warped trap, grid 293 4]
+[drop - full send drop, chest-sub 808 wall, warped trap, grid 293 4]
 
-[outro - kick holds, trap hats roll, 808 ride, grid 293 5]
+[outro - kick holds, rapid hi-hats roll, 808 ride, grid 293 5]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -895,20 +895,20 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, inst…` |
+| 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
 | 2 | `[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0] [inst - amen…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/06-liquid-grade` |
 
 ```text
-drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]
 
-[inst - amen chops, trap hats 808 liquid, grid 307 1]
+[inst - amen break, rapid hi-hats 808 liquid, grid 307 1]
 
 [drop - harder growl drop, reese stack, chest formant, grid 307 2]
 
@@ -916,16 +916,16 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 
 [drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]
 
-[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 307 5]
+[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 307 5]
 
-[outro - kick holds, amen keep, reese ride, grid 307 6]
+[outro - kick holds, amen break, reese ride, grid 307 6]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, inst…` |
+| 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
 | 1 | `[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0] [inst - amen…` |
 | 2 | `307` |
 | 3 | `fixed` |
@@ -942,13 +942,13 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 | 14 | `0.0` |
 
 ```text
-drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm
+drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]
 
-[inst - amen chops, trap hats 808 liquid, grid 307 1]
+[inst - amen break, rapid hi-hats 808 liquid, grid 307 1]
 
 [drop - harder growl drop, reese stack, chest formant, grid 307 2]
 
@@ -956,9 +956,9 @@ drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instr
 
 [drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]
 
-[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 307 5]
+[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 307 5]
 
-[outro - kick holds, amen keep, reese ride, grid 307 6]
+[outro - kick holds, amen break, reese ride, grid 307 6]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1050,14 +1050,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, in…` |
+| 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
 | 2 | `[drop - heavy brostep drop, growl wreck, warped 808, grid 311 0] [inst - metal …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/07-jump-bay` |
 
 ```text
-brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
@@ -1065,13 +1065,13 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 
 [inst - metal hats roll, growl sustain, grid 311 1]
 
-[drop - harder formant drop, sub crush, chest 808, grid 311 2]
+[drop - harder formant drop, sub crush, chest-sub 808, grid 311 2]
 
-[inst - trap hats denser, wobble hold, grid 311 3]
+[inst - rapid hi-hats denser, wobble hold, grid 311 3]
 
 [drop - full send drop, brostep wreck, stacked growl, grid 311 4]
 
-[inst - snare roll, bass growl hold, grid 311 5]
+[inst - snare roll, growl bass hold, grid 311 5]
 
 [drop - harder warped drop, stacked 808 wreck, mid growl, grid 311 6]
 
@@ -1082,7 +1082,7 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 
 | Slot | Value |
 | --- | --- |
-| 0 | `brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, in…` |
+| 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
 | 1 | `[drop - heavy brostep drop, growl wreck, warped 808, grid 311 0] [inst - metal …` |
 | 2 | `311` |
 | 3 | `fixed` |
@@ -1099,7 +1099,7 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 | 14 | `0.0` |
 
 ```text
-brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
@@ -1107,13 +1107,13 @@ brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, ins
 
 [inst - metal hats roll, growl sustain, grid 311 1]
 
-[drop - harder formant drop, sub crush, chest 808, grid 311 2]
+[drop - harder formant drop, sub crush, chest-sub 808, grid 311 2]
 
-[inst - trap hats denser, wobble hold, grid 311 3]
+[inst - rapid hi-hats denser, wobble hold, grid 311 3]
 
 [drop - full send drop, brostep wreck, stacked growl, grid 311 4]
 
-[inst - snare roll, bass growl hold, grid 311 5]
+[inst - snare roll, growl bass hold, grid 311 5]
 
 [drop - harder warped drop, stacked 808 wreck, mid growl, grid 311 6]
 
@@ -1209,34 +1209,34 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, i…` |
-| 2 | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - tra…` |
+| 1 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
+| 2 | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - rap…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/08-psy-median` |
 
 ```text
-neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]
 
-[inst - trap hats roll, reese sustain, grid 313 1]
+[inst - rapid hi-hats roll, reese sustain, grid 313 1]
 
-[drop - harder stacked drop, formant 808 wall, chest sub, grid 313 2]
+[drop - harder stacked drop, formant 808 wall, chest-sub, grid 313 2]
 
-[drop - full send drop, chest sub wreck, neuro warp, grid 313 3]
+[drop - full send drop, chest-sub wreck, neuro warp, grid 313 3]
 
-[outro - kick holds, trap hats roll, reese ride, grid 313 4]
+[outro - kick holds, rapid hi-hats roll, reese ride, grid 313 4]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, i…` |
-| 1 | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - tra…` |
+| 0 | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
+| 1 | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - rap…` |
 | 2 | `313` |
 | 3 | `fixed` |
 | 4 | `145` |
@@ -1252,19 +1252,19 @@ neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, in
 | 14 | `0.0` |
 
 ```text
-neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm
+neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0]
 
-[inst - trap hats roll, reese sustain, grid 313 1]
+[inst - rapid hi-hats roll, reese sustain, grid 313 1]
 
-[drop - harder stacked drop, formant 808 wall, chest sub, grid 313 2]
+[drop - harder stacked drop, formant 808 wall, chest-sub, grid 313 2]
 
-[drop - full send drop, chest sub wreck, neuro warp, grid 313 3]
+[drop - full send drop, chest-sub wreck, neuro warp, grid 313 3]
 
-[outro - kick holds, trap hats roll, reese ride, grid 313 4]
+[outro - kick holds, rapid hi-hats roll, reese ride, grid 313 4]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1356,24 +1356,24 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, …` |
-| 2 | `[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0] [inst…` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
+| 2 | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/09-groove-mile` |
 
 ```text
-hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0]
+[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid 317 0]
 
-[inst - trap hats roll, 808 bounce hold, grid 317 1]
+[inst - rapid hi-hats roll, 808 bounce hold, grid 317 1]
 
 [drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]
 
-[inst - snare roll, chest 808, grid 317 3]
+[inst - snare roll, chest-sub 808, grid 317 3]
 
 [drop - full send drop, body bass wreck, warped trap, grid 317 4]
 
@@ -1384,8 +1384,8 @@ hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n
 
 | Slot | Value |
 | --- | --- |
-| 0 | `hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, …` |
-| 1 | `[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0] [inst…` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
+| 1 | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid…` |
 | 2 | `317` |
 | 3 | `fixed` |
 | 4 | `144` |
@@ -1401,17 +1401,17 @@ hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n
 | 14 | `0.0` |
 
 ```text
-hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 144 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 144 bpm, instrumental, no vocals
 ```
 
 ```text
-[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0]
+[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid 317 0]
 
-[inst - trap hats roll, 808 bounce hold, grid 317 1]
+[inst - rapid hi-hats roll, 808 bounce hold, grid 317 1]
 
 [drop - harder growl drop, stacked 808 warp, chest punch, grid 317 2]
 
-[inst - snare roll, chest 808, grid 317 3]
+[inst - snare roll, chest-sub 808, grid 317 3]
 
 [drop - full send drop, body bass wreck, warped trap, grid 317 4]
 
@@ -1507,33 +1507,33 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no …` |
+| 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
 | 2 | `[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0] [drop - …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/10-donk-ramp` |
 
 ```text
-tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]
 
-[drop - harder warped drop, chest 808 stack, tearout grind, grid 331 1]
+[drop - harder warped drop, chest-sub 808 stack, tearout grind, grid 331 1]
 
-[inst - trap hats denser, growl sustain, grid 331 2]
+[inst - rapid hi-hats denser, growl sustain, grid 331 2]
 
 [drop - full send drop, dirty analog wreck, warped 808, grid 331 3]
 
-[outro - kick holds, trap hats roll, growl ride, grid 331 4]
+[outro - kick holds, rapid hi-hats roll, growl ride, grid 331 4]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no …` |
+| 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
 | 1 | `[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0] [drop - …` |
 | 2 | `331` |
 | 3 | `fixed` |
@@ -1550,19 +1550,19 @@ tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no v
 | 14 | `0.0` |
 
 ```text
-tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0]
 
-[drop - harder warped drop, chest 808 stack, tearout grind, grid 331 1]
+[drop - harder warped drop, chest-sub 808 stack, tearout grind, grid 331 1]
 
-[inst - trap hats denser, growl sustain, grid 331 2]
+[inst - rapid hi-hats denser, growl sustain, grid 331 2]
 
 [drop - full send drop, dirty analog wreck, warped 808, grid 331 3]
 
-[outro - kick holds, trap hats roll, growl ride, grid 331 4]
+[outro - kick holds, rapid hi-hats roll, growl ride, grid 331 4]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1654,24 +1654,24 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n…` |
-| 2 | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - tr…` |
+| 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
+| 2 | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - ra…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/11-bounce-booth` |
 
 ```text
-chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0]
 
-[inst - trap hats roll, 808 punch hold, grid 337 1]
+[inst - rapid hi-hats roll, 808 punch hold, grid 337 1]
 
-[drop - harder growl drop, stacked chest 808, formant wall, grid 337 2]
+[drop - harder growl drop, stacked chest-sub 808, formant wall, grid 337 2]
 
-[inst - snare roll, chest sub hold, grid 337 3]
+[inst - snare roll, chest-sub hold, grid 337 3]
 
 [drop - full send drop, low 808 wreck, warped chest, grid 337 4]
 
@@ -1682,8 +1682,8 @@ chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no
 
 | Slot | Value |
 | --- | --- |
-| 0 | `chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n…` |
-| 1 | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - tr…` |
+| 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
+| 1 | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - ra…` |
 | 2 | `337` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -1699,17 +1699,17 @@ chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no
 | 14 | `0.0` |
 
 ```text
-chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0]
 
-[inst - trap hats roll, 808 punch hold, grid 337 1]
+[inst - rapid hi-hats roll, 808 punch hold, grid 337 1]
 
-[drop - harder growl drop, stacked chest 808, formant wall, grid 337 2]
+[drop - harder growl drop, stacked chest-sub 808, formant wall, grid 337 2]
 
-[inst - snare roll, chest sub hold, grid 337 3]
+[inst - snare roll, chest-sub hold, grid 337 3]
 
 [drop - full send drop, low 808 wreck, warped chest, grid 337 4]
 
@@ -1805,14 +1805,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumen…` |
+| 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
 | 2 | `[drop - heavy riddim drop, tearout growl wreck, warped toll, grid 347 0] [inst …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/12-toll-growl` |
 
 ```text
-riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
@@ -1820,13 +1820,13 @@ riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrument
 
 [inst - metal hats roll, growl sustain, grid 347 1]
 
-[drop - harder formant drop, sub crush, chest 808, grid 347 2]
+[drop - harder formant drop, sub crush, chest-sub 808, grid 347 2]
 
-[inst - trap hats denser, growl hold, grid 347 3]
+[inst - rapid hi-hats denser, growl hold, grid 347 3]
 
 [drop - full send drop, stacked growl wreck, wobble wall, grid 347 4]
 
-[inst - snare roll, bass growl hold, grid 347 5]
+[inst - snare roll, growl bass hold, grid 347 5]
 
 [drop - harder warped drop, stacked growl wreck, low rumble, grid 347 6]
 
@@ -1837,7 +1837,7 @@ riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrument
 
 | Slot | Value |
 | --- | --- |
-| 0 | `riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumen…` |
+| 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
 | 1 | `[drop - heavy riddim drop, tearout growl wreck, warped toll, grid 347 0] [inst …` |
 | 2 | `347` |
 | 3 | `fixed` |
@@ -1854,7 +1854,7 @@ riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrument
 | 14 | `0.0` |
 
 ```text
-riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
@@ -1862,13 +1862,13 @@ riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrument
 
 [inst - metal hats roll, growl sustain, grid 347 1]
 
-[drop - harder formant drop, sub crush, chest 808, grid 347 2]
+[drop - harder formant drop, sub crush, chest-sub 808, grid 347 2]
 
-[inst - trap hats denser, growl hold, grid 347 3]
+[inst - rapid hi-hats denser, growl hold, grid 347 3]
 
 [drop - full send drop, stacked growl wreck, wobble wall, grid 347 4]
 
-[inst - snare roll, bass growl hold, grid 347 5]
+[inst - snare roll, growl bass hold, grid 347 5]
 
 [drop - harder warped drop, stacked growl wreck, low rumble, grid 347 6]
 
@@ -1964,34 +1964,34 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, …` |
-| 2 | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - tra…` |
+| 1 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
+| 2 | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - rap…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/13-night-oil` |
 
 ```text
-hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0]
 
-[inst - trap hats roll, 808 slide, grid 349 1]
+[inst - rapid hi-hats roll, 808 slide, grid 349 1]
 
 [drop - harder growl drop, trap bass wall, formant crush, grid 349 2]
 
-[drop - full send drop, chest sub wreck, hybrid warp, grid 349 3]
+[drop - full send drop, chest-sub wreck, hybrid warp, grid 349 3]
 
-[outro - kick holds, trap hats roll, 808 ride, grid 349 4]
+[outro - kick holds, rapid hi-hats roll, 808 ride, grid 349 4]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, …` |
-| 1 | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - tra…` |
+| 0 | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
+| 1 | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - rap…` |
 | 2 | `349` |
 | 3 | `fixed` |
 | 4 | `142` |
@@ -2007,19 +2007,19 @@ hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, i
 | 14 | `0.0` |
 
 ```text
-hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 142 bpm
+warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 142 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0]
 
-[inst - trap hats roll, 808 slide, grid 349 1]
+[inst - rapid hi-hats roll, 808 slide, grid 349 1]
 
 [drop - harder growl drop, trap bass wall, formant crush, grid 349 2]
 
-[drop - full send drop, chest sub wreck, hybrid warp, grid 349 3]
+[drop - full send drop, chest-sub wreck, hybrid warp, grid 349 3]
 
-[outro - kick holds, trap hats roll, 808 ride, grid 349 4]
+[outro - kick holds, rapid hi-hats roll, 808 ride, grid 349 4]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2111,20 +2111,20 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 80…` |
-| 2 | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - trap …` |
+| 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
+| 2 | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - rapid…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/14-chest-pass` |
 
 ```text
-dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0]
 
-[inst - trap hats denser, 808 hold, grid 353 1]
+[inst - rapid hi-hats denser, 808 hold, grid 353 1]
 
 [drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 353 2]
 
@@ -2139,8 +2139,8 @@ dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 808
 
 | Slot | Value |
 | --- | --- |
-| 0 | `dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 80…` |
-| 1 | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - trap …` |
+| 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
+| 1 | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - rapid…` |
 | 2 | `353` |
 | 3 | `fixed` |
 | 4 | `150` |
@@ -2156,13 +2156,13 @@ dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 808
 | 14 | `0.0` |
 
 ```text
-dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm
+dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0]
 
-[inst - trap hats denser, 808 hold, grid 353 1]
+[inst - rapid hi-hats denser, 808 hold, grid 353 1]
 
 [drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 353 2]
 
@@ -2262,34 +2262,34 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no…` |
-| 2 | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - trap h…` |
+| 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
+| 2 | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - rapid …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/hour-2/15-sunrise-sub` |
 
 ```text
-wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0]
 
-[inst - trap hats roll, wave 808 sustain dawn, grid 359 1]
+[inst - rapid hi-hats roll, wave 808 sustain dawn, grid 359 1]
 
 [drop - harder formant drop, chest gold wreck, 808 punch, grid 359 2]
 
 [drop - full send drop, low 808 wreck, wave warp, grid 359 3]
 
-[outro - kick holds, trap hats roll, wave ride, grid 359 4]
+[outro - kick holds, rapid hi-hats roll, wave ride, grid 359 4]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no…` |
-| 1 | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - trap h…` |
+| 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
+| 1 | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - rapid …` |
 | 2 | `359` |
 | 3 | `fixed` |
 | 4 | `140` |
@@ -2305,19 +2305,19 @@ wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no 
 | 14 | `0.0` |
 
 ```text
-wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm
+wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals
 ```
 
 ```text
 [drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0]
 
-[inst - trap hats roll, wave 808 sustain dawn, grid 359 1]
+[inst - rapid hi-hats roll, wave 808 sustain dawn, grid 359 1]
 
 [drop - harder formant drop, chest gold wreck, 808 punch, grid 359 2]
 
 [drop - full send drop, low 808 wreck, wave warp, grid 359 3]
 
-[outro - kick holds, trap hats roll, wave ride, grid 359 4]
+[outro - kick holds, rapid hi-hats roll, wave ride, grid 359 4]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2664,21 +2664,21 @@ Genre-first tags.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, i…` |
-| ez_edm_prompt | `riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no …` |
-| ez_edm_prompt | `wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no…` |
-| ez_edm_prompt | `color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, n…` |
-| ez_edm_prompt | `festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental…` |
-| ez_edm_prompt | `drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, inst…` |
-| ez_edm_prompt | `brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, in…` |
-| ez_edm_prompt | `neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, i…` |
-| ez_edm_prompt | `hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, …` |
-| ez_edm_prompt | `tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no …` |
-| ez_edm_prompt | `chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n…` |
-| ez_edm_prompt | `riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumen…` |
-| ez_edm_prompt | `hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, …` |
-| ez_edm_prompt | `dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 80…` |
-| ez_edm_prompt | `wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no…` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
+| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
+| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
+| ez_edm_prompt | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
+| ez_edm_prompt | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
+| ez_edm_prompt | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
+| ez_edm_prompt | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
+| ez_edm_prompt | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
+| ez_edm_prompt | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
+| ez_edm_prompt | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
+| ez_edm_prompt | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
+| ez_edm_prompt | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
+| ez_edm_prompt | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
+| ez_edm_prompt | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
 
 #### `lyrics`
 
@@ -2690,21 +2690,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0] [in…` |
-| ez_edm_prompt | `[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0] [drop - …` |
-| ez_edm_prompt | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - trap…` |
-| ez_edm_prompt | `[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0] [drop - ha…` |
-| ez_edm_prompt | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - t…` |
+| ez_edm_prompt | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, gr…` |
+| ez_edm_prompt | `[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0] [drop - …` |
+| ez_edm_prompt | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - rapi…` |
+| ez_edm_prompt | `[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0] [drop …` |
+| ez_edm_prompt | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - r…` |
 | ez_edm_prompt | `[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0] [inst - amen…` |
 | ez_edm_prompt | `[drop - heavy brostep drop, growl wreck, warped 808, grid 311 0] [inst - metal …` |
-| ez_edm_prompt | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - tra…` |
-| ez_edm_prompt | `[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0] [inst…` |
+| ez_edm_prompt | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - rap…` |
+| ez_edm_prompt | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid…` |
 | ez_edm_prompt | `[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0] [drop - …` |
-| ez_edm_prompt | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - tr…` |
+| ez_edm_prompt | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - ra…` |
 | ez_edm_prompt | `[drop - heavy riddim drop, tearout growl wreck, warped toll, grid 347 0] [inst …` |
-| ez_edm_prompt | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - tra…` |
-| ez_edm_prompt | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - trap …` |
-| ez_edm_prompt | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - trap h…` |
+| ez_edm_prompt | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - rap…` |
+| ez_edm_prompt | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - rapid…` |
+| ez_edm_prompt | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - rapid …` |
 
 #### `enhance`
 
@@ -2785,21 +2785,21 @@ Genre-first tags, BPM last.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `hybrid trap, warped bass, trap hats, chest sub, dual-action pedal bass, rave, i…` |
-| ACE tags + lyrics | `riddim, warped bass, trap hats, chest sub, rolling 808, rave, instrumental, no …` |
-| ACE tags + lyrics | `wave bass, warped bass, trap hats, chest 808, chest sub, rave, instrumental, no…` |
-| ACE tags + lyrics | `color bass, warped bass, trap hats, chest sub, dirty 808, rave, instrumental, n…` |
-| ACE tags + lyrics | `festival trap, warped bass, trap hats, trap 808, dirty bass, rave, instrumental…` |
-| ACE tags + lyrics | `drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, inst…` |
-| ACE tags + lyrics | `brostep, warped bass, trap hats, dirty dubstep, bass growl, heavy sub, rave, in…` |
-| ACE tags + lyrics | `neuro bass, warped bass, trap hats, reese bass, stacked 808, chest sub, rave, i…` |
-| ACE tags + lyrics | `hybrid trap, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, …` |
-| ACE tags + lyrics | `tearout, warped bass, trap hats, chest 808, bass growl, rave, instrumental, no …` |
-| ACE tags + lyrics | `chest bass, warped bass, trap hats, dirty 808, chest sub, rave, instrumental, n…` |
-| ACE tags + lyrics | `riddim, warped bass, trap hats, tearout, bass growl, heavy sub, rave, instrumen…` |
-| ACE tags + lyrics | `hybrid trap, warped bass, trap hats, festival trap, trap 808, chest sub, rave, …` |
-| ACE tags + lyrics | `dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, dirty 80…` |
-| ACE tags + lyrics | `wave bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no…` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
+| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave, 8…` |
+| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, n…` |
+| ACE tags + lyrics | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, warped bass, ra…` |
+| ACE tags + lyrics | `festival trap, trap drums, 808, rapid hi-hats, warped bass, chest-sub, rave, no…` |
+| ACE tags + lyrics | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
+| ACE tags + lyrics | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
+| ACE tags + lyrics | `neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warp…` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, warped bass, chest-sub, rave, 80…` |
+| ACE tags + lyrics | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
+| ACE tags + lyrics | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, warped bass, rave, no si…` |
+| ACE tags + lyrics | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav…` |
+| ACE tags + lyrics | `warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rav…` |
+| ACE tags + lyrics | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
+| ACE tags + lyrics | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
 
 #### `lyrics`
 
@@ -2811,21 +2811,21 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[drop - heavy warped drop, hybrid trap 808 wreck, rumble grind, grid 271 0] [in…` |
-| ACE tags + lyrics | `[drop - heavy riddim drop, chest sub wobble, warped wreck, grid 277 0] [drop - …` |
-| ACE tags + lyrics | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - trap…` |
-| ACE tags + lyrics | `[drop - heavy color drop, chest 808 warp, formant wreck, grid 283 0] [drop - ha…` |
-| ACE tags + lyrics | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - t…` |
+| ACE tags + lyrics | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, rumble grind, gr…` |
+| ACE tags + lyrics | `[drop - heavy riddim drop, chest-sub wobble, warped wreck, grid 277 0] [drop - …` |
+| ACE tags + lyrics | `[drop - heavy wave drop, warped 808 wreck, fold grind, grid 281 0] [inst - rapi…` |
+| ACE tags + lyrics | `[drop - heavy color drop, chest-sub 808 warp, formant wreck, grid 283 0] [drop …` |
+| ACE tags + lyrics | `[drop - heavy trap drop, warped 808 wreck, formant stamp, grid 293 0] [inst - r…` |
 | ACE tags + lyrics | `[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0] [inst - amen…` |
 | ACE tags + lyrics | `[drop - heavy brostep drop, growl wreck, warped 808, grid 311 0] [inst - metal …` |
-| ACE tags + lyrics | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - tra…` |
-| ACE tags + lyrics | `[drop - heavy warped drop, hybrid trap 808 wreck, mile grind, grid 317 0] [inst…` |
+| ACE tags + lyrics | `[drop - heavy neuro drop, reese 808 wreck, warped coil, grid 313 0] [inst - rap…` |
+| ACE tags + lyrics | `[drop - heavy warped drop, warped hybrid-trap drums 808 wreck, mile grind, grid…` |
 | ACE tags + lyrics | `[drop - heavy tearout drop, growl 808 wreck, formant ramp, grid 331 0] [drop - …` |
-| ACE tags + lyrics | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - tr…` |
+| ACE tags + lyrics | `[drop - heavy chest drop, warped 808 wreck, booth grind, grid 337 0] [inst - ra…` |
 | ACE tags + lyrics | `[drop - heavy riddim drop, tearout growl wreck, warped toll, grid 347 0] [inst …` |
-| ACE tags + lyrics | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - tra…` |
-| ACE tags + lyrics | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - trap …` |
-| ACE tags + lyrics | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - trap h…` |
+| ACE tags + lyrics | `[drop - heavy hybrid drop, warped 808 wreck, oil grind, grid 349 0] [inst - rap…` |
+| ACE tags + lyrics | `[drop - heavy chest drop, sub warp wreck, pass grind, grid 353 0] [inst - rapid…` |
+| ACE tags + lyrics | `[drop - heavy wave drop, warped sub wreck, fold 808, grid 359 0] [inst - rapid …` |
 
 #### `seed`
 
