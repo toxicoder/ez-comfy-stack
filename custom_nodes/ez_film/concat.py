@@ -15,16 +15,30 @@ import subprocess
 import sys
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 
 from .jobstore import DURATION_S, DURATION_TOL
 from .ltx_timing import ltx_decoded_frames
+from .probe import (  # noqa: F401 — coverage/monkeypatch façade
+    FfprobeMediaProbe,
+    _ffprobe_csv,
+    probe_audio_hz,
+    probe_audio_seconds,
+    probe_fps,
+    probe_has_audio,
+    probe_seconds,
+    probe_wh,
+)
+from .protocols import FfmpegRunner
 from .shots import (
     DEFAULT_CAP_SECONDS,
     SHOT_COUNT,
     film_slug,
     master_filename,
 )
+
+if TYPE_CHECKING:
+    from ez_common.protocols import ProgressReporter
 
 # ffmpeg/x264 stitch: loudnorm, AAC, H.264, FPS, pad, and path suffixes.
 LOUDNORM_FILTER = "loudnorm=I=-14:LRA=11:TP=-1.5"
@@ -83,6 +97,26 @@ def output_directory() -> Path:
             return Path("output")
 
 
+class PathFfmpegTools:
+    """PATH locator via this module's ``shutil.which`` (patchable in tests)."""
+
+    def ffmpeg(self) -> str | None:
+        """Return ffmpeg on PATH, or None.
+
+        Returns:
+            Executable path, or None.
+        """
+        return shutil.which("ffmpeg")
+
+    def ffprobe(self) -> str | None:
+        """Return ffprobe on PATH, or None.
+
+        Returns:
+            Executable path, or None.
+        """
+        return shutil.which("ffprobe")
+
+
 def find_ffmpeg() -> str:
     """Resolve ffmpeg: PATH, then imageio-ffmpeg (VHS dependency).
 
@@ -91,7 +125,7 @@ def find_ffmpeg() -> str:
     Raises:
         RuntimeError: no ffmpeg available.
     """
-    found = shutil.which("ffmpeg")
+    found = PathFfmpegTools().ffmpeg()
     if found:
         return found
     try:
@@ -111,7 +145,7 @@ def find_ffprobe() -> str | None:
     Returns:
         Executable path or None.
     """
-    return shutil.which("ffprobe")
+    return PathFfmpegTools().ffprobe()
 
 
 def _is_video_path(path: str) -> bool:
@@ -649,131 +683,6 @@ def ffmpeg_mux_copy_argv(
     ]
 
 
-def _ffprobe_csv(
-    path: str,
-    args: list[str],
-    ffprobe: str | None = None,
-    run: Any = None,
-) -> str | None:
-    """Run ffprobe and return stripped stdout, or None on failure.
-
-    Args:
-        path: Media file.
-        args: Extra ffprobe arguments before ``path``.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-
-    Returns:
-        Stripped stdout, or None on failure.
-    """
-    exe = ffprobe if ffprobe is not None else find_ffprobe()
-    if not exe:
-        return None
-    runner = run or subprocess.run
-    try:
-        proc = runner(
-            [exe, "-v", "error", *args, path],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError as exc:
-        log(f"ffprobe failed: {exc}")
-        return None
-    if getattr(proc, "returncode", 1) != 0:
-        return None
-    text = (getattr(proc, "stdout", "") or "").strip()
-    return text or None
-
-
-def probe_has_audio(
-    path: str, ffprobe: str | None = None, run: Any = None
-) -> bool:
-    """True when ffprobe reports an audio stream.
-
-    Args:
-        path: MP4 path.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-    Returns:
-        False when ffprobe is missing or no audio stream.
-    """
-    text = _ffprobe_csv(
-        path,
-        [
-            "-select_streams",
-            "a:0",
-            "-show_entries",
-            "stream=codec_type",
-            "-of",
-            "csv=p=0",
-        ],
-        ffprobe=ffprobe,
-        run=run,
-    )
-    if not text:
-        return False
-    return "audio" in text.lower()
-
-
-def probe_audio_hz(
-    path: str, ffprobe: str | None = None, run: Any = None
-) -> int | None:
-    """Audio sample rate in Hz, or None if unavailable.
-
-    Args:
-        path: MP4 path.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-
-    Returns:
-        Sample rate in Hz, or None.
-    """
-    text = _ffprobe_csv(
-        path,
-        [
-            "-select_streams",
-            "a:0",
-            "-show_entries",
-            "stream=sample_rate",
-            "-of",
-            "csv=p=0",
-        ],
-        ffprobe=ffprobe,
-        run=run,
-    )
-    if not text:
-        return None
-    try:
-        return int(float(text.split(",")[-1].strip()))
-    except ValueError:
-        return None
-
-
-def probe_seconds(path: str, ffprobe: str | None = None, run: Any = None) -> float | None:
-    """Duration in seconds, or None if ffprobe is missing/fails.
-
-    Args:
-        path: MP4 path.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-    Returns:
-        Float seconds or None.
-    """
-    text = _ffprobe_csv(
-        path,
-        ["-show_entries", "format=duration", "-of", "csv=p=0"],
-        ffprobe=ffprobe,
-        run=run,
-    )
-    if not text:
-        return None
-    try:
-        return float(text.split(",")[0].strip())
-    except ValueError:
-        return None
-
-
 def is_ltx_120_floor_duration(dur: float) -> bool:
     """True when ``dur`` is the 113-frame VAE floor of an illegal 120 widget.
 
@@ -854,7 +763,7 @@ def normalize_stitch_stem(
     *,
     ffmpeg: str,
     ffprobe: str | None = None,
-    run: Any = None,
+    run: FfmpegRunner | None = None,
     temps: list[str] | None = None,
 ) -> str:
     """Pad a 113-frame LTX neighbor to 5.00s; otherwise return ``path``.
@@ -895,7 +804,7 @@ def normalize_stitch_stems(
     *,
     ffmpeg: str,
     ffprobe: str | None = None,
-    run: Any = None,
+    run: FfmpegRunner | None = None,
 ) -> tuple[list[str], list[str]]:
     """Pad 113-frame LTX neighbors; return ``(paths, temps_to_unlink)``.
 
@@ -918,82 +827,11 @@ def normalize_stitch_stems(
     return out, temps
 
 
-def probe_wh(
-    path: str, ffprobe: str | None = None, run: Any = None
-) -> tuple[int, int] | None:
-    """First video stream width×height, or None.
-
-    Args:
-        path: MP4 path.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-
-    Returns:
-        ``(width, height)`` or None.
-    """
-    text = _ffprobe_csv(
-        path,
-        [
-            "-select_streams",
-            "v:0",
-            "-show_entries",
-            "stream=width,height",
-            "-of",
-            "csv=p=0",
-        ],
-        ffprobe=ffprobe,
-        run=run,
-    )
-    if not text or "," not in text:
-        return None
-    left, right = text.split(",", 1)
-    try:
-        return int(left), int(right)
-    except ValueError:
-        return None
-
-
-def probe_audio_seconds(
-    path: str, ffprobe: str | None = None, run: Any = None
-) -> float | None:
-    """Audio stream duration in seconds, or None.
-
-    Args:
-        path: MP4 path.
-        ffprobe: Optional ffprobe executable.
-        run: Override ``subprocess.run``.
-
-    Returns:
-        Audio duration in seconds, or None.
-    """
-    text = _ffprobe_csv(
-        path,
-        [
-            "-select_streams",
-            "a:0",
-            "-show_entries",
-            "stream=duration",
-            "-of",
-            "csv=p=0",
-        ],
-        ffprobe=ffprobe,
-        run=run,
-    )
-    if text:
-        token = text.split(",")[0].strip()
-        if token and token.upper() != "N/A":
-            try:
-                return float(token)
-            except ValueError:
-                pass
-    return probe_seconds(path, ffprobe=ffprobe, run=run)
-
-
 def validate_stitch_stems(
     shot_paths: list[str],
     *,
     ffprobe: str | None = None,
-    run: Any = None,
+    run: FfmpegRunner | None = None,
     expected_count: int | None = None,
 ) -> None:
     """Refuse missing, unreadable, short, or silent stems before ffmpeg.
@@ -1056,7 +894,7 @@ def assert_master_duration(
     cap_seconds: float,
     *,
     ffprobe: str | None = None,
-    run: Any = None,
+    run: FfmpegRunner | None = None,
 ) -> None:
     """Fail closed if the stitched master is not ``cap±0.10`` with synced audio.
 
@@ -1101,7 +939,7 @@ def assert_master_duration(
         )
 
 
-def _run_ffmpeg(argv: list[str], runner: Any) -> None:
+def _run_ffmpeg(argv: list[str], runner: FfmpegRunner) -> None:
     """Run one ffmpeg argv; raise RuntimeError on non-zero.
 
     Args:
@@ -1116,7 +954,7 @@ def _run_ffmpeg(argv: list[str], runner: Any) -> None:
 
 
 def _run_with_x264_fallback(
-    playable: list[str], fallback: list[str], runner: Any
+    playable: list[str], fallback: list[str], runner: FfmpegRunner
 ) -> None:
     """Run playable argv; retry fallback when libx264 is missing.
 
@@ -1134,6 +972,318 @@ def _run_with_x264_fallback(
         _run_ffmpeg(fallback, runner)
 
 
+class ConcatPipeline:
+    """Stitch N shot MP4s behind the :func:`stitch_film` façade."""
+
+    def __init__(
+        self,
+        shot_paths: list[str],
+        out_mp4: str,
+        cap_seconds: float,
+        *,
+        ffmpeg: str | None = None,
+        ffprobe: str | None = None,
+        run: FfmpegRunner | None = None,
+        xfade_cs: int = 0,
+        expected_count: int | None = None,
+    ) -> None:
+        """Store stitch arguments.
+
+        Args:
+            shot_paths: MP4 paths in beat/shot order.
+            out_mp4: Destination path.
+            cap_seconds: Publish cap (default 90).
+            ffmpeg: Override ffmpeg path.
+            ffprobe: Override ffprobe path.
+            run: Override ``subprocess.run`` (tests).
+            xfade_cs: Audio acrossfade in centiseconds; 0 disables.
+            expected_count: Required stem count (default 18).
+        """
+        self._shots = shot_paths
+        self._out = out_mp4
+        self._cap = cap_seconds
+        self._ffmpeg_override = ffmpeg
+        self._ffprobe = ffprobe
+        self._run = run
+        self._xfade_cs = xfade_cs
+        self._expected = expected_count
+
+    def run(self) -> str:
+        """Normalize, validate, encode, and gate the master.
+
+        Returns:
+            ``out_mp4``.
+        Raises:
+            ValueError: wrong shot count or invalid xfade_cs.
+            RuntimeError: ffmpeg missing/fails, missing/short stems, or duration off cap.
+        """
+        count = self._shot_count()
+        self._require_count(count)
+        self._reject_images()
+        self._require_xfade_range()
+        exe = self._ffmpeg()
+        work_paths, pad_tmps = self._normalize(exe)
+        try:
+            self._validate(work_paths, count)
+            self._encode(work_paths, exe)
+        finally:
+            self._unlink_temps(pad_tmps)
+        self._assert_master()
+        return self._out
+
+    def _shot_count(self) -> int:
+        """Required stem count (18 unless overridden).
+
+        Returns:
+            Expected number of shots.
+        """
+        if self._expected is None:
+            return SHOT_COUNT
+        return int(self._expected)
+
+    def _require_count(self, count: int) -> None:
+        """Refuse a short or long stem list.
+
+        Args:
+            count: Required stem count.
+        Raises:
+            ValueError: ``len(shot_paths)`` is not ``count``.
+        """
+        if len(self._shots) != count:
+            raise ValueError(f"expected {count} shots, found {len(self._shots)}")
+
+    def _reject_images(self) -> None:
+        """Refuse VHS metadata PNGs in the stem list.
+
+        Raises:
+            RuntimeError: a path has an image suffix.
+        """
+        for path in self._shots:
+            if _is_image_path(path):
+                raise RuntimeError(
+                    f"shot is an image, not an MP4 ({path}); "
+                    "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+                )
+
+    def _require_xfade_range(self) -> None:
+        """Refuse xfade outside 0–50 centiseconds.
+
+        Raises:
+            ValueError: ``xfade_cs`` is out of range.
+        """
+        if self._xfade_cs < 0 or self._xfade_cs > 50:
+            raise ValueError(f"xfade_cs must be 0–50, got {self._xfade_cs}")
+
+    def _ffmpeg(self) -> str:
+        """Resolve ffmpeg (override, else PATH / imageio).
+
+        Returns:
+            Executable path.
+        """
+        return self._ffmpeg_override or find_ffmpeg()
+
+    def _runner(self) -> FfmpegRunner:
+        """Injected runner, else ``subprocess.run``.
+
+        Returns:
+            Callable matching :class:`~ez_film.protocols.FfmpegRun`.
+        """
+        if self._run is not None:
+            return self._run
+        return subprocess.run
+
+    def _normalize(self, ffmpeg: str) -> tuple[list[str], list[str]]:
+        """Pad 113-frame LTX neighbors.
+
+        Args:
+            ffmpeg: ffmpeg executable.
+
+        Returns:
+            ``(paths, temps_to_unlink)``.
+        """
+        return normalize_stitch_stems(
+            self._shots, ffmpeg=ffmpeg, ffprobe=self._ffprobe, run=self._run
+        )
+
+    def _validate(self, work_paths: list[str], count: int) -> None:
+        """Refuse missing, unreadable, short, or silent stems.
+
+        Args:
+            work_paths: Normalized MP4 paths.
+            count: Required stem count.
+        """
+        validate_stitch_stems(
+            work_paths, ffprobe=self._ffprobe, run=self._run, expected_count=count
+        )
+
+    def _progress(self, n_shots: int) -> ProgressReporter | None:
+        """Log the stitch and return a two-step bar when ez_common loads.
+
+        Args:
+            n_shots: Stem count being stitched.
+
+        Returns:
+            Progress bar, or None in hermetic tests.
+        """
+        log(f"stitching {n_shots} shots → {self._out}")
+        try:
+            root = str(Path(__file__).resolve().parent.parent)
+            if root not in sys.path:
+                sys.path.insert(0, root)
+            from ez_common import node_log, node_progress
+
+            node_log("ez_film", f"stitching {n_shots} shots")
+            return node_progress(2)
+        except Exception:  # noqa: BLE001 — pytest / missing pack
+            return None
+
+    def _write_concat_list(self, work_paths: list[str]) -> str:
+        """Write a concat-demuxer list file.
+
+        Args:
+            work_paths: Normalized MP4 paths.
+
+        Returns:
+            List-file path (caller unlinks).
+        """
+        list_file = tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", suffix=".txt", delete=False
+        )
+        for path in work_paths:
+            list_file.write(concat_list_line(path) + "\n")
+        list_file.close()
+        return list_file.name
+
+    def _encode(self, work_paths: list[str], ffmpeg: str) -> None:
+        """Hard-cut or xfade-remux into ``out_mp4``.
+
+        Args:
+            work_paths: Normalized MP4 paths.
+            ffmpeg: ffmpeg executable.
+        """
+        bar = self._progress(len(work_paths))
+        runner = self._runner()
+        list_path = self._write_concat_list(work_paths)
+        video_tmp = ""
+        audio_tmp = ""
+        try:
+            if self._xfade_cs == 0:
+                self._encode_hardcut(list_path, ffmpeg, runner, bar)
+            else:
+                video_tmp, audio_tmp = self._encode_xfade(
+                    work_paths, list_path, ffmpeg, runner, bar
+                )
+        finally:
+            Path(list_path).unlink(missing_ok=True)
+            if video_tmp:
+                Path(video_tmp).unlink(missing_ok=True)
+            if audio_tmp:
+                Path(audio_tmp).unlink(missing_ok=True)
+
+    def _encode_hardcut(
+        self,
+        list_path: str,
+        ffmpeg: str,
+        runner: FfmpegRunner,
+        bar: ProgressReporter | None,
+    ) -> None:
+        """Concat-demuxer H.264+AAC, with stream-copy fallback.
+
+        Args:
+            list_path: Concat demuxer list file.
+            ffmpeg: ffmpeg executable.
+            runner: ``subprocess.run`` or a test double.
+            bar: Optional two-step progress bar.
+        """
+        _run_with_x264_fallback(
+            ffmpeg_stitch_argv(list_path, self._out, self._cap, ffmpeg),
+            ffmpeg_stitch_copy_argv(list_path, self._out, self._cap, ffmpeg),
+            runner,
+        )
+        if bar is not None:
+            bar.update(2)
+
+    def _require_xfade_audio(self, work_paths: list[str]) -> None:
+        """Refuse xfade when any stem is silent.
+
+        Args:
+            work_paths: Normalized MP4 paths.
+        Raises:
+            RuntimeError: a stem has no audio stream.
+        """
+        for path in work_paths:
+            if not probe_has_audio(path, ffprobe=self._ffprobe, run=self._run):
+                raise RuntimeError(
+                    f"xfade requires audio on every shot (missing on {path}); "
+                    "Wan-silent concat cannot use --xfade"
+                )
+
+    def _encode_xfade(
+        self,
+        work_paths: list[str],
+        list_path: str,
+        ffmpeg: str,
+        runner: FfmpegRunner,
+        bar: ProgressReporter | None,
+    ) -> tuple[str, str]:
+        """Picture-aligned audio acrossfade remux (video / audio / mux).
+
+        Args:
+            work_paths: Normalized MP4 paths.
+            list_path: Concat demuxer list file.
+            ffmpeg: ffmpeg executable.
+            runner: ``subprocess.run`` or a test double.
+            bar: Optional two-step progress bar.
+
+        Returns:
+            ``(video_tmp, audio_tmp)`` paths for the caller to unlink.
+        """
+        self._require_xfade_audio(work_paths)
+        duration_s = self._xfade_cs / 100.0
+        video_tmp = list_path + ".v.mp4"
+        audio_tmp = list_path + ".a.m4a"
+        _run_with_x264_fallback(
+            ffmpeg_video_copy_argv(list_path, video_tmp, self._cap, ffmpeg),
+            ffmpeg_video_streamcopy_argv(list_path, video_tmp, self._cap, ffmpeg),
+            runner,
+        )
+        _run_ffmpeg(
+            ffmpeg_audio_acrossfade_argv(
+                work_paths,
+                audio_tmp,
+                ffmpeg,
+                duration_s,
+                cap_seconds=self._cap,
+            ),
+            runner,
+        )
+        _run_ffmpeg(
+            ffmpeg_mux_copy_argv(video_tmp, audio_tmp, self._out, self._cap, ffmpeg),
+            runner,
+        )
+        if bar is not None:
+            bar.update(2)
+        hz = probe_audio_hz(self._out, ffprobe=self._ffprobe, run=self._run)
+        if hz is not None and hz != int(AAC_RATE):
+            raise RuntimeError(f"concat audio is {hz} Hz, expected {AAC_RATE}")
+        return video_tmp, audio_tmp
+
+    def _unlink_temps(self, paths: list[str]) -> None:
+        """Best-effort delete pad temps.
+
+        Args:
+            paths: Temp MP4 paths.
+        """
+        for tmp in paths:
+            Path(tmp).unlink(missing_ok=True)
+
+    def _assert_master(self) -> None:
+        """Fail closed if the stitched master is off cap or out of A/V sync."""
+        assert_master_duration(
+            self._out, self._cap, ffprobe=self._ffprobe, run=self._run
+        )
+
+
 def stitch_film(
     shot_paths: list[str],
     out_mp4: str,
@@ -1141,7 +1291,7 @@ def stitch_film(
     *,
     ffmpeg: str | None = None,
     ffprobe: str | None = None,
-    run: Any = None,
+    run: FfmpegRunner | None = None,
     xfade_cs: int = 0,
     expected_count: int | None = None,
 ) -> str:
@@ -1175,108 +1325,16 @@ def stitch_film(
         ValueError: wrong shot count or invalid xfade_cs.
         RuntimeError: ffmpeg missing/fails, missing/short stems, or duration off cap.
     """
-    count = SHOT_COUNT if expected_count is None else int(expected_count)
-    if len(shot_paths) != count:
-        raise ValueError(f"expected {count} shots, found {len(shot_paths)}")
-    for path in shot_paths:
-        if _is_image_path(path):
-            raise RuntimeError(
-                f"shot is an image, not an MP4 ({path}); "
-                "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
-            )
-    if xfade_cs < 0 or xfade_cs > 50:
-        raise ValueError(f"xfade_cs must be 0–50, got {xfade_cs}")
-    exe = ffmpeg or find_ffmpeg()
-    work_paths, pad_tmps = normalize_stitch_stems(
-        shot_paths, ffmpeg=exe, ffprobe=ffprobe, run=run
-    )
-    try:
-        validate_stitch_stems(
-            work_paths, ffprobe=ffprobe, run=run, expected_count=count
-        )
-        log(f"stitching {len(work_paths)} shots → {out_mp4}")
-        try:
-            root = str(Path(__file__).resolve().parent.parent)
-            if root not in sys.path:
-                sys.path.insert(0, root)
-            from ez_common import node_log, node_progress
-
-            node_log("ez_film", f"stitching {len(work_paths)} shots")
-            bar = node_progress(2)
-        except Exception:  # noqa: BLE001 — pytest / missing pack
-            bar = None
-        runner = run or subprocess.run
-        list_file = tempfile.NamedTemporaryFile(
-            "w", encoding="utf-8", suffix=".txt", delete=False
-        )
-        video_tmp = ""
-        audio_tmp = ""
-        try:
-            for path in work_paths:
-                list_file.write(concat_list_line(path) + "\n")
-            list_file.close()
-            if xfade_cs == 0:
-                _run_with_x264_fallback(
-                    ffmpeg_stitch_argv(list_file.name, out_mp4, cap_seconds, exe),
-                    ffmpeg_stitch_copy_argv(list_file.name, out_mp4, cap_seconds, exe),
-                    runner,
-                )
-                if bar is not None:
-                    bar.update(2)
-            else:
-                for path in work_paths:
-                    if not probe_has_audio(path, ffprobe=ffprobe, run=run):
-                        raise RuntimeError(
-                            f"xfade requires audio on every shot (missing on {path}); "
-                            "Wan-silent concat cannot use --xfade"
-                        )
-                duration_s = xfade_cs / 100.0
-                video_tmp = list_file.name + ".v.mp4"
-                audio_tmp = list_file.name + ".a.m4a"
-                _run_with_x264_fallback(
-                    ffmpeg_video_copy_argv(list_file.name, video_tmp, cap_seconds, exe),
-                    ffmpeg_video_streamcopy_argv(
-                        list_file.name, video_tmp, cap_seconds, exe
-                    ),
-                    runner,
-                )
-                _run_ffmpeg(
-                    ffmpeg_audio_acrossfade_argv(
-                        work_paths,
-                        audio_tmp,
-                        exe,
-                        duration_s,
-                        cap_seconds=cap_seconds,
-                    ),
-                    runner,
-                )
-                _run_ffmpeg(
-                    ffmpeg_mux_copy_argv(
-                        video_tmp, audio_tmp, out_mp4, cap_seconds, exe
-                    ),
-                    runner,
-                )
-                if bar is not None:
-                    bar.update(2)
-                hz = probe_audio_hz(out_mp4, ffprobe=ffprobe, run=run)
-                if hz is not None and hz != int(AAC_RATE):
-                    raise RuntimeError(
-                        f"concat audio is {hz} Hz, expected {AAC_RATE}"
-                    )
-        finally:
-            Path(list_file.name).unlink(missing_ok=True)
-            if video_tmp:
-                Path(video_tmp).unlink(missing_ok=True)
-            if audio_tmp:
-                Path(audio_tmp).unlink(missing_ok=True)
-    finally:
-        for tmp in pad_tmps:
-            Path(tmp).unlink(missing_ok=True)
-
-    assert_master_duration(
-        out_mp4, cap_seconds, ffprobe=ffprobe, run=run
-    )
-    return out_mp4
+    return ConcatPipeline(
+        shot_paths,
+        out_mp4,
+        cap_seconds,
+        ffmpeg=ffmpeg,
+        ffprobe=ffprobe,
+        run=run,
+        xfade_cs=xfade_cs,
+        expected_count=expected_count,
+    ).run()
 
 
 def publish_path(

@@ -192,31 +192,9 @@ def probe_duration_s(path: Path) -> float | None:
     exe = shutil.which("ffprobe")
     if not exe or not path.is_file():
         return None
-    try:
-        proc = subprocess.run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-show_entries",
-                "format=duration",
-                "-of",
-                "csv=p=0",
-                str(path),
-            ],
-            check=False,
-            capture_output=True,
-            text=True,
-        )
-    except OSError:
-        return None
-    text = (proc.stdout or "").strip()
-    if not text:
-        return None
-    try:
-        return float(text)
-    except ValueError:
-        return None
+    from . import concat as _c
+
+    return _c.probe_seconds(str(path), ffprobe=exe, run=subprocess.run)
 
 
 def duration_ok(path: Path, expected: float = DURATION_S, tol: float = DURATION_TOL) -> bool:

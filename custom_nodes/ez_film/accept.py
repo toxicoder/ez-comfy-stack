@@ -17,6 +17,14 @@ from typing import Any, Callable
 
 from .jobstore import DURATION_S, DURATION_TOL, load_state, shot_mp4
 from .catalog import master_filename
+from .probe import (
+    probe_audio_seconds as _probe_audio_seconds,
+    probe_fps as _probe_fps,
+    probe_has_audio as _probe_has_audio,
+    probe_seconds as _probe_seconds,
+    probe_wh as _probe_wh,
+)
+from .protocols import FfmpegRunner
 from .shots import SHOT_COUNT, film_publish_cap, film_slug, film_total_shots
 from .stems import LUFS_TARGET, LUFS_TOL, lufs_in_band, parse_lufs
 
@@ -45,7 +53,7 @@ _RMS_DB_RE = re.compile(r"RMS level dB:\s*([-+]?\d+(?:\.\d+)?)", re.I)
 _PEAK_DB_RE = re.compile(r"Peak level dB:\s*([-+]?\d+(?:\.\d+)?)", re.I)
 _SILENCE_START_RE = re.compile(r"silence_start:\s*([-+]?\d+(?:\.\d+)?)")
 _SILENCE_END_RE = re.compile(r"silence_end:\s*([-+]?\d+(?:\.\d+)?)")
-RunFn = Callable[..., Any]
+RunFn = FfmpegRunner
 
 
 def find_ffprobe() -> str | None:
@@ -70,7 +78,7 @@ def _run(
     argv: list[str],
     *,
     run: RunFn = subprocess.run,
-) -> subprocess.CompletedProcess[str]:
+) -> Any:
     """Run a subprocess with captured text output.
 
     Args:
@@ -81,6 +89,21 @@ def _run(
         Completed process (not checked).
     """
     return run(argv, check=False, capture_output=True, text=True)
+
+
+def _ffprobe_ready(path: Path, ffprobe: str | None) -> str | None:
+    """Return ffprobe when ``path`` is a file, else None.
+
+    Args:
+        path: Candidate media file.
+        ffprobe: Override ffprobe path.
+
+    Returns:
+        Executable path, or None.
+    """
+    if not path.is_file():
+        return None
+    return ffprobe or find_ffprobe()
 
 
 def probe_duration_s(
@@ -99,23 +122,10 @@ def probe_duration_s(
     Returns:
         Duration in seconds, or None.
     """
-    exe = ffprobe or find_ffprobe()
-    if not exe or not path.is_file():
+    exe = _ffprobe_ready(path, ffprobe)
+    if not exe:
         return None
-    try:
-        proc = _run(
-            [exe, "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(path)],
-            run=run,
-        )
-    except OSError:
-        return None
-    text = (proc.stdout or "").strip()
-    if not text:
-        return None
-    try:
-        return float(text)
-    except ValueError:
-        return None
+    return _probe_seconds(str(path), ffprobe=exe, run=run)
 
 
 def probe_wh(
@@ -134,35 +144,10 @@ def probe_wh(
     Returns:
         ``(width, height)`` or None.
     """
-    exe = ffprobe or find_ffprobe()
-    if not exe or not path.is_file():
+    exe = _ffprobe_ready(path, ffprobe)
+    if not exe:
         return None
-    try:
-        proc = _run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-select_streams",
-                "v:0",
-                "-show_entries",
-                "stream=width,height",
-                "-of",
-                "csv=p=0",
-                str(path),
-            ],
-            run=run,
-        )
-    except OSError:
-        return None
-    text = (proc.stdout or "").strip()
-    if not text or "," not in text:
-        return None
-    left, right = text.split(",", 1)
-    try:
-        return int(left), int(right)
-    except ValueError:
-        return None
+    return _probe_wh(str(path), ffprobe=exe, run=run)
 
 
 def probe_has_audio(
@@ -181,28 +166,10 @@ def probe_has_audio(
     Returns:
         Whether an audio stream is present.
     """
-    exe = ffprobe or find_ffprobe()
-    if not exe or not path.is_file():
+    exe = _ffprobe_ready(path, ffprobe)
+    if not exe:
         return False
-    try:
-        proc = _run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-select_streams",
-                "a:0",
-                "-show_entries",
-                "stream=codec_type",
-                "-of",
-                "csv=p=0",
-                str(path),
-            ],
-            run=run,
-        )
-    except OSError:
-        return False
-    return "audio" in (proc.stdout or "").lower()
+    return _probe_has_audio(str(path), ffprobe=exe, run=run)
 
 
 def stem_mix_path(dest: Path, sid: str) -> Path | None:
@@ -538,44 +505,10 @@ def probe_fps(
     Returns:
         Frame rate, or None.
     """
-    exe = ffprobe or find_ffprobe()
-    if not exe or not path.is_file():
+    exe = _ffprobe_ready(path, ffprobe)
+    if not exe:
         return None
-    try:
-        proc = _run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-select_streams",
-                "v:0",
-                "-show_entries",
-                "stream=r_frame_rate",
-                "-of",
-                "csv=p=0",
-                str(path),
-            ],
-            run=run,
-        )
-    except OSError:
-        return None
-    text = (proc.stdout or "").strip()
-    if not text:
-        return None
-    token = text.split(",")[0].strip()
-    if "/" in token:
-        left, right = token.split("/", 1)
-        try:
-            denom = float(right)
-            if denom == 0:
-                return None
-            return float(left) / denom
-        except ValueError:
-            return None
-    try:
-        return float(token)
-    except ValueError:
-        return None
+    return _probe_fps(str(path), ffprobe=exe, run=run)
 
 
 def probe_audio_duration_s(
@@ -594,35 +527,10 @@ def probe_audio_duration_s(
     Returns:
         Audio duration in seconds, or None.
     """
-    exe = ffprobe or find_ffprobe()
-    if not exe or not path.is_file():
+    exe = _ffprobe_ready(path, ffprobe)
+    if not exe:
         return None
-    try:
-        proc = _run(
-            [
-                exe,
-                "-v",
-                "error",
-                "-select_streams",
-                "a:0",
-                "-show_entries",
-                "stream=duration",
-                "-of",
-                "csv=p=0",
-                str(path),
-            ],
-            run=run,
-        )
-    except OSError:
-        return None
-    text = (proc.stdout or "").strip()
-    token = text.split(",")[0].strip() if text else ""
-    if token and token.upper() != "N/A":
-        try:
-            return float(token)
-        except ValueError:
-            pass
-    return probe_duration_s(path, ffprobe=exe, run=run)
+    return _probe_audio_seconds(str(path), ffprobe=exe, run=run)
 
 
 def accept_master(
