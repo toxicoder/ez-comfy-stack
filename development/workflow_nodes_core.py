@@ -287,6 +287,27 @@ def core_nodes() -> dict[str, Any]:
             ],
             widgets=[],
         ),
+        "EZImageFormat": _n(
+            "Format / platform",
+            "Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.",
+            origin="ez_image",
+            lab="klein/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.",
+            sockets=[
+                _s("width", "INT", "out", "Latent width (÷16)."),
+                _s("height", "INT", "out", "Latent height (÷16)."),
+                _s("batch", "INT", "out", "Batch size."),
+                _s("hint", "STRING", "out", "Enhance duration / framing line."),
+                _s("prefix", "STRING", "out", "SaveImage filename prefix."),
+                _s("context", "STRING", "out", "Look-recipe splice for Enhance context."),
+            ],
+            widgets=[
+                _w("format", index=0, typ="COMBO", rng="16:9 LTX feeder / platform jobs / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.", choices_from="image_formats"),
+                _w("look", index=1, typ="COMBO", rng="none", desc="Optional Cinema Rack starter.", gen="none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.", choices_from="cinema_recipes"),
+                _w("width", index=2, typ="INT", rng="16–2048, step 16", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
+                _w("height", index=3, typ="INT", rng="16–2048, step 16", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
+                _w("batch_size", index=4, typ="INT", rng="1–4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
+            ],
+        ),
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
