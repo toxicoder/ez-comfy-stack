@@ -1014,6 +1014,131 @@ def clone_template(stem: str) -> tuple[str, dict[str, Any]]:
     return origin, copy.deepcopy(data)
 
 
+def _planner_result(
+    brief: str, requested: str, *, use_llm: bool
+) -> tuple[dict[str, Any] | None, str, str]:
+    """Run the GGUF planner or keep the keyword-heuristic status.
+
+    Args:
+        brief: Operator brief.
+        requested: Template widget (``auto`` / lab_rel).
+        use_llm: When false, skip the planner.
+
+    Returns:
+        ``(plan, status, reason)``.
+    """
+    if not (use_llm and requested.lower() in {AUTO, "custom", ""}):
+        return None, "heuristic", "keyword heuristic"
+    plan, llm_status = _plan_from_llm(brief)
+    if plan is not None:
+        return plan, llm_status or "ok", str(plan.get("reason") or "planner")
+    return None, llm_status or "llm passthrough", "keyword heuristic"
+
+
+def _choose_template(
+    brief: str, requested: str, plan: dict[str, Any] | None
+) -> str:
+    """Pick a lab stem, preferring a valid planner template.
+
+    Args:
+        brief: Operator brief.
+        requested: Template widget.
+        plan: Planner JSON, or None.
+
+    Returns:
+        Template stem / lab_rel.
+    """
+    chosen = pick_template(brief, requested)
+    if plan is not None and requested.lower() in {AUTO, "custom", ""}:
+        planned = normalize_stem(str(plan.get("template") or ""))
+        if planned and load_lab_graph(planned) is not None:
+            return planned
+    return chosen
+
+
+def _merged_slots(
+    graph: dict[str, Any],
+    plan: dict[str, Any] | None,
+    slots: Mapping[str, Any] | None,
+    brief: str,
+) -> dict[str, Any]:
+    """Combine planner slots, operator slots, and a prompt fill.
+
+    Args:
+        graph: Cloned lab graph.
+        plan: Planner JSON, or None.
+        slots: Extra widget patches.
+        brief: Operator brief.
+
+    Returns:
+        Slot mapping (possibly empty).
+    """
+    merged: dict[str, Any] = {}
+    if plan is not None and isinstance(plan.get("slots"), dict):
+        merged.update(plan["slots"])
+    if slots:
+        merged.update(dict(slots))
+    extra = graph.get("extra") or {}
+    labels = _linear_labels(extra if isinstance(extra, dict) else {})
+    has_prompt = any(name.lower() in {"prompt", "brief", "message"} for name in labels)
+    if brief and has_prompt and "prompt" not in merged and "Prompt" not in merged:
+        merged["prompt"] = brief
+    return merged
+
+
+def _choose_slug(
+    slug: str, plan: dict[str, Any] | None, brief: str, origin: str
+) -> str:
+    """Resolve a `_user` stem.
+
+    Args:
+        slug: Operator slug widget.
+        plan: Planner JSON, or None.
+        brief: Operator brief.
+        origin: Template id.
+
+    Returns:
+        Validated slug.
+    """
+    want = slug or (str(plan.get("slug") or "") if plan is not None else "") or slugify(
+        brief or origin.replace("/", "-")
+    )
+    return validate_slug(want)
+
+
+def _choose_as_app(
+    as_app: object, plan: dict[str, Any] | None, graph: Mapping[str, Any]
+) -> bool:
+    """Resolve whether to write ``.app.json``.
+
+    Args:
+        as_app: Widget value, or None for planner/default_view.
+        plan: Planner JSON, or None.
+        graph: Cloned lab graph.
+
+    Returns:
+        True when the dest should be an App.
+    """
+    if as_app is None:
+        if plan is not None and "as_app" in plan:
+            return _as_bool(plan.get("as_app"))
+        return _default_view(graph) == "app"
+    return _as_bool(as_app)
+
+
+def _enable_app_mode(graph: dict[str, Any]) -> None:
+    """Stamp App Mode extras on a cloned graph.
+
+    Args:
+        graph: Workflow dict (mutated).
+    """
+    mode = graph.setdefault("extra", {}).setdefault("lab_app_mode", {})
+    if isinstance(mode, dict):
+        mode["default_view"] = "app"
+        mode["enabled"] = True
+    graph["extra"]["linearMode"] = True
+
+
 def generate_app(
     brief: str,
     *,
@@ -1039,57 +1164,19 @@ def generate_app(
         ``ForgeResult`` with path on success or ``error`` on refusal.
     """
     text = (brief or "").strip()
-    status = "heuristic"
-    reason = "keyword heuristic"
-    plan: dict[str, Any] | None = None
     requested = (template or AUTO).strip() or AUTO
-    if use_llm and requested.lower() in {AUTO, "custom", ""}:
-        plan, llm_status = _plan_from_llm(text)
-        if plan is not None:
-            status = llm_status or "ok"
-            reason = str(plan.get("reason") or "planner")
-        else:
-            status = llm_status or "llm passthrough"
-            reason = "keyword heuristic"
+    plan, status, reason = _planner_result(text, requested, use_llm=use_llm)
     try:
-        chosen = pick_template(text, requested)
-        if plan is not None and requested.lower() in {AUTO, "custom", ""}:
-            planned = normalize_stem(str(plan.get("template") or ""))
-            if planned and load_lab_graph(planned) is not None:
-                chosen = planned
+        chosen = _choose_template(text, requested, plan)
         origin, graph = clone_template(chosen)
-        merged: dict[str, Any] = {}
-        if plan is not None and isinstance(plan.get("slots"), dict):
-            merged.update(plan["slots"])
-        if slots:
-            merged.update(dict(slots))
-        extra = graph.get("extra") or {}
-        labels = _linear_labels(extra if isinstance(extra, dict) else {})
-        has_prompt = any(
-            name.lower() in {"prompt", "brief", "message"} for name in labels
-        )
-        if text and has_prompt and "prompt" not in merged and "Prompt" not in merged:
-            merged["prompt"] = text
+        merged = _merged_slots(graph, plan, slots, text)
         if merged:
             apply_slots(graph, merged)
-        want_slug = slug or (
-            str(plan.get("slug") or "") if plan is not None else ""
-        ) or slugify(text or origin.replace("/", "-"))
-        clean = validate_slug(want_slug)
-        if as_app is None:
-            if plan is not None and "as_app" in plan:
-                want_app = _as_bool(plan.get("as_app"))
-            else:
-                want_app = _default_view(graph) == "app"
-        else:
-            want_app = _as_bool(as_app)
+        clean = _choose_slug(slug, plan, text, origin)
+        want_app = _choose_as_app(as_app, plan, graph)
         restamp_identity(graph, origin=origin, slug=clean)
         if want_app:
-            mode = graph.setdefault("extra", {}).setdefault("lab_app_mode", {})
-            if isinstance(mode, dict):
-                mode["default_view"] = "app"
-                mode["enabled"] = True
-            graph["extra"]["linearMode"] = True
+            _enable_app_mode(graph)
         dest = save_workflow(
             graph,
             slug=clean,
