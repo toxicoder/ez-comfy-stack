@@ -384,6 +384,28 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                 flavor,
                 cat or catalog,
             ]
+        elif ntype == "EZPodcastLearn":
+            if len(values) >= 7:
+                sample, sources, fmt, duration, fetch, enhance, cat = values[:7]
+            else:
+                sample, cat = "custom", catalog
+                sources = values[0] if values else ""
+                fmt = values[1] if len(values) > 1 else "Explainer"
+                duration = values[2] if len(values) > 2 else "8 min briefing"
+                fetch = values[3] if len(values) > 3 else True
+                enhance = _as_enhance_flag(values[4]) if len(values) > 4 else True
+            fetch_flag = fetch
+            if isinstance(fetch, str):
+                fetch_flag = fetch.strip().lower() in {"1", "true", "yes", "on"}
+            node["widgets_values"] = [
+                sample or "custom",
+                sources,
+                fmt or "Explainer",
+                duration or "8 min briefing",
+                bool(fetch_flag),
+                _as_enhance_flag(enhance),
+                cat or catalog,
+            ]
         elif ntype == "EZCreativeResearch":
             if len(values) >= 7:
                 sample, text, mode, web, sub, hist, cat = values[:7]
@@ -1064,6 +1086,13 @@ def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
         values[1] = flag
         node["widgets_values"] = values
         return
+    if ntype == "EZPodcastLearn":
+        idx = 5 if len(values) >= 7 else 4
+        while len(values) <= idx:
+            values.append(flag)
+        values[idx] = flag
+        node["widgets_values"] = values
+        return
     if ntype in (
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
@@ -1089,6 +1118,11 @@ def apply_enhance_policy(graph: dict[str, Any]) -> None:
     """Pin Enhance off on authored/structured graphs. Leave lazy printers alone."""
     extra = graph.get("extra") or {}
     gid = str(extra.get("lab_rel") or graph.get("id") or "")
+    if any(n.get("type") == "EZPodcastLearn" for n in graph.get("nodes") or []):
+        for node in graph.get("nodes") or []:
+            if node.get("type") == "EZAceStepPromptEnhance":
+                _set_node_enhance(node, False)
+        return
     if not enhance_pin_off(gid):
         return
     for node in graph.get("nodes") or []:
@@ -1221,17 +1255,22 @@ def wire_identity_context_to_ltx(graph: dict[str, Any]) -> None:
 
 
 def wire_script_context_to_ace(graph: dict[str, Any]) -> None:
-    """Fan podcast script STRING into ACE-Step enhance context."""
+    """Fan podcast script or learn digest STRING into ACE-Step enhance context."""
+    learn = next(
+        (n for n in graph.get("nodes") or [] if n.get("type") == "EZPodcastLearn"),
+        None,
+    )
     script = next(
         (n for n in graph.get("nodes") or [] if n.get("type") == "EZPodcastScript"),
         None,
     )
-    if script is None:
+    src = learn if learn is not None else script
+    if src is None:
         return
     for node in graph.get("nodes") or []:
         if node.get("type") != "EZAceStepPromptEnhance":
             continue
-        _link_string(graph, script, node, "context")
+        _link_string(graph, src, node, "context")
 
 
 def enable_lab_graph(graph: dict[str, Any]) -> None:

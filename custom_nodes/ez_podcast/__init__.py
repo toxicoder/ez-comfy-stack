@@ -1,4 +1,4 @@
-"""ez-comfy US-safe podcast nodes (script, disclosure, Kokoro TTS).
+"""ez-comfy US-safe podcast nodes (script, learn, disclosure, Kokoro TTS).
 
 Import is hermetic: stdlib only at pack load. Optional kokoro-onnx /
 chatterbox / qwen3tts backends are lazy inside node ``run()``.

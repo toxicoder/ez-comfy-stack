@@ -1819,6 +1819,7 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         "EZAceStepPromptEnhance",
         "EZRapLyrics",
         "EZPodcastScript",
+        "EZPodcastLearn",
     }
     pos_enhance_types = enhance_types - {"EZNegativePromptEnhance"}
     encoder_types = {"CLIPTextEncode", "TextEncodeAceStepAudio1.5"}
@@ -1846,12 +1847,24 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                         if len(values) >= 6
                         else values[2] if len(values) > 2 else True
                     )
+                elif ntype == "EZPodcastLearn":
+                    flag = (
+                        values[5]
+                        if len(values) >= 7
+                        else values[4] if len(values) > 4 else True
+                    )
                 else:
                     flag = (
                         values[2]
                         if len(values) >= 4
                         else values[1] if len(values) > 1 else True
                     )
+                if gid == "audio/podcast/learn-episode" and ntype == "EZAceStepPromptEnhance":
+                    if flag is not False:
+                        missing.append(
+                            f"{path.name}: {ntype}#{node['id']} enhance={flag!r}"
+                        )
+                    continue
                 if pin_off:
                     if flag is not False:
                         missing.append(

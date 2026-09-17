@@ -1,6 +1,6 @@
 ---
 title: Local podcast
-description: US-safe two-host-episode episode and radio-drama lanes on one DGX Spark (Kokoro + native ACE-Step).
+description: US-safe two-host, radio-drama, and learning-episode lanes on one DGX Spark (Kokoro + native ACE-Step).
 tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 ---
 
@@ -8,8 +8,8 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 **What's on this page**
 
-- Option A (two-host-episode commercial episode) vs Option B (one-graph radio drama)
-- App Mode: script, bed/sting tags, length, Kokoro stock voices (refs stay graph-only)
+- Option A (two-host-episode) vs Option B (radio drama) vs Option C (learning episode)
+- App Mode: script or sources + format/duration, bed/sting tags, Kokoro stock voices (refs stay graph-only)
 - Why TTS-Audio-Suite and OldTimeRadio are not vendored
 - Kokoro default on Spark; Chatterbox / Qwen3-TTS optional (`qwen3tts` is a complete snapshot, not weights-only)
 - Native ACE-Step instrumental beds
@@ -20,7 +20,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 **What this enables**
 
-- Queue a local two-host episode without cloud TTS or rented music
+- Queue a local two-host or learning episode without cloud TTS or rented music
 - Keep the visual studio bootable when podcast extras are missing
 - Disclose synthetic voices in the mix, not only in a description box
 - Mux a cover still + episode FLAC into a YouTube MP4 without changing the episode graph
@@ -31,7 +31,7 @@ tags: [podcast, kokoro, ace-step, tts, disclosure, us-safe]
 
 ---
 
-## Two operator paths
+## Three operator paths
 
 Do **not** load Klein + Wan + LTX + ACE-Step + TTS in one session. Cover art is a separate graph.
 
@@ -59,6 +59,39 @@ Do not type that line yourself. The disclosure node prepends it.
 Graph: **audio/podcast/radio-drama** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
 
 Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **wan/bumper-loop** or **ltx/hook-av** in a later session. Not a one-graph film.
+
+### Option C — learning episode
+
+Graph: **audio/podcast/learn-episode** (`us-safe-learn-podcast`). Same legal engines as Option A. Occupancy **audio**.
+
+Paste a lazy blob of notes, `https://` links, captioned video URLs, or local `.txt` / `.md` / `.srt` / `.vtt` paths. Pick **Format** and **Duration**. Rewrite stays **on**.
+
+| Stage | What runs | Prefix |
+| --- | --- | --- |
+| SOURCES | App **Sources**, **Format**, **Duration**, **Fetch links**, **Rewrite**. `EZPodcastLearn` writes a deduped digest then a Speaker A/B (or solo) script | `ez_learn_sources` |
+| DISCLOSURE | `EZPodcastDisclosure` prepends the spoken bumper | (string) |
+| VOICES | App **Speaker A / B**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M built-ins | `ez_learn_voice` |
+| BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck −15 dB | `ez_learn_bed` |
+| MIX | Overlay. FLAC master + 320 kbps MP3 | `ez_learn_ep` / `ez_learn_mix` |
+| COVER | Queue **klein/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
+
+| Format | Shape |
+| --- | --- |
+| Quick recap | Two-host, tight, what to remember |
+| Deep dive | Two-host, examples, caveats, connections |
+| Explainer (default) | Teacher A + curious student B |
+| Quiz drill | Host asks, cohost answers, then correction |
+| Solo lecture | Speaker A only |
+| Debate | A/B argue tensions in the sources, then synthesize |
+
+| Duration | Spoken budget | Writer passes |
+| --- | --- | --- |
+| 3 min commute | ~450 words | 1 |
+| 8 min briefing (default) | ~1200 words | 3 |
+| 15 min lesson | ~2250 words | 5 |
+| 25 min seminar | ~3750 words | 8 (slow CPU TTS) |
+
+Fetch is SSRF-safe **HTTPS** only. Video URLs pull **captions only** (`yt-dlp --skip-download --write-sub`). No media download. No dub ASR or voice clone. Missing captions are a status line; the rest of the mix still runs. This is a personal study mix of operator-provided sources — not news copy, not a doctor / lawyer / finance-advisor persona. Missing GGUF concatenates sources and wraps Speaker A lines.
 
 ---
 
@@ -139,18 +172,18 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 ```mermaid
 sequenceDiagram
   participant U as Studio user
-  participant S as EZPodcastScript
+  participant L as EZPodcastLearn or Script
   participant D as Disclosure
   participant K as Kokoro TTS
   participant A as ACE-Step beds
   participant M as Mix
 
-  U->>S: Queue (Enhance on)
-  S->>D: script string
+  U->>L: Queue (learn: Rewrite on)
+  L->>D: script string
   D->>K: bumper + lines
   D->>A: instrumental tags
   K->>M: voice stems
-  A->>M: beds
+  A->>M: beds (learn loops 30 s under speech)
   M->>U: FLAC + MP3 under COMFY_OUTPUT_DIR
 ```
 
@@ -161,7 +194,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 1. `download-podcast --tier analog` (and `--tier acestep` for beds)
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md))
 3. `./scripts/manage.sh start` — type **yes**
-4. Load **audio/podcast/two-host-episode**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_podcast_mix_*.mp3`
+4. Load **audio/podcast/two-host-episode** (authored script) or **audio/podcast/learn-episode** (paste sources, pick Format + Duration). Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_learn_ep_*.flac` (plus the matching `*_mix_*.mp3`)
 5. Load **klein/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 

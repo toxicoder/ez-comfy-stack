@@ -175,3 +175,63 @@ def test_podcast_apps_expose_voices_length_not_clone_refs() -> None:
     assert "Sting tags" in radio_labels
     assert "Bed tags" in radio_labels
     assert len(radio_labels) == len(set(radio_labels)), radio_labels
+
+
+def test_learn_episode_podcast_graph() -> None:
+    graph = _load("audio/podcast/learn-episode")
+    assert graph["id"] == "learn-episode"
+    assert graph["extra"].get("lab_rel") == "audio/podcast/learn-episode"
+    extra = graph["extra"]
+    assert extra["lab_profile"] == "us-safe-learn-podcast"
+    blob = json.dumps(graph)
+    for prefix in (
+        "ez_learn_sources",
+        "ez_learn_voice",
+        "ez_learn_bed",
+        "ez_learn_mix",
+        "ez_learn_ep",
+    ):
+        assert prefix in blob, prefix
+    assert DISCLOSURE in blob
+    assert "klein/podcast-cover" in blob
+    learn = next(n for n in graph["nodes"] if n["type"] == "EZPodcastLearn")
+    lw = learn["widgets_values"]
+    assert (lw[5] if len(lw) >= 7 else lw[4]) is True
+    assert (lw[2] if len(lw) >= 7 else lw[1]) == "Explainer"
+    assert (lw[3] if len(lw) >= 7 else lw[2]) == "8 min briefing"
+    assert any(n["type"] == "EZPodcastDisclosure" for n in graph["nodes"])
+    assert any(n["type"] == "EZKokoroTTS" for n in graph["nodes"])
+    assert any(n["type"] == "EZAudioLoopToMatch" for n in graph["nodes"])
+    ace = list(iter_ace_encoders(graph))
+    assert ace
+    for node in ace:
+        assert_ace_encoder_widgets(node, where=f"podcast-learn:{node.get('title')}")
+    pos = next(n for n in ace if "bed" in (n.get("title") or "").lower())
+    tags, lyrics = pos["widgets_values"][0], pos["widgets_values"][1]
+    assert "instrumental" in tags.lower()
+    assert "no vocals" in tags.lower()
+    assert lyrics == ""
+    duck = next(n for n in graph["nodes"] if n["type"] == "AudioAdjustVolume")
+    assert duck["widgets_values"][0] <= -12
+    flac = next(n for n in graph["nodes"] if n["type"] == "SaveAudio")
+    assert flac["widgets_values"][0] == "ez_learn_ep"
+    mp3 = next(n for n in graph["nodes"] if n["type"] == "SaveAudioMP3")
+    assert mp3["widgets_values"][0] == "ez_learn_mix"
+    for needle in BANNED:
+        assert needle not in blob, needle
+    names = _app_names(graph)
+    assert "sources" in names
+    assert "format" in names
+    assert "duration" in names
+    assert "fetch_links" in names
+    assert "seconds" not in names
+    assert "speaker_a_voice" in names
+    labels = _app_labels(graph)
+    assert "Sources" in labels
+    assert "Format" in labels
+    assert "Duration" in labels
+    assert len(labels) == len(set(labels)), labels
+    groups = {g["title"] for g in graph["groups"]}
+    assert "MODEL" in groups
+    assert "PROMPT" in groups
+    assert "OUTPUT" in groups

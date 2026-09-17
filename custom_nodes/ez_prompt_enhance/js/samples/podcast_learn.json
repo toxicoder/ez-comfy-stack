@@ -1,0 +1,102 @@
+[
+  {
+    "id": "occupancy-one-job",
+    "label": "One GB10 job",
+    "prompt": "Occupancy on this Spark is one GB10 job. Stop Klein, Wan, and LTX before you Queue a podcast. Cover art is a later Klein session. The disclosure bumper is prepended; do not type it. Kokoro is Apache ONNX on CPU. ACE-Step beds stay instrumental."
+  },
+  {
+    "id": "kokoro-default",
+    "label": "Kokoro default TTS",
+    "prompt": "Kokoro-82M is the US-safe default TTS. Voices are stock identities, not clones of real people. Optional Chatterbox and Qwen3-TTS need operator-owned refs. Empty refs fall back to Kokoro. Never drop celebrity WAVs into the graph."
+  },
+  {
+    "id": "ace-instrumental",
+    "label": "ACE instrumental beds",
+    "prompt": "Native ACE-Step 1.5 already ships in the Comfy pin. Podcast beds stay instrumental: tags include no vocals, lyrics stay empty. download-podcast --tier acestep shares the turbo AIO dest with download-music --tier turbo. Do not pull the file twice."
+  },
+  {
+    "id": "disclosure-bumper",
+    "label": "Spoken bumper",
+    "prompt": "Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people. EZPodcastDisclosure prepends that line. Apple, YouTube, and Spotify still want disclosure in metadata. This page is not legal advice."
+  },
+  {
+    "id": "captions-only",
+    "label": "Captions only",
+    "prompt": "Learning episodes fetch video captions only. yt-dlp --skip-download --write-sub. No media download. No dub ASR. No voice clone. Missing captions are a status line; the rest of the mix still runs. Paste a transcript if the video has none."
+  },
+  {
+    "id": "https-only",
+    "label": "HTTPS pages",
+    "prompt": "Page fetch is HTTPS only and SSRF-gated. Private, loopback, and link-local hosts are refused. http:// links are skipped. Fetch off uses pasted prose and local .txt .md .srt .vtt files. Cap eight URLs per Queue."
+  },
+  {
+    "id": "format-explainer",
+    "label": "Explainer format",
+    "prompt": "Explainer format: Speaker A teaches, Speaker B asks the next honest question. Alternate turns. Stay on the digest. Do not invent facts. Do not play doctor, lawyer, or finance advisor. Short clauses that read well aloud."
+  },
+  {
+    "id": "format-quiz",
+    "label": "Quiz drill",
+    "prompt": "Quiz drill: Speaker A asks a short question from the digest. Speaker B answers. Speaker A confirms or corrects. Keep one fact per turn. Do not pad with slogans. The edit is still the human part."
+  },
+  {
+    "id": "duration-commute",
+    "label": "Three minute commute",
+    "prompt": "A three minute commute is about 450 spoken words. One writer pass. Tight recap: foundations, one example, one caveat. ACE bed stays 30 seconds and loops under the speech. Do not generate a three minute ACE track."
+  },
+  {
+    "id": "duration-briefing",
+    "label": "Eight minute briefing",
+    "prompt": "An eight minute briefing is about 1200 spoken words in three writer passes. Default duration. Opening, middle, recap. Loop the instrumental bed. 25 minute seminar is the slow CPU-TTS path."
+  },
+  {
+    "id": "gguf-fail-soft",
+    "label": "GGUF fail-soft",
+    "prompt": "Missing Qwen3-4B-Instruct GGUF concatenates sources and wraps Speaker A lines. Rewrite off does the same on purpose. download-models pulls the GGUF. The writer unloads after the last section so Kokoro can run in the same Queue."
+  },
+  {
+    "id": "study-not-news",
+    "label": "Study mix not news",
+    "prompt": "This App is a personal study mix of operator-provided sources. It is not a news rewrite. It does not impersonate a licensed professional. When sources conflict, name the conflict. Do not fill gaps with guesses."
+  },
+  {
+    "id": "two-host-vs-learn",
+    "label": "Two-host vs learn",
+    "prompt": "audio/podcast/two-host-episode is an authored commercial hour with Enhance off so Speaker A/B labels stay parser input. audio/podcast/learn-episode is the lazy path: paste sources, pick format and duration, Rewrite on. Same Kokoro, same bumper, same occupancy audio."
+  },
+  {
+    "id": "loudnorm-after",
+    "label": "Loudnorm after Queue",
+    "prompt": "Comfy cannot loudnorm. After Queue run podcast-loudnorm.sh on the FLAC master. Default podcast is -16 LUFS. --target youtube is -14. Missing ffmpeg is a hard fail. YouTube still-image MP4 is host audio-still-video after cover art."
+  },
+  {
+    "id": "cover-later",
+    "label": "Cover later",
+    "prompt": "Do not load Klein in the same session as ACE-Step plus TTS. Queue klein/podcast-cover later. Prefix ez_podcast. 1024 square. Add the show title in an editor. Mux with audio-still-video if YouTube wants a video."
+  },
+  {
+    "id": "prompt-enhance-cpu",
+    "label": "Enhance stays CPU",
+    "prompt": "Prompt Enhance GGUF stays CPU-only with n_gpu_layers=0. Occupancy llm desks can run while a Spark is idle. Podcast Queue is occupancy audio: stop Klein, Wan, and LTX first. One heavy job on this box."
+  },
+  {
+    "id": "dedupe-order",
+    "label": "Dedupe then order",
+    "prompt": "The digest drops repeated claims and keeps the strongest wording once. Order is pedagogical: foundations, mechanism, examples, caveats, recap. Thin or blocked sources are named. The script must not invent a number the digest did not contain."
+  },
+  {
+    "id": "local-files",
+    "label": "Local notes files",
+    "prompt": "Paste a path to a .txt .md .srt or .vtt file that already exists. Bare mp4 without captions is a status line, not Whisper. Sidecar captions next to a video are enough. Keep the paste under 48k characters."
+  },
+  {
+    "id": "invented-hosts",
+    "label": "Invented hosts",
+    "prompt": "Hosts are original characters. Stock Kokoro voices only on the default path. Do not name living celebrities as the talent. Do not ship Rogan or Ramsay style refs. Translating a recorded show while keeping the original speakers is the dub lane, not this App."
+  },
+  {
+    "id": "weights-on-disk",
+    "label": "Weights on disk",
+    "prompt": "download-podcast --tier analog pulls Kokoro ONNX plus voices. --tier acestep pulls the ACE-Step turbo AIO. doctor still exits 0 when the pack is absent. Analog graphs load; Queue fail-softs until the wheels and weights exist. Own the weights or skip the show."
+  }
+]

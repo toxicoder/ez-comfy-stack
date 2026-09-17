@@ -40,6 +40,7 @@ _FAMILY_FOR_MODE: dict[tuple[str, str], str] = {
     ("EZAceStepPromptEnhance", "instrumental"): "rap_draft",
     ("EZPodcastScript", "podcast_two_host"): "podcast_two_host",
     ("EZPodcastScript", "radio_drama"): "podcast_radio",
+    ("EZPodcastLearn", ""): "podcast_learn",
     ("EZRapLyrics", ""): "rap_draft",
     ("EZCreativeResearch", ""): "research_chat",
     ("EZAppForge", ""): "app_forge",

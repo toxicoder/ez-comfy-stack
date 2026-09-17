@@ -1,4 +1,4 @@
-"""ComfyUI nodes for US-safe local podcast script, disclosure, and TTS."""
+"""ComfyUI nodes for US-safe local podcast script, disclosure, TTS, and learn."""
 
 from __future__ import annotations
 
@@ -7,6 +7,16 @@ import re
 import sys
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Protocol
+
+from .digest import (
+    DEFAULT_DURATION,
+    DEFAULT_FORMAT,
+    DURATIONS,
+    FORMATS,
+    run_learn,
+)
+from .ingest import ingest_paste
+from .loop import loop_to_match
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
@@ -30,6 +40,12 @@ RADIO_SEED_SCRIPT = (
     "Speaker A: Then say the line like you mean the cut, not the cloud.\n"
     "Speaker B: Cue the bed. Keep it instrumental. We own the silence between words.\n"
     "Announcer: End of scene. The hosts are invented. The mix is local."
+)
+SEED_SOURCES = (
+    "Occupancy on this Spark is one GB10 job. Stop Klein, Wan, and LTX before "
+    "you Queue a podcast. Kokoro-82M is the default TTS (Apache ONNX on CPU). "
+    "ACE-Step beds stay instrumental. The disclosure node prepends the spoken "
+    "bumper; do not type it. Edit the digest if a source was thin or blocked."
 )
 FLAVOR_PODCAST = "podcast_two_host"
 FLAVOR_RADIO = "radio_drama"
@@ -92,8 +108,11 @@ def _log(message: str) -> None:
     print(f"[ez_podcast] {message}", file=sys.stderr)
 
 
-def _sample_combo() -> tuple[Any, ...]:
-    """Prompt-enhance sample combo for the podcast writer.
+def _sample_combo(preferred: str = "podcast_two_host") -> tuple[Any, ...]:
+    """Prompt-enhance sample combo for a podcast writer.
+
+    Args:
+        preferred: Catalog stem whose labels come first.
 
     Returns:
         ``(labels, options)`` widget spec.
@@ -101,7 +120,7 @@ def _sample_combo() -> tuple[Any, ...]:
     _ensure_lab_custom_nodes_path()
     from ez_prompt_enhance.samples import CUSTOM, sample_combo_labels
 
-    return (sample_combo_labels("podcast_two_host"), {"default": CUSTOM})
+    return (sample_combo_labels(preferred), {"default": CUSTOM})
 
 
 def _ensure_lab_custom_nodes_path() -> None:
@@ -721,15 +740,174 @@ class EZKokoroTTS:
         return samples, int(rate or SAMPLE_RATE_KOKORO)
 
 
+def _pack_learn(digest: str, script: str, status: str) -> dict[str, Any]:
+    """Build the Comfy output-node payload for a learn episode.
+
+    Args:
+        digest: Ordered study digest.
+        script: Speaker-labeled script.
+        status: Ingest/writer passthrough shown in the UI.
+
+    Returns:
+        UI text plus ``(digest, script)``.
+    """
+    return {
+        "ui": {
+            "text": (digest,),
+            "script": (script,),
+            "passthrough": (status,),
+        },
+        "result": (digest, script),
+    }
+
+
+class EZPodcastLearn:
+    """Ingest a lazy paste, write a study digest, then a duration-sized script."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required widget map (sample, sources, format, duration, fetch, enhance).
+        """
+        return {
+            "required": {
+                "sample": _sample_combo("podcast_learn"),
+                "sources": (
+                    "STRING",
+                    {
+                        "multiline": True,
+                        "default": SEED_SOURCES,
+                        "dynamicPrompts": False,
+                    },
+                ),
+                "format": (list(FORMATS), {"default": DEFAULT_FORMAT}),
+                "duration": (list(DURATIONS), {"default": DEFAULT_DURATION}),
+                "fetch_links": (
+                    "BOOLEAN",
+                    {"default": True, "label_on": "On", "label_off": "Off"},
+                ),
+                "enhance": (
+                    "BOOLEAN",
+                    {"default": True, "label_on": "On", "label_off": "Off"},
+                ),
+                "catalog": ("STRING", {"default": "", "multiline": False}),
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("STRING", "STRING")
+    RETURN_NAMES = ("digest", "script")
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/podcast"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Paste notes, HTTPS links, and captioned video URLs. Writes a deduped "
+        "study digest and a Speaker A/B (or solo) script sized to Format and "
+        "Duration. Fetch is SSRF-safe HTTPS; videos use captions only. Missing "
+        "GGUF concatenates sources and wraps Speaker A lines. Unloads the "
+        "writer so TTS can run in the same Queue."
+    )
+
+    def run(
+        self,
+        sources: object,
+        format: object = DEFAULT_FORMAT,
+        duration: object = DEFAULT_DURATION,
+        fetch_links: object = True,
+        enhance: object = True,
+        sample: object = "custom",
+        catalog: object = "",
+    ) -> dict[str, Any]:
+        """Ingest sources, write digest + script, fail-soft without a GGUF.
+
+        Args:
+            sources: Operator paste or sample override.
+            format: Episode shape (explainer, quiz, …).
+            duration: Spoken length combo.
+            fetch_links: When true, fetch HTTPS pages and video captions.
+            enhance: When false, concatenate sources and naive-wrap the script.
+            sample: Prompt catalog sample id.
+            catalog: Optional sample catalog override.
+
+        Returns:
+            Comfy output-node payload with digest and script STRING values.
+        """
+        _ensure_lab_custom_nodes_path()
+        from ez_prompt_enhance.samples import resolve_prompt
+
+        paste = resolve_prompt(
+            catalog,
+            sample,
+            sources,
+            node_type="EZPodcastLearn",
+            mode="",
+        )
+        records = ingest_paste(paste, fetch_links=fetch_links)
+        payload = run_learn(
+            records, fmt=format, duration=duration, enhance=enhance
+        )
+        return _pack_learn(
+            str(payload.get("digest") or ""),
+            str(payload.get("script") or ""),
+            str(payload.get("status") or ""),
+        )
+
+
+class EZAudioLoopToMatch:
+    """Repeat a short bed until it covers the speech stem, then trim."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy socket specs for this node.
+
+        Returns:
+            Required AUDIO inputs (speech, bed).
+        """
+        return {
+            "required": {
+                "speech": ("AUDIO",),
+                "bed": ("AUDIO",),
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("AUDIO",)
+    RETURN_NAMES = ("bed",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/podcast"
+    DESCRIPTION = (
+        "Loop an instrumental bed to the speech length so a 30 s ACE-Step "
+        "bed can sit under a longer study episode. Empty speech stays empty."
+    )
+
+    def run(self, speech: object, bed: object) -> tuple[dict[str, Any]]:
+        """Loop ``bed`` to match ``speech``.
+
+        Args:
+            speech: Speech AUDIO (length target).
+            bed: Short instrumental AUDIO.
+
+        Returns:
+            One-item AUDIO tuple (looped or silent bed).
+        """
+        return (loop_to_match(speech, bed),)
+
+
 # Comfy custom-node registries.
 NODE_CLASS_MAPPINGS: dict[str, Any] = {
     "EZPodcastScript": EZPodcastScript,
     "EZPodcastDisclosure": EZPodcastDisclosure,
     "EZKokoroTTS": EZKokoroTTS,
+    "EZPodcastLearn": EZPodcastLearn,
+    "EZAudioLoopToMatch": EZAudioLoopToMatch,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "EZPodcastScript": "Podcast Script",
     "EZPodcastDisclosure": "Podcast Disclosure",
     "EZKokoroTTS": "Kokoro TTS (two-host)",
+    "EZPodcastLearn": "Podcast Learn",
+    "EZAudioLoopToMatch": "Loop bed to speech",
 }

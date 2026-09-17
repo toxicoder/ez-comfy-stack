@@ -231,6 +231,7 @@ ENHANCE_TYPES = (
     "EZAceStepPromptEnhance",
     "EZRapLyrics",
     "EZPodcastScript",
+    "EZPodcastLearn",
     "EZSamplePrompt",
     "EZCreativeResearch",
     "EZAppForge",
@@ -261,7 +262,11 @@ WIDGET_ORDER = (
     "layer",
     "required_mode",
     "sample",
+    "sources",
     "prompt",
+    "format",
+    "duration",
+    "fetch_links",
     "template",
     "as_app",
     "overwrite",
@@ -330,6 +335,7 @@ NODE_MODE_ALWAYS = 0
 NODE_MODE_BYPASS = 4
 WIDGET_HEIGHTS = {
     "prompt": 140,
+    "sources": 140,
     "subject": 140,
     "lyrics": 140,
     "tags": 80,
@@ -615,6 +621,15 @@ def display_label(
             "prompt": "Script",
             "enhance": "Rewrite script",
         }.get(name, generic)
+    if ntype == "EZPodcastLearn":
+        return {
+            "sample": "Sample prompt",
+            "sources": "Sources",
+            "format": "Format",
+            "duration": "Duration",
+            "fetch_links": "Fetch links",
+            "enhance": "Rewrite",
+        }.get(name, generic)
     if ntype == "EZDubIngest":
         return {
             "source": "Source file",
@@ -730,6 +745,28 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             )
     if name == "prompt" and ntype == "EZPodcastScript":
         return "Speaker A/B lines. Disclosure prepends the spoken bumper."
+    if ntype == "EZPodcastLearn":
+        return {
+            "sources": (
+                "Paste notes, HTTPS links, captioned video URLs, or local "
+                ".txt/.md/.srt/.vtt paths. Custom keeps this box."
+            ),
+            "format": (
+                "Quick recap, deep dive, explainer, quiz, solo lecture, or debate."
+            ),
+            "duration": (
+                "Spoken length. 8 min briefing is the default. 25 min is slow CPU TTS. "
+                "ACE bed stays 30 s and loops under the speech."
+            ),
+            "fetch_links": (
+                "On: HTTPS pages + video captions (no media download). "
+                "Off: pasted prose and local text files only."
+            ),
+            "enhance": (
+                "On: digest + script from the on-box GGUF. Off: concatenate sources "
+                "and wrap Speaker A lines."
+            ),
+        }.get(name)
     if name == "prompt" and ntype == "EZDubScript":
         return "Editable turns JSON. Rewrite translation fills text_target."
     if name == "enhance" and ntype == "EZDubScript":
@@ -1042,6 +1079,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     },
     "audio/podcast/two-host-episode": _spec("audio", "audio"),
     "audio/podcast/radio-drama": _spec("audio", "audio"),
+    "audio/podcast/learn-episode": _spec("audio", "audio"),
     "audio/dub/clone-translate": _spec("audio", "audio"),
     "audio/music/rap-draft": _spec("audio", "audio"),
     "audio/music/rap-full": _spec("audio", "audio"),
@@ -1444,14 +1482,18 @@ def _collect_raw_inputs(
             has_rap = any(
                 other.get("type") == "EZRapLyrics" for other in graph.get("nodes") or []
             )
+            has_learn = any(
+                other.get("type") == "EZPodcastLearn"
+                for other in graph.get("nodes") or []
+            )
             mode = _enhance_mode(node)
             show_score = mode != "instrumental" or spec.get("ace_instrumental_score")
-            if not hide_sample:
+            if not hide_sample and not has_learn:
                 raw.append((nid, "sample", node))
             raw.append((nid, "tags", node))
             if show_score and not has_rap:
                 raw.append((nid, "lyrics", node))
-            if not has_rap:
+            if not has_rap and not has_learn:
                 raw.append((nid, "enhance", node))
             if show_score:
                 raw.append((nid, "mode", node))
@@ -1462,6 +1504,18 @@ def _collect_raw_inputs(
             raw.extend(
                 (
                     (nid, widget, node),
+                    (nid, "enhance", node),
+                )
+            )
+        elif ntype == "EZPodcastLearn":
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.extend(
+                (
+                    (nid, "sources", node),
+                    (nid, "format", node),
+                    (nid, "duration", node),
+                    (nid, "fetch_links", node),
                     (nid, "enhance", node),
                 )
             )
@@ -1596,7 +1650,11 @@ def _collect_raw_inputs(
                 )
             )
         elif ntype == "EmptyAceStep1.5LatentAudio":
-            if not _input_linked(node, "seconds"):
+            has_learn = any(
+                other.get("type") == "EZPodcastLearn"
+                for other in graph.get("nodes") or []
+            )
+            if not has_learn and not _input_linked(node, "seconds"):
                 raw.append((nid, "seconds", node))
         elif ntype == "PrimitiveNode":
             widget = _primitive_widget_name(node) or "value"

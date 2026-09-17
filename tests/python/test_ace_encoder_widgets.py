@@ -57,7 +57,11 @@ def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
 
 
 def test_podcast_ace_encoders_keep_instrumental_codes_off() -> None:
-    for stem in ("audio/podcast/two-host-episode", "audio/podcast/radio-drama"):
+    for stem in (
+        "audio/podcast/two-host-episode",
+        "audio/podcast/radio-drama",
+        "audio/podcast/learn-episode",
+    ):
         graph = _load(lab_json(stem))
         encoders = list(iter_ace_encoders(graph))
         assert encoders, stem

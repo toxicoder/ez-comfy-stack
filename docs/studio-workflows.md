@@ -34,7 +34,7 @@ user/default/workflows/
     shorts/    go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05 (7.5 min)
     dcc/       clay → print, plates, canny, depth/canny control, first-last from guide, in-canvas loaders
     optional/  a14b, longcat stub, klein-trellis2
-    audio/     podcast, dub, music/rap-draft, music/rap-full
+    audio/     podcast (two-host, radio-drama, learn-episode), dub, music/rap-draft, music/rap-full
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  five Drive-through albums
     inspire/   prompt-forge, cinema-rack, research-chat, app-forge, beat-sheet

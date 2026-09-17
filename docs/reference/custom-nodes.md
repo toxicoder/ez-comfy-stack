@@ -47,7 +47,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_film` | 3 nodes | Unload, 90s concat, LTX disclosure |
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
-| `ez_podcast` | 3 nodes | Script, disclosure, Kokoro TTS |
+| `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 12 nodes | Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack |
 | `ez_image` | 2 nodes | Snap a still to the Klein ÷16 grid; restore source pixel size |
 | `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
@@ -137,6 +137,8 @@ Category `ez-comfy/podcast`. [Local podcast](../podcast.md).
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZPodcastScript` | Podcast Script | `sample` combo, `prompt` STRING multiline, `enhance` BOOLEAN (default on), `flavor` combo `podcast_two_host` `radio_drama` (default `podcast_two_host`), `catalog`; optional `context` STRING (forceInput) | `STRING` script | graph **audio** | On-box Qwen3-4B-Instruct GGUF. Missing GGUF passes widget text. Unloads the writer after a rewrite so TTS can run in the same Queue. Context ignored when Enhance is off |
+| `EZPodcastLearn` | Podcast Learn | `sample` combo, `sources` STRING multiline, `format` combo (Quick recap / Deep dive / Explainer / Quiz drill / Solo lecture / Debate; default Explainer), `duration` combo (3 min commute / 8 min briefing / 15 min lesson / 25 min seminar; default 8 min briefing), `fetch_links` BOOLEAN (default on), `enhance` BOOLEAN (default on), `catalog` | `STRING` digest, `STRING` script | graph **audio** | Paste notes, HTTPS links, captioned video URLs. SSRF-safe fetch; videos are captions only. Missing GGUF concatenates sources and wraps Speaker A lines. Unloads the writer so TTS can run in the same Queue |
+| `EZAudioLoopToMatch` | Loop bed to speech | `speech` AUDIO, `bed` AUDIO | `AUDIO` bed | graph **audio** | Repeats a short instrumental bed until it covers the speech stem, then trims. Empty speech stays empty |
 | `EZPodcastDisclosure` | Podcast Disclosure | `script` STRING | `STRING` script | graph **audio** | Prepends the **fixed** line: voices and music are synthesized; hosts are original characters, not recordings of real people. Operators cannot edit that string |
 | `EZKokoroTTS` | Kokoro TTS (two-host) | `script` STRING, `speaker_a_voice` / `speaker_b_voice` / `announcer_voice` combo (Kokoro ids; defaults `af_heart` / `am_michael` / `bm_george`), `include_announcer` BOOLEAN (default false), `backend` combo `kokoro` `chatterbox` `qwen3tts` (default `kokoro`), `speaker_a_ref` / `speaker_b_ref` STRING, `speed` FLOAT 0.5–1.5 (default 1.0) | `AUDIO` audio | graph **audio** | Kokoro-82M ONNX/CPU built-ins (Apache 2.0). Chatterbox / Qwen3-TTS only with operator-owned refs; empty refs fall back to Kokoro. **Never ships celebrity WAVs** |
 

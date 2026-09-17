@@ -882,6 +882,15 @@
     "see_also": ["tts", "kokoro"]
   },
   {
+    "id": "learn-episode",
+    "title": "learning episode",
+    "aliases": ["learn-episode", "study mix", "study podcast"],
+    "category": "Audio",
+    "short": "Paste notes and links, pick format and duration, Queue a local study podcast.",
+    "long": "`audio/podcast/learn-episode` reviews operator-provided sources, writes a deduped digest, then a Speaker A/B (or solo) script. Videos are captions only. ACE bed stays 30 s and loops under the speech. Occupancy audio. See [Local podcast](podcast.md).",
+    "see_also": ["tts", "kokoro", "disclosure", "download-podcast"]
+  },
+  {
     "id": "apache",
     "title": "Apache 2.0",
     "aliases": ["Apache 2.0", "Apache"],

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build US-safe podcast lab graphs (two-host-episode + radio drama).
+"""Build US-safe podcast lab graphs (two-host, radio drama, learn-episode).
 
 Not imported by pytest (leading underscore). Run from repo root:
 
@@ -30,6 +30,7 @@ from ez_podcast.nodes import (  # noqa: E402
     DISCLOSURE_TEXT,
     RADIO_SEED_SCRIPT,
     SEED_SCRIPT,
+    SEED_SOURCES,
 )
 
 WF = ROOT / "workflows"
@@ -69,6 +70,22 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}
+"""
+
+AUDIO_NOTE_C = f"""## audio/podcast/learn-episode
+
+US-safe learning episode (Option C). Sequential Queue — do not load Klein + Wan + LTX + ACE-Step + TTS together.
+
+1. Paste notes, HTTPS links, captioned video URLs, or local `.txt`/`.md`/`.srt`/`.vtt` paths into **Sources**. Pick **Format** and **Duration**. Rewrite is **on**.
+2. Fetch is SSRF-safe HTTPS. Videos pull **captions only** (no media download, no dub ASR). Missing captions are a status line.
+3. The node writes a deduped study digest, then a Speaker A/B (or solo) script sized to the duration. Missing GGUF concatenates sources and wraps Speaker A lines.
+4. Disclosure is prepended by the node (do not type it): {DISCLOSURE_TEXT}
+5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck −15 dB.
+6. Saves: `ez_learn_ep` FLAC master + `ez_learn_mix` 320 kbps MP3.
+7. Cover separately: Queue **{COVER_GRAPH}** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
+8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
+
+25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
 """
 
 
@@ -570,10 +587,204 @@ def build_radio_drama() -> dict:
     )
 
 
+def build_learn_episode() -> dict:
+    g = Graph("audio/podcast/learn-episode", pop_lab_rel=False, enable_lab=True)
+    g.add(
+        1,
+        "CheckpointLoaderSimple",
+        [40, 80],
+        [360, 100],
+        "ACE-Step 1.5 turbo AIO",
+        [ACE_CKPT],
+        outputs=[
+            g.out("MODEL", "MODEL", []),
+            g.out("CLIP", "CLIP", []),
+            g.out("VAE", "VAE", []),
+        ],
+    )
+    g.add(
+        2,
+        "EZPodcastLearn",
+        [500, 80],
+        [420, 380],
+        "ez_learn_sources",
+        [SEED_SOURCES, "Explainer", "8 min briefing", True, True],
+        outputs=[
+            g.out("digest", "STRING", []),
+            g.out("script", "STRING", []),
+        ],
+    )
+    g.add(
+        3,
+        "EZPodcastDisclosure",
+        [500, 500],
+        [420, 80],
+        "Disclosure bumper",
+        [],
+        inputs=[g.inp("script", "STRING")],
+        outputs=[g.out("script", "STRING", [])],
+    )
+    g.add(
+        4,
+        "EZKokoroTTS",
+        [500, 620],
+        [420, 300],
+        "ez_learn_voice",
+        ["af_heart", "am_michael", "bm_george", False, "kokoro", "", "", 1.0],
+        inputs=[g.inp("script", "STRING")],
+        outputs=[g.out("audio", "AUDIO", [])],
+    )
+    g.add(
+        5,
+        "TextEncodeAceStepAudio1.5",
+        [40, 220],
+        [400, 360],
+        "ez_learn_bed",
+        _ace_widgets(ACE_BED_TAGS, 30.0),
+        inputs=[g.inp("clip", "CLIP")],
+        outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
+    )
+    g.add(
+        6,
+        "TextEncodeAceStepAudio1.5",
+        [40, 620],
+        [400, 280],
+        "ACE negative",
+        _ace_widgets(ACE_NEG_TAGS, 30.0, seed=7),
+        inputs=[g.inp("clip", "CLIP")],
+        outputs=[g.out("CONDITIONING", "CONDITIONING", [])],
+    )
+    g.add(
+        7,
+        "EmptyAceStep1.5LatentAudio",
+        [1440, 80],
+        [320, 80],
+        "Bed length (seconds)",
+        [30.0, 1],
+        outputs=[g.out("LATENT", "LATENT", [])],
+    )
+    g.add(
+        8,
+        "KSampler",
+        [1440, 200],
+        [320, 262],
+        "ACE sampler",
+        _sampler_widgets(),
+        inputs=[
+            g.inp("model", "MODEL"),
+            g.inp("positive", "CONDITIONING"),
+            g.inp("negative", "CONDITIONING"),
+            g.inp("latent_image", "LATENT"),
+        ],
+        outputs=[g.out("LATENT", "LATENT", [])],
+    )
+    g.add(
+        9,
+        "VAEDecodeAudio",
+        [1440, 510],
+        [280, 60],
+        "ACE decode",
+        [],
+        inputs=[g.inp("samples", "LATENT"), g.inp("vae", "VAE")],
+        outputs=[g.out("AUDIO", "AUDIO", [])],
+    )
+    g.add(
+        10,
+        "EZAudioLoopToMatch",
+        [1440, 610],
+        [320, 80],
+        "Loop bed to speech",
+        [],
+        inputs=[g.inp("speech", "AUDIO"), g.inp("bed", "AUDIO")],
+        outputs=[g.out("bed", "AUDIO", [])],
+    )
+    g.add(
+        11,
+        "AudioAdjustVolume",
+        [1860, 80],
+        [280, 80],
+        "Duck bed −15 dB",
+        [-15],
+        inputs=[g.inp("audio", "AUDIO")],
+        outputs=[g.out("AUDIO", "AUDIO", [])],
+    )
+    g.add(
+        12,
+        "AudioMerge",
+        [1860, 200],
+        [320, 120],
+        "ez_learn_mix overlay",
+        ["overlay"],
+        inputs=[g.inp("audio1", "AUDIO"), g.inp("audio2", "AUDIO")],
+        outputs=[g.out("AUDIO", "AUDIO", [])],
+    )
+    g.add(
+        13,
+        "SaveAudio",
+        [1860, 360],
+        [320, 80],
+        "FLAC master",
+        ["ez_learn_ep"],
+        inputs=[g.inp("audio", "AUDIO")],
+    )
+    g.add(
+        14,
+        "SaveAudioMP3",
+        [1860, 480],
+        [320, 100],
+        "MP3 320k",
+        ["ez_learn_mix", "320k"],
+        inputs=[g.inp("audio", "AUDIO")],
+    )
+    g.add(
+        15,
+        "Note",
+        [1860, 620],
+        [400, 460],
+        "Operator note",
+        [AUDIO_NOTE_C],
+    )
+    g.link(2, 1, 3, 0, "STRING")
+    g.link(3, 0, 4, 0, "STRING")
+    g.link(1, 1, 5, 0, "CLIP")
+    g.link(1, 1, 6, 0, "CLIP")
+    g.link(1, 0, 8, 0, "MODEL")
+    g.link(5, 0, 8, 1, "CONDITIONING")
+    g.link(6, 0, 8, 2, "CONDITIONING")
+    g.link(7, 0, 8, 3, "LATENT")
+    g.link(8, 0, 9, 0, "LATENT")
+    g.link(1, 2, 9, 1, "VAE")
+    g.link(4, 0, 10, 0, "AUDIO")
+    g.link(9, 0, 10, 1, "AUDIO")
+    g.link(10, 0, 11, 0, "AUDIO")
+    g.link(4, 0, 12, 0, "AUDIO")
+    g.link(11, 0, 12, 1, "AUDIO")
+    g.link(12, 0, 13, 0, "AUDIO")
+    g.link(12, 0, 14, 0, "AUDIO")
+    return g.dump(
+        {
+            "lab_profile": "us-safe-learn-podcast",
+            "lab_note": AUDIO_NOTE_C,
+            "lab_description": (
+                "US-safe learning episode: paste sources, pick format and "
+                "duration, Kokoro TTS + looped ACE-Step bed"
+            ),
+            "ds": {"scale": 1, "offset": [0, 0]},
+            "groups": [
+                _group(1, "MODEL", 20, LAB_GROUP_Y0, 440, 900, "#3f789e"),
+                _group(2, "PROMPT", 480, LAB_GROUP_Y0, 460, 920, "#3f789e"),
+                _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 400, 720, "#a1309b"),
+                _group(4, "OUTPUT", 1840, LAB_GROUP_Y0, 440, 980, "#3f789e"),
+            ],
+        }
+    )
+
+
 def main() -> None:
     graphs = {
         "audio/podcast/two-host-episode.json": build_audio_first(),
         "audio/podcast/radio-drama.json": build_radio_drama(),
+        "audio/podcast/learn-episode.json": build_learn_episode(),
     }
     for name, graph in graphs.items():
         path = lab_json(name)

@@ -51,6 +51,7 @@ CREATORS = (
     ("ltx/audio-to-video-5s", "ez_ltx_a2v", True),
     ("audio/podcast/two-host-episode", "ez_podcast_ep", False),
     ("audio/podcast/radio-drama", "ez_radio_ep", False),
+    ("audio/podcast/learn-episode", "ez_learn_ep", False),
     ("audio/music/rap-draft", "ez_rap_draft", False),
     ("audio/music/rap-full", "ez_rap_full", False),
 ) + tuple((ex["stem"], ex["prefix"], False) for ex in DISS_EXAMPLES) + tuple(

@@ -1281,6 +1281,7 @@ def main() -> None:
         "shorts/switchyard": "film_switchyard",
         "audio/podcast/two-host-episode": "podcast_two_host",
         "audio/podcast/radio-drama": "podcast_radio",
+        "audio/podcast/learn-episode": "podcast_learn",
         "audio/music/rap-draft": "rap_draft",
         "audio/music/rap-full": "rap_full",
         "inspire/prompt-forge": "forge_lazy",

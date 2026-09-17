@@ -415,6 +415,22 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
+### `EZAudioLoopToMatch` — Loop bed to speech
+
+Repeat a short instrumental bed until it covers the speech stem, then trim.
+
+!!! warning "Lab notes"
+
+    Keeps a 30 s ACE-Step bed under a longer study episode. Empty speech stays empty.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `speech` | in | `AUDIO` | Speech stem (length target). |
+| `bed` | in | `AUDIO` | Short instrumental bed. |
+| `bed` | out | `AUDIO` | Looped (or silent) bed. |
+
+No widgets. Sockets only.
+
 ### `EZAudioMetadata` — Audio Metadata
 
 Stamp artist/album/title tags and optional cover on saved audio.
@@ -2339,6 +2355,95 @@ Prepend the fixed synthesized-voices bumper. Operators cannot edit the string.
 | `script` | out | `STRING` | Disclosure + script. |
 
 No widgets. Sockets only.
+
+### `EZPodcastLearn` — Podcast Learn
+
+Paste notes and links; write a study digest and a duration-sized script.
+
+!!! warning "Lab notes"
+
+    Videos use captions only. Missing GGUF concatenates sources. Unloads the writer so TTS can run in the same Queue.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `digest` | out | `STRING` | Ordered, deduped study digest. |
+| `script` | out | `STRING` | Labeled script for TTS. |
+
+#### `sample`
+
+Type `COMBO`. Range / default: custom.
+
+Sample or Custom.
+
+**How it affects generation:** Custom keeps the Sources box.
+
+#### `sources`
+
+Type `STRING`.
+
+Paste notes, HTTPS links, captioned video URLs, or local text paths.
+
+**How it affects generation:** Fetch is SSRF-safe. Videos are captions only.
+
+#### `format`
+
+Type `COMBO`.
+
+Episode shape.
+
+**How it affects generation:** Explainer is the lab default.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Quick recap` | Two-host, tight, what to remember. |
+| `Deep dive` | Two-host, examples and caveats. |
+| `Explainer` | Teacher A + curious student B. |
+| `Quiz drill` | Host asks, cohost answers, then correction. |
+| `Solo lecture` | Speaker A only. |
+| `Debate` | A/B argue tensions in the sources, then synthesize. |
+
+#### `duration`
+
+Type `COMBO`.
+
+Spoken length.
+
+**How it affects generation:** 8 min briefing is the default. ACE bed stays 30 s and loops.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `3 min commute` | About 450 words, one writer pass. |
+| `8 min briefing` | About 1200 words, three passes. |
+| `15 min lesson` | About 2250 words, five passes. |
+| `25 min seminar` | About 3750 words, eight passes. Slow CPU TTS. |
+
+#### `fetch_links`
+
+Type `BOOLEAN`. Range / default: true.
+
+Fetch HTTPS pages and video captions.
+
+**How it affects generation:** Off uses pasted prose and local text files only.
+
+#### `enhance`
+
+Type `BOOLEAN`. Range / default: true on learn-episode.
+
+Run the digest and script writer.
+
+**How it affects generation:** Off concatenates sources and wraps Speaker A lines.
+
+#### `catalog`
+
+Type `STRING`.
+
+Catalog id.
+
+**How it affects generation:** Leave as stamped.
 
 ### `EZPodcastScript` — Podcast Script
 
