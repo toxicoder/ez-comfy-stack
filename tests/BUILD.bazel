@@ -51,7 +51,9 @@ exports_files(
 sh_test(
     name = "pytest",
     size = "large",
-    timeout = "moderate",
+    # size large defaults to 900s; an explicit moderate (300s) cap was
+    # killing coverage wrap-up on GitHub runners after Audio Rack splices.
+    timeout = "long",
     srcs = ["run_pytest.sh"],
     data = [
         "repo_root.sh",

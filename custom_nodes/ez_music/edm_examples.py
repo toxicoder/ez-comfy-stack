@@ -278,7 +278,11 @@ def _splice_drive(
     Returns:
         Tags line, integer BPM from the splice, and the merged picks.
     """
-    from ez_prompt_enhance import audio
+    from ez_prompt_enhance.audio import (
+        FLAVOR_ACE_INSTRUMENTAL,
+        FLAVOR_ACE_VOCAL,
+        splice,
+    )
 
     merged = {str(key): str(value) for key, value in dict(picks or {}).items()}
     merged["tempo_groove"] = _tempo_id(bpm)
@@ -287,8 +291,8 @@ def _splice_drive(
         merged.setdefault("mix_production", "mix_drive_treat")
     else:
         merged.setdefault("mix_production", "mix_drive_lock")
-    flavor = audio.FLAVOR_ACE_VOCAL if treat else audio.FLAVOR_ACE_INSTRUMENTAL
-    result = audio.splice(merged, flavor=flavor, recipe=recipe)
+    flavor = FLAVOR_ACE_VOCAL if treat else FLAVOR_ACE_INSTRUMENTAL
+    result = splice(merged, flavor=flavor, recipe=recipe)
     token = str(result.bpm or "").strip() or f"{int(bpm)} bpm"
     match = re.search(r"(\d{2,3})", token)
     bpm_n = int(match.group(1)) if match else int(bpm)
