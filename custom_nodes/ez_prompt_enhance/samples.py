@@ -346,10 +346,10 @@ def _sample_combo_labels_cached(preferred: str) -> tuple[str, ...]:
 def sample_combo_labels(preferred: str = "") -> list[str]:
     """Labels Comfy must accept on the sample combo.
 
-    JS still filters the visible dropdown to one catalog. The Python combo is
-    the union of every catalog so a graph like ``klein/dream-house``
-    (``klein_place``) does not fail frontend validation when the App picks a
-    place recipe such as Cliff villa.
+    JS binds ``widget.options.values`` to one catalog so App Mode cannot
+    show foreign recipes. The Python combo is the union of every catalog so
+    a graph like ``klein/dream-house`` (``klein_place``) does not fail
+    frontend validation when the App picks a place recipe such as Cliff villa.
 
     Args:
         preferred: Catalog stem whose labels come first (family default).

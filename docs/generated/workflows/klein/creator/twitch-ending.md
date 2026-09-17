@@ -582,7 +582,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. Python combo is the union of every catalog so Comfy accepts place recipes (Cliff villa on dream-house); JS still filters the App dropdown to this graph.
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on klein/dream-house).
 
 **This graph:** `A photoreal still of a dim unmarked streaming desk with teal practicals and a quiet backdrop. Empty of lettering and UI chrome. Quiet center for overlay type later. Empty of lettering.`
 

@@ -212,6 +212,41 @@ def test_klein_sample_combo_accepts_place_catalog_labels() -> None:
     assert cliff != "stale textarea"
 
 
+def test_visible_sample_labels_exclude_foreign_catalogs() -> None:
+    """App dropdown is one catalog; Klein stills must not list Wan or place recipes."""
+    place = sample_labels("klein_place")
+    t2i = sample_labels("klein_t2i")
+    wan = sample_labels("wan_i2v")
+    assert "Cliff villa" in place
+    assert "Cliff villa" not in t2i
+    assert "Cliff villa" not in wan
+    assert "Slow push-in" in wan
+    assert "Slow push-in" not in t2i
+    assert "Rooftop golden hour" in t2i
+    assert "Rooftop golden hour" not in place
+    assert place[-1] == SAMPLE_CUSTOM
+    assert t2i[-1] == SAMPLE_CUSTOM
+    assert wan[-1] == SAMPLE_CUSTOM
+
+
+def test_index_graphs_visible_labels_match_catalog() -> None:
+    """Every indexed lab graph resolves to a 20+Custom catalog, not the union."""
+    index = load_index()
+    for rel, cid in index.items():
+        assert catalog_for_rel(rel) == cid, rel
+        visible = sample_labels(cid)
+        assert len(visible) == SAMPLE_COUNT + 1, (rel, cid)
+        assert visible[-1] == SAMPLE_CUSTOM
+
+
+def test_catalog_for_rel_specialized_graphs() -> None:
+    assert catalog_for_rel("klein/dream-house") == "klein_place"
+    assert catalog_for_rel("klein/still-draft") == "klein_t2i"
+    assert catalog_for_rel("klein/text-swap") == "klein_text_swap"
+    assert catalog_for_rel("wan/gif-loop") == "wan_loop"
+    assert catalog_for_rel("inspire/app-forge") == "app_forge"
+
+
 def test_enhance_node_sample_overrides_textarea() -> None:
     from ez_prompt_enhance.nodes import EZKleinPromptEnhance, EZSamplePrompt
 

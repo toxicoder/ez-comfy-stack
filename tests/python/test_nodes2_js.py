@@ -35,6 +35,23 @@ def test_sample_picker_js_is_nodes2_safe() -> None:
     assert "node_widget" not in body
 
 
+def test_sample_picker_js_filters_to_graph_catalog() -> None:
+    """Visible combo is this graph's catalog; Python union must not leak back."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "_ezSampleLabels" in body
+    assert "Object.defineProperty" in body
+    assert "refreshComboInNodes" in body
+    assert "syncAllSamplePickers" in body
+    assert 'addEventListener("configured"' in body
+    assert "FAMILY_FOR_MODE" in body
+    assert "EZAppForge" in body
+    assert "PREVIEW_SKIP" in body
+    assert "if (!sampleWidget._ezSampleBound)" in body
+    assert body.count("syncSample(node)") >= 2
+
+
 def test_ingest_js_drops_litegraph_node_widget() -> None:
     body = INGEST_JS.read_text(encoding="utf-8")
     assert "node_widget" not in body
