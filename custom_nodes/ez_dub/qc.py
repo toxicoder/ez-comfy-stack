@@ -69,7 +69,7 @@ def evaluate_qc(
             checks.append(
                 {"id": "quiet_mix", "level": "warn", "rule": "max abs < 0.25"}
             )
-        from .pipeline import is_speech_like
+        from .speech import is_speech_like
 
         if not is_speech_like(samples, int(rate) or 0):
             checks.append(

@@ -10,7 +10,45 @@ import sys
 from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Callable, cast
+from typing import TYPE_CHECKING, Any, Callable, cast
+
+if TYPE_CHECKING:
+    from ez_common.protocols import ProgressReporter
+
+from .hooks import AsrHook, EmbedHook, FetchHook, TranslateHook, TtsHook
+from .media import extract_audio, fetch_url, ingest, input_directory, is_url
+from .media import list_input_media, resolve_media_source, source_combo_options
+from .media import _strip_annotated_name
+from .speech import (
+    cluster_embeddings,
+    cosine,
+    crop_hallucination_tail,
+    energy_vad,
+    envelope_cv,
+    expected_speech_s,
+    is_speech_like,
+    match_rms,
+    normalize_clone_pcm,
+    raise_to_peak,
+    speech_onset_slice,
+    strip_leading_silence,
+    voiced_fraction,
+    zc_interval_cv,
+    zero_crossing_rate,
+)
+from .speech import (
+    _concat_crossfade,
+    _extract_refs,
+    _filter_ref_turns,
+    _frame_rms,
+    _peak_normalize,
+    _slice_pcm,
+    _speaker_ref_text,
+    _trim_silence,
+    _turn_rms,
+    _voiced_span,
+    _zero_cross_indices,
+)
 
 from .align import (
     MAX_SPEED,
@@ -26,7 +64,6 @@ from .audio import read_wav, write_wav
 from .disclosure import DISCLOSURE_TEXT, apply_spoken_disclosure, disclosure_for
 from .jobstore import dub_dir, load_state, save_state, write_json
 from .qc import evaluate_qc
-from .rights import require_rights
 from .sanitize import looks_like_target, sanitize_target
 from .srt import turns_to_srt
 from .turns import (
@@ -80,12 +117,12 @@ AUDIO_SUFFIXES = (".wav", ".mp3", ".flac", ".ogg", ".m4a", ".aac")
 VIDEO_SUFFIXES = (".mp4", ".mkv", ".mov", ".webm")
 MEDIA_SUFFIXES = AUDIO_SUFFIXES + VIDEO_SUFFIXES
 
-# Tests inject these. Production stays None (fail-soft).
-fetch_hook: Callable[..., Any] | None = None
-asr_hook: Callable[..., Any] | None = None
-embed_hook: Callable[..., Any] | None = None
-translate_hook: Callable[..., Any] | None = None
-tts_hook: Callable[..., Any] | None = None
+# Tests inject these (often untyped lambdas). Production stays None (fail-soft).
+fetch_hook: FetchHook | Callable[..., Any] | None = None
+asr_hook: AsrHook | Callable[..., Any] | None = None
+embed_hook: EmbedHook | Callable[..., Any] | None = None
+translate_hook: TranslateHook | Callable[..., Any] | None = None
+tts_hook: TtsHook | Callable[..., Any] | None = None
 
 
 def _log(message: str) -> None:
@@ -97,15 +134,14 @@ def _log(message: str) -> None:
     print(f"[ez_dub] {message}", file=sys.stderr)
 
 
-def _progress(total: int) -> Any:
+def _progress(total: int) -> ProgressReporter | None:
     """Comfy ProgressBar when the sibling pack is importable.
 
     Args:
         total: Expected steps.
 
     Returns:
-        ProgressBar-like object, or None in pytest. Typed ``Any`` because
-        Comfy's ProgressBar is an optional sibling import.
+        ProgressBar-like object, or None in pytest.
     """
     _ensure_lab_custom_nodes_path()
     try:
@@ -127,134 +163,6 @@ def _ensure_lab_custom_nodes_path() -> None:
         sys.path.insert(0, root)
 
 
-def is_url(source: object) -> bool:
-    """True when the widget looks like an http(s) URL.
-
-    Args:
-        source: Combo value, path, or URL.
-
-    Returns:
-        Whether ingest should fetch with yt-dlp.
-    """
-    text = (source if isinstance(source, str) else str(source or "")).strip()
-    lowered = text.lower()
-    return lowered.startswith("http://") or lowered.startswith("https://")
-
-
-def input_directory() -> Path:
-    """Comfy input dir, then ``COMFY_OUTPUT_DIR/input``, then ``/inputs``.
-
-    Returns:
-        Directory path (may not exist yet).
-    """
-    try:
-        import folder_paths  # type: ignore[import-not-found]
-
-        path = Path(folder_paths.get_input_directory())
-        if str(path):
-            return path
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
-        pass
-    env = (os.environ.get("COMFY_OUTPUT_DIR") or os.environ.get("COMFY_OUTPUT") or "").strip()
-    if env:
-        return Path(env) / "input"
-    if Path("/inputs").is_dir():
-        return Path("/inputs")
-    return Path("input")
-
-
-def list_input_media(root: Path | None = None) -> list[str]:
-    """Audio and video filenames in the Comfy input folder (not recursive).
-
-    Args:
-        root: Override directory (tests). Default is ``input_directory()``.
-    Returns:
-        Sorted basenames with a media suffix. Missing dirs yield ``[]``.
-    """
-    folder = root if root is not None else input_directory()
-    if not folder.is_dir():
-        return []
-    names: list[str] = []
-    for entry in folder.iterdir():
-        if not entry.is_file():
-            continue
-        if entry.name.startswith("."):
-            continue
-        if entry.suffix.lower() not in MEDIA_SUFFIXES:
-            continue
-        names.append(entry.name)
-    names.sort(key=str.lower)
-    return names
-
-
-def source_combo_options(root: Path | None = None) -> list[str]:
-    """Combo values: ``(none)`` first, then ``list_input_media``.
-
-    Args:
-        root: Override directory (tests).
-    Returns:
-        Non-empty list so the node can load with an empty input folder.
-    """
-    return [SOURCE_NONE, *list_input_media(root)]
-
-
-def _strip_annotated_name(name: str) -> str:
-    """Drop a Comfy `` [input]`` annotation from a combo value.
-
-    Args:
-        name: Combo basename, possibly annotated.
-
-    Returns:
-        Basename without the `` [input]`` suffix.
-    """
-    if name.endswith("]") and " [" in name:
-        return name.rsplit(" [", 1)[0]
-    return name
-
-
-def resolve_media_source(
-    source: object,
-    source_url: object = "",
-    *,
-    input_dir: Path | None = None,
-) -> str:
-    """Turn App widgets into a path or URL for ``ingest``.
-
-    Args:
-        source: Combo basename, ``(none)``, or an existing path.
-        source_url: Optional http(s) override.
-        input_dir: Override input folder (tests).
-    Returns:
-        URL string or an existing filesystem path as a string.
-    Raises:
-        FileNotFoundError: empty ``(none)`` or missing file.
-    """
-    url = (source_url if isinstance(source_url, str) else str(source_url or "")).strip()
-    if url and is_url(url):
-        return url
-    text = (source if isinstance(source, str) else str(source or "")).strip()
-    if not text or text == SOURCE_NONE:
-        raise FileNotFoundError("empty source")
-    if is_url(text):
-        return text
-    path = Path(text).expanduser()
-    if path.is_file():
-        return str(path)
-    folder = input_dir if input_dir is not None else input_directory()
-    candidate = folder / _strip_annotated_name(text)
-    if candidate.is_file():
-        return str(candidate)
-    try:
-        import folder_paths  # type: ignore[import-not-found]
-
-        annotated = folder_paths.get_annotated_filepath(text)
-        if annotated:
-            found = Path(annotated)
-            if found.is_file():
-                return str(found)
-    except Exception:  # noqa: BLE001 — Comfy is optional in unit tests
-        pass
-    raise FileNotFoundError(f"source missing: {path}")
 
 
 # Clone/ASR/translate knobs, status strings, pack files, process-local handles.
@@ -720,153 +628,6 @@ def load_translate_prompt() -> str:
     return path.read_text(encoding="utf-8").strip()
 
 
-def cosine(left: list[float], right: list[float]) -> float:
-    """Cosine similarity; 0 when either vector is empty/zero.
-
-    Args:
-        left: Embedding.
-        right: Embedding.
-
-    Returns:
-        Cosine in ``[0, 1]`` for non-negative typical speaker vectors.
-    """
-    n = min(len(left), len(right))
-    if n == 0:
-        return 0.0
-    dot = 0.0
-    na = 0.0
-    nb = 0.0
-    for i in range(n):
-        a = float(left[i])
-        b = float(right[i])
-        dot += a * b
-        na += a * a
-        nb += b * b
-    if na <= 0.0 or nb <= 0.0:
-        return 0.0
-    return dot / ((na ** 0.5) * (nb ** 0.5))
-
-
-def cluster_embeddings(
-    vectors: list[list[float]],
-    max_speakers: int = 0,
-    threshold: float = 0.55,
-) -> list[str]:
-    """Greedy nearest-centroid clustering.
-
-    Args:
-        vectors: One embedding per segment.
-        max_speakers: 0 means cap at 8.
-        threshold: Below this, start a new speaker (until the cap).
-    Returns:
-        Speaker ids ``spk00``… aligned with ``vectors``.
-    """
-    labels: list[str] = []
-    centroids: list[tuple[str, list[float], int]] = []
-    cap = int(max_speakers) if int(max_speakers) > 0 else 8
-    cap = max(1, cap)
-    for vector in vectors:
-        if not centroids:
-            centroids.append(("spk00", [float(x) for x in vector], 1))
-            labels.append("spk00")
-            continue
-        best_i = 0
-        best = -1.0
-        for i, (_sid, mean, _count) in enumerate(centroids):
-            score = cosine(vector, mean)
-            if score > best:
-                best = score
-                best_i = i
-        if best < threshold and len(centroids) < cap:
-            sid = f"spk{len(centroids):02d}"
-            centroids.append((sid, [float(x) for x in vector], 1))
-            labels.append(sid)
-            continue
-        sid, mean, count = centroids[best_i]
-        new_mean = [
-            (m * count + float(x)) / (count + 1) for m, x in zip(mean, vector)
-        ]
-        centroids[best_i] = (sid, new_mean, count + 1)
-        labels.append(sid)
-    return labels
-
-
-def energy_vad(
-    samples: list[float],
-    rate: int,
-    frame_ms: int = 20,
-    hop_ms: int = 10,
-    thresh: float = 0.02,
-    min_s: float = 0.3,
-    pad_s: float = 0.05,
-) -> list[tuple[float, float]]:
-    """Energy VAD fallback when Silero is missing.
-
-    Args:
-        samples: Mono PCM.
-        rate: Sample rate.
-        frame_ms: Analysis frame size.
-        hop_ms: Hop between frames.
-        thresh: RMS threshold.
-        min_s: Minimum span length.
-        pad_s: Padding added around each span.
-
-    Returns:
-        List of ``(t0, t1)`` speech spans in seconds.
-    """
-    sr = int(rate) or SAMPLE_RATE
-    n = len(samples)
-    if n == 0:
-        return []
-    frame = max(1, int(sr * frame_ms / 1000))
-    hop = max(1, int(sr * hop_ms / 1000))
-    voiced: list[bool] = []
-    i = 0
-    while i + frame <= n:
-        chunk = samples[i : i + frame]
-        voiced.append(rms(chunk) >= thresh)
-        i += hop
-    if not voiced:
-        return []
-    spans: list[tuple[float, float]] = []
-    start: int | None = None
-    for idx, flag in enumerate(voiced):
-        if flag and start is None:
-            start = idx
-        if not flag and start is not None:
-            spans.append((start, idx))
-            start = None
-    if start is not None:
-        spans.append((start, len(voiced)))
-    out: list[tuple[float, float]] = []
-    pad = float(pad_s)
-    min_len = float(min_s)
-    for a, b in spans:
-        t0 = max(0.0, a * hop / sr - pad)
-        t1 = min(n / sr, (b * hop + frame) / sr + pad)
-        if t1 - t0 >= min_len:
-            out.append((t0, t1))
-    return out
-
-
-def _slice_pcm(samples: list[float], rate: int, t0: float, t1: float) -> list[float]:
-    """Copy a ``[t0, t1]`` window from ``samples``.
-
-    Args:
-        samples: Mono PCM.
-        rate: Sample rate.
-        t0: Start seconds.
-        t1: End seconds.
-
-    Returns:
-        Slice, or ``[]`` when the window is empty.
-    """
-    sr = int(rate) or SAMPLE_RATE
-    a = max(0, int(round(t0 * sr)))
-    b = min(len(samples), int(round(t1 * sr)))
-    if b <= a:
-        return []
-    return [float(x) for x in samples[a:b]]
 
 
 def _run(cmd: list[str]) -> tuple[int, str]:
@@ -891,117 +652,6 @@ def _run(cmd: list[str]) -> tuple[int, str]:
     return int(proc.returncode), err
 
 
-def fetch_url(url: str, dest_dir: Path) -> Path:
-    """Download media with yt-dlp (or a test hook).
-
-    Args:
-        url: http(s) URL the operator owns or is licensed to fetch.
-        dest_dir: Job directory.
-    Returns:
-        Path to a local media file.
-    Raises:
-        FileNotFoundError: yt-dlp missing or download failed.
-    """
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    hook = fetch_hook
-    if hook is not None:
-        return hook(url, dest_dir)
-    out_tmpl = str(dest_dir / "download.%(ext)s")
-    code, err = _run(
-        [
-            "yt-dlp",
-            "--no-playlist",
-            "-f",
-            "bestaudio/best",
-            "-o",
-            out_tmpl,
-            url,
-        ]
-    )
-    if code != 0:
-        raise FileNotFoundError(
-            f"yt-dlp failed (install it for URL ingest): {err or code}"
-        )
-    found = sorted(dest_dir.glob("download.*"))
-    if not found:
-        raise FileNotFoundError("yt-dlp produced no file")
-    return found[0]
-
-
-def extract_audio(src: Path, dest: Path, rate: int = SAMPLE_RATE) -> None:
-    """ffmpeg-extract mono 16-bit PCM to dest (never copy a WAV as-is).
-
-    Args:
-        src: Local media path.
-        dest: Destination wav path.
-        rate: Target sample rate.
-    """
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    code, err = _run(
-        [
-            "ffmpeg",
-            "-y",
-            "-i",
-            str(src),
-            "-ac",
-            "1",
-            "-ar",
-            str(int(rate) or SAMPLE_RATE),
-            "-c:a",
-            "pcm_s16le",
-            str(dest),
-        ]
-    )
-    if code != 0 or not dest.is_file():
-        raise FileNotFoundError(f"ffmpeg extract failed: {err or src}")
-
-
-def ingest(
-    source: str,
-    have_rights: object,
-    slug: str,
-    *,
-    root: Path | None = None,
-) -> tuple[Path, str]:
-    """Rights-gated ingest of a local path or URL.
-
-    Args:
-        source: Existing path or http(s) URL.
-        have_rights: Rights attestation widget.
-        slug: Job folder name.
-        root: Override output root (tests).
-
-    Returns:
-        ``(job_dir, status)``.
-    """
-    require_rights(have_rights)
-    dest = dub_dir(slug, root=root)
-    dest.mkdir(parents=True, exist_ok=True)
-    text = (source if isinstance(source, str) else str(source or "")).strip()
-    if not text:
-        raise FileNotFoundError("empty source")
-    if is_url(text):
-        media = fetch_url(text, dest)
-    else:
-        media = Path(text).expanduser()
-        if not media.is_file():
-            raise FileNotFoundError(f"source missing: {media}")
-    wav = dest / "source.wav"
-    extract_audio(media, wav)
-    if media.suffix.lower() in {".mp4", ".mkv", ".mov", ".webm"}:
-        shutil.copy(media, dest / "source_video.mp4")
-    save_state(
-        dest,
-        {
-            "slug": dest.name,
-            "stage": "ingest",
-            "status": "ok",
-            "source": text,
-            "error": None,
-            "flags": [],
-        },
-    )
-    return dest, "ok"
 
 
 def _default_embed(pcm: list[float], rate: int) -> list[float]:
@@ -1428,7 +1078,7 @@ def translate_turns(
         return _copy_source_targets(turns), "same language"
     hook = translate_hook
     if hook is not None:
-        return hook([cast(Turn, dict(t)) for t in turns], tgt, src), ""
+        return cast(list[Turn], list(hook(list(turns), tgt, src))), ""
     spoken = [t for t in turns if str(t.get("text") or "").strip()]
     if not spoken:
         return [cast(Turn, dict(t)) for t in turns], "no turns"
@@ -1578,641 +1228,6 @@ def clone_token_budget(text: str) -> int:
     return tokens
 
 
-def _frame_rms(
-    pcm: list[float], rate: int, frame_ms: int = 20
-) -> tuple[list[float], int]:
-    """Non-overlapping frame RMS plus frame length in samples.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-        frame_ms: Frame size.
-
-    Returns:
-        ``(rms_per_frame, frame_length_samples)``.
-    """
-    sr = int(rate) or SAMPLE_RATE
-    frame = max(1, int(sr * frame_ms / 1000))
-    n = len(pcm)
-    values: list[float] = []
-    i = 0
-    while i + frame <= n:
-        values.append(rms(pcm[i : i + frame]))
-        i += frame
-    return values, frame
-
-
-def _voiced_span(pcm: list[float], rate: int) -> tuple[int, int] | None:
-    """Sample span of voiced audio plus onset pad, or None if none.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-    Returns:
-        ``(start, end)`` exclusive-end indices, or None.
-    """
-    if not pcm:
-        return None
-    sr = int(rate) or SAMPLE_RATE
-    frames, frame = _frame_rms(pcm, sr)
-    n = len(pcm)
-    if not frames:
-        return (0, n) if rms(pcm) >= ONSET_ABS else None
-    peak = max(frames)
-    if peak < ONSET_ABS:
-        return None
-    thresh = max(ONSET_ABS, ONSET_REL * peak)
-    hold = max(1, int(round(ONSET_HOLD_S * sr / frame)))
-    if len(frames) < hold:
-        return (0, n) if peak >= thresh else None
-
-    def _first_hold(seq: list[float]) -> int | None:
-        """Index of the first frame that starts an onset hold.
-
-        Args:
-            seq: Frame RMS values.
-
-        Returns:
-            Frame index, or None when no hold is found.
-        """
-        run = 0
-        for i, value in enumerate(seq):
-            if value >= thresh:
-                run += 1
-                if run >= hold:
-                    return i - hold + 1
-            else:
-                run = 0
-        return None
-
-    start_f = _first_hold(frames)
-    if start_f is None:
-        return None
-    end_rev = _first_hold(list(reversed(frames)))
-    if end_rev is None:
-        last_f = len(frames) - 1
-    else:
-        last_f = len(frames) - 1 - end_rev
-    pad = int(round(ONSET_PAD_S * sr))
-    start = max(0, start_f * frame - pad)
-    end = min(n, (last_f + 1) * frame + pad)
-    if end <= start:
-        return None
-    return start, end
-
-
-def speech_onset_slice(pcm: list[float], rate: int) -> list[float]:
-    """Drop leading/trailing near-silence using a relative onset.
-
-    Absolute RMS 0.008 keeps PerTh-watermarked hush (~0.01). This uses
-    ``max(ONSET_ABS, ONSET_REL * peak)`` and an 80 ms hold so watermark
-    floor and clicks do not count as speech.
-
-    Args:
-        pcm: Mono clone PCM.
-        rate: Sample rate.
-    Returns:
-        Sliced PCM, or ``[]`` when no voiced burst is found.
-    """
-    span = _voiced_span(pcm, rate)
-    if span is None:
-        return []
-    start, end = span
-    return [float(x) for x in pcm[start:end]]
-
-
-def strip_leading_silence(pcm: list[float], rate: int) -> list[float]:
-    """Drop a leading hush prefix. Keep the tail.
-
-    Used when spoken disclosure is off so ``ez_dub_mix`` starts on speech.
-    Does not change ``ez_dub_yt.wav``. No-op when no voiced burst is found
-    (never returns empty for a non-empty mix).
-
-    Args:
-        pcm: Mono mix PCM.
-        rate: Sample rate.
-    Returns:
-        PCM with leading near-silence removed, or a copy of ``pcm``.
-    """
-    if not pcm:
-        return []
-    span = _voiced_span(pcm, rate)
-    if span is None:
-        return [float(x) for x in pcm]
-    start, _end = span
-    if start <= 0:
-        return [float(x) for x in pcm]
-    return [float(x) for x in pcm[start:]]
-
-
-def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
-    """Coefficient of variation of 20 ms frame RMS.
-
-    Steady tones sit near 0; speech has syllable-scale swings.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-        frame_ms: Frame size.
-    Returns:
-        ``std / mean``, or 1.0 when the clip is too short to judge.
-    """
-    frames, _frame = _frame_rms(pcm, rate, frame_ms)
-    if len(frames) < 4:
-        return 1.0
-    mean = sum(frames) / len(frames)
-    if mean < 1e-8:
-        return 0.0
-    acc = 0.0
-    for value in frames:
-        delta = value - mean
-        acc += delta * delta
-    return (acc / len(frames)) ** 0.5 / mean
-
-
-def _trim_silence(
-    pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
-) -> list[float]:
-    """Drop leading and trailing frames below ``thresh`` RMS.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-        thresh: Frame RMS below which a frame is silence.
-
-    Returns:
-        Trimmed PCM, or a copy when the whole clip is below thresh.
-    """
-    if not pcm:
-        return []
-    sr = int(rate) or SAMPLE_RATE
-    frame = max(1, int(sr * 0.02))
-    n = len(pcm)
-
-    def _voiced(index: int) -> bool:
-        """True when the frame at ``index`` is above the silence RMS.
-
-        Args:
-            index: Sample offset.
-
-        Returns:
-            Whether that frame is voiced.
-        """
-        chunk = pcm[index : min(n, index + frame)]
-        return rms(chunk) >= float(thresh)
-
-    start = 0
-    while start + frame <= n and not _voiced(start):
-        start += frame
-    end = n
-    while end - frame >= start and not _voiced(end - frame):
-        end -= frame
-    if end <= start:
-        return [float(x) for x in pcm]
-    return [float(x) for x in pcm[start:end]]
-
-
-def _concat_crossfade(
-    chunks: list[list[float]], rate: int, xfade_ms: int = REF_XFADE_MS
-) -> list[float]:
-    """Join PCM chunks with an equal-power-ish linear crossfade.
-
-    Args:
-        chunks: PCM pieces in order.
-        rate: Sample rate.
-        xfade_ms: Crossfade length.
-
-    Returns:
-        Concatenated PCM.
-    """
-    if not chunks:
-        return []
-    sr = int(rate) or SAMPLE_RATE
-    fade = max(1, int(sr * max(0, int(xfade_ms)) / 1000))
-    out = [float(x) for x in chunks[0]]
-    for chunk in chunks[1:]:
-        if not chunk:
-            continue
-        piece = [float(x) for x in chunk]
-        n = min(fade, len(out), len(piece))
-        if n <= 0:
-            out.extend(piece)
-            continue
-        for i in range(n):
-            gain = i / n
-            out[-n + i] = out[-n + i] * (1.0 - gain) + piece[i] * gain
-        out.extend(piece[n:])
-    return out
-
-
-def _peak_normalize(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
-    """Scale so max abs sample is ``peak`` (no-op when already quieter).
-
-    Args:
-        pcm: Mono PCM.
-        peak: Target peak magnitude.
-
-    Returns:
-        Scaled PCM (or a copy).
-    """
-    if not pcm:
-        return []
-    mag = max(abs(float(x)) for x in pcm)
-    if mag <= 1e-8:
-        return [float(x) for x in pcm]
-    target = float(peak)
-    if mag <= target:
-        return [float(x) for x in pcm]
-    scale = target / mag
-    return [float(x) * scale for x in pcm]
-
-
-def raise_to_peak(pcm: list[float], peak: float = REF_PEAK) -> list[float]:
-    """Scale so max abs == peak. No-op on silence (mag < 1e-8).
-
-    Args:
-        pcm: Mono PCM.
-        peak: Target peak magnitude.
-
-    Returns:
-        Scaled PCM (or a copy).
-    """
-    if not pcm:
-        return []
-    mag = max(abs(float(x)) for x in pcm)
-    if mag < 1e-8:
-        return [float(x) for x in pcm]
-    scale = float(peak) / mag
-    return [float(x) * scale for x in pcm]
-
-
-def match_rms(pcm: list[float], target_rms: float) -> list[float]:
-    """Scale pcm so rms(pcm) ~= target_rms, then cap with raise_to_peak.
-
-    No-op if rms(pcm) < 1e-8 or target_rms < REF_MIN_RMS.
-
-    Args:
-        pcm: Clone PCM.
-        target_rms: Desired RMS (usually the source window).
-
-    Returns:
-        Gain-matched PCM.
-    """
-    if not pcm:
-        return []
-    current = rms(pcm)
-    if current < 1e-8 or float(target_rms) < REF_MIN_RMS:
-        return [float(x) for x in pcm]
-    scale = float(target_rms) / current
-    scaled = [float(x) * scale for x in pcm]
-    return raise_to_peak(scaled)
-
-
-def _speaker_ref_text(ref: Path | str) -> str:
-    """Transcript sidecar next to a speaker ref wav.
-
-    Args:
-        ref: Speaker ``.wav`` path.
-
-    Returns:
-        Sidecar text, or ``""`` when missing.
-    """
-    path = Path(ref)
-    txt = path.with_suffix(".txt")
-    if not txt.is_file():
-        return ""
-    return txt.read_text(encoding="utf-8").strip()
-
-
-def _turn_rms(turn: dict[str, Any], pcm: list[float]) -> float:
-    """Turn RMS from the mapping, else from ``pcm``.
-
-    Args:
-        turn: JSON turn mapping (may include ``rms``).
-        pcm: Window PCM used when ``rms`` is missing.
-
-    Returns:
-        Non-negative RMS.
-    """
-    raw = turn.get("rms")
-    try:
-        value = float(raw) if raw is not None else 0.0
-    except (TypeError, ValueError):
-        value = 0.0
-    if value > 0.0:
-        return value
-    return rms(pcm)
-
-
-def _filter_ref_turns(
-    group: list[dict[str, Any]],
-    samples: list[float],
-    rate: int,
-) -> list[dict[str, Any]]:
-    """Drop overlap, short, quiet, and (when VE-sized) off-centroid turns.
-
-    Args:
-        group: JSON turns for one speaker.
-        samples: Source PCM.
-        rate: Sample rate.
-
-    Returns:
-        Filtered turn mappings (may include ``_pcm``).
-    """
-    sr = int(rate) or SAMPLE_RATE
-    kept: list[dict[str, Any]] = []
-    vectors: list[list[float]] = []
-    for turn in group:
-        if turn.get("overlap"):
-            continue
-        dur = float(turn["t1"]) - float(turn["t0"])
-        if dur < REF_MIN_TURN_S:
-            continue
-        chunk = _slice_pcm(samples, sr, float(turn["t0"]), float(turn["t1"]))
-        if _turn_rms(turn, chunk) < REF_MIN_RMS:
-            continue
-        item = dict(turn)
-        item["_pcm"] = chunk
-        kept.append(item)
-        vectors.append(speaker_embed(chunk, sr))
-    if len(kept) < 2:
-        return kept
-    if not vectors or len(vectors[0]) < REF_PURITY_MIN_DIM:
-        return kept
-    dim = len(vectors[0])
-    centroid = [0.0] * dim
-    for vector in vectors:
-        for i, value in enumerate(vector[:dim]):
-            centroid[i] += float(value)
-    scale = 1.0 / len(vectors)
-    centroid = [c * scale for c in centroid]
-    pure: list[dict[str, Any]] = []
-    for item, vector in zip(kept, vectors):
-        if cosine(vector, centroid) >= REF_PURITY_COSINE:
-            pure.append(item)
-    return pure or kept
-
-
-def _extract_refs(
-    samples: list[float],
-    rate: int,
-    turns: list[dict[str, Any]],
-    dest: Path,
-    max_s: float = REF_MAX_S,
-) -> dict[str, Path]:
-    """Build a 3–10 s clean ref wav (and transcript sidecar) per speaker.
-
-    Args:
-        samples: Source PCM.
-        rate: Sample rate.
-        turns: JSON turns.
-        dest: Speaker-ref directory.
-        max_s: Hard cap on ref duration.
-
-    Returns:
-        Speaker id to wav path.
-    """
-    dest.mkdir(parents=True, exist_ok=True)
-    by_spk: dict[str, list[dict[str, Any]]] = {}
-    for turn in turns:
-        by_spk.setdefault(str(turn["speaker"]), []).append(turn)
-    refs: dict[str, Path] = {}
-    sr = int(rate) or SAMPLE_RATE
-    cap = int((max_s if max_s > 0 else REF_MAX_S) * sr)
-    target = int(REF_TARGET_S * sr)
-    for speaker, group in by_spk.items():
-        candidates = _filter_ref_turns(group, samples, sr)
-        if not candidates:
-            continue
-        ordered = sorted(
-            candidates,
-            key=lambda t: (
-                (float(t["t1"]) - float(t["t0"]))
-                * max(_turn_rms(t, t.get("_pcm") or []), 1e-6)
-            ),
-            reverse=True,
-        )
-        used: list[dict[str, Any]] = []
-        chunks: list[list[float]] = []
-        best = ordered[0]
-        best_dur = float(best["t1"]) - float(best["t0"])
-        if best_dur >= REF_SINGLE_S:
-            used = [best]
-            chunks = [list(best.get("_pcm") or [])]
-        else:
-            total = 0
-            for turn in ordered:
-                chunk = list(turn.get("_pcm") or [])
-                if not chunk:
-                    continue
-                used.append(turn)
-                chunks.append(chunk)
-                total += len(chunk)
-                if total >= target:
-                    break
-        pcm = _concat_crossfade(chunks, sr)
-        pcm = _trim_silence(pcm, sr)
-        if len(pcm) > cap:
-            pcm = pcm[:cap]
-        pcm = _peak_normalize(pcm)
-        if not pcm:
-            continue
-        path = dest / f"{speaker}.wav"
-        write_wav(path, pcm, sr)
-        lines = [str(t.get("text") or "").strip() for t in used]
-        note = " ".join(part for part in lines if part)
-        if note:
-            path.with_suffix(".txt").write_text(note + "\n", encoding="utf-8")
-        refs[speaker] = path
-    return refs
-
-
-def expected_speech_s(text: str) -> float:
-    """Nominal spoken duration from word count (~160 wpm).
-
-    Args:
-        text: Clone line.
-
-    Returns:
-        Duration in seconds (at least 0.35 s).
-    """
-    words = len((text or "").split())
-    return max(0.35, words / EXPECTED_WORDS_PER_S)
-
-
-def normalize_clone_pcm(
-    pcm: list[float], peak: float = REF_PEAK
-) -> list[float]:
-    """Rescale int-range PCM into [-peak, peak]. No-op when already in [-1.5, 1.5].
-
-    Args:
-        pcm: Clone PCM (may be int-range).
-        peak: Target peak.
-
-    Returns:
-        Float PCM in about ``[-peak, peak]``.
-    """
-    if not pcm:
-        return []
-    mag = max(abs(float(x)) for x in pcm)
-    if mag <= PCM_INT_RANGE:
-        return [float(x) for x in pcm]
-    scale = float(peak) / mag
-    return [float(x) * scale for x in pcm]
-
-
-def _zero_cross_indices(pcm: list[float]) -> list[int]:
-    """Sample indices where the sign flips (zeros skipped, matching ZCR).
-
-    Args:
-        pcm: Mono PCM.
-
-    Returns:
-        Indices of zero crossings.
-    """
-    if len(pcm) < 2:
-        return []
-    out: list[int] = []
-    prev = float(pcm[0])
-    for i, raw in enumerate(pcm[1:], 1):
-        cur = float(raw)
-        if prev != 0.0 and cur != 0.0 and (prev >= 0.0) != (cur >= 0.0):
-            out.append(i)
-        prev = cur
-    return out
-
-
-def zero_crossing_rate(pcm: list[float], rate: int) -> float:
-    """Zero-crossings per second. Noise sits near ``rate / 2``.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-
-    Returns:
-        Zero-crossings per second.
-    """
-    if len(pcm) < 2:
-        return 0.0
-    dur = len(pcm) / float(int(rate) or SAMPLE_RATE)
-    if dur <= 0.0:
-        return 0.0
-    return len(_zero_cross_indices(pcm)) / dur
-
-
-def zc_interval_cv(pcm: list[float]) -> float:
-    """Coefficient of variation of zero-crossing gaps.
-
-    A pure / AM tone has nearly constant period (CV near 0). Speech and
-    modulated noise have irregular gaps.
-
-    Args:
-        pcm: Mono PCM.
-    Returns:
-        ``std / mean`` of successive ZC gaps, or 0.0 when too few gaps.
-    """
-    idxs = _zero_cross_indices(pcm)
-    if len(idxs) < ZC_INTERVAL_MIN_GAPS + 1:
-        return 0.0
-    gaps = [float(idxs[i] - idxs[i - 1]) for i in range(1, len(idxs))]
-    if len(gaps) < ZC_INTERVAL_MIN_GAPS:
-        return 0.0
-    mean = sum(gaps) / len(gaps)
-    if mean < 1e-8:
-        return 0.0
-    acc = 0.0
-    for gap in gaps:
-        delta = gap - mean
-        acc += delta * delta
-    return (acc / len(gaps)) ** 0.5 / mean
-
-
-def voiced_fraction(
-    pcm: list[float],
-    rate: int,
-    thresh: float = REF_SILENCE_RMS,
-    frame_ms: int = 20,
-) -> float:
-    """Fraction of 20 ms frames whose RMS is at least ``thresh``.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-        thresh: Frame RMS threshold.
-        frame_ms: Frame size.
-
-    Returns:
-        Voiced fraction in ``[0, 1]``.
-    """
-    sr = int(rate) or SAMPLE_RATE
-    n = len(pcm)
-    if n == 0:
-        return 0.0
-    frame = max(1, int(sr * frame_ms / 1000))
-    voiced = 0
-    total = 0
-    i = 0
-    while i + frame <= n:
-        total += 1
-        if rms(pcm[i : i + frame]) >= float(thresh):
-            voiced += 1
-        i += frame
-    if total == 0:
-        return 1.0 if rms(pcm) >= float(thresh) else 0.0
-    return voiced / total
-
-
-def is_speech_like(pcm: list[float], rate: int) -> bool:
-    """False for silence, noise, a steady tone, or a PerTh/Chatterbox drone.
-
-    Args:
-        pcm: Mono PCM.
-        rate: Sample rate.
-    Returns:
-        True only when RMS, ZCR, voicing, envelope, and ZC irregularity
-        all look like speech (not a 60–120 Hz leftover tone).
-    """
-    if not pcm:
-        return False
-    if rms(pcm) < REF_MIN_RMS:
-        return False
-    sr = int(rate) or SAMPLE_RATE
-    zcr = zero_crossing_rate(pcm, sr)
-    if zcr > sr * ZCR_NOISE_FRAC:
-        return False
-    if zcr < ZCR_SPEECH_MIN:
-        return False
-    if voiced_fraction(pcm, sr) < VOICED_MIN_FRAC:
-        return False
-    if envelope_cv(pcm, sr) < ENVELOPE_CV_MIN:
-        return False
-    return zc_interval_cv(pcm) >= ZC_INTERVAL_CV_MIN
-
-
-def crop_hallucination_tail(
-    pcm: list[float], rate: int, text: str
-) -> list[float]:
-    """Onset-crop hush, then keep a prefix up to 1.6× expected spoken duration.
-
-    Args:
-        pcm: Clone PCM.
-        rate: Sample rate.
-        text: Target line (duration prior).
-
-    Returns:
-        Cropped PCM.
-    """
-    trimmed = speech_onset_slice(pcm, rate)
-    if not trimmed:
-        return trimmed
-    cap = max(
-        1,
-        int(round(expected_speech_s(text) * TAIL_SLACK * (int(rate) or SAMPLE_RATE))),
-    )
-    if len(trimmed) <= cap:
-        return trimmed
-    out, _flags = lock_duration(trimmed, cap, room=None, rate=rate)
-    return out
 
 
 def _pcm_list(wav: object) -> list[float]:
@@ -3033,6 +2048,74 @@ def _write_render_qc(
         _log(f"qc failed: {exc}")
 
 
+def _clamp_render_knobs(
+    speed: float,
+    exaggeration: object,
+    cfg_weight: float,
+    payload: Mapping[str, Any],
+) -> tuple[float, float, float]:
+    """Clamp speed/exaggeration and resolve clone CFG.
+
+    Args:
+        speed: Time-compression ceiling widget.
+        exaggeration: Chatterbox exaggeration widget.
+        cfg_weight: Chatterbox CFG widget; ``< 0`` means auto.
+        payload: JSON script mapping (source/target language).
+
+    Returns:
+        ``(pace, exaggeration, cfg)``.
+    """
+    pace = float(speed) if speed else 1.0
+    if pace < 0.5:
+        pace = 0.5
+    if pace > 1.5:
+        pace = 1.5
+    try:
+        exag = float(exaggeration)  # type: ignore[arg-type]
+    except (TypeError, ValueError):
+        exag = EXAGGERATION_DEFAULT
+    if exag < 0.25:
+        exag = 0.25
+    if exag > 2.0:
+        exag = 2.0
+    cfg = clone_cfg_weight(
+        payload.get("source_language"),
+        payload.get("target_language"),
+        cfg_weight,
+    )
+    return pace, exag, cfg
+
+
+def _empty_render(
+    dest: Path,
+    rate: int,
+    status: str,
+    flags: list[str],
+) -> tuple[list[float], int, str]:
+    """Persist an export-stage failure and return an empty mix.
+
+    Args:
+        dest: Job directory.
+        rate: Sample rate.
+        status: Operator-facing reason.
+        flags: Status flags to store.
+
+    Returns:
+        ``([], rate, status)``.
+    """
+    save_state(
+        dest,
+        {
+            "slug": dest.name,
+            "stage": "export",
+            "status": status,
+            "error": None,
+            "flags": flags,
+        },
+    )
+    return [], rate, status
+
+
 def render_mix(
     samples: list[float],
     rate: int,
@@ -3065,23 +2148,8 @@ def render_mix(
         exaggeration: Chatterbox exaggeration.
         cfg_weight: Chatterbox CFG; ``< 0`` means auto.
     """
-    pace = float(speed) if speed else 1.0
-    if pace < 0.5:
-        pace = 0.5
-    if pace > 1.5:
-        pace = 1.5
-    try:
-        exag = float(exaggeration)
-    except (TypeError, ValueError):
-        exag = EXAGGERATION_DEFAULT
-    if exag < 0.25:
-        exag = 0.25
-    if exag > 2.0:
-        exag = 2.0
-    cfg = clone_cfg_weight(
-        payload.get("source_language"),
-        payload.get("target_language"),
-        cfg_weight,
+    pace, exag, cfg = _clamp_render_knobs(
+        speed, exaggeration, cfg_weight, payload
     )
     blocked = translate_blocking_status(str(payload.get("status") or ""))
     if blocked:
@@ -3218,32 +2286,12 @@ def render_mix(
     write_json(dest / "translation.json", payload)
     if not had_spoken:
         status = "no spoken text — ASR produced empty turns"
-        save_state(
-            dest,
-            {
-                "slug": dest.name,
-                "stage": "export",
-                "status": status,
-                "error": None,
-                "flags": flags,
-            },
-        )
-        return [], rate, status
+        return _empty_render(dest, rate, status, flags)
     unvoiced_only = (not cloned) and any("unvoiced" in f for f in flags)
     if not cloned and not unvoiced_only:
         status = last_err or CLONE_MISSING_STATUS
         flags.append(status)
-        save_state(
-            dest,
-            {
-                "slug": dest.name,
-                "stage": "export",
-                "status": status,
-                "error": None,
-                "flags": flags,
-            },
-        )
-        return [], rate, status
+        return _empty_render(dest, rate, status, flags)
     cross_lang = not _same_language(src_lang, tgt_lang)
     if not cloned and unvoiced_only and cross_lang:
         status = CLONE_UNVOICED_STATUS
