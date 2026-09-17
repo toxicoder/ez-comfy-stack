@@ -20,7 +20,7 @@ Operator playbook: [Cinema Rack](../../create/cinema-rack.md).
 
 | Axis | Techniques | Clips | Page |
 | --- | --- | --- | --- |
-| Framing and Shot Size | 131 | 0 | [framing_shot_size](framing_shot_size.md) |
+| Framing and Shot Size | 131 | 131 | [framing_shot_size](framing_shot_size.md) |
 | Camera Angles | 131 | 0 | [camera_angles](camera_angles.md) |
 | Lenses and Optics | 141 | 0 | [lenses_optics](lenses_optics.md) |
 | Composition | 133 | 0 | [composition](composition.md) |
