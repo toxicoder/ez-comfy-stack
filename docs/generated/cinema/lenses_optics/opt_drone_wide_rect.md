@@ -1,0 +1,36 @@
+---
+title: "Drone wide rectilinear"
+description: "Cinema Rack illustration — Drone wide rectilinear."
+tags: [cinema, prompting, catalog, clip]
+---
+
+# Drone wide rectilinear
+
+**What's on this page**
+
+- A muted 5s illustration of **Drone wide rectilinear** (`opt_drone_wide_rect`)
+- Catalog clause and still/motion/AV flags on **Lenses and Optics**
+
+**What this enables**
+
+- Seeing the pick before splicing it on Cinema Rack
+- Copying the clause next to a concrete camera example
+
+Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Axis: [Lenses and Optics](../lenses_optics.md). Playbook: [Cinema Rack](../../../create/cinema-rack.md).
+
+<div class="ez-cinema-clip">
+<video controls preload="none" playsinline poster="../../../assets/cinema/lenses_optics/opt_drone_wide_rect.jpg"><source src="../../../assets/cinema/lenses_optics/opt_drone_wide_rect.mp4" type="video/mp4"></video>
+</div>
+
+## Clause
+
+A drone wide rectilinear, the city a map without a fisheye ball.
+
+## Use on
+
+still, motion, av
+
+## Conflicts
+
+—
