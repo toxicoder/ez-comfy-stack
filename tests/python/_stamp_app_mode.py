@@ -20,6 +20,8 @@ import json
 from collections import Counter
 from typing import Any, Mapping, Sequence
 
+from _enhance_schema import enhance_mode
+
 FRONTEND_MIN = "1.41.13"
 LANES = ("inspire", "produce", "audio", "film", "dcc", "optional")
 OCCUPANCIES = ("llm", "klein", "wan", "ltx", "trellis", "audio", "film", "none")
@@ -507,24 +509,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
 
 def _enhance_mode(node: Mapping[str, Any]) -> str:
     """Return the enhance node's mode widget (t2i / i2v / vocal / …)."""
-    ntype = node.get("type")
-    values = list(node.get("widgets_values") or [])
-    if ntype in (
-        "EZKleinPromptEnhance",
-        "EZWanPromptEnhance",
-        "EZLTXPromptEnhance",
-        "EZLongCatPromptEnhance",
-    ):
-        idx = 3 if len(values) >= 7 else 2
-        return str(values[idx]) if len(values) > idx else ""
-    if ntype == "EZZimagePromptEnhance":
-        return "t2i"
-    if ntype == "EZDreamXPromptEnhance":
-        return "i2v"
-    if ntype == "EZAceStepPromptEnhance":
-        idx = 4 if len(values) >= 6 else 3
-        return str(values[idx]) if len(values) > idx else ""
-    return ""
+    return enhance_mode(node)
 
 
 def _node_always(node: Mapping[str, Any]) -> bool:
@@ -1263,6 +1248,169 @@ def ensure_occupancy_note(graph: dict, occupancy: str) -> None:
         break
 
 
+def _collect_film_minimal(
+    graph: dict, hide_sample: bool
+) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZKleinPromptEnhance":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.extend(
+                (
+                    (nid, "prompt", node),
+                    (nid, "style", node),
+                    (nid, "enhance", node),
+                )
+            )
+    sampler = next(
+        (n for n in graph.get("nodes") or [] if n.get("type") == "KSampler"),
+        None,
+    )
+    if sampler is not None:
+        raw.append((sampler["id"], "seed", sampler))
+    return raw
+
+
+def _collect_primitive_strings(
+    graph: dict, hide_sample: bool
+) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZSamplePrompt":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.append((nid, "prompt", node))
+        elif node.get("type") == "PrimitiveNode":
+            raw.append((node["id"], "value", node))
+    return raw
+
+
+def _collect_cinema_widgets(graph: dict) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    axis_names = (
+        "framing_shot_size",
+        "camera_angles",
+        "camera_movement",
+        "lenses_optics",
+        "composition",
+        "lighting",
+        "color_film_look",
+        "time_motion",
+        "in_camera_optical",
+        "editing_transitions",
+        "atmosphere_weather",
+        "genre_looks",
+        "viral_looks",
+    )
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZCinemaRack":
+            continue
+        nid = node["id"]
+        raw.append((nid, "subject", node))
+        raw.append((nid, "recipe", node))
+        raw.append((nid, "flavor", node))
+        for axis_id in axis_names:
+            raw.append((nid, axis_id, node))
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        nid = node["id"]
+        if ntype not in (
+            "EZKleinPromptEnhance",
+            "EZWanPromptEnhance",
+            "EZLTXPromptEnhance",
+        ):
+            continue
+        raw.extend(
+            (
+                (nid, "style", node),
+                (nid, "enhance", node),
+            )
+        )
+        if ntype == "EZLTXPromptEnhance":
+            raw.append((nid, "audio_notes", node))
+    return raw
+
+
+def _collect_forge_widgets(
+    graph: dict, hide_sample: bool
+) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZSamplePrompt":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.append((nid, "prompt", node))
+        elif node.get("type") == "PrimitiveNode":
+            raw.append((node["id"], "value", node))
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        nid = node["id"]
+        if ntype not in (
+            "EZKleinPromptEnhance",
+            "EZWanPromptEnhance",
+            "EZLTXPromptEnhance",
+            "EZZimagePromptEnhance",
+            "EZLongCatPromptEnhance",
+            "EZDreamXPromptEnhance",
+        ):
+            continue
+        raw.extend(
+            (
+                (nid, "style", node),
+                (nid, "enhance", node),
+            )
+        )
+        if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
+            raw.append((nid, "audio_notes", node))
+    return raw
+
+
+def _collect_research_widgets(
+    graph: dict, hide_sample: bool
+) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZCreativeResearch":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.extend(
+                (
+                    (nid, "prompt", node),
+                    (nid, "mode", node),
+                    (nid, "web_search", node),
+                    (nid, "subagents", node),
+                    (nid, "history", node),
+                )
+            )
+    return raw
+
+
+def _collect_app_forge_widgets(
+    graph: dict, hide_sample: bool
+) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZAppForge":
+            nid = node["id"]
+            if not hide_sample:
+                raw.append((nid, "sample", node))
+            raw.extend(
+                (
+                    (nid, "prompt", node),
+                    (nid, "template", node),
+                    (nid, "slug", node),
+                    (nid, "as_app", node),
+                    (nid, "overwrite", node),
+                )
+            )
+    return raw
+
+
 def _collect_raw_inputs(
     graph: dict, spec: Mapping[str, Any]
 ) -> list[tuple[NodeRef, str, dict]]:
@@ -1270,145 +1418,22 @@ def _collect_raw_inputs(
     raw: list[tuple[NodeRef, str, dict]] = []
     hide_sample = _graph_hides_sample(graph)
     if spec.get("film_minimal"):
-        for node in graph.get("nodes") or []:
-            if node.get("type") == "EZKleinPromptEnhance":
-                nid = node["id"]
-                if not hide_sample:
-                    raw.append((nid, "sample", node))
-                raw.extend(
-                    (
-                        (nid, "prompt", node),
-                        (nid, "style", node),
-                        (nid, "enhance", node),
-                    )
-                )
-        sampler = next(
-            (n for n in graph.get("nodes") or [] if n.get("type") == "KSampler"),
-            None,
-        )
-        if sampler is not None:
-            raw.append((sampler["id"], "seed", sampler))
-        return raw
+        return _collect_film_minimal(graph, hide_sample)
 
     if spec.get("primitive_strings"):
-        for node in graph.get("nodes") or []:
-            if node.get("type") == "EZSamplePrompt":
-                nid = node["id"]
-                if not hide_sample:
-                    raw.append((nid, "sample", node))
-                raw.append((nid, "prompt", node))
-            elif node.get("type") == "PrimitiveNode":
-                raw.append((node["id"], "value", node))
-        return raw
+        return _collect_primitive_strings(graph, hide_sample)
 
     if spec.get("cinema_widgets"):
-        axis_names = (
-            "framing_shot_size",
-            "camera_angles",
-            "camera_movement",
-            "lenses_optics",
-            "composition",
-            "lighting",
-            "color_film_look",
-            "time_motion",
-            "in_camera_optical",
-            "editing_transitions",
-            "atmosphere_weather",
-            "genre_looks",
-            "viral_looks",
-        )
-        for node in graph.get("nodes") or []:
-            if node.get("type") != "EZCinemaRack":
-                continue
-            nid = node["id"]
-            raw.append((nid, "subject", node))
-            raw.append((nid, "recipe", node))
-            raw.append((nid, "flavor", node))
-            for axis_id in axis_names:
-                raw.append((nid, axis_id, node))
-        for node in graph.get("nodes") or []:
-            ntype = node.get("type")
-            nid = node["id"]
-            if ntype not in (
-                "EZKleinPromptEnhance",
-                "EZWanPromptEnhance",
-                "EZLTXPromptEnhance",
-            ):
-                continue
-            raw.extend(
-                (
-                    (nid, "style", node),
-                    (nid, "enhance", node),
-                )
-            )
-            if ntype == "EZLTXPromptEnhance":
-                raw.append((nid, "audio_notes", node))
-        return raw
+        return _collect_cinema_widgets(graph)
 
     if spec.get("forge_widgets"):
-        for node in graph.get("nodes") or []:
-            if node.get("type") == "EZSamplePrompt":
-                nid = node["id"]
-                if not hide_sample:
-                    raw.append((nid, "sample", node))
-                raw.append((nid, "prompt", node))
-            elif node.get("type") == "PrimitiveNode":
-                raw.append((node["id"], "value", node))
-        for node in graph.get("nodes") or []:
-            ntype = node.get("type")
-            nid = node["id"]
-            if ntype not in (
-                "EZKleinPromptEnhance",
-                "EZWanPromptEnhance",
-                "EZLTXPromptEnhance",
-                "EZZimagePromptEnhance",
-                "EZLongCatPromptEnhance",
-                "EZDreamXPromptEnhance",
-            ):
-                continue
-            raw.extend(
-                (
-                    (nid, "style", node),
-                    (nid, "enhance", node),
-                )
-            )
-            if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
-                raw.append((nid, "audio_notes", node))
-        return raw
+        return _collect_forge_widgets(graph, hide_sample)
 
     if spec.get("research_widgets"):
-        for node in graph.get("nodes") or []:
-            if node.get("type") == "EZCreativeResearch":
-                nid = node["id"]
-                if not hide_sample:
-                    raw.append((nid, "sample", node))
-                raw.extend(
-                    (
-                        (nid, "prompt", node),
-                        (nid, "mode", node),
-                        (nid, "web_search", node),
-                        (nid, "subagents", node),
-                        (nid, "history", node),
-                    )
-                )
-        return raw
+        return _collect_research_widgets(graph, hide_sample)
 
     if spec.get("app_forge_widgets"):
-        for node in graph.get("nodes") or []:
-            if node.get("type") == "EZAppForge":
-                nid = node["id"]
-                if not hide_sample:
-                    raw.append((nid, "sample", node))
-                raw.extend(
-                    (
-                        (nid, "prompt", node),
-                        (nid, "template", node),
-                        (nid, "slug", node),
-                        (nid, "as_app", node),
-                        (nid, "overwrite", node),
-                    )
-                )
-        return raw
+        return _collect_app_forge_widgets(graph, hide_sample)
 
     saw_seed = False
     saw_primary_enhance = False
