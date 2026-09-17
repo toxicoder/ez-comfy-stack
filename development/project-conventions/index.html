@@ -10770,6 +10770,18 @@
 <td>Only at tensor / <code>bpy</code> / optional-import boundaries, with a one-line reason</td>
 </tr>
 <tr>
+<td>Behavioral seams</td>
+<td><code>typing.Protocol</code> (PEP 544). Small capability interfaces (<code>ProgressReporter</code>, <code>ToolHandler</code>, <code>ChatCompleter</code>). Classes satisfy them structurally — do not inherit</td>
+</tr>
+<tr>
+<td>Data records</td>
+<td><code>TypedDict</code> for JSON/YAML shapes (<code>Turn</code>, <code>JobState</code>, <code>ToolSpec</code>, <code>HouseLayout</code>). Do not wrap records in a Protocol</td>
+</tr>
+<tr>
+<td>ABC</td>
+<td>Not used. Prefer Protocol over <code>abc.ABC</code></td>
+</tr>
+<tr>
 <td>Comfy <code>INPUT_TYPES</code></td>
 <td>Return <code>ComfyInputTypes</code> from <code>ez_common</code> via <code>TYPE_CHECKING</code> import (no runtime sibling import at module load)</td>
 </tr>
