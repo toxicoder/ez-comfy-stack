@@ -225,6 +225,35 @@ def enhance_nodes() -> dict[str, Any]:
             _w("viral_looks", index=15, typ="COMBO", rng="none", desc="Short-form hook.", gen="Platform-agnostic hook grammar. Catalog under generated/cinema."),
         ],
     )
+    nodes["EZAudioRack"] = _n(
+        "Audio Rack",
+        "Pick one audio/music technique per axis and splice ACE-Step tags and lyrics form.",
+        origin="ez_prompt_enhance",
+        lab="Deterministic. No LLM. Recipe fills empty axes. Vocal omitted on instrumental/podcast. Instrumental forces no-vocals tags and [inst] form. Exactly one BPM when tempo is picked.",
+        sockets=[
+            _s("tags", "STRING", "out", "Genre-first ACE tags."),
+            _s("lyrics", "STRING", "out", "Lyrics form / [inst] skeleton."),
+            _s("notes", "STRING", "out", "Dropped conflicts and BPM token."),
+        ],
+        widgets=[
+            _w("brief", index=0, desc="Optional lyrics seed.", gen="Ignored on instrumental and podcast-bed so ACE does not sing free text."),
+            _w("flavor", index=1, typ="COMBO", rng="ace_vocal", desc="Family renderer.", gen="ace_vocal keeps vocal identity. ace_instrumental and podcast_bed omit it and force no-vocals tags.", choices=[("ace_vocal", "Vocal tags + lyrics form."), ("ace_instrumental", "No-vocals tags and [inst]/[drop]."), ("podcast_bed", "Instrumental bed; drop-first EDM dropped.")]),
+            _w("recipe", index=2, typ="COMBO", rng="none", desc="Named splice.", gen="Fills axes that are still none. Explicit picks win."),
+            _w("genre_style", index=3, typ="COMBO", rng="none", desc="Genre.", gen="Genre-first ACE tags. Catalog under generated/audio."),
+            _w("tempo_groove", index=4, typ="COMBO", rng="none", desc="Tempo.", gen="Pocket and BPM token. Match the ACE encoder BPM. Catalog under generated/audio."),
+            _w("drums_rhythm", index=5, typ="COMBO", rng="none", desc="Drums.", gen="Kit, hats, and groove. Catalog under generated/audio."),
+            _w("bass_low_end", index=6, typ="COMBO", rng="none", desc="Bass.", gen="Upright, 808, sub, walking. Catalog under generated/audio."),
+            _w("harmony_mode", index=7, typ="COMBO", rng="none", desc="Harmony.", gen="Mode color in tags. Does not set ACE keyscale. Catalog under generated/audio."),
+            _w("instruments_texture", index=8, typ="COMBO", rng="none", desc="Instruments.", gen="Specific instruments and timbre. Catalog under generated/audio."),
+            _w("vocal_identity", index=9, typ="COMBO", rng="none", desc="Vocal.", gen="One vocal identity. Omitted on instrumental/podcast. Catalog under generated/audio."),
+            _w("arrangement_form", index=10, typ="COMBO", rng="none", desc="Form.", gen="Lyrics skeleton. Instrumental uses [inst]/[drop]. Catalog under generated/audio."),
+            _w("mix_production", index=11, typ="COMBO", rng="none", desc="Mix.", gen="Vinyl dirt, dry booth, club loudness, duck. Catalog under generated/audio."),
+            _w("space_ambience", index=12, typ="COMBO", rng="none", desc="Space.", gen="Booth dry, hall, mono drums, width. Catalog under generated/audio."),
+            _w("sound_design_fx", index=13, typ="COMBO", rng="none", desc="Sound design.", gen="Tape stop, riser, reverse cymbal. Catalog under generated/audio."),
+            _w("mood_energy", index=14, typ="COMBO", rng="none", desc="Mood.", gen="Menace, laid-back, civic-serious. Catalog under generated/audio."),
+            _w("use_case", index=15, typ="COMBO", rng="none", desc="Use.", gen="Draft, album take, 30 s bed, bumper. Catalog under generated/audio."),
+        ],
+    )
     nodes["EZSamplePrompt"] = _n(
         "Sample Prompt",
         "STRING source with a sample-prompt combo plus Custom textarea.",

@@ -25,6 +25,7 @@ tags: [prompting, klein, wan, ltx, zimage, longcat, dreamx, comfyui]
 - Picking a lab sample prompt from the App dropdown, or Custom to type a lazy sentence the on-box Qwen3 rewriter expands for Klein / Wan / LTX / Z-Image / LongCat / DreamX
 - Optional style dropdown (150 presets): the rewriter weaves research-backed medium, light, color, and texture into the CLIP prompt, and retunes any style already in the source
 - **Cinema Rack** (`inspire/cinema-rack`): pick one cinematography technique per axis (shot size, angle, move, lens, light, …) and splice a Klein / Wan / LTX string. Deterministic — no LLM. Wan emits one camera verb. Lazy Prompt Enhance uses the same catalog language (clauses, recipes, Wan tokens) when it rewrites. [Cinema Rack](create/cinema-rack.md)
+- **Audio Rack** (`inspire/audio-rack`): pick one audio/music technique per axis (genre, tempo, drums, bass, vocal, form, …) and splice ACE-Step tags plus lyrics form. Deterministic — no LLM. Vocal identity is omitted on instrumental and podcast-bed. ACE Prompt Enhance uses the same catalog language when it rewrites. [Audio Rack](create/audio-rack.md)
 
 !!! tip "Lab graphs already ship model-native prompts"
 

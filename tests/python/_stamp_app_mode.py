@@ -271,6 +271,7 @@ WIDGET_ORDER = (
     "as_app",
     "overwrite",
     "subject",
+    "brief",
     "recipe",
     "flavor",
     "framing_shot_size",
@@ -286,6 +287,19 @@ WIDGET_ORDER = (
     "atmosphere_weather",
     "genre_looks",
     "viral_looks",
+    "genre_style",
+    "tempo_groove",
+    "drums_rhythm",
+    "bass_low_end",
+    "harmony_mode",
+    "instruments_texture",
+    "vocal_identity",
+    "arrangement_form",
+    "mix_production",
+    "space_ambience",
+    "sound_design_fx",
+    "mood_energy",
+    "use_case",
     "web_search",
     "subagents",
     "history",
@@ -338,6 +352,7 @@ WIDGET_HEIGHTS = {
     "prompt": 140,
     "sources": 140,
     "subject": 140,
+    "brief": 140,
     "lyrics": 140,
     "tags": 80,
     "audio_notes": 80,
@@ -352,6 +367,7 @@ GENERIC_LABELS = {
     "as_app": "As app",
     "overwrite": "Overwrite",
     "subject": "Subject",
+    "brief": "Brief",
     "recipe": "Recipe",
     "flavor": "Family",
     "framing_shot_size": "Shot size",
@@ -367,6 +383,19 @@ GENERIC_LABELS = {
     "atmosphere_weather": "Weather",
     "genre_looks": "Genre",
     "viral_looks": "Viral look",
+    "genre_style": "Genre",
+    "tempo_groove": "Tempo",
+    "drums_rhythm": "Drums",
+    "bass_low_end": "Bass",
+    "harmony_mode": "Harmony",
+    "instruments_texture": "Instruments",
+    "vocal_identity": "Vocal",
+    "arrangement_form": "Form",
+    "mix_production": "Mix",
+    "space_ambience": "Space",
+    "sound_design_fx": "Sound design",
+    "mood_energy": "Mood",
+    "use_case": "Use",
     "web_search": "Web search",
     "subagents": "Subagents",
     "history": "History",
@@ -432,6 +461,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "as_app": "On: write *.app.json for the Apps sidebar. Off: graph-only *.json.",
     "overwrite": "On: replace an existing _user file with this slug.",
     "subject": "Who or what is in the shot. Cinema Rack splices technique clauses after this.",
+    "brief": "Optional lyrics seed. Ignored on instrumental and podcast-bed flavors.",
     "recipe": "Named splice that fills empty axes only. Explicit dropdowns win.",
     "flavor": "klein / wan_t2v / ltx_t2v (and edit, identity, i2v). Wan emits one camera verb.",
     "framing_shot_size": "How much of the subject fills the frame.",
@@ -690,6 +720,10 @@ def display_label(
             kind = "Sting"
         elif "bed" in title_l:
             kind = "Bed"
+        elif "vocal" in title_l:
+            kind = "Vocal"
+        elif "instrumental" in title_l:
+            kind = "Instrumental"
         if kind:
             return {
                 "sample": f"{kind} sample",
@@ -730,6 +764,33 @@ def display_label(
 def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str | None:
     """Help text for one App Mode widget."""
     ntype = (node or {}).get("type")
+    if ntype == "EZAudioRack":
+        return {
+            "brief": (
+                "Optional lyrics seed. Ignored on instrumental and podcast-bed "
+                "flavors so ACE does not sing free text."
+            ),
+            "recipe": (
+                "Named splice that fills empty axes only. Explicit dropdowns win."
+            ),
+            "flavor": (
+                "ace_vocal / ace_instrumental / podcast_bed. Instrumental omits "
+                "vocal identity and forces no-vocals tags."
+            ),
+            "genre_style": "Genre-first ACE tags. Catalog under generated/audio.",
+            "tempo_groove": "Pocket and BPM token. Match the ACE encoder BPM.",
+            "drums_rhythm": "Kit, hats, and groove language.",
+            "bass_low_end": "Upright, 808, sub, walking.",
+            "harmony_mode": "Mode and harmonic color in tags, not ACE keyscale.",
+            "instruments_texture": "Specific instruments and timbre.",
+            "vocal_identity": "One vocal identity. Omitted on instrumental/podcast.",
+            "arrangement_form": "Lyrics skeleton. Instrumental uses [inst]/[drop].",
+            "mix_production": "Vinyl dirt, dry booth, club loudness, duck.",
+            "space_ambience": "Booth dry, hall, mono drums, width.",
+            "sound_design_fx": "Tape stop, riser, reverse cymbal. Bed-safe skips drops.",
+            "mood_energy": "Menace, laid-back, civic-serious, triumphant.",
+            "use_case": "Draft, album take, 30 s bed, bumper, sting.",
+        }.get(name)
     if ntype == "EZCreativeResearch":
         return {
             "prompt": "Question or note for the creative-process desk.",
@@ -900,6 +961,7 @@ def _spec(
     film_minimal: bool = False,
     forge_widgets: bool = False,
     cinema_widgets: bool = False,
+    audio_widgets: bool = False,
     research_widgets: bool = False,
     app_forge_widgets: bool = False,
     primitive_strings: bool = False,
@@ -919,6 +981,7 @@ def _spec(
         "film_minimal": film_minimal,
         "forge_widgets": forge_widgets,
         "cinema_widgets": cinema_widgets,
+        "audio_widgets": audio_widgets,
         "research_widgets": research_widgets,
         "app_forge_widgets": app_forge_widgets,
         "primitive_strings": primitive_strings,
@@ -995,6 +1058,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "inspire/prompt-forge",
         "klein/still-draft",
         cinema_widgets=True,
+    ),
+    "inspire/audio-rack": _spec(
+        "inspire",
+        "llm",
+        "audio/music/rap-draft",
+        "audio/podcast/learn-episode",
+        audio_widgets=True,
     ),
     "inspire/research-chat": _spec(
         "inspire",
@@ -1259,6 +1329,9 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
     ),
+    "inspire/audio-rack": (
+        "EZAceStepPromptEnhance",
+    ),
     "inspire/research-chat": ("EZCreativeResearch",),
     "inspire/app-forge": ("EZAppForge",),
     "wan/first-last-5s": ("LoadImage",),
@@ -1426,6 +1499,40 @@ def _collect_cinema_widgets(graph: dict) -> list[tuple[NodeRef, str, dict]]:
     return raw
 
 
+def _collect_audio_widgets(graph: dict) -> list[tuple[NodeRef, str, dict]]:
+    raw: list[tuple[NodeRef, str, dict]] = []
+    axis_names = (
+        "genre_style",
+        "tempo_groove",
+        "drums_rhythm",
+        "bass_low_end",
+        "harmony_mode",
+        "instruments_texture",
+        "vocal_identity",
+        "arrangement_form",
+        "mix_production",
+        "space_ambience",
+        "sound_design_fx",
+        "mood_energy",
+        "use_case",
+    )
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZAudioRack":
+            continue
+        nid = node["id"]
+        raw.append((nid, "brief", node))
+        raw.append((nid, "recipe", node))
+        raw.append((nid, "flavor", node))
+        for axis_id in axis_names:
+            raw.append((nid, axis_id, node))
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZAceStepPromptEnhance":
+            continue
+        nid = node["id"]
+        raw.append((nid, "enhance", node))
+    return raw
+
+
 def _collect_forge_widgets(
     graph: dict, hide_sample: bool
 ) -> list[tuple[NodeRef, str, dict]]:
@@ -1517,6 +1624,9 @@ def _collect_raw_inputs(
 
     if spec.get("cinema_widgets"):
         return _collect_cinema_widgets(graph)
+
+    if spec.get("audio_widgets"):
+        return _collect_audio_widgets(graph)
 
     if spec.get("forge_widgets"):
         return _collect_forge_widgets(graph, hide_sample)
@@ -1790,7 +1900,9 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
             for node in graph.get("nodes") or []
             if node.get("type") == "EZAppForge"
         ]
-    if spec.get("forge_widgets") or spec.get("cinema_widgets"):
+    if spec.get("forge_widgets") or spec.get("cinema_widgets") or spec.get(
+        "audio_widgets"
+    ):
         return [
             int(node["id"])
             for node in graph.get("nodes") or []

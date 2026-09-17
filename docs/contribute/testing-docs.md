@@ -12,7 +12,7 @@ tags: [testing, coverage, mkdocs, mike, contributing]
 - **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
 - **Shell function inventory** (invoked by a test, not only named)
 - **`deploy-docs.yml` + mike** — `main` → `latest`, `development` → `development`
-- **`bazelisk run //docs:docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` + `docs/generate_cinema_docs.py` then `mkdocs build --strict`
+- **`bazelisk run //docs:docs`** — `docs/generate_shell_docs.py` + `docs/generate_workflow_docs.py` + `docs/generate_cinema_docs.py` + `docs/generate_audio_docs.py` then `mkdocs build --strict`
 
 **What this enables**
 
@@ -84,11 +84,12 @@ Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by
 python3 docs/generate_shell_docs.py
 python3 docs/generate_workflow_docs.py
 python3 docs/generate_cinema_docs.py
+python3 docs/generate_audio_docs.py
 NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict
 touch site/.nojekyll
 ```
 
-`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. Do not hand-edit those files. `--strict` treats MkDocs warnings as errors.
+`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. `generate_audio_docs.py` writes `docs/generated/audio/` from Audio Rack JSON. Do not hand-edit those files. `--strict` treats MkDocs warnings as errors.
 
 Pins: MkDocs **1.x** + Material (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x. Do **not** enable `header.autohide`. [Docs style](docs-style.md).
 

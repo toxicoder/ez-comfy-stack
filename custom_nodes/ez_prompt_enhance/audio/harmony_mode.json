@@ -1,0 +1,1762 @@
+[
+  {
+    "id": "hrm_minor_pent",
+    "label": "Minor pentatonic",
+    "clause": "Stay in minor pentatonic so the hook can chant without a jazz tangle.",
+    "tags": "minor pentatonic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_phrygian",
+    "label": "Phrygian dark",
+    "clause": "Lean Phrygian so the pad has a flattened-second menace.",
+    "tags": "phrygian, dark mode",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_gospel_251",
+    "label": "Gospel two-five-one",
+    "clause": "Turn a gospel two-five-one so the choir pad can cadence home.",
+    "tags": "gospel 2-5-1",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_dorian",
+    "label": "Dorian",
+    "clause": "Sit Dorian so the minor has a raised sixth of hope.",
+    "tags": "dorian",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_mixolydian",
+    "label": "Mixolydian",
+    "clause": "Mixolydian so the major has a flat seventh of blues.",
+    "tags": "mixolydian",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_lydian",
+    "label": "Lydian",
+    "clause": "Raise the fourth so the major feels lifted and cinematic without a film name.",
+    "tags": "lydian",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_aeolian",
+    "label": "Natural minor",
+    "clause": "Natural minor so the sad hook has no raised leading tone.",
+    "tags": "natural minor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_harmonic_min",
+    "label": "Harmonic minor",
+    "clause": "Raise the seventh in minor so the cadence has a classical sting.",
+    "tags": "harmonic minor",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_blues_hex",
+    "label": "Blues hexatonic",
+    "clause": "Bend blues thirds so the guitar can answer the vocal.",
+    "tags": "blues scale",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_whole_tone",
+    "label": "Whole tone",
+    "clause": "Walk whole tone so the harmony never cadences home.",
+    "tags": "whole tone",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_octatonic",
+    "label": "Octatonic",
+    "clause": "Alternate half and whole so the tension never sits in a key.",
+    "tags": "octatonic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_open_fifth",
+    "label": "Open fifths",
+    "clause": "Stack open fifths so nordic-folk cold is the harmony.",
+    "tags": "open fifths",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_power_fifth",
+    "label": "Power fifths",
+    "clause": "Power fifths so the riff has no third to argue major or minor.",
+    "tags": "power fifths",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_maj7_lush",
+    "label": "Major seven lush",
+    "clause": "Lush major-sevens so neo-soul chords bloom.",
+    "tags": "major 7 chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_min7_velvet",
+    "label": "Minor seven velvet",
+    "clause": "Velvet minor-sevens so night R&B can sit late.",
+    "tags": "minor 7 chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_dom7_blues",
+    "label": "Dominant seven",
+    "clause": "Dominant sevens so the blues can want the next chord.",
+    "tags": "dominant 7",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_sus_hold",
+    "label": "Suspended hold",
+    "clause": "Suspend the third so the chord waits to decide.",
+    "tags": "suspended chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_cluster",
+    "label": "Cluster",
+    "clause": "Cluster close dissonance so the pad is a smear not a triad.",
+    "tags": "cluster chords",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_pedal_point",
+    "label": "Pedal point",
+    "clause": "Hold a pedal so the upper chords can move against a floor.",
+    "tags": "pedal point",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_static_vamp",
+    "label": "Static vamp",
+    "clause": "Vamp one loop so the verse can talk without a change.",
+    "tags": "static vamp",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_00",
+    "label": "Harmony color 1",
+    "clause": "Harmony color 1 occupies a sedge pocket named fill00 so harmony color 1 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 1",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_01",
+    "label": "Harmony color 2",
+    "clause": "Harmony color 2 occupies a loam pocket named fill01 so harmony color 2 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 2",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_02",
+    "label": "Harmony color 3",
+    "clause": "Harmony color 3 occupies a basalt pocket named fill02 so harmony color 3 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 3",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_03",
+    "label": "Harmony color 4",
+    "clause": "Harmony color 4 occupies a schist pocket named fill03 so harmony color 4 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 4",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_04",
+    "label": "Harmony color 5",
+    "clause": "Harmony color 5 occupies a flint pocket named fill04 so harmony color 5 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 5",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_05",
+    "label": "Harmony color 6",
+    "clause": "Harmony color 6 occupies a shale pocket named fill05 so harmony color 6 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 6",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_06",
+    "label": "Harmony color 7",
+    "clause": "Harmony color 7 occupies a quartz pocket named fill06 so harmony color 7 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 7",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_07",
+    "label": "Harmony color 8",
+    "clause": "Harmony color 8 occupies a mica pocket named fill07 so harmony color 8 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 8",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_08",
+    "label": "Harmony color 9",
+    "clause": "Harmony color 9 occupies a gypsum pocket named fill08 so harmony color 9 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 9",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_09",
+    "label": "Harmony color 10",
+    "clause": "Harmony color 10 occupies a calcite pocket named fill09 so harmony color 10 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 10",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_10",
+    "label": "Harmony color 11",
+    "clause": "Harmony color 11 occupies a dolomite pocket named fill10 so harmony color 11 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 11",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_11",
+    "label": "Harmony color 12",
+    "clause": "Harmony color 12 occupies a spar pocket named fill11 so harmony color 12 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 12",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_12",
+    "label": "Harmony color 13",
+    "clause": "Harmony color 13 occupies a rivet pocket named fill12 so harmony color 13 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 13",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_13",
+    "label": "Harmony color 14",
+    "clause": "Harmony color 14 occupies a cog pocket named fill13 so harmony color 14 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 14",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_14",
+    "label": "Harmony color 15",
+    "clause": "Harmony color 15 occupies a pinion pocket named fill14 so harmony color 15 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 15",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_15",
+    "label": "Harmony color 16",
+    "clause": "Harmony color 16 occupies a cam pocket named fill15 so harmony color 16 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 16",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_16",
+    "label": "Harmony color 17",
+    "clause": "Harmony color 17 occupies a crank pocket named fill16 so harmony color 17 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 17",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_17",
+    "label": "Harmony color 18",
+    "clause": "Harmony color 18 occupies a flywheel pocket named fill17 so harmony color 18 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 18",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_18",
+    "label": "Harmony color 19",
+    "clause": "Harmony color 19 occupies a governor pocket named fill18 so harmony color 19 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 19",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_19",
+    "label": "Harmony color 20",
+    "clause": "Harmony color 20 occupies a pawl pocket named fill19 so harmony color 20 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 20",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_20",
+    "label": "Harmony color 21",
+    "clause": "Harmony color 21 occupies a ratchet pocket named fill20 so harmony color 21 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 21",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_21",
+    "label": "Harmony color 22",
+    "clause": "Harmony color 22 occupies a pawlbox pocket named fill21 so harmony color 22 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 22",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_22",
+    "label": "Harmony color 23",
+    "clause": "Harmony color 23 occupies a thimble pocket named fill22 so harmony color 23 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 23",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_23",
+    "label": "Harmony color 24",
+    "clause": "Harmony color 24 occupies a bobbin pocket named fill23 so harmony color 24 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 24",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_24",
+    "label": "Harmony color 25",
+    "clause": "Harmony color 25 occupies a shuttle pocket named fill24 so harmony color 25 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 25",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_25",
+    "label": "Harmony color 26",
+    "clause": "Harmony color 26 occupies a loom pocket named fill25 so harmony color 26 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 26",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_26",
+    "label": "Harmony color 27",
+    "clause": "Harmony color 27 occupies a warp pocket named fill26 so harmony color 27 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 27",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_27",
+    "label": "Harmony color 28",
+    "clause": "Harmony color 28 occupies a weft pocket named fill27 so harmony color 28 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 28",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_28",
+    "label": "Harmony color 29",
+    "clause": "Harmony color 29 occupies a selvedge pocket named fill28 so harmony color 29 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 29",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_29",
+    "label": "Harmony color 30",
+    "clause": "Harmony color 30 occupies a twill pocket named fill29 so harmony color 30 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 30",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_30",
+    "label": "Harmony color 31",
+    "clause": "Harmony color 31 occupies a herringbone pocket named fill30 so harmony color 31 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 31",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_31",
+    "label": "Harmony color 32",
+    "clause": "Harmony color 32 occupies a keel pocket named fill31 so harmony color 32 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 32",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_32",
+    "label": "Harmony color 33",
+    "clause": "Harmony color 33 occupies a rudder pocket named fill32 so harmony color 33 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 33",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_33",
+    "label": "Harmony color 34",
+    "clause": "Harmony color 34 occupies a thwart pocket named fill33 so harmony color 34 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 34",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_34",
+    "label": "Harmony color 35",
+    "clause": "Harmony color 35 occupies a gunwale pocket named fill34 so harmony color 35 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 35",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_35",
+    "label": "Harmony color 36",
+    "clause": "Harmony color 36 occupies a transom pocket named fill35 so harmony color 36 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 36",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_36",
+    "label": "Harmony color 37",
+    "clause": "Harmony color 37 occupies a spar pocket named fill36 so harmony color 37 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 37",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_37",
+    "label": "Harmony color 38",
+    "clause": "Harmony color 38 occupies a gaff pocket named fill37 so harmony color 38 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 38",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_38",
+    "label": "Harmony color 39",
+    "clause": "Harmony color 39 occupies a boom pocket named fill38 so harmony color 39 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 39",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_39",
+    "label": "Harmony color 40",
+    "clause": "Harmony color 40 occupies a clew pocket named fill39 so harmony color 40 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 40",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_40",
+    "label": "Harmony color 41",
+    "clause": "Harmony color 41 occupies a apse pocket named fill40 so harmony color 41 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 41",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_41",
+    "label": "Harmony color 42",
+    "clause": "Harmony color 42 occupies a nave pocket named fill41 so harmony color 42 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 42",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_42",
+    "label": "Harmony color 43",
+    "clause": "Harmony color 43 occupies a transept pocket named fill42 so harmony color 43 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 43",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_43",
+    "label": "Harmony color 44",
+    "clause": "Harmony color 44 occupies a rood pocket named fill43 so harmony color 44 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 44",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_44",
+    "label": "Harmony color 45",
+    "clause": "Harmony color 45 occupies a piscina pocket named fill44 so harmony color 45 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 45",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_45",
+    "label": "Harmony color 46",
+    "clause": "Harmony color 46 occupies a ambry pocket named fill45 so harmony color 46 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 46",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_46",
+    "label": "Harmony color 47",
+    "clause": "Harmony color 47 occupies a squint pocket named fill46 so harmony color 47 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 47",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_47",
+    "label": "Harmony color 48",
+    "clause": "Harmony color 48 occupies a triforium pocket named fill47 so harmony color 48 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 48",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_48",
+    "label": "Harmony color 49",
+    "clause": "Harmony color 49 occupies a clerestory pocket named fill48 so harmony color 49 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 49",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_49",
+    "label": "Harmony color 50",
+    "clause": "Harmony color 50 occupies a culvert pocket named fill49 so harmony color 50 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 50",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_50",
+    "label": "Harmony color 51",
+    "clause": "Harmony color 51 occupies a sluice pocket named fill50 so harmony color 51 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 51",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_51",
+    "label": "Harmony color 52",
+    "clause": "Harmony color 52 occupies a weir pocket named fill51 so harmony color 52 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 52",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_52",
+    "label": "Harmony color 53",
+    "clause": "Harmony color 53 occupies a millrace pocket named fill52 so harmony color 53 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 53",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_53",
+    "label": "Harmony color 54",
+    "clause": "Harmony color 54 occupies a millpond pocket named fill53 so harmony color 54 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 54",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_54",
+    "label": "Harmony color 55",
+    "clause": "Harmony color 55 occupies a millstone pocket named fill54 so harmony color 55 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 55",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_55",
+    "label": "Harmony color 56",
+    "clause": "Harmony color 56 occupies a hopper pocket named fill55 so harmony color 56 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 56",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_56",
+    "label": "Harmony color 57",
+    "clause": "Harmony color 57 occupies a silo pocket named fill56 so harmony color 57 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 57",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_57",
+    "label": "Harmony color 58",
+    "clause": "Harmony color 58 occupies a bin pocket named fill57 so harmony color 58 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 58",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_58",
+    "label": "Harmony color 59",
+    "clause": "Harmony color 59 occupies a crucible pocket named fill58 so harmony color 59 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 59",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_59",
+    "label": "Harmony color 60",
+    "clause": "Harmony color 60 occupies a ladle pocket named fill59 so harmony color 60 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 60",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_60",
+    "label": "Harmony color 61",
+    "clause": "Harmony color 61 occupies a tuyere pocket named fill60 so harmony color 61 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 61",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_61",
+    "label": "Harmony color 62",
+    "clause": "Harmony color 62 occupies a slagpot pocket named fill61 so harmony color 62 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 62",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_62",
+    "label": "Harmony color 63",
+    "clause": "Harmony color 63 occupies a ingot pocket named fill62 so harmony color 63 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 63",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_63",
+    "label": "Harmony color 64",
+    "clause": "Harmony color 64 occupies a billet pocket named fill63 so harmony color 64 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 64",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_64",
+    "label": "Harmony color 65",
+    "clause": "Harmony color 65 occupies a bloom pocket named fill64 so harmony color 65 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 65",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_65",
+    "label": "Harmony color 66",
+    "clause": "Harmony color 66 occupies a pigiron pocket named fill65 so harmony color 66 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 66",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_66",
+    "label": "Harmony color 67",
+    "clause": "Harmony color 67 occupies a nectar pocket named fill66 so harmony color 67 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 67",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_67",
+    "label": "Harmony color 68",
+    "clause": "Harmony color 68 occupies a comb pocket named fill67 so harmony color 68 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 68",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_68",
+    "label": "Harmony color 69",
+    "clause": "Harmony color 69 occupies a brood pocket named fill68 so harmony color 69 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 69",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_69",
+    "label": "Harmony color 70",
+    "clause": "Harmony color 70 occupies a super pocket named fill69 so harmony color 70 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 70",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_70",
+    "label": "Harmony color 71",
+    "clause": "Harmony color 71 occupies a hivebody pocket named fill70 so harmony color 71 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 71",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_71",
+    "label": "Harmony color 72",
+    "clause": "Harmony color 72 occupies a smoker pocket named fill71 so harmony color 72 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 72",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_72",
+    "label": "Harmony color 73",
+    "clause": "Harmony color 73 occupies a veil pocket named fill72 so harmony color 73 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 73",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_73",
+    "label": "Harmony color 74",
+    "clause": "Harmony color 74 occupies a sextant pocket named fill73 so harmony color 74 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 74",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_74",
+    "label": "Harmony color 75",
+    "clause": "Harmony color 75 occupies a astrolabe pocket named fill74 so harmony color 75 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 75",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_75",
+    "label": "Harmony color 76",
+    "clause": "Harmony color 76 occupies a alidade pocket named fill75 so harmony color 76 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 76",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_76",
+    "label": "Harmony color 77",
+    "clause": "Harmony color 77 occupies a vernier pocket named fill76 so harmony color 77 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 77",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_77",
+    "label": "Harmony color 78",
+    "clause": "Harmony color 78 occupies a reticle pocket named fill77 so harmony color 78 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 78",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_78",
+    "label": "Harmony color 79",
+    "clause": "Harmony color 79 occupies a collimator pocket named fill78 so harmony color 79 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 79",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_79",
+    "label": "Harmony color 80",
+    "clause": "Harmony color 80 occupies a folio pocket named fill79 so harmony color 80 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 80",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_80",
+    "label": "Harmony color 81",
+    "clause": "Harmony color 81 occupies a quire pocket named fill80 so harmony color 81 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 81",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_81",
+    "label": "Harmony color 82",
+    "clause": "Harmony color 82 occupies a binding pocket named fill81 so harmony color 82 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 82",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_82",
+    "label": "Harmony color 83",
+    "clause": "Harmony color 83 occupies a endpaper pocket named fill82 so harmony color 83 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 83",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_83",
+    "label": "Harmony color 84",
+    "clause": "Harmony color 84 occupies a colophon pocket named fill83 so harmony color 84 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 84",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_84",
+    "label": "Harmony color 85",
+    "clause": "Harmony color 85 occupies a catchword pocket named fill84 so harmony color 85 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 85",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_85",
+    "label": "Harmony color 86",
+    "clause": "Harmony color 86 occupies a signature pocket named fill85 so harmony color 86 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 86",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_86",
+    "label": "Harmony color 87",
+    "clause": "Harmony color 87 occupies a trellis pocket named fill86 so harmony color 87 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 87",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_87",
+    "label": "Harmony color 88",
+    "clause": "Harmony color 88 occupies a espalier pocket named fill87 so harmony color 88 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 88",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_88",
+    "label": "Harmony color 89",
+    "clause": "Harmony color 89 occupies a graft pocket named fill88 so harmony color 89 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 89",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  },
+  {
+    "id": "hrm_fill_89",
+    "label": "Harmony color 90",
+    "clause": "Harmony color 90 occupies a scion pocket named fill89 so harmony color 90 cannot collapse into a sibling harmony lane.",
+    "tags": "harmony color 90",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "harmony"
+    ]
+  }
+]

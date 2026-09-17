@@ -57,6 +57,8 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` `on_post
 
 **Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Playbook: [Cinema Rack](../create/cinema-rack.md).
 
+**Audio catalogs:** `python3 docs/generate_audio_docs.py` writes `docs/generated/audio/` from `custom_nodes/ez_prompt_enhance/audio/*.json`. Playbook: [Audio Rack](../create/audio-rack.md).
+
 **Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
 
 Safety callouts: `!!! danger` / `!!! warning` for occupancy XOR, `restart: "no"`, headroom, download-limit, licenses.

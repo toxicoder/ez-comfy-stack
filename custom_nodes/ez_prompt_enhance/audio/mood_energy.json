@@ -1,0 +1,1762 @@
+[
+  {
+    "id": "mood_menace",
+    "label": "Menace",
+    "clause": "Coil a coiled threat across the hook basement so comfort never arrives.",
+    "tags": "menacing",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_laid_back",
+    "label": "Laid-back",
+    "clause": "Lean a slack pocket across the porch swing so the verse can lounge.",
+    "tags": "laid-back",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_triumphant",
+    "label": "Triumphant",
+    "clause": "Raise a victory brass across the podium so the chorus lifts a flag.",
+    "tags": "triumphant",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_nocturnal",
+    "label": "Nocturnal",
+    "clause": "Dim a night filter across the after-hours booth so the night owns the filter.",
+    "tags": "nocturnal",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_civic_serious",
+    "label": "Civic serious",
+    "clause": "Measure a statute cadence across the hearing room so the statute is the hook.",
+    "tags": "serious civic tone",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_playful",
+    "label": "Playful",
+    "clause": "Skip a toy melody across the playground so the bars can grin.",
+    "tags": "playful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_mournful",
+    "label": "Mournful",
+    "clause": "Lower a funeral pad across the graveside so the loss sits in the pad.",
+    "tags": "mournful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_anxious",
+    "label": "Anxious",
+    "clause": "Tighten a tight chest across the waiting room so the chest stays tight.",
+    "tags": "anxious",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_tender",
+    "label": "Tender",
+    "clause": "Warm a close harmony across the nursery so the close stack breathes.",
+    "tags": "tender",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_defiant",
+    "label": "Defiant",
+    "clause": "Brace a raised chin across the picket line so the chin does not drop.",
+    "tags": "defiant",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_stoic",
+    "label": "Stoic",
+    "clause": "Hold a stone face across the marble hall so the face does not move.",
+    "tags": "stoic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_euphoric",
+    "label": "Euphoric",
+    "clause": "Flood a peak drop across the winner circle so the drop feels earned.",
+    "tags": "euphoric",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_homesick",
+    "label": "Homesick",
+    "clause": "Ache a far hometown across the departure gate so the hometown stays far.",
+    "tags": "homesick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_sarcastic",
+    "label": "Sarcastic",
+    "clause": "Needle a dry joke across the roast dais so the joke lands dry.",
+    "tags": "sarcastic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_prayerful",
+    "label": "Prayerful",
+    "clause": "Kneel a kneeling chord across the pew so the chord kneels.",
+    "tags": "prayerful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_restless",
+    "label": "Restless",
+    "clause": "Pace a tapping foot across the hallway so the foot never stills.",
+    "tags": "restless",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_smug",
+    "label": "Smug",
+    "clause": "Smirk a smug stab across the VIP rope so the stab looks pleased.",
+    "tags": "smug",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_humble",
+    "label": "Humble",
+    "clause": "Bow a bowed head across the soup kitchen so the head stays bowed.",
+    "tags": "humble",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_feverish",
+    "label": "Feverish",
+    "clause": "Spike a fever synth across the sickbed so the synth runs hot.",
+    "tags": "feverish",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_glacial",
+    "label": "Glacial",
+    "clause": "Freeze an ice pad across the ice field so the pad ices over.",
+    "tags": "glacial",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_bitter",
+    "label": "Bitter",
+    "clause": "Sting a bitter third across the breakup kitchen so the third stays sour.",
+    "tags": "bitter",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_hopeful",
+    "label": "Hopeful",
+    "clause": "Open a lifted fourth across the sunrise stoop so the fourth lifts a shade.",
+    "tags": "hopeful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_numb",
+    "label": "Numb",
+    "clause": "Blank a flatline drone across the recovery ward so the drone feels empty.",
+    "tags": "numb",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_ferocious",
+    "label": "Ferocious",
+    "clause": "Charge a snarling bass across the cage so the bass shows teeth.",
+    "tags": "ferocious",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_wistful",
+    "label": "Wistful",
+    "clause": "Drift a faded postcard across the old photo so the postcard fades.",
+    "tags": "wistful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_clinical",
+    "label": "Clinical",
+    "clause": "Sanitize a white-coat click across the lab bench so the click feels sterile.",
+    "tags": "clinical",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_rowdy",
+    "label": "Rowdy",
+    "clause": "Shout a crowd chant across the bleachers so the chant fills bleachers.",
+    "tags": "rowdy",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_solemn",
+    "label": "Solemn",
+    "clause": "Bow-in a funeral organ across the chapel aisle so the organ walks a funeral.",
+    "tags": "solemn",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_flirtatious",
+    "label": "Flirtatious",
+    "clause": "Wink a coy slide across the dance floor edge so the slide flirts then leaves.",
+    "tags": "flirtatious",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_paranoid",
+    "label": "Paranoid",
+    "clause": "Glance a side-eye hat across the peephole so the hat glances sideways.",
+    "tags": "paranoid",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_grateful",
+    "label": "Grateful",
+    "clause": "Thank a thank-you hook across the dinner table so the hook says thank you.",
+    "tags": "grateful",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_exhausted",
+    "label": "Exhausted",
+    "clause": "Slump a spent verse across the night shift so the verse has no gas.",
+    "tags": "exhausted",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_radiant",
+    "label": "Radiant",
+    "clause": "Glow a sunburst chord across the east window so the chord throws sun.",
+    "tags": "radiant",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_sullen",
+    "label": "Sullen",
+    "clause": "Sulksink a slouched hook across the unmade bed so the hook slumps.",
+    "tags": "sullen",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_mischievous",
+    "label": "Mischievous",
+    "clause": "Prank a prank stab across the joke shop so the stab plays a trick.",
+    "tags": "mischievous",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_austere",
+    "label": "Austere",
+    "clause": "Strip a bare fifth across the monastery so the fifth stays bare.",
+    "tags": "austere",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_lustrous",
+    "label": "Lustrous",
+    "clause": "Polish a chrome lead across the showroom so the lead gleams.",
+    "tags": "lustrous",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_brittle",
+    "label": "Brittle",
+    "clause": "Crack a cracked reed across the frost pane so the reed splits.",
+    "tags": "brittle",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_oceanic",
+    "label": "Oceanic",
+    "clause": "Swell a tide pad across the tide line so the pad tides in.",
+    "tags": "oceanic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_volcanic",
+    "label": "Volcanic",
+    "clause": "Erupt a lava bass across the crater rim so the bass erupts.",
+    "tags": "volcanic",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_pastoral",
+    "label": "Pastoral",
+    "clause": "Graze a pasture drone across the pasture fence so the drone grazes grass.",
+    "tags": "pastoral",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_urban_night",
+    "label": "Urban night",
+    "clause": "Neon-wash a neon bed across the fire escape so the bed wears neon.",
+    "tags": "night-city",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_courtroom",
+    "label": "Courtroom",
+    "clause": "Swear-in a gavel hit across the witness box so the hit swears them in.",
+    "tags": "courtroom tension",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_locker_room",
+    "label": "Locker room",
+    "clause": "Huddle a towel-snap snare across the locker row so the snare huddles.",
+    "tags": "locker-room heat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_library",
+    "label": "Library hush",
+    "clause": "Whisper a page-turn foley across the reading room so the foley turns a page.",
+    "tags": "library hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_factory",
+    "label": "Factory",
+    "clause": "Stamp a press-brake hit across the shop floor so the hit stamps metal.",
+    "tags": "factory clang",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_chapel",
+    "label": "Chapel",
+    "clause": "Consecrate a hymnal swell across the apse so the swell consecrates.",
+    "tags": "chapel hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_boardwalk",
+    "label": "Boardwalk",
+    "clause": "Stroll a salt-air pad across the pier so the pad tastes salt.",
+    "tags": "boardwalk air",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_rooftop",
+    "label": "Rooftop",
+    "clause": "Perch a windy verse across the parapet so the verse leans on wind.",
+    "tags": "rooftop wind",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_subway",
+    "label": "Subway",
+    "clause": "Rattle a tunnel rumble across the platform edge so the rumble fills the tube.",
+    "tags": "subway rumble",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_greenhouse",
+    "label": "Greenhouse",
+    "clause": "Mist a humid pad across the glasshouse aisle so the pad beads water.",
+    "tags": "greenhouse humidity",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_harbor",
+    "label": "Harbor",
+    "clause": "Fog a foghorn motif across the quay so the motif honks fog.",
+    "tags": "harbor fog",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_desert",
+    "label": "Desert",
+    "clause": "Scorch a heat-shimmer across the dune so the shimmer bakes.",
+    "tags": "desert heat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_tundra",
+    "label": "Tundra",
+    "clause": "Rime a frost click across the pack ice so the click frosts.",
+    "tags": "tundra freeze",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_jungle_heat",
+    "label": "Jungle heat",
+    "clause": "Steam a insect bed across the canopy so the bed crawls.",
+    "tags": "jungle humidity",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_office_fluorescent",
+    "label": "Office fluorescent",
+    "clause": "Buzz a ballast hum across the cubicle row so the hum fatigues.",
+    "tags": "fluorescent fatigue",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_diner_late",
+    "label": "Late diner",
+    "clause": "Pour a coffee-urn hiss across the counter so the hiss pours late.",
+    "tags": "diner-late",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_stadium",
+    "label": "Stadium",
+    "clause": "Roar a crowd bed across the tunnel so the roar fills a bowl.",
+    "tags": "stadium roar",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_backstage",
+    "label": "Backstage",
+    "clause": "Cue a talkback click across the green room so the click cues a show.",
+    "tags": "backstage nerves",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_classroom",
+    "label": "Classroom",
+    "clause": "Lecture a chalk motif across the lecture hall so the motif lectures.",
+    "tags": "classroom quiet",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_workshop",
+    "label": "Workshop",
+    "clause": "File a rasp file across the bench vise so the rasp files metal.",
+    "tags": "workshop grit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_kitchen_dawn",
+    "label": "Dawn kitchen",
+    "clause": "Simmer a kettle hiss across the stove so the hiss simmers breakfast.",
+    "tags": "dawn-kitchen",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_attic",
+    "label": "Attic",
+    "clause": "Creak a moth-wing across the rafter so the wing creaks dust.",
+    "tags": "attic dust",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_basement",
+    "label": "Basement",
+    "clause": "Drip a sump drip across the cellar stair so the drip damps stone.",
+    "tags": "basement damp",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_courtyard",
+    "label": "Courtyard",
+    "clause": "Echo a fountain bed across the cloister so the bed echoes a court.",
+    "tags": "courtyard echo",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_bridge",
+    "label": "Bridge",
+    "clause": "Span a cable hum across the span so the hum spans steel.",
+    "tags": "bridge wind",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_runway",
+    "label": "Runway",
+    "clause": "Launch a jet wash across the tarmac so the wash launches.",
+    "tags": "runway rush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_orchard",
+    "label": "Orchard",
+    "clause": "Ripen a blossom pad across the tree row so the pad ripens fruit.",
+    "tags": "orchard calm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_quarry",
+    "label": "Quarry",
+    "clause": "Blast a dynamite tail across the pit so the tail blasts rock.",
+    "tags": "quarry boom",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_lighthouse",
+    "label": "Lighthouse",
+    "clause": "Sweep a beacon pulse across the lantern room so the pulse sweeps water.",
+    "tags": "lighthouse pulse",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_observatory",
+    "label": "Observatory",
+    "clause": "Focus a telescope motor across the dome so the motor focuses stars.",
+    "tags": "observatory hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_archive",
+    "label": "Archive",
+    "clause": "Index a card catalog across the stacks so the catalog indexes paper.",
+    "tags": "archive dry",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_newsroom",
+    "label": "Newsroom",
+    "clause": "Deadline a teletype bed across the copy desk so the bed chases copy.",
+    "tags": "newsroom urgency",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_ferry",
+    "label": "Ferry",
+    "clause": "Rock a hull slap across the rail so the slap rocks a hull.",
+    "tags": "ferry sway",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_campfire",
+    "label": "Campfire",
+    "clause": "Ember a spark bed across the ring of logs so the spark embers a ring.",
+    "tags": "campfire glow",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_ice_rink",
+    "label": "Ice rink",
+    "clause": "Glide a skate scrape across the boards so the scrape glides ice.",
+    "tags": "ice-rink scrape",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_vineyard",
+    "label": "Vineyard",
+    "clause": "Ferment a cask pop across the trellis so the pop ferments fruit.",
+    "tags": "vineyard dusk",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_foundry",
+    "label": "Foundry",
+    "clause": "Forge a slag hiss across the pour floor so the hiss forges slag.",
+    "tags": "foundry heat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_apiary",
+    "label": "Apiary",
+    "clause": "Hum a hive drone across the hive box so the drone hives.",
+    "tags": "apiary hum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_clocktower",
+    "label": "Clocktower",
+    "clause": "Toll a bell motif across the belfry so the motif tolls hours.",
+    "tags": "clocktower toll",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_grain_silo",
+    "label": "Grain silo",
+    "clause": "Hollow an empty cylinder across the bin so the cylinder hollows.",
+    "tags": "silo hollow",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_switchyard",
+    "label": "Switchyard",
+    "clause": "Switch a coupler clang across the hump yard so the clang switches cars.",
+    "tags": "switchyard clang",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_boathouse",
+    "label": "Boathouse",
+    "clause": "Moorslip a gunwale creak across the slip so the creak moors a hull.",
+    "tags": "boathouse creak",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_pagoda",
+    "label": "Pagoda",
+    "clause": "Bow-east a woodblock prayer across the shrine so the prayer bows east.",
+    "tags": "pagoda hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_windmill",
+    "label": "Windmill",
+    "clause": "Turn a vane squeak across the cap so the squeak turns a vane.",
+    "tags": "windmill turn",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_tide_pool",
+    "label": "Tide pool",
+    "clause": "Pool anemone shimmer across the rock pool so the shimmer pools tide.",
+    "tags": "tide-pool hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_canyon",
+    "label": "Canyon",
+    "clause": "Boom a wall echo across the slot canyon so the echo booms stone.",
+    "tags": "canyon boom",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_mesa",
+    "label": "Mesa",
+    "clause": "Bake a tableland drone across the butte top so the drone bakes tableland.",
+    "tags": "mesa heat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_fjord",
+    "label": "Fjord",
+    "clause": "Chill a glacier drip across the inlet so the drip chills inlet.",
+    "tags": "fjord cold",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_savanna",
+    "label": "Savanna",
+    "clause": "Shimmer a grass hiss across the grass sea so the hiss shimmers grass.",
+    "tags": "savanna shimmer",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_coral",
+    "label": "Coral",
+    "clause": "Refract a polyp glint across the lagoon shelf so the glint refracts water.",
+    "tags": "coral shimmer",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_glacier_cave",
+    "label": "Glacier cave",
+    "clause": "Drip-ice an ice organ across the blue grotto so the organ drips ice.",
+    "tags": "glacier-cave",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_salt_flat",
+    "label": "Salt flat",
+    "clause": "Glare a salt crunch across the pan so the crunch glares white.",
+    "tags": "salt-flat glare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_mangrove",
+    "label": "Mangrove",
+    "clause": "Root a root tangle across the root maze so the tangle roots.",
+    "tags": "mangrove hush",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_steppe",
+    "label": "Steppe",
+    "clause": "Whistle a grass whistle across the grass ocean so the whistle grasses.",
+    "tags": "steppe wind",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_bayou",
+    "label": "Bayou",
+    "clause": "Thicken a cypress bed across the cypress stand so the bed thickens cypress.",
+    "tags": "bayou thick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_prairie",
+    "label": "Prairie",
+    "clause": "Widen a wheat hiss across the grass ocean two so the hiss widens wheat.",
+    "tags": "prairie wide",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_delta",
+    "label": "Delta",
+    "clause": "Silt a silt pad across the silt mouth so the pad silts a mouth.",
+    "tags": "delta slow",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_atoll",
+    "label": "Atoll",
+    "clause": "Brighten a lagoon glint across the ring reef so the glint brightens a ring.",
+    "tags": "atoll bright",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_crater",
+    "label": "Crater",
+    "clause": "Cup a bowl echo across the bowl so the echo cups a bowl.",
+    "tags": "crater hollow",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_geyser",
+    "label": "Geyser",
+    "clause": "Hiss a steam vent across the vent field so the vent hisses steam.",
+    "tags": "geyser hiss",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_oasis",
+    "label": "Oasis",
+    "clause": "Calm a palm shade across the palm ring so the shade calms palms.",
+    "tags": "oasis calm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_reef",
+    "label": "Reef",
+    "clause": "Glint a fish-scale glint across the drop-off so the glint scales fish.",
+    "tags": "reef bright",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_bluff",
+    "label": "Bluff",
+    "clause": "Lean-out a cliff wind across the headland so the wind leans a cliff.",
+    "tags": "bluff wind",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_hollow",
+    "label": "Hollow",
+    "clause": "Darken a cave mouth across the cave lip so the mouth darkens.",
+    "tags": "hollow dark",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_meadow",
+    "label": "Meadow",
+    "clause": "Soften a clover bed across the clover patch so the bed softens clover.",
+    "tags": "meadow soft",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_thicket",
+    "label": "Thicket",
+    "clause": "Close-in a bramble scrape across the bramble wall so the scrape closes bramble.",
+    "tags": "thicket close",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_copse",
+    "label": "Copse",
+    "clause": "Dapple a leaf dapple across the copse floor so the dapple copses.",
+    "tags": "copse dappled",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_heath",
+    "label": "Heath",
+    "clause": "Open-out a gorse hiss across the gorse bank so the hiss opens gorse.",
+    "tags": "heath open",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  },
+  {
+    "id": "mood_moor",
+    "label": "Moor",
+    "clause": "Bleak-wash a peat drone across the peat bog so the drone bleaks peat.",
+    "tags": "moor bleak",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "mood"
+    ]
+  }
+]

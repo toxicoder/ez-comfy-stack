@@ -1,0 +1,1766 @@
+[
+  {
+    "id": "bass_upright",
+    "label": "Upright bass",
+    "clause": "Walk an upright so wood and fingerboard carry the boom-bap floor.",
+    "tags": "upright bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_slide_808",
+    "label": "Sliding 808",
+    "clause": "Slide an 808 into the downbeat so the trap grid has a gliding sub.",
+    "tags": "808 bass, sliding 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "bass_upright"
+    ],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_chest_sub",
+    "label": "Chest sub",
+    "clause": "Park a chest-sub under the drop so the body feels the note before the ear.",
+    "tags": "chest-sub bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_walking",
+    "label": "Walking bass",
+    "clause": "Walk quarter notes so jazz-rap has a moving floor.",
+    "tags": "walking bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_squelch",
+    "label": "Squelch bass",
+    "clause": "Resonate a squelch bass so acid house occupies the mid-sub.",
+    "tags": "squelch bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_octave_disco",
+    "label": "Octave disco",
+    "clause": "Octave a disco bass so the four-floor has a glittering floor.",
+    "tags": "octave bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_slap",
+    "label": "Slap bass",
+    "clause": "Slap ghosts between notes so funk has a talking floor.",
+    "tags": "slap bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_tuba",
+    "label": "Sousaphone",
+    "clause": "Pump sousaphone so the brass band has a moving floor.",
+    "tags": "sousaphone",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_synth_round",
+    "label": "Round synth bass",
+    "clause": "Round a synth bass so deep house stays warm not sharp.",
+    "tags": "round synth bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_neuro",
+    "label": "Surgical bass",
+    "clause": "Sculpt a surgical bass so neurofunk is all mid-sub design.",
+    "tags": "surgical bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_log_bass",
+    "label": "Log-drum bass",
+    "clause": "Punch log-drum bass late so amapiano low end is percussive.",
+    "tags": "log drum bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_wobble",
+    "label": "Wobble bass",
+    "clause": "Wobble a half-time bass so dubstep has a door-slam snare above it.",
+    "tags": "wobble bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_square_grime",
+    "label": "Square bass",
+    "clause": "Stab square bass sparsely so grime has radio-set urgency.",
+    "tags": "square bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_tumbao",
+    "label": "Tumbao bass",
+    "clause": "Tumbao the bass so salsa has a clave-aware floor.",
+    "tags": "tumbao bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_one_drop_bass",
+    "label": "One-drop bass",
+    "clause": "Melody the bass on a one-drop so reggae bass is the song.",
+    "tags": "reggae bass melody",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_drone_fifth",
+    "label": "Drone fifth",
+    "clause": "Hold low fifths so the underscore threatens without a groove.",
+    "tags": "low fifths",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_none_bass",
+    "label": "No bass",
+    "clause": "Withhold bass so ambient air is the low end.",
+    "tags": "no bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "bass_chest_sub"
+    ],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_sub_only",
+    "label": "Sub only",
+    "clause": "Low-pass until only sub remains so the chest is the arrangement.",
+    "tags": "sub only",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_picked",
+    "label": "Picked bass",
+    "clause": "Pick a bass so attack is a click not a round sine.",
+    "tags": "picked bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fretless",
+    "label": "Fretless bass",
+    "clause": "Slide fretless so the intonation is a vocal cousin.",
+    "tags": "fretless bass",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_00",
+    "label": "Bass color 1",
+    "clause": "Bass color 1 occupies a sedge pocket named fill00 so bass color 1 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 1",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_01",
+    "label": "Bass color 2",
+    "clause": "Bass color 2 occupies a loam pocket named fill01 so bass color 2 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 2",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_02",
+    "label": "Bass color 3",
+    "clause": "Bass color 3 occupies a basalt pocket named fill02 so bass color 3 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 3",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_03",
+    "label": "Bass color 4",
+    "clause": "Bass color 4 occupies a schist pocket named fill03 so bass color 4 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 4",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_04",
+    "label": "Bass color 5",
+    "clause": "Bass color 5 occupies a flint pocket named fill04 so bass color 5 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 5",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_05",
+    "label": "Bass color 6",
+    "clause": "Bass color 6 occupies a shale pocket named fill05 so bass color 6 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 6",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_06",
+    "label": "Bass color 7",
+    "clause": "Bass color 7 occupies a quartz pocket named fill06 so bass color 7 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 7",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_07",
+    "label": "Bass color 8",
+    "clause": "Bass color 8 occupies a mica pocket named fill07 so bass color 8 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 8",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_08",
+    "label": "Bass color 9",
+    "clause": "Bass color 9 occupies a gypsum pocket named fill08 so bass color 9 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 9",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_09",
+    "label": "Bass color 10",
+    "clause": "Bass color 10 occupies a calcite pocket named fill09 so bass color 10 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 10",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_10",
+    "label": "Bass color 11",
+    "clause": "Bass color 11 occupies a dolomite pocket named fill10 so bass color 11 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 11",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_11",
+    "label": "Bass color 12",
+    "clause": "Bass color 12 occupies a spar pocket named fill11 so bass color 12 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 12",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_12",
+    "label": "Bass color 13",
+    "clause": "Bass color 13 occupies a rivet pocket named fill12 so bass color 13 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 13",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_13",
+    "label": "Bass color 14",
+    "clause": "Bass color 14 occupies a cog pocket named fill13 so bass color 14 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 14",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_14",
+    "label": "Bass color 15",
+    "clause": "Bass color 15 occupies a pinion pocket named fill14 so bass color 15 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 15",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_15",
+    "label": "Bass color 16",
+    "clause": "Bass color 16 occupies a cam pocket named fill15 so bass color 16 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 16",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_16",
+    "label": "Bass color 17",
+    "clause": "Bass color 17 occupies a crank pocket named fill16 so bass color 17 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 17",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_17",
+    "label": "Bass color 18",
+    "clause": "Bass color 18 occupies a flywheel pocket named fill17 so bass color 18 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 18",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_18",
+    "label": "Bass color 19",
+    "clause": "Bass color 19 occupies a governor pocket named fill18 so bass color 19 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 19",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_19",
+    "label": "Bass color 20",
+    "clause": "Bass color 20 occupies a pawl pocket named fill19 so bass color 20 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 20",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_20",
+    "label": "Bass color 21",
+    "clause": "Bass color 21 occupies a ratchet pocket named fill20 so bass color 21 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 21",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_21",
+    "label": "Bass color 22",
+    "clause": "Bass color 22 occupies a pawlbox pocket named fill21 so bass color 22 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 22",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_22",
+    "label": "Bass color 23",
+    "clause": "Bass color 23 occupies a thimble pocket named fill22 so bass color 23 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 23",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_23",
+    "label": "Bass color 24",
+    "clause": "Bass color 24 occupies a bobbin pocket named fill23 so bass color 24 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 24",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_24",
+    "label": "Bass color 25",
+    "clause": "Bass color 25 occupies a shuttle pocket named fill24 so bass color 25 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 25",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_25",
+    "label": "Bass color 26",
+    "clause": "Bass color 26 occupies a loom pocket named fill25 so bass color 26 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 26",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_26",
+    "label": "Bass color 27",
+    "clause": "Bass color 27 occupies a warp pocket named fill26 so bass color 27 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 27",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_27",
+    "label": "Bass color 28",
+    "clause": "Bass color 28 occupies a weft pocket named fill27 so bass color 28 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 28",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_28",
+    "label": "Bass color 29",
+    "clause": "Bass color 29 occupies a selvedge pocket named fill28 so bass color 29 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 29",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_29",
+    "label": "Bass color 30",
+    "clause": "Bass color 30 occupies a twill pocket named fill29 so bass color 30 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 30",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_30",
+    "label": "Bass color 31",
+    "clause": "Bass color 31 occupies a herringbone pocket named fill30 so bass color 31 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 31",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_31",
+    "label": "Bass color 32",
+    "clause": "Bass color 32 occupies a keel pocket named fill31 so bass color 32 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 32",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_32",
+    "label": "Bass color 33",
+    "clause": "Bass color 33 occupies a rudder pocket named fill32 so bass color 33 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 33",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_33",
+    "label": "Bass color 34",
+    "clause": "Bass color 34 occupies a thwart pocket named fill33 so bass color 34 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 34",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_34",
+    "label": "Bass color 35",
+    "clause": "Bass color 35 occupies a gunwale pocket named fill34 so bass color 35 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 35",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_35",
+    "label": "Bass color 36",
+    "clause": "Bass color 36 occupies a transom pocket named fill35 so bass color 36 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 36",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_36",
+    "label": "Bass color 37",
+    "clause": "Bass color 37 occupies a spar pocket named fill36 so bass color 37 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 37",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_37",
+    "label": "Bass color 38",
+    "clause": "Bass color 38 occupies a gaff pocket named fill37 so bass color 38 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 38",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_38",
+    "label": "Bass color 39",
+    "clause": "Bass color 39 occupies a boom pocket named fill38 so bass color 39 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 39",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_39",
+    "label": "Bass color 40",
+    "clause": "Bass color 40 occupies a clew pocket named fill39 so bass color 40 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 40",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_40",
+    "label": "Bass color 41",
+    "clause": "Bass color 41 occupies a apse pocket named fill40 so bass color 41 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 41",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_41",
+    "label": "Bass color 42",
+    "clause": "Bass color 42 occupies a nave pocket named fill41 so bass color 42 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 42",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_42",
+    "label": "Bass color 43",
+    "clause": "Bass color 43 occupies a transept pocket named fill42 so bass color 43 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 43",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_43",
+    "label": "Bass color 44",
+    "clause": "Bass color 44 occupies a rood pocket named fill43 so bass color 44 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 44",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_44",
+    "label": "Bass color 45",
+    "clause": "Bass color 45 occupies a piscina pocket named fill44 so bass color 45 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 45",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_45",
+    "label": "Bass color 46",
+    "clause": "Bass color 46 occupies a ambry pocket named fill45 so bass color 46 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 46",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_46",
+    "label": "Bass color 47",
+    "clause": "Bass color 47 occupies a squint pocket named fill46 so bass color 47 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 47",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_47",
+    "label": "Bass color 48",
+    "clause": "Bass color 48 occupies a triforium pocket named fill47 so bass color 48 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 48",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_48",
+    "label": "Bass color 49",
+    "clause": "Bass color 49 occupies a clerestory pocket named fill48 so bass color 49 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 49",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_49",
+    "label": "Bass color 50",
+    "clause": "Bass color 50 occupies a culvert pocket named fill49 so bass color 50 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 50",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_50",
+    "label": "Bass color 51",
+    "clause": "Bass color 51 occupies a sluice pocket named fill50 so bass color 51 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 51",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_51",
+    "label": "Bass color 52",
+    "clause": "Bass color 52 occupies a weir pocket named fill51 so bass color 52 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 52",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_52",
+    "label": "Bass color 53",
+    "clause": "Bass color 53 occupies a millrace pocket named fill52 so bass color 53 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 53",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_53",
+    "label": "Bass color 54",
+    "clause": "Bass color 54 occupies a millpond pocket named fill53 so bass color 54 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 54",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_54",
+    "label": "Bass color 55",
+    "clause": "Bass color 55 occupies a millstone pocket named fill54 so bass color 55 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 55",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_55",
+    "label": "Bass color 56",
+    "clause": "Bass color 56 occupies a hopper pocket named fill55 so bass color 56 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 56",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_56",
+    "label": "Bass color 57",
+    "clause": "Bass color 57 occupies a silo pocket named fill56 so bass color 57 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 57",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_57",
+    "label": "Bass color 58",
+    "clause": "Bass color 58 occupies a bin pocket named fill57 so bass color 58 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 58",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_58",
+    "label": "Bass color 59",
+    "clause": "Bass color 59 occupies a crucible pocket named fill58 so bass color 59 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 59",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_59",
+    "label": "Bass color 60",
+    "clause": "Bass color 60 occupies a ladle pocket named fill59 so bass color 60 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 60",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_60",
+    "label": "Bass color 61",
+    "clause": "Bass color 61 occupies a tuyere pocket named fill60 so bass color 61 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 61",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_61",
+    "label": "Bass color 62",
+    "clause": "Bass color 62 occupies a slagpot pocket named fill61 so bass color 62 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 62",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_62",
+    "label": "Bass color 63",
+    "clause": "Bass color 63 occupies a ingot pocket named fill62 so bass color 63 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 63",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_63",
+    "label": "Bass color 64",
+    "clause": "Bass color 64 occupies a billet pocket named fill63 so bass color 64 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 64",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_64",
+    "label": "Bass color 65",
+    "clause": "Bass color 65 occupies a bloom pocket named fill64 so bass color 65 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 65",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_65",
+    "label": "Bass color 66",
+    "clause": "Bass color 66 occupies a pigiron pocket named fill65 so bass color 66 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 66",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_66",
+    "label": "Bass color 67",
+    "clause": "Bass color 67 occupies a nectar pocket named fill66 so bass color 67 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 67",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_67",
+    "label": "Bass color 68",
+    "clause": "Bass color 68 occupies a comb pocket named fill67 so bass color 68 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 68",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_68",
+    "label": "Bass color 69",
+    "clause": "Bass color 69 occupies a brood pocket named fill68 so bass color 69 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 69",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_69",
+    "label": "Bass color 70",
+    "clause": "Bass color 70 occupies a super pocket named fill69 so bass color 70 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 70",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_70",
+    "label": "Bass color 71",
+    "clause": "Bass color 71 occupies a hivebody pocket named fill70 so bass color 71 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 71",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_71",
+    "label": "Bass color 72",
+    "clause": "Bass color 72 occupies a smoker pocket named fill71 so bass color 72 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 72",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_72",
+    "label": "Bass color 73",
+    "clause": "Bass color 73 occupies a veil pocket named fill72 so bass color 73 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 73",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_73",
+    "label": "Bass color 74",
+    "clause": "Bass color 74 occupies a sextant pocket named fill73 so bass color 74 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 74",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_74",
+    "label": "Bass color 75",
+    "clause": "Bass color 75 occupies a astrolabe pocket named fill74 so bass color 75 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 75",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_75",
+    "label": "Bass color 76",
+    "clause": "Bass color 76 occupies a alidade pocket named fill75 so bass color 76 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 76",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_76",
+    "label": "Bass color 77",
+    "clause": "Bass color 77 occupies a vernier pocket named fill76 so bass color 77 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 77",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_77",
+    "label": "Bass color 78",
+    "clause": "Bass color 78 occupies a reticle pocket named fill77 so bass color 78 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 78",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_78",
+    "label": "Bass color 79",
+    "clause": "Bass color 79 occupies a collimator pocket named fill78 so bass color 79 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 79",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_79",
+    "label": "Bass color 80",
+    "clause": "Bass color 80 occupies a folio pocket named fill79 so bass color 80 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 80",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_80",
+    "label": "Bass color 81",
+    "clause": "Bass color 81 occupies a quire pocket named fill80 so bass color 81 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 81",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_81",
+    "label": "Bass color 82",
+    "clause": "Bass color 82 occupies a binding pocket named fill81 so bass color 82 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 82",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_82",
+    "label": "Bass color 83",
+    "clause": "Bass color 83 occupies a endpaper pocket named fill82 so bass color 83 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 83",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_83",
+    "label": "Bass color 84",
+    "clause": "Bass color 84 occupies a colophon pocket named fill83 so bass color 84 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 84",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_84",
+    "label": "Bass color 85",
+    "clause": "Bass color 85 occupies a catchword pocket named fill84 so bass color 85 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 85",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_85",
+    "label": "Bass color 86",
+    "clause": "Bass color 86 occupies a signature pocket named fill85 so bass color 86 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 86",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_86",
+    "label": "Bass color 87",
+    "clause": "Bass color 87 occupies a trellis pocket named fill86 so bass color 87 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 87",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_87",
+    "label": "Bass color 88",
+    "clause": "Bass color 88 occupies a espalier pocket named fill87 so bass color 88 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 88",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_88",
+    "label": "Bass color 89",
+    "clause": "Bass color 89 occupies a graft pocket named fill88 so bass color 89 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 89",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  },
+  {
+    "id": "bass_fill_89",
+    "label": "Bass color 90",
+    "clause": "Bass color 90 occupies a scion pocket named fill89 so bass color 90 cannot collapse into a sibling bass lane.",
+    "tags": "bass color 90",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "bass"
+    ]
+  }
+]

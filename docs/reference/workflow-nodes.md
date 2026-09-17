@@ -513,6 +513,156 @@ SaveAudio stem to stamp.
 
 **How it affects generation:** Must match SaveAudio / SaveAudioMP3.
 
+### `EZAudioRack` — Audio Rack
+
+Pick one audio/music technique per axis and splice ACE-Step tags and lyrics form.
+
+!!! warning "Lab notes"
+
+    Deterministic. No LLM. Recipe fills empty axes. Vocal omitted on instrumental/podcast. Instrumental forces no-vocals tags and [inst] form. Exactly one BPM when tempo is picked.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `tags` | out | `STRING` | Genre-first ACE tags. |
+| `lyrics` | out | `STRING` | Lyrics form / [inst] skeleton. |
+| `notes` | out | `STRING` | Dropped conflicts and BPM token. |
+
+#### `brief`
+
+Type `STRING`.
+
+Optional lyrics seed.
+
+**How it affects generation:** Ignored on instrumental and podcast-bed so ACE does not sing free text.
+
+#### `flavor`
+
+Type `COMBO`. Range / default: ace_vocal.
+
+Family renderer.
+
+**How it affects generation:** ace_vocal keeps vocal identity. ace_instrumental and podcast_bed omit it and force no-vocals tags.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `ace_vocal` | Vocal tags + lyrics form. |
+| `ace_instrumental` | No-vocals tags and [inst]/[drop]. |
+| `podcast_bed` | Instrumental bed; drop-first EDM dropped. |
+
+#### `recipe`
+
+Type `COMBO`. Range / default: none.
+
+Named splice.
+
+**How it affects generation:** Fills axes that are still none. Explicit picks win.
+
+#### `genre_style`
+
+Type `COMBO`. Range / default: none.
+
+Genre.
+
+**How it affects generation:** Genre-first ACE tags. Catalog under generated/audio.
+
+#### `tempo_groove`
+
+Type `COMBO`. Range / default: none.
+
+Tempo.
+
+**How it affects generation:** Pocket and BPM token. Match the ACE encoder BPM. Catalog under generated/audio.
+
+#### `drums_rhythm`
+
+Type `COMBO`. Range / default: none.
+
+Drums.
+
+**How it affects generation:** Kit, hats, and groove. Catalog under generated/audio.
+
+#### `bass_low_end`
+
+Type `COMBO`. Range / default: none.
+
+Bass.
+
+**How it affects generation:** Upright, 808, sub, walking. Catalog under generated/audio.
+
+#### `harmony_mode`
+
+Type `COMBO`. Range / default: none.
+
+Harmony.
+
+**How it affects generation:** Mode color in tags. Does not set ACE keyscale. Catalog under generated/audio.
+
+#### `instruments_texture`
+
+Type `COMBO`. Range / default: none.
+
+Instruments.
+
+**How it affects generation:** Specific instruments and timbre. Catalog under generated/audio.
+
+#### `vocal_identity`
+
+Type `COMBO`. Range / default: none.
+
+Vocal.
+
+**How it affects generation:** One vocal identity. Omitted on instrumental/podcast. Catalog under generated/audio.
+
+#### `arrangement_form`
+
+Type `COMBO`. Range / default: none.
+
+Form.
+
+**How it affects generation:** Lyrics skeleton. Instrumental uses [inst]/[drop]. Catalog under generated/audio.
+
+#### `mix_production`
+
+Type `COMBO`. Range / default: none.
+
+Mix.
+
+**How it affects generation:** Vinyl dirt, dry booth, club loudness, duck. Catalog under generated/audio.
+
+#### `space_ambience`
+
+Type `COMBO`. Range / default: none.
+
+Space.
+
+**How it affects generation:** Booth dry, hall, mono drums, width. Catalog under generated/audio.
+
+#### `sound_design_fx`
+
+Type `COMBO`. Range / default: none.
+
+Sound design.
+
+**How it affects generation:** Tape stop, riser, reverse cymbal. Catalog under generated/audio.
+
+#### `mood_energy`
+
+Type `COMBO`. Range / default: none.
+
+Mood.
+
+**How it affects generation:** Menace, laid-back, civic-serious. Catalog under generated/audio.
+
+#### `use_case`
+
+Type `COMBO`. Range / default: none.
+
+Use.
+
+**How it affects generation:** Draft, album take, 30 s bed, bumper. Catalog under generated/audio.
+
 ### `EZCinemaRack` — Cinema Rack
 
 Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.

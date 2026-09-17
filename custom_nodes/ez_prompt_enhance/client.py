@@ -40,6 +40,7 @@ from ._styles import (
     style_llm_block,
     style_must_include,
     style_suffix,
+    with_audio_system,
     with_cinema_system,
     with_context_system,
     with_style_system,

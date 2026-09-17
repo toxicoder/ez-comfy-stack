@@ -46,6 +46,7 @@ SKIP_SAMPLE_PREFIXES = (
     "optional/klein/",
     "optional/longcat",
     "inspire/cinema-rack",
+    "inspire/audio-rack",
     "shorts/tide-table/",
     "shorts/night-oven/",
     "shorts/glasshouse/",

@@ -1,0 +1,1764 @@
+[
+  {
+    "id": "tmp_88",
+    "label": "Boom-bap 88",
+    "clause": "Hold eighty-eight so the dusty pocket can breathe.",
+    "tags": "88 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "88 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_86",
+    "label": "Lo-fi 86",
+    "clause": "Hold eighty-six so the Rhodes can lag the grid.",
+    "tags": "86 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "86 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_92",
+    "label": "Hop 92",
+    "clause": "Hold ninety-two so the lecture cadence still walks.",
+    "tags": "92 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "92 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_70",
+    "label": "Slow 70",
+    "clause": "Hold seventy so the ballad almost stops.",
+    "tags": "70 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "70 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_100",
+    "label": "Head-nod 100",
+    "clause": "Hold one hundred so the nod is walking speed.",
+    "tags": "100 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "100 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_118",
+    "label": "House 118",
+    "clause": "Hold one-eighteen so deep house can roll.",
+    "tags": "118 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "118 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_128",
+    "label": "Four-floor 128",
+    "clause": "Hold one-twenty-eight so the club four-floor is standard.",
+    "tags": "128 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "128 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_140",
+    "label": "Trap 140",
+    "clause": "Hold one-forty half-time so trap hats sprint over a slow snare.",
+    "tags": "140 bpm, half-time",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "140 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "tmp_88"
+    ],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_160",
+    "label": "Footwork 160",
+    "clause": "Hold one-sixty so footwork kicks can chatter.",
+    "tags": "160 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "160 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_174",
+    "label": "DnB 174",
+    "clause": "Hold one-seventy-four so drum-and-bass can sprint.",
+    "tags": "174 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "174 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_96",
+    "label": "Pocket 96",
+    "clause": "Hold ninety-six so the southern pocket can lean.",
+    "tags": "96 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "96 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_108",
+    "label": "Reggae 108",
+    "clause": "Hold one-oh-eight so one-drop has air.",
+    "tags": "108 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "108 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_112",
+    "label": "Soul 112",
+    "clause": "Hold one-twelve so tambourine two-and-four can dance.",
+    "tags": "112 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "112 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_120",
+    "label": "Straight 120",
+    "clause": "Hold one-twenty so the click is a round number.",
+    "tags": "120 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "120 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_75",
+    "label": "Dirge 75",
+    "clause": "Hold seventy-five so the funeral pad can walk.",
+    "tags": "75 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "75 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_80",
+    "label": "Night 80",
+    "clause": "Hold eighty so night R&B can sit late.",
+    "tags": "80 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "80 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_84",
+    "label": "Trip-hop 84",
+    "clause": "Hold eighty-four so the dusty break can smoke.",
+    "tags": "84 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "84 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_90",
+    "label": "Gospel 90",
+    "clause": "Hold ninety so the testimony cadence can breathe.",
+    "tags": "90 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "90 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_102",
+    "label": "Funk 102",
+    "clause": "Hold one-oh-two so sixteenth hats can chick.",
+    "tags": "102 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "102 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_134",
+    "label": "Techno 134",
+    "clause": "Hold one-thirty-four so the warehouse kick can hypnotize.",
+    "tags": "134 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "134 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_00",
+    "label": "Tempo 60",
+    "clause": "Tempo 60 occupies a sedge pocket named fill00 so 60 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "60 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "60 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_01",
+    "label": "Tempo 61",
+    "clause": "Tempo 61 occupies a loam pocket named fill01 so 61 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "61 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "61 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_02",
+    "label": "Tempo 62",
+    "clause": "Tempo 62 occupies a basalt pocket named fill02 so 62 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "62 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "62 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_03",
+    "label": "Tempo 63",
+    "clause": "Tempo 63 occupies a schist pocket named fill03 so 63 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "63 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "63 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_04",
+    "label": "Tempo 64",
+    "clause": "Tempo 64 occupies a flint pocket named fill04 so 64 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "64 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "64 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_05",
+    "label": "Tempo 65",
+    "clause": "Tempo 65 occupies a shale pocket named fill05 so 65 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "65 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "65 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_06",
+    "label": "Tempo 66",
+    "clause": "Tempo 66 occupies a quartz pocket named fill06 so 66 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "66 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "66 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_07",
+    "label": "Tempo 67",
+    "clause": "Tempo 67 occupies a mica pocket named fill07 so 67 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "67 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "67 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_08",
+    "label": "Tempo 68",
+    "clause": "Tempo 68 occupies a gypsum pocket named fill08 so 68 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "68 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "68 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_09",
+    "label": "Tempo 69",
+    "clause": "Tempo 69 occupies a calcite pocket named fill09 so 69 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "69 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "69 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_10",
+    "label": "Tempo 70",
+    "clause": "Tempo 70 occupies a dolomite pocket named fill10 so 70 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "70 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "70 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_11",
+    "label": "Tempo 71",
+    "clause": "Tempo 71 occupies a spar pocket named fill11 so 71 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "71 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "71 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_12",
+    "label": "Tempo 72",
+    "clause": "Tempo 72 occupies a rivet pocket named fill12 so 72 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "72 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "72 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_13",
+    "label": "Tempo 73",
+    "clause": "Tempo 73 occupies a cog pocket named fill13 so 73 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "73 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "73 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_14",
+    "label": "Tempo 74",
+    "clause": "Tempo 74 occupies a pinion pocket named fill14 so 74 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "74 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "74 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_15",
+    "label": "Tempo 75",
+    "clause": "Tempo 75 occupies a cam pocket named fill15 so 75 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "75 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "75 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_16",
+    "label": "Tempo 76",
+    "clause": "Tempo 76 occupies a crank pocket named fill16 so 76 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "76 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "76 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_17",
+    "label": "Tempo 77",
+    "clause": "Tempo 77 occupies a flywheel pocket named fill17 so 77 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "77 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "77 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_18",
+    "label": "Tempo 78",
+    "clause": "Tempo 78 occupies a governor pocket named fill18 so 78 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "78 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "78 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_19",
+    "label": "Tempo 79",
+    "clause": "Tempo 79 occupies a pawl pocket named fill19 so 79 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "79 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "79 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_20",
+    "label": "Tempo 80",
+    "clause": "Tempo 80 occupies a ratchet pocket named fill20 so 80 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "80 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "80 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_21",
+    "label": "Tempo 81",
+    "clause": "Tempo 81 occupies a pawlbox pocket named fill21 so 81 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "81 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "81 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_22",
+    "label": "Tempo 82",
+    "clause": "Tempo 82 occupies a thimble pocket named fill22 so 82 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "82 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "82 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_23",
+    "label": "Tempo 83",
+    "clause": "Tempo 83 occupies a bobbin pocket named fill23 so 83 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "83 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "83 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_24",
+    "label": "Tempo 84",
+    "clause": "Tempo 84 occupies a shuttle pocket named fill24 so 84 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "84 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "84 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_25",
+    "label": "Tempo 85",
+    "clause": "Tempo 85 occupies a loom pocket named fill25 so 85 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "85 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "85 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_26",
+    "label": "Tempo 86",
+    "clause": "Tempo 86 occupies a warp pocket named fill26 so 86 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "86 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "86 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_27",
+    "label": "Tempo 87",
+    "clause": "Tempo 87 occupies a weft pocket named fill27 so 87 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "87 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "87 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_28",
+    "label": "Tempo 88",
+    "clause": "Tempo 88 occupies a selvedge pocket named fill28 so 88 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "88 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "88 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_29",
+    "label": "Tempo 89",
+    "clause": "Tempo 89 occupies a twill pocket named fill29 so 89 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "89 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "89 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_30",
+    "label": "Tempo 90",
+    "clause": "Tempo 90 occupies a herringbone pocket named fill30 so 90 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "90 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "90 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_31",
+    "label": "Tempo 91",
+    "clause": "Tempo 91 occupies a keel pocket named fill31 so 91 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "91 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "91 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_32",
+    "label": "Tempo 92",
+    "clause": "Tempo 92 occupies a rudder pocket named fill32 so 92 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "92 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "92 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_33",
+    "label": "Tempo 93",
+    "clause": "Tempo 93 occupies a thwart pocket named fill33 so 93 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "93 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "93 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_34",
+    "label": "Tempo 94",
+    "clause": "Tempo 94 occupies a gunwale pocket named fill34 so 94 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "94 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "94 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_35",
+    "label": "Tempo 95",
+    "clause": "Tempo 95 occupies a transom pocket named fill35 so 95 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "95 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "95 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_36",
+    "label": "Tempo 96",
+    "clause": "Tempo 96 occupies a spar pocket named fill36 so 96 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "96 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "96 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_37",
+    "label": "Tempo 97",
+    "clause": "Tempo 97 occupies a gaff pocket named fill37 so 97 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "97 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "97 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_38",
+    "label": "Tempo 98",
+    "clause": "Tempo 98 occupies a boom pocket named fill38 so 98 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "98 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "98 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_39",
+    "label": "Tempo 99",
+    "clause": "Tempo 99 occupies a clew pocket named fill39 so 99 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "99 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "99 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_40",
+    "label": "Tempo 100",
+    "clause": "Tempo 100 occupies a apse pocket named fill40 so 100 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "100 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "100 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_41",
+    "label": "Tempo 101",
+    "clause": "Tempo 101 occupies a nave pocket named fill41 so 101 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "101 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "101 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_42",
+    "label": "Tempo 102",
+    "clause": "Tempo 102 occupies a transept pocket named fill42 so 102 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "102 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "102 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_43",
+    "label": "Tempo 103",
+    "clause": "Tempo 103 occupies a rood pocket named fill43 so 103 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "103 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "103 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_44",
+    "label": "Tempo 104",
+    "clause": "Tempo 104 occupies a piscina pocket named fill44 so 104 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "104 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "104 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_45",
+    "label": "Tempo 105",
+    "clause": "Tempo 105 occupies a ambry pocket named fill45 so 105 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "105 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "105 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_46",
+    "label": "Tempo 106",
+    "clause": "Tempo 106 occupies a squint pocket named fill46 so 106 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "106 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "106 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_47",
+    "label": "Tempo 107",
+    "clause": "Tempo 107 occupies a triforium pocket named fill47 so 107 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "107 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "107 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_48",
+    "label": "Tempo 108",
+    "clause": "Tempo 108 occupies a clerestory pocket named fill48 so 108 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "108 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "108 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_49",
+    "label": "Tempo 109",
+    "clause": "Tempo 109 occupies a culvert pocket named fill49 so 109 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "109 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "109 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_50",
+    "label": "Tempo 110",
+    "clause": "Tempo 110 occupies a sluice pocket named fill50 so 110 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "110 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "110 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_51",
+    "label": "Tempo 111",
+    "clause": "Tempo 111 occupies a weir pocket named fill51 so 111 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "111 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "111 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_52",
+    "label": "Tempo 112",
+    "clause": "Tempo 112 occupies a millrace pocket named fill52 so 112 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "112 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "112 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_53",
+    "label": "Tempo 113",
+    "clause": "Tempo 113 occupies a millpond pocket named fill53 so 113 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "113 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "113 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_54",
+    "label": "Tempo 114",
+    "clause": "Tempo 114 occupies a millstone pocket named fill54 so 114 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "114 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "114 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_55",
+    "label": "Tempo 115",
+    "clause": "Tempo 115 occupies a hopper pocket named fill55 so 115 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "115 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "115 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_56",
+    "label": "Tempo 116",
+    "clause": "Tempo 116 occupies a silo pocket named fill56 so 116 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "116 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "116 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_57",
+    "label": "Tempo 117",
+    "clause": "Tempo 117 occupies a bin pocket named fill57 so 117 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "117 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "117 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_58",
+    "label": "Tempo 118",
+    "clause": "Tempo 118 occupies a crucible pocket named fill58 so 118 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "118 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "118 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_59",
+    "label": "Tempo 119",
+    "clause": "Tempo 119 occupies a ladle pocket named fill59 so 119 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "119 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "119 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_60",
+    "label": "Tempo 120",
+    "clause": "Tempo 120 occupies a tuyere pocket named fill60 so 120 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "120 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "120 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_61",
+    "label": "Tempo 121",
+    "clause": "Tempo 121 occupies a slagpot pocket named fill61 so 121 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "121 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "121 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_62",
+    "label": "Tempo 122",
+    "clause": "Tempo 122 occupies a ingot pocket named fill62 so 122 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "122 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "122 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_63",
+    "label": "Tempo 123",
+    "clause": "Tempo 123 occupies a billet pocket named fill63 so 123 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "123 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "123 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_64",
+    "label": "Tempo 124",
+    "clause": "Tempo 124 occupies a bloom pocket named fill64 so 124 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "124 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "124 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_65",
+    "label": "Tempo 125",
+    "clause": "Tempo 125 occupies a pigiron pocket named fill65 so 125 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "125 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "125 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_66",
+    "label": "Tempo 126",
+    "clause": "Tempo 126 occupies a nectar pocket named fill66 so 126 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "126 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "126 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_67",
+    "label": "Tempo 127",
+    "clause": "Tempo 127 occupies a comb pocket named fill67 so 127 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "127 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "127 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_68",
+    "label": "Tempo 128",
+    "clause": "Tempo 128 occupies a brood pocket named fill68 so 128 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "128 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "128 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_69",
+    "label": "Tempo 129",
+    "clause": "Tempo 129 occupies a super pocket named fill69 so 129 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "129 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "129 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_70",
+    "label": "Tempo 130",
+    "clause": "Tempo 130 occupies a hivebody pocket named fill70 so 130 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "130 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "130 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_71",
+    "label": "Tempo 131",
+    "clause": "Tempo 131 occupies a smoker pocket named fill71 so 131 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "131 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "131 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_72",
+    "label": "Tempo 132",
+    "clause": "Tempo 132 occupies a veil pocket named fill72 so 132 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "132 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "132 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_73",
+    "label": "Tempo 133",
+    "clause": "Tempo 133 occupies a sextant pocket named fill73 so 133 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "133 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "133 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_74",
+    "label": "Tempo 134",
+    "clause": "Tempo 134 occupies a astrolabe pocket named fill74 so 134 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "134 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "134 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_75",
+    "label": "Tempo 135",
+    "clause": "Tempo 135 occupies a alidade pocket named fill75 so 135 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "135 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "135 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_76",
+    "label": "Tempo 136",
+    "clause": "Tempo 136 occupies a vernier pocket named fill76 so 136 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "136 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "136 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_77",
+    "label": "Tempo 137",
+    "clause": "Tempo 137 occupies a reticle pocket named fill77 so 137 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "137 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "137 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_78",
+    "label": "Tempo 138",
+    "clause": "Tempo 138 occupies a collimator pocket named fill78 so 138 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "138 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "138 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_79",
+    "label": "Tempo 139",
+    "clause": "Tempo 139 occupies a folio pocket named fill79 so 139 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "139 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "139 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_80",
+    "label": "Tempo 140",
+    "clause": "Tempo 140 occupies a quire pocket named fill80 so 140 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "140 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "140 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_81",
+    "label": "Tempo 141",
+    "clause": "Tempo 141 occupies a binding pocket named fill81 so 141 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "141 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "141 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_82",
+    "label": "Tempo 142",
+    "clause": "Tempo 142 occupies a endpaper pocket named fill82 so 142 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "142 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "142 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_83",
+    "label": "Tempo 143",
+    "clause": "Tempo 143 occupies a colophon pocket named fill83 so 143 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "143 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "143 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_84",
+    "label": "Tempo 144",
+    "clause": "Tempo 144 occupies a catchword pocket named fill84 so 144 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "144 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "144 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_85",
+    "label": "Tempo 145",
+    "clause": "Tempo 145 occupies a signature pocket named fill85 so 145 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "145 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "145 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_86",
+    "label": "Tempo 146",
+    "clause": "Tempo 146 occupies a trellis pocket named fill86 so 146 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "146 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "146 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_87",
+    "label": "Tempo 147",
+    "clause": "Tempo 147 occupies a espalier pocket named fill87 so 147 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "147 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "147 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_88",
+    "label": "Tempo 148",
+    "clause": "Tempo 148 occupies a graft pocket named fill88 so 148 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "148 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "148 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  },
+  {
+    "id": "tmp_fill_89",
+    "label": "Tempo 149",
+    "clause": "Tempo 149 occupies a scion pocket named fill89 so 149 bpm cannot collapse into a sibling tempo lane.",
+    "tags": "149 bpm",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "149 bpm",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "tempo"
+    ]
+  }
+]

@@ -115,6 +115,12 @@
       "kind": "graph"
     },
     {
+      "id": "inspire/audio-rack",
+      "path": "generated/workflows/inspire/audio-rack.md",
+      "lane": "inspire",
+      "kind": "graph"
+    },
+    {
       "id": "inspire/beat-sheet",
       "path": "generated/workflows/inspire/beat-sheet.md",
       "lane": "inspire",
@@ -1345,6 +1351,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 457,
-  "page_count": 225
+  "graph_count": 458,
+  "page_count": 226
 }

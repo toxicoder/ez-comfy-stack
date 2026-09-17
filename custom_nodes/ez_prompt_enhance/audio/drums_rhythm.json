@@ -1,0 +1,1850 @@
+[
+  {
+    "id": "drm_dusty_pocket",
+    "label": "Dusty pocket",
+    "clause": "Park a dusty snare a hair behind the kick so crate-chop air can sit in the pocket.",
+    "tags": "dusty drums, dry snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_trap_hats",
+    "label": "Trap hats",
+    "clause": "Stutter thirty-second hats over a sparse snare so the 808 can own the downbeat.",
+    "tags": "rapid hi-hats, trap drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_four_floor",
+    "label": "Four-on-floor",
+    "clause": "Pound a kick on every quarter so the floor never skips a dance count.",
+    "tags": "four-on-the-floor kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "drm_dusty_pocket"
+    ],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_break_chop",
+    "label": "Break chop",
+    "clause": "Chop a funky break into handmade shards that never loop the same way twice.",
+    "tags": "chopped break",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_shuffle",
+    "label": "Shuffle",
+    "clause": "Lean the backbeat late so the shuffle bar feels drunk on purpose.",
+    "tags": "shuffle groove",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_swing",
+    "label": "Swing",
+    "clause": "Lilt the eighths so the ride pings a jazz-leaning hop without a ride-brand name.",
+    "tags": "swing drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_sidestick",
+    "label": "Sidestick",
+    "clause": "Click a sidestick instead of a snare so the verse stays dry and close.",
+    "tags": "sidestick pocket",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_brushes",
+    "label": "Brushes",
+    "clause": "Sweep brushes in circles on the head so the ballad breathes instead of counting.",
+    "tags": "brushed drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_rudiment",
+    "label": "Rudiments",
+    "clause": "Rattle military rudiments on a tight snare so the cadence speaks parade.",
+    "tags": "rudimental snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_cumbia_scrape",
+    "label": "Cumbia scrape",
+    "clause": "Scrape guacharaca on the two-side so the cumbia lilt is felt not named.",
+    "tags": "guacharaca scrape",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_dembow",
+    "label": "Dembow",
+    "clause": "Bounce a dembow kick-snare so the clave cousin lives in the loop.",
+    "tags": "dembow drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_amapiano_shaker",
+    "label": "Amapiano shaker",
+    "clause": "Haze shakers without a gap so the log drum can arrive late.",
+    "tags": "amapiano shakers",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_footwork_kicks",
+    "label": "Footwork kicks",
+    "clause": "Sprint a rapid kick grid so the battle floor chatters.",
+    "tags": "rapid footwork kicks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_juke_chatter",
+    "label": "Juke chatter",
+    "clause": "Chatter hats that refuse rest so the juke loop never sits.",
+    "tags": "juke chatter hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_one_drop",
+    "label": "One-drop",
+    "clause": "Drop the kick on three so reggae air opens the one.",
+    "tags": "one-drop drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_train_beat",
+    "label": "Train beat",
+    "clause": "Chug snare like rails so the country bar moves a train.",
+    "tags": "train beat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_disco_hats",
+    "label": "Disco hats",
+    "clause": "Glitter hats on the offbeat so the octave bass can walk.",
+    "tags": "disco offbeat hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_techno_pulse",
+    "label": "Techno pulse",
+    "clause": "Pulse a dry warehouse kick so hypnosis is the arrangement.",
+    "tags": "techno pulse kick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_dnb_breaks",
+    "label": "DnB breaks",
+    "clause": "Sprint amen-cousin breaks so the bass can roll at speed.",
+    "tags": "drum and bass breaks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_jungle_chops",
+    "label": "Jungle chops",
+    "clause": "Collage chopped breaks so the drop can rewind.",
+    "tags": "jungle chopped breaks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_garage_skip",
+    "label": "Garage skip",
+    "clause": "Skip the kick like two-step so the shuffle is UK-leaning without a brand.",
+    "tags": "two-step skip",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_ghost_notes",
+    "label": "Ghost notes",
+    "clause": "Whisper ghost snares between hits so the pocket fills without adding a drum.",
+    "tags": "ghost-note snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_rim_click",
+    "label": "Rim click",
+    "clause": "Tick the rim instead of the head so the quiet verse stays small.",
+    "tags": "rim click",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_clap_stack",
+    "label": "Clap stack",
+    "clause": "Stack claps on the chorus so the hook has a crowd without a room mic.",
+    "tags": "stacked claps",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_finger_snap",
+    "label": "Finger snap",
+    "clause": "Snap fingers as the kit so the bar is a doo-wop cousin.",
+    "tags": "finger snaps",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_cowbell",
+    "label": "Cowbell",
+    "clause": "Clang a cowbell as the downbeat so the bounce has a metal tick.",
+    "tags": "cowbell",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_tambourine",
+    "label": "Tambourine",
+    "clause": "Shake tambourine on two and four so soul sparkle sits on the snare.",
+    "tags": "tambourine on two and four",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_conga_tumbao",
+    "label": "Conga tumbao",
+    "clause": "Walk tumbao on congas so the bass has a skin to talk to.",
+    "tags": "conga tumbao",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bongo",
+    "label": "Bongo martillo",
+    "clause": "Martillo on bongos so the martillo chatters over the tumbao.",
+    "tags": "bongo martillo",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_timbale",
+    "label": "Timbale cascara",
+    "clause": "Drive cascara on timbales so the salsa bar has a shell clock.",
+    "tags": "timbale cascara",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_surdo",
+    "label": "Surdo",
+    "clause": "Pulse surdo as earth so samba has a floor drum.",
+    "tags": "surdo pulse",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_tamborim",
+    "label": "Tamborim",
+    "clause": "Sparkle tamborim on top so the samba layer glitters.",
+    "tags": "tamborim sparkle",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_talking_drum",
+    "label": "Talking drum",
+    "clause": "Talk syllables on a squeezed drum so the rhythm is speech.",
+    "tags": "talking drum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_djembe",
+    "label": "Djembe slap",
+    "clause": "Slap djembe so the pop is a hand not a stick.",
+    "tags": "djembe slap",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_frame_drum",
+    "label": "Frame drum",
+    "clause": "Frame a pulse on a round skin so folk time has almost no metal.",
+    "tags": "frame drum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bodhran",
+    "label": "Bodhran",
+    "clause": "Tipper a bodhran so the reel has a Celtic clock.",
+    "tags": "bodhran pulse",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_tabla",
+    "label": "Tabla theka",
+    "clause": "Cycle a tabla theka so the grid is a spoken bol.",
+    "tags": "tabla theka",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_taiko",
+    "label": "Taiko",
+    "clause": "Strike taiko into the chest so the hit is a body not a snare.",
+    "tags": "taiko hits",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_clave_32",
+    "label": "Clave 3-2",
+    "clause": "Pull 3-2 clave forward so the phrase leans ahead of the bar.",
+    "tags": "3-2 clave",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_clave_23",
+    "label": "Clave 2-3",
+    "clause": "Answer 2-3 clave so the phrase replies after the bar.",
+    "tags": "2-3 clave",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bounce_trill",
+    "label": "Bounce trill",
+    "clause": "Trill hats as the party so the chant has a New-Orleans cousin.",
+    "tags": "bounce trill hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_jersey_stutter",
+    "label": "Jersey stutter",
+    "clause": "Stutter kicks in a club chop so the vocal sample is percussion.",
+    "tags": "jersey club stutter",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bmore_break",
+    "label": "Club break",
+    "clause": "Break club chops at dance tempo so shouts can sit as drums.",
+    "tags": "club break chops",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_phonk_bell",
+    "label": "Phonk cowbell",
+    "clause": "Bounce a phonk cowbell so the chopped tag has a metal tick.",
+    "tags": "phonk cowbell",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_crunk_stomp",
+    "label": "Crunk stomp",
+    "clause": "Stomp a heavy 808-adjacent kick so the chant is the arrangement.",
+    "tags": "crunk stomp",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_hyphy_bounce",
+    "label": "Hyphy bounce",
+    "clause": "Ghost-ride a bouncy kit so the party ad-lib has a floor.",
+    "tags": "hyphy bounce drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_gqom_broken",
+    "label": "Gqom broken",
+    "clause": "Break gqom kicks in the dark so the club stays ominous.",
+    "tags": "gqom broken kicks",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_log_drum",
+    "label": "Log drum",
+    "clause": "Punch a log-drum pattern late so amapiano bass is percussive.",
+    "tags": "log drum pattern",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_organic_shaker",
+    "label": "Organic shaker",
+    "clause": "Shake organic time so the four-floor feels played.",
+    "tags": "organic shakers",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_live_room_kit",
+    "label": "Live room kit",
+    "clause": "Bleed a live kit into the room so the drums have walls.",
+    "tags": "live room kit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_drumless_click",
+    "label": "Drumless click",
+    "clause": "Mute the kit to a click so bass and sample carry time.",
+    "tags": "click only",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "drm_four_floor"
+    ],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_half_snare",
+    "label": "Half-time snare",
+    "clause": "Halve the snare so the hook waits a bar to clap.",
+    "tags": "half-time snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_double_hats",
+    "label": "Double-time hats",
+    "clause": "Double the hats so the verse sprints over a slow kick.",
+    "tags": "double-time hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_triplet_hats",
+    "label": "Triplet hats",
+    "clause": "Triplet the hats so the grid is three against two.",
+    "tags": "triplet hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_linear_kit",
+    "label": "Linear kit",
+    "clause": "Linearize so no two drums speak at once.",
+    "tags": "linear drumming",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_samba_batucada",
+    "label": "Samba batucada",
+    "clause": "Layer batucada so many skins are one pulse.",
+    "tags": "batucada",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_second_line",
+    "label": "Second line",
+    "clause": "Second-line the snare so the parade answers the bass drum.",
+    "tags": "second-line snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_go_go",
+    "label": "Go-go pocket",
+    "clause": "Pocket a go-go swing so the conga and kit talk.",
+    "tags": "go-go pocket",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_afrobeat_lock",
+    "label": "Afrobeat lock",
+    "clause": "Interlock drums so no part is the whole groove.",
+    "tags": "interlocking afrobeat drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_funk_sixteenth",
+    "label": "Funk sixteenth",
+    "clause": "Chick sixteenth hats so the guitar can answer.",
+    "tags": "funk sixteenth hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_soul_two_four",
+    "label": "Soul two-four",
+    "clause": "Soul the snare on two and four so the tambourine has a partner.",
+    "tags": "soul two and four",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_house_offbeat",
+    "label": "House offbeat",
+    "clause": "Offbeat the hats so the four-floor has sparkle.",
+    "tags": "house offbeat hats",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_deep_tick",
+    "label": "Deep house tick",
+    "clause": "Tick deep and small so the warm kick stays round.",
+    "tags": "deep house tick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_trance_two",
+    "label": "Trance two-step",
+    "clause": "Two-step a trance hat so the breakdown can wait minutes.",
+    "tags": "trance two-step",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_hard_clap",
+    "label": "Hard clap",
+    "clause": "Clap hard and dry so industrial four-floor has a stick.",
+    "tags": "hard techno clap",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_acid_tick",
+    "label": "Acid tick",
+    "clause": "Tick acid-small so the squelch bass can occupy.",
+    "tags": "acid house tick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bigbeat_fat",
+    "label": "Big-beat fat",
+    "clause": "Fatten a break so the rave kick has rock weight.",
+    "tags": "fat big-beat break",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_idm_broken",
+    "label": "IDM broken",
+    "clause": "Scatter broken hits so the meter refuses a dance floor.",
+    "tags": "broken idm drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_cloud_wash",
+    "label": "Cloud wash",
+    "clause": "Wash drums into cloud so the vocal can float.",
+    "tags": "washed cloud drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_lofi_sleepy",
+    "label": "Lo-fi sleepy",
+    "clause": "Sleep the loop so the Rhodes never quite locks.",
+    "tags": "sleepy lo-fi drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_triphop_break",
+    "label": "Trip-hop break",
+    "clause": "Dust a trip-hop break so smoke sits in the snare.",
+    "tags": "dusty trip-hop break",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_industrial_metal",
+    "label": "Industrial metal",
+    "clause": "Hit metal as drums so the machine is the kit.",
+    "tags": "industrial metal hits",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_punk_dry",
+    "label": "Dry punk snare",
+    "clause": "Dry-crack a punk snare so prettiness is refused.",
+    "tags": "dry punk snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_gaze_cymbal",
+    "label": "Shoegaze cymbal",
+    "clause": "Bloom cymbals so the kit is weather not time.",
+    "tags": "washed shoegaze cymbals",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_folk_tap",
+    "label": "Folk foot-tap",
+    "clause": "Tap a foot as the grid so the guitar can follow the lyric.",
+    "tags": "foot-tap time",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_country_train",
+    "label": "Country train",
+    "clause": "Train-chug a country snare so the story sits on two and four.",
+    "tags": "country train beat",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bluegrass_chop",
+    "label": "Bluegrass chop",
+    "clause": "Chop mandolin-time so acoustic sprint has a backbeat.",
+    "tags": "bluegrass chop",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_blues_shuffle",
+    "label": "Blues shuffle",
+    "clause": "Shuffle twelve-bar so the guitar can answer the vocal.",
+    "tags": "blues shuffle drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_jazz_ride",
+    "label": "Jazz ride",
+    "clause": "Ping a jazz ride so hop can lean without a trap hat.",
+    "tags": "jazz ride cymbal",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bossa_cross",
+    "label": "Bossa cross-stick",
+    "clause": "Cross-stick a bossa so nylon guitar has a quiet clock.",
+    "tags": "bossa cross-stick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_tango_stop",
+    "label": "Tango stop",
+    "clause": "Stop tango-hard so drama is a rest not a fill.",
+    "tags": "tango dramatic stop",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_waltz_three",
+    "label": "Waltz three",
+    "clause": "Count three so the turn never lands on four.",
+    "tags": "waltz one-two-three",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_polka_oom",
+    "label": "Polka oom-pah",
+    "clause": "Oom-pah a 2/4 so the clarinet has a bounce.",
+    "tags": "polka oom-pah drums",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_march_two",
+    "label": "March two",
+    "clause": "March in two so rudiments have a parade.",
+    "tags": "marching 2/4",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_hymn_rest",
+    "label": "Hymn rest",
+    "clause": "Rest the kit so the SATB stack owns time.",
+    "tags": "hymn rest no kit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "drm_four_floor"
+    ],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_underscore_none",
+    "label": "Underscore none",
+    "clause": "Withhold percussion so low fifths can threaten picture.",
+    "tags": "almost no percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [
+      "drm_four_floor"
+    ],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_podcast_tick",
+    "label": "Podcast tick",
+    "clause": "Tick under speech so the bed never competes with a host.",
+    "tags": "quiet podcast tick",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_sting_hit",
+    "label": "Sting hit",
+    "clause": "Hit an ident so two bars can brand a show without a platform name.",
+    "tags": "sting hit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_bumper_hit",
+    "label": "Bumper hit",
+    "clause": "Hit a short bumper so the tail dies before a new scene.",
+    "tags": "bumper hit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_album_ride",
+    "label": "Album ride",
+    "clause": "Ride album-length so the cymbal can last a three-minute take.",
+    "tags": "album ride cymbal",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_draft_click",
+    "label": "Draft click",
+    "clause": "Click a draft so a 32-second sketch has a grid.",
+    "tags": "draft click track",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_club_tom",
+    "label": "Club tom",
+    "clause": "Tom-fill a club so the drop has a floor run.",
+    "tags": "club toms",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_fill_snare",
+    "label": "Snare fill",
+    "clause": "Fill snare into the downbeat so the chorus is announced.",
+    "tags": "snare fill",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_rimshot_crack",
+    "label": "Rimshot crack",
+    "clause": "Crack a rimshot so the backbeat has a stick and a hoop.",
+    "tags": "rimshot crack",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_brush_swirl",
+    "label": "Brush swirl",
+    "clause": "Swirl brushes so the ballad has motion without attack.",
+    "tags": "brush swirl",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_mallet_tom",
+    "label": "Mallet tom",
+    "clause": "Mallet toms so the hit is felt more than clicked.",
+    "tags": "mallet toms",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_gong_swell",
+    "label": "Gong swell",
+    "clause": "Swell a gong so the section change is a metal bloom.",
+    "tags": "gong swell",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_triangle_ding",
+    "label": "Triangle ding",
+    "clause": "Ding a triangle so a small metal marks the bar.",
+    "tags": "triangle ding",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_cabasa",
+    "label": "Cabasa",
+    "clause": "Scrape cabasa so the sixteenth is a bead not a hat.",
+    "tags": "cabasa scrape",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_shekere",
+    "label": "Shekere",
+    "clause": "Shake shekere so the net beads are the shaker.",
+    "tags": "shekere shake",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_guiro",
+    "label": "Guiro",
+    "clause": "Scrape guiro so the rhythm is a gourd ridge.",
+    "tags": "guiro scrape",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_claves_wood",
+    "label": "Wood claves",
+    "clause": "Click wood claves so the wood is the metronome.",
+    "tags": "wood claves",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_woodblock",
+    "label": "Woodblock",
+    "clause": "Knock a woodblock so a dry wood ticks the bar.",
+    "tags": "woodblock",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_agogo",
+    "label": "Agogo",
+    "clause": "Bell agogo so two pitches are the percussion melody.",
+    "tags": "agogo bells",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_flexatone",
+    "label": "Flexatone",
+    "clause": "Wobble a flexatone so the comic metal slides pitch.",
+    "tags": "flexatone",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_vibra_slap",
+    "label": "Vibra-slap",
+    "clause": "Slap a vibra-slap so the rattle follows the hit.",
+    "tags": "vibra-slap",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_ratchet",
+    "label": "Ratchet",
+    "clause": "Crank a ratchet so the grind is a measured click.",
+    "tags": "ratchet",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_anvil",
+    "label": "Anvil",
+    "clause": "Strike an anvil so the industrial hit is a real metal.",
+    "tags": "anvil hit",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_brake_drum",
+    "label": "Brake drum",
+    "clause": "Hit a brake drum so the ping is a found-object bell.",
+    "tags": "brake drum",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_chain_rattle",
+    "label": "Chain rattle",
+    "clause": "Rattle a chain so the texture is metal links not a shaker.",
+    "tags": "chain rattle",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_typewriter",
+    "label": "Typewriter",
+    "clause": "Type percussion so the office click is a grid.",
+    "tags": "typewriter percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_match_strike",
+    "label": "Match strike",
+    "clause": "Strike a match as a hit so the foley is the snare cousin.",
+    "tags": "match-strike percussion",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_finger_roll",
+    "label": "Finger roll",
+    "clause": "Roll fingers on the snare so the fill is skin not sticks.",
+    "tags": "finger roll snare",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_rim_scrape",
+    "label": "Rim scrape",
+    "clause": "Scrape the rim so the riser is a drum not a synth.",
+    "tags": "rim scrape",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  },
+  {
+    "id": "drm_shell_knock",
+    "label": "Shell knock",
+    "clause": "Knock the shell so the click is wood hoop not a cowbell.",
+    "tags": "shell knock",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": true,
+    "conflicts": [],
+    "tags_meta": [
+      "drums"
+    ]
+  }
+]

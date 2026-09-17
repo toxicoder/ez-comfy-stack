@@ -263,6 +263,22 @@ def test_cinema_rack_exposes_subject_and_axes() -> None:
     assert len(labels) == len(set(labels)), labels
 
 
+def test_audio_rack_exposes_brief_and_axes() -> None:
+    names = _widget_names(_load("inspire/audio-rack.json"))
+    assert names[0] == "quality"
+    assert names[1] == "brief"
+    assert "recipe" in names
+    assert "genre_style" in names
+    assert names.count("enhance") == 2
+    labels = _labels(_load("inspire/audio-rack.json"))
+    assert labels[0] == "Quality"
+    assert labels[1] == "Brief"
+    assert "Tempo" in labels
+    assert "Rewrite vocal" in labels
+    assert "Rewrite instrumental" in labels
+    assert len(labels) == len(set(labels)), labels
+
+
 def test_prompt_forge_keeps_three_family_prompts_first() -> None:
     names = _widget_names(_load("inspire/prompt-forge.json"))
     assert names[:4] == ["quality", "sample", "prompt", "value"]
