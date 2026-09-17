@@ -95,7 +95,7 @@ Canvas rows live in [Studio canvas](operate/troubleshooting-canvas.md). The fixt
 
 | Symptom | Cause | Fix |
 | --- | --- | --- |
-| YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, or ducked English) | Clone failed `is_speech_like` or ingest `job_slug` became `True` from the upload button | Pull latest. Check Dub status. Inspect `dubs/<slug>/render/turn_*.raw.wav`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. Job dir must be `dubs/episode/`, not `dubs/True/`. |
+| YT preview `ez_dub_yt_*.mp3` is ~source length but has no Spanish (tone, hush, ducked English, or a sliding moan) | Clone failed `is_speech_like` (including an F0-glide vocoder “whale”) or ingest `job_slug` became `True` from the upload button | Pull latest. Clone CFG auto is 0.3 (retry 0.5). Check Dub status. Inspect `dubs/<slug>/render/turn_*.raw.wav`. `download-dub --tier asr` then `--tier clone` with compose up. Never treat a duration-matched drone as success. Job dir must be `dubs/episode/`, not `dubs/True/`. |
 
 ---
 

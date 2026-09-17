@@ -6,6 +6,7 @@ Constants that tests monkeypatch on :mod:`ez_dub.pipeline` (currently
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +20,12 @@ ZCR_SPEECH_MIN = 150.0
 ZC_INTERVAL_CV_MIN = 0.18
 ZC_INTERVAL_MIN_GAPS = 8
 ENVELOPE_CV_MIN = 0.12
+SPEECH_BAND_LO_HZ = 300.0
+SPEECH_BAND_HI_HZ = 3400.0
+SPEECH_BAND_MIN = 0.22
+TONAL_FRAME_MS = 80
+TONAL_CV_MAX = 0.08
+TONAL_FRAME_MAX = 0.82
 ONSET_ABS = 0.02
 ONSET_REL = 0.12
 ONSET_HOLD_S = 0.08
@@ -711,6 +718,92 @@ def zero_crossing_rate(pcm: list[float], rate: int) -> float:
     return len(_zero_cross_indices(pcm)) / dur
 
 
+def _one_pole_alpha(rate: int, cutoff_hz: float) -> float:
+    """Smoothing coefficient for a 1-pole filter at ``cutoff_hz``.
+
+    Args:
+        rate: Sample rate.
+        cutoff_hz: −3 dB frequency.
+
+    Returns:
+        Coefficient in ``(0, 1]``.
+    """
+    sr = float(max(1, int(rate) or SAMPLE_RATE))
+    fc = max(1.0, float(cutoff_hz))
+    dt = 1.0 / sr
+    rc = 1.0 / (2.0 * math.pi * fc)
+    return dt / (rc + dt)
+
+
+def speech_band_ratio(pcm: list[float], rate: int) -> float:
+    """Fraction of RMS in the 300–3400 Hz speech band (1-pole HP then LP).
+
+    Vocoder moans sit below 300 Hz. Spoken formants and sibilants do not.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+
+    Returns:
+        ``rms(band) / rms(full)``, or 0.0 when the clip is silent.
+    """
+    if not pcm:
+        return 0.0
+    full = rms(pcm)
+    if full < 1e-8:
+        return 0.0
+    sr = int(rate) or SAMPLE_RATE
+    hp_a = 1.0 - _one_pole_alpha(sr, SPEECH_BAND_LO_HZ)
+    lp_a = _one_pole_alpha(sr, SPEECH_BAND_HI_HZ)
+    prev_x = float(pcm[0])
+    hp_y = 0.0
+    lp_y = 0.0
+    acc = 0.0
+    for raw in pcm:
+        x = float(raw)
+        hp_y = hp_a * (hp_y + x - prev_x)
+        prev_x = x
+        lp_y = lp_y + lp_a * (hp_y - lp_y)
+        acc += lp_y * lp_y
+    band = (acc / len(pcm)) ** 0.5
+    return band / full
+
+
+def tonal_frame_fraction(pcm: list[float], rate: int) -> float:
+    """Fraction of voiced 80 ms frames that look like a near-pure tone.
+
+    A HiFT whale/moan is periodic in every frame. Speech mixes vowels with
+    consonants, so the fraction stays lower.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+
+    Returns:
+        Tonal voiced-frame fraction in ``[0, 1]``, or 0.0 when too short.
+    """
+    sr = int(rate) or SAMPLE_RATE
+    frame = max(1, int(sr * TONAL_FRAME_MS / 1000))
+    n = len(pcm)
+    if n < frame * 2:
+        return 0.0
+    tonal = 0
+    voiced = 0
+    i = 0
+    while i + frame <= n:
+        chunk = pcm[i : i + frame]
+        i += frame
+        if rms(chunk) < REF_SILENCE_RMS:
+            continue
+        voiced += 1
+        cv = zc_interval_cv(chunk)
+        if cv < TONAL_CV_MAX:
+            tonal += 1
+    if voiced < 4:
+        return 0.0
+    return tonal / voiced
+
+
 def zc_interval_cv(pcm: list[float]) -> float:
     """Coefficient of variation of zero-crossing gaps.
 
@@ -774,12 +867,15 @@ def voiced_fraction(
 def is_speech_like(pcm: list[float], rate: int) -> bool:
     """False for silence, noise, a steady tone, or a PerTh/Chatterbox drone.
 
+    Also rejects an F0-glide vocoder moan (whale): energy below the
+    300–3400 Hz speech band, or almost every frame a near-pure tone.
+
     Args:
         pcm: Mono PCM.
         rate: Sample rate.
     Returns:
-        True only when RMS, ZCR, voicing, envelope, and ZC irregularity
-        all look like speech (not a 60–120 Hz leftover tone).
+        True only when RMS, ZCR, voicing, envelope, ZC irregularity,
+        speech-band energy, and frame tonality all look like speech.
     """
     if not pcm:
         return False
@@ -795,7 +891,11 @@ def is_speech_like(pcm: list[float], rate: int) -> bool:
         return False
     if envelope_cv(pcm, sr) < ENVELOPE_CV_MIN:
         return False
-    return zc_interval_cv(pcm) >= ZC_INTERVAL_CV_MIN
+    if zc_interval_cv(pcm) < ZC_INTERVAL_CV_MIN:
+        return False
+    if speech_band_ratio(pcm, sr) < SPEECH_BAND_MIN:
+        return False
+    return tonal_frame_fraction(pcm, sr) <= TONAL_FRAME_MAX
 
 
 def crop_hallucination_tail(

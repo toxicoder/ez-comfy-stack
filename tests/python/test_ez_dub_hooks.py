@@ -15,6 +15,8 @@ def test_pipeline_reexports_speech_and_media() -> None:
     assert pipeline.is_speech_like is speech.is_speech_like
     assert pipeline.speech_onset_slice is speech.speech_onset_slice
     assert pipeline.cosine is speech.cosine
+    assert pipeline.speech_band_ratio is speech.speech_band_ratio
+    assert pipeline.tonal_frame_fraction is speech.tonal_frame_fraction
 
 
 def test_hook_protocols_execute() -> None:

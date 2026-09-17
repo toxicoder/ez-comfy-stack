@@ -1250,7 +1250,7 @@ Type `FLOAT`. Range / default: −1.0 = auto.
 
 Clone CFG.
 
-**How it affects generation:** −1 auto. Lab auto 0 on EN→ES.
+**How it affects generation:** −1 auto. Lab auto 0.3 on EN→ES (retry 0.5).
 
 #### `exaggeration`
 
@@ -1291,7 +1291,7 @@ Type `COMBO`. Range / default: es.
 
 Target ISO code.
 
-**How it affects generation:** es is the lab smoke. Clone CFG auto 0 on EN→ES.
+**How it affects generation:** es is the lab smoke. Clone CFG auto 0.3 on EN→ES.
 
 **Other choices**
 

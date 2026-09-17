@@ -23,7 +23,7 @@ Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `down
 
 | Workflow | What it does |
 | --- | --- |
-| **[audio/dub/clone-translate](../generated/workflows/audio/dub/clone-translate.md)** | Multi-speaker clone-and-translate. Pick or upload source media. Rights gate. **Clone CFG** auto 0 on EN→ES. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
+| **[audio/dub/clone-translate](../generated/workflows/audio/dub/clone-translate.md)** | Multi-speaker clone-and-translate. Pick or upload source media. Rights gate. **Clone CFG** auto 0.3 on EN→ES. Duration-locked `ez_dub_yt` for YouTube Languages. Prefix `ez_dub_mix` |
 | **[audio/podcast/two-host-episode](../generated/workflows/audio/podcast/two-host-episode.md)** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
 | **[audio/podcast/radio-drama](../generated/workflows/audio/podcast/radio-drama.md)** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
 | **[audio/music/rap-draft](../generated/workflows/audio/music/rap-draft.md)** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
