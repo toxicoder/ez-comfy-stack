@@ -124,7 +124,7 @@
     "lyrics_form": "",
     "lyrics_form_inst": "",
     "bpm": "",
-    "vocal_ok": false,
+    "vocal_ok": true,
     "instrumental_ok": true,
     "podcast_ok": false,
     "conflicts": [
@@ -1940,6 +1940,208 @@
     "instrumental_ok": true,
     "podcast_ok": true,
     "conflicts": [],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_riddim",
+    "label": "Riddim bass",
+    "clause": "Syncopated mid-bass wobbles on a sparse snare with no rap vocal and no dancehall chat pocket.",
+    "tags": "riddim, warped bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_dancehall",
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_tearout",
+    "label": "Tearout",
+    "clause": "Distorted half-time bass that scrapes the mids while trap drums stay sparse and mean.",
+    "tags": "tearout, warped bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_brostep",
+    "label": "Brostep",
+    "clause": "Midrange growl bass over a sparse snare, weight in the body not a mainstage hymn.",
+    "tags": "brostep, growl bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_wave_bass",
+    "label": "Wave bass",
+    "clause": "Folding 808 waves that warp the sub without a sung hook or a house four-floor.",
+    "tags": "wave bass, warped bass, 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_color_bass",
+    "label": "Color bass",
+    "clause": "Formant-stacked bass color that stays low and wet, never a pluck or a sparkle lead.",
+    "tags": "color bass, formant bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dirty_bass",
+    "label": "Dirty bass",
+    "clause": "Industrial grit on a warped bass bed with trap drums and no rap verse.",
+    "tags": "dirty bass, warped bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_dirty_south",
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_dirty_dubstep",
+    "label": "Dirty dubstep",
+    "clause": "Filthy wobble cousin of dubstep that stays chest-heavy and refuses a pretty pad.",
+    "tags": "dirty dubstep, wobble bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_drumstep",
+    "label": "Drumstep",
+    "clause": "Dubstep bass at a sprint grid, amen cousins under a chest-sub not a liquid pad.",
+    "tags": "drumstep, amen break, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_liquid_dnb",
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_neuro_bass",
+    "label": "Neuro bass",
+    "clause": "Mid-heavy growl design at bass-music tempo, not surgical dnb breaks.",
+    "tags": "neuro bass, reese bass, chest-sub",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_neurofunk",
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_chest_bass",
+    "label": "Chest bass",
+    "clause": "The arrangement is the chest-sub; drums only exist to punch the body note.",
+    "tags": "chest bass, chest-sub, 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
+    "tags_meta": [
+      "genre"
+    ]
+  },
+  {
+    "id": "gen_festival_trap",
+    "label": "Festival trap",
+    "clause": "Trap-drum warp with stacked 808s for a live bass set, not a four-floor anthem.",
+    "tags": "festival trap, trap drums, 808",
+    "lyrics_form": "",
+    "lyrics_form_inst": "",
+    "bpm": "",
+    "vocal_ok": true,
+    "instrumental_ok": true,
+    "podcast_ok": false,
+    "conflicts": [
+      "gen_boom_bap"
+    ],
     "tags_meta": [
       "genre"
     ]

@@ -1,6 +1,6 @@
 {
   "id": "14-root-chest",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
-        "[drop - heavy chest drop, trap sub wreck, warped 808, grid 443 0]\n\n[inst - trap hats denser, chest 808 hold, grid 443 1]\n\n[drop - harder chest drop, dual-action pedal bass, stacked 808 warp, grid 443 2]\n\n[inst - pedal 808 hold, hats roll, grid 443 3]\n\n[drop - full send drop, body chest wreck, trap warp, grid 443 4]\n\n[inst - hats denser, 808 punch, grid 443 5]\n\n[drop - harder stacked drop, trap 808 wreck, chest formant, grid 443 6]\n\n[drop - full send drop, chest sub wreck, warped pedal, grid 443 7]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 443 8]",
+        "chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals",
+        "[drop - heavy chest drop, trap sub wreck, warped 808, grid 443 0]\n\n[inst - rapid hi-hats denser, chest-sub 808 hold, grid 443 1]\n\n[drop - harder chest drop, dual-action pedal bass, stacked 808 warp, grid 443 2]\n\n[inst - pedal 808 hold, hats roll, grid 443 3]\n\n[drop - full send drop, body chest wreck, trap warp, grid 443 4]\n\n[inst - hats denser, 808 punch, grid 443 5]\n\n[drop - harder stacked drop, trap drums 808 wreck, chest formant, grid 443 6]\n\n[drop - full send drop, chest-sub wreck, warped pedal, grid 443 7]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 443 8]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/14-root-chest"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "chest bass, warped bass, trap hats, dual-action pedal bass, body bass, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 148 bpm",
-        "[drop - heavy chest drop, trap sub wreck, warped 808, grid 443 0]\n\n[inst - trap hats denser, chest 808 hold, grid 443 1]\n\n[drop - harder chest drop, dual-action pedal bass, stacked 808 warp, grid 443 2]\n\n[inst - pedal 808 hold, hats roll, grid 443 3]\n\n[drop - full send drop, body chest wreck, trap warp, grid 443 4]\n\n[inst - hats denser, 808 punch, grid 443 5]\n\n[drop - harder stacked drop, trap 808 wreck, chest formant, grid 443 6]\n\n[drop - full send drop, chest sub wreck, warped pedal, grid 443 7]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 443 8]",
+        "chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 148 bpm, instrumental, no vocals",
+        "[drop - heavy chest drop, trap sub wreck, warped 808, grid 443 0]\n\n[inst - rapid hi-hats denser, chest-sub 808 hold, grid 443 1]\n\n[drop - harder chest drop, dual-action pedal bass, stacked 808 warp, grid 443 2]\n\n[inst - pedal 808 hold, hats roll, grid 443 3]\n\n[drop - full send drop, body chest wreck, trap warp, grid 443 4]\n\n[inst - hats denser, 808 punch, grid 443 5]\n\n[drop - harder stacked drop, trap drums 808 wreck, chest formant, grid 443 6]\n\n[drop - full send drop, chest-sub wreck, warped pedal, grid 443 7]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 443 8]",
         443,
         "fixed",
         148,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/headliner/14-root-chest",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

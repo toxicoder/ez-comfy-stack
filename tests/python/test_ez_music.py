@@ -509,9 +509,15 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
     assert civic[0]["title"] == "frozen ercot"
     assert "Uri" in civic[0]["lyrics"]
     assert civic_club[0]["title"] == "lone star tab"
-    assert "Lone Star" in civic_club[0]["lyrics"] or "lone star" in civic_club[0]["lyrics"].lower()
+    assert (
+        "Lone Star" in civic_club[0]["lyrics"]
+        or "lone star" in civic_club[0]["lyrics"].lower()
+    )
     assert federal[0]["title"] == "thirty four counts"
-    assert "thirty-four" in federal[0]["lyrics"].lower() or "thirty four" in federal[0]["lyrics"].lower()
+    assert (
+        "thirty-four" in federal[0]["lyrics"].lower()
+        or "thirty four" in federal[0]["lyrics"].lower()
+    )
     assert federal_club[0]["title"] == "pardon flood"
     assert "pardon" in federal_club[0]["lyrics"].lower()
     progress = [ex for ex in DISS_EXAMPLES if ex["series"] == "progress"]
@@ -670,25 +676,23 @@ def _hits_needles(text: str, needles: tuple[str, ...]) -> bool:
 
 
 def test_drive_tags_lock_instrumental_bed() -> None:
-    tags = drive_tags("hybrid trap", "warped bass", bpm=148)
-    assert tags == (
-        "hybrid trap, warped bass, instrumental, no vocals, no singing, "
-        "no choir, no vocal chops, original composition, 148 bpm"
-    )
+    tags = drive_tags(bpm=148)
+    tags_low = tags.lower()
     for token in DRIVE_LOCK.split(", "):
-        assert token in tags
+        assert token in tags_low
+    assert "148 bpm" in tags_low
+    assert "rave" in tags_low
+    assert "warped hybrid-trap" in tags_low
 
 
 def test_drive_tags_lock_vocal_treat() -> None:
-    tags = drive_tags("hybrid trap", "trap hats", bpm=150, treat=True)
-    assert tags == (
-        "hybrid trap, trap hats, sparse vocal chop, DJ shout, no rap, "
-        "original composition, 150 bpm"
-    )
+    tags = drive_tags(bpm=150, treat=True)
+    tags_low = tags.lower()
     for token in DRIVE_TREAT_LOCK.split(", "):
-        assert token in tags
-    assert "no vocals" not in tags
-    assert "no singing" not in tags
+        assert token.lower() in tags_low
+    assert "no vocals" not in tags_low
+    assert "no singing" not in tags_low
+    assert "150 bpm" in tags_low
 
 
 def test_format_edm_score_requires_weighted_drops() -> None:
@@ -729,8 +733,7 @@ def test_edm_example_rejects_unknown_layout() -> None:
             0,
             "nope",
             format_edm_score(*_valid_edm_sections()),
-            "hybrid trap",
-            "rave",
+            recipe="rec_drive_through_drop",
             layout="diagonal",
         )
 
@@ -864,9 +867,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert labels[0] == "drop", (ex["stem"], labels)
         signatures.append(labels)
         sections = _section_blocks(lyrics)
-        drop_at = next(
-            i for i, block in enumerate(sections) if "drop" in block.lower()
-        )
+        drop_at = next(i for i, block in enumerate(sections) if "drop" in block.lower())
         assert drop_at == 0, (ex["stem"], drop_at, labels)
         drops = _drop_blocks(lyrics)
         assert len(drops) >= 2, (ex["stem"], len(drops))
@@ -953,9 +954,7 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert ex["artist"] == DRIVE_THROUGH_ARTIST
         assert ex["album"] == DRIVE_THROUGH_ALBUMS[ex["phase"]]["title"]
         assert ex["prefix"] == music_output_prefix(ex["title"], ex["track"])
-        assert ex["rel"] == album_rel(
-            "drive-through", ex["album_slug"], ex["stem"]
-        )
+        assert ex["rel"] == album_rel("drive-through", ex["album_slug"], ex["stem"])
         for needle in (*LIVING_MC_NEEDLES, *LIVING_EDM_NEEDLES):
             assert needle not in lyrics
             assert needle not in ex["tags"]
@@ -1002,7 +1001,72 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
     assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
     assert "warped" in EDM_EXAMPLES[0]["lyrics"].lower()
     assert "full send drop" in EDM_EXAMPLES[1]["lyrics"]
-    assert "trap hats" in EDM_EXAMPLES[2]["tags"]
+    assert (
+        "trap drums" in EDM_EXAMPLES[2]["tags"]
+        or "rapid hi-hats" in EDM_EXAMPLES[2]["tags"]
+    )
+
+
+def test_drive_through_tags_are_audio_rack_splices() -> None:
+    from ez_prompt_enhance import audio
+
+    audio.reset_audio_caches_for_tests()
+    for ex in EDM_EXAMPLES:
+        treat = ex["ace_mode"] == "vocal"
+        flavor = audio.FLAVOR_ACE_VOCAL if treat else audio.FLAVOR_ACE_INSTRUMENTAL
+        result = audio.splice(ex["picks"], flavor=flavor, recipe=ex["recipe"])
+        assert result.tags == ex["tags"], ex["stem"]
+        assert str(ex["bpm"]) in result.tags
+        assert result.tags.lower().count("bpm") == 1
+        for tid in ex["picks"].values():
+            assert audio.technique(tid) is not None, (ex["stem"], tid)
+        if treat:
+            assert "voc_dj_shout" in result.used
+            assert "no vocals" not in result.tags.lower()
+        else:
+            assert "instrumental" in result.tags.lower()
+            assert "no vocals" in result.tags.lower()
+
+
+def test_drive_through_score_cues_use_catalog_language() -> None:
+    unofficial = (
+        "trap hats",
+        "chest sub",
+        "bass growl",
+        "amen chops",
+        "amen keep",
+    )
+    official_needles = (
+        "rapid hi-hats",
+        "trap drums",
+        "chest-sub",
+        "growl bass",
+        "amen break",
+        "warped bass",
+        "wobble bass",
+        "reese bass",
+        "formant bass",
+        "dual-action pedal bass",
+        "stacked 808",
+        "body bass",
+        "fold bass",
+        "dirty bass",
+        "wave bass",
+        "color bass",
+        "riddim",
+        "tearout",
+        "brostep",
+        "drumstep",
+        "neuro bass",
+        "festival trap",
+        "warped hybrid-trap",
+        "dirty dubstep",
+    )
+    for ex in EDM_EXAMPLES:
+        low = ex["lyrics"].lower()
+        for phrase in unofficial:
+            assert phrase not in low, (ex["stem"], phrase)
+        assert any(needle in low for needle in official_needles), ex["stem"]
 
 
 def test_writer_prompt_forbids_living_mcs() -> None:
@@ -1026,7 +1090,10 @@ def test_lyrics_enhance_off_passthrough() -> None:
 
 def test_lyrics_enhance_on_sends_context() -> None:
     with (
-        patch("ez_prompt_enhance.client.complete", return_value=("[verse]\nrewritten", None)) as complete,
+        patch(
+            "ez_prompt_enhance.client.complete",
+            return_value=("[verse]\nrewritten", None),
+        ) as complete,
         patch("ez_prompt_enhance.client._close_llm"),
     ):
         out = EZRapLyrics().run(DRAFT_LYRICS, True, "own the booth")
@@ -1047,7 +1114,9 @@ def test_lyrics_missing_gguf_passthrough() -> None:
     assert "GGUF missing" in out["ui"]["passthrough"][0]
 
 
-def test_ensure_lab_custom_nodes_path_inserts_parent(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_ensure_lab_custom_nodes_path_inserts_parent(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr(
         sys,
         "path",

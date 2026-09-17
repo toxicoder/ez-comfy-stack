@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "wave bass, warped bass, trap hats, chest 808, low rumble, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
-        "[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]\n\n[inst - trap hats denser, wave 808 sustain splice, grid 523 1]\n\n[drop - harder growl drop, chest 808 wall, formant fold, grid 523 2]\n\n[drop - full send drop, low swell wreck, wave warp, grid 523 3]\n\n[outro - kick holds, hats denser, wave ride, grid 523 4]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 152 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]\n\n[inst - rapid hi-hats denser, wave 808 sustain splice, grid 523 1]\n\n[drop - harder growl drop, chest-sub 808 wall, formant fold, grid 523 2]\n\n[drop - full send drop, low swell wreck, wave warp, grid 523 3]\n\n[outro - kick holds, hats denser, wave ride, grid 523 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/12-night-splice"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "wave bass, warped bass, trap hats, chest 808, low rumble, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
-        "[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]\n\n[inst - trap hats denser, wave 808 sustain splice, grid 523 1]\n\n[drop - harder growl drop, chest 808 wall, formant fold, grid 523 2]\n\n[drop - full send drop, low swell wreck, wave warp, grid 523 3]\n\n[outro - kick holds, hats denser, wave ride, grid 523 4]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 152 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]\n\n[inst - rapid hi-hats denser, wave 808 sustain splice, grid 523 1]\n\n[drop - harder growl drop, chest-sub 808 wall, formant fold, grid 523 2]\n\n[drop - full send drop, low swell wreck, wave warp, grid 523 3]\n\n[outro - kick holds, hats denser, wave ride, grid 523 4]",
         523,
         "fixed",
         152,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/12-night-splice",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

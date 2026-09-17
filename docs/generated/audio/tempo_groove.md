@@ -1,6 +1,6 @@
 ---
 title: Tempo and Groove
-description: Audio Rack catalog — Tempo and Groove (110 spliceable techniques).
+description: Audio Rack catalog — Tempo and Groove (123 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 110 spliceable techniques for **Tempo and Groove**
+- 123 spliceable techniques for **Tempo and Groove**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -29,7 +29,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `tmp_100` | Head-nod 100 | 100 bpm | vocal, instrumental, podcast | — |
 | `tmp_118` | House 118 | 118 bpm | vocal, instrumental, podcast | — |
 | `tmp_128` | Four-floor 128 | 128 bpm | vocal, instrumental, podcast | — |
-| `tmp_140` | Trap 140 | 140 bpm, half-time | vocal, instrumental, podcast | tmp_88 |
+| `tmp_140` | Trap 140 | 140 bpm | vocal, instrumental, podcast | tmp_88 |
 | `tmp_160` | Footwork 160 | 160 bpm | vocal, instrumental | — |
 | `tmp_174` | DnB 174 | 174 bpm | vocal, instrumental | — |
 | `tmp_96` | Pocket 96 | 96 bpm | vocal, instrumental, podcast | — |
@@ -42,6 +42,19 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `tmp_90` | Gospel 90 | 90 bpm | vocal, instrumental, podcast | — |
 | `tmp_102` | Funk 102 | 102 bpm | vocal, instrumental, podcast | — |
 | `tmp_134` | Techno 134 | 134 bpm | vocal, instrumental, podcast | — |
+| `tmp_142` | Tearout 142 | 142 bpm | vocal, instrumental | — |
+| `tmp_144` | Riddim 144 | 144 bpm | vocal, instrumental | — |
+| `tmp_145` | Hybrid 145 | 145 bpm | vocal, instrumental | — |
+| `tmp_148` | Wave 148 | 148 bpm | vocal, instrumental | — |
+| `tmp_150` | Bass-set 150 | 150 bpm | vocal, instrumental | — |
+| `tmp_152` | Riddim 152 | 152 bpm | vocal, instrumental | — |
+| `tmp_155` | Wave 155 | 155 bpm | vocal, instrumental | — |
+| `tmp_158` | Brostep 158 | 158 bpm | vocal, instrumental | — |
+| `tmp_165` | Tearout 165 | 165 bpm | vocal, instrumental | — |
+| `tmp_168` | Dirty 168 | 168 bpm | vocal, instrumental | — |
+| `tmp_170` | Neuro 170 | 170 bpm | vocal, instrumental | — |
+| `tmp_172` | Drumstep 172 | 172 bpm | vocal, instrumental | — |
+| `tmp_176` | Drumstep 176 | 176 bpm | vocal, instrumental | — |
 | `tmp_fill_00` | Tempo 60 | 60 bpm | vocal, instrumental, podcast | — |
 | `tmp_fill_01` | Tempo 61 | 61 bpm | vocal, instrumental, podcast | — |
 | `tmp_fill_02` | Tempo 62 | 62 bpm | vocal, instrumental, podcast | — |

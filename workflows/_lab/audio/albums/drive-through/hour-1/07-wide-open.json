@@ -1,6 +1,6 @@
 {
   "id": "07-wide-open",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "color bass, warped bass, trap hats, stacked 808, chest sub, rave, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[drop - heavy color drop, warped 808 wreck, formant stack, grid 239 0]\n\n[chorus]\nhey\n\n[drop - harder growl drop, chest sub warp, color bass wreck, grid 239 2]\n\n[inst - trap hats roll, 808 slide, grid 239 3]\n\n[drop - full send drop, low 808 wall, warped color, grid 239 4]\n\n[outro - kick holds, trap hats roll, color ride, grid 239 5]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, sparse vocal chop, DJ shout, no rap, rave, 808, original composition, riser, drop first, 150 bpm",
+        "[drop - heavy color drop, warped 808 wreck, formant stack, grid 239 0]\n\n[chorus]\nhey\n\n[drop - harder growl drop, chest-sub warp, color bass wreck, grid 239 2]\n\n[inst - rapid hi-hats roll, 808 slide, grid 239 3]\n\n[drop - full send drop, low 808 wall, warped color, grid 239 4]\n\n[outro - kick holds, rapid hi-hats roll, color ride, grid 239 5]",
         false,
         "vocal",
         "audio/albums/drive-through/hour-1/07-wide-open"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "color bass, warped bass, trap hats, stacked 808, chest sub, rave, sparse vocal chop, DJ shout, no rap, original composition, 150 bpm",
-        "[drop - heavy color drop, warped 808 wreck, formant stack, grid 239 0]\n\n[chorus]\nhey\n\n[drop - harder growl drop, chest sub warp, color bass wreck, grid 239 2]\n\n[inst - trap hats roll, 808 slide, grid 239 3]\n\n[drop - full send drop, low 808 wall, warped color, grid 239 4]\n\n[outro - kick holds, trap hats roll, color ride, grid 239 5]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, sparse vocal chop, DJ shout, no rap, rave, 808, original composition, riser, drop first, 150 bpm",
+        "[drop - heavy color drop, warped 808 wreck, formant stack, grid 239 0]\n\n[chorus]\nhey\n\n[drop - harder growl drop, chest-sub warp, color bass wreck, grid 239 2]\n\n[inst - rapid hi-hats roll, 808 slide, grid 239 3]\n\n[drop - full send drop, low 808 wall, warped color, grid 239 4]\n\n[outro - kick holds, rapid hi-hats roll, color ride, grid 239 5]",
         239,
         "fixed",
         150,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/07-wide-open",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

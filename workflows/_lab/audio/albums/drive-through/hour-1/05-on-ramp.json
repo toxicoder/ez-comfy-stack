@@ -1,6 +1,6 @@
 {
   "id": "05-on-ramp",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "wave bass, warped bass, trap hats, 808 punch, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - trap hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, trap hats roll, wave ride, grid 197 5]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 155 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - rapid hi-hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, rapid hi-hats roll, wave ride, grid 197 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-1/05-on-ramp"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "wave bass, warped bass, trap hats, 808 punch, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 155 bpm",
-        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - trap hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, trap hats roll, wave ride, grid 197 5]",
+        "wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 155 bpm, instrumental, no vocals",
+        "[drop - heavy wave drop, warped 808 wreck, fold bass, grid 197 0]\n\n[inst - rapid hi-hats roll, wave 808 sustain, grid 197 1]\n\n[drop - harder formant drop, double 808 split, chest warp, grid 197 2]\n\n[inst - snare roll, 808 slide, grid 197 3]\n\n[drop - full send drop, stacked wave wreck, warped sub, grid 197 4]\n\n[outro - kick holds, rapid hi-hats roll, wave ride, grid 197 5]",
         197,
         "fixed",
         155,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/05-on-ramp",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

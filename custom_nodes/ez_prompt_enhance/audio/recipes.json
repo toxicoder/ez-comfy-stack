@@ -77,10 +77,192 @@
       "tempo_groove": "tmp_140",
       "drums_rhythm": "drm_trap_hats",
       "bass_low_end": "bass_chest_sub",
-      "instruments_texture": "ins_warped_saw",
+      "instruments_texture": "ins_warped_bass",
       "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
       "sound_design_fx": "sfx_riser",
       "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_riddim",
+    "label": "Drive-through riddim",
+    "axes": {
+      "genre_style": "gen_riddim",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_wobble",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_tearout",
+    "label": "Drive-through tearout",
+    "axes": {
+      "genre_style": "gen_tearout",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_growl",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_brostep",
+    "label": "Drive-through brostep",
+    "axes": {
+      "genre_style": "gen_brostep",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_growl",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_wave",
+    "label": "Drive-through wave bass",
+    "axes": {
+      "genre_style": "gen_wave_bass",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_fold",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_color",
+    "label": "Drive-through color bass",
+    "axes": {
+      "genre_style": "gen_color_bass",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_formant",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_dirty",
+    "label": "Drive-through dirty bass",
+    "axes": {
+      "genre_style": "gen_dirty_bass",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_warped",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_dirty_dubstep",
+    "label": "Drive-through dirty dubstep",
+    "axes": {
+      "genre_style": "gen_dirty_dubstep",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_wobble",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_drumstep",
+    "label": "Drive-through drumstep",
+    "axes": {
+      "genre_style": "gen_drumstep",
+      "tempo_groove": "tmp_174",
+      "drums_rhythm": "drm_amen_chop",
+      "bass_low_end": "bass_reese",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_neuro",
+    "label": "Drive-through neuro bass",
+    "axes": {
+      "genre_style": "gen_neuro_bass",
+      "tempo_groove": "tmp_170",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_reese",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_chest",
+    "label": "Drive-through chest bass",
+    "axes": {
+      "genre_style": "gen_chest_bass",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_body",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_festival_trap",
+    "label": "Drive-through festival trap",
+    "axes": {
+      "genre_style": "gen_festival_trap",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_stacked_808",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_first",
+      "mix_production": "mix_drive_lock",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first"
+    }
+  },
+  {
+    "id": "rec_drive_dj_shout",
+    "label": "Drive-through DJ shout",
+    "axes": {
+      "genre_style": "gen_hybrid_trap",
+      "tempo_groove": "tmp_140",
+      "drums_rhythm": "drm_trap_hats",
+      "bass_low_end": "bass_chest_sub",
+      "instruments_texture": "ins_warped_bass",
+      "arrangement_form": "frm_drop_shout",
+      "mix_production": "mix_drive_treat",
+      "sound_design_fx": "sfx_riser",
+      "use_case": "use_drop_first",
+      "vocal_identity": "voc_dj_shout"
     }
   },
   {
@@ -248,8 +430,9 @@
       "genre_style": "gen_hybrid_trap",
       "tempo_groove": "tmp_140",
       "bass_low_end": "bass_chest_sub",
-      "instruments_texture": "ins_warped_saw",
+      "instruments_texture": "ins_warped_bass",
       "arrangement_form": "frm_inst_drop_outro",
+      "mix_production": "mix_drive_lock",
       "use_case": "use_afterparty"
     }
   }

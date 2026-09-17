@@ -1,6 +1,6 @@
 {
   "id": "12-horizon-kick",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "tearout, warped bass, trap hats, bass growl, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy tearout drop, kick split wreck, warped growl, grid 263 0]\n\n[inst - trap hats roll, growl sustain, grid 263 1]\n\n[drop - harder stacked drop, formant reverse wreck, chest 808, grid 263 2]\n\n[inst - 808 triplets, hats denser, grid 263 3]\n\n[drop - full send drop, chest sub wreck, tearout warp, grid 263 4]\n\n[drop - harder growl drop, low rumble wreck, 808 punch, grid 263 5]\n\n[outro - kick holds, trap hats roll, growl ride, grid 263 6]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, kick split, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, kick split wreck, warped growl, grid 263 0]\n\n[inst - rapid hi-hats roll, growl sustain, grid 263 1]\n\n[drop - harder stacked drop, formant reverse wreck, chest-sub 808, grid 263 2]\n\n[inst - 808 triplets, hats denser, grid 263 3]\n\n[drop - full send drop, chest-sub wreck, tearout warp, grid 263 4]\n\n[drop - harder growl drop, low rumble wreck, 808 punch, grid 263 5]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 263 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-1/12-horizon-kick"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "tearout, warped bass, trap hats, bass growl, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy tearout drop, kick split wreck, warped growl, grid 263 0]\n\n[inst - trap hats roll, growl sustain, grid 263 1]\n\n[drop - harder stacked drop, formant reverse wreck, chest 808, grid 263 2]\n\n[inst - 808 triplets, hats denser, grid 263 3]\n\n[drop - full send drop, chest sub wreck, tearout warp, grid 263 4]\n\n[drop - harder growl drop, low rumble wreck, 808 punch, grid 263 5]\n\n[outro - kick holds, trap hats roll, growl ride, grid 263 6]",
+        "tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rave, no singing, no choir, no vocal chops, original composition, kick split, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy tearout drop, kick split wreck, warped growl, grid 263 0]\n\n[inst - rapid hi-hats roll, growl sustain, grid 263 1]\n\n[drop - harder stacked drop, formant reverse wreck, chest-sub 808, grid 263 2]\n\n[inst - 808 triplets, hats denser, grid 263 3]\n\n[drop - full send drop, chest-sub wreck, tearout warp, grid 263 4]\n\n[drop - harder growl drop, low rumble wreck, 808 punch, grid 263 5]\n\n[outro - kick holds, rapid hi-hats roll, growl ride, grid 263 6]",
         263,
         "fixed",
         165,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/12-horizon-kick",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

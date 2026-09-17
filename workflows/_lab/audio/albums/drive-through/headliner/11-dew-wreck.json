@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy neuro drop, reese trap 808, chest warp wreck, grid 431 0]\n\n[inst - amen chops, trap hats 808 dew, grid 431 1]\n\n[drop - harder stacked drop, chest reese wreck, warped 808, grid 431 2]\n\n[inst - hats denser, reese hold, grid 431 3]\n\n[drop - full send drop, trap 808 wreck, chest formant, grid 431 4]\n\n[inst - snare roll, 808 punch, grid 431 5]\n\n[drop - harder growl drop, stacked neuro 808 wreck, trap warp, grid 431 6]\n\n[drop - full send drop, body reese wreck, chest 808, grid 431 7]\n\n[outro - kick holds, amen keep, reese ride, grid 431 8]",
+        "drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese trap drums 808, chest warp wreck, grid 431 0]\n\n[inst - amen break, rapid hi-hats 808 dew, grid 431 1]\n\n[drop - harder stacked drop, chest reese wreck, warped 808, grid 431 2]\n\n[inst - hats denser, reese hold, grid 431 3]\n\n[drop - full send drop, trap drums 808 wreck, chest formant, grid 431 4]\n\n[inst - snare roll, 808 punch, grid 431 5]\n\n[drop - harder growl drop, stacked neuro 808 wreck, trap warp, grid 431 6]\n\n[drop - full send drop, body reese wreck, chest-sub 808, grid 431 7]\n\n[outro - kick holds, amen break, reese ride, grid 431 8]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/11-dew-wreck"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy neuro drop, reese trap 808, chest warp wreck, grid 431 0]\n\n[inst - amen chops, trap hats 808 dew, grid 431 1]\n\n[drop - harder stacked drop, chest reese wreck, warped 808, grid 431 2]\n\n[inst - hats denser, reese hold, grid 431 3]\n\n[drop - full send drop, trap 808 wreck, chest formant, grid 431 4]\n\n[inst - snare roll, 808 punch, grid 431 5]\n\n[drop - harder growl drop, stacked neuro 808 wreck, trap warp, grid 431 6]\n\n[drop - full send drop, body reese wreck, chest 808, grid 431 7]\n\n[outro - kick holds, amen keep, reese ride, grid 431 8]",
+        "drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese trap drums 808, chest warp wreck, grid 431 0]\n\n[inst - amen break, rapid hi-hats 808 dew, grid 431 1]\n\n[drop - harder stacked drop, chest reese wreck, warped 808, grid 431 2]\n\n[inst - hats denser, reese hold, grid 431 3]\n\n[drop - full send drop, trap drums 808 wreck, chest formant, grid 431 4]\n\n[inst - snare roll, 808 punch, grid 431 5]\n\n[drop - harder growl drop, stacked neuro 808 wreck, trap warp, grid 431 6]\n\n[drop - full send drop, body reese wreck, chest-sub 808, grid 431 7]\n\n[outro - kick holds, amen break, reese ride, grid 431 8]",
         431,
         "fixed",
         172,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/headliner/11-dew-wreck",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

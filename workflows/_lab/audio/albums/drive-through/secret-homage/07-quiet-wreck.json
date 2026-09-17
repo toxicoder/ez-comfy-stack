@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty bass, warped bass, trap hats, low rumble, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy dirty drop, warped bass wreck, slam 808, grid 619 0]\n\n[inst - trap hats roll, 808 slide, grid 619 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 619 2]\n\n[inst - snare roll, chest 808 punch, grid 619 3]\n\n[drop - full send drop, chest sub wreck, dirty warp, grid 619 4]\n\n[inst - hats denser, 808 punch hold, grid 619 5]\n\n[drop - harder stacked drop, slam wreck, warped 808, grid 619 6]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 619 7]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, warped bass wreck, slam 808, grid 619 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 619 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 619 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 619 3]\n\n[drop - full send drop, chest-sub wreck, dirty warp, grid 619 4]\n\n[inst - hats denser, 808 punch hold, grid 619 5]\n\n[drop - harder stacked drop, slam wreck, warped 808, grid 619 6]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 619 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/07-quiet-wreck"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty bass, warped bass, trap hats, low rumble, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 140 bpm",
-        "[drop - heavy dirty drop, warped bass wreck, slam 808, grid 619 0]\n\n[inst - trap hats roll, 808 slide, grid 619 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 619 2]\n\n[inst - snare roll, chest 808 punch, grid 619 3]\n\n[drop - full send drop, chest sub wreck, dirty warp, grid 619 4]\n\n[inst - hats denser, 808 punch hold, grid 619 5]\n\n[drop - harder stacked drop, slam wreck, warped 808, grid 619 6]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 619 7]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 140 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, warped bass wreck, slam 808, grid 619 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 619 1]\n\n[drop - harder growl drop, low rumble wreck, chest formant, grid 619 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 619 3]\n\n[drop - full send drop, chest-sub wreck, dirty warp, grid 619 4]\n\n[inst - hats denser, 808 punch hold, grid 619 5]\n\n[drop - harder stacked drop, slam wreck, warped 808, grid 619 6]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 619 7]",
         619,
         "fixed",
         140,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/07-quiet-wreck",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

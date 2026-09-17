@@ -1,6 +1,6 @@
 {
   "id": "20-trailer-hitch",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "hybrid trap, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy warped drop, chest 808 wreck, hitch grind, grid 587 0]\n\n[inst - trap hats roll, 808 slide, grid 587 1]\n\n[drop - harder stacked drop, rolling 808 wall, hybrid formant, grid 587 2]\n\n[inst - snare roll, chest 808 punch, grid 587 3]\n\n[drop - full send drop, body bass wreck, trap warp, grid 587 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]\n\n[drop - full send drop, chest sub wreck, warped hitch, grid 587 6]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 587 7]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 587 1]\n\n[drop - harder stacked drop, stacked 808 wall, hybrid formant, grid 587 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 587 3]\n\n[drop - full send drop, body bass wreck, trap warp, grid 587 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]\n\n[drop - full send drop, chest-sub wreck, warped hitch, grid 587 6]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 587 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/20-trailer-hitch"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hybrid trap, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy warped drop, chest 808 wreck, hitch grind, grid 587 0]\n\n[inst - trap hats roll, 808 slide, grid 587 1]\n\n[drop - harder stacked drop, rolling 808 wall, hybrid formant, grid 587 2]\n\n[inst - snare roll, chest 808 punch, grid 587 3]\n\n[drop - full send drop, body bass wreck, trap warp, grid 587 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]\n\n[drop - full send drop, chest sub wreck, warped hitch, grid 587 6]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 587 7]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0]\n\n[inst - rapid hi-hats roll, 808 slide, grid 587 1]\n\n[drop - harder stacked drop, stacked 808 wall, hybrid formant, grid 587 2]\n\n[inst - snare roll, chest-sub 808 punch, grid 587 3]\n\n[drop - full send drop, body bass wreck, trap warp, grid 587 4]\n\n[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]\n\n[drop - full send drop, chest-sub wreck, warped hitch, grid 587 6]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 587 7]",
         587,
         "fixed",
         165,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/20-trailer-hitch",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

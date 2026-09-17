@@ -1,6 +1,6 @@
 {
   "id": "04-weigh-station",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "brostep, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 158 bpm",
-        "[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]\n\n[inst - trap hats roll, growl hold, grid 467 1]\n\n[drop - harder growl drop, chest sub wall, formant 808, grid 467 2]\n\n[inst - snare roll, 808 punch, grid 467 3]\n\n[drop - full send drop, body bass wreck, warped brostep, grid 467 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 467 5]",
+        "brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 158 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]\n\n[inst - rapid hi-hats roll, growl hold, grid 467 1]\n\n[drop - harder growl drop, chest-sub wall, formant 808, grid 467 2]\n\n[inst - snare roll, 808 punch, grid 467 3]\n\n[drop - full send drop, body bass wreck, warped brostep, grid 467 4]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 467 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/04-weigh-station"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "brostep, warped bass, trap hats, stacked 808, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 158 bpm",
-        "[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]\n\n[inst - trap hats roll, growl hold, grid 467 1]\n\n[drop - harder growl drop, chest sub wall, formant 808, grid 467 2]\n\n[inst - snare roll, 808 punch, grid 467 3]\n\n[drop - full send drop, body bass wreck, warped brostep, grid 467 4]\n\n[outro - kick holds, trap hats roll, 808 ride, grid 467 5]",
+        "brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 158 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]\n\n[inst - rapid hi-hats roll, growl hold, grid 467 1]\n\n[drop - harder growl drop, chest-sub wall, formant 808, grid 467 2]\n\n[inst - snare roll, 808 punch, grid 467 3]\n\n[drop - full send drop, body bass wreck, warped brostep, grid 467 4]\n\n[outro - kick holds, rapid hi-hats roll, 808 ride, grid 467 5]",
         467,
         "fixed",
         158,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/04-weigh-station",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

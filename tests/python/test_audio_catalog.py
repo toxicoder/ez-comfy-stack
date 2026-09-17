@@ -121,9 +121,10 @@ def test_each_axis_has_at_least_one_hundred_unique_techniques() -> None:
             if row.get("_bpm_axis"):
                 assert str(row.get("bpm") or "").strip(), f"{tid} needs bpm"
             if row.get("_form_axis"):
-                assert str(row.get("lyrics_form") or "").strip() or str(
-                    row.get("lyrics_form_inst") or ""
-                ).strip(), f"{tid} needs lyrics form"
+                assert (
+                    str(row.get("lyrics_form") or "").strip()
+                    or str(row.get("lyrics_form_inst") or "").strip()
+                ), f"{tid} needs lyrics form"
             for field in ("clause", "tags", "lyrics_form", "bpm", "label"):
                 blob = str(row.get(field) or "").lower()
                 for brand in _BANNED:
@@ -133,7 +134,9 @@ def test_each_axis_has_at_least_one_hundred_unique_techniques() -> None:
 def test_conflict_ids_exist() -> None:
     audio.reset_audio_caches_for_tests()
     known = {
-        str(row["id"]) for axis_id in audio.axis_ids() for row in audio.load_axis(axis_id)
+        str(row["id"])
+        for axis_id in audio.axis_ids()
+        for row in audio.load_axis(axis_id)
     }
     for axis_id in audio.axis_ids():
         for row in audio.load_axis(axis_id):
@@ -153,7 +156,9 @@ def test_same_axis_clauses_are_not_synonym_padding() -> None:
     audio.reset_audio_caches_for_tests()
     for axis_id in audio.axis_ids():
         rows = audio.load_axis(axis_id)
-        bags = [(str(row["id"]), _variant_normalized(str(row["clause"]))) for row in rows]
+        bags = [
+            (str(row["id"]), _variant_normalized(str(row["clause"]))) for row in rows
+        ]
         for idx, (left_id, left) in enumerate(bags):
             if len(left) < 6:
                 continue
@@ -170,12 +175,57 @@ def test_same_axis_clauses_are_not_synonym_padding() -> None:
                 )
 
 
+def test_drive_through_catalog_ids_exist() -> None:
+    audio.reset_audio_caches_for_tests()
+    needed = (
+        "gen_riddim",
+        "gen_tearout",
+        "gen_brostep",
+        "gen_wave_bass",
+        "gen_color_bass",
+        "gen_dirty_bass",
+        "gen_dirty_dubstep",
+        "gen_drumstep",
+        "gen_neuro_bass",
+        "gen_chest_bass",
+        "gen_festival_trap",
+        "bass_growl",
+        "bass_reese",
+        "bass_formant",
+        "bass_warped",
+        "bass_pedal_dual",
+        "bass_fold",
+        "bass_stacked_808",
+        "bass_body",
+        "ins_warped_bass",
+        "mix_drive_lock",
+        "mix_drive_treat",
+        "voc_dj_shout",
+        "frm_drop_shout",
+        "tmp_150",
+        "tmp_176",
+        "rec_drive_riddim",
+        "rec_drive_dj_shout",
+    )
+    for tid in needed:
+        if tid.startswith("rec_"):
+            assert tid in audio.load_recipes(), tid
+        else:
+            assert audio.technique(tid) is not None, tid
+    drop = audio.load_recipes()["rec_drive_through_drop"]["axes"]
+    assert drop["instruments_texture"] == "ins_warped_bass"
+    after = audio.load_recipes()["rec_warped_afterparty"]["axes"]
+    assert after["instruments_texture"] == "ins_warped_bass"
+
+
 def test_recipes_fill_known_axes() -> None:
     audio.reset_audio_caches_for_tests()
     recipes = audio.load_recipes()
     assert len(recipes) >= 20
     known = {
-        str(row["id"]) for axis_id in audio.axis_ids() for row in audio.load_axis(axis_id)
+        str(row["id"])
+        for axis_id in audio.axis_ids()
+        for row in audio.load_axis(axis_id)
     }
     for rid, recipe in recipes.items():
         assert audio.validate_id(rid), rid

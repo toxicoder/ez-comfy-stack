@@ -1,6 +1,6 @@
 {
   "id": "05-moss-sub",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy dirty drop, chest sub warp, trap 808 wreck, grid 389 0]\n\n[inst - trap hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, rolling 808 wall, grid 389 2]\n\n[inst - hats denser, chest 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 389 5]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, chest-sub warp, trap drums 808 wreck, grid 389 0]\n\n[inst - rapid hi-hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 389 2]\n\n[inst - hats denser, chest-sub 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 389 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/05-moss-sub"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty bass, warped bass, trap hats, chest sub, dual-action pedal bass, rolling 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy dirty drop, chest sub warp, trap 808 wreck, grid 389 0]\n\n[inst - trap hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, rolling 808 wall, grid 389 2]\n\n[inst - hats denser, chest 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, trap hats roll, pedal ride, grid 389 5]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, chest-sub warp, trap drums 808 wreck, grid 389 0]\n\n[inst - rapid hi-hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 389 2]\n\n[inst - hats denser, chest-sub 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 389 5]",
         389,
         "fixed",
         150,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/headliner/05-moss-sub",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

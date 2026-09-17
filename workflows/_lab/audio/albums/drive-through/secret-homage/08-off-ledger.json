@@ -1,6 +1,6 @@
 {
   "id": "08-off-ledger",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -178,7 +178,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         40,
-        748
+        896
       ],
       "size": [
         400,
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
-        "[drop - heavy amen drop, reese wreck, warped ledger, grid 631 0]\n\n[inst - amen chops, trap hats 808 ledger, grid 631 1]\n\n[drop - harder dirty drop, reese stack, chest formant, grid 631 2]\n\n[inst - hats denser, reese hold, grid 631 3]\n\n[drop - full send drop, stacked amen wreck, 808 warp, grid 631 4]\n\n[drop - harder growl drop, chest 808 wreck, drumstep grind, grid 631 5]\n\n[outro - kick holds, amen keep, reese ride, grid 631 6]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals",
+        "[drop - heavy amen drop, reese wreck, warped ledger, grid 631 0]\n\n[inst - amen break, rapid hi-hats 808 ledger, grid 631 1]\n\n[drop - harder dirty drop, reese stack, chest formant, grid 631 2]\n\n[inst - hats denser, reese hold, grid 631 3]\n\n[drop - full send drop, stacked amen wreck, 808 warp, grid 631 4]\n\n[drop - harder growl drop, chest-sub 808 wreck, drumstep grind, grid 631 5]\n\n[outro - kick holds, amen break, reese ride, grid 631 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/08-off-ledger"
@@ -224,7 +224,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        1240
+        1388
       ],
       "size": [
         400,
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
-        "[drop - heavy amen drop, reese wreck, warped ledger, grid 631 0]\n\n[inst - amen chops, trap hats 808 ledger, grid 631 1]\n\n[drop - harder dirty drop, reese stack, chest formant, grid 631 2]\n\n[inst - hats denser, reese hold, grid 631 3]\n\n[drop - full send drop, stacked amen wreck, 808 warp, grid 631 4]\n\n[drop - harder growl drop, chest 808 wreck, drumstep grind, grid 631 5]\n\n[outro - kick holds, amen keep, reese ride, grid 631 6]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals",
+        "[drop - heavy amen drop, reese wreck, warped ledger, grid 631 0]\n\n[inst - amen break, rapid hi-hats 808 ledger, grid 631 1]\n\n[drop - harder dirty drop, reese stack, chest formant, grid 631 2]\n\n[inst - hats denser, reese hold, grid 631 3]\n\n[drop - full send drop, stacked amen wreck, 808 warp, grid 631 4]\n\n[drop - harder growl drop, chest-sub 808 wreck, drumstep grind, grid 631 5]\n\n[outro - kick holds, amen break, reese ride, grid 631 6]",
         631,
         "fixed",
         174,
@@ -302,7 +302,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         488,
-        748
+        896
       ],
       "size": [
         240,
@@ -339,7 +339,7 @@
       "type": "KSampler",
       "pos": [
         488,
-        866
+        1014
       ],
       "size": [
         330,
@@ -804,7 +804,7 @@
       "title": "PROMPT",
       "bounding": [
         20,
-        692,
+        840,
         818,
         1012
       ],
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/08-off-ledger",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -1,6 +1,6 @@
 {
   "id": "18-blind-stamp",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -178,7 +178,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         40,
-        748
+        896
       ],
       "size": [
         400,
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "riddim, warped bass, trap hats, wobble bass, heavy sub, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy riddim drop, wobble wreck, warped stamp, grid 691 0]\n\n[inst - metal hats roll, wobble sustain, grid 691 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 691 2]\n\n[inst - trap hats denser, wobble hold, grid 691 3]\n\n[drop - full send drop, sub crush wreck, riddim warp, grid 691 4]\n\n[outro - kick holds, hats denser, wobble ride, grid 691 5]",
+        "riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy riddim drop, wobble wreck, warped stamp, grid 691 0]\n\n[inst - metal hats roll, wobble sustain, grid 691 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 691 2]\n\n[inst - rapid hi-hats denser, wobble hold, grid 691 3]\n\n[drop - full send drop, sub crush wreck, riddim warp, grid 691 4]\n\n[outro - kick holds, hats denser, wobble ride, grid 691 5]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/18-blind-stamp"
@@ -224,7 +224,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        1240
+        1388
       ],
       "size": [
         400,
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "riddim, warped bass, trap hats, wobble bass, heavy sub, chest 808, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy riddim drop, wobble wreck, warped stamp, grid 691 0]\n\n[inst - metal hats roll, wobble sustain, grid 691 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 691 2]\n\n[inst - trap hats denser, wobble hold, grid 691 3]\n\n[drop - full send drop, sub crush wreck, riddim warp, grid 691 4]\n\n[outro - kick holds, hats denser, wobble ride, grid 691 5]",
+        "riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy riddim drop, wobble wreck, warped stamp, grid 691 0]\n\n[inst - metal hats roll, wobble sustain, grid 691 1]\n\n[drop - harder growl drop, chest growl wreck, 808 crush, grid 691 2]\n\n[inst - rapid hi-hats denser, wobble hold, grid 691 3]\n\n[drop - full send drop, sub crush wreck, riddim warp, grid 691 4]\n\n[outro - kick holds, hats denser, wobble ride, grid 691 5]",
         691,
         "fixed",
         150,
@@ -302,7 +302,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         488,
-        748
+        896
       ],
       "size": [
         240,
@@ -339,7 +339,7 @@
       "type": "KSampler",
       "pos": [
         488,
-        866
+        1014
       ],
       "size": [
         330,
@@ -804,7 +804,7 @@
       "title": "PROMPT",
       "bounding": [
         20,
-        692,
+        840,
         818,
         1012
       ],
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/18-blind-stamp",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

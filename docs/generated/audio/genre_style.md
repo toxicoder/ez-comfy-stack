@@ -1,6 +1,6 @@
 ---
 title: Genre
-description: Audio Rack catalog — Genre (121 spliceable techniques).
+description: Audio Rack catalog — Genre (132 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 121 spliceable techniques for **Genre**
+- 132 spliceable techniques for **Genre**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -29,7 +29,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `gen_jazz_rap` | Jazz rap | jazz rap, upright bass, brushed drums | vocal, instrumental, podcast | — |
 | `gen_gospel_rap` | Gospel rap | gospel rap, organ, choir pads | vocal, instrumental, podcast | — |
 | `gen_spoken_hop` | Spoken hop | spoken word hip-hop, spare drums | vocal, instrumental, podcast | — |
-| `gen_hybrid_trap` | Hybrid trap | warped hybrid-trap, trap drums | instrumental | gen_boom_bap |
+| `gen_hybrid_trap` | Hybrid trap | warped hybrid-trap, trap drums | vocal, instrumental | gen_boom_bap |
 | `gen_four_on_floor` | Four-on-floor house | house, four-on-the-floor | vocal, instrumental | gen_boom_bap |
 | `gen_deep_house` | Deep house | deep house, warm kick, filtered chords | vocal, instrumental, podcast | — |
 | `gen_techno` | Techno | techno, industrial hats, warehouse kick | vocal, instrumental | — |
@@ -143,3 +143,14 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `gen_underscore` | Dark underscore | dark underscore, low fifths, almost no percussion | instrumental, podcast | — |
 | `gen_new_age_bed` | Soft bed | soft keys, gentle bed, no groove threat | instrumental, podcast | — |
 | `gen_boom_bap_gospel` | Boom-bap gospel | boom bap, organ stabs, gospel cadence | vocal, instrumental, podcast | — |
+| `gen_riddim` | Riddim bass | riddim, warped bass, chest-sub | vocal, instrumental | gen_dancehall, gen_boom_bap |
+| `gen_tearout` | Tearout | tearout, warped bass, chest-sub | vocal, instrumental | gen_boom_bap |
+| `gen_brostep` | Brostep | brostep, growl bass, chest-sub | vocal, instrumental | gen_boom_bap |
+| `gen_wave_bass` | Wave bass | wave bass, warped bass, 808 | vocal, instrumental | gen_boom_bap |
+| `gen_color_bass` | Color bass | color bass, formant bass, chest-sub | vocal, instrumental | gen_boom_bap |
+| `gen_dirty_bass` | Dirty bass | dirty bass, warped bass, chest-sub | vocal, instrumental | gen_dirty_south, gen_boom_bap |
+| `gen_dirty_dubstep` | Dirty dubstep | dirty dubstep, wobble bass, chest-sub | vocal, instrumental | gen_boom_bap |
+| `gen_drumstep` | Drumstep | drumstep, amen break, chest-sub | vocal, instrumental | gen_liquid_dnb, gen_boom_bap |
+| `gen_neuro_bass` | Neuro bass | neuro bass, reese bass, chest-sub | vocal, instrumental | gen_neurofunk, gen_boom_bap |
+| `gen_chest_bass` | Chest bass | chest bass, chest-sub, 808 | vocal, instrumental | gen_boom_bap |
+| `gen_festival_trap` | Festival trap | festival trap, trap drums, 808 | vocal, instrumental | gen_boom_bap |

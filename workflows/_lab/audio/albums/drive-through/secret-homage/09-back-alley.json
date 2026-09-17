@@ -1,6 +1,6 @@
 {
   "id": "09-back-alley",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy neuro drop, reese 808 wreck, warped alley, grid 641 0]\n\n[inst - hats denser, reese hold, grid 641 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 641 2]\n\n[inst - trap hats roll, 808 punch, grid 641 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 641 4]\n\n[inst - snare roll, alley 808 punch, grid 641 5]\n\n[drop - harder growl drop, stacked reese wreck, alley grind, grid 641 6]\n\n[outro - kick holds, hats denser, reese ride, grid 641 7]",
+        "drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese 808 wreck, warped alley, grid 641 0]\n\n[inst - hats denser, reese hold, grid 641 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 641 2]\n\n[inst - rapid hi-hats roll, 808 punch, grid 641 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 641 4]\n\n[inst - snare roll, alley 808 punch, grid 641 5]\n\n[drop - harder growl drop, stacked reese wreck, alley grind, grid 641 6]\n\n[outro - kick holds, hats denser, reese ride, grid 641 7]",
         false,
         "instrumental",
         "audio/albums/drive-through/secret-homage/09-back-alley"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "neuro bass, warped bass, trap hats, drumstep, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 172 bpm",
-        "[drop - heavy neuro drop, reese 808 wreck, warped alley, grid 641 0]\n\n[inst - hats denser, reese hold, grid 641 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 641 2]\n\n[inst - trap hats roll, 808 punch, grid 641 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 641 4]\n\n[inst - snare roll, alley 808 punch, grid 641 5]\n\n[drop - harder growl drop, stacked reese wreck, alley grind, grid 641 6]\n\n[outro - kick holds, hats denser, reese ride, grid 641 7]",
+        "drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 172 bpm, instrumental, no vocals",
+        "[drop - heavy neuro drop, reese 808 wreck, warped alley, grid 641 0]\n\n[inst - hats denser, reese hold, grid 641 1]\n\n[drop - harder stacked drop, chest reese wreck, formant coil, grid 641 2]\n\n[inst - rapid hi-hats roll, 808 punch, grid 641 3]\n\n[drop - full send drop, neuro 808 wreck, chest warp, grid 641 4]\n\n[inst - snare roll, alley 808 punch, grid 641 5]\n\n[drop - harder growl drop, stacked reese wreck, alley grind, grid 641 6]\n\n[outro - kick holds, hats denser, reese ride, grid 641 7]",
         641,
         "fixed",
         172,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/secret-homage/09-back-alley",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

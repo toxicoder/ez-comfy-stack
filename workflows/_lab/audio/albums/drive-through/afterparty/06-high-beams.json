@@ -1,6 +1,6 @@
 {
   "id": "06-high-beams",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "color bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy color drop, dual-action pedal bass, chest 808 warp, grid 487 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 487 1]\n\n[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]\n\n[inst - snare roll, chest 808, grid 487 3]\n\n[drop - full send drop, body sub wreck, warped color, grid 487 4]\n\n[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]\n\n[outro - kick holds, hats denser, color ride, grid 487 6]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 487 1]\n\n[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]\n\n[inst - snare roll, chest-sub 808, grid 487 3]\n\n[drop - full send drop, body sub wreck, warped color, grid 487 4]\n\n[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]\n\n[outro - kick holds, hats denser, color ride, grid 487 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/06-high-beams"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "color bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 165 bpm",
-        "[drop - heavy color drop, dual-action pedal bass, chest 808 warp, grid 487 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 487 1]\n\n[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]\n\n[inst - snare roll, chest 808, grid 487 3]\n\n[drop - full send drop, body sub wreck, warped color, grid 487 4]\n\n[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]\n\n[outro - kick holds, hats denser, color ride, grid 487 6]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 165 bpm, instrumental, no vocals",
+        "[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 487 1]\n\n[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]\n\n[inst - snare roll, chest-sub 808, grid 487 3]\n\n[drop - full send drop, body sub wreck, warped color, grid 487 4]\n\n[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]\n\n[outro - kick holds, hats denser, color ride, grid 487 6]",
         487,
         "fixed",
         165,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/06-high-beams",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

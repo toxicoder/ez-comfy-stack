@@ -11,7 +11,8 @@ tags: [audio, music, prompting, ace-step, inspire]
 - Thirteen audio/music axes you pick one-at-a-time
 - How the rack splices ACE-Step tags and lyrics form
 - Flavor rules (vocal, instrumental, podcast bed)
-- Recipes, conflicts, and handoff to rap-draft
+- Recipes, including Drive-through bass-set starters
+- Conflicts, and handoff to rap-draft
 
 **What this enables**
 
@@ -68,6 +69,28 @@ A **Recipe** fills axes that are still `none`. An explicit dropdown always wins.
 When two picks conflict, the **later splice-order** axis wins. Notes on the rack list what was dropped.
 
 The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to that note. Do not also type a second BPM in the brief.
+
+## Drive-through recipes
+
+Shipped 180s takes under `_lab/audio/albums/drive-through/` splice these starters (tempo and bass still override per track):
+
+| Recipe | Genre |
+| --- | --- |
+| `rec_drive_through_drop` | Hybrid trap |
+| `rec_drive_riddim` | Riddim bass |
+| `rec_drive_tearout` | Tearout |
+| `rec_drive_brostep` | Brostep |
+| `rec_drive_wave` | Wave bass |
+| `rec_drive_color` | Color bass |
+| `rec_drive_dirty` | Dirty bass |
+| `rec_drive_dirty_dubstep` | Dirty dubstep |
+| `rec_drive_drumstep` | Drumstep |
+| `rec_drive_neuro` | Neuro bass |
+| `rec_drive_chest` | Chest bass |
+| `rec_drive_festival_trap` | Festival trap |
+| `rec_drive_dj_shout` | Hybrid trap + `voc_dj_shout` |
+
+Instrumental takes use `mix_drive_lock`. DJ-shout treats use `mix_drive_treat`. Do not pick `ins_warped_saw` on a Drive-through graph (supersaw is a high-pitch needle). Playbook: [Drive-through EDM](music-edm.md).
 
 ## Handoff
 

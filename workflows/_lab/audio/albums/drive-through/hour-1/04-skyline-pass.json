@@ -1,6 +1,6 @@
 {
   "id": "04-skyline-pass",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "brostep, warped bass, trap hats, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
-        "[drop - heavy brostep drop, mid growl wreck, warped 808, grid 199 0]\n\n[inst - trap hats roll, growl sustain, grid 199 1]\n\n[drop - harder reese drop, stacked 808 wall, formant bend, grid 199 2]\n\n[drop - full send drop, chest sub growl, brostep wreck, grid 199 3]\n\n[inst - snare roll, reese hold, grid 199 4]\n\n[drop - harder warped drop, low rumble wreck, 808 punch, grid 199 5]\n\n[outro - kick holds, hats denser, reese ride, grid 199 6]",
+        "brostep, growl bass, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, mid growl wreck, warped 808, grid 199 0]\n\n[inst - rapid hi-hats roll, growl sustain, grid 199 1]\n\n[drop - harder reese drop, stacked 808 wall, formant bend, grid 199 2]\n\n[drop - full send drop, chest-sub growl, brostep wreck, grid 199 3]\n\n[inst - snare roll, reese hold, grid 199 4]\n\n[drop - harder warped drop, low rumble wreck, 808 punch, grid 199 5]\n\n[outro - kick holds, hats denser, reese ride, grid 199 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-1/04-skyline-pass"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "brostep, warped bass, trap hats, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 145 bpm",
-        "[drop - heavy brostep drop, mid growl wreck, warped 808, grid 199 0]\n\n[inst - trap hats roll, growl sustain, grid 199 1]\n\n[drop - harder reese drop, stacked 808 wall, formant bend, grid 199 2]\n\n[drop - full send drop, chest sub growl, brostep wreck, grid 199 3]\n\n[inst - snare roll, reese hold, grid 199 4]\n\n[drop - harder warped drop, low rumble wreck, 808 punch, grid 199 5]\n\n[outro - kick holds, hats denser, reese ride, grid 199 6]",
+        "brostep, growl bass, chest-sub, rapid hi-hats, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 145 bpm, instrumental, no vocals",
+        "[drop - heavy brostep drop, mid growl wreck, warped 808, grid 199 0]\n\n[inst - rapid hi-hats roll, growl sustain, grid 199 1]\n\n[drop - harder reese drop, stacked 808 wall, formant bend, grid 199 2]\n\n[drop - full send drop, chest-sub growl, brostep wreck, grid 199 3]\n\n[inst - snare roll, reese hold, grid 199 4]\n\n[drop - harder warped drop, low rumble wreck, 808 punch, grid 199 5]\n\n[outro - kick holds, hats denser, reese ride, grid 199 6]",
         199,
         "fixed",
         145,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-1/04-skyline-pass",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

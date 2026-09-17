@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "hybrid trap, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
-        "[drop - heavy warped drop, dual-action pedal bass, chest 808 wreck, grid 461 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 461 1]\n\n[drop - harder growl drop, rolling 808 wall, hybrid formant, grid 461 2]\n\n[drop - full send drop, chest sub wreck, pedal warp, grid 461 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 461 4]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 152 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 461 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 461 1]\n\n[drop - harder growl drop, stacked 808 wall, hybrid formant, grid 461 2]\n\n[drop - full send drop, chest-sub wreck, pedal warp, grid 461 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 461 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/02-diesel-hum"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "hybrid trap, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 152 bpm",
-        "[drop - heavy warped drop, dual-action pedal bass, chest 808 wreck, grid 461 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 461 1]\n\n[drop - harder growl drop, rolling 808 wall, hybrid formant, grid 461 2]\n\n[drop - full send drop, chest sub wreck, pedal warp, grid 461 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 461 4]",
+        "warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 152 bpm, instrumental, no vocals",
+        "[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 461 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 461 1]\n\n[drop - harder growl drop, stacked 808 wall, hybrid formant, grid 461 2]\n\n[drop - full send drop, chest-sub wreck, pedal warp, grid 461 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 461 4]",
         461,
         "fixed",
         152,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/02-diesel-hum",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

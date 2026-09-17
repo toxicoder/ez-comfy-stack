@@ -19,16 +19,16 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 
 | Axis | Techniques | Page |
 | --- | --- | --- |
-| Genre | 121 | [genre_style](genre_style.md) |
+| Genre | 132 | [genre_style](genre_style.md) |
 | Mood and Energy | 110 | [mood_energy](mood_energy.md) |
-| Drums and Rhythm | 115 | [drums_rhythm](drums_rhythm.md) |
-| Bass and Low End | 110 | [bass_low_end](bass_low_end.md) |
-| Instruments and Texture | 110 | [instruments_texture](instruments_texture.md) |
+| Drums and Rhythm | 119 | [drums_rhythm](drums_rhythm.md) |
+| Bass and Low End | 118 | [bass_low_end](bass_low_end.md) |
+| Instruments and Texture | 111 | [instruments_texture](instruments_texture.md) |
 | Harmony and Mode | 110 | [harmony_mode](harmony_mode.md) |
-| Vocal Identity | 110 | [vocal_identity](vocal_identity.md) |
-| Mix and Production | 110 | [mix_production](mix_production.md) |
+| Vocal Identity | 111 | [vocal_identity](vocal_identity.md) |
+| Mix and Production | 112 | [mix_production](mix_production.md) |
 | Space and Ambience | 110 | [space_ambience](space_ambience.md) |
-| Sound Design | 110 | [sound_design_fx](sound_design_fx.md) |
+| Sound Design | 112 | [sound_design_fx](sound_design_fx.md) |
 | Use Case | 110 | [use_case](use_case.md) |
-| Tempo and Groove | 110 | [tempo_groove](tempo_groove.md) |
-| Form and Arrangement | 110 | [arrangement_form](arrangement_form.md) |
+| Tempo and Groove | 123 | [tempo_groove](tempo_groove.md) |
+| Form and Arrangement | 111 | [arrangement_form](arrangement_form.md) |

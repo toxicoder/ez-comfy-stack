@@ -1,6 +1,6 @@
 {
   "id": "15-oil-pan",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "color bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]\n\n[inst - trap hats roll, 808 punch hold, grid 557 1]\n\n[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]\n\n[inst - snare roll, chest 808, grid 557 3]\n\n[drop - full send drop, body bass wreck, color warp, grid 557 4]\n\n[drop - harder stacked drop, chest sub wreck, warped 808 wall, grid 557 5]\n\n[outro - kick holds, hats denser, color ride, grid 557 6]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]\n\n[inst - rapid hi-hats roll, 808 punch hold, grid 557 1]\n\n[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]\n\n[inst - snare roll, chest-sub 808, grid 557 3]\n\n[drop - full send drop, body bass wreck, color warp, grid 557 4]\n\n[drop - harder stacked drop, chest-sub wreck, warped 808 wall, grid 557 5]\n\n[outro - kick holds, hats denser, color ride, grid 557 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/15-oil-pan"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "color bass, warped bass, trap hats, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 150 bpm",
-        "[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]\n\n[inst - trap hats roll, 808 punch hold, grid 557 1]\n\n[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]\n\n[inst - snare roll, chest 808, grid 557 3]\n\n[drop - full send drop, body bass wreck, color warp, grid 557 4]\n\n[drop - harder stacked drop, chest sub wreck, warped 808 wall, grid 557 5]\n\n[outro - kick holds, hats denser, color ride, grid 557 6]",
+        "color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
+        "[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]\n\n[inst - rapid hi-hats roll, 808 punch hold, grid 557 1]\n\n[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]\n\n[inst - snare roll, chest-sub 808, grid 557 3]\n\n[drop - full send drop, body bass wreck, color warp, grid 557 4]\n\n[drop - harder stacked drop, chest-sub wreck, warped 808 wall, grid 557 5]\n\n[outro - kick holds, hats denser, color ride, grid 557 6]",
         557,
         "fixed",
         150,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/15-oil-pan",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

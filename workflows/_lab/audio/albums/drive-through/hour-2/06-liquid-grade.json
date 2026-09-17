@@ -1,6 +1,6 @@
 {
   "id": "06-liquid-grade",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 15,
   "last_link_id": 16,
   "nodes": [
@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
-        "[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]\n\n[inst - amen chops, trap hats 808 liquid, grid 307 1]\n\n[drop - harder growl drop, reese stack, chest formant, grid 307 2]\n\n[inst - hats denser, reese hold, grid 307 3]\n\n[drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 307 5]\n\n[outro - kick holds, amen keep, reese ride, grid 307 6]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals",
+        "[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]\n\n[inst - amen break, rapid hi-hats 808 liquid, grid 307 1]\n\n[drop - harder growl drop, reese stack, chest formant, grid 307 2]\n\n[inst - hats denser, reese hold, grid 307 3]\n\n[drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]\n\n[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 307 5]\n\n[outro - kick holds, amen break, reese ride, grid 307 6]",
         false,
         "instrumental",
         "audio/albums/drive-through/hour-2/06-liquid-grade"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "drumstep, warped bass, trap hats, amen break, reese bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 174 bpm",
-        "[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]\n\n[inst - amen chops, trap hats 808 liquid, grid 307 1]\n\n[drop - harder growl drop, reese stack, chest formant, grid 307 2]\n\n[inst - hats denser, reese hold, grid 307 3]\n\n[drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]\n\n[drop - harder warped drop, chest 808 wreck, drumstep grind, grid 307 5]\n\n[outro - kick holds, amen keep, reese ride, grid 307 6]",
+        "drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808, no singing, no choir, no vocal chops, original composition, riser, drop first, 174 bpm, instrumental, no vocals",
+        "[drop - heavy drumstep drop, reese wreck, warped amen, grid 307 0]\n\n[inst - amen break, rapid hi-hats 808 liquid, grid 307 1]\n\n[drop - harder growl drop, reese stack, chest formant, grid 307 2]\n\n[inst - hats denser, reese hold, grid 307 3]\n\n[drop - full send drop, stacked amen wreck, warped 808 punch, grid 307 4]\n\n[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 307 5]\n\n[outro - kick holds, amen break, reese ride, grid 307 6]",
         307,
         "fixed",
         174,
@@ -566,7 +566,7 @@
       "type": "EZAudioMetadata",
       "pos": [
         2200,
-        534
+        466
       ],
       "size": [
         360,
@@ -792,8 +792,8 @@
       "bounding": [
         20,
         356,
-        360,
-        370
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -818,8 +818,8 @@
       "bounding": [
         1320,
         24,
-        480,
-        1416
+        360,
+        844
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/hour-2/06-liquid-grade",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

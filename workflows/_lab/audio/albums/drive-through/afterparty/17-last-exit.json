@@ -211,8 +211,8 @@
       },
       "widgets_values": [
         "custom",
-        "dirty bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 160 bpm",
-        "[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 569 1]\n\n[drop - harder growl drop, chest 808 wall, formant crush, grid 569 2]\n\n[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 569 4]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 160 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 569 1]\n\n[drop - harder growl drop, chest-sub 808 wall, formant crush, grid 569 2]\n\n[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 569 4]",
         false,
         "instrumental",
         "audio/albums/drive-through/afterparty/17-last-exit"
@@ -279,8 +279,8 @@
         "Node name for S&R": "TextEncodeAceStepAudio1.5"
       },
       "widgets_values": [
-        "dirty bass, warped bass, trap hats, dual-action pedal bass, chest sub, rave, instrumental, no vocals, no singing, no choir, no vocal chops, original composition, 160 bpm",
-        "[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]\n\n[inst - pedal 808 hold, trap hats roll, grid 569 1]\n\n[drop - harder growl drop, chest 808 wall, formant crush, grid 569 2]\n\n[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 569 4]",
+        "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 160 bpm, instrumental, no vocals",
+        "[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]\n\n[inst - pedal 808 hold, rapid hi-hats roll, grid 569 1]\n\n[drop - harder growl drop, chest-sub 808 wall, formant crush, grid 569 2]\n\n[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]\n\n[outro - kick holds, hats denser, pedal ride, grid 569 4]",
         569,
         "fixed",
         160,
@@ -852,6 +852,9 @@
     },
     "lab_rel": "audio/albums/drive-through/afterparty/17-last-exit",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -984,10 +987,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -1,6 +1,6 @@
 ---
 title: Instruments and Texture
-description: Audio Rack catalog — Instruments and Texture (110 spliceable techniques).
+description: Audio Rack catalog — Instruments and Texture (111 spliceable techniques).
 tags: [audio, music, prompting, catalog]
 ---
 
@@ -8,7 +8,7 @@ tags: [audio, music, prompting, catalog]
 
 **What's on this page**
 
-- 110 spliceable techniques for **Instruments and Texture**
+- 111 spliceable techniques for **Instruments and Texture**
 - Vocal include `True`; instrumental `True`
 - Ids for the Audio Rack combo (pick one per axis)
 
@@ -25,6 +25,7 @@ Operator playbook: [Audio Rack](../../create/audio-rack.md).
 | `ins_piano_stab` | Sampled piano stab | sampled piano stab | vocal, instrumental, podcast | — |
 | `ins_rhodes` | Rhodes | rhodes | vocal, instrumental, podcast | — |
 | `ins_warped_saw` | Warped supersaw | warped supersaw | vocal, instrumental | — |
+| `ins_warped_bass` | Warped bass texture | warped bass | vocal, instrumental | — |
 | `ins_organ_stabs` | Organ stabs | organ stabs | vocal, instrumental, podcast | — |
 | `ins_nylon_guitar` | Nylon guitar | nylon guitar | vocal, instrumental, podcast | — |
 | `ins_tele_twang` | Twang guitar | twang guitar | vocal, instrumental, podcast | — |
