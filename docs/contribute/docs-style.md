@@ -55,7 +55,7 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` `on_post
 
 **Workflow details:** `python3 docs/generate_workflow_docs.py` (also `make docs`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.34.6 / lab `INPUT_TYPES`. Hooks inject the pages under Create → Workflow details from `manifest.json`.
 
-**Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Playbook: [Cinema Rack](../create/cinema-rack.md).
+**Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Illustration clips live at `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; the generator links them when both files exist. Compress with `./scripts/utilities/compress-cinema-clip.sh`. Prompt recipes: `python3 docs/cinema_clip_prompts.py --axis camera_movement`. Playbook: [Cinema Rack](../create/cinema-rack.md).
 
 **Audio catalogs:** `python3 docs/generate_audio_docs.py` writes `docs/generated/audio/` from `custom_nodes/ez_prompt_enhance/audio/*.json`. Playbook: [Audio Rack](../create/audio-rack.md).
 
