@@ -40,6 +40,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+from patch_common import cli_main
+from patch_common import compiles as _common_compiles
+
 # Marker embedded in patched lines so re-runs are no-ops.
 MARKER = "LAB_SPARK_UNIFIED_MEMORY_PATCH"
 
@@ -80,20 +83,7 @@ def _compiles(source: str, filename: str = "<model_management.py>") -> bool:
     Returns:
         Whether ``source`` compiles as a module or as a wrapped function body.
     """
-    try:
-        compile(source, filename, "exec")
-        return True
-    except SyntaxError:
-        pass
-    # Snippet that is only an indented block (tests) — wrap as function body
-    body = "".join(
-        ("    " + ln if ln.strip() else ln) for ln in source.splitlines(keepends=True)
-    )
-    try:
-        compile(f"def _lab_wrap():\n{body}", filename, "exec")
-        return True
-    except SyntaxError:
-        return False
+    return _common_compiles(source, filename, allow_indented_snippet=True)
 
 
 def _restore_from_git(root: Path, rel: str = "comfy/model_management.py") -> bool:
@@ -264,9 +254,7 @@ def main(argv: list[str] | None = None) -> int:
     Returns:
         Exit code from :func:`apply_patch` (normally ``0``).
     """
-    args = list(sys.argv[1:] if argv is None else argv)
-    root = Path(args[0] if args else "/comfy-state/ComfyUI")
-    return apply_patch(root)
+    return cli_main(apply_patch, argv)
 
 
 if __name__ == "__main__":

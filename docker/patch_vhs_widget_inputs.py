@@ -29,6 +29,9 @@ import re
 import sys
 from pathlib import Path
 
+from patch_common import cli_main
+from patch_common import consumed_and_newline as _common_consumed_and_newline
+
 # VHS.core.js rewrite: marker, pack paths, and legacy widgetInputs import.
 MARKER = "LAB_VHS_WIDGET_INPUTS_PATCH"
 PACK_REL = Path("custom_nodes") / "ComfyUI-VideoHelperSuite"
@@ -65,12 +68,7 @@ def _consumed_and_newline(text: str, needle: str, idx: int) -> tuple[str, str]:
     Returns:
         ``(consumed, newline)`` where ``consumed`` is replaced as a unit.
     """
-    after = text[idx + len(needle) :]
-    if after.startswith("\r\n"):
-        return needle + "\r\n", "\r\n"
-    if after.startswith("\n"):
-        return needle + "\n", "\n"
-    return needle, "\n"
+    return _common_consumed_and_newline(text, needle, idx)
 
 
 def _header_import_end(text: str) -> int:
@@ -207,9 +205,7 @@ def main(argv: list[str] | None = None) -> int:
     Returns:
         Exit code from :func:`apply_patch` (normally ``0``).
     """
-    args = list(sys.argv[1:] if argv is None else argv)
-    root = Path(args[0] if args else "/comfy-state/ComfyUI")
-    return apply_patch(root)
+    return cli_main(apply_patch, argv)
 
 
 if __name__ == "__main__":
