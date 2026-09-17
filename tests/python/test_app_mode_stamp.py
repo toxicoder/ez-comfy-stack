@@ -46,8 +46,9 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
             ("Klein Prompt Enhance", "prompt"),
             ("Klein Prompt Enhance", "style"),
             ("Klein Prompt Enhance", "enhance"),
-            ("Latent 768x432 batch 2", "width"),
-            ("Latent 768x432 batch 2", "height"),
+            ("Format / platform", "format"),
+            ("Format / platform", "width"),
+            ("Format / platform", "height"),
             ("KSampler", "seed"),
         ],
         outputs=["Save"],
@@ -150,12 +151,14 @@ def _widget_names(graph: dict) -> list[str]:
     return [entry[1] for entry in infer_suite_inputs(graph, spec)]
 
 
-def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
+def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
     names = _widget_names(_load("klein/still-draft.json"))
-    assert names[:6] == ["quality", "sample", "prompt", "style", "enhance", "seed"]
-    assert "width" not in names
-    assert "height" not in names
-    assert "batch_size" not in names
+    assert names[:6] == ["quality", "sample", "prompt", "format", "style", "enhance"]
+    assert "width" in names
+    assert "height" in names
+    assert "batch_size" in names
+    assert names.index("seed") > names.index("enhance")
+    assert "look" not in names
     assert "shot" not in names
     assert "unet_name" not in names
 
@@ -202,7 +205,9 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
     assert names[2] == "prompt"
     for hidden in HIDDEN_APP_WIDGETS:
         assert hidden not in names
-    assert "width" not in names
+    assert "format" in names
+    assert "width" in names
+    assert "look" not in names
 
 
 def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:

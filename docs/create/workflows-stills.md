@@ -25,7 +25,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[klein/still-draft](../generated/workflows/klein/still-draft.md)** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
+| **[klein/still-draft](../generated/workflows/klein/still-draft.md)** | Apache Klein 4B distilled. Default **768×432**, **4** steps, batch 2, prefix `ez_still_draft`. **Format / platform** retargets |
 | **[klein/still-hero](../generated/workflows/klein/still-hero.md)** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
 | **[klein/still-studio](../generated/workflows/klein/still-studio.md)** | Still desk. Format / platform (aspect or named job), Style, Rewrite prompt, Look recipe. Default **1280×704**. Prefix follows Format. |
 | **[klein/identity-sheet](../generated/workflows/klein/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
@@ -37,7 +37,7 @@ Lane B Klein stills (same occupancy **klein**):
 
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
-| **[klein/still-daily](../generated/workflows/klein/still-daily.md)** | klein | Daily still. Click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
+| **[klein/still-daily](../generated/workflows/klein/still-daily.md)** | klein | Daily still. Format / platform + click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
 | **[klein/still-studio](../generated/workflows/klein/still-studio.md)** | klein | Still desk. Format / platform sets pixels + prefix + framing; Style + Rewrite prompt + Look recipe. Prefix follows Format (`ez_still_studio` when Custom) |
 | **[klein/platform-pack](../generated/workflows/klein/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
 | **[klein/text-swap](../generated/workflows/klein/text-swap.md)** | klein | Lettering swap. Load a still, type new lettering, output matches source size. Prefix `ez_text_swap` |
@@ -50,7 +50,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 
 | Workflow | What it does |
 | --- | --- |
-| **[klein/still-draft](../generated/workflows/klein/still-draft.md)** | Spark Still. 768×432, Enhance on. Prefix `ez_still_draft` |
+| **[klein/still-draft](../generated/workflows/klein/still-draft.md)** | Spark Still. Default 768×432; **Format / platform** retargets. Enhance on. Prefix `ez_still_draft` |
 | **[klein/identity-sheet](../generated/workflows/klein/identity-sheet.md)** | 3-angle sheet of the identity you type, seed **42**, **1280×704** |
 | **[klein/storyboard-6up](../generated/workflows/klein/storyboard-6up.md)** | Six new cameras of one scene (`ez_board_01`…`06`) |
 | **[klein/dream-house](../generated/workflows/klein/dream-house.md)** | World bible. Ten Instagram 4:5 stills: virtual tour of one place, each a different room or view (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study) |

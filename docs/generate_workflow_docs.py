@@ -32,6 +32,9 @@ ENCYCLOPEDIA_PAGE = DOCS_DIR / "reference" / "workflow-nodes.md"
 MANIFEST_FILE = OUT_DIR / "manifest.json"
 STYLES_FILE = REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "styles.json"
 FORMATS_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "formats.json"
+VIDEO_FORMATS_FILE = (
+    REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "video_formats.json"
+)
 RECIPES_FILE = (
     REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "cinema" / "recipes.json"
 )
@@ -314,6 +317,64 @@ def _image_format_choices() -> list[dict[str, str]]:
     return out
 
 
+def _video_format_choices() -> list[dict[str, str]]:
+    """Load EZVideoFormat combo rows from video_formats.json.
+
+    Returns:
+        ``{id, description}`` rows (label plus WxH).
+    """
+    if not VIDEO_FORMATS_FILE.is_file():
+        return []
+    raw = json.loads(VIDEO_FORMATS_FILE.read_text(encoding="utf-8"))
+    rows = raw.get("formats") if isinstance(raw, dict) else None
+    if not isinstance(rows, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in rows:
+        if not isinstance(item, dict):
+            continue
+        fid = str(item.get("id") or "").strip()
+        label = str(item.get("label") or fid)
+        if not fid or not label:
+            continue
+        width = item.get("width") or 0
+        height = item.get("height") or 0
+        family = str(item.get("family") or "").strip()
+        if fid == "custom":
+            desc = "Width × Height widgets, snapped to the Family VAE grid."
+        else:
+            desc = f"{int(width)}×{int(height)}. {family or fid}."
+        out.append({"id": label, "description": desc})
+    return out
+
+
+def _video_family_choices() -> list[dict[str, str]]:
+    """Load EZVideoFormat family combo rows.
+
+    Returns:
+        ``{id, description}`` rows.
+    """
+    if not VIDEO_FORMATS_FILE.is_file():
+        return []
+    raw = json.loads(VIDEO_FORMATS_FILE.read_text(encoding="utf-8"))
+    families = raw.get("families") if isinstance(raw, dict) else None
+    if not isinstance(families, dict):
+        return []
+    out: list[dict[str, str]] = []
+    for fid, item in families.items():
+        if not isinstance(item, dict):
+            continue
+        label = str(item.get("label") or fid).strip()
+        grid = item.get("grid") or 0
+        out.append(
+            {
+                "id": label,
+                "description": f"{fid} VAE grid ÷{int(grid)}.",
+            }
+        )
+    return out
+
+
 def _cinema_recipe_choices() -> list[dict[str, str]]:
     """Load Cinema Rack recipe combo rows.
 
@@ -380,6 +441,10 @@ def expand_choices(
         return list(ace_keyscale)
     if source == "image_formats":
         return _image_format_choices()
+    if source == "video_formats":
+        return _video_format_choices()
+    if source == "video_families":
+        return _video_family_choices()
     if source == "cinema_recipes":
         return _cinema_recipe_choices()
     raw = widget.get("choices") or []

@@ -23,6 +23,7 @@ import ez_image  # noqa: E402
 from ez_image import formats as fmt  # noqa: E402
 from ez_image.formats import (  # noqa: E402
     CUSTOM_ID,
+    CUSTOM_LABEL,
     LOOK_NONE,
     MAX_DIM,
     MIN_DIM,
@@ -37,23 +38,43 @@ from ez_image.formats import (  # noqa: E402
     resolve_canvas,
     splice_look,
 )
+from ez_image import video_formats as vfmt  # noqa: E402
 from ez_image.nodes import (  # noqa: E402
     GRID,
     EZImageFormat,
     EZMatchImageSize,
     EZSnapImage,
+    EZVideoFormat,
     NODE_CLASS_MAPPINGS,
     NODE_DISPLAY_NAME_MAPPINGS,
     _resize_bhwc,
     snap_dim,
+)
+from ez_image.video_formats import (  # noqa: E402
+    FAMILY_LTX,
+    FAMILY_LTX_LABEL,
+    FAMILY_WAN,
+    FAMILY_WAN_LABEL,
+    clamp_video_dim,
+    default_video_format_id,
+    default_video_format_label,
+    family_combo_labels,
+    family_format_labels,
+    get_video_format,
+    load_video_formats,
+    resolve_family,
+    resolve_video_canvas,
+    video_format_combo_labels,
 )
 
 
 @pytest.fixture(autouse=True)
 def _reset_format_cache() -> Iterator[None]:
     fmt.reset_format_cache_for_tests()
+    vfmt.reset_video_format_cache_for_tests()
     yield
     fmt.reset_format_cache_for_tests()
+    vfmt.reset_video_format_cache_for_tests()
 
 
 class _FakeImg:
@@ -73,12 +94,14 @@ def test_pack_mappings_and_category() -> None:
         "EZSnapImage",
         "EZMatchImageSize",
         "EZImageFormat",
+        "EZVideoFormat",
     }
     assert ez_image.NODE_CLASS_MAPPINGS == NODE_CLASS_MAPPINGS
     assert ez_image.WEB_DIRECTORY == "./js"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZSnapImage"] == "Snap image (div 16)"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZMatchImageSize"] == "Match image size"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZImageFormat"] == "Format / platform"
+    assert NODE_DISPLAY_NAME_MAPPINGS["EZVideoFormat"] == "Format / platform (video)"
     for cls in NODE_CLASS_MAPPINGS.values():
         assert getattr(cls, "CATEGORY") == "ez-comfy/image"
 
@@ -421,3 +444,192 @@ def test_format_catalog_covers_klein_single_creator_prefixes() -> None:
         row = next(item for item in load_formats() if item.prefix == spec.prefix)
         assert (row.width, row.height) == spec.size, spec.rel
     assert missing == []
+
+
+def test_video_catalog_ids_grids_and_families() -> None:
+    rows = load_video_formats()
+    assert rows[0].id == CUSTOM_ID
+    ids = [row.id for row in rows]
+    labels = [row.label for row in rows]
+    assert len(ids) == len(set(ids))
+    assert len({label.casefold() for label in labels}) == len(labels)
+    assert video_format_combo_labels() == labels
+    assert family_combo_labels() == [FAMILY_WAN_LABEL, FAMILY_LTX_LABEL]
+    wan_labels = family_format_labels(FAMILY_WAN)
+    ltx_labels = family_format_labels(FAMILY_LTX_LABEL)
+    assert CUSTOM_LABEL in wan_labels
+    assert CUSTOM_LABEL in ltx_labels
+    assert "Wan · 16:9 YouTube (832×480)" in wan_labels
+    assert "LTX · 16:9 YouTube (1280×704)" in ltx_labels
+    assert "LTX · 16:9 YouTube (1280×704)" not in wan_labels
+    for row in rows:
+        assert _ID_RE.match(row.id), row.id
+        if row.id == CUSTOM_ID:
+            assert row.width == 0 and row.height == 0
+            continue
+        family = vfmt.get_family(row.family)
+        assert row.width % family.grid == 0
+        assert row.height % family.grid == 0
+        assert family.min_dim <= row.width <= family.max_dim
+        assert family.min_dim <= row.height <= family.max_dim
+    assert default_video_format_id(FAMILY_WAN) == "wan_16_9"
+    assert default_video_format_id(FAMILY_LTX) == "ltx_16_9"
+    assert resolve_family("not-a-family") == FAMILY_WAN
+    assert resolve_family(FAMILY_LTX_LABEL) == FAMILY_LTX
+
+
+def test_ltx_custom_snaps_720_and_family_mismatch_falls_back() -> None:
+    custom = resolve_video_canvas(
+        FAMILY_LTX_LABEL, "Custom", width=1280, height=720
+    )
+    assert custom.format_id == CUSTOM_ID
+    assert custom.width == 1280
+    assert custom.height == 704
+    assert "1280×704" in custom.hint
+    assert custom.prefix == "ez_ltx_clip"
+    wan = resolve_video_canvas(FAMILY_WAN, "LTX · 16:9 YouTube (1280×704)")
+    assert wan.format_id == "wan_16_9"
+    assert wan.width == 832
+    assert wan.height == 480
+    unknown = get_video_format("not-a-real-format", family=FAMILY_LTX)
+    assert unknown.id == "ltx_16_9"
+    assert clamp_video_dim(8, grid=32, min_dim=32, max_dim=1280) == 32
+    assert clamp_video_dim(3000, grid=32, min_dim=32, max_dim=1280) == 1280
+    assert clamp_video_dim(16, grid=32, min_dim=32, max_dim=1280) == 32
+
+
+def test_ez_video_format_run_packs_ui_and_result() -> None:
+    types = EZVideoFormat.INPUT_TYPES()
+    required = types["required"]
+    assert required["family"][1]["default"] == FAMILY_WAN_LABEL
+    assert required["format"][1]["default"] == default_video_format_label()
+    packed = EZVideoFormat().run(
+        FAMILY_LTX_LABEL,
+        "LTX · 9:16 Shorts (768×1280)",
+        width=16,
+        height=16,
+    )
+    assert packed["result"][0] == 768
+    assert packed["result"][1] == 1280
+    assert packed["result"][3] == "ez_ltx_shorts"
+    assert "768×1280" in packed["ui"]["text"][0]
+
+
+def test_video_catalog_file_errors(
+    monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
+) -> None:
+    missing = tmp_path / "missing.json"
+    monkeypatch.setattr(vfmt, "VIDEO_FORMATS_PATH", missing)
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="missing"):
+        load_video_formats()
+    missing.write_text("[]", encoding="utf-8")
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="must be an object"):
+        load_video_formats()
+    missing.write_text('{"formats": []}', encoding="utf-8")
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="nonempty list"):
+        load_video_formats()
+    missing.write_text('{"formats": [1], "families": {}}', encoding="utf-8")
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="entries must be objects"):
+        load_video_formats()
+    missing.write_text(
+        '{"formats": [{"id": "", "label": "x"}], "families": {"wan": 1}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="id and label"):
+        load_video_formats()
+    missing.write_text(
+        '{"formats": [{"id": "ok", "label": "Ok"}], "families": {}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="nonempty object"):
+        vfmt.load_families()
+    missing.write_text(
+        '{"formats": [{"id": "ok", "label": "Ok"}], "families": {"wan": 1}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="family rows must be objects"):
+        vfmt.load_families()
+    missing.write_text(
+        '{"formats": [{"id": "ok", "label": "Ok"}], '
+        '"families": {"wan": {"label": "", "grid": 0}}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="id, label, and grid"):
+        vfmt.load_families()
+    missing.write_text(
+        '{"formats": [{"id": "ok", "label": "Ok"}], '
+        '"families": {"wan": {"label": "Wan 5B", "grid": 16, "default_id": "x", '
+        '"custom_prefix": "p", "custom_width": 16, "custom_height": 16}}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    with pytest.raises(ValueError, match="wan and ltx"):
+        vfmt.load_families()
+    missing.write_text(
+        '{"formats": [{"id": "custom", "label": "Custom", "family": ""}], '
+        '"families": {'
+        '"wan": {"label": "Wan 5B", "grid": 16, "min": 16, "max": 1024, '
+        '"default_id": "missing-id", "custom_prefix": "p", "custom_width": 16, '
+        '"custom_height": 16}, '
+        '"ltx": {"label": "LTX-2.5", "grid": 32, "min": 32, "max": 1280, '
+        '"default_id": "ltx_16_9", "custom_prefix": "q", "custom_width": 32, '
+        '"custom_height": 32}}}',
+        encoding="utf-8",
+    )
+    vfmt.reset_video_format_cache_for_tests()
+    assert vfmt.catalog_payload()["families"]["wan"]["grid"] == 16
+    assert default_video_format_label(FAMILY_WAN) == CUSTOM_LABEL
+    assert clamp_video_dim(50, grid=32, min_dim=40, max_dim=1280) == 40
+
+
+def test_video_format_input_types_fallback_default(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import ez_image.nodes as image_nodes
+
+    monkeypatch.setattr(
+        image_nodes, "default_video_format_label", lambda _family=None: "not-in-list"
+    )
+    types = EZVideoFormat.INPUT_TYPES()
+    assert types["required"]["format"][1]["default"] == video_format_combo_labels()[0]
+    empty = resolve_video_canvas(FAMILY_WAN, "wan_1_1")
+    assert empty.width == 768
+    assert empty.prefix == "ez_wan_square"
+    custom = get_video_format("custom", family=FAMILY_WAN)
+    assert custom.id == CUSTOM_ID
+    assert get_video_format("wan_16_9", family=FAMILY_WAN).id == "wan_16_9"
+    no_default = vfmt.FamilySpec(
+        id="wan",
+        label="Wan 5B",
+        grid=16,
+        min_dim=16,
+        max_dim=1024,
+        default_id="",
+        custom_prefix="ez_wan_clip",
+        custom_width=832,
+        custom_height=480,
+    )
+    monkeypatch.setattr(vfmt, "get_family", lambda _value: no_default)
+    assert default_video_format_id(FAMILY_WAN) == "wan_16_9"
+    ghost = vfmt.FamilySpec(
+        id="ghost",
+        label="Ghost",
+        grid=16,
+        min_dim=16,
+        max_dim=1024,
+        default_id="",
+        custom_prefix="ez_ghost",
+        custom_width=16,
+        custom_height=16,
+    )
+    monkeypatch.setattr(vfmt, "get_family", lambda _value: ghost)
+    assert default_video_format_id("ghost") == CUSTOM_ID

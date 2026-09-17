@@ -590,6 +590,12 @@ def display_label(
             "height": "Height",
             "batch_size": "Batch",
         }.get(name, generic)
+    if ntype == "EZVideoFormat":
+        return {
+            "format": "Format / platform",
+            "width": "Width",
+            "height": "Height",
+        }.get(name, generic)
     if ntype == "LoadImage" and name == "image":
         return title or generic
     if ntype == "LoadAudio" and name == "audio":
@@ -765,6 +771,16 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
             "batch_size": "How many stills in one Run. Large canvases stay at 1.",
         }.get(name)
+    if ntype == "EZVideoFormat":
+        return {
+            "format": (
+                "Aspect or named platform job. Sets clip width and height on the "
+                "Wan ÷16 or LTX ÷32 grid. Custom uses Width × Height. Length stays "
+                "on the latent node."
+            ),
+            "width": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+        }.get(name)
     if name == "prompt" and ntype == "EZKleinPromptEnhance" and node is not None:
         if _enhance_mode(node) == "text_swap":
             return (
@@ -889,6 +905,7 @@ def _spec(
     primitive_strings: bool = False,
     hide_images: bool = False,
     ace_instrumental_score: bool = False,
+    expose_look: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -907,6 +924,7 @@ def _spec(
         "primitive_strings": primitive_strings,
         "hide_images": hide_images,
         "ace_instrumental_score": ace_instrumental_score,
+        "expose_look": expose_look,
     }
 
 
@@ -1004,7 +1022,6 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "produce",
         "klein",
         expose_unet=True,
-        expose_latent=True,
         sampler_steps_cfg=True,
     ),
     "klein/still-studio": _spec(
@@ -1014,6 +1031,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "ltx/still-to-video-5s",
         "klein/text-swap",
         expose_unet=True,
+        expose_look=True,
     ),
     "klein/still-hero": _spec(
         "produce",
@@ -1574,13 +1592,22 @@ def _collect_raw_inputs(
             if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
                 raw.append((nid, "audio_notes", node))
         elif ntype == "EZImageFormat":
+            raw.append((nid, "format", node))
+            if spec.get("expose_look"):
+                raw.append((nid, "look", node))
             raw.extend(
                 (
-                    (nid, "format", node),
-                    (nid, "look", node),
                     (nid, "width", node),
                     (nid, "height", node),
                     (nid, "batch_size", node),
+                )
+            )
+        elif ntype == "EZVideoFormat":
+            raw.extend(
+                (
+                    (nid, "format", node),
+                    (nid, "width", node),
+                    (nid, "height", node),
                 )
             )
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):

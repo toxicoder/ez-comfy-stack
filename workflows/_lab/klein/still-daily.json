@@ -1,8 +1,8 @@
 {
   "id": "still-daily",
-  "revision": 4,
-  "last_node_id": 13,
-  "last_link_id": 12,
+  "revision": 5,
+  "last_node_id": 14,
+  "last_link_id": 16,
   "nodes": [
     {
       "id": 1,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        684
       ],
       "size": [
         360,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1440,
-        434
+        832
       ],
       "size": [
         280,
@@ -215,7 +215,32 @@
       "flags": {},
       "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 13,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 14,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 15,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "LATENT",
@@ -234,7 +259,7 @@
         576,
         1
       ],
-      "title": "Size (width x height x batch)"
+      "title": "Latent (wired from Format)"
     },
     {
       "id": 7,
@@ -373,7 +398,7 @@
       "type": "Note",
       "pos": [
         40,
-        606.0
+        814
       ],
       "size": [
         960,
@@ -388,7 +413,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein/still-daily\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## klein/still-daily\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -406,7 +431,16 @@
       "flags": {},
       "order": 2,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 16,
+          "widget": {
+            "name": "duration_hint"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -437,7 +471,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        958
+        1166
       ],
       "size": [
         420,
@@ -503,6 +537,79 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 14,
+      "type": "EZImageFormat",
+      "pos": [
+        1440,
+        540
+      ],
+      "size": [
+        360,
+        220
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            14
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "batch",
+          "type": "INT",
+          "links": [
+            15
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            16
+          ],
+          "slot_index": 3
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageFormat"
+      },
+      "widgets_values": [
+        "16:9 mid (1024\u00d7576)",
+        "none",
+        1024,
+        576,
+        1
+      ],
+      "title": "Format / platform"
     }
   ],
   "links": [
@@ -601,6 +708,38 @@
       12,
       0,
       "STRING"
+    ],
+    [
+      13,
+      14,
+      0,
+      6,
+      0,
+      "INT"
+    ],
+    [
+      14,
+      14,
+      1,
+      6,
+      1,
+      "INT"
+    ],
+    [
+      15,
+      14,
+      2,
+      6,
+      2,
+      "INT"
+    ],
+    [
+      16,
+      14,
+      3,
+      11,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -611,7 +750,7 @@
         20,
         24,
         400,
-        490
+        762
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -636,8 +775,8 @@
       "bounding": [
         1420,
         24,
-        360,
-        560
+        400,
+        958
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -668,7 +807,7 @@
         0
       ]
     },
-    "lab_note": "## klein/still-daily\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## klein/still-daily\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nDaily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.\nCLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.\n\nSwap table:\n- flux-2-klein-4b-fp8.safetensors \u2014 daily default, 4 steps, CFG 1.0\n- flux-2-klein-4b-nvfp4.safetensors \u2014 Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0\n- flux-2-klein-base-4b-fp8.safetensors \u2014 more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5\n\nSETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.\nSave prefix: ez_still_app.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base",
     "lab_app_mode": {
       "enabled": true,
@@ -707,6 +846,14 @@
           }
         ],
         [
+          14,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "label": "Format / platform"
+          }
+        ],
+        [
           11,
           "style",
           {
@@ -731,26 +878,26 @@
           }
         ],
         [
-          6,
+          14,
           "width",
           {
-            "description": "Latent width in pixels.",
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
             "label": "Width"
           }
         ],
         [
-          6,
+          14,
           "height",
           {
-            "description": "Latent height in pixels.",
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
             "label": "Height"
           }
         ],
         [
-          6,
+          14,
           "batch_size",
           {
-            "description": "How many stills in one Run.",
+            "description": "How many stills in one Run. Large canvases stay at 1.",
             "label": "Batch"
           }
         ],

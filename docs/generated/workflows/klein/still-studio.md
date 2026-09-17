@@ -29,6 +29,8 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## klein/still-studio
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048).
 Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
 Default canvas: 1280×704 (LTX I2V feeder). 1280×720 platform rows are stills-only — scale in an editor if a host wants more pixels.
@@ -525,10 +527,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## klein/still-studio Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Look recipe is an optiona…`
+**This graph:** `## klein/still-studio Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt…`
 
 ```text
 ## klein/still-studio
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048).
 Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.

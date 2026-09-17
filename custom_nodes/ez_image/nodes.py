@@ -16,6 +16,15 @@ from .formats import (
     look_combo_labels,
     resolve_canvas,
 )
+from .video_formats import (
+    DEFAULT_FAMILY,
+    FAMILY_LTX,
+    default_video_format_label,
+    family_combo_labels,
+    get_family,
+    resolve_video_canvas,
+    video_format_combo_labels,
+)
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
@@ -271,10 +280,108 @@ class EZImageFormat:
         }
 
 
+class EZVideoFormat:
+    """Pick a Wan or LTX clip canvas (aspect or named platform)."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for family, format, and custom size.
+
+        Returns:
+            Required widget map. Format combo is the union of both families
+            so Queue accepts either label; ``run`` falls back when the pick
+            does not match Family.
+        """
+        families = family_combo_labels()
+        family_default = families[0] if families else "Wan 5B"
+        labels = video_format_combo_labels()
+        default_label = default_video_format_label(DEFAULT_FAMILY)
+        if labels and default_label not in labels:
+            default_label = labels[0]
+        family_spec = get_family(DEFAULT_FAMILY)
+        ltx = get_family(FAMILY_LTX)
+        max_dim = max(family_spec.max_dim, ltx.max_dim)
+        min_dim = min(family_spec.min_dim, ltx.min_dim)
+        return {
+            "required": {
+                "family": (families, {"default": family_default}),
+                "format": (labels, {"default": default_label}),
+                "width": (
+                    "INT",
+                    {
+                        "default": family_spec.custom_width,
+                        "min": min_dim,
+                        "max": max_dim,
+                        "step": family_spec.grid,
+                    },
+                ),
+                "height": (
+                    "INT",
+                    {
+                        "default": family_spec.custom_height,
+                        "min": min_dim,
+                        "max": max_dim,
+                        "step": family_spec.grid,
+                    },
+                ),
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("INT", "INT", "STRING", "STRING")
+    RETURN_NAMES = ("width", "height", "hint", "prefix")
+    FUNCTION = "run"
+    CATEGORY = CATEGORY
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Wan / LTX clip canvas. Family picks the VAE grid (Wan ÷16, LTX ÷32). "
+        "Format / platform sets width, height, and Enhance framing. Custom "
+        "uses the width/height widgets. Length stays on the latent node. "
+        "Quality does not change size."
+    )
+
+    def run(
+        self,
+        family: object,
+        format: object,
+        width: object = 832,
+        height: object = 480,
+    ) -> dict[str, Any]:
+        """Resolve family and format widgets to a clip canvas.
+
+        Args:
+            family: Wan 5B or LTX-2.5 combo (id or label).
+            format: Format / platform combo (id or label).
+            width: Custom width; ignored unless format is Custom.
+            height: Custom height; ignored unless format is Custom.
+
+        Returns:
+            Comfy output-node payload with width, height, Enhance hint,
+            and a filename prefix (graphs may leave VHS prefix unwired).
+        """
+        result = resolve_video_canvas(
+            family,
+            format,
+            width=width,
+            height=height,
+        )
+        summary = f"{result.width}×{result.height} · {result.label}"
+        return {
+            "ui": {"text": (summary,)},
+            "result": (
+                result.width,
+                result.height,
+                result.hint,
+                result.prefix,
+            ),
+        }
+
+
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZSnapImage": EZSnapImage,
     "EZMatchImageSize": EZMatchImageSize,
     "EZImageFormat": EZImageFormat,
+    "EZVideoFormat": EZVideoFormat,
 }
 """Comfy class-name registry."""
 
@@ -282,5 +389,6 @@ NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZSnapImage": "Snap image (div 16)",
     "EZMatchImageSize": "Match image size",
     "EZImageFormat": "Format / platform",
+    "EZVideoFormat": "Format / platform (video)",
 }
 """Comfy display-name registry."""

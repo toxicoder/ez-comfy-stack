@@ -1,8 +1,8 @@
 {
   "id": "instagram-carousel-5",
-  "revision": 4,
-  "last_node_id": 40,
-  "last_link_id": 53,
+  "revision": 5,
+  "last_node_id": 41,
+  "last_link_id": 57,
   "nodes": [
     {
       "id": 1,
@@ -133,7 +133,16 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 57,
+          "widget": {
+            "name": "duration_hint"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -228,7 +237,32 @@
       "flags": {},
       "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 54,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 55,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 56,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "LATENT",
@@ -251,14 +285,14 @@
         1280,
         1
       ],
-      "title": "Size 1024x1280"
+      "title": "Latent (wired from Format)"
     },
     {
       "id": 7,
       "type": "Note",
       "pos": [
         40,
-        1472
+        1764
       ],
       "size": [
         420,
@@ -273,7 +307,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein/creator/instagram-carousel-5\n\nInstagram 4:5 carousel, five slides. Lab size **1024\u00d71280**. Prefix `ez_ig_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **wan/creator/paper-flip**.\nPack prefixes: `ez_ig_c01`, `ez_ig_c02`, `ez_ig_c03`, `ez_ig_c04`, `ez_ig_c05`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein/creator/instagram-carousel-5\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nInstagram 4:5 carousel, five slides. Lab size **1024\u00d71280**. Prefix `ez_ig_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **wan/creator/paper-flip**.\nPack prefixes: `ez_ig_c01`, `ez_ig_c02`, `ez_ig_c03`, `ez_ig_c04`, `ez_ig_c05`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -1448,6 +1482,79 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 41,
+      "type": "EZImageFormat",
+      "pos": [
+        40,
+        1472
+      ],
+      "size": [
+        360,
+        220
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            54
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            55
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "batch",
+          "type": "INT",
+          "links": [
+            56
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            57
+          ],
+          "slot_index": 3
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageFormat"
+      },
+      "widgets_values": [
+        "4:5 portrait (1024\u00d71280)",
+        "none",
+        1024,
+        1280,
+        1
+      ],
+      "title": "Format / platform"
     }
   ],
   "links": [
@@ -1874,6 +1981,38 @@
       39,
       0,
       "STRING"
+    ],
+    [
+      54,
+      41,
+      0,
+      6,
+      0,
+      "INT"
+    ],
+    [
+      55,
+      41,
+      1,
+      6,
+      1,
+      "INT"
+    ],
+    [
+      56,
+      41,
+      2,
+      6,
+      2,
+      "INT"
+    ],
+    [
+      57,
+      41,
+      3,
+      4,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1972,7 +2111,7 @@
   "config": {},
   "extra": {
     "lab_profile": "klein/creator/instagram-carousel-5",
-    "lab_note": "## klein/creator/instagram-carousel-5\n\nInstagram 4:5 carousel, five slides. Lab size **1024\u00d71280**. Prefix `ez_ig_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **wan/creator/paper-flip**.\nPack prefixes: `ez_ig_c01`, `ez_ig_c02`, `ez_ig_c03`, `ez_ig_c04`, `ez_ig_c05`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein/creator/instagram-carousel-5\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nInstagram 4:5 carousel, five slides. Lab size **1024\u00d71280**. Prefix `ez_ig_c01`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nHandoff: **wan/creator/paper-flip**.\nPack prefixes: `ez_ig_c01`, `ez_ig_c02`, `ez_ig_c03`, `ez_ig_c04`, `ez_ig_c05`.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Instagram 4:5 carousel, five slides",
     "lab_rel": "klein/creator/instagram-carousel-5",
     "workflowRendererVersion": "Vue-corrected",
@@ -2015,6 +2154,14 @@
           }
         ],
         [
+          41,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "label": "Format / platform"
+          }
+        ],
+        [
           4,
           "style",
           {
@@ -2036,6 +2183,30 @@
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          41,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          41,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
+        ],
+        [
+          41,
+          "batch_size",
+          {
+            "description": "How many stills in one Run. Large canvases stay at 1.",
+            "label": "Batch"
           }
         ]
       ],

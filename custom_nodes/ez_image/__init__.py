@@ -1,4 +1,4 @@
-"""ez-comfy image size helpers and Klein still format picker."""
+"""ez-comfy image size helpers and still / video format pickers."""
 
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 

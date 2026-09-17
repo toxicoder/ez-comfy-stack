@@ -28,6 +28,7 @@ from _lab_theme import (
 )
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
+from _wire_format import wire_lab_graph
 from _wire_prompt_enhance import append_note
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -72,7 +73,7 @@ Swap table:
 - flux-2-klein-4b-nvfp4.safetensors — Spark NVFP4 (download-image --tier nvfp4), 4 steps, CFG 1.0
 - flux-2-klein-base-4b-fp8.safetensors — more quality (download-image --tier base), raise steps to 20-28 and CFG to about 3.5
 
-SETTINGS: width/height on EmptyFlux2LatentImage (default 1024x576 16:9). 1:1 = 768x768. 9:16 = 576x1024. Instagram 4:5 = 1024x1280. Seed, steps, CFG on KSampler.
+SETTINGS: Format / platform sets pixels (default 1024×576 16:9 mid). Custom uses Width × Height. Seed, steps, CFG on KSampler.
 Save prefix: ez_still_app.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
@@ -229,6 +230,7 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    wire_lab_graph(graph)
     stamp_suite_graph(graph)
     append_note(graph)
     apply_lab_identity(graph, lab_rel_of(path))
