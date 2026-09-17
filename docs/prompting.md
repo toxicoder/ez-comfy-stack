@@ -201,4 +201,4 @@ Safety: `restart: "no"`, headroom preflight, and download-limit clear-on-exit ar
 
 ## Next steps
 
-Queue **klein/still-draft** first ([Getting Started](getting-started.md)), or **klein/character-draft** then **klein/character-tweak** to iterate a still. Swap lettering on an existing plate with **klein/text-swap** (output matches the source size; style is off). Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).
+Queue **klein/still-draft** first ([Getting Started](getting-started.md)), or **klein/still-studio** to pick a format/platform without changing Apps. **klein/character-draft** then **klein/character-tweak** iterates a still. Swap lettering on an existing plate with **klein/text-swap** (output matches the source size; style is off). Daily loop: still → Wan 5 s → LTX 5 s on [Visual Generative AI](visual-generative-ai.md).

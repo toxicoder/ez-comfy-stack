@@ -1213,6 +1213,7 @@ def main() -> None:
     index = {
         "klein/still-draft": "klein_t2i",
         "klein/still-daily": "klein_t2i",
+        "klein/still-studio": "klein_t2i",
         "klein/still-hero": "klein_t2i",
         "klein/thumbnail": "klein_t2i",
         "klein/instagram-square": "klein_t2i",

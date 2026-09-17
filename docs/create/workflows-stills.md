@@ -27,6 +27,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 | --- | --- |
 | **[klein/still-draft](../generated/workflows/klein/still-draft.md)** | Apache Klein 4B distilled, **768×432**, **4** steps, batch 2, prefix `ez_still_draft` |
 | **[klein/still-hero](../generated/workflows/klein/still-hero.md)** | Same prompt + seed, **1280×704** (LTX VAE grid), more steps, prefix `ez_still_hero`. Enhance **on**. |
+| **[klein/still-studio](../generated/workflows/klein/still-studio.md)** | Still desk. Format / platform (aspect or named job), Style, Rewrite prompt, Look recipe. Default **1280×704**. Prefix follows Format. |
 | **[klein/identity-sheet](../generated/workflows/klein/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
 | **[klein/character-draft](../generated/workflows/klein/character-draft.md)** | Character still 1024×1280, style dropdown, prefix `ez_character` |
 | **[klein/character-tweak](../generated/workflows/klein/character-tweak.md)** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
@@ -37,6 +38,7 @@ Lane B Klein stills (same occupancy **klein**):
 | Workflow | Occupancy | What it does |
 | --- | --- | --- |
 | **[klein/still-daily](../generated/workflows/klein/still-daily.md)** | klein | Daily still. Click UNET to swap distilled / NVFP4 / base. Prefix `ez_still_app` |
+| **[klein/still-studio](../generated/workflows/klein/still-studio.md)** | klein | Still desk. Format / platform sets pixels + prefix + framing; Style + Rewrite prompt + Look recipe. Prefix follows Format (`ez_still_studio` when Custom) |
 | **[klein/platform-pack](../generated/workflows/klein/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
 | **[klein/text-swap](../generated/workflows/klein/text-swap.md)** | klein | Lettering swap. Load a still, type new lettering, output matches source size. Prefix `ez_text_swap` |
 

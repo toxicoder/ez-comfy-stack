@@ -158,6 +158,7 @@ tags: [workflows, generated, comfyui]
 | `klein/still-daily` | [klein/still-daily.md](klein/still-daily.md) |
 | `klein/still-draft` | [klein/still-draft.md](klein/still-draft.md) |
 | `klein/still-hero` | [klein/still-hero.md](klein/still-hero.md) |
+| `klein/still-studio` | [klein/still-studio.md](klein/still-studio.md) |
 | `klein/storyboard-6up` | [klein/storyboard-6up.md](klein/storyboard-6up.md) |
 | `klein/style-lock` | [klein/style-lock.md](klein/style-lock.md) |
 | `klein/talking-head` | [klein/talking-head.md](klein/talking-head.md) |

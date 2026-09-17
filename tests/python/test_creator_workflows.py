@@ -328,7 +328,7 @@ def test_only_daily_still_exposes_unet_in_app_inputs() -> None:
         hits = [entry for entry in linear.get("inputs") or [] if entry[1] == "unet_name"]
         if hits:
             unet_stems.append(graph["id"])
-    assert unet_stems == ["still-daily"]
+    assert set(unet_stems) == {"still-daily", "still-studio"}
 
 
 def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
@@ -365,7 +365,7 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             assert names.index(creator) < names.index("seed"), graph["id"]
         if "width" in names or "unet_name" in names:
             latent_stems.append(graph["id"])
-    assert latent_stems == ["still-daily"]
+    assert set(latent_stems) == {"still-daily", "still-studio"}
 
 
 def _app_labels(graph: dict) -> list[str]:

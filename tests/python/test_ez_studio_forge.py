@@ -53,6 +53,8 @@ def test_pick_template_heuristic() -> None:
     assert pick_template("spotify canvas loop", "auto") == "wan/creator/spotify-canvas"
     assert pick_template("silent 5s from a still", "auto") == "wan/still-to-video-5s"
     assert pick_template("hello world", "auto") == "klein/still-draft"
+    assert pick_template("still studio desk for IG", "auto") == "klein/still-studio"
+    assert pick_template("image studio 4:5", "auto") == "klein/still-studio"
     assert pick_template("text swap a neon sign", "auto") == "klein/text-swap"
     assert pick_template("relabel the mug lettering", "auto") == "klein/text-swap"
     assert pick_template("anything", "klein/still-hero") == "klein/still-hero"

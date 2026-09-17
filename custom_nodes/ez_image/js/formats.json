@@ -1,0 +1,796 @@
+{
+  "default_id": "aspect_16_9_ltx",
+  "custom_prefix": "ez_still_studio",
+  "formats": [
+    {
+      "id": "custom",
+      "label": "Custom",
+      "group": "aspect",
+      "width": 0,
+      "height": 0,
+      "prefix": "ez_still_studio",
+      "hint": "Custom still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_16_9_draft",
+      "label": "16:9 draft (768×432)",
+      "group": "aspect",
+      "width": 768,
+      "height": 432,
+      "prefix": "ez_still_studio",
+      "hint": "YouTube 16:9 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_16_9_ltx",
+      "label": "16:9 LTX feeder (1280×704)",
+      "group": "aspect",
+      "width": 1280,
+      "height": 704,
+      "prefix": "ez_still_studio",
+      "hint": "YouTube 16:9 still, LTX feeder",
+      "lock": "LTX I2V feeders stay 1280×704. Empty of lettering."
+    },
+    {
+      "id": "aspect_16_9",
+      "label": "16:9 (1280×720)",
+      "group": "aspect",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_still_studio",
+      "hint": "YouTube 16:9 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_16_9_mid",
+      "label": "16:9 mid (1024×576)",
+      "group": "aspect",
+      "width": 1024,
+      "height": 576,
+      "prefix": "ez_still_studio",
+      "hint": "YouTube 16:9 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_1_1",
+      "label": "1:1 square (1024×1024)",
+      "group": "aspect",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_still_studio",
+      "hint": "Square 1:1 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_1_1_circle",
+      "label": "1:1 circle-safe (768×768)",
+      "group": "aspect",
+      "width": 768,
+      "height": 768,
+      "prefix": "ez_still_studio",
+      "hint": "Circle-safe 1:1 still",
+      "lock": "Subject centered in a circular safe area so corners may crop. Empty of lettering."
+    },
+    {
+      "id": "aspect_4_5",
+      "label": "4:5 portrait (1024×1280)",
+      "group": "aspect",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_still_studio",
+      "hint": "Instagram 4:5 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "aspect_9_16_draft",
+      "label": "9:16 draft (432×768)",
+      "group": "aspect",
+      "width": 432,
+      "height": 768,
+      "prefix": "ez_still_studio",
+      "hint": "Shorts 9:16 still",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "aspect_9_16",
+      "label": "9:16 (576×1024)",
+      "group": "aspect",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_still_studio",
+      "hint": "Shorts 9:16 still",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "aspect_191",
+      "label": "~1.91:1 landscape (1216×640)",
+      "group": "aspect",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_still_studio",
+      "hint": "Open Graph ~1.91:1 still",
+      "lock": "Subject left-weighted, quiet right third. Empty of lettering."
+    },
+    {
+      "id": "aspect_3_1",
+      "label": "~3:1 banner (1536×512)",
+      "group": "aspect",
+      "width": 1536,
+      "height": 512,
+      "prefix": "ez_still_studio",
+      "hint": "Ultra-wide ~3:1 banner",
+      "lock": "Horizon low, empty sky band. Empty of lettering."
+    },
+    {
+      "id": "aspect_4_1",
+      "label": "4:1 banner (1536×384)",
+      "group": "aspect",
+      "width": 1536,
+      "height": 384,
+      "prefix": "ez_still_studio",
+      "hint": "Ultra-wide 4:1 banner",
+      "lock": "Subject in the right half; left stays simple. Empty of lettering."
+    },
+    {
+      "id": "aspect_2_3",
+      "label": "2:3 pin (768×1152)",
+      "group": "aspect",
+      "width": 768,
+      "height": 1152,
+      "prefix": "ez_still_studio",
+      "hint": "Pinterest 2:3 still",
+      "lock": "Subject in the upper two-thirds, quiet lower band. Empty of lettering."
+    },
+    {
+      "id": "aspect_3_4",
+      "label": "3:4 panel (768×1024)",
+      "group": "aspect",
+      "width": 768,
+      "height": 1024,
+      "prefix": "ez_still_studio",
+      "hint": "Tall 3:4 panel still",
+      "lock": "Subject in the upper half, quiet lower band. Empty of lettering."
+    },
+    {
+      "id": "youtube_thumb",
+      "label": "YouTube · thumbnail (1280×720)",
+      "group": "youtube",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_thumbnail",
+      "hint": "YouTube 16:9 thumbnail",
+      "lock": "Subject large, readable at small sizes. Quiet lower band for a title later. Empty of lettering."
+    },
+    {
+      "id": "youtube_channel_art",
+      "label": "YouTube · channel art (1536×864)",
+      "group": "youtube",
+      "width": 1536,
+      "height": 864,
+      "prefix": "ez_yt_art",
+      "hint": "YouTube 16:9 channel art",
+      "lock": "16:9 channel art. Keep the subject in the horizontal center band; top and bottom may crop on phones. Empty of lettering."
+    },
+    {
+      "id": "youtube_channel_icon",
+      "label": "YouTube · channel icon (768×768)",
+      "group": "youtube",
+      "width": 768,
+      "height": 768,
+      "prefix": "ez_yt_icon",
+      "hint": "YouTube channel icon, circle-safe 1:1",
+      "lock": "Subject centered in a circular safe area so corners may crop. Empty of lettering."
+    },
+    {
+      "id": "youtube_shorts_thumb",
+      "label": "YouTube · Shorts thumb (576×1024)",
+      "group": "youtube",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_yt_shorts_thumb",
+      "hint": "YouTube Shorts 9:16 thumbnail",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "youtube_community",
+      "label": "YouTube · Community (1024×1024)",
+      "group": "youtube",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_yt_community",
+      "hint": "YouTube Community 1:1 still",
+      "lock": "Square community still. Subject large, quiet edges. Empty of lettering."
+    },
+    {
+      "id": "youtube_chapter",
+      "label": "YouTube · chapter card (1280×720)",
+      "group": "youtube",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_yt_chapter",
+      "hint": "YouTube 16:9 chapter plate",
+      "lock": "Quiet lower band for a chapter title later. Empty of lettering."
+    },
+    {
+      "id": "youtube_subscribe",
+      "label": "YouTube · subscribe plate (1280×720)",
+      "group": "youtube",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_yt_sub",
+      "hint": "YouTube 16:9 subscribe plate",
+      "lock": "Generous empty lower-right for a button later. Empty of lettering and UI chrome."
+    },
+    {
+      "id": "youtube_endscreen",
+      "label": "YouTube · end screen (1280×720)",
+      "group": "youtube",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_yt_endscreen",
+      "hint": "YouTube 16:9 end-screen plate",
+      "lock": "Subject left-weighted; quiet right third for tiles later. Empty of lettering."
+    },
+    {
+      "id": "ig_square",
+      "label": "Instagram · square (1024×1024)",
+      "group": "instagram",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_ig_square",
+      "hint": "Instagram 1:1 still",
+      "lock": "Empty of lettering."
+    },
+    {
+      "id": "ig_portrait",
+      "label": "Instagram · 4:5 portrait (1024×1280)",
+      "group": "instagram",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_ig_portrait",
+      "hint": "Instagram 4:5 still",
+      "lock": "Instagram 4:5 portrait. Subject large, warm key. Empty of lettering."
+    },
+    {
+      "id": "ig_landscape",
+      "label": "Instagram · landscape (1216×640)",
+      "group": "instagram",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_ig_land",
+      "hint": "Instagram landscape ~1.91:1",
+      "lock": "Wide feed still. Horizon low, subject left-weighted. Empty of lettering."
+    },
+    {
+      "id": "ig_story",
+      "label": "Instagram · Story (576×1024)",
+      "group": "instagram",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_ig_story",
+      "hint": "Instagram Story 9:16 still",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "ig_reel",
+      "label": "Instagram · Reel cover (576×1024)",
+      "group": "instagram",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_ig_reel",
+      "hint": "Instagram Reel cover 9:16",
+      "lock": "Vertical 9:16 Reel cover. Subject centered vertically so a 3:4 grid crop keeps the face. Empty of lettering."
+    },
+    {
+      "id": "ig_highlight",
+      "label": "Instagram · Highlight (768×768)",
+      "group": "instagram",
+      "width": 768,
+      "height": 768,
+      "prefix": "ez_ig_highlight",
+      "hint": "Instagram Highlight cover, circle-safe",
+      "lock": "Subject centered in a circular safe area so corners may crop. Empty of lettering."
+    },
+    {
+      "id": "ig_profile",
+      "label": "Instagram · profile (768×768)",
+      "group": "instagram",
+      "width": 768,
+      "height": 768,
+      "prefix": "ez_ig_profile",
+      "hint": "Instagram profile photo, circle-safe",
+      "lock": "Subject centered in a circular safe area so corners may crop. Empty of lettering."
+    },
+    {
+      "id": "tt_cover",
+      "label": "TikTok · cover (576×1024)",
+      "group": "tiktok",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_tt_cover",
+      "hint": "TikTok cover 9:16",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "tt_shop",
+      "label": "TikTok · Shop (1024×1024)",
+      "group": "tiktok",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_tt_shop",
+      "hint": "TikTok Shop packshot 1:1",
+      "lock": "Clean product on a seamless light-gray cyclorama, soft studio key, unmarked. Empty of lettering."
+    },
+    {
+      "id": "x_post",
+      "label": "X · post (1280×720)",
+      "group": "x",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_x_post",
+      "hint": "X in-stream 16:9 still",
+      "lock": "Landscape in-feed still. Subject large, readable at small sizes. Empty of lettering."
+    },
+    {
+      "id": "x_header",
+      "label": "X · header (1536×512)",
+      "group": "x",
+      "width": 1536,
+      "height": 512,
+      "prefix": "ez_x_header",
+      "hint": "X header 3:1",
+      "lock": "Ultra-wide header. Horizon low, empty sky band. Empty of lettering."
+    },
+    {
+      "id": "x_card",
+      "label": "X · card (1216×640)",
+      "group": "x",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_x_card",
+      "hint": "X link-card ~1.91:1",
+      "lock": "Wide card still. Subject left-weighted, quiet right third. Empty of lettering."
+    },
+    {
+      "id": "li_post",
+      "label": "LinkedIn · square (1024×1024)",
+      "group": "linkedin",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_li_post",
+      "hint": "LinkedIn square post 1:1",
+      "lock": "Square professional still. Subject large, clean light. Empty of lettering."
+    },
+    {
+      "id": "li_landscape",
+      "label": "LinkedIn · landscape (1216×640)",
+      "group": "linkedin",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_li_land",
+      "hint": "LinkedIn landscape ~1.91:1",
+      "lock": "Wide professional still. Quiet right third for a headline later. Empty of lettering."
+    },
+    {
+      "id": "li_banner",
+      "label": "LinkedIn · banner (1536×384)",
+      "group": "linkedin",
+      "width": 1536,
+      "height": 384,
+      "prefix": "ez_li_banner",
+      "hint": "LinkedIn personal banner 4:1",
+      "lock": "Ultra-wide 4:1 banner. Subject in the right half; left stays simple. Empty of lettering."
+    },
+    {
+      "id": "li_article",
+      "label": "LinkedIn · article (1216×640)",
+      "group": "linkedin",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_li_article",
+      "hint": "LinkedIn article cover ~1.91:1",
+      "lock": "Article hero. Subject left-weighted, quiet right third. Empty of lettering."
+    },
+    {
+      "id": "pin",
+      "label": "Pinterest · pin (768×1152)",
+      "group": "pinterest",
+      "width": 768,
+      "height": 1152,
+      "prefix": "ez_pin",
+      "hint": "Pinterest standard pin 2:3",
+      "lock": "Tall 2:3 pin. Subject in the upper two-thirds, quiet lower band. Empty of lettering."
+    },
+    {
+      "id": "pin_story",
+      "label": "Pinterest · Idea Pin (576×1024)",
+      "group": "pinterest",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_pin_story",
+      "hint": "Pinterest Idea Pin 9:16",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "fb_post",
+      "label": "Facebook · post (1216×640)",
+      "group": "meta",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_fb_post",
+      "hint": "Facebook shared-image ~1.91:1",
+      "lock": "Wide shared-image still. Subject large, quiet edges. Empty of lettering."
+    },
+    {
+      "id": "threads",
+      "label": "Threads · 4:5 (1024×1280)",
+      "group": "meta",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_threads",
+      "hint": "Threads 4:5 still",
+      "lock": "Threads 4:5 portrait. Subject large, warm key. Empty of lettering."
+    },
+    {
+      "id": "twitch_offline",
+      "label": "Twitch · offline (1280×720)",
+      "group": "twitch",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_tw_off",
+      "hint": "Twitch offline screen 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "twitch_starting",
+      "label": "Twitch · starting soon (1280×720)",
+      "group": "twitch",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_tw_start",
+      "hint": "Twitch starting-soon screen 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "twitch_brb",
+      "label": "Twitch · BRB (1280×720)",
+      "group": "twitch",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_tw_brb",
+      "hint": "Twitch BRB screen 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "twitch_ending",
+      "label": "Twitch · ending (1280×720)",
+      "group": "twitch",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_tw_end",
+      "hint": "Twitch stream-ending screen 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "twitch_overlay",
+      "label": "Twitch · overlay (1280×720)",
+      "group": "twitch",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_tw_overlay",
+      "hint": "Twitch webcam-hole overlay 16:9",
+      "lock": "16:9 stream overlay. Right third empty for a webcam. Empty of lettering and chrome."
+    },
+    {
+      "id": "twitch_panel",
+      "label": "Twitch · panel (768×1024)",
+      "group": "twitch",
+      "width": 768,
+      "height": 1024,
+      "prefix": "ez_tw_panel",
+      "hint": "Twitch about-panel art",
+      "lock": "Tall panel still. Subject in the upper half, quiet lower band. Empty of lettering."
+    },
+    {
+      "id": "twitch_profile",
+      "label": "Twitch · profile (768×768)",
+      "group": "twitch",
+      "width": 768,
+      "height": 768,
+      "prefix": "ez_tw_profile",
+      "hint": "Twitch profile photo, circle-safe",
+      "lock": "Subject centered in a circular safe area so corners may crop. Empty of lettering."
+    },
+    {
+      "id": "twitch_banner",
+      "label": "Twitch · banner (1536×512)",
+      "group": "twitch",
+      "width": 1536,
+      "height": 512,
+      "prefix": "ez_tw_banner",
+      "hint": "Twitch channel banner ~3:1",
+      "lock": "Ultra-wide banner. Horizon low, empty sky band. Empty of lettering."
+    },
+    {
+      "id": "spot_playlist",
+      "label": "Spotify · playlist (1024×1024)",
+      "group": "spotify",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_spot_pl",
+      "hint": "Spotify playlist cover 1:1",
+      "lock": "Square playlist cover. Bold subject, quiet corners. Empty of lettering."
+    },
+    {
+      "id": "spot_canvas",
+      "label": "Spotify · Canvas still (576×1024)",
+      "group": "spotify",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_spot_still",
+      "hint": "Spotify Canvas still 9:16",
+      "lock": "Vertical 9:16 Canvas still. No talking, no lettering. Subject in the middle third."
+    },
+    {
+      "id": "album_cover",
+      "label": "Album · cover (1024×1024)",
+      "group": "spotify",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_album",
+      "hint": "Release / album cover 1:1",
+      "lock": "Square album cover. Bold subject, unmarked surfaces. Empty of lettering."
+    },
+    {
+      "id": "lyric_card",
+      "label": "Lyric card (1024×1024)",
+      "group": "spotify",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_lyric",
+      "hint": "Lyric-card background 1:1",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "ag_wide",
+      "label": "Audiogram · wide (1280×720)",
+      "group": "podcast",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_ag_wide",
+      "hint": "Audiogram background 16:9",
+      "lock": "Quiet lower fifth for a waveform overlay later. Empty of lettering."
+    },
+    {
+      "id": "ag_vert",
+      "label": "Audiogram · vertical (576×1024)",
+      "group": "podcast",
+      "width": 576,
+      "height": 1024,
+      "prefix": "ez_ag_vert",
+      "hint": "Audiogram background 9:16",
+      "lock": "Vertical audiogram. Quiet lower third for a waveform. Empty of lettering."
+    },
+    {
+      "id": "episode_art",
+      "label": "Podcast · episode art (1024×1024)",
+      "group": "podcast",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_episode",
+      "hint": "Per-episode podcast art 1:1",
+      "lock": "Square episode art. One prop story, unmarked. Empty of lettering."
+    },
+    {
+      "id": "podcast_cover",
+      "label": "Podcast · cover (1024×1024)",
+      "group": "podcast",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_podcast",
+      "hint": "Podcast cover 1:1",
+      "lock": "Square cover. Bold subject, unmarked. Empty of lettering."
+    },
+    {
+      "id": "og",
+      "label": "Open Graph / blog (1216×640)",
+      "group": "web",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_og",
+      "hint": "Open Graph ~1.91:1 hero",
+      "lock": "Subject left-weighted, quiet right third for a title later. Empty of lettering."
+    },
+    {
+      "id": "email_header",
+      "label": "Email · header (1216×640)",
+      "group": "web",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_email",
+      "hint": "Newsletter / email header ~1.91:1",
+      "lock": "Wide email header. Subject left-weighted, quiet right third. Empty of lettering."
+    },
+    {
+      "id": "substack",
+      "label": "Substack · hero (1216×640)",
+      "group": "web",
+      "width": 1216,
+      "height": 640,
+      "prefix": "ez_substack",
+      "hint": "Substack / blog hero ~1.91:1",
+      "lock": "Wide blog hero. Subject left-weighted, quiet right third. Empty of lettering."
+    },
+    {
+      "id": "patreon",
+      "label": "Patreon · post (1024×1280)",
+      "group": "web",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_patreon",
+      "hint": "Membership post still 4:5",
+      "lock": "4:5 membership still. Subject large, warm key. Empty of lettering."
+    },
+    {
+      "id": "banner",
+      "label": "Channel · banner (1536×512)",
+      "group": "web",
+      "width": 1536,
+      "height": 512,
+      "prefix": "ez_banner",
+      "hint": "Channel / LinkedIn banner ~3:1",
+      "lock": "Ultra-wide banner. Horizon low, empty sky band. Empty of lettering."
+    },
+    {
+      "id": "endcard",
+      "label": "End-card / CTA (1280×720)",
+      "group": "production",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_endcard",
+      "hint": "End-card / CTA plate 16:9",
+      "lock": "Generous empty lower-right for a button later. Empty of lettering and UI chrome."
+    },
+    {
+      "id": "quote_bg",
+      "label": "Quote background (1024×1024)",
+      "group": "production",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_quote_bg",
+      "hint": "Quote-card background 1:1",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "lower_third",
+      "label": "Lower-third plate (1280×720)",
+      "group": "production",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_lowerthird",
+      "hint": "Lower-third-safe 16:9 plate",
+      "lock": "Quiet lower fifth for a title bar later. Empty of lettering."
+    },
+    {
+      "id": "food_tabletop",
+      "label": "Food / tabletop (1024×1280)",
+      "group": "production",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_tabletop",
+      "hint": "Food / tabletop 4:5 still",
+      "lock": "Tabletop still, warm key, unmarked surfaces. Empty of lettering."
+    },
+    {
+      "id": "shorts_still",
+      "label": "Shorts still (432×768)",
+      "group": "production",
+      "width": 432,
+      "height": 768,
+      "prefix": "ez_shorts_still",
+      "hint": "Shorts 9:16 still",
+      "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
+      "id": "hook_still",
+      "label": "Hook still (432×768)",
+      "group": "production",
+      "width": 432,
+      "height": 768,
+      "prefix": "ez_hook_still",
+      "hint": "Vertical 9:16 hook still",
+      "lock": "Vertical 9:16 first-frame hook. Subject large, middle third. Empty of lettering."
+    },
+    {
+      "id": "packshot",
+      "label": "Product packshot (1024×1024)",
+      "group": "production",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_packshot",
+      "hint": "Clean product packshot 1:1",
+      "lock": "Clean product on a seamless light-gray cyclorama, soft studio key, unmarked. Empty of lettering."
+    },
+    {
+      "id": "lifestyle",
+      "label": "Product lifestyle (1024×1280)",
+      "group": "production",
+      "width": 1024,
+      "height": 1280,
+      "prefix": "ez_lifestyle",
+      "hint": "In-use product lifestyle 4:5",
+      "lock": "Lifestyle still of an unmarked object in use. No cyclorama. Empty of lettering."
+    },
+    {
+      "id": "desk_setup",
+      "label": "Desk setup (1280×720)",
+      "group": "production",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_desk",
+      "hint": "Workspace establishing still 16:9",
+      "lock": "Photoreal desk setup, unmarked screens. Empty of lettering."
+    },
+    {
+      "id": "coming_soon",
+      "label": "Coming soon (1280×720)",
+      "group": "production",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_soon",
+      "hint": "Launch / coming-soon plate 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "slide_title",
+      "label": "Slide title (1280×720)",
+      "group": "slides",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_slide",
+      "hint": "Course / webinar title plate 16:9",
+      "lock": "Quiet center for overlay type later. Empty of lettering."
+    },
+    {
+      "id": "zoom_bg",
+      "label": "Zoom / Meet background (1280×720)",
+      "group": "slides",
+      "width": 1280,
+      "height": 720,
+      "prefix": "ez_zoom",
+      "hint": "Webcam-safe Zoom / Meet background 16:9",
+      "lock": "16:9 background. Center stays simple for a webcam. Empty of lettering."
+    },
+    {
+      "id": "merch_tee",
+      "label": "Merch · tee (1024×1024)",
+      "group": "merch",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_tee",
+      "hint": "Unmarked tee mock 1:1",
+      "lock": "Photoreal tee on a hanger against seamless gray. Unmarked fabric, no logos. Empty of lettering."
+    },
+    {
+      "id": "merch_mug",
+      "label": "Merch · mug (1024×1024)",
+      "group": "merch",
+      "width": 1024,
+      "height": 1024,
+      "prefix": "ez_mug_merch",
+      "hint": "Merch mug mock 1:1",
+      "lock": "Photoreal ceramic mug three-quarter view on seamless gray. Unmarked, no logos. Empty of lettering."
+    },
+    {
+      "id": "poster",
+      "label": "Print poster (768×1152)",
+      "group": "merch",
+      "width": 768,
+      "height": 1152,
+      "prefix": "ez_poster",
+      "hint": "Print poster 2:3",
+      "lock": "Tall poster still. Subject in the upper two-thirds, quiet lower band for type. Empty of lettering."
+    }
+  ]
+}

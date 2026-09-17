@@ -142,6 +142,7 @@ Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefe
 | `_lab/audio/albums/drive-through/<album>/` | Five Drive-through albums (85 ACE-Step 180 s bass-set EDM takes + cover + album pack; eighty-three instrumental, two DJ-shout treats). SaveAudio stem `NN - Song Title`. Catalog: [Local music](../music.md) |
 | `klein/still-hero.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
 | `klein/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
+| `klein/still-studio.json` | Still desk; Format / platform picker, style, enhance, look recipe |
 | `klein/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
 | `klein/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
 | `wan/still-to-video-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |

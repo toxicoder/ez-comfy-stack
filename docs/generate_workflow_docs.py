@@ -31,6 +31,10 @@ OUT_DIR = DOCS_DIR / "generated" / "workflows"
 ENCYCLOPEDIA_PAGE = DOCS_DIR / "reference" / "workflow-nodes.md"
 MANIFEST_FILE = OUT_DIR / "manifest.json"
 STYLES_FILE = REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "styles.json"
+FORMATS_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "formats.json"
+RECIPES_FILE = (
+    REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "cinema" / "recipes.json"
+)
 
 if str(DOCS_DIR) not in sys.path:
     sys.path.insert(0, str(DOCS_DIR))
@@ -280,6 +284,63 @@ def load_styles(path: Path | None = None) -> dict[str, dict[str, Any]]:
     return {str(key): dict(value) for key, value in raw.items() if isinstance(value, dict)}
 
 
+def _image_format_choices() -> list[dict[str, str]]:
+    """Load EZImageFormat combo rows from formats.json.
+
+    Returns:
+        ``{id, description}`` rows (label plus WxH).
+    """
+    if not FORMATS_FILE.is_file():
+        return []
+    raw = json.loads(FORMATS_FILE.read_text(encoding="utf-8"))
+    rows = raw.get("formats") if isinstance(raw, dict) else None
+    if not isinstance(rows, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in rows:
+        if not isinstance(item, dict):
+            continue
+        fid = str(item.get("id") or "").strip()
+        label = str(item.get("label") or fid)
+        if not fid or not label:
+            continue
+        width = item.get("width") or 0
+        height = item.get("height") or 0
+        if fid == "custom":
+            desc = "Width × Height widgets, snapped to ÷16."
+        else:
+            desc = f"{int(width)}×{int(height)}. {fid}."
+        out.append({"id": label, "description": desc})
+    return out
+
+
+def _cinema_recipe_choices() -> list[dict[str, str]]:
+    """Load Cinema Rack recipe combo rows.
+
+    Returns:
+        ``none`` plus recipe ids.
+    """
+    rows = [
+        {
+            "id": "none",
+            "description": "Off. Style + Prompt own look.",
+        }
+    ]
+    if not RECIPES_FILE.is_file():
+        return rows
+    raw = json.loads(RECIPES_FILE.read_text(encoding="utf-8"))
+    if not isinstance(raw, list):
+        return rows
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        rid = str(item.get("id") or "").strip()
+        label = str(item.get("label") or rid)
+        if rid and label:
+            rows.append({"id": label, "description": rid})
+    return rows
+
+
 def expand_choices(
     widget: dict[str, Any],
     *,
@@ -317,6 +378,10 @@ def expand_choices(
         return list(ace_language)
     if source == "ace_keyscale":
         return list(ace_keyscale)
+    if source == "image_formats":
+        return _image_format_choices()
+    if source == "cinema_recipes":
+        return _cinema_recipe_choices()
     raw = widget.get("choices") or []
     out: list[dict[str, str]] = []
     for item in raw:
