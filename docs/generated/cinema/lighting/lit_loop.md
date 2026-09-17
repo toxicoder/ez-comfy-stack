@@ -1,0 +1,36 @@
+---
+title: "Loop"
+description: "Cinema Rack illustration — Loop."
+tags: [cinema, prompting, catalog, clip]
+---
+
+# Loop
+
+**What's on this page**
+
+- A muted 5s illustration of **Loop** (`lit_loop`)
+- Catalog clause and still/motion/AV flags on **Lighting**
+
+**What this enables**
+
+- Seeing the pick before splicing it on Cinema Rack
+- Copying the clause next to a concrete camera example
+
+Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Axis: [Lighting](../lighting.md). Playbook: [Cinema Rack](../../../create/cinema-rack.md).
+
+<div class="ez-cinema-clip">
+<video controls preload="none" playsinline poster="../../../assets/cinema/lighting/lit_loop.jpg"><source src="../../../assets/cinema/lighting/lit_loop.mp4" type="video/mp4"></video>
+</div>
+
+## Clause
+
+Place the key to throw a small hook of nose shade onto the opposite cheek, both eyes open.
+
+## Use on
+
+still, motion, av
+
+## Conflicts
+
+—
