@@ -13,6 +13,18 @@ import sys
 from pathlib import Path
 from typing import Any, TypeAlias
 
+from .path import ensure_custom_nodes_path
+from .protocols import (
+    ComfyNode,
+    CompletedProc,
+    FileSystem,
+    OccupancyPolicy,
+    OccupancySource,
+    ProgressReporter,
+    StatusSink,
+    SubprocessRunner,
+)
+
 NODE_CLASS_MAPPINGS: dict[str, type[Any]] = {}
 """Comfy registry (empty — this pack has no nodes)."""
 
@@ -55,6 +67,26 @@ class NullProgress:
         return
 
 
+class NodeLogSink:
+    """:class:`StatusSink` that writes ``[prefix] message`` via :func:`node_log`."""
+
+    def __init__(self, prefix: str) -> None:
+        """Bind a pack prefix.
+
+        Args:
+            prefix: Pack id such as ``ez_dub``.
+        """
+        self._prefix = prefix
+
+    def log(self, message: str) -> None:
+        """Write a human status line.
+
+        Args:
+            message: Status text without a trailing newline.
+        """
+        node_log(self._prefix, message)
+
+
 def node_log(prefix: str, message: str) -> None:
     """Write ``[prefix] message`` to stderr (shows up in manage.sh logs).
 
@@ -65,15 +97,15 @@ def node_log(prefix: str, message: str) -> None:
     print(f"[{prefix}] {message}", file=sys.stderr)
 
 
-def node_progress(total: int) -> Any:
+def node_progress(total: int) -> ProgressReporter:
     """Comfy ProgressBar when importable, else NullProgress.
 
     Args:
         total: Expected steps; values below 1 clamp to 1.
 
     Returns:
-        Comfy ``ProgressBar`` or ``NullProgress``. Typed as ``Any`` because
-        ``comfy.utils`` is optional in hermetic tests.
+        Comfy ``ProgressBar`` or :class:`NullProgress` (both match
+        :class:`ProgressReporter`).
     """
     n = int(total) if total else 1
     if n < 1:
@@ -117,3 +149,24 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
     if default is None:
         return Path(_DEFAULT_OUTPUT)
     return Path(default)
+
+
+__all__ = [
+    "ComfyInputTypes",
+    "ComfyNode",
+    "CompletedProc",
+    "FileSystem",
+    "NODE_CLASS_MAPPINGS",
+    "NODE_DISPLAY_NAME_MAPPINGS",
+    "NodeLogSink",
+    "NullProgress",
+    "OccupancyPolicy",
+    "OccupancySource",
+    "ProgressReporter",
+    "StatusSink",
+    "SubprocessRunner",
+    "ensure_custom_nodes_path",
+    "node_log",
+    "node_progress",
+    "output_root",
+]

@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 import types
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 
@@ -105,6 +106,136 @@ def test_node_progress_zero_total_clamps_to_one() -> None:
     bar = ec.node_progress(0)
     assert isinstance(bar, ec.NullProgress)
     bar.update(1)
+
+
+def test_ensure_custom_nodes_path_inserts_once(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    custom = str(ROOT / "custom_nodes")
+    monkeypatch.setattr(sys, "path", [p for p in sys.path if p != custom])
+    first = ec.ensure_custom_nodes_path()
+    assert first == ROOT / "custom_nodes"
+    assert sys.path[0] == custom
+    again = ec.ensure_custom_nodes_path(anchor=ROOT / "custom_nodes" / "ez_common")
+    assert again == first
+    assert sys.path.count(custom) == 1
+    packed = ec.ensure_custom_nodes_path(
+        anchor=ROOT / "custom_nodes" / "ez_common" / "__init__.py"
+    )
+    assert packed == first
+
+
+def test_ensure_custom_nodes_path_falls_back_outside_tree(tmp_path: Path) -> None:
+    outside = tmp_path / "not-custom" / "nested"
+    outside.mkdir(parents=True)
+    root = ec.ensure_custom_nodes_path(anchor=outside)
+    assert root == ROOT / "custom_nodes"
+
+
+def test_node_log_sink_stderr(capsys: pytest.CaptureFixture[str]) -> None:
+    sink = ec.NodeLogSink("ez_dub")
+    sink.log("ASR 3/12")
+    captured = capsys.readouterr()
+    assert captured.err == "[ez_dub] ASR 3/12\n"
+
+
+def _invoke_protocol(owner: object, name: str, *args: object, **kwargs: object) -> None:
+    """Call a Protocol ellipsis body (coverage). Typed as Any to avoid ABC errors.
+
+    Args:
+        owner: Protocol class.
+        name: Method name.
+        *args: Bound-self plus positional args.
+        **kwargs: Keyword args.
+    """
+    cast(Any, getattr(owner, name))(*args, **kwargs)
+
+
+def test_protocol_stubs_execute() -> None:
+    """Call Protocol ellipsis bodies so coverage stays at 100%."""
+    bar = ec.NullProgress()
+    _invoke_protocol(ec.ProgressReporter, "update", bar, 1)
+    _invoke_protocol(ec.ProgressReporter, "update_absolute", bar, 0)
+    sink = ec.NodeLogSink("ez_test")
+    _invoke_protocol(ec.StatusSink, "log", sink, "ok")
+
+    class _Occ:
+        def read_mode(self) -> str:
+            return "idle"
+
+    _invoke_protocol(ec.OccupancySource, "read_mode", _Occ())
+
+    class _Pol:
+        def allow(self, required: str, current: str) -> None:
+            return None
+
+    _invoke_protocol(ec.OccupancyPolicy, "allow", _Pol(), "klein", "klein")
+
+    class _Proc:
+        returncode = 0
+        stdout = ""
+        stderr = ""
+
+    class _Run:
+        def __call__(
+            self,
+            argv: list[str],
+            *,
+            check: bool,
+            capture_output: bool,
+            text: bool,
+        ) -> _Proc:
+            del argv, check, capture_output, text
+            return _Proc()
+
+    _invoke_protocol(
+        ec.SubprocessRunner,
+        "__call__",
+        _Run(),
+        ["true"],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    class _FS:
+        def is_file(self, path: Path) -> bool:
+            del path
+            return False
+
+        def is_dir(self, path: Path) -> bool:
+            del path
+            return False
+
+        def read_text(self, path: Path) -> str:
+            del path
+            return ""
+
+        def write_text(self, path: Path, text: str) -> None:
+            del path, text
+
+    fs = _FS()
+    here = Path(".")
+    _invoke_protocol(ec.FileSystem, "is_file", fs, here)
+    _invoke_protocol(ec.FileSystem, "is_dir", fs, here)
+    _invoke_protocol(ec.FileSystem, "read_text", fs, here)
+    _invoke_protocol(ec.FileSystem, "write_text", fs, here, "x")
+
+    class _Node:
+        RETURN_TYPES: tuple[str, ...] = ("STRING",)
+        FUNCTION: str = "run"
+        CATEGORY: str = "ez-comfy"
+
+        @classmethod
+        def INPUT_TYPES(cls) -> dict[str, object]:
+            return {}
+
+        def run(self, *args: object, **kwargs: object) -> object:
+            del args, kwargs
+            return ()
+
+    _invoke_protocol(ec.ComfyNode, "INPUT_TYPES")
+    _invoke_protocol(ec.ComfyNode, "run", _Node())
 
 
 def test_node_progress_uses_comfy_progress_bar(

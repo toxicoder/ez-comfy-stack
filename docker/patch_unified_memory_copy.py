@@ -25,6 +25,9 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+from patch_common import cli_main
+from patch_common import compiles as _common_compiles
+
 # Unified-memory copy=False rewrite: marker, target file, and exact assignment.
 MARKER = "LAB_SPARK_UM_COPY_PATCH"
 REL_PATH = Path("comfy") / "utils.py"
@@ -42,11 +45,7 @@ def _compiles(source: str, filename: str = "<utils.py>") -> bool:
     Returns:
         Whether ``source`` compiles as a module.
     """
-    try:
-        compile(source, filename, "exec")
-        return True
-    except SyntaxError:
-        return False
+    return _common_compiles(source, filename)
 
 
 def apply_patch(root: Path) -> int:
@@ -106,9 +105,7 @@ def main(argv: list[str] | None = None) -> int:
     Returns:
         Exit code from :func:`apply_patch` (normally ``0``).
     """
-    args = list(sys.argv[1:] if argv is None else argv)
-    root = Path(args[0] if args else "/comfy-state/ComfyUI")
-    return apply_patch(root)
+    return cli_main(apply_patch, argv)
 
 
 if __name__ == "__main__":

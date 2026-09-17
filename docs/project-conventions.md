@@ -154,6 +154,9 @@ First-party Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib/*.py`, `
 | mypy | `disallow_untyped_defs` and `disallow_incomplete_defs` |
 | Pyright | `standard` (not `strict` — Comfy/torch/bpy stay optional) |
 | `Any` | Only at tensor / `bpy` / optional-import boundaries, with a one-line reason |
+| Behavioral seams | `typing.Protocol` (PEP 544). Small capability interfaces (`ProgressReporter`, `ToolHandler`, `ChatCompleter`). Classes satisfy them structurally — do not inherit |
+| Data records | `TypedDict` for JSON/YAML shapes (`Turn`, `JobState`, `ToolSpec`, `HouseLayout`). Do not wrap records in a Protocol |
+| ABC | Not used. Prefer Protocol over `abc.ABC` |
 | Comfy `INPUT_TYPES` | Return `ComfyInputTypes` from `ez_common` via `TYPE_CHECKING` import (no runtime sibling import at module load) |
 | Docstrings | Module + class + every non-dunder function. `Args:` when there are params besides `self`/`cls`; `Returns:` when the annotation is not `None` |
 | Constants | PEP 257 attribute docstring, or one `#` group comment above a contiguous `UPPER_SNAKE` block |

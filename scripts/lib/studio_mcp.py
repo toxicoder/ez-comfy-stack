@@ -11,23 +11,21 @@ import json
 import os
 import sys
 from pathlib import Path
-from typing import Any, Callable, Mapping, TypedDict, cast
+from typing import Any
+
+from mcp_runtime import (
+    ToolSpec,
+    call_tool as _runtime_call_tool,
+    handle_rpc as _runtime_handle_rpc,
+    list_tools as _runtime_list_tools,
+    main_cli,
+    serve_stdio as _runtime_serve_stdio,
+)
 
 # MCP protocol identity (JSON-RPC initialize.serverInfo).
 PROTOCOL_VERSION = "2024-11-05"
 SERVER_NAME = "ez-studio"
 SERVER_VERSION = "1"
-
-RpcId = str | int | None
-ToolHandler = Callable[[dict[str, Any]], dict[str, Any]]
-
-
-class ToolSpec(TypedDict):
-    """One MCP tool: description, JSON Schema, handler."""
-
-    description: str
-    inputSchema: dict[str, Any]
-    handler: ToolHandler
 
 
 def _repo_root() -> Path:
@@ -451,17 +449,12 @@ def list_tools() -> list[dict[str, Any]]:
     Returns:
         ``{name, description, inputSchema}`` rows.
     """
-    return [
-        {
-            "name": name,
-            "description": spec["description"],
-            "inputSchema": spec["inputSchema"],
-        }
-        for name, spec in TOOLS.items()
-    ]
+    return _runtime_list_tools(TOOLS)
 
 
-def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str, Any]:
+def call_tool(
+    name: str, arguments: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """Dispatch a named MCP tool.
 
     Args:
@@ -471,38 +464,7 @@ def call_tool(name: str, arguments: Mapping[str, Any] | None = None) -> dict[str
     Returns:
         Tool payload (``ok`` false on unknown tool).
     """
-    spec = TOOLS.get(name)
-    if spec is None:
-        return {"ok": False, "error": f"unknown tool {name}"}
-    handler: ToolHandler = spec["handler"]
-    return handler(dict(arguments or {}))
-
-
-def _rpc_result(msg_id: RpcId, result: object) -> dict[str, Any]:
-    """Build a JSON-RPC 2.0 success envelope.
-
-    Args:
-        msg_id: Request id (string, number, or null).
-        result: Method result payload.
-
-    Returns:
-        JSON-RPC response object.
-    """
-    return {"jsonrpc": "2.0", "id": msg_id, "result": result}
-
-
-def _rpc_error(msg_id: RpcId, code: int, message: str) -> dict[str, Any]:
-    """Build a JSON-RPC 2.0 error envelope.
-
-    Args:
-        msg_id: Request id (string, number, or null).
-        code: JSON-RPC error code.
-        message: Error text.
-
-    Returns:
-        JSON-RPC error object.
-    """
-    return {"jsonrpc": "2.0", "id": msg_id, "error": {"code": code, "message": message}}
+    return _runtime_call_tool(TOOLS, name, arguments)
 
 
 def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
@@ -514,54 +476,18 @@ def handle_rpc(message: dict[str, Any]) -> dict[str, Any] | None:
     Returns:
         Response object, or None for notifications.
     """
-    method = str(message.get("method") or "")
-    msg_id = cast(RpcId, message.get("id"))
-    params = message.get("params") or {}
-    if method == "notifications/initialized":
-        return None
-    if method == "initialize":
-        return _rpc_result(
-            msg_id,
-            {
-                "protocolVersion": PROTOCOL_VERSION,
-                "capabilities": {"tools": {}},
-                "serverInfo": {"name": SERVER_NAME, "version": SERVER_VERSION},
-            },
-        )
-    if method == "ping":
-        return _rpc_result(msg_id, {})
-    if method == "tools/list":
-        return _rpc_result(msg_id, {"tools": list_tools()})
-    if method == "tools/call":
-        name = str(params.get("name") or "")
-        arguments = params.get("arguments") or {}
-        payload = call_tool(name, arguments if isinstance(arguments, dict) else {})
-        text = json.dumps(payload)
-        return _rpc_result(
-            msg_id,
-            {"content": [{"type": "text", "text": text}], "isError": not payload.get("ok", True)},
-        )
-    if msg_id is None:
-        return None
-    return _rpc_error(msg_id, -32601, f"method not found: {method}")
+    return _runtime_handle_rpc(
+        message,
+        tools=TOOLS,
+        server_name=SERVER_NAME,
+        server_version=SERVER_VERSION,
+        protocol_version=PROTOCOL_VERSION,
+    )
 
 
 def serve_stdio() -> None:
     """Serve JSON-RPC on stdin/stdout (one JSON object per line)."""
-    for raw in sys.stdin:
-        line = raw.strip()
-        if not line:
-            continue
-        try:
-            message = json.loads(line)
-        except json.JSONDecodeError:
-            continue
-        if not isinstance(message, dict):
-            continue
-        reply = handle_rpc(message)
-        if reply is not None:
-            sys.stdout.write(json.dumps(reply) + "\n")
-            sys.stdout.flush()
+    _runtime_serve_stdio(handle_rpc)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -573,33 +499,15 @@ def main(argv: list[str] | None = None) -> int:
     Returns:
         Process status.
     """
-    args = list(sys.argv[1:] if argv is None else argv)
-    if not args or args[0] in ("--stdio", "stdio"):
-        serve_stdio()
-        return 0
-    if args[0] in ("-h", "--help", "help"):
-        sys.stderr.write(
-            "Usage: studio_mcp.py [--stdio] | --list-tools | --call TOOL [JSON]\n"
-            "  Occupancy-aware studio MCP. No execute_code. No telemetry. No Queue.\n"
-        )
-        return 0
-    if args[0] == "--list-tools":
-        json.dump(list_tools(), sys.stdout, indent=2)
-        sys.stdout.write("\n")
-        return 0
-    if args[0] == "--call":
-        if len(args) < 2:
-            sys.stderr.write("studio_mcp.py --call TOOL [JSON args]\n")
-            return 1
-        payload: dict[str, Any] = {}
-        if len(args) >= 3:
-            payload = json.loads(args[2])
-        result = call_tool(args[1], payload)
-        json.dump(result, sys.stdout)
-        sys.stdout.write("\n")
-        return 0 if result.get("ok", True) else 1
-    sys.stderr.write(f"unknown arg: {args[0]}\n")
-    return 1
+    return main_cli(
+        argv,
+        tools=TOOLS,
+        prog="studio_mcp.py",
+        usage_extra=(
+            "Occupancy-aware studio MCP. No execute_code. No telemetry. No Queue."
+        ),
+        handle=handle_rpc,
+    )
 
 
 if __name__ == "__main__":
