@@ -10477,7 +10477,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 17 Sep 2026, 05:09 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-17T05:09:28+00:00">17 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 17 Sep 2026, 05:47 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-17T05:47:54+00:00">17 Sep 2026</time></span>
                 
                   
 
@@ -10562,8 +10562,8 @@
 </tr>
 <tr>
 <td><code>ez_image</code></td>
-<td>3 nodes</td>
-<td>Snap / match Klein edit sizes; Format / platform canvas picker</td>
+<td>4 nodes</td>
+<td>Snap / match Klein edit sizes; still and video Format / platform pickers</td>
 </tr>
 <tr>
 <td><code>ez_quality</code></td>
@@ -11029,7 +11029,7 @@
 </table>
 <hr />
 <h2 id="ez_image">ez_image<a class="headerlink" href="#ez_image" title="Permanent link">&para;</a></h2>
-<p>Category <code>ez-comfy/image</code>. Size helpers for Klein edit graphs plus the still-studio Format picker. Torch / Comfy <code>common_upscale</code> is lazy inside snap/match <code>run()</code>.</p>
+<p>Category <code>ez-comfy/image</code>. Size helpers for Klein edit graphs plus still and video Format / platform pickers. Torch / Comfy <code>common_upscale</code> is lazy inside snap/match <code>run()</code>.</p>
 <table>
 <thead>
 <tr>
@@ -11064,7 +11064,15 @@
 <td><code>format</code> combo, <code>look</code> combo, <code>width</code>/<code>height</code>/<code>batch_size</code> INT</td>
 <td><code>INT</code> width/height/batch, <code>STRING</code> hint/prefix/context</td>
 <td>klein</td>
-<td>Preset sets ÷16 canvas, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="saveimage" data-href="../../glossary/#saveimage" data-short="Writes a PNG under COMFY_OUTPUT_DIR. Last-frame savers feed the next I2V start." data-category="Studio" title="Writes a PNG under COMFY_OUTPUT_DIR. Last-frame savers feed the next I2V start.">SaveImage</span> prefix, and Enhance framing. Custom snaps Width×Height. Look recipe is a Cinema Rack starter. Quality does not change size</td>
+<td>Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio App only) is a Cinema Rack starter. Quality does not change size</td>
+</tr>
+<tr>
+<td><code>EZVideoFormat</code></td>
+<td>Format / platform (video)</td>
+<td><code>family</code> combo (Wan 5B / LTX-2.5), <code>format</code> combo, <code>width</code>/<code>height</code> INT</td>
+<td><code>INT</code> width/height, <code>STRING</code> hint/prefix</td>
+<td>wan / ltx</td>
+<td>Preset sets <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>-safe <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../../glossary/#clip" data-short="Text encoder that turns a prompt into conditioning for the sampler." data-category="Models" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span> pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../../glossary/#latent" data-short="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet." data-category="Studio" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>. App Mode hides Family. Quality does not change size</td>
 </tr>
 </tbody>
 </table>
@@ -11089,7 +11097,7 @@
 <td><code>quality</code> combo <code>lab</code> <code>draft</code> <code>high</code> (default <strong>lab</strong>)</td>
 <td><code>STRING</code> quality</td>
 <td>graph occupancy (overlay table)</td>
-<td>Lab is authored widgets. Never writes banned UNETs. Klein base High needs <code>download-image --tier base</code>. Not <code>--tier quality</code>. Does not change size, length, <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../../glossary/#clip" data-short="Text encoder that turns a prompt into conditioning for the sampler." data-category="Models" title="Text encoder that turns a prompt into conditioning for the sampler.">CLIP</span>, or VAE. Inspire/llm is a visible no-op</td>
+<td>Lab is authored widgets. Never writes banned UNETs. Klein base High needs <code>download-image --tier base</code>. Not <code>--tier quality</code>. Does not change size, length, CLIP, or VAE. Inspire/llm is a visible no-op</td>
 </tr>
 </tbody>
 </table>
@@ -11123,7 +11131,7 @@
 </tr>
 <tr>
 <td><code>film</code></td>
-<td>everything else on that <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span></td>
+<td>everything else on that Spark</td>
 </tr>
 <tr>
 <td><code>audio</code></td>

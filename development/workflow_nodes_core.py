@@ -308,6 +308,24 @@ def core_nodes() -> dict[str, Any]:
                 _w("batch_size", index=4, typ="INT", rng="1–4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
             ],
         ),
+        "EZVideoFormat": _n(
+            "Format / platform (video)",
+            "Pick a Wan or LTX clip canvas (aspect or named platform).",
+            origin="ez_image",
+            lab="Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.",
+            sockets=[
+                _s("width", "INT", "out", "Latent width (Wan ÷16, LTX ÷32)."),
+                _s("height", "INT", "out", "Latent height (Wan ÷16, LTX ÷32)."),
+                _s("hint", "STRING", "out", "Enhance duration / framing line."),
+                _s("prefix", "STRING", "out", "Optional filename prefix (often unwired)."),
+            ],
+            widgets=[
+                _w("family", index=0, typ="COMBO", rng="Wan 5B / LTX-2.5", desc="Which VAE grid to use.", gen="Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.", choices_from="video_families"),
+                _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.", choices_from="video_formats"),
+                _w("width", index=2, typ="INT", rng="16–1280", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704."),
+                _w("height", index=3, typ="INT", rng="16–1280", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
+            ],
+        ),
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
