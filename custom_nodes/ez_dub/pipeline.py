@@ -30,8 +30,10 @@ from .speech import (
     match_rms,
     normalize_clone_pcm,
     raise_to_peak,
+    speech_band_ratio,
     speech_onset_slice,
     strip_leading_silence,
+    tonal_frame_fraction,
     voiced_fraction,
     zc_interval_cv,
     zero_crossing_rate,
@@ -171,12 +173,15 @@ TRANSLATE_TEMPERATURE = 0.3
 TRANSLATE_TIMEOUT_S = 120
 CLONE_TEXT_LIMIT = 300
 CFG_AUTO = -1.0
-CFG_CROSS_LANG = 0.0
-CFG_CROSS_LANG_RETRY = 0.25
+CFG_CROSS_LANG = 0.3
+CFG_CROSS_LANG_RETRY = 0.5
+CFG_RETRY_BELOW = 0.45
 CFG_SAME_LANG = 0.5
 EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
-CLONE_REPETITION_PENALTY = 1.2
+CLONE_REPETITION_PENALTY = 1.9
+CLONE_MIN_P = 0.05
+CLONE_TOP_P = 1.0
 EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
 VOICED_MIN_FRAC = 0.20
@@ -193,7 +198,7 @@ ONSET_PAD_S = 0.03
 CLONE_TOKEN_RATE = 25
 CLONE_SILENCE_PAD_S = 3.0
 CLONE_TOKEN_SLACK = 1.8
-CLONE_TOKEN_MIN = 80
+CLONE_TOKEN_MIN = 200
 CLONE_TOKEN_MAX = 1000
 PCM_INT_RANGE = 1.5
 REF_MIN_TURN_S = 0.8
@@ -334,7 +339,10 @@ def language_name(code: object) -> str:
 def clone_cfg_weight(
     source: object, target: object, override: object = CFG_AUTO
 ) -> float:
-    """CFG for Chatterbox generate. Auto is 0 on language transfer.
+    """CFG for Chatterbox generate. Auto is 0.3 on language transfer.
+
+    ``0.0`` disables T3 CFG and often vocodes a moan instead of the
+    target line. ``0.3`` still reduces reference-accent lock vs 0.5.
 
     Args:
         source: ISO source or ``auto``.
@@ -362,6 +370,20 @@ def clone_cfg_weight(
     if _same_language(src, tgt):
         return CFG_SAME_LANG
     return CFG_CROSS_LANG
+
+
+def clone_cfg_retry(cfg: float) -> float | None:
+    """Stronger CFG for a second take, or None when the first is already high.
+
+    Args:
+        cfg: CFG used on the first generate.
+
+    Returns:
+        Retry weight, or None when no second take is warranted.
+    """
+    if float(cfg) < CFG_RETRY_BELOW:
+        return CFG_CROSS_LANG_RETRY
+    return None
 
 
 def dub_llm_timeout_s() -> int:
@@ -1607,11 +1629,17 @@ def _try_chatterbox(
     except (TypeError, ValueError):
         params = {}
     has_rep = "repetition_penalty" in params
+    has_min_p = "min_p" in params
+    has_top_p = "top_p" in params
     has_var = any(
         item.kind == inspect.Parameter.VAR_KEYWORD for item in params.values()
     )
     if has_rep or has_var:
         kwargs["repetition_penalty"] = CLONE_REPETITION_PENALTY
+    if has_min_p or has_var:
+        kwargs["min_p"] = CLONE_MIN_P
+    if has_top_p or has_var:
+        kwargs["top_p"] = CLONE_TOP_P
     ref = (ref_wav or "").strip()
     cond_key = ""
     if ref and Path(ref).is_file():
@@ -2177,7 +2205,7 @@ def render_mix(
     cloned = False
     cloned_n = 0
     last_err = ""
-    cross_cfg = abs(cfg - CFG_CROSS_LANG) < 1e-9
+    retry_cfg = clone_cfg_retry(cfg)
 
     def _prep_clone(raw_pcm: list[float], raw_sr: int, text: str) -> list[float]:
         """Resample to mix rate and crop a hallucination tail.
@@ -2228,14 +2256,14 @@ def render_mix(
         write_wav(render_dir / f"turn_{int(turn['id']):04d}.raw.wav", pcm, rate)
         if not is_speech_like(pcm, rate):
             used_retry = False
-            if cross_cfg:
+            if retry_cfg is not None:
                 pcm2, sr2, err2 = synthesize_turn(
                     spoken,
                     lang,
                     str(ref) if ref else "",
                     engine if engine in ENGINES else ENGINE_CHATTERBOX,
                     exaggeration=exag,
-                    cfg_weight=CFG_CROSS_LANG_RETRY,
+                    cfg_weight=retry_cfg,
                     ref_text=_speaker_ref_text(ref) if ref else "",
                 )
                 if err2:

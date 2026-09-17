@@ -481,7 +481,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "include_announcer": "On: speak Announcer: lines. Off: skip them.",
     "speed": "TTS speed. 1.0 is the Kokoro default.",
     "cfg_weight": (
-        "-1 auto: 0 for EN→ES (less English accent). 0.5 same-language clone."
+        "-1 auto: 0.3 for EN→ES (CFG 0 often moans). 0.5 same-language clone."
     ),
     "exaggeration": "0.5 is neutral. Higher is more intense and faster.",
     "source": (

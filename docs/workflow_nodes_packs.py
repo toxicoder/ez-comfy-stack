@@ -109,7 +109,7 @@ def pack_nodes() -> dict[str, Any]:
         widgets=[
             _w("prompt", index=0, desc="Editable translation JSON.", gen="Turn Enhance off to pin widget text after a human rewrite."),
             _w("enhance", index=1, typ="BOOLEAN", desc="Rewrite translation via GGUF.", gen="Off pins your edits."),
-            _w("target_language", index=2, typ="COMBO", rng="es", desc="Target ISO code.", gen="es is the lab smoke. Clone CFG auto 0 on EN→ES.", choices=dub_langs),
+            _w("target_language", index=2, typ="COMBO", rng="es", desc="Target ISO code.", gen="es is the lab smoke. Clone CFG auto 0.3 on EN→ES.", choices=dub_langs),
             _w("source_language", index=3, typ="COMBO", rng="auto", desc="Source language.", gen="auto detects. Pin en if ASR mis-detects.", choices=[("auto", "Detect.")] + dub_langs),
             _w("max_speakers", index=4, typ="INT", rng="0–12, 0 = auto", desc="Diarize cap.", gen="0 lets the pipeline decide."),
             _w("stage", index=5, typ="COMBO", rng="all", desc="Analyze vs render vs both.", gen="all analyzes then clones. render skips ASR. analyze stops after JSON.", choices=[("all", "Analyze then clone (lab)."), ("analyze", "ASR/translate only."), ("render", "Skip ASR; clone widget JSON.")]),
@@ -129,7 +129,7 @@ def pack_nodes() -> dict[str, Any]:
             _w("keep_bed", index=1, typ="BOOLEAN", rng="true", desc="Keep source bed under the clone.", gen="true duration-locks to the source (YouTube Languages)."),
             _w("spoken_disclosure", index=2, typ="BOOLEAN", rng="false", desc="Overlay a spoken bumper on the mix wav.", gen="Off: mix starts on speech. YT wav stays source-timed either way."),
             _w("speed", index=3, typ="FLOAT", rng="0.5–1.5, 1.0", desc="Clone speaking rate.", gen="Stay near 1.0 or the duration lock fights you."),
-            _w("cfg_weight", index=4, typ="FLOAT", rng="−1.0 = auto", desc="Clone CFG.", gen="−1 auto. Lab auto 0 on EN→ES."),
+            _w("cfg_weight", index=4, typ="FLOAT", rng="−1.0 = auto", desc="Clone CFG.", gen="−1 auto. Lab auto 0.3 on EN→ES (retry 0.5)."),
             _w("exaggeration", index=5, typ="FLOAT", rng="0.25–2.0, 0.5", desc="Chatterbox exaggeration.", gen="0.5 is the lab default. Higher is cartoon-emotive."),
         ],
     )

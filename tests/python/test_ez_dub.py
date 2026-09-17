@@ -23,6 +23,7 @@ from ez_dub import align  # noqa: E402
 from ez_dub import audio as dub_audio  # noqa: E402
 from ez_dub import jobstore  # noqa: E402
 from ez_dub import pipeline  # noqa: E402
+from ez_dub import speech as dub_speech  # noqa: E402
 from ez_dub import srt as dub_srt  # noqa: E402
 from ez_dub import turns as dub_turns  # noqa: E402
 from ez_dub.nodes import (  # noqa: E402
@@ -2102,7 +2103,7 @@ def test_queue_once_e2e_hooks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
 
     def _tts(text: str, language: str, ref_wav: str, engine: str) -> tuple[list[float], int]:
         del language, ref_wav, engine
-        return _am_speech(rate, max(0.4, len(text) * 40 / float(rate))), rate
+        return _am_speech(rate, max(1.2, len(text.split()) / 2.7)), rate
 
     pipeline.asr_hook = _asr
     pipeline.translate_hook = _tr
@@ -2374,12 +2375,15 @@ def _f0(samples: list[float], rate: int, skip_s: float = 0.08) -> float:
 
 
 def test_clone_cfg_weight_auto_and_override() -> None:
-    assert pipeline.clone_cfg_weight("en", "es", -1) == 0.0
-    assert pipeline.clone_cfg_weight("auto", "es", -1.0) == 0.0
+    assert pipeline.clone_cfg_weight("en", "es", -1) == pipeline.CFG_CROSS_LANG
+    assert pipeline.clone_cfg_weight("auto", "es", -1.0) == pipeline.CFG_CROSS_LANG
     assert pipeline.clone_cfg_weight("es", "es", -1) == 0.5
     assert pipeline.clone_cfg_weight("en", "es", 0.3) == 0.3
     assert pipeline.clone_cfg_weight("en", "es", 1.5) == 1.0
-    assert pipeline.clone_cfg_weight("en", "es", "nope") == 0.0
+    assert pipeline.clone_cfg_weight("en", "es", "nope") == pipeline.CFG_CROSS_LANG
+    assert pipeline.clone_cfg_retry(0.3) == pipeline.CFG_CROSS_LANG_RETRY
+    assert pipeline.clone_cfg_retry(0.0) == pipeline.CFG_CROSS_LANG_RETRY
+    assert pipeline.clone_cfg_retry(0.5) is None
 
 
 def test_try_chatterbox_caps_max_new_tokens(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -2453,6 +2457,8 @@ def test_try_chatterbox_passes_cross_lang_cfg(tmp_path: Path, monkeypatch: pytes
     assert seen[0]["language_id"] == "es"
     assert seen[0]["audio_prompt_path"] == str(ref)
     assert seen[0]["repetition_penalty"] == pipeline.CLONE_REPETITION_PENALTY
+    assert seen[0]["min_p"] == pipeline.CLONE_MIN_P
+    assert seen[0]["top_p"] == pipeline.CLONE_TOP_P
     pcm2, _rate, err2 = pipeline._try_chatterbox(
         "Adios",
         "es",
@@ -2503,8 +2509,10 @@ def test_render_mix_auto_cfg_zero_for_en_es(tmp_path: Path, monkeypatch: pytest.
     assert mix
     assert "cloned" in status
     assert seen
-    assert seen[0]["cfg_weight"] == 0.0
+    assert seen[0]["cfg_weight"] == pipeline.CFG_CROSS_LANG
     assert seen[0]["exaggeration"] == 0.5
+    assert seen[0]["repetition_penalty"] == pipeline.CLONE_REPETITION_PENALTY
+    assert seen[0]["min_p"] == pipeline.CLONE_MIN_P
 
 
 def test_extract_refs_skips_overlap_quiet_and_caps(tmp_path: Path) -> None:
@@ -2720,6 +2728,31 @@ def _am_speech(
     return out
 
 
+def _whale_glide(rate: int, seconds: float = 2.0) -> list[float]:
+    """F0-glide harmonic stack: vocoder moan that fooled the old ZCR/CV gate."""
+    n = max(1, int(round(rate * seconds)))
+    out: list[float] = []
+    phase = 0.0
+    dt = 1.0 / float(rate)
+    denom = max(n - 1, 1)
+    for i in range(n):
+        t = i * dt
+        f0 = 80.0 + 80.0 * (i / denom)
+        phase += 2.0 * math.pi * f0 * dt
+        env = 0.55 + 0.45 * abs(math.sin(2.0 * math.pi * 0.7 * t))
+        sample = env * (
+            math.sin(phase)
+            + 0.50 * math.sin(2.0 * phase)
+            + 0.25 * math.sin(3.0 * phase)
+        )
+        if sample > 1.0:
+            sample = 1.0
+        elif sample < -1.0:
+            sample = -1.0
+        out.append(0.60 * sample)
+    return out
+
+
 def _perth_drone(
     rate: int,
     hush_s: float = 8.0,
@@ -2796,7 +2829,8 @@ def test_crop_hallucination_tail_starts_at_onset() -> None:
 def test_clone_token_budget_scales_with_text() -> None:
     short = pipeline.clone_token_budget("Hola")
     long = pipeline.clone_token_budget("palabra " * 80)
-    assert short >= pipeline.CLONE_TOKEN_MIN
+    assert pipeline.CLONE_TOKEN_MIN >= 200
+    assert short == pipeline.CLONE_TOKEN_MIN
     assert short < 250
     assert long <= pipeline.CLONE_TOKEN_MAX
     assert long > short
@@ -2831,6 +2865,31 @@ def test_is_speech_like_rejects_perth_drone() -> None:
     tone_only = drone[rate * 8 :]
     assert pipeline.is_speech_like(tone_only, rate) is False
     assert pipeline.zero_crossing_rate(tone_only, rate) < 250.0
+
+
+def test_is_speech_like_rejects_whale_glide() -> None:
+    rate = 24000
+    whale = _whale_glide(rate, 2.0)
+    assert pipeline.is_speech_like(whale, rate) is False
+    speech = _am_speech(rate, 1.5)
+    assert pipeline.is_speech_like(speech, rate) is True
+    assert pipeline.speech_band_ratio(speech, rate) >= 0.22
+    assert pipeline.speech_band_ratio(whale, rate) < pipeline.speech_band_ratio(
+        speech, rate
+    )
+    assert pipeline.speech_band_ratio([], rate) == 0.0
+    assert pipeline.speech_band_ratio([0.0] * rate, rate) == 0.0
+    assert pipeline.tonal_frame_fraction([], rate) == 0.0
+    assert pipeline.tonal_frame_fraction([0.2] * 100, rate) == 0.0
+    hush = [0.0] * (rate * 2)
+    assert pipeline.tonal_frame_fraction(hush, rate) == 0.0
+
+
+def test_is_speech_like_rejects_low_speech_band(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(dub_speech, "SPEECH_BAND_MIN", 1.1)
+    assert dub_speech.is_speech_like(_am_speech(24000, 1.5), 24000) is False
 
 
 def test_render_mix_strips_leading_clone_hush(
@@ -3139,6 +3198,64 @@ def test_clone_cfg_retries_when_unvoiced(tmp_path: Path, monkeypatch: pytest.Mon
     assert (dest / "ez_dub_yt.wav").is_file()
     yt, _sr = dub_audio.read_wav(dest / "ez_dub_yt.wav")
     assert pipeline.is_speech_like(yt, rate) is True
+
+
+def test_render_mix_retries_cfg_half_when_first_take_unvoiced(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 3.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.5,
+                "text": "Hello team",
+                "text_target": "Hola equipo",
+                "overlap": False,
+                "rms": 0.2,
+            }
+        ],
+    }
+    seen: list[float] = []
+
+    class _Fake:
+        sr = 24000
+
+        def generate(self, text: str, **kwargs: Any) -> Any:
+            del text
+            seen.append(float(kwargs.get("cfg_weight") or 0.0))
+            if len(seen) == 1:
+                return _whale_glide(24000, 1.2)
+            return _am_speech(24000, 0.8)
+
+    monkeypatch.setattr(pipeline, "_get_chatterbox", lambda: (_Fake(), ""))
+    monkeypatch.setattr(pipeline, "preflight_clone", lambda: "")
+    mix, out_rate, status = pipeline.render_mix(
+        samples,
+        rate,
+        payload,
+        dest,
+        engine=ENGINE_CHATTERBOX,
+        keep_bed=True,
+        spoken_disclosure=False,
+        cfg_weight=-1.0,
+    )
+    assert out_rate == rate
+    assert mix
+    assert "cloned" in status
+    assert seen[:2] == [pipeline.CFG_CROSS_LANG, pipeline.CFG_CROSS_LANG_RETRY]
 
 
 def test_render_mix_speed_widget_does_not_stack(
