@@ -956,6 +956,33 @@ Exit codes:
 
 ### Command: compile-film
 
+<!-- source: scripts/utilities/compress-cinema-clip.sh -->
+## compress-cinema-clip
+
+Re-encode a Cinema Rack illustration MP4 to muted 854x480 H.264 and
+write a JPEG poster. Host ffmpeg. Does not start Docker.
+
+Purpose:
+  Keep encyclopedia clips small enough for Git LFS (target ≤512KiB).
+
+```bash
+Usage:
+  ./scripts/utilities/compress-cinema-clip.sh --in FILE --out FILE
+```
+
+      [--poster FILE] [--crf 28] [--max-bytes 524288] [--dry-run]
+
+!!! warning
+
+    Safety:
+      Does not start Docker. CPU encode; compose may stay up. Fails if
+      ffmpeg is missing.
+
+Exit codes:
+  0 success or dry-run; 1 usage / missing ffmpeg / size cap.
+
+### Command: compress-cinema-clip
+
 <!-- source: scripts/utilities/concat-shots.sh -->
 ## concat-shots
 

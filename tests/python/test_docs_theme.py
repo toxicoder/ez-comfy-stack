@@ -32,6 +32,13 @@ def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def test_mkdocs_keeps_cinema_clip_pages_off_nav() -> None:
+    """Technique encyclopedia pages are built but not listed in nav."""
+    text = _read(MKDOCS_YML)
+    assert "not_in_nav:" in text
+    assert "generated/cinema/*/*.md" in text
+
+
 def test_mkdocs_enables_sticky_tabs_not_autohide() -> None:
     """Tabs stay in the sticky header; header.autohide stays off."""
     text = _read(MKDOCS_YML)
@@ -326,6 +333,19 @@ def test_extra_css_styles_published_chip() -> None:
     assert ".ez-published-chip__label" in css
     assert re.search(r"clip:\s*rect\(0,\s*0,\s*0,\s*0\)", css)
     assert re.search(r"display\s*:\s*none", css) is None
+
+
+def test_extra_css_cinema_clip_box() -> None:
+    """Encyclopedia clips stay 16:9 and do not autoplay."""
+    css = _read(EXTRA_CSS)
+    assert ".ez-cinema-clip" in css
+    assert ".ez-cinema-thumb" in css
+    assert re.search(r"aspect-ratio:\s*16\s*/\s*9", css)
+    assert re.search(
+        r"\.ez-cinema-clip video\s*\{[^}]*width:\s*100%",
+        css,
+        re.S,
+    )
 
 
 def test_published_js_rewrites_relative_time() -> None:

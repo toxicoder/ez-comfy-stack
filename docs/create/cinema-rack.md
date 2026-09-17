@@ -12,11 +12,13 @@ tags: [cinema, prompting, klein, wan, ltx, inspire]
 - How the rack splices Klein / Wan / LTX strings
 - Flavor rules (stills, I2V look-skip, one Wan camera)
 - Recipes, conflicts, and handoff to still-draft
+- 5s muted encyclopedia clips for shipped techniques
 
 **What this enables**
 
 - Building a professional shot from dropdowns instead of remembering film grammar
 - Copying a family CLIP string into **klein/still-draft**, **wan/text-to-video-5s**, or **ltx/text-to-video-5s**
+- Watching a 5s example of a pick on the generated technique page
 
 **Who this is for:** studio users after Prompt Forge. Occupancy **llm**. No UNET.
 
@@ -52,7 +54,7 @@ Pick **none** or one id per axis. Splicing is across axes, not two dollies on on
 | Genre | Genre Looks | clause |
 | Viral look | Viral Looks | freeze |
 
-Catalog encyclopedia (generated, do not hand-edit): [Cinema technique catalogs](../generated/cinema/index.md).
+Catalog encyclopedia (generated, do not hand-edit): [Cinema technique catalogs](../generated/cinema/index.md). When a 5s muted illustration is shipped, the axis table links a poster to a technique page. Clips live under `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; compress with `./scripts/utilities/compress-cinema-clip.sh`.
 
 Klein sentence order is cinematic grammar, not widget order: shot size → angle → lens → composition → lighting → color → weather → genre → viral → time → move → optical → edit.
 

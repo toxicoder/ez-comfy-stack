@@ -110,7 +110,8 @@ def test_mkdocs_nav_lists_every_docs_markdown_page() -> None:
     from ``docs/generated/workflows/manifest.json`` rather than 90+
     hand-listed nav lines. Cinema catalogs inject from
     ``docs/generated/cinema/manifest.json``. Audio catalogs inject from
-    ``docs/generated/audio/manifest.json``.
+    ``docs/generated/audio/manifest.json``. Cinema technique clip pages are
+    linked from axis tables and stay off nav.
     """
     nav = MKDOCS.read_text(encoding="utf-8")
     listed = (
@@ -123,6 +124,9 @@ def test_mkdocs_nav_lists_every_docs_markdown_page() -> None:
         p.relative_to(DOCS).as_posix()
         for p in DOCS.rglob("*.md")
         if p.name not in SKIP_NAMES
+        # Technique clip pages live under generated/cinema/<axis>/<id>.md
+        # and are linked from axis tables, not MkDocs nav.
+        and not (p.parent.parent.name == "cinema" and p.parent.name != "cinema")
     )
     missing = [p for p in pages if p not in listed]
     extra = sorted(listed - set(pages))

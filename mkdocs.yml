@@ -59,6 +59,10 @@ plugins:
 hooks:
   - docs/hooks.py
 
+# Technique clip pages are linked from axis tables; keep them off the nav tree.
+not_in_nav: |
+  generated/cinema/*/*.md
+
 extra:
   version:
     provider: mike
