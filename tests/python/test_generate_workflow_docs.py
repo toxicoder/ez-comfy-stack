@@ -223,6 +223,24 @@ def test_expand_choices_image_formats_and_cinema_recipes() -> None:
     ids = {row["id"] for row in formats}
     assert "Custom" in ids
     assert "16:9 LTX feeder (1280×704)" in ids
+    video = gen.expand_choices(
+        {"choices_from": "video_formats"},
+        styles={},
+        ace_language=[],
+        ace_keyscale=[],
+    )
+    video_ids = {row["id"] for row in video}
+    assert "Custom" in video_ids
+    assert "LTX · 16:9 YouTube (1280×704)" in video_ids
+    families = gen.expand_choices(
+        {"choices_from": "video_families"},
+        styles={},
+        ace_language=[],
+        ace_keyscale=[],
+    )
+    family_ids = {row["id"] for row in families}
+    assert "Wan 5B" in family_ids
+    assert "LTX-2.5" in family_ids
     recipes = gen.expand_choices(
         {"choices_from": "cinema_recipes"},
         styles={},
@@ -236,17 +254,39 @@ def test_expand_choices_image_formats_and_cinema_recipes() -> None:
 def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     gen = _load()
     monkeypatch.setattr(gen, "FORMATS_FILE", tmp_path / "no-formats.json")
+    monkeypatch.setattr(gen, "VIDEO_FORMATS_FILE", tmp_path / "no-video.json")
     monkeypatch.setattr(gen, "RECIPES_FILE", tmp_path / "no-recipes.json")
     assert gen._image_format_choices() == []
+    assert gen._video_format_choices() == []
+    assert gen._video_family_choices() == []
     assert gen._cinema_recipe_choices() == [
         {"id": "none", "description": "Off. Style + Prompt own look."}
     ]
     (tmp_path / "no-formats.json").write_text("[]", encoding="utf-8")
+    (tmp_path / "no-video.json").write_text("[]", encoding="utf-8")
     (tmp_path / "no-recipes.json").write_text("{}", encoding="utf-8")
     assert gen._image_format_choices() == []
+    assert gen._video_format_choices() == []
+    assert gen._video_family_choices() == []
     assert gen._cinema_recipe_choices()[0]["id"] == "none"
     (tmp_path / "no-formats.json").write_text('{"formats": [1, {"id": ""}]}', encoding="utf-8")
+    (tmp_path / "no-video.json").write_text(
+        '{"formats": [1, {"id": ""}], "families": {"wan": 1}}', encoding="utf-8"
+    )
     (tmp_path / "no-recipes.json").write_text("[1, {\"id\": \"rec_x\", \"label\": \"X\"}]", encoding="utf-8")
     assert gen._image_format_choices() == []
+    assert gen._video_format_choices() == []
+    assert gen._video_family_choices() == []
     rows = gen._cinema_recipe_choices()
     assert {"id": "X", "description": "rec_x"} in rows
+    (tmp_path / "no-video.json").write_text(
+        '{"formats": [{"id": "custom", "label": "Custom", "width": 0, "height": 0}, '
+        '{"id": "wan_16_9", "label": "Wan 16:9", "family": "wan", "width": 832, '
+        '"height": 480}], "families": {"wan": {"label": "Wan 5B", "grid": 16}}}',
+        encoding="utf-8",
+    )
+    video_rows = gen._video_format_choices()
+    assert video_rows[0]["id"] == "Custom"
+    assert "832×480" in video_rows[1]["description"]
+    family_rows = gen._video_family_choices()
+    assert family_rows[0]["id"] == "Wan 5B"

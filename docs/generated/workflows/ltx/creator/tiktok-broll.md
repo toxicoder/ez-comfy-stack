@@ -29,6 +29,8 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## ltx/creator/tiktok-broll
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 TikTok B-roll AV 9:16. Lab size **768×1280**. Prefix `ez_tt_broll`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
@@ -72,6 +74,7 @@ flowchart LR
   N20["Audio VAE Decode"]
   N21["Negative Prompt Enhance"]
   N22["Quality"]
+  N23["Format / platform"]
   N1 --> N9
   N2 --> N7
   N2 --> N10
@@ -96,6 +99,8 @@ flowchart LR
   N19 --> N21
   N20 --> N18
   N21 --> N6
+  N23 --> N7
+  N23 --> N19
 ```
 
 ## Nodes on this graph
@@ -123,6 +128,7 @@ flowchart LR
 | 20 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
 | 21 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 22 | Quality | `EZQuality` | Ungrouped |
+| 23 | Format / platform | `EZVideoFormat` | Ungrouped |
 
 ## Node parameter reference
 
@@ -682,10 +688,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## ltx/creator/tiktok-broll TikTok B-roll AV 9:16. Lab size **768×1280**. Prefix `ez_tt_broll`. Empty of lettering. Add titles in your editor, not in the prompt. Occupancy: ltx — stop Wan, podcast, m…`
+**This graph:** `## ltx/creator/tiktok-broll Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. TikTok B-roll AV 9:16. Lab size **768×1280**. Prefix `ez_tt_broll`. Empty of lett…`
 
 ```text
 ## ltx/creator/tiktok-broll
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 TikTok B-roll AV 9:16. Lab size **768×1280**. Prefix `ez_tt_broll`.
 Empty of lettering. Add titles in your editor, not in the prompt.
@@ -1180,3 +1188,79 @@ Lab default, Draft (faster), or High (slower).
 | `lab` | Authored lab widgets. Default. |
 | `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
 | `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
+
+### `EZVideoFormat` — Format / platform (video)
+
+Pick a Wan or LTX clip canvas (aspect or named platform).
+
+!!! warning "Lab notes"
+
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
+| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
+
+#### `family`
+
+Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
+
+Which VAE grid to use.
+
+**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+
+**This graph:** `LTX-2.5`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Wan 5B` | wan VAE grid ÷16. |
+| `LTX-2.5` | ltx VAE grid ÷32. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+
+**This graph:** `LTX · 9:16 Shorts (768×1280)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
+| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
+| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
+| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
+| `Wan · 1:1 square (768×768)` | 768×768. wan. |
+| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
+| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
+| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
+| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+
+#### `width`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+
+**This graph:** `768`
+
+#### `height`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1280`

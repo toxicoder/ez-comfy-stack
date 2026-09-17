@@ -18,6 +18,7 @@ from _lab_layout import LAB_GROUP_Y0, finalize_layout, group as _group
 from _lab_paths import LAB_ROOT, ROOT, apply_lab_identity, lab_dest, lab_json
 from _lab_theme import CREATOR_IDENTITY, I2V_LOCK, KLEIN_NEG_STILL
 from _stamp_app_mode import stamp_suite_graph
+from _wire_format import wire_lab_graph
 from _wire_prompt_enhance import enable_lab_graph, normalize_enhance_widgets
 
 import _build_creator_video_workflows as cv
@@ -126,6 +127,7 @@ def _dump(path: Path, graph: dict) -> None:
     apply_lab_identity(graph, rel)
     enable_lab_graph(graph)
     normalize_enhance_widgets(graph)
+    wire_lab_graph(graph)
     stamp_suite_graph(graph)
     finalize_layout(graph)
     apply_lab_identity(graph, rel)

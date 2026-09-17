@@ -17,6 +17,7 @@ import sys
 from _wire_prompt_enhance import _rewrite_enhance_blurb, enable_lab_graph, normalize_enhance_widgets
 from _lab_paths import lab_json
 from _stamp_app_mode import stamp_suite_graph
+from _wire_format import wire_lab_graph
 from _lab_layout import (
     GROUP_TITLE_INSET,
     LAB_GROUP_Y0,
@@ -140,6 +141,7 @@ def _load(path: Path) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    wire_lab_graph(graph)
     stamp_suite_graph(graph)
     finalize_layout(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")

@@ -1,8 +1,8 @@
 {
   "id": "dream-house",
-  "revision": 3,
-  "last_node_id": 61,
-  "last_link_id": 103,
+  "revision": 4,
+  "last_node_id": 62,
+  "last_link_id": 107,
   "nodes": [
     {
       "id": 1,
@@ -148,7 +148,16 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 107,
+          "widget": {
+            "name": "duration_hint"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -253,7 +262,32 @@
       "flags": {},
       "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 104,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 105,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 106,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "LATENT",
@@ -281,14 +315,14 @@
         1280,
         1
       ],
-      "title": "Instagram 4:5 1024x1280"
+      "title": "Latent (wired from Format)"
     },
     {
       "id": 7,
       "type": "Note",
       "pos": [
         40,
-        1472
+        1764
       ],
       "size": [
         420,
@@ -303,7 +337,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## klein/dream-house\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room\u2019s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room \u2014 not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with \u201cthis still is only the room and backdrop the shot names.\u201d Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## klein/dream-house\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room\u2019s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room \u2014 not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with \u201cthis still is only the room and backdrop the shot names.\u201d Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note"
     },
@@ -2578,6 +2612,79 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 62,
+      "type": "EZImageFormat",
+      "pos": [
+        40,
+        1472
+      ],
+      "size": [
+        360,
+        220
+      ],
+      "flags": {},
+      "order": 62,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            104
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            105
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "batch",
+          "type": "INT",
+          "links": [
+            106
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            107
+          ],
+          "slot_index": 3
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageFormat"
+      },
+      "widgets_values": [
+        "4:5 portrait (1024\u00d71280)",
+        "none",
+        1024,
+        1280,
+        1
+      ],
+      "title": "Format / platform"
     }
   ],
   "links": [
@@ -3404,6 +3511,38 @@
       60,
       0,
       "STRING"
+    ],
+    [
+      104,
+      62,
+      0,
+      6,
+      0,
+      "INT"
+    ],
+    [
+      105,
+      62,
+      1,
+      6,
+      1,
+      "INT"
+    ],
+    [
+      106,
+      62,
+      2,
+      6,
+      2,
+      "INT"
+    ],
+    [
+      107,
+      62,
+      3,
+      4,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -3568,7 +3707,7 @@
   "extra": {
     "lab_profile": "klein/dream-house",
     "lab_flux_tier": "fast",
-    "lab_note": "## klein/dream-house\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room\u2019s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room \u2014 not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with \u201cthis still is only the room and backdrop the shot names.\u201d Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## klein/dream-house\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTen Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY \u2014 the default placeholder is the lab penthouse.\nHOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named \u2014 name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room\u2019s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room \u2014 not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with \u201cthis still is only the room and backdrop the shot names.\u201d Shots 02\u201310 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.\nIdentity-mode enhance is **on**. Shot cards are not Klein-t2i-enhanced \u2014 a per-shot rewrite would mutate the bible. Optional style dropdown applies to the bible.\nQueue writes ez_dream_house_01 through ez_dream_house_10. Unused SHOT groups may be bypassed (Ctrl+B). Dawn / noon / night of one camera belong on klein-time-of-day, not this tour.\nIf materials drift across rooms, swap the UNET to Klein base 4B and raise steps/CFG as on klein-still-daily.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)",
     "ds": {
       "scale": 1,
@@ -3618,6 +3757,14 @@
           }
         ],
         [
+          62,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "label": "Format / platform"
+          }
+        ],
+        [
           4,
           "style",
           {
@@ -3639,6 +3786,30 @@
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          62,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          62,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
+        ],
+        [
+          62,
+          "batch_size",
+          {
+            "description": "How many stills in one Run. Large canvases stay at 1.",
+            "label": "Batch"
           }
         ]
       ],

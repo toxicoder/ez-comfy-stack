@@ -49,7 +49,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
 | `ez_prompt_enhance` | 12 nodes | Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack |
-| `ez_image` | 3 nodes | Snap / match Klein edit sizes; Format / platform canvas picker |
+| `ez_image` | 4 nodes | Snap / match Klein edit sizes; still and video Format / platform pickers |
 | `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
@@ -189,13 +189,14 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 
 ## ez_image
 
-Category `ez-comfy/image`. Size helpers for Klein edit graphs plus the still-studio Format picker. Torch / Comfy `common_upscale` is lazy inside snap/match `run()`.
+Category `ez-comfy/image`. Size helpers for Klein edit graphs plus still and video Format / platform pickers. Torch / Comfy `common_upscale` is lazy inside snap/match `run()`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | — | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
 | `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | — | Lanczos-resize to `size_src` H×W. No-op when already equal |
-| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas, SaveImage prefix, and Enhance framing. Custom snaps Width×Height. Look recipe is a Cinema Rack starter. Quality does not change size |
+| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio App only) is a Cinema Rack starter. Quality does not change size |
+| `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
 
 ---
 

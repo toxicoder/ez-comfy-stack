@@ -11,7 +11,7 @@ tags: [comfyui, workflows, creator, klein, wan, ltx, catalog]
 - **One hundred extra Apps** nested under `_lab/<lane>/creator/`
 - **Platform stills** (YouTube, Instagram, TikTok, X, LinkedIn, Pinterest, Twitch, Spotify)
 - **Silent Wan loops / I2V** and **LTX AV** job plates
-- **Lab sizes vs upload pixels** — match aspect; scale in an editor if a platform wants more pixels
+- **Lab sizes vs upload pixels** — Size column is the **default**. **Format / platform** retargets the same App (YouTube, Shorts, …). Match aspect; scale in an editor if a platform wants more pixels
 
 **What this enables**
 

@@ -26,7 +26,7 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[wan/still-to-video-5s](../generated/workflows/wan/still-to-video-5s.md)** | Silent I2V smoke, 832×480, **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
+| **[wan/still-to-video-5s](../generated/workflows/wan/still-to-video-5s.md)** | Silent I2V smoke. Default 832×480; **Format / platform** (YouTube 16:9 / Shorts 9:16 / Custom). **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
 | **[wan/first-last-5s](../generated/workflows/wan/first-last-5s.md)** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
 | **[wan/vace-join](../generated/workflows/wan/vace-join.md)** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
 | **[optional/wan/still-to-video-a14b](../generated/workflows/optional/wan/still-to-video-a14b.md)** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `_lab/optional/` |
@@ -42,8 +42,8 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[ltx/still-to-video-5s](../generated/workflows/ltx/still-to-video-5s.md)** | ~5 s I2V, **1280×704**, native audio (Community License, $10M cap) |
-| **[ltx/text-to-video-5s](../generated/workflows/ltx/text-to-video-5s.md)** | ~5 s T2V AV, **1280×704** |
+| **[ltx/still-to-video-5s](../generated/workflows/ltx/still-to-video-5s.md)** | ~5 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
+| **[ltx/text-to-video-5s](../generated/workflows/ltx/text-to-video-5s.md)** | ~5 s T2V AV. Default **1280×704**; same Format / platform combo |
 
 ---
 
@@ -61,7 +61,7 @@ Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 5.00 s / 121 /
 
 !!! warning "LTX width/height must be divisible by 32"
 
-    Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](../troubleshooting.md).
+    Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. On LTX Apps pick **Format / platform → LTX · 16:9 YouTube (1280×704)** instead of typing 720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](../troubleshooting.md).
 
 ---
 

@@ -363,9 +363,14 @@ def test_app_inputs_are_prompt_first_and_hide_join_shots() -> None:
             assert names.index("sample") < names.index("prompt"), graph["id"]
         if "seed" in names:
             assert names.index(creator) < names.index("seed"), graph["id"]
-        if "width" in names or "unet_name" in names:
+        if "width" in names:
+            assert "format" in names, graph["id"]
             latent_stems.append(graph["id"])
-    assert set(latent_stems) == {"still-daily", "still-studio"}
+        if "unet_name" in names:
+            assert graph["id"] in {"still-daily", "still-studio"}
+    assert latent_stems
+    assert "still-studio" in latent_stems
+    assert "still-draft" in latent_stems
 
 
 def _app_labels(graph: dict) -> list[str]:
