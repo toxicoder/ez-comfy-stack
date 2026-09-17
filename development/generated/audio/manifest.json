@@ -1,0 +1,102 @@
+{
+  "pages": [
+    {
+      "id": "index",
+      "path": "generated/audio/index.md",
+      "kind": "index",
+      "label": "Overview",
+      "count": "0"
+    },
+    {
+      "id": "genre_style",
+      "path": "generated/audio/genre_style.md",
+      "kind": "axis",
+      "label": "Genre",
+      "count": "121"
+    },
+    {
+      "id": "mood_energy",
+      "path": "generated/audio/mood_energy.md",
+      "kind": "axis",
+      "label": "Mood and Energy",
+      "count": "110"
+    },
+    {
+      "id": "drums_rhythm",
+      "path": "generated/audio/drums_rhythm.md",
+      "kind": "axis",
+      "label": "Drums and Rhythm",
+      "count": "115"
+    },
+    {
+      "id": "bass_low_end",
+      "path": "generated/audio/bass_low_end.md",
+      "kind": "axis",
+      "label": "Bass and Low End",
+      "count": "110"
+    },
+    {
+      "id": "instruments_texture",
+      "path": "generated/audio/instruments_texture.md",
+      "kind": "axis",
+      "label": "Instruments and Texture",
+      "count": "110"
+    },
+    {
+      "id": "harmony_mode",
+      "path": "generated/audio/harmony_mode.md",
+      "kind": "axis",
+      "label": "Harmony and Mode",
+      "count": "110"
+    },
+    {
+      "id": "vocal_identity",
+      "path": "generated/audio/vocal_identity.md",
+      "kind": "axis",
+      "label": "Vocal Identity",
+      "count": "110"
+    },
+    {
+      "id": "mix_production",
+      "path": "generated/audio/mix_production.md",
+      "kind": "axis",
+      "label": "Mix and Production",
+      "count": "110"
+    },
+    {
+      "id": "space_ambience",
+      "path": "generated/audio/space_ambience.md",
+      "kind": "axis",
+      "label": "Space and Ambience",
+      "count": "110"
+    },
+    {
+      "id": "sound_design_fx",
+      "path": "generated/audio/sound_design_fx.md",
+      "kind": "axis",
+      "label": "Sound Design",
+      "count": "110"
+    },
+    {
+      "id": "use_case",
+      "path": "generated/audio/use_case.md",
+      "kind": "axis",
+      "label": "Use Case",
+      "count": "110"
+    },
+    {
+      "id": "tempo_groove",
+      "path": "generated/audio/tempo_groove.md",
+      "kind": "axis",
+      "label": "Tempo and Groove",
+      "count": "110"
+    },
+    {
+      "id": "arrangement_form",
+      "path": "generated/audio/arrangement_form.md",
+      "kind": "axis",
+      "label": "Form and Arrangement",
+      "count": "110"
+    }
+  ]
+}
