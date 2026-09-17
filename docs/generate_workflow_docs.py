@@ -1030,6 +1030,77 @@ def iter_lab_graphs(
     return rows
 
 
+def _partition_lab_graphs(
+    lab: Path,
+    graphs: list[tuple[str, Path, dict[str, Any]]],
+) -> tuple[
+    dict[str, list[tuple[str, Path, dict[str, Any]]]],
+    list[tuple[str, Path, dict[str, Any]]],
+]:
+    """Split lab graphs into album groups vs standalone pages.
+
+    Args:
+        lab: ``workflows/_lab`` root.
+        graphs: ``(lab_rel, path, data)`` rows.
+
+    Returns:
+        ``(albums, singles)``.
+    """
+    albums: dict[str, list[tuple[str, Path, dict[str, Any]]]] = defaultdict(list)
+    singles: list[tuple[str, Path, dict[str, Any]]] = []
+    for lab_rel, path, data in graphs:
+        rel_file = path.relative_to(lab).as_posix()
+        key = album_key_of(rel_file)
+        if key:
+            albums[key].append((lab_rel, path, data))
+        else:
+            singles.append((lab_rel, path, data))
+    return albums, singles
+
+
+def _write_generated_pages(
+    pages: dict[str, str],
+    dest: Path,
+    enc_page: Path,
+    manifest_pages: list[dict[str, str]],
+    graph_count: int,
+) -> None:
+    """Write Markdown pages and ``manifest.json``.
+
+    Args:
+        pages: Repo-relative path → markdown.
+        dest: ``docs/generated/workflows``.
+        enc_page: ``docs/reference/workflow-nodes.md``.
+        manifest_pages: Manifest rows.
+        graph_count: Number of lab graphs walked.
+    """
+    dest.mkdir(parents=True, exist_ok=True)
+    if dest.is_dir():
+        for old in dest.rglob("*.md"):
+            old.unlink()
+    for rel, text in pages.items():
+        if rel == "reference/workflow-nodes.md":
+            target = enc_page
+        else:
+            suffix = rel.removeprefix("generated/workflows/")
+            target = dest / suffix
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
+    manifest_path = dest / "manifest.json"
+    manifest_path.write_text(
+        json.dumps(
+            {
+                "pages": manifest_pages,
+                "graph_count": graph_count,
+                "page_count": len(pages),
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+
 def generate(
     repo_root: Path | None = None,
     *,
@@ -1068,15 +1139,7 @@ def generate(
     graphs = iter_lab_graphs(lab)
     pages: dict[str, str] = {}
     manifest_pages: list[dict[str, str]] = []
-    albums: dict[str, list[tuple[str, Path, dict[str, Any]]]] = defaultdict(list)
-    singles: list[tuple[str, Path, dict[str, Any]]] = []
-    for lab_rel, path, data in graphs:
-        rel_file = path.relative_to(lab).as_posix()
-        key = album_key_of(rel_file)
-        if key:
-            albums[key].append((lab_rel, path, data))
-        else:
-            singles.append((lab_rel, path, data))
+    albums, singles = _partition_lab_graphs(lab, graphs)
 
     for lab_rel, _path, data in singles:
         md = render_graph_page(
@@ -1126,30 +1189,8 @@ def generate(
     )
 
     if write:
-        dest.mkdir(parents=True, exist_ok=True)
-        if dest.is_dir():
-            for old in dest.rglob("*.md"):
-                old.unlink()
-        for rel, text in pages.items():
-            if rel == "reference/workflow-nodes.md":
-                target = enc_page
-            else:
-                suffix = rel.removeprefix("generated/workflows/")
-                target = dest / suffix
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.write_text(text, encoding="utf-8")
-        manifest_path = dest / "manifest.json"
-        manifest_path.write_text(
-            json.dumps(
-                {
-                    "pages": manifest_pages,
-                    "graph_count": len(graphs),
-                    "page_count": len(pages),
-                },
-                indent=2,
-            )
-            + "\n",
-            encoding="utf-8",
+        _write_generated_pages(
+            pages, dest, enc_page, manifest_pages, len(graphs)
         )
     return pages
 

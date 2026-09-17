@@ -310,6 +310,80 @@ def _safe_thumb(slug: str, shot: str, kind: str) -> Path | None:
 class Handler(BaseHTTPRequestHandler):
     """Stdlib HTTP handler for the board, thumbs, and allowlisted MP4s."""
 
+    def _send(
+        self,
+        payload: bytes,
+        content_type: str,
+        extra_headers: list[tuple[str, str]] | None = None,
+    ) -> None:
+        """Write a 200 response.
+
+        Args:
+            payload: Body bytes.
+            content_type: ``Content-Type`` value.
+            extra_headers: Optional extra header pairs.
+        """
+        self.send_response(200)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        for name, value in extra_headers or []:
+            self.send_header(name, value)
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def _send_404(self) -> None:
+        """Write an empty 404."""
+        self.send_response(404)
+        self.end_headers()
+
+    def _serve_watch(self, slug: str) -> None:
+        """Serve the watch HTML for a published master.
+
+        Args:
+            slug: Film slug.
+        """
+        if publish_mp4(slug) is None:
+            self._send_404()
+            return
+        self._send(watch_page(slug) or b"", "text/html; charset=utf-8")
+
+    def _serve_media(self, slug: str, query: dict[str, list[str]]) -> None:
+        """Serve the published MP4, optionally as a download.
+
+        Args:
+            slug: Film slug.
+            query: Parsed query string.
+        """
+        path = publish_mp4(slug)
+        if path is None:
+            self._send_404()
+            return
+        extra: list[tuple[str, str]] = []
+        if (query.get("dl") or [""])[0] == "1":
+            extra.append(
+                ("Content-Disposition", f'attachment; filename="{path.name}"')
+            )
+        self._send(path.read_bytes(), "video/mp4", extra)
+
+    def _serve_thumb(self, query: dict[str, list[str]]) -> None:
+        """Serve an allowlisted clay/look PNG.
+
+        Args:
+            query: Parsed query string (``slug`` / ``shot`` / ``kind``).
+        """
+        slug = (query.get("slug") or [""])[0]
+        shot = (query.get("shot") or [""])[0]
+        kind = (query.get("kind") or ["clay"])[0]
+        path = _safe_thumb(slug, shot, kind)
+        if path is None:
+            self._send_404()
+            return
+        self._send(path.read_bytes(), "image/png")
+
+    def _serve_board(self) -> None:
+        """Serve the film board HTML."""
+        self._send(_page(), "text/html; charset=utf-8")
+
     def do_GET(self) -> None:  # noqa: N802
         """Serve board HTML, ``/watch``, ``/media``, or ``/thumb``.
 
@@ -320,55 +394,15 @@ class Handler(BaseHTTPRequestHandler):
         parts = [p for p in parsed.path.split("/") if p]
         if len(parts) == 2 and parts[0] in {"watch", "media"}:
             slug = parts[1]
-            path = publish_mp4(slug)
-            if path is None:
-                self.send_response(404)
-                self.end_headers()
-                return
             if parts[0] == "watch":
-                payload = watch_page(slug) or b""
-                self.send_response(200)
-                self.send_header("Content-Type", "text/html; charset=utf-8")
-                self.send_header("Content-Length", str(len(payload)))
-                self.end_headers()
-                self.wfile.write(payload)
+                self._serve_watch(slug)
                 return
-            payload = path.read_bytes()
-            query = parse_qs(parsed.query)
-            self.send_response(200)
-            self.send_header("Content-Type", "video/mp4")
-            self.send_header("Content-Length", str(len(payload)))
-            if (query.get("dl") or [""])[0] == "1":
-                self.send_header(
-                    "Content-Disposition",
-                    f'attachment; filename="{path.name}"',
-                )
-            self.end_headers()
-            self.wfile.write(payload)
+            self._serve_media(slug, parse_qs(parsed.query))
             return
         if parsed.path == "/thumb":
-            query = parse_qs(parsed.query)
-            slug = (query.get("slug") or [""])[0]
-            shot = (query.get("shot") or [""])[0]
-            kind = (query.get("kind") or ["clay"])[0]
-            path = _safe_thumb(slug, shot, kind)
-            if path is None:
-                self.send_response(404)
-                self.end_headers()
-                return
-            payload = path.read_bytes()
-            self.send_response(200)
-            self.send_header("Content-Type", "image/png")
-            self.send_header("Content-Length", str(len(payload)))
-            self.end_headers()
-            self.wfile.write(payload)
+            self._serve_thumb(parse_qs(parsed.query))
             return
-        payload = _page()
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html; charset=utf-8")
-        self.send_header("Content-Length", str(len(payload)))
-        self.end_headers()
-        self.wfile.write(payload)
+        self._serve_board()
 
     def log_message(self, format: str, *args: Any) -> None:
         """Swallow request logs (board is a sidecar, not an access log).

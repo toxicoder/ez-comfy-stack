@@ -13,12 +13,14 @@ _DOCS_COMMON_DATA = [
     "hooks.py",
     "page_brief.py",
     "commands.py",
-    "workflow_nodes.py",
     "requirements.txt",
     "//:mkdocs.yml",
     "//includes",
     "//scripts:doc_sources",
 ] + glob(
+    ["workflow_nodes*.py"],
+    allow_empty = True,
+) + glob(
     ["**/*.md"],
     allow_empty = True,
 ) + glob(

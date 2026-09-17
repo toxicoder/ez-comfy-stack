@@ -6,7 +6,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable, Protocol
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
@@ -38,8 +38,27 @@ BACKEND_KOKORO = "kokoro"
 BACKEND_CHATTERBOX = "chatterbox"
 BACKEND_QWEN3TTS = "qwen3tts"
 BACKENDS = (BACKEND_KOKORO, BACKEND_CHATTERBOX, BACKEND_QWEN3TTS)
+
+
+class OptionalBackendHook(Protocol):
+    """Test/production extra TTS backend (Chatterbox / Qwen3)."""
+
+    def __call__(self, text: str, backend: str, path: str, /) -> Any:
+        """Synthesize one line with an extra backend.
+
+        Args:
+            text: Spoken line.
+            backend: ``chatterbox`` or ``qwen3tts``.
+            path: Operator-owned reference wav.
+
+        Returns:
+            PCM samples (tensor boundary stays ``Any``).
+        """
+        ...
+
+
 # Tests inject a synthesizer. Production stays None (fail-soft to Kokoro).
-optional_backend_hook: Any | None = None
+optional_backend_hook: OptionalBackendHook | Callable[..., Any] | None = None
 # Kokoro voice ids, default hosts, ONNX filenames, speaker-line regex, sample rate.
 KOKORO_VOICES = (
     "af_heart",

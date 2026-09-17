@@ -118,6 +118,11 @@ def test_handler_routes_watch_media_thumb_and_board(
     assert captured["status"] == 200
     assert b"<video" in handler.wfile.getvalue()
 
+    handler, captured = _bind_handler(server, "/media/gosee")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 200
+    assert handler.wfile.getvalue() == b"mp4-bytes"
+
     handler, captured = _bind_handler(server, "/media/gosee?dl=1")
     server.Handler.do_GET(handler)
     assert captured["status"] == 200
@@ -127,6 +132,10 @@ def test_handler_routes_watch_media_thumb_and_board(
     assert any(k == "Content-Disposition" for k, _v in headers)
 
     handler, captured = _bind_handler(server, "/watch/nope")
+    server.Handler.do_GET(handler)
+    assert captured["status"] == 404
+
+    handler, captured = _bind_handler(server, "/media/nope")
     server.Handler.do_GET(handler)
     assert captured["status"] == 404
 
