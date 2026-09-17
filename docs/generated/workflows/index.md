@@ -24,6 +24,7 @@ tags: [workflows, generated, comfyui]
 | `audio/dub/clone-translate` | [audio/dub/clone-translate.md](audio/dub/clone-translate.md) |
 | `audio/music/rap-draft` | [audio/music/rap-draft.md](audio/music/rap-draft.md) |
 | `audio/music/rap-full` | [audio/music/rap-full.md](audio/music/rap-full.md) |
+| `audio/podcast/learn-episode` | [audio/podcast/learn-episode.md](audio/podcast/learn-episode.md) |
 | `audio/podcast/radio-drama` | [audio/podcast/radio-drama.md](audio/podcast/radio-drama.md) |
 | `audio/podcast/two-host-episode` | [audio/podcast/two-host-episode.md](audio/podcast/two-host-episode.md) |
 | `audio/stem-mix` | [audio/stem-mix.md](audio/stem-mix.md) |

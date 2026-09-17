@@ -324,3 +324,12 @@ def test_podcast_ace_bed_reads_script_context() -> None:
         assert aces, rel
         for ace in aces:
             assert _source_of(graph, ace, "context") is script, (rel, ace.get("title"))
+
+
+def test_learn_episode_ace_bed_reads_digest_context() -> None:
+    graph = _load(lab_json("audio/podcast/learn-episode.json"))
+    learn = next(n for n in graph["nodes"] if n.get("type") == "EZPodcastLearn")
+    aces = [n for n in graph["nodes"] if n.get("type") == "EZAceStepPromptEnhance"]
+    assert aces
+    for ace in aces:
+        assert _source_of(graph, ace, "context") is learn, ace.get("title")

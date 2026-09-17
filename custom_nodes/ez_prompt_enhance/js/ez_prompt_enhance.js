@@ -19,6 +19,7 @@ const NODE_CLASSES = new Set([
   "EZAceStepPromptEnhance",
   "EZRapLyrics",
   "EZPodcastScript",
+  "EZPodcastLearn",
   "EZSamplePrompt",
   "EZCreativeResearch",
   "EZAppForge",
@@ -28,6 +29,7 @@ const PREVIEW_SKIP = new Set([
   "EZSamplePrompt",
   "EZCreativeResearch",
   "EZAppForge",
+  "EZPodcastLearn",
 ]);
 
 const SAMPLE_CUSTOM = "custom";
@@ -68,6 +70,7 @@ const FAMILY_FOR_MODE = {
     podcast_two_host: "podcast_two_host",
     radio_drama: "podcast_radio",
   },
+  EZPodcastLearn: { "": "podcast_learn" },
   EZRapLyrics: { "": "rap_draft" },
   EZCreativeResearch: { "": "research_chat" },
   EZAppForge: { "": "app_forge" },
@@ -280,6 +283,9 @@ function applySampleRow(node, row, readOnly) {
   if (row.prompt != null && widgetByName(node, "prompt")) {
     setTextWidget(widgetByName(node, "prompt"), row.prompt, readOnly);
   }
+  if (row.prompt != null && widgetByName(node, "sources")) {
+    setTextWidget(widgetByName(node, "sources"), row.prompt, readOnly);
+  }
   if (row.tags != null && widgetByName(node, "tags")) {
     setTextWidget(widgetByName(node, "tags"), row.tags, readOnly);
   }
@@ -309,7 +315,7 @@ async function syncSample(node) {
     applySampleRow(node, row, true);
     return;
   }
-  for (const name of ["prompt", "tags", "lyrics"]) {
+  for (const name of ["prompt", "tags", "lyrics", "sources"]) {
     const widget = widgetByName(node, name);
     if (widget?.inputEl) {
       widget.inputEl.readOnly = false;

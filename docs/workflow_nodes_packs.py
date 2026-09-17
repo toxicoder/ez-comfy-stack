@@ -58,6 +58,48 @@ def pack_nodes() -> dict[str, Any]:
             _w("speed", index=7, typ="FLOAT", rng="0.5–1.5, lab 1.0", desc="Speaking rate.", gen="1.0 is natural. Faster shrinks the episode and can clip diction."),
         ],
     )
+    nodes["EZPodcastLearn"] = _n(
+        "Podcast Learn",
+        "Paste notes and links; write a study digest and a duration-sized script.",
+        origin="ez_podcast",
+        lab="Videos use captions only. Missing GGUF concatenates sources. Unloads the writer so TTS can run in the same Queue.",
+        sockets=[
+            _s("digest", "STRING", "out", "Ordered, deduped study digest."),
+            _s("script", "STRING", "out", "Labeled script for TTS."),
+        ],
+        widgets=[
+            _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample or Custom.", gen="Custom keeps the Sources box."),
+            _w("sources", index=1, desc="Paste notes, HTTPS links, captioned video URLs, or local text paths.", gen="Fetch is SSRF-safe. Videos are captions only."),
+            _w("format", index=2, typ="COMBO", desc="Episode shape.", gen="Explainer is the lab default.", choices=[
+                ("Quick recap", "Two-host, tight, what to remember."),
+                ("Deep dive", "Two-host, examples and caveats."),
+                ("Explainer", "Teacher A + curious student B."),
+                ("Quiz drill", "Host asks, cohost answers, then correction."),
+                ("Solo lecture", "Speaker A only."),
+                ("Debate", "A/B argue tensions in the sources, then synthesize."),
+            ]),
+            _w("duration", index=3, typ="COMBO", desc="Spoken length.", gen="8 min briefing is the default. ACE bed stays 30 s and loops.", choices=[
+                ("3 min commute", "About 450 words, one writer pass."),
+                ("8 min briefing", "About 1200 words, three passes."),
+                ("15 min lesson", "About 2250 words, five passes."),
+                ("25 min seminar", "About 3750 words, eight passes. Slow CPU TTS."),
+            ]),
+            _w("fetch_links", index=4, typ="BOOLEAN", rng="true", desc="Fetch HTTPS pages and video captions.", gen="Off uses pasted prose and local text files only."),
+            _w("enhance", index=5, typ="BOOLEAN", rng="true on learn-episode", desc="Run the digest and script writer.", gen="Off concatenates sources and wraps Speaker A lines."),
+            _w("catalog", index=6, desc="Catalog id.", gen="Leave as stamped."),
+        ],
+    )
+    nodes["EZAudioLoopToMatch"] = _n(
+        "Loop bed to speech",
+        "Repeat a short instrumental bed until it covers the speech stem, then trim.",
+        origin="ez_podcast",
+        lab="Keeps a 30 s ACE-Step bed under a longer study episode. Empty speech stays empty.",
+        sockets=[
+            _s("speech", "AUDIO", "in", "Speech stem (length target)."),
+            _s("bed", "AUDIO", "in", "Short instrumental bed."),
+            _s("bed", "AUDIO", "out", "Looped (or silent) bed."),
+        ],
+    )
     dub_langs = [
         ("es", "Spanish (lab default target)."),
         ("en", "English."),

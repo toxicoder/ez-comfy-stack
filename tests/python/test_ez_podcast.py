@@ -37,6 +37,8 @@ def test_pack_imports_without_kokoro() -> None:
         "EZPodcastScript",
         "EZPodcastDisclosure",
         "EZKokoroTTS",
+        "EZPodcastLearn",
+        "EZAudioLoopToMatch",
     }
     for cls in NODE_CLASS_MAPPINGS.values():
         assert cls.CATEGORY == "ez-comfy/podcast"
