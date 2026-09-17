@@ -6,8 +6,9 @@ import math
 import shutil
 import struct
 import subprocess
-from collections.abc import Callable
 from typing import Any, TypedDict
+
+from .hooks import StretchHook
 
 # Duration-lock knobs (24 kHz PCM, atempo bounds, WSOLA window).
 SAMPLE_RATE = 24000
@@ -20,7 +21,7 @@ ATEMPO_MIN = 0.5
 ATEMPO_MAX = 2.0
 
 # Tests inject this to keep fit_turn hermetic (no host ffmpeg).
-stretch_hook: Callable[[list[float], int, int], list[float]] | None = None
+stretch_hook: StretchHook | None = None
 
 
 class FitFlags(TypedDict):

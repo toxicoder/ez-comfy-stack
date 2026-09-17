@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable
+from typing import Any
 
 from .align import fit_turn, resample_linear
+from .hooks import SynthesizeFn
 
 # Canonical English bumper plus localized overlays (ISO 639-1 keys).
 DISCLOSURE_TEXT = (
@@ -40,9 +41,6 @@ DISCLOSURE_LOCALIZED: dict[str, str] = {
         "con l'autorizzazione del titolare dei diritti."
     ),
 }
-
-SynthesizeFn = Callable[..., Any]
-
 
 def _lang_key(language: str) -> str:
     """Normalize a widget language to a ``DISCLOSURE_LOCALIZED`` key.
@@ -158,7 +156,7 @@ def _crop_bumper_hush(bumper: list[float], rate: int) -> list[float]:
     """
     if not bumper:
         return []
-    from .pipeline import speech_onset_slice
+    from .speech import speech_onset_slice
 
     return speech_onset_slice(bumper, rate)
 
