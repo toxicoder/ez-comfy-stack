@@ -1,0 +1,36 @@
+---
+title: "Tilt miniature"
+description: "Cinema Rack illustration — Tilt miniature."
+tags: [cinema, prompting, catalog, clip]
+---
+
+# Tilt miniature
+
+**What's on this page**
+
+- A muted 5s illustration of **Tilt miniature** (`opt_tilt_miniature`)
+- Catalog clause and still/motion/AV flags on **Lenses and Optics**
+
+**What this enables**
+
+- Seeing the pick before splicing it on Cinema Rack
+- Copying the clause next to a concrete camera example
+
+Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Axis: [Lenses and Optics](../lenses_optics.md). Playbook: [Cinema Rack](../../../create/cinema-rack.md).
+
+<div class="ez-cinema-clip">
+<video controls preload="none" playsinline poster="../../../assets/cinema/lenses_optics/opt_tilt_miniature.jpg"><source src="../../../assets/cinema/lenses_optics/opt_tilt_miniature.mp4" type="video/mp4"></video>
+</div>
+
+## Clause
+
+A steep tilt that makes a real street read as a tiny model.
+
+## Use on
+
+still, motion, av
+
+## Conflicts
+
+—
