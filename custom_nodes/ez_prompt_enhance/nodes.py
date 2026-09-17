@@ -57,6 +57,48 @@ _CONTEXT_INPUT = (
 _CATALOG_INPUT = ("STRING", {"default": "", "multiline": False})
 
 
+def _visual_input_types(
+    *,
+    catalog_id: str,
+    duration_default: str,
+    modes: list[str] | None = None,
+    audio_notes: bool = False,
+) -> ComfyInputTypes:
+    """Build the shared visual Enhance widget map (stable key order).
+
+    Args:
+        catalog_id: Default sample catalog stem.
+        duration_default: Duration / framing widget default.
+        modes: Mode combo list. ``None`` omits the mode widget (Z-Image).
+        audio_notes: Insert the LTX/DreamX audio_notes widget before style.
+
+    Returns:
+        Comfy ``INPUT_TYPES`` payload.
+    """
+    required: dict[str, Any] = {
+        "sample": _sample_input(catalog_id),
+        "prompt": (
+            "STRING",
+            {"multiline": True, "default": "", "dynamicPrompts": False},
+        ),
+        "enhance": _ENHANCE_BOOL,
+    }
+    if modes:
+        required["mode"] = (list(modes), {"default": modes[0]})
+    required["duration_hint"] = ("STRING", {"default": duration_default})
+    if audio_notes:
+        required["audio_notes"] = (
+            "STRING",
+            {"multiline": True, "default": "", "dynamicPrompts": False},
+        )
+    required["style"] = (style_ids(), {"default": STYLE_NONE})
+    required["catalog"] = _CATALOG_INPUT
+    return {
+        "required": required,
+        "optional": {"context": _CONTEXT_INPUT},
+    }
+
+
 def _sample_input(catalog_id: str) -> tuple[list[str], dict[str, str]]:
     """Combo widget: union of sample labels, preferred catalog first.
 
@@ -249,23 +291,11 @@ class EZKleinPromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("klein_t2i"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "mode": (["t2i", "edit", "identity", "text_swap"], {"default": "t2i"}),
-                "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="klein_t2i",
+            duration_default="YouTube 16:9 still",
+            modes=["t2i", "edit", "identity", "text_swap"],
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -340,23 +370,11 @@ class EZWanPromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("wan_t2v"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "mode": (["t2v", "i2v", "flf", "vace", "s2v"], {"default": "t2v"}),
-                "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="wan_t2v",
+            duration_default="5 seconds, 24 fps",
+            modes=["t2v", "i2v", "flf", "vace", "s2v"],
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -433,27 +451,12 @@ class EZLTXPromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("ltx_t2v"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "mode": (["t2v", "i2v", "iclora"], {"default": "t2v"}),
-                "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
-                "audio_notes": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="ltx_t2v",
+            duration_default="5 seconds, 24 fps",
+            modes=["t2v", "i2v", "iclora"],
+            audio_notes=True,
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -881,22 +884,10 @@ class EZZimagePromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("klein_t2i"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "duration_hint": ("STRING", {"default": "YouTube 16:9 still"}),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="klein_t2i",
+            duration_default="YouTube 16:9 still",
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -959,23 +950,11 @@ class EZLongCatPromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("wan_t2v"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "mode": (["t2v", "i2v", "vc"], {"default": "t2v"}),
-                "duration_hint": ("STRING", {"default": "5 seconds, 30 fps"}),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="wan_t2v",
+            duration_default="5 seconds, 30 fps",
+            modes=["t2v", "i2v", "vc"],
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -1046,26 +1025,11 @@ class EZDreamXPromptEnhance:
         Returns:
             Required and optional widget map.
         """
-        return {
-            "required": {
-                "sample": _sample_input("ltx_i2v"),
-                "prompt": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "enhance": _ENHANCE_BOOL,
-                "duration_hint": ("STRING", {"default": "5 seconds, 24 fps"}),
-                "audio_notes": (
-                    "STRING",
-                    {"multiline": True, "default": "", "dynamicPrompts": False},
-                ),
-                "style": (style_ids(), {"default": STYLE_NONE}),
-                "catalog": _CATALOG_INPUT,
-            },
-            "optional": {
-                "context": _CONTEXT_INPUT,
-            },
-        }
+        return _visual_input_types(
+            catalog_id="ltx_i2v",
+            duration_default="5 seconds, 24 fps",
+            audio_notes=True,
+        )
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
