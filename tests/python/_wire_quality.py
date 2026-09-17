@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from _lab_layout import estimated_node_size
 from _lab_paths import lab_graph_paths
 
 QUALITY_TYPE = "EZQuality"
@@ -30,11 +31,7 @@ QUALITY_LABEL = {
 def _node_rect(node: dict[str, Any]) -> tuple[float, float, float, float]:
     pos = node.get("pos") or [0, 0]
     x, y = float(pos[0]), float(pos[1])
-    size = node.get("size", [200, 100])
-    if isinstance(size, dict):
-        width, height = float(size.get("0", 200)), float(size.get("1", 100))
-    else:
-        width, height = float(size[0]), float(size[1])
+    width, height = estimated_node_size(node)
     return x, y, width, height
 
 

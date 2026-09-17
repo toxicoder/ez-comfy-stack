@@ -12,9 +12,9 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_graph import Graph
 from _lab_layout import LAB_GROUP_Y0, finalize_layout, group as _group
-from _lab_paths import apply_lab_identity, lab_dest
-from _stamp_app_mode import stamp_suite_graph
+from _lab_paths import lab_dest
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -45,83 +45,6 @@ Weights: `./scripts/manage.sh download-dub --tier asr` then `--tier clone` (pip-
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
     del pad
     finalize_layout(graph)
-
-
-class Graph:
-    def __init__(self, graph_id: str) -> None:
-        self.graph_id = graph_id
-        self.nodes: list[dict] = []
-        self.links: list[list] = []
-        self._lid = 0
-
-    def add(
-        self,
-        nid: int,
-        ntype: str,
-        pos: list[float],
-        size: list[float],
-        title: str,
-        widgets: list | dict,
-        *,
-        inputs: list | None = None,
-        outputs: list | None = None,
-        mode: int = 0,
-    ) -> dict:
-        node = {
-            "id": nid,
-            "type": ntype,
-            "pos": pos,
-            "size": size,
-            "flags": {},
-            "order": len(self.nodes),
-            "mode": mode,
-            "inputs": inputs or [],
-            "outputs": outputs or [],
-            "properties": {"Node name for S&R": ntype},
-            "widgets_values": widgets,
-            "title": title,
-        }
-        self.nodes.append(node)
-        return node
-
-    def out(self, name: str, ltype: str, links: list[int] | None = None, slot: int = 0) -> dict:
-        return {
-            "name": name,
-            "type": ltype,
-            "links": links if links is not None else [],
-            "slot_index": slot,
-        }
-
-    def inp(self, name: str, ltype: str, link: int | None = None) -> dict:
-        return {"name": name, "type": ltype, "link": link}
-
-    def link(self, src: int, src_slot: int, dst: int, dst_slot: int, ltype: str) -> int:
-        self._lid += 1
-        self.links.append([self._lid, src, src_slot, dst, dst_slot, ltype])
-        dst_node = next(n for n in self.nodes if n["id"] == dst)
-        dst_node["inputs"][dst_slot]["link"] = self._lid
-        src_node = next(n for n in self.nodes if n["id"] == src)
-        src_node["outputs"][src_slot]["links"].append(self._lid)
-        return self._lid
-
-    def dump(self, extra: dict) -> dict:
-        rel = str(extra.pop("lab_rel", self.graph_id))
-        graph = {
-            "id": Path(rel).name,
-            "revision": 1,
-            "last_node_id": max(n["id"] for n in self.nodes),
-            "last_link_id": self._lid,
-            "nodes": self.nodes,
-            "links": self.links,
-            "groups": extra.pop("groups"),
-            "config": {},
-            "extra": extra,
-            "version": 0.4,
-        }
-        apply_lab_identity(graph, rel)
-        stamp_suite_graph(graph)
-        finalize_layout(graph)
-        return graph
 
 
 def build_dub_localize() -> dict:

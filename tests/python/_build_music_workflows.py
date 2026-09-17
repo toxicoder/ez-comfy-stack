@@ -12,6 +12,7 @@ import json
 import sys
 from pathlib import Path
 
+from _lab_graph import Graph
 from _lab_layout import (
     GROUP_TITLE_INSET,
     LAB_GROUP_Y0,
@@ -20,8 +21,6 @@ from _lab_layout import (
 )
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_dest, lab_json, write_lab_graph
 from _stamp_app_mode import NODE_MODE_BYPASS, stamp_suite_graph
-from _wire_prompt_enhance import enable_lab_graph
-from _wire_prompt_enhance import _rewrite_enhance_blurb
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -88,96 +87,6 @@ Canned style swaps (tags widget only):
 def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
     del pad
     finalize_layout(graph)
-
-
-class Graph:
-    def __init__(self, graph_id: str) -> None:
-        self.graph_id = graph_id
-        self.nodes: list[dict] = []
-        self.links: list[list] = []
-        self._lid = 0
-
-    def add(
-        self,
-        nid: int,
-        ntype: str,
-        pos: list[float],
-        size: list[float],
-        title: str,
-        widgets: list | dict,
-        *,
-        inputs: list | None = None,
-        outputs: list | None = None,
-        mode: int = 0,
-        properties: dict | None = None,
-    ) -> dict:
-        node = {
-            "id": nid,
-            "type": ntype,
-            "pos": pos,
-            "size": size,
-            "flags": {},
-            "order": len(self.nodes),
-            "mode": mode,
-            "inputs": inputs or [],
-            "outputs": outputs or [],
-            "properties": properties or {"Node name for S&R": ntype},
-            "widgets_values": widgets,
-            "title": title,
-        }
-        self.nodes.append(node)
-        return node
-
-    def out(self, name: str, ltype: str, links: list[int] | None = None) -> dict:
-        return {
-            "name": name,
-            "type": ltype,
-            "links": links if links is not None else [],
-            "slot_index": 0,
-        }
-
-    def inp(self, name: str, ltype: str, link: int | None = None, widget: str | None = None) -> dict:
-        item: dict = {"name": name, "type": ltype, "link": link}
-        if widget is not None:
-            item["widget"] = {"name": widget}
-        return item
-
-    def link(self, src: int, src_slot: int, dst: int, dst_slot: int, ltype: str) -> int:
-        self._lid += 1
-        self.links.append([self._lid, src, src_slot, dst, dst_slot, ltype])
-        dst_node = next(n for n in self.nodes if n["id"] == dst)
-        dst_node["inputs"][dst_slot]["link"] = self._lid
-        src_node = next(n for n in self.nodes if n["id"] == src)
-        src_node["outputs"][src_slot]["links"].append(self._lid)
-        return self._lid
-
-    def dump(self, extra: dict) -> dict:
-        rel = str(extra.pop("lab_rel", self.graph_id))
-        graph = {
-            "id": Path(rel).name,
-            "revision": 1,
-            "last_node_id": max(n["id"] for n in self.nodes),
-            "last_link_id": self._lid,
-            "nodes": self.nodes,
-            "links": self.links,
-            "groups": extra.pop("groups"),
-            "config": {},
-            "extra": extra,
-            "version": 0.4,
-        }
-        apply_lab_identity(graph, rel)
-        enable_lab_graph(graph)
-        stamp_suite_graph(graph)
-        extra = graph.setdefault("extra", {})
-        extra["lab_note"] = _rewrite_enhance_blurb(str(extra.get("lab_note") or ""))
-        for node in graph["nodes"]:
-            if node.get("type") != "Note":
-                continue
-            values = node.get("widgets_values") or [""]
-            node["widgets_values"] = [_rewrite_enhance_blurb(str(values[0]))]
-            break
-        finalize_layout(graph)
-        return graph
 
 
 def _ace_widgets(
@@ -474,7 +383,7 @@ def _build_ace(
         "art_mode": "skip",
         "prefix": prefix,
     }
-    g = Graph(stem)
+    g = Graph(stem, enable_lab=True, rewrite_enhance_note=True)
     g.add(
         1,
         "CheckpointLoaderSimple",
@@ -880,7 +789,7 @@ def build_album(info: AlbumInfo, tracks: list[str]) -> dict:
         "Occupancy: audio for tracks, klein first when --art generate. "
         "Do not co-resident Klein + ACE-Step.\n"
     )
-    g = Graph(rel)
+    g = Graph(rel, enable_lab=True, rewrite_enhance_note=True)
     g.add(
         1,
         "Note",
