@@ -4,6 +4,19 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from .formats import (
+    DEFAULT_BATCH,
+    LOOK_NONE,
+    MAX_BATCH,
+    MAX_DIM,
+    MIN_BATCH,
+    MIN_DIM,
+    default_format_label,
+    format_combo_labels,
+    look_combo_labels,
+    resolve_canvas,
+)
+
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
@@ -155,14 +168,119 @@ class EZMatchImageSize:
         return (_resize_bhwc(image, ref_h, ref_w),)
 
 
+class EZImageFormat:
+    """Pick a Klein still canvas (aspect or named platform) and look recipe."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for format, look, and custom size.
+
+        Returns:
+            Required widget map.
+        """
+        labels = format_combo_labels()
+        default_label = default_format_label()
+        if default_label not in labels:
+            default_label = labels[0]
+        return {
+            "required": {
+                "format": (labels, {"default": default_label}),
+                "look": (look_combo_labels(), {"default": LOOK_NONE}),
+                "width": (
+                    "INT",
+                    {
+                        "default": 1280,
+                        "min": MIN_DIM,
+                        "max": MAX_DIM,
+                        "step": GRID,
+                    },
+                ),
+                "height": (
+                    "INT",
+                    {
+                        "default": 704,
+                        "min": MIN_DIM,
+                        "max": MAX_DIM,
+                        "step": GRID,
+                    },
+                ),
+                "batch_size": (
+                    "INT",
+                    {
+                        "default": DEFAULT_BATCH,
+                        "min": MIN_BATCH,
+                        "max": MAX_BATCH,
+                        "step": 1,
+                    },
+                ),
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("INT", "INT", "INT", "STRING", "STRING", "STRING")
+    RETURN_NAMES = ("width", "height", "batch", "hint", "prefix", "context")
+    FUNCTION = "run"
+    CATEGORY = CATEGORY
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Klein still canvas. Format / platform sets width, height, SaveImage "
+        "prefix, and Enhance framing. Custom uses the width/height widgets "
+        "(snapped to ÷16). Look recipe splices a Cinema Rack starter into "
+        "Enhance context. Quality does not change size. Empty of lettering."
+    )
+
+    def run(
+        self,
+        format: object,
+        look: object = LOOK_NONE,
+        width: object = 1280,
+        height: object = 704,
+        batch_size: object = DEFAULT_BATCH,
+    ) -> dict[str, Any]:
+        """Resolve format widgets to a Klein canvas.
+
+        Args:
+            format: Format / platform combo (id or label).
+            look: Cinema Rack recipe label or none.
+            width: Custom width; ignored unless format is Custom.
+            height: Custom height; ignored unless format is Custom.
+            batch_size: Batch widget.
+
+        Returns:
+            Comfy output-node payload with width, height, batch, hint,
+            SaveImage prefix, and Enhance context.
+        """
+        result = resolve_canvas(
+            format,
+            width=width,
+            height=height,
+            batch=batch_size,
+            look=look,
+        )
+        summary = f"{result.width}×{result.height} · {result.prefix} · {result.label}"
+        return {
+            "ui": {"text": (summary,)},
+            "result": (
+                result.width,
+                result.height,
+                result.batch,
+                result.hint,
+                result.prefix,
+                result.context,
+            ),
+        }
+
+
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZSnapImage": EZSnapImage,
     "EZMatchImageSize": EZMatchImageSize,
+    "EZImageFormat": EZImageFormat,
 }
 """Comfy class-name registry."""
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZSnapImage": "Snap image (div 16)",
     "EZMatchImageSize": "Match image size",
+    "EZImageFormat": "Format / platform",
 }
 """Comfy display-name registry."""

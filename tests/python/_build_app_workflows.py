@@ -50,6 +50,18 @@ GIF_NEG = (
     "watermark, burned-in text"
 )
 
+STUDIO_NOTE = """## klein/still-studio
+
+Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048).
+Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
+Default canvas: 1280×704 (LTX I2V feeder). 1280×720 platform rows are stills-only — scale in an editor if a host wants more pixels.
+Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors.
+Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
+Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
+Handoff: wan/still-to-video-5s, ltx/still-to-video-5s, klein/text-swap.
+"""
+
 STILL_NOTE = """## klein/still-daily
 
 Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
@@ -273,6 +285,137 @@ def build_still_app() -> dict:
         _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 400, "#3f789e"),
         _group(3, "SETTINGS", 1420, LAB_GROUP_Y0, 380, 500, "#a1309b"),
         _group(4, "OUTPUT", 1820, LAB_GROUP_Y0, 340, 430, "#3f789e"),
+    ]
+    return graph
+
+
+def _append_link(
+    graph: dict,
+    src: int,
+    src_slot: int,
+    dst: int,
+    dst_slot: int,
+    ltype: str,
+) -> int:
+    last = int(graph.get("last_link_id") or 0) + 1
+    graph["last_link_id"] = last
+    links = list(graph.get("links") or [])
+    links.append([last, src, src_slot, dst, dst_slot, ltype])
+    graph["links"] = links
+    return last
+
+
+def _push_output_link(node: dict, slot: int, link_id: int) -> None:
+    outputs = list(node.get("outputs") or [])
+    while len(outputs) <= slot:
+        outputs.append({"name": "", "type": "*", "links": [], "slot_index": len(outputs)})
+    out = outputs[slot]
+    existing = list(out.get("links") or [])
+    existing.append(link_id)
+    out["links"] = existing
+    out["slot_index"] = slot
+    node["outputs"] = outputs
+
+
+def _add_widget_input(node: dict, name: str, typ: str, link_id: int) -> int:
+    inputs = list(node.get("inputs") or [])
+    inputs.append(
+        {
+            "name": name,
+            "type": typ,
+            "link": link_id,
+            "widget": {"name": name},
+        }
+    )
+    node["inputs"] = inputs
+    return len(inputs) - 1
+
+
+def build_still_studio() -> dict:
+    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
+    apply_lab_identity(graph, "klein/still-studio")
+    nid = int(graph.get("last_node_id") or 0) + 1
+    graph["last_node_id"] = nid
+    graph["revision"] = 1
+    unet = _node(graph, "UNETLoader")
+    unet["title"] = "Image model — click filename to swap"
+    latent = _node(graph, "EmptyFlux2LatentImage")
+    latent["widgets_values"] = [1280, 704, 1]
+    latent["title"] = "Latent (wired from Format)"
+    save = _node(graph, "SaveImage")
+    save["widgets_values"] = ["ez_still_studio"]
+    save["title"] = "Save PNG"
+    enh = _node(graph, "EZKleinPromptEnhance")
+    enh_values = list(enh.get("widgets_values") or [])
+    while len(enh_values) < 7:
+        enh_values.append("")
+    enh_values[0] = "custom"
+    enh_values[2] = True
+    enh_values[3] = "t2i"
+    enh_values[4] = "YouTube 16:9 still, LTX feeder"
+    enh_values[5] = "none"
+    enh_values[6] = "klein/still-studio"
+    enh["widgets_values"] = enh_values
+    note = _node(graph, "Note")
+    note["widgets_values"] = [STUDIO_NOTE]
+    fmt = {
+        "id": nid,
+        "type": "EZImageFormat",
+        "pos": [1440, 414],
+        "size": [360, 220],
+        "flags": {},
+        "order": 11,
+        "mode": 0,
+        "inputs": [],
+        "outputs": [
+            {"name": "width", "type": "INT", "links": [], "slot_index": 0},
+            {"name": "height", "type": "INT", "links": [], "slot_index": 1},
+            {"name": "batch", "type": "INT", "links": [], "slot_index": 2},
+            {"name": "hint", "type": "STRING", "links": [], "slot_index": 3},
+            {"name": "prefix", "type": "STRING", "links": [], "slot_index": 4},
+            {"name": "context", "type": "STRING", "links": [], "slot_index": 5},
+        ],
+        "properties": {"Node name for S&R": "EZImageFormat"},
+        "widgets_values": [
+            "16:9 LTX feeder (1280×704)",
+            "none",
+            1280,
+            704,
+            1,
+        ],
+        "title": "Format / platform",
+    }
+    graph["nodes"].append(fmt)
+    w_link = _append_link(graph, nid, 0, int(latent["id"]), 0, "INT")
+    _add_widget_input(latent, "width", "INT", w_link)
+    _push_output_link(fmt, 0, w_link)
+    h_link = _append_link(graph, nid, 1, int(latent["id"]), 1, "INT")
+    _add_widget_input(latent, "height", "INT", h_link)
+    _push_output_link(fmt, 1, h_link)
+    b_link = _append_link(graph, nid, 2, int(latent["id"]), 2, "INT")
+    _add_widget_input(latent, "batch_size", "INT", b_link)
+    _push_output_link(fmt, 2, b_link)
+    hint_link = _append_link(graph, nid, 3, int(enh["id"]), 0, "STRING")
+    _add_widget_input(enh, "duration_hint", "STRING", hint_link)
+    _push_output_link(fmt, 3, hint_link)
+    prefix_link = _append_link(graph, nid, 4, int(save["id"]), 1, "STRING")
+    _add_widget_input(save, "filename_prefix", "STRING", prefix_link)
+    _push_output_link(fmt, 4, prefix_link)
+    ctx_link = _append_link(graph, nid, 5, int(enh["id"]), 1, "STRING")
+    enh_inputs = list(enh.get("inputs") or [])
+    enh_inputs.append({"name": "context", "type": "STRING", "link": ctx_link})
+    enh["inputs"] = enh_inputs
+    _push_output_link(fmt, 5, ctx_link)
+    graph["extra"]["lab_profile"] = "klein/still-studio"
+    graph["extra"]["lab_note"] = STUDIO_NOTE
+    graph["extra"]["lab_description"] = (
+        "Klein 4B still desk: format/platform picker, style, enhance, look recipe"
+    )
+    graph["groups"] = [
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 620, "#3f789e"),
+        _group(3, "FORMAT", 1420, LAB_GROUP_Y0, 400, 720, "#a1309b"),
+        _group(4, "OUTPUT", 1860, LAB_GROUP_Y0, 360, 520, "#3f789e"),
     ]
     return graph
 
@@ -1528,6 +1671,7 @@ def build_text_swap() -> dict:
 
 def main() -> None:
     still = build_still_app()
+    studio = build_still_studio()
     gif = build_gif_loop()
     house = build_dream_house()
     house_clay = build_dream_house_clay()
@@ -1536,6 +1680,7 @@ def main() -> None:
     tweak = build_character_tweak()
     swap = build_text_swap()
     _dump(lab_json("klein/still-daily.json"), still)
+    _dump(lab_dest("klein/still-studio"), studio)
     _dump(lab_json("wan/gif-loop.json"), gif)
     _dump(lab_json("klein/dream-house.json"), house)
     _dump(lab_dest("klein/dream-house-clay"), house_clay)
@@ -1544,7 +1689,7 @@ def main() -> None:
     _dump(lab_dest("klein/character-tweak"), tweak)
     _dump(lab_dest("klein/text-swap"), swap)
     print(
-        "wrote still-app, gif-loop, dream-house, dream-house-clay, "
+        "wrote still-app, still-studio, gif-loop, dream-house, dream-house-clay, "
         "platform-pack, character draft/tweak, text-swap"
     )
 

@@ -15,6 +15,7 @@ const LABELS = {
   history: "History",
   style: "Style",
   enhance: "Rewrite prompt",
+  look: "Look recipe",
   seed: "Seed",
   image: "Start image",
   tags: "Tags",

@@ -294,6 +294,7 @@ WIDGET_ORDER = (
     "value",
     "style",
     "enhance",
+    "look",
     "mode",
     "duration_hint",
     "audio_notes",
@@ -371,6 +372,7 @@ GENERIC_LABELS = {
     "history": "History",
     "style": "Style",
     "enhance": "Rewrite prompt",
+    "look": "Look recipe",
     "seed": "Seed",
     "image": "Start image",
     "audio": "Audio file",
@@ -451,6 +453,10 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "style": "Optional look. Hidden on I2V — the start image owns look.",
     "enhance": (
         "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+    ),
+    "look": (
+        "Optional Cinema Rack starter spliced into Rewrite prompt context. "
+        "none leaves look to Style + Prompt."
     ),
     "seed": "Fix to iterate; randomize to explore.",
     "image": "Start frame or reference still. Only shown when the LoadImage is wired.",
@@ -576,6 +582,14 @@ def display_label(
     if ntype == "EZKleinPromptEnhance" and name == "prompt":
         if _enhance_mode(node) == "text_swap":
             return "New lettering"
+    if ntype == "EZImageFormat":
+        return {
+            "format": "Format / platform",
+            "look": "Look recipe",
+            "width": "Width",
+            "height": "Height",
+            "batch_size": "Batch",
+        }.get(name, generic)
     if ntype == "LoadImage" and name == "image":
         return title or generic
     if ntype == "LoadAudio" and name == "audio":
@@ -737,6 +751,20 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         )
     if name == "seconds" and ntype == "EmptyAceStep1.5LatentAudio":
         return "Bed or sting length in seconds."
+    if ntype == "EZImageFormat":
+        return {
+            "format": (
+                "Aspect or named platform job. Sets pixels, save prefix, and "
+                "Rewrite prompt framing. Custom uses Width × Height (÷16)."
+            ),
+            "look": (
+                "Optional Cinema Rack starter. none leaves look to Style + Prompt. "
+                "Full 13-axis desk is inspire/cinema-rack."
+            ),
+            "width": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "batch_size": "How many stills in one Run. Large canvases stay at 1.",
+        }.get(name)
     if name == "prompt" and ntype == "EZKleinPromptEnhance" and node is not None:
         if _enhance_mode(node) == "text_swap":
             return (
@@ -978,6 +1006,14 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         expose_unet=True,
         expose_latent=True,
         sampler_steps_cfg=True,
+    ),
+    "klein/still-studio": _spec(
+        "produce",
+        "klein",
+        "wan/still-to-video-5s",
+        "ltx/still-to-video-5s",
+        "klein/text-swap",
+        expose_unet=True,
     ),
     "klein/still-hero": _spec(
         "produce",
@@ -1537,6 +1573,16 @@ def _collect_raw_inputs(
             raw.append((nid, "enhance", node))
             if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
                 raw.append((nid, "audio_notes", node))
+        elif ntype == "EZImageFormat":
+            raw.extend(
+                (
+                    (nid, "format", node),
+                    (nid, "look", node),
+                    (nid, "width", node),
+                    (nid, "height", node),
+                    (nid, "batch_size", node),
+                )
+            )
         elif ntype == "EmptyFlux2LatentImage" and spec.get("expose_latent"):
             if any(name == "width" for _nid, name, _node in raw):
                 continue

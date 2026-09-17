@@ -41,7 +41,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets: **Quality** (Lab / Draft / High) first, then **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/first-last-5s** exposes **First frame** and **Last frame**. **ltx/audio-to-video-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET only on **klein-still-daily**. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets: **Quality** (Lab / Draft / High) first, then **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Style** (`none` = off), **Rewrite prompt**, then **Seed**. **Start image** only when that LoadImage is wired (I2V, character tweak, clay). **ltx/first-last-5s** exposes **First frame** and **Last frame**. **ltx/audio-to-video-5s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). Size and UNET on **klein-still-daily**. **klein/still-studio** adds **Format / platform**, **Look recipe**, Width / Height / Batch, and Image model — Format sets pixels, save prefix, and Rewrite prompt framing. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 **Quality** is a workflow-global combo (`EZQuality`) stamped first in `linearData`. Lab leaves authored widgets. Draft is faster (fewer steps). High is slower (more steps; Klein base 4B + CFG 3.5 when `download-image --tier base` is on disk, otherwise extra distilled steps at CFG 1.0). It does not change size, length, CLIP, or VAE, and it is not `--tier quality`. Inspire desks (no UNET) still show the combo as a no-op.
@@ -102,11 +102,12 @@ Explore identity, cameras, and world bibles. Occupancy **klein** unless noted.
 
 ## Lane B — Produce
 
-Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** (swap table).
+Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily** and **klein/still-studio** (swap table).
 
 | App | Occupancy | Prefix / output |
 | --- | --- | --- |
 | **klein/still-daily** | klein | `ez_still_app` — click UNET to swap distilled / NVFP4 / base |
+| **klein/still-studio** | klein | Format / platform desk. Prefix follows Format (`ez_still_studio` when Custom). Default 1280×704 |
 | **klein/still-hero** | klein | `ez_still_hero` — 1280×704 LTX feeder |
 | **klein/thumbnail** | klein | `ez_thumbnail` 1280×720 |
 | **klein/instagram-square** | klein | `ez_ig_square` 1:1 |

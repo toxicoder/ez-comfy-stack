@@ -183,7 +183,7 @@ for path in paths:
 
 @test "still lab graphs use Klein 4B Apache weights and flux2 CLIP" {
   local wf path draft hero
-  for wf in klein/still-draft.json klein/still-hero.json klein/still-daily.json; do
+  for wf in klein/still-draft.json klein/still-hero.json klein/still-daily.json klein/still-studio.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'flux-2-klein-4b-fp8.safetensors' "${path}"
@@ -355,7 +355,7 @@ assert 'wind' in tt.lower() or 'traffic' in tt.lower()
 import json
 from pathlib import Path
 root = Path('${REPO_ROOT}/workflows')
-stale = ('~10 s', 'tea house', 'sketch', 'STILL DRAFT/HERO', 'bridge-wan', 'still-studio')
+stale = ('~10 s', 'tea house', 'sketch', 'STILL DRAFT/HERO', 'bridge-wan')
 seen = []
 for p in sorted((root / '_lab').rglob('*.json')):
     d = json.loads(p.read_text())
@@ -381,6 +381,9 @@ for p in sorted((root / '_lab').rglob('*.json')):
         assert '121' in desc
     if rel == 'klein/still-draft':
         assert 'klein/still-hero' in note
+    if rel == 'klein/still-studio':
+        assert 'Format' in note or 'format' in note.lower()
+        assert '1280' in note
     if rel == 'shorts/go-see':
         assert 'parkour' in desc
         assert 'one-click' in desc.lower() or 'queue once' in note.lower()
@@ -505,7 +508,7 @@ assert isinstance(d.get('extra',{}).get('lab_note'), str) and d['extra']['lab_no
 }
 
 @test "operator app graphs: still settings, gif ping-pong loop, dream-house pack" {
-  local daily gif house clay
+  local daily gif house clay studio
   daily="$(lab_wf klein/still-daily.json)"
   gif="$(lab_wf wan/gif-loop.json)"
   house="$(lab_wf klein/dream-house.json)"
@@ -534,6 +537,23 @@ assert 'swap' in ntext and 'steps' in ntext and 'cfg' in ntext
 assert 'flux-2-klein-base-4b-fp8' in ntext or 'base' in ntext
 assert any(g.get('title','').upper().startswith('MODEL') for g in s.get('groups',[]))
 assert any('SETTING' in g.get('title','').upper() for g in s.get('groups',[]))
+"
+  [ "${status}" -eq 0 ]
+  studio="$(lab_wf klein/still-studio.json)"
+  [[ -f ${studio} ]]
+  run python3 -c "
+import json
+s=json.load(open('${studio}'))
+assert s.get('id')=='still-studio'
+assert any(n.get('type')=='EZImageFormat' for n in s['nodes'])
+assert any(n.get('type')=='EmptyFlux2LatentImage' and n['widgets_values'][:2]==[1280, 704] for n in s['nodes'])
+assert any(n.get('type')=='SaveImage' and n['widgets_values'][0]=='ez_still_studio' for n in s['nodes'])
+fmt=next(n for n in s['nodes'] if n.get('type')=='EZImageFormat')
+assert fmt['widgets_values'][0].startswith('16:9')
+enh=next(n for n in s['nodes'] if n.get('type')=='EZKleinPromptEnhance')
+assert enh['widgets_values'][2] is True
+assert enh['widgets_values'][6]=='klein/still-studio'
+assert any('FORMAT' in g.get('title','').upper() for g in s.get('groups',[]))
 "
   [ "${status}" -eq 0 ]
   run python3 -c "

@@ -625,6 +625,12 @@
       "kind": "graph"
     },
     {
+      "id": "klein/still-studio",
+      "path": "generated/workflows/klein/still-studio.md",
+      "lane": "klein",
+      "kind": "graph"
+    },
+    {
       "id": "klein/storyboard-6up",
       "path": "generated/workflows/klein/storyboard-6up.md",
       "lane": "klein",
@@ -1339,6 +1345,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 456,
-  "page_count": 224
+  "graph_count": 457,
+  "page_count": 225
 }

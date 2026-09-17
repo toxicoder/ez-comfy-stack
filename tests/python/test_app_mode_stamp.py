@@ -160,6 +160,26 @@ def test_still_draft_app_inputs_are_prompt_first_without_latent_size() -> None:
     assert "unet_name" not in names
 
 
+def test_still_studio_exposes_format_look_size_and_unet() -> None:
+    names = _widget_names(_load("klein/still-studio.json"))
+    assert names[:7] == [
+        "quality",
+        "sample",
+        "prompt",
+        "format",
+        "style",
+        "enhance",
+        "look",
+    ]
+    assert "seed" in names
+    assert "width" in names
+    assert "height" in names
+    assert "batch_size" in names
+    assert "unet_name" in names
+    assert "steps" not in names
+    assert names.index("look") < names.index("seed")
+
+
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
     names = _widget_names(_load("klein/still-daily.json"))
     assert names[0] == "quality"
