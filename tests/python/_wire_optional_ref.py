@@ -75,7 +75,7 @@ def wire_optional_ref(graph: dict[str, Any]) -> dict[str, Any]:
     canvas_id = opt_id + 1
     graph["last_node_id"] = canvas_id
     pos_l = latent.get("pos") or [948, 544]
-    opt_node = {
+    opt_node: dict[str, Any] = {
         "id": opt_id,
         "type": OPTIONAL_TYPE,
         "pos": [-400.0, 400.0],
@@ -93,7 +93,7 @@ def wire_optional_ref(graph: dict[str, Any]) -> dict[str, Any]:
         "widgets_values": [""],
         "title": "Example / reference (optional)",
     }
-    canvas_node = {
+    canvas_node: dict[str, Any] = {
         "id": canvas_id,
         "type": CANVAS_TYPE,
         "pos": [-400.0, 720.0],
@@ -127,7 +127,11 @@ def wire_optional_ref(graph: dict[str, Any]) -> dict[str, Any]:
     latent_out[3] = canvas_id
     latent_out[4] = 0
     canvas_node["inputs"][0]["link"] = int(latent_out[0])
-    vae_out = next(s for s in vae["outputs"] if s.get("name") == "VAE")
+    vae_out = next(
+        slot
+        for slot in vae["outputs"]
+        if isinstance(slot, dict) and slot.get("name") == "VAE"
+    )
     vae_links = vae_out.setdefault("links", [])
     if vae_links is None:
         vae_links = []

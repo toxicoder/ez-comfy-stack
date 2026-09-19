@@ -170,7 +170,7 @@ Type `STRING`.
 
 Checkpoint filename under MODELS_DIR diffusion_models.
 
-**How it affects generation:** Wrong family = Queue error or a melted picture. Do not swap Klein 9B / FLUX.2-dev / MiniMax.
+**How it affects generation:** Wrong family = Queue error or a melted picture. Lab pins Apache Klein 4B. Klein 9B / FLUX.2-dev are opt-in NC. MiniMax is banned.
 
 **This graph:** `ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors`
 
@@ -1245,23 +1245,23 @@ Which negative family.
 
 ### `EZQuality` — Quality
 
-Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
 !!! warning "Lab notes"
 
-    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+    custom freezes the last overlay. lab restores authored widgets. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+| `quality` | out | `STRING` | Selected quality id. |
 
 #### `quality`
 
 Type `COMBO`. Range / default: lab.
 
-Lab default, Draft (faster), or High (slower).
+custom freezes last overlay; lab restores graph defaults.
 
-**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. ultra/max need download-image --tier 9b or flux2-dev.
 
 **This graph:** `lab`
 
@@ -1269,6 +1269,10 @@ Lab default, Draft (faster), or High (slower).
 
 | Choice | What it does |
 | --- | --- |
+| `custom` | Freeze current widgets. Queue does not overlay. |
+| `draft` | Faster Apache Klein 4B (NVFP4 if on disk). |
 | `lab` | Authored lab widgets. Default. |
-| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
-| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
+| `standard` | Distilled 4B, 8 steps, CFG 1.0. |
+| `high` | Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0. |
+| `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
+| `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
