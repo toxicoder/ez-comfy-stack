@@ -47,7 +47,7 @@ def core_nodes() -> dict[str, Any]:
             lab="Lab files: flux-2-klein-4b-fp8.safetensors, wan2.2_ti2v_5B_fp16.safetensors, ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors. weight_dtype stays default.",
             sockets=[_s("MODEL", "MODEL", "out", "Denoiser weights.")],
             widgets=[
-                _w("unet_name", index=0, desc="Checkpoint filename under MODELS_DIR diffusion_models.", gen="Wrong family = Queue error or a melted picture. Do not swap Klein 9B / FLUX.2-dev / MiniMax."),
+                _w("unet_name", index=0, desc="Checkpoint filename under MODELS_DIR diffusion_models.", gen="Wrong family = Queue error or a melted picture. Lab pins Apache Klein 4B. Klein 9B / FLUX.2-dev are opt-in NC. MiniMax is banned."),
                 _w("weight_dtype", index=1, typ="COMBO", rng="default", desc="Cast at load.", gen="default keeps the file's dtype (Klein FP8, LTX INT8-convrot, Wan FP16).", choices=_WEIGHT_DTYPE),
             ],
         ),
