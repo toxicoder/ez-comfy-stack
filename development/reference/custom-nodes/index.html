@@ -4245,6 +4245,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../generated/workflows/klein/image-studio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    image-studio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../generated/workflows/klein/instagram-square/" class="md-nav__link">
         
   
@@ -10985,7 +11013,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 19 Sep 2026, 22:43 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-19T22:43:23+00:00">19 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 19 Sep 2026, 22:53 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-19T22:53:01+00:00">19 Sep 2026</time></span>
                 
                   
 
@@ -11545,7 +11573,7 @@
 </table>
 <hr />
 <h2 id="ez_image">ez_image<a class="headerlink" href="#ez_image" title="Permanent link">&para;</a></h2>
-<p>Category <code>ez-comfy/image</code>. Size helpers for Klein edit graphs plus still and video Format / platform pickers. Torch / Comfy <code>common_upscale</code> is lazy inside snap/match <code>run()</code>.</p>
+<p>Category <code>ez-comfy/image</code>. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional reference stills, and the 100-mode Creator mode node. Torch / Comfy <code>common_upscale</code> is lazy inside snap/match <code>run()</code>.</p>
 <table>
 <thead>
 <tr>
@@ -11580,7 +11608,39 @@
 <td><code>format</code> combo, <code>look</code> combo, <code>width</code>/<code>height</code>/<code>batch_size</code> INT</td>
 <td><code>INT</code> width/height/batch, <code>STRING</code> hint/prefix/context</td>
 <td>klein</td>
-<td>Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio App only) is a Cinema Rack starter. Quality does not change size</td>
+<td>Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size</td>
+</tr>
+<tr>
+<td><code>EZImageMode</code></td>
+<td>Creator mode</td>
+<td><code>category</code> combo, <code>mode</code> combo (100 labels), optional <code>context</code> STRING</td>
+<td><code>STRING</code> context/enhance_mode/prefix</td>
+<td>klein</td>
+<td>klein/image-studio. Category filters Mode. Queue splices an instruction, picks <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="t2i" data-href="../../glossary/#t2i" data-short="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job." data-category="Modalities" title="Text-to-image: a prompt becomes a still (PNG). Klein&#x27;s job.">t2i</span>/edit/text_swap/identity, and sets the save prefix. Optional refs never required</td>
+</tr>
+<tr>
+<td><code>EZOptionalImage</code></td>
+<td>Optional reference stills</td>
+<td><code>filename</code> STRING (default empty), optional IMAGE×3</td>
+<td><code>IMAGE</code> image, <code>INT</code> count, <code>BOOLEAN</code> has_image</td>
+<td>klein</td>
+<td>Empty is valid. Presence is the tensor, not the filename</td>
+</tr>
+<tr>
+<td><code>EZKleinRefCanvas</code></td>
+<td>Klein canvas (optional ref)</td>
+<td><code>latent</code> <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../../glossary/#latent" data-short="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet." data-category="Studio" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">LATENT</span>, <code>vae</code> VAE, optional IMAGE + has_image</td>
+<td><code>LATENT</code> latent, <code>IMAGE</code> image</td>
+<td>klein</td>
+<td>Empty still passes the Flux2 latent through. Present still snaps ÷16, VAE-encodes, ReferenceLatent. Fail-soft</td>
+</tr>
+<tr>
+<td><code>EZDescribeImage</code></td>
+<td>Describe reference still</td>
+<td><code>has_image</code> BOOLEAN, optional IMAGE</td>
+<td><code>STRING</code> caption</td>
+<td>—</td>
+<td>Fail-soft empty caption without VL weights. Klein graphs use EZKleinRefCanvas instead</td>
 </tr>
 <tr>
 <td><code>EZVideoFormat</code></td>
@@ -11588,7 +11648,7 @@
 <td><code>family</code> combo (Wan 5B / LTX-2.5), <code>format</code> combo, <code>width</code>/<code>height</code> INT</td>
 <td><code>INT</code> width/height, <code>STRING</code> hint/prefix</td>
 <td>wan / ltx</td>
-<td>Preset sets <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>-safe <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../../glossary/#clip" data-short="Text encoder that turns a prompt into conditioning for the sampler." data-category="Models" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span> pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="latent" data-href="../../glossary/#latent" data-short="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet." data-category="Studio" title="Compressed representation the sampler denoises. Frame count × size live here, not in the PNG yet.">latent</span>. App Mode hides Family. Quality does not change size</td>
+<td>Preset sets <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="dgx-spark" data-href="../../glossary/#dgx-spark" data-short="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH." data-category="Hardware and safety" title="NVIDIA Grace Blackwell desktop this stack targets. One GPU, often operated over SSH.">Spark</span>-safe <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="clip" data-href="../../glossary/#clip" data-short="Text encoder that turns a prompt into conditioning for the sampler." data-category="Models" title="Text encoder that turns a prompt into conditioning for the sampler.">clip</span> pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size</td>
 </tr>
 </tbody>
 </table>
@@ -11610,10 +11670,10 @@
 <tr>
 <td><code>EZQuality</code></td>
 <td>Quality</td>
-<td><code>quality</code> combo <code>lab</code> <code>draft</code> <code>high</code> (default <strong>lab</strong>)</td>
+<td><code>quality</code> combo <code>custom</code> <code>draft</code> <code>lab</code> <code>standard</code> <code>high</code> <code>ultra</code> <code>max</code> (default <strong>lab</strong>)</td>
 <td><code>STRING</code> quality</td>
 <td>graph occupancy (overlay table)</td>
-<td>Lab is authored widgets. Never writes banned UNETs. Klein base High needs <code>download-image --tier base</code>. Not <code>--tier quality</code>. Does not change size, length, CLIP, or VAE. Inspire/llm is a visible no-op</td>
+<td>custom freezes the last overlay. lab restores authored widgets. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. ultra/max may select opt-in Non-Commercial weights. Not <code>--tier quality</code></td>
 </tr>
 </tbody>
 </table>
