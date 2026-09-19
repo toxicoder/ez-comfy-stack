@@ -69,13 +69,16 @@ flowchart LR
   N12["Negative Prompt Enhance"]
   N13["Quality"]
   N14["Format / platform"]
+  N15["Example / reference (optional)"]
+  N16["Optional Klein ref"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
+  N3 --> N16
   N4 --> N7
   N5 --> N7
-  N6 --> N7
+  N6 --> N16
   N7 --> N8
   N8 --> N9
   N11 --> N4
@@ -84,6 +87,8 @@ flowchart LR
   N14 --> N6
   N14 --> N11
   N14 --> N9
+  N15 --> N16
+  N16 --> N7
 ```
 
 ## Nodes on this graph
@@ -104,6 +109,8 @@ flowchart LR
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 13 | Quality | `EZQuality` | Ungrouped |
 | 14 | Format / platform | `EZImageFormat` | FORMAT |
+| 15 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
+| 16 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
 
 ## Node parameter reference
 
@@ -127,7 +134,7 @@ Type `STRING`.
 
 Checkpoint filename under MODELS_DIR diffusion_models.
 
-**How it affects generation:** Wrong family = Queue error or a melted picture. Do not swap Klein 9B / FLUX.2-dev / MiniMax.
+**How it affects generation:** Wrong family = Queue error or a melted picture. Lab pins Apache Klein 4B. Klein 9B / FLUX.2-dev are opt-in NC. MiniMax is banned.
 
 **This graph:** `flux-2-klein-4b-fp8.safetensors`
 
@@ -856,23 +863,23 @@ Which negative family.
 
 ### `EZQuality` — Quality
 
-Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.
+Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
 
 !!! warning "Lab notes"
 
-    Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.
+    custom freezes the last overlay. lab restores authored widgets. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `quality` | out | `STRING` | Selected quality id (lab, draft, high). |
+| `quality` | out | `STRING` | Selected quality id. |
 
 #### `quality`
 
 Type `COMBO`. Range / default: lab.
 
-Lab default, Draft (faster), or High (slower).
+custom freezes last overlay; lab restores graph defaults.
 
-**How it affects generation:** Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.
+**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. ultra/max need download-image --tier 9b or flux2-dev.
 
 **This graph:** `lab`
 
@@ -880,9 +887,13 @@ Lab default, Draft (faster), or High (slower).
 
 | Choice | What it does |
 | --- | --- |
+| `custom` | Freeze current widgets. Queue does not overlay. |
+| `draft` | Faster Apache Klein 4B (NVFP4 if on disk). |
 | `lab` | Authored lab widgets. Default. |
-| `draft` | Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled. |
-| `high` | Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0. |
+| `standard` | Distilled 4B, 8 steps, CFG 1.0. |
+| `high` | Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0. |
+| `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
+| `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
 ### `EZImageFormat` — Format / platform
 
@@ -1064,3 +1075,55 @@ How many stills in one Run.
 **How it affects generation:** Large canvases stay at 1.
 
 **This graph:** `1`
+
+### `EZOptionalImage` — Optional reference stills
+
+Optional example or reference stills. Empty is valid — Queue without a file.
+
+!!! warning "Lab notes"
+
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Filename may be empty.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional first still. |
+| `image_2` | in | `IMAGE` | Optional second still. |
+| `image_3` | in | `IMAGE` | Optional third still. |
+| `image` | out | `IMAGE` | First present still, or empty. |
+| `count` | out | `INT` | How many stills are present. |
+| `has_image` | out | `BOOLEAN` | True when at least one still is present. |
+
+#### `filename`
+
+Type `STRING`.
+
+Optional path or App upload. Empty is valid.
+
+**How it affects generation:** Leave empty to Queue a T2I. Presence is the tensor, not this string.
+
+### `EZKleinRefCanvas` — Klein canvas (optional ref)
+
+Pass the empty Flux2 latent, or VAE-encode a still and attach ReferenceLatent.
+
+!!! warning "Lab notes"
+
+    Fail-soft: empty still or encode errors pass the empty latent through. Never raises.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `latent` | in | `LATENT` | Empty Flux2 canvas. |
+| `vae` | in | `VAE` | Flux2 VAE. |
+| `image` | in | `IMAGE` | Optional start still. |
+| `has_image` | in | `BOOLEAN` | Presence flag from EZOptionalImage. |
+| `latent` | out | `LATENT` | Empty or reference-attached latent. |
+| `image` | out | `IMAGE` | The still, or empty. |
+
+#### `has_image`
+
+Type `BOOLEAN`. Range / default: false.
+
+Presence flag when unwired.
+
+**How it affects generation:** Lab graphs wire this from EZOptionalImage. Off = T2I.
+
+**This graph:** `false`

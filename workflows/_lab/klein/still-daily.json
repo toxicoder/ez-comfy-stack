@@ -1,8 +1,8 @@
 {
   "id": "still-daily",
   "revision": 5,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "last_node_id": 16,
+  "last_link_id": 21,
   "nodes": [
     {
       "id": 1,
@@ -94,7 +94,8 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            7
+            7,
+            18
           ],
           "slot_index": 0
         }
@@ -294,7 +295,7 @@
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 6
+          "link": 21
         }
       ],
       "outputs": [
@@ -610,6 +611,113 @@
         1
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 15,
+      "type": "EZOptionalImage",
+      "pos": [
+        -400.0,
+        400.0
+      ],
+      "size": [
+        360.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "count",
+          "type": "INT",
+          "links": null,
+          "slot_index": 1
+        },
+        {
+          "name": "has_image",
+          "type": "BOOLEAN",
+          "links": [
+            20
+          ],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZOptionalImage"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "Example / reference (optional)"
+    },
+    {
+      "id": 16,
+      "type": "EZKleinRefCanvas",
+      "pos": [
+        -400.0,
+        720.0
+      ],
+      "size": [
+        360.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 6
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 18
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 19
+        },
+        {
+          "name": "has_image",
+          "type": "BOOLEAN",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": null,
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinRefCanvas"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Optional Klein ref"
     }
   ],
   "links": [
@@ -657,8 +765,8 @@
       6,
       6,
       0,
-      7,
-      3,
+      16,
+      0,
       "LATENT"
     ],
     [
@@ -740,6 +848,38 @@
       11,
       0,
       "STRING"
+    ],
+    [
+      18,
+      3,
+      0,
+      16,
+      1,
+      "VAE"
+    ],
+    [
+      19,
+      15,
+      0,
+      16,
+      2,
+      "IMAGE"
+    ],
+    [
+      20,
+      15,
+      2,
+      16,
+      3,
+      "BOOLEAN"
+    ],
+    [
+      21,
+      16,
+      0,
+      7,
+      3,
+      "LATENT"
     ]
   ],
   "groups": [
@@ -923,6 +1063,14 @@
           {
             "description": "Click to swap Klein 4B distilled / NVFP4 / base.",
             "label": "Image model"
+          }
+        ],
+        [
+          15,
+          "filename",
+          {
+            "label": "Example / reference (optional)",
+            "description": "Optional still. Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference."
           }
         ]
       ],
