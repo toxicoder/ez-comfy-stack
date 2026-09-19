@@ -308,6 +308,53 @@ def core_nodes() -> dict[str, Any]:
                 _w("batch_size", index=4, typ="INT", rng="1–4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
             ],
         ),
+        "EZOptionalImage": _n(
+            "Optional reference stills",
+            "Optional example or reference stills. Empty is valid — Queue without a file.",
+            origin="ez_image",
+            lab="Klein T2I Apps attach a present still via EZKleinRefCanvas. Filename may be empty.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Optional first still."),
+                _s("image_2", "IMAGE", "in", "Optional second still."),
+                _s("image_3", "IMAGE", "in", "Optional third still."),
+                _s("image", "IMAGE", "out", "First present still, or empty."),
+                _s("count", "INT", "out", "How many stills are present."),
+                _s("has_image", "BOOLEAN", "out", "True when at least one still is present."),
+            ],
+            widgets=[
+                _w("filename", index=0, desc="Optional path or App upload. Empty is valid.", gen="Leave empty to Queue a T2I. Presence is the tensor, not this string."),
+            ],
+        ),
+        "EZKleinRefCanvas": _n(
+            "Klein canvas (optional ref)",
+            "Pass the empty Flux2 latent, or VAE-encode a still and attach ReferenceLatent.",
+            origin="ez_image",
+            lab="Fail-soft: empty still or encode errors pass the empty latent through. Never raises.",
+            sockets=[
+                _s("latent", "LATENT", "in", "Empty Flux2 canvas."),
+                _s("vae", "VAE", "in", "Flux2 VAE."),
+                _s("image", "IMAGE", "in", "Optional start still."),
+                _s("has_image", "BOOLEAN", "in", "Presence flag from EZOptionalImage."),
+                _s("latent", "LATENT", "out", "Empty or reference-attached latent."),
+                _s("image", "IMAGE", "out", "The still, or empty."),
+            ],
+            widgets=[
+                _w("has_image", index=0, typ="BOOLEAN", rng="false", desc="Presence flag when unwired.", gen="Lab graphs wire this from EZOptionalImage. Off = T2I."),
+            ],
+        ),
+        "EZDescribeImage": _n(
+            "Describe reference still",
+            "Fail-soft caption for models that are not multimodal. Empty without VL weights.",
+            origin="ez_image",
+            lab="This stack returns an empty caption (no VL GGUF). Klein graphs use EZKleinRefCanvas instead.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Optional still."),
+                _s("caption", "STRING", "out", "Caption, or empty."),
+            ],
+            widgets=[
+                _w("has_image", index=0, typ="BOOLEAN", rng="false", desc="Presence flag.", gen="Off or missing VL weights → empty string."),
+            ],
+        ),
         "EZVideoFormat": _n(
             "Format / platform (video)",
             "Pick a Wan or LTX clip canvas (aspect or named platform).",
