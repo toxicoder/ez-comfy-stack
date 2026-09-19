@@ -22,7 +22,8 @@ QUALITY_PAD = 20.0
 QUALITY_LABEL = {
     "label": "Quality",
     "description": (
-        "Lab default, Draft (faster), or High (slower). "
+        "custom freezes the last overlay. lab restores graph defaults. "
+        "ultra/max may select Klein 9B or FLUX.2-dev (FLUX Non-Commercial). "
         "Family-specific — not --tier."
     ),
 }

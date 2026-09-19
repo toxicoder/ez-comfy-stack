@@ -36,10 +36,12 @@ class EZQuality:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Lab default, Draft (faster), or High (slower). "
-        "Family-specific overlays on steps, CFG, and Klein 4B UNET. "
-        "Not --tier quality. Never selects banned weights. "
-        "High on Klein base needs download-image --tier base."
+        "custom freezes the last overlay. lab restores graph defaults. "
+        "draft / standard / high are Apache Klein 4B. "
+        "ultra is Klein 9B distilled when on disk (FLUX Non-Commercial, not YouTube-ok). "
+        "max is 9B base or FLUX.2-dev when on disk (same NC license). "
+        "Named qualities may swap UNET, CLIP, and VAE. Never changes size. "
+        "Not --tier quality."
     )
 
     def report(self, quality: str) -> dict[str, Any]:

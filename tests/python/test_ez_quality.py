@@ -27,6 +27,15 @@ from ez_quality.nodes import EZQuality  # noqa: E402
 from ez_quality.presets import (  # noqa: E402
     AUDIO_DRAFT_STEPS,
     AUDIO_HIGH_STEPS,
+    AUDIO_MAX_STEPS,
+    AUDIO_STANDARD_STEPS,
+    CLIP_4B,
+    CLIP_8B,
+    FLUX2_DEV,
+    KLEIN_9B,
+    KLEIN_9B_BASE,
+    KLEIN_9B_CFG,
+    KLEIN_9B_STEPS,
     KLEIN_BASE,
     KLEIN_DISTILLED,
     KLEIN_DRAFT_CFG,
@@ -39,20 +48,34 @@ from ez_quality.presets import (  # noqa: E402
     KSAMPLER_STEPS_INDEX,
     LTX_DRAFT_STEPS,
     LTX_HIGH_STEPS,
+    LTX_MAX_STEPS,
+    LTX_STANDARD_STEPS,
     QUALITY_CHOICES,
+    QUALITY_CUSTOM,
     QUALITY_DRAFT,
     QUALITY_HIGH,
     QUALITY_LAB,
+    QUALITY_MAX,
+    QUALITY_STANDARD,
+    QUALITY_ULTRA,
     QualityOverlay,
+    TRELLIS_DRAFT_STEPS,
     TRELLIS_HIGH_STEPS,
+    TRELLIS_MAX_STEPS,
+    TRELLIS_STANDARD_STEPS,
     UNET_NAME_INDEX,
+    VAE_SMALL,
     WAN_DRAFT_STEPS,
     WAN_HIGH_STEPS,
+    WAN_MAX_STEPS,
+    WAN_STANDARD_STEPS,
+    _klein_overlay,
     _pick_unet,
     apply_to_graph,
     infer_occupancy,
     is_banned_unet,
     is_klein_4b_unet,
+    is_klein_9b_unet,
     normalize_quality,
     resolve_overlay,
 )
@@ -109,11 +132,13 @@ def test_normalize_quality() -> None:
 
 
 def test_banned_unet_needles() -> None:
-    assert is_banned_unet("flux-2-klein-9b.safetensors")
-    assert is_banned_unet("FLUX.2-dev.safetensors")
+    assert not is_banned_unet("flux-2-klein-9b.safetensors")
+    assert not is_banned_unet(FLUX2_DEV)
     assert is_banned_unet("z_image_turbo_bf16.safetensors")
+    assert is_banned_unet("MiniMax-H3.safetensors")
     assert not is_banned_unet(KLEIN_DISTILLED)
     assert not is_banned_unet(KLEIN_BASE)
+    assert is_klein_9b_unet(KLEIN_9B) is True
 
 
 def test_klein_high_without_base_keeps_cfg_1() -> None:
@@ -434,9 +459,11 @@ def test_klein_9b_is_not_klein_4b() -> None:
 
 
 def test_pick_unet_refuses_banned_and_missing() -> None:
-    assert _pick_unet("FLUX.2-dev.safetensors", {"FLUX.2-dev.safetensors"}) is None
+    assert _pick_unet("MiniMax-H3.safetensors", {"MiniMax-H3.safetensors"}) is None
+    assert _pick_unet(FLUX2_DEV, {FLUX2_DEV}) == FLUX2_DEV
     assert _pick_unet(KLEIN_BASE, {KLEIN_DISTILLED}) is None
     assert _pick_unet(KLEIN_BASE, {KLEIN_BASE}) == KLEIN_BASE
+    assert _pick_unet(KLEIN_BASE, set()) is None
 
 
 def test_unknown_occupancy_is_noop() -> None:
@@ -552,7 +579,7 @@ def test_apply_refuses_banned_unet_overlay(monkeypatch: pytest.MonkeyPatch) -> N
     before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
 
     def _banned(**_kwargs: object) -> QualityOverlay:
-        return QualityOverlay(unet_name="flux-2-klein-9b.safetensors")
+        return QualityOverlay(unet_name="MiniMax-H3.safetensors")
 
     monkeypatch.setattr("ez_quality.presets.resolve_overlay", _banned)
     apply_to_graph(graph, QUALITY_HIGH, available_unets=(KLEIN_BASE,))
@@ -571,3 +598,279 @@ def test_js_mirrors_preset_constants() -> None:
     assert "wan2.2_i2v_high_noise_14B" not in body
     assert 'includes("14b")' in body
     assert "flux-2-klein-9b" in body.lower() or "klein-9b" in body
+    assert QUALITY_CUSTOM in body
+    assert "clip_name" in body
+    assert VAE_SMALL in body
+
+
+def test_custom_and_lab_are_noop() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_CUSTOM,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B),
+    )
+    assert overlay == QualityOverlay()
+    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    before = _values(_sampler(graph))[KSAMPLER_STEPS_INDEX]
+    apply_to_graph(
+        graph,
+        QUALITY_HIGH,
+        available_unets=(KLEIN_DISTILLED, KLEIN_BASE),
+    )
+    high_steps = _values(_sampler(graph))[KSAMPLER_STEPS_INDEX]
+    assert high_steps == KLEIN_HIGH_BASE_STEPS
+    apply_to_graph(graph, QUALITY_CUSTOM, available_unets=(KLEIN_BASE,))
+    assert _values(_sampler(graph))[KSAMPLER_STEPS_INDEX] == high_steps
+    apply_to_graph(graph, QUALITY_LAB, available_unets=(KLEIN_BASE,))
+    assert _values(_sampler(graph))[KSAMPLER_STEPS_INDEX] == high_steps
+    assert before == 4
+
+
+def test_ultra_selects_9b_and_8b_te_when_present() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_ULTRA,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B),
+        available_clips=(CLIP_4B, CLIP_8B),
+        available_vaes=(VAE_SMALL,),
+    )
+    assert overlay.unet_name == KLEIN_9B
+    assert overlay.clip_name == CLIP_8B
+    assert overlay.vae_name == VAE_SMALL
+    assert overlay.steps == KLEIN_9B_STEPS
+    assert overlay.cfg == KLEIN_9B_CFG
+
+
+def test_ultra_falls_back_to_high_without_9b() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_ULTRA,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_BASE),
+        available_clips=(CLIP_4B,),
+    )
+    assert overlay.unet_name == KLEIN_BASE
+    assert overlay.steps == KLEIN_HIGH_BASE_STEPS
+    assert overlay.clip_name == CLIP_4B
+
+
+def test_max_prefers_9b_base_then_dev() -> None:
+    nine = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_MAX,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B_BASE, FLUX2_DEV),
+        available_clips=(CLIP_8B, CLIP_4B),
+    )
+    assert nine.unet_name == KLEIN_9B_BASE
+    assert nine.clip_name == CLIP_8B
+    dev = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_MAX,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, FLUX2_DEV),
+        available_clips=("mistral_3_small_flux2_bf16.safetensors",),
+    )
+    assert dev.unet_name == FLUX2_DEV
+    assert dev.clip_name == "mistral_3_small_flux2_bf16.safetensors"
+
+
+def test_standard_is_distilled_8_steps() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_STANDARD,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_BASE,
+        available_unets=(KLEIN_DISTILLED, KLEIN_BASE),
+        available_clips=(CLIP_4B,),
+    )
+    assert overlay.unet_name == KLEIN_DISTILLED
+    assert overlay.steps == 8
+    assert overlay.cfg == 1.0
+
+
+def test_apply_writes_clip_and_vae_on_klein() -> None:
+    graph = {
+        "extra": {"lab_app_mode": {"occupancy": "klein"}},
+        "nodes": [
+            {"type": "UNETLoader", "widgets_values": [KLEIN_DISTILLED]},
+            {"type": "CLIPLoader", "widgets_values": [CLIP_4B, "flux2", "default"]},
+            {"type": "VAELoader", "widgets_values": ["flux2-vae.safetensors"]},
+            {
+                "type": "KSampler",
+                "widgets_values": [42, "fixed", 4, 1.0, "euler", "simple", 1.0],
+            },
+        ],
+    }
+    apply_to_graph(
+        graph,
+        QUALITY_ULTRA,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B),
+        available_clips=(CLIP_4B, CLIP_8B),
+        available_vaes=("flux2-vae.safetensors", VAE_SMALL),
+    )
+    assert _values(_graph_node(graph, 0))[0] == KLEIN_9B
+    assert _values(_graph_node(graph, 1))[0] == CLIP_8B
+    assert _values(_graph_node(graph, 2))[0] == VAE_SMALL
+    assert _values(_graph_node(graph, 3))[KSAMPLER_STEPS_INDEX] == KLEIN_9B_STEPS
+
+
+def test_wan_max_bumps_steps_not_unet() -> None:
+    overlay = resolve_overlay(
+        occupancy="wan",
+        quality=QUALITY_MAX,
+        authored_steps=20,
+        authored_cfg=5.0,
+        unet_name="wan2.2_ti2v_5B_fp16.safetensors",
+        available_unets=(
+            "wan2.2_ti2v_5B_fp16.safetensors",
+            "wan2.2_i2v_high_noise_14B_fp8_scaled.safetensors",
+        ),
+    )
+    assert overlay.steps == WAN_MAX_STEPS
+    assert overlay.unet_name is None
+
+
+def test_named_qualities_cover_family_step_tables() -> None:
+    wan_std = resolve_overlay(
+        occupancy="wan",
+        quality=QUALITY_STANDARD,
+        authored_steps=16,
+        authored_cfg=5.0,
+        unet_name="wan2.2_ti2v_5B_fp16.safetensors",
+    )
+    assert wan_std.steps == WAN_STANDARD_STEPS
+    ltx_std = resolve_overlay(
+        occupancy="ltx",
+        quality=QUALITY_STANDARD,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="ltx-2.5.safetensors",
+    )
+    assert ltx_std.steps == LTX_STANDARD_STEPS
+    ltx_max = resolve_overlay(
+        occupancy="film",
+        quality=QUALITY_MAX,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="ltx-2.5.safetensors",
+    )
+    assert ltx_max.steps == LTX_MAX_STEPS
+    audio_std = resolve_overlay(
+        occupancy="audio",
+        quality=QUALITY_STANDARD,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert audio_std.steps == AUDIO_STANDARD_STEPS
+    audio_max = resolve_overlay(
+        occupancy="audio",
+        quality=QUALITY_MAX,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert audio_max.steps == AUDIO_MAX_STEPS
+    trellis_draft = resolve_overlay(
+        occupancy="trellis",
+        quality=QUALITY_DRAFT,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert trellis_draft.steps == TRELLIS_DRAFT_STEPS
+    trellis_std = resolve_overlay(
+        occupancy="trellis",
+        quality=QUALITY_STANDARD,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert trellis_std.steps == TRELLIS_STANDARD_STEPS
+    trellis_max = resolve_overlay(
+        occupancy="trellis",
+        quality=QUALITY_MAX,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert trellis_max.steps == TRELLIS_MAX_STEPS
+    trellis_high = resolve_overlay(
+        occupancy="trellis",
+        quality=QUALITY_HIGH,
+        authored_steps=12,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert trellis_high.steps == TRELLIS_HIGH_STEPS
+
+
+def test_max_without_9b_or_dev_falls_back_to_high() -> None:
+    overlay = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_MAX,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_BASE),
+        available_clips=(CLIP_4B,),
+    )
+    assert overlay.unet_name == KLEIN_BASE
+    assert overlay.steps == KLEIN_HIGH_BASE_STEPS
+
+
+def test_apply_skips_non_flux2_clip_and_vae() -> None:
+    graph = {
+        "extra": {"lab_app_mode": {"occupancy": "klein"}},
+        "nodes": [
+            {"type": "UNETLoader", "widgets_values": [KLEIN_DISTILLED]},
+            {
+                "type": "CLIPLoader",
+                "widgets_values": ["umt5_xxl_fp8_e4m3fn_scaled.safetensors", "wan"],
+            },
+            {"type": "VAELoader", "widgets_values": ["wan2.2_vae.safetensors"]},
+            {
+                "type": "KSampler",
+                "widgets_values": [42, "fixed", 4, 1.0, "euler", "simple", 1.0],
+            },
+        ],
+    }
+    apply_to_graph(
+        graph,
+        QUALITY_ULTRA,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B),
+        available_clips=(CLIP_4B, CLIP_8B),
+        available_vaes=("wan2.2_vae.safetensors", VAE_SMALL),
+    )
+    assert _values(_graph_node(graph, 0))[0] == KLEIN_9B
+    assert _values(_graph_node(graph, 1))[0] == "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
+    assert _values(_graph_node(graph, 2))[0] == "wan2.2_vae.safetensors"
+
+
+def test_klein_overlay_unknown_choice_uses_high() -> None:
+    overlay = _klein_overlay(
+        "not-a-quality",
+        4,
+        KLEIN_DISTILLED,
+        CLIP_4B,
+        "flux2-vae.safetensors",
+        {KLEIN_DISTILLED, KLEIN_BASE},
+        {CLIP_4B},
+        {"flux2-vae.safetensors"},
+    )
+    assert overlay.unet_name == KLEIN_BASE
+    assert overlay.steps == KLEIN_HIGH_BASE_STEPS
