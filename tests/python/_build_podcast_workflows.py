@@ -43,7 +43,7 @@ ACE_STING_TAGS = (
     "short instrumental sting, analog keys hit, no vocals, instrumental"
 )
 ACE_NEG_TAGS = "vocals, singing, choir, rap"
-COVER_GRAPH = "klein/podcast-cover.json"
+COVER_GRAPH = "stills/podcast-cover.json"
 
 AUDIO_NOTE_A = f"""## audio/podcast/two-host-episode
 
@@ -66,7 +66,7 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session — not a one-graph film.
+- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **motion/loops/bumper-loop** / **motion/av/hook-av** in a later session — not a one-graph film.
 - Cover: Queue **{COVER_GRAPH}** separately.
 
 {DISCLOSURE_TEXT}

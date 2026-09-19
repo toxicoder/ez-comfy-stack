@@ -36,7 +36,7 @@ US-safe two-host-episode episode (Option A). Sequential Queue — do not load Kl
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
 4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
-6. Cover separately: Queue **klein/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
+6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
 7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).
@@ -943,7 +943,7 @@ US-safe two-host-episode episode (Option A). Sequential Queue — do not load Kl
 3. Kokoro-82M built-in voices (Apache). Optional Chatterbox/Qwen3-TTS only with operator-owned refs.
 4. ACE-Step 1.5 native bed: instrumental, no vocals, empty lyrics. The script STRING is wired into ACE enhance as context (used if you turn Enhance on). Duck −15 dB under speech.
 5. Saves: `ez_podcast_ep` FLAC master + `ez_podcast_mix` 320 kbps MP3.
-6. Cover separately: Queue **klein/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
+6. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
 7. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
 
 Weights: `./scripts/manage.sh download-podcast --tier analog` (Kokoro) then `--tier acestep` (beds).

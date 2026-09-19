@@ -17,7 +17,7 @@ tags: [comfyui, workflows, catalog, generated]
 - **Opening a filename** and seeing every node, widget, and legal combo without raw JSON
 - **Changing a sampler or latent size** with a documented generation effect
 
-**Who this is for:** studio users who already Queued `klein/still-draft`. Scan tables stay on the [Workflow catalog](../studio-workflows.md).
+**Who this is for:** studio users who already Queued `stills/still-draft`. Scan tables stay on the [Workflow catalog](../studio-workflows.md).
 
 After `download-models` + `start`, load graphs from Comfy **Workflows** / **Apps**. These pages document the **seeded JSON**, not a live Queue.
 

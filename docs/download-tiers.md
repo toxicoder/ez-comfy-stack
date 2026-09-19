@@ -117,15 +117,15 @@ Occupancy: one heavy GPU job. `occupancy enter trellis` (unload LTX/Wan, stop Bl
 
 | You will Queue | Pull |
 | --- | --- |
-| `_lab/klein/still-draft` (and most Klein stills) | `download-models` or `download-image --tier fast` |
+| `_lab/stills/still-draft` (and most Klein stills) | `download-models` or `download-image --tier fast` |
 | Klein daily UNET swap NVFP4 / base | `download-image --tier nvfp4` or `base` |
 | Z-Image Turbo graph | `download-image --tier zimage` |
-| `_lab/wan/still-to-video-5s`, `text-to-video-5s`, shot / GIF / bumper | `download-models` or `download-wan --tier 5b` |
+| `_lab/motion/silent/still-to-video-5s`, `text-to-video-5s`, shot / GIF / bumper | `download-models` or `download-wan --tier 5b` |
 | Wan A14B silent hero | `download-wan --tier a14b` |
-| `wan/first-last-5s` first-last-frame | `download-wan --tier fun-inp` (~47 GB, floor 40) |
+| `motion/silent/first-last-5s` first-last-frame | `download-wan --tier fun-inp` (~47 GB, floor 40) |
 | VACE join | `download-wan --tier vace` (not in Wan `all`) |
 | Wan S2V talking-head | `download-wan --tier s2v` (not in Wan `all`) |
-| `_lab/ltx/*` lab AV printers | `download-models` or `download-ltx --tier 2.5` |
+| `_lab/motion/av/*` lab AV printers | `download-models` or `download-ltx --tier 2.5` |
 | LTX IC-LoRA control graphs | `download-ltx --tier iclora` (not in LTX `all`) |
 | Retired LTX-2.3 DualCLIP fallback | `download-ltx --tier 2.3` (auto-includes `gemma`) |
 | Podcast Kokoro | `download-podcast --tier analog` |
@@ -185,7 +185,7 @@ The manage.sh default pack calls `download-image.sh run --tier fast`. There is n
 | --- | --- | --- | --- | --- | --- |
 | `5b` | yes | yes | ~12 GB (floor 12) | wan | TI2V-5B silent smoke + shots |
 | `a14b` | no | no | ~20 GB (floor 20) | wan | I2V 14B FP8; unload 5B first |
-| `fun-inp` | no | no | **~47 GB** (status floor 40) | wan; unload LTX | First-last-frame; `wan/first-last-5s` |
+| `fun-inp` | no | no | **~47 GB** (status floor 40) | wan; unload LTX | First-last-frame; `motion/silent/first-last-5s` |
 | `vace` | no | no | ~6 GB (floor 6) | wan; unload LTX | **Not in `all`**. 17-frame join |
 | `s2v` | no | no | ~20 GB (floor 20) | wan; unload LTX | **Not in `all`**. Talking-head opt-in |
 | `all` | no | no | 5b+a14b+fun-inp | — | Explicitly **not** vace/s2v |

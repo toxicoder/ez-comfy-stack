@@ -127,7 +127,7 @@ def lab_rel_of(path: Path, data: dict[str, Any], lab_root: Path) -> str:
         lab_root: ``workflows/_lab`` root.
 
     Returns:
-        Catalog id such as ``klein/still-draft``.
+        Catalog id such as ``stills/still-draft``.
     """
     extra = data.get("extra") or {}
     lab_rel = extra.get("lab_rel")

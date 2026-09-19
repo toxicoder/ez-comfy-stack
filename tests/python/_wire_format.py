@@ -52,62 +52,62 @@ ENHANCE_TYPES = (
 )
 KLEIN_GENERIC = frozenset(
     {
-        "klein/still-draft",
-        "klein/still-hero",
-        "klein/still-daily",
-        "klein/still-studio",
-        "klein/image-studio",
-        "klein/thumbnail",
-        "klein/instagram-square",
-        "klein/open-graph",
-        "klein/banner-wide",
-        "klein/shorts-still",
-        "klein/hook-still",
-        "klein/character-draft",
-        "klein/product-packshot",
-        "klein/podcast-cover",
-        "klein/endcard-cta",
-        "klein/quote-bg",
-        "klein/lower-third-bg",
-        "klein/food-tabletop",
-        "klein/identity-sheet",
-        "klein/storyboard-6up",
-        "klein/dream-house",
-        "klein/style-lock",
-        "klein/camera-angles",
+        "stills/still-draft",
+        "stills/still-hero",
+        "stills/still-daily",
+        "stills/still-studio",
+        "stills/image-studio",
+        "stills/thumbnail",
+        "stills/instagram-square",
+        "stills/open-graph",
+        "stills/banner-wide",
+        "stills/shorts-still",
+        "stills/hook-still",
+        "stills/character-draft",
+        "stills/product-packshot",
+        "stills/podcast-cover",
+        "stills/endcard-cta",
+        "stills/quote-bg",
+        "stills/lower-third-bg",
+        "stills/food-tabletop",
+        "stills/identity-sheet",
+        "stills/storyboard-6up",
+        "stills/dream-house",
+        "stills/style-lock",
+        "stills/camera-angles",
     }
 )
 VIDEO_GENERIC = frozenset(
     {
-        "wan/still-to-video-5s",
-        "wan/text-to-video-5s",
-        "wan/still-to-shot",
-        "wan/gif-loop",
-        "wan/bumper-loop",
-        "wan/sticker-loop",
-        "wan/shorts-still-5s",
-        "wan/orbit-still-5s",
-        "wan/push-in-still-5s",
-        "wan/parallax-still-5s",
-        "ltx/still-to-video-5s",
-        "ltx/text-to-video-5s",
-        "ltx/still-to-shot",
-        "ltx/shorts-still-5s",
-        "ltx/hook-av",
-        "ltx/broll-ambient",
-        "ltx/weather-broll",
-        "ltx/interior-ambience",
-        "ltx/dialogue-5s",
-        "ltx/multishot-5s",
-        "ltx/product-hero",
+        "motion/silent/still-to-video-5s",
+        "motion/silent/text-to-video-5s",
+        "motion/silent/still-to-shot",
+        "motion/loops/gif-loop",
+        "motion/loops/bumper-loop",
+        "motion/loops/sticker-loop",
+        "motion/silent/shorts-still-5s",
+        "motion/silent/orbit-still-5s",
+        "motion/silent/push-in-still-5s",
+        "motion/silent/parallax-still-5s",
+        "motion/av/still-to-video-5s",
+        "motion/av/text-to-video-5s",
+        "motion/av/still-to-shot",
+        "motion/av/shorts-still-5s",
+        "motion/av/hook-av",
+        "motion/av/broll-ambient",
+        "motion/av/weather-broll",
+        "motion/av/interior-ambience",
+        "motion/av/dialogue-5s",
+        "motion/av/multishot-5s",
+        "motion/av/product-hero",
     }
 )
 STILL_REL_FORMAT = {
-    "klein/still-studio": "aspect_16_9_ltx",
-    "klein/image-studio": "aspect_16_9_ltx",
-    "klein/still-draft": "aspect_16_9_draft",
-    "klein/still-hero": "aspect_16_9_ltx",
-    "klein/still-daily": "aspect_16_9_mid",
+    "stills/still-studio": "aspect_16_9_ltx",
+    "stills/image-studio": "aspect_16_9_ltx",
+    "stills/still-draft": "aspect_16_9_draft",
+    "stills/still-hero": "aspect_16_9_ltx",
+    "stills/still-daily": "aspect_16_9_mid",
 }
 PACK3_STILL_KINDS = frozenset({"klein_single", "klein_pack"})
 PACK3_VIDEO_KINDS = frozenset({"wan_i2v", "wan_loop", "ltx_av"})
@@ -557,10 +557,10 @@ def wire_still_format(graph: dict[str, Any]) -> bool:
     enhance = _primary_enhance(graph)
     if enhance is not None:
         _link_out(graph, fmt, 3, enhance, "duration_hint", "STRING")
-        if rel == "klein/still-studio":
+        if rel == "stills/still-studio":
             _link_out(graph, fmt, 5, enhance, "context", "STRING", widget=False)
     saves = _nodes_of(graph, "SaveImage")
-    wire_prefix = rel == "klein/still-studio" or (
+    wire_prefix = rel == "stills/still-studio" or (
         "/creator/" in rel and len(saves) == 1
     )
     if wire_prefix and saves:

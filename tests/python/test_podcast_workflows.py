@@ -53,7 +53,7 @@ def test_audio_first_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "klein/podcast-cover" in blob
+    assert "stills/podcast-cover" in blob
     titles = {n.get("title") for n in graph["nodes"]}
     assert "MODEL" in {g["title"] for g in graph["groups"]}
     assert "PROMPT" in {g["title"] for g in graph["groups"]}
@@ -193,7 +193,7 @@ def test_learn_episode_podcast_graph() -> None:
     ):
         assert prefix in blob, prefix
     assert DISCLOSURE in blob
-    assert "klein/podcast-cover" in blob
+    assert "stills/podcast-cover" in blob
     learn = next(n for n in graph["nodes"] if n["type"] == "EZPodcastLearn")
     lw = learn["widgets_values"]
     assert (lw[5] if len(lw) >= 7 else lw[4]) is True

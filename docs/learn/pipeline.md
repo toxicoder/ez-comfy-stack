@@ -18,7 +18,7 @@ tags: [learn, klein, wan, ltx, pipeline, us-safe]
 - Picking the next graph after a still without guessing
 - Prompting each model in its native shape
 
-**Who this is for:** studio users who have Queued `klein/still-draft` once.
+**Who this is for:** studio users who have Queued `stills/still-draft` once.
 
 ---
 

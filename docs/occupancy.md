@@ -19,7 +19,7 @@ tags: [occupancy, blender, trellis, safety, gb10]
 
 - Host Blender clay dumps without typing **yes** on a full `start` cycle every time
 - An opt-in 35B writing desk (`llm-desk`) while Comfy weights are parked
-- A later TRELLIS (`optional/klein/trellis2`) or LTX Queue after Blender / the sidecar is stopped
+- A later TRELLIS (`optional/trellis2`) or LTX Queue after Blender / the sidecar is stopped
 - Unchanged `restart: "no"`, heavy confirm, `mem_limit: 90g`, headroom 28 GiB
 
 !!! danger "One heavy job"

@@ -43,7 +43,7 @@ network or GGUF is missing.
 1. Type a question (look, camera, lighting, world, reference).
 2. Mode **research** (planner + search subagents) or **chat** (one turn).
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
-   **inspire/prompt-forge**, then **klein/still-draft**.
+   **inspire/prompt-forge**, then **stills/still-draft**.
 
 Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -114,7 +114,7 @@ network or GGUF is missing.
 1. Type a question (look, camera, lighting, world, reference).
 2. Mode **research** (planner + search subagents) or **chat** (one turn).
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
-   **inspire/prompt-forge**, then **klein/still-draft**.
+   **inspire/prompt-forge**, then **stills/still-draft**.
 
 Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.

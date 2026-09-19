@@ -1,4 +1,4 @@
-"""klein/text-swap graph: glyph-lock Klein edit, output matches source size."""
+"""stills/text-swap graph: glyph-lock Klein edit, output matches source size."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from _stamp_app_mode import infer_suite_inputs, STAMP_SPECS  # noqa: E402
 
 
 def _load() -> dict[str, Any]:
-    return load_lab_graph(lab_json("klein/text-swap.json"))
+    return load_lab_graph(lab_json("stills/text-swap.json"))
 
 
 def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -38,13 +38,13 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 def test_text_swap_identity_and_app_mode() -> None:
     graph = _load()
     extra = graph["extra"]
-    assert extra.get("lab_rel") == "klein/text-swap"
+    assert extra.get("lab_rel") == "stills/text-swap"
     assert graph.get("id") == "text-swap"
     mode = extra["lab_app_mode"]
     assert mode["lane"] == "produce"
     assert mode["occupancy"] == "klein"
     assert mode["default_view"] == "app"
-    assert "wan/still-to-video-5s" in mode["handoff"]
+    assert "motion/silent/still-to-video-5s" in mode["handoff"]
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_text_swap"
 
@@ -97,7 +97,7 @@ def test_text_swap_enhance_mode_and_app_widgets() -> None:
     assert "enhance" in names
     assert "seed" in names
     assert "style" not in names
-    spec = STAMP_SPECS["klein/text-swap"]
+    spec = STAMP_SPECS["stills/text-swap"]
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
         config = entry[2] if len(entry) > 2 else {}

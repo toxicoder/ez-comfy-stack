@@ -132,59 +132,59 @@ Opt-in dub (`./scripts/manage.sh download-dub`, **not** `download-models`):
 
 ## Example graphs
 
-Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). JSON that landed in live `_lab/` is rescued into `_user/` or `_user/_rescued/` before the catalog overwrite. YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](../visual-generative-ai.md).
+Seeded into Comfy `user/default/workflows/_lab/<lane>/` (never flattened). Prefer host `workflows/_lab/` when that tree exists; otherwise the entrypoint maps the current top-level / `shorts/` / `dcc/` / `optional/` JSON into `_lab/<lane>/`. Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. App Mode graphs land as **`*.app.json`** under the same lane folder so they appear in Comfy’s Apps sidebar as well as Workflows; 90s films stay `.json`. Operator saves belong in `_user/` (never overwritten). JSON that landed in live `_lab/` is rescued into `_user/` or `_user/_rescued/` before the catalog overwrite. YAML shot lists and `quality/` NOTICE files are not copied. Catalog and iteration loop: [Visual Generative AI](../visual-generative-ai.md).
 
 | Graph | Notes |
 | --- | --- |
-| `klein/still-draft.json` | Klein 4B 768×432, 4 steps, batch 2 |
+| `stills/still-draft.json` | Klein 4B 768×432, 4 steps, batch 2 |
 | `audio/dub/clone-translate.json` | Multi-speaker clone-and-translate (`ez_dub_mix` / `ez_dub_yt`; opt-in dub pack) |
 | `audio/music/rap-draft.json` | ACE-Step rap draft 32 s (`ez_rap_draft`; opt-in AIO) |
 | `audio/music/rap-full.json` | ACE-Step rap full 96 s (`ez_rap_full`) |
 | `_lab/audio/albums/nill-bye/<album>/` | Nine Nill Bye albums (135 ACE-Step 180 s takes + `cover.json` + `album.json`). SaveAudio stem `NN - Song Title`. Catalog: [Local music](../music.md) |
 | `_lab/audio/albums/drive-through/<album>/` | Five Drive-through albums (85 ACE-Step 180 s bass-set EDM takes + cover + album pack; eighty-three instrumental, two DJ-shout treats). SaveAudio stem `NN - Song Title`. Catalog: [Local music](../music.md) |
-| `klein/still-hero.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
-| `klein/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
-| `klein/still-studio.json` | Still desk; Format / platform picker, style, enhance, look recipe |
-| `klein/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
-| `klein/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
-| `wan/still-to-video-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
-| `wan/text-to-video-5s.json` | Wan 5B T2V smoke |
-| `wan/still-to-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
-| `wan/gif-loop.json` | Ping-pong GIF, 49 @ 12 fps |
-| `ltx/still-to-video-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
-| `ltx/text-to-video-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
-| `ltx/still-to-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
-| `_lab/shorts/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](../shorts.md)) |
-| `klein/shorts-still.json` | Vertical 9:16 Shorts still |
-| `wan/shorts-still-5s.json` | Vertical silent Shorts I2V |
-| `ltx/shorts-still-5s.json` | Vertical AV Shorts I2V |
-| `klein/thumbnail.json` | YouTube thumbnail still |
-| `klein/product-packshot.json` | Product packshot 1:1 |
-| `klein/before-after.json` | Before/after still pair |
-| `klein/style-lock.json` | Four stills of one penthouse from new cameras; locked inventory |
-| `wan/bumper-loop.json` | Loopable MP4 bumper |
-| `ltx/broll-ambient.json` | Ambient B-roll AV ~5 s |
-| `klein/storyboard-6up.json` | Six storyboard frames |
-| `klein/endcard-cta.json` | End-card / CTA plate 16:9 |
-| `klein/quote-bg.json` | Quote-card background 1:1 |
-| `klein/open-graph.json` | Blog / OG hero |
-| `klein/podcast-cover.json` | Podcast cover 1:1 |
-| `klein/banner-wide.json` | Wide channel banner |
-| `klein/instagram-square.json` | Instagram 1:1 still |
-| `klein/hook-still.json` | 9:16 hook still |
-| `klein/lower-third-bg.json` | Lower-third-safe 16:9 |
-| `klein/food-tabletop.json` | Food tabletop 4:5 |
-| `klein/lighting-trio.json` | Three-light study |
-| `klein/time-of-day.json` | Dawn / noon / dusk / night |
-| `klein/camera-angles.json` | Wide / medium / close |
-| `klein/color-moods.json` | Four color moods |
-| `wan/orbit-still-5s.json` | Slow orbit I2V ~5 s |
-| `wan/push-in-still-5s.json` | Hero push-in I2V ~5 s |
-| `wan/parallax-still-5s.json` | Parallax I2V ~5 s |
-| `wan/sticker-loop.json` | Looping sticker MP4 |
-| `ltx/weather-broll.json` | Weather B-roll AV ~5 s |
-| `ltx/interior-ambience.json` | Interior ambience AV ~5 s |
-| `ltx/hook-av.json` | AV hook / cold open ~5 s |
+| `stills/still-hero.json` | Same prompt/seed, 1280×704 (LTX VAE grid) |
+| `stills/still-daily.json` | Daily still; UNET swap distilled / NVFP4 / base |
+| `stills/still-studio.json` | Still desk; Format / platform picker, style, enhance, look recipe |
+| `stills/dream-house.json` | Ten IG 4:5 stills: virtual tour of one penthouse (tower, foyer, rooms, terrace, drone, study) |
+| `stills/dream-house-clay.json` | Ten IG 4:5 Klein edits of `house-views` clay (`ez_dream_house_clay_01`…`10`) |
+| `motion/silent/still-to-video-5s.json` | Wan 5B I2V smoke (121 @ 24 fps) |
+| `motion/silent/text-to-video-5s.json` | Wan 5B T2V smoke |
+| `motion/silent/still-to-shot.json` | 5.00 s Wan I2V + last-frame SaveImage |
+| `motion/loops/gif-loop.json` | Ping-pong GIF, 49 @ 12 fps |
+| `motion/av/still-to-video-5s.json` | LTX-2.5 I2V ~5 s with audio muxed into MP4 (121) |
+| `motion/av/text-to-video-5s.json` | LTX-2.5 T2V ~5 s with audio muxed into MP4 |
+| `motion/av/still-to-shot.json` | 5.00 s LTX I2V print + last-frame SaveImage |
+| `_lab/films/go-see.json` (also still-here, switchyard) | **One-click** Klein identity + 18 LTX 5.00s AV prints + stitch ([90s shorts](../shorts.md)) |
+| `stills/shorts-still.json` | Vertical 9:16 Shorts still |
+| `motion/silent/shorts-still-5s.json` | Vertical silent Shorts I2V |
+| `motion/av/shorts-still-5s.json` | Vertical AV Shorts I2V |
+| `stills/thumbnail.json` | YouTube thumbnail still |
+| `stills/product-packshot.json` | Product packshot 1:1 |
+| `stills/before-after.json` | Before/after still pair |
+| `stills/style-lock.json` | Four stills of one penthouse from new cameras; locked inventory |
+| `motion/loops/bumper-loop.json` | Loopable MP4 bumper |
+| `motion/av/broll-ambient.json` | Ambient B-roll AV ~5 s |
+| `stills/storyboard-6up.json` | Six storyboard frames |
+| `stills/endcard-cta.json` | End-card / CTA plate 16:9 |
+| `stills/quote-bg.json` | Quote-card background 1:1 |
+| `stills/open-graph.json` | Blog / OG hero |
+| `stills/podcast-cover.json` | Podcast cover 1:1 |
+| `stills/banner-wide.json` | Wide channel banner |
+| `stills/instagram-square.json` | Instagram 1:1 still |
+| `stills/hook-still.json` | 9:16 hook still |
+| `stills/lower-third-bg.json` | Lower-third-safe 16:9 |
+| `stills/food-tabletop.json` | Food tabletop 4:5 |
+| `stills/lighting-trio.json` | Three-light study |
+| `stills/time-of-day.json` | Dawn / noon / dusk / night |
+| `stills/camera-angles.json` | Wide / medium / close |
+| `stills/color-moods.json` | Four color moods |
+| `motion/silent/orbit-still-5s.json` | Slow orbit I2V ~5 s |
+| `motion/silent/push-in-still-5s.json` | Hero push-in I2V ~5 s |
+| `motion/silent/parallax-still-5s.json` | Parallax I2V ~5 s |
+| `motion/loops/sticker-loop.json` | Looping sticker MP4 |
+| `motion/av/weather-broll.json` | Weather B-roll AV ~5 s |
+| `motion/av/interior-ambience.json` | Interior ambience AV ~5 s |
+| `motion/av/hook-av.json` | AV hook / cold open ~5 s |
 
 Lab LTX video graphs write **MP4** via **`VHS_VideoCombine`** (ComfyUI-VideoHelperSuite, h264 @ 24 fps) and still write **frames** via `SaveImage`. They still **must** wire the audio VAE because LTX is a joint AV model.
 

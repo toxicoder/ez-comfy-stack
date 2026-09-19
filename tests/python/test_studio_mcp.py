@@ -71,7 +71,7 @@ def test_search_templates_includes_inspire() -> None:
 
 
 def test_get_template_still_draft() -> None:
-    result = mcp.call_tool("get_template", {"stem": "klein/still-draft"})
+    result = mcp.call_tool("get_template", {"stem": "stills/still-draft"})
     assert result["ok"] is True
     assert result["occupancy"] == "klein"
     assert "Prompt" in result["widgets"]
@@ -85,14 +85,14 @@ def test_generate_app_tool(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> N
         "generate_app",
         {
             "brief": "a chipped cobalt mug",
-            "template": "klein/still-draft",
+            "template": "stills/still-draft",
             "slug": "mcp-mug",
             "as_app": True,
         },
     )
     assert result["ok"] is True, result
     assert Path(result["path"]).is_file()
-    assert result["template"] == "klein/still-draft"
+    assert result["template"] == "stills/still-draft"
     assert result["occupancy"] == "klein"
 
 
@@ -101,14 +101,14 @@ def test_create_app_and_validate(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     created = mcp.call_tool(
         "create_app",
         {
-            "stem": "klein/instagram-square",
+            "stem": "stills/instagram-square",
             "slug": "mcp-ig",
             "slots": {"prompt": "square mug still"},
         },
     )
     assert created["ok"] is True, created
     assert created["path"].endswith("mcp-ig.app.json")
-    valid = mcp.call_tool("validate_workflow", {"stem": "klein/still-draft"})
+    valid = mcp.call_tool("validate_workflow", {"stem": "stills/still-draft"})
     assert valid["ok"] is True
 
 
@@ -189,12 +189,12 @@ def test_apply_slots_and_validate_errors(
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     bad_slots = mcp.call_tool(
-        "apply_slots", {"stem": "klein/still-draft", "slots": [1]}
+        "apply_slots", {"stem": "stills/still-draft", "slots": [1]}
     )
     assert bad_slots["ok"] is False
     ok_slots = mcp.call_tool(
         "apply_slots",
-        {"stem": "klein/still-draft", "slots": {"prompt": "mcp slot"}},
+        {"stem": "stills/still-draft", "slots": {"prompt": "mcp slot"}},
     )
     assert ok_slots["ok"] is True
     err = mcp.call_tool("apply_slots", {"stem": "no-such", "slots": {}})
@@ -219,7 +219,7 @@ def test_save_and_generate_errors(
     saved = mcp.call_tool(
         "save_workflow",
         {
-            "stem": "klein/still-draft",
+            "stem": "stills/still-draft",
             "slug": "save-mug",
             "as_app": False,
             "slots": {"prompt": "saved"},
@@ -228,7 +228,7 @@ def test_save_and_generate_errors(
     assert saved["ok"] is True
     assert saved["as_app"] is False
     forced = mcp._save_from_args(
-        {"stem": "klein/still-draft", "slug": "force-graph"},
+        {"stem": "stills/still-draft", "slug": "force-graph"},
         force_app=False,
     )
     assert forced["ok"] is True
@@ -278,7 +278,7 @@ def test_main_call_with_json_and_stdio(monkeypatch: pytest.MonkeyPatch, capsys: 
     assert mcp.main(["--stdio"]) == 0
     assert mcp.main(["stdio"]) == 0
     assert (
-        mcp.main(["--call", "get_template", json.dumps({"stem": "klein/still-draft"})])
+        mcp.main(["--call", "get_template", json.dumps({"stem": "stills/still-draft"})])
         == 0
     )
     payload = json.loads(capsys.readouterr().out.strip().splitlines()[-1])

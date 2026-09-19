@@ -18,7 +18,7 @@ tags: [comfyui, klein, wan, ltx, visual]
 - Running still + silent motion + AV tools in **one** Docker Compose stack
 - Iterating in minutes on ~5 s clips instead of a 90 s denoise
 
-**Who this is for:** studio users after `klein/still-draft` has queued once.
+**Who this is for:** studio users after `stills/still-draft` has queued once.
 
 !!! tip "First run?"
 
@@ -66,7 +66,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **klein/still-draft** → enter App Mode → Queue Spark Still → open **klein/still-hero** (same seed) → set **wan/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **ltx/still-to-video-5s** for native audio. Showcase: **ltx/dialogue-5s** (quoted speech), **ltx/multishot-5s** (named cuts), **ltx/product-hero** (packshot), **ltx/first-last-5s** (two stills), **ltx/audio-to-video-5s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **klein/creator/youtube-shorts-thumb** → **wan/creator/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **stills/still-draft** → enter App Mode → Queue Spark Still → open **stills/still-hero** (same seed) → set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **motion/av/still-to-video-5s** for native audio. Showcase: **motion/av/dialogue-5s** (quoted speech), **motion/av/multishot-5s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-5s** (two stills), **motion/av/audio-to-video-5s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** → **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -86,11 +86,11 @@ Which filename: [Workflow catalog](studio-workflows.md).
 
 Do **not** edit raw JSON. Change widgets on the canvas.
 
-1. Load **klein/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
+1. Load **stills/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
-3. Load **wan/still-to-video-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **ltx/still-to-video-5s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
-5. Short six-shot demo: Queue **wan/still-to-shot** six times (`ez_shot_01` … `06`) then:
+3. Load **motion/silent/still-to-video-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
+4. Optional audio: **motion/av/still-to-video-5s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
+5. Short six-shot demo: Queue **motion/silent/still-to-shot** six times (`ez_shot_01` … `06`) then:
 
     ```bash
     ./scripts/utilities/concat-shots.sh --yes
@@ -98,7 +98,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
     ```
 
 6. **90s films** (go-see first-person parkour / still-here / switchyard): load one **film-*-90s** graph → Queue **once** → the MP4 is already at `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (faststart). A **90s film ready** overlay plays and downloads it; `ez_<slug>_90s.html` is a local player. See [90s shorts](shorts.md).
-7. Daily still / GIF / IG pack: **klein/image-studio** (100 creator modes + Format / platform + optional reference) or **klein/still-studio** (Format / platform + Style + Rewrite prompt) or **klein/still-daily** → optional **wan/gif-loop** (LoadImage = the still prefix you just saved, leave ping-pong on) or **klein/dream-house** for a 10-photo virtual tour of one place (type any place; each still a different room or view — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same walkthrough with 3D persistence: **klein/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **klein/character-draft** → **klein/character-tweak** (`ez_character_*.png`). Lettering swap: **klein/text-swap** (output matches the source still).
+7. Daily still / GIF / IG pack: **stills/image-studio** (100 creator modes + Format / platform + optional reference) or **stills/still-studio** (Format / platform + Style + Rewrite prompt) or **stills/still-daily** → optional **motion/loops/gif-loop** (LoadImage = the still prefix you just saved, leave ping-pong on) or **stills/dream-house** for a 10-photo virtual tour of one place (type any place; each still a different room or view — tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study). Same walkthrough with 3D persistence: **stills/dream-house-clay** (`start` seeds clay plates; optional `house-views` dump) ([Dream-house tours](learn/dream-house.md)). Character loop: **stills/character-draft** → **stills/character-tweak** (`ez_character_*.png`). Lettering swap: **stills/text-swap** (output matches the source still).
 8. Creator toolkit: vertical Shorts still→I2V, thumbnail, packshot, before/after, style lock, bumper, B-roll, storyboard 6-up — [catalog](studio-workflows.md).
 
 Do not Queue a 90s denoise. Default graphs iterate in minutes; one-click films are 18 × 5s prints.

@@ -41,7 +41,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 2. Optional **Context**: paste a research brief or bible. Empty is fine.
 3. Set family mode (t2i / i2v / t2v / s2v / iclora / vc), style, and aspect / duration hint on each enhance node.
 4. Queue. Each Enhance node previews the rewritten STRING. Klein, Wan, LTX, Z-Image, LongCat, and DreamX read the same Prompt and Context.
-5. Copy the family you need into **klein/still-draft** (Spark Still) or an opt-in graph.
+5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
 Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
@@ -137,7 +137,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 2. Optional **Context**: paste a research brief or bible. Empty is fine.
 3. Set family mode (t2i / i2v / t2v / s2v / iclora / vc), style, and aspect / duration hint on each enhance node.
 4. Queue. Each Enhance node previews the rewritten STRING. Klein, Wan, LTX, Z-Image, LongCat, and DreamX read the same Prompt and Context.
-5. Copy the family you need into **klein/still-draft** (Spark Still) or an opt-in graph.
+5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
 Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
@@ -242,7 +242,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on klein/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
 **This graph:** `custom`
 

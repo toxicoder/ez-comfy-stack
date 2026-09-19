@@ -48,24 +48,24 @@ def test_pack_exports_node() -> None:
 
 
 def test_pick_template_heuristic() -> None:
-    assert pick_template("1:1 IG still of a mug", "auto") == "klein/instagram-square"
-    assert pick_template("pinterest pin of a mug", "auto") == "klein/creator/pinterest-pin"
-    assert pick_template("spotify canvas loop", "auto") == "wan/creator/spotify-canvas"
-    assert pick_template("silent 5s from a still", "auto") == "wan/still-to-video-5s"
-    assert pick_template("hello world", "auto") == "klein/still-draft"
-    assert pick_template("still studio desk for IG", "auto") == "klein/still-studio"
-    assert pick_template("image studio 4:5", "auto") == "klein/image-studio"
-    assert pick_template("background swap a still", "auto") == "klein/image-studio"
-    assert pick_template("text swap a neon sign", "auto") == "klein/text-swap"
-    assert pick_template("relabel the mug lettering", "auto") == "klein/text-swap"
-    assert pick_template("anything", "klein/still-hero") == "klein/still-hero"
+    assert pick_template("1:1 IG still of a mug", "auto") == "stills/instagram-square"
+    assert pick_template("pinterest pin of a mug", "auto") == "creator/stills/pinterest-pin"
+    assert pick_template("spotify canvas loop", "auto") == "creator/silent/spotify-canvas"
+    assert pick_template("silent 5s from a still", "auto") == "motion/silent/still-to-video-5s"
+    assert pick_template("hello world", "auto") == "stills/still-draft"
+    assert pick_template("still studio desk for IG", "auto") == "stills/still-studio"
+    assert pick_template("image studio 4:5", "auto") == "stills/image-studio"
+    assert pick_template("background swap a still", "auto") == "stills/image-studio"
+    assert pick_template("text swap a neon sign", "auto") == "stills/text-swap"
+    assert pick_template("relabel the mug lettering", "auto") == "stills/text-swap"
+    assert pick_template("anything", "stills/still-hero") == "stills/still-hero"
     with pytest.raises(ForgeError, match="unknown"):
         pick_template("x", "no-such-graph")
 
 
 def test_clone_apply_slots_and_prefix() -> None:
-    origin, graph = clone_template("klein/still-draft")
-    assert origin == "klein/still-draft"
+    origin, graph = clone_template("stills/still-draft")
+    assert origin == "stills/still-draft"
     apply_slots(
         graph,
         {"prompt": "a chipped cobalt mug on stone", "filename_prefix": "ez_mug"},
@@ -77,7 +77,7 @@ def test_clone_apply_slots_and_prefix() -> None:
 
 
 def test_validate_bans_minimax_and_colon_ids() -> None:
-    _origin, graph = clone_template("klein/still-draft")
+    _origin, graph = clone_template("stills/still-draft")
     apply_slots(graph, {"prompt": "MiniMax H3 rooftop"})
     errors = validate_workflow(graph)
     assert any("banned" in err for err in errors)
@@ -94,7 +94,7 @@ def test_generate_app_writes_user_app_json(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     result = generate_app(
         "a chipped cobalt mug on pale stone",
-        template="klein/still-draft",
+        template="stills/still-draft",
         slug="mug-still",
         as_app=True,
         use_llm=False,
@@ -108,7 +108,7 @@ def test_generate_app_writes_user_app_json(
     data = json.loads(dest.read_text(encoding="utf-8"))
     assert data["id"] == "mug-still"
     extra = data["extra"]
-    assert extra["lab_origin"] == "klein/still-draft"
+    assert extra["lab_origin"] == "stills/still-draft"
     assert extra["lab_rel"] == "_user/mug-still"
     assert extra["lab_generated"] is True
     assert extra["workflowRendererVersion"] == "Vue-corrected"
@@ -117,7 +117,7 @@ def test_generate_app_writes_user_app_json(
     assert "a chipped cobalt mug" in _prompt_of(data)
     again = generate_app(
         "again",
-        template="klein/still-draft",
+        template="stills/still-draft",
         slug="mug-still",
         as_app=True,
         use_llm=False,
@@ -132,7 +132,7 @@ def test_overwrite_and_graph_suffix(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     first = generate_app(
         "gif loop of palms",
-        template="wan/gif-loop",
+        template="motion/loops/gif-loop",
         slug="palm-loop",
         as_app=False,
         use_llm=False,
@@ -141,7 +141,7 @@ def test_overwrite_and_graph_suffix(
     assert Path(first.path).name == "palm-loop.json"
     second = generate_app(
         "gif loop of palms at night",
-        template="wan/gif-loop",
+        template="motion/loops/gif-loop",
         slug="palm-loop",
         as_app=False,
         overwrite=True,
@@ -153,8 +153,8 @@ def test_overwrite_and_graph_suffix(
 
 def test_refuse_lab_dest(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
-    _origin, graph = clone_template("klein/still-draft")
-    restamp_identity(graph, origin="klein/still-draft", slug="x")
+    _origin, graph = clone_template("stills/still-draft")
+    restamp_identity(graph, origin="stills/still-draft", slug="x")
     lab_dest = ROOT / "workflows" / "_lab" / "inspire" / "should-not-write.json"
     errors = validate_workflow(graph, dest=lab_dest, slug="x")
     assert any("_lab" in err for err in errors)
@@ -175,7 +175,7 @@ def test_node_run_writes(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     packed = EZAppForge().run(
         prompt="1:1 IG still of a mug",
-        template="klein/instagram-square",
+        template="stills/instagram-square",
         slug="node-mug",
         as_app=True,
         overwrite=False,
@@ -184,14 +184,14 @@ def test_node_run_writes(
     )
     path = packed["result"][0]
     assert Path(path).is_file()
-    assert packed["ui"]["template"][0] == "klein/instagram-square"
+    assert packed["ui"]["template"][0] == "stills/instagram-square"
 
 
 def test_save_workflow_helper(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
-    origin, graph = clone_template("klein/still-draft")
+    origin, graph = clone_template("stills/still-draft")
     restamp_identity(graph, origin=origin, slug="helper-mug")
     dest = save_workflow(graph, slug="helper-mug", as_app=True)
     assert dest.name == "helper-mug.app.json"
@@ -205,8 +205,8 @@ def test_helpers_stems_slugs_and_prompts() -> None:
     assert forge._as_bool("yes") is True
     assert forge._as_bool("no") is False
     assert forge._as_bool(None) is False
-    assert forge.normalize_stem("_lab/klein/still-draft.app.json") == "klein/still-draft"
-    assert forge.normalize_stem("./klein/still-draft.json") == "klein/still-draft"
+    assert forge.normalize_stem("_lab/stills/still-draft.app.json") == "stills/still-draft"
+    assert forge.normalize_stem("./stills/still-draft.json") == "stills/still-draft"
     assert forge.slugify("!!!") == "app"
     with pytest.raises(ForgeError, match="missing slug"):
         validate_slug("")
@@ -216,7 +216,7 @@ def test_helpers_stems_slugs_and_prompts() -> None:
     assert forge.load_lab_graph("still-draft") is not None
     assert forge._brief_has("", "") is False
     assert forge._brief_has("instagram-square still", "instagram-square") is True
-    assert pick_template("x", "custom") == "klein/still-draft"
+    assert pick_template("x", "custom") == "stills/still-draft"
 
 
 def test_linear_occupancy_and_view_edges() -> None:
@@ -291,9 +291,9 @@ def test_describe_template_block_and_odd_extra() -> None:
     block = forge.describe_template("klein-t2i-backbone")
     assert block["ok"] is True
     assert block["kind"] == "block"
-    origin, graph = clone_template("klein/still-draft")
+    origin, graph = clone_template("stills/still-draft")
     graph["extra"] = [1]
-    described = forge.describe_template("klein/still-draft")
+    described = forge.describe_template("stills/still-draft")
     assert described["ok"] is True
     restamp_identity(graph, origin=origin, slug="list-extra")
     assert "_user/list-extra" in json.dumps(graph)
@@ -304,7 +304,7 @@ def test_describe_template_block_and_odd_extra() -> None:
 
 
 def test_apply_slots_coercion_and_edges() -> None:
-    _origin, graph = clone_template("klein/still-draft")
+    _origin, graph = clone_template("stills/still-draft")
     apply_slots(graph, None)
     apply_slots(graph, {"Prompt": "via label", "seed": "99", "enhance": "off"})
     assert _prompt_of(graph) == "via label"
@@ -361,7 +361,7 @@ def test_validate_and_save_edges(
         dest=outside,
     )
     assert any("outside" in err or "_lab" in err for err in errors)
-    origin, graph = clone_template("klein/still-draft")
+    origin, graph = clone_template("stills/still-draft")
     restamp_identity(graph, origin=origin, slug="sib")
     first = save_workflow(graph, slug="sib", as_app=True)
     assert first.is_file()
@@ -381,7 +381,7 @@ def test_parse_plan_and_llm_generate(
     assert forge.parse_plan("{not-json") is None
     assert forge.parse_plan("[1]") is None
     assert forge.parse_plan('{"template": }') is None
-    plan = forge.parse_plan('prefix {"template":"klein/instagram-square","slug":"p","reason":"r"}')
+    plan = forge.parse_plan('prefix {"template":"stills/instagram-square","slug":"p","reason":"r"}')
     assert plan is not None
     monkeypatch.setattr(
         forge,
@@ -389,7 +389,7 @@ def test_parse_plan_and_llm_generate(
         lambda _s, _u: (
             json.dumps(
                 {
-                    "template": "klein/instagram-square",
+                    "template": "stills/instagram-square",
                     "slug": "plan-mug",
                     "as_app": True,
                     "slots": {"prompt": "planned mug"},
@@ -401,7 +401,7 @@ def test_parse_plan_and_llm_generate(
     )
     result = generate_app("make a still", template="auto", use_llm=True)
     assert result.ok, result.error
-    assert result.template == "klein/instagram-square"
+    assert result.template == "stills/instagram-square"
     assert result.slug == "plan-mug"
     monkeypatch.setattr(forge, "_complete", lambda _s, _u: ("", "llama.cpp unavailable"))
     fallback = generate_app(
@@ -411,10 +411,10 @@ def test_parse_plan_and_llm_generate(
         use_llm=True,
     )
     assert fallback.ok, fallback.error
-    assert fallback.template == "klein/thumbnail"
+    assert fallback.template == "stills/thumbnail"
     none_app = generate_app(
         "a still of a mug",
-        template="klein/still-draft",
+        template="stills/still-draft",
         slug="none-app",
         as_app=None,
         use_llm=False,
@@ -461,7 +461,7 @@ def test_node_input_types_and_bools(
     types = EZAppForge.INPUT_TYPES()
     assert "template" in types["required"]
     assert types["required"]["template"][1]["default"] == "auto"
-    monkeypatch.setattr(forge_nodes, "template_combo_labels", lambda: ["klein/still-draft"])
+    monkeypatch.setattr(forge_nodes, "template_combo_labels", lambda: ["stills/still-draft"])
     types2 = EZAppForge.INPUT_TYPES()
     assert types2["required"]["template"][0][0] == "auto"
     assert forge_nodes._as_bool(True) is True
@@ -504,7 +504,7 @@ def test_generate_app_with_slots(
     monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
     result = generate_app(
         "ignored brief",
-        template="klein/still-draft",
+        template="stills/still-draft",
         slug="slot-mug",
         slots={"prompt": "slot prompt", "filename_prefix": "ez_slot"},
         use_llm=False,
@@ -535,7 +535,7 @@ def test_remaining_branches(
     llm_only = forge.list_templates(occupancy="llm")
     assert llm_only
     assert all(row["kind"] == "lab" for row in llm_only)
-    _origin, graph = clone_template("klein/still-draft")
+    _origin, graph = clone_template("stills/still-draft")
     apply_slots(graph, {"seed": []})
     graph["extra"] = [1]
     apply_slots(graph, {"filename_prefix": "ez_list_extra"})
@@ -543,16 +543,16 @@ def test_remaining_branches(
     graph["extra"] = {"linearData": {"inputs": ["skip", [99999, "prompt"]]}}
     with pytest.raises(ForgeError):
         apply_slots(graph, {"prompt": "missing-node"})
-    banned = clone_template("klein/still-draft")[1]
+    banned = clone_template("stills/still-draft")[1]
     apply_slots(banned, {"prompt": "MiniMax H3"})
-    restamp_identity(banned, origin="klein/still-draft", slug="ban")
+    restamp_identity(banned, origin="stills/still-draft", slug="ban")
     with pytest.raises(ForgeError, match="banned"):
         save_workflow(banned, slug="ban")
     monkeypatch.setattr(
         forge,
         "_complete",
         lambda _s, _u: (
-            json.dumps({"template": "klein/still-draft", "slug": "empty-reason"}),
+            json.dumps({"template": "stills/still-draft", "slug": "empty-reason"}),
             "",
         ),
     )

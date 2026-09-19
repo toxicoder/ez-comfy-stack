@@ -42,7 +42,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 3. Pick at most one technique per axis (shot size, angle, move, lens, …).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
-6. Copy the family you need into **klein/still-draft** or an I2V graph.
+6. Copy the family you need into **stills/still-draft** or an I2V graph.
 
 Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.
 Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
@@ -122,7 +122,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 3. Pick at most one technique per axis (shot size, angle, move, lens, …).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
-6. Copy the family you need into **klein/still-draft** or an I2V graph.
+6. Copy the family you need into **stills/still-draft** or an I2V graph.
 
 Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.
 Cinema Rack is deterministic (no LLM). Enhance is optional downstream.
@@ -334,7 +334,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on klein/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
 **This graph:** `custom`
 

@@ -311,7 +311,7 @@ def test_audio_and_trellis_and_inspire() -> None:
 
 
 def test_apply_klein_draft_does_not_change_latent_size() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     latent = next(n for n in graph["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     before = list(latent["widgets_values"])
     apply_to_graph(graph, QUALITY_DRAFT, available_unets=(KLEIN_DISTILLED,))
@@ -322,7 +322,7 @@ def test_apply_klein_draft_does_not_change_latent_size() -> None:
 
 
 def test_apply_klein_high_fallback_keeps_distilled() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     apply_to_graph(graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED,))
     assert _unet(graph)["widgets_values"][UNET_NAME_INDEX] == KLEIN_DISTILLED
     sampler = _sampler(graph)
@@ -331,7 +331,7 @@ def test_apply_klein_high_fallback_keeps_distilled() -> None:
 
 
 def test_apply_klein_high_swaps_when_base_listed() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     apply_to_graph(
         graph, QUALITY_HIGH, available_unets=(KLEIN_DISTILLED, KLEIN_BASE)
     )
@@ -344,7 +344,7 @@ def test_apply_klein_high_swaps_when_base_listed() -> None:
 
 
 def test_apply_wan_does_not_change_frames_or_unet() -> None:
-    graph = copy.deepcopy(_load("wan/still-to-video-5s.json"))
+    graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
     unet_before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
     latent = next(
         n for n in graph["nodes"] if n.get("type") == "Wan22ImageToVideoLatent"
@@ -359,7 +359,7 @@ def test_apply_wan_does_not_change_frames_or_unet() -> None:
 
 
 def test_apply_ltx_does_not_change_length() -> None:
-    graph = copy.deepcopy(_load("ltx/still-to-video-5s.json"))
+    graph = copy.deepcopy(_load("motion/av/still-to-video-5s.json"))
     video = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     before = list(video["widgets_values"])
     apply_to_graph(graph, QUALITY_HIGH)
@@ -369,7 +369,7 @@ def test_apply_ltx_does_not_change_length() -> None:
 
 
 def test_apply_a14b_is_noop() -> None:
-    graph = copy.deepcopy(_load("optional/wan/still-to-video-a14b.json"))
+    graph = copy.deepcopy(_load("optional/still-to-video-a14b.json"))
     sampler_before = list(_sampler(graph)["widgets_values"])
     unets_before = [
         n["widgets_values"][0]
@@ -391,7 +391,7 @@ def test_apply_a14b_is_noop() -> None:
 
 
 def test_ensure_quality_node_is_idempotent() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     ensure_quality_node(graph)
     first = find_quality_node(graph)
     assert first is not None
@@ -410,7 +410,7 @@ def test_ensure_quality_node_is_idempotent() -> None:
 
 
 def test_ensure_quality_places_without_overlap() -> None:
-    graph = copy.deepcopy(_load("shorts/go-see.json"))
+    graph = copy.deepcopy(_load("films/go-see.json"))
     ensure_quality_node(graph)
     quality = find_quality_node(graph)
     assert quality is not None
@@ -575,7 +575,7 @@ def test_apply_with_no_unet_loader() -> None:
 
 
 def test_apply_refuses_banned_unet_overlay(monkeypatch: pytest.MonkeyPatch) -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     before = _unet(graph)["widgets_values"][UNET_NAME_INDEX]
 
     def _banned(**_kwargs: object) -> QualityOverlay:
@@ -613,7 +613,7 @@ def test_custom_and_lab_are_noop() -> None:
         available_unets=(KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B),
     )
     assert overlay == QualityOverlay()
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     before = _values(_sampler(graph))[KSAMPLER_STEPS_INDEX]
     apply_to_graph(
         graph,

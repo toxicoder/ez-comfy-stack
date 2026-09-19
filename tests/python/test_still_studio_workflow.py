@@ -1,4 +1,4 @@
-"""klein/still-studio graph: format picker wired into latent, hint, prefix."""
+"""stills/still-studio graph: format picker wired into latent, hint, prefix."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ from _stamp_app_mode import STAMP_SPECS, infer_suite_inputs  # noqa: E402
 
 
 def _load() -> dict[str, Any]:
-    return load_lab_graph(lab_json("klein/still-studio.json"))
+    return load_lab_graph(lab_json("stills/still-studio.json"))
 
 
 def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -38,15 +38,15 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 def test_still_studio_identity_and_app_mode() -> None:
     graph = _load()
     extra = graph["extra"]
-    assert extra.get("lab_rel") == "klein/still-studio"
+    assert extra.get("lab_rel") == "stills/still-studio"
     assert graph.get("id") == "still-studio"
     mode = extra["lab_app_mode"]
     assert mode["lane"] == "produce"
     assert mode["occupancy"] == "klein"
     assert mode["default_view"] == "app"
-    assert "wan/still-to-video-5s" in mode["handoff"]
-    assert "ltx/still-to-video-5s" in mode["handoff"]
-    assert "klein/text-swap" in mode["handoff"]
+    assert "motion/silent/still-to-video-5s" in mode["handoff"]
+    assert "motion/av/still-to-video-5s" in mode["handoff"]
+    assert "stills/text-swap" in mode["handoff"]
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_still_studio"
 
@@ -87,7 +87,7 @@ def test_still_studio_enhance_and_app_widgets() -> None:
     assert values[0] == "custom"
     assert values[2] is True
     assert values[3] == "t2i"
-    assert values[6] == "klein/still-studio"
+    assert values[6] == "stills/still-studio"
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
     assert names[:7] == [
         "quality",
@@ -111,7 +111,7 @@ def test_still_studio_enhance_and_app_widgets() -> None:
     ]
     assert width_nodes == [fmt["id"]]
     assert latent["id"] not in width_nodes
-    spec = STAMP_SPECS["klein/still-studio"]
+    spec = STAMP_SPECS["stills/still-studio"]
     labels: list[str] = []
     for entry in infer_suite_inputs(graph, spec):
         config = entry[2] if len(entry) > 2 else {}
@@ -132,7 +132,7 @@ def test_still_studio_optional_ref_does_not_require_image() -> None:
 
 
 def test_still_studio_json_roundtrip() -> None:
-    path = lab_json("klein/still-studio.json")
+    path = lab_json("stills/still-studio.json")
     raw = json.loads(path.read_text(encoding="utf-8"))
     assert raw["extra"]["workflowRendererVersion"] == "Vue-corrected"
-    assert raw["extra"]["lab_rel"] == "klein/still-studio"
+    assert raw["extra"]["lab_rel"] == "stills/still-studio"

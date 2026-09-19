@@ -79,7 +79,7 @@ Wan and LTX pin their own steps on the canvas. Change them on purpose; do not co
 | **T2I** | Text → still | No | — | Klein 4B |
 | **I2V** | Still → clip | **Yes — owns look** | Wan silent / LTX world audio | Wan 5B or LTX-2.5 |
 | **T2V** | Text → clip | No | Wan silent / LTX AV | Wan 5B or LTX-2.5 |
-| **A2V** | Soundtrack → picture | Often a freeze still | Input audio | **ltx/audio-to-video-5s** (talking-head is I2V smoke) |
+| **A2V** | Soundtrack → picture | Often a freeze still | Input audio | **motion/av/audio-to-video-5s** (talking-head is I2V smoke) |
 | **S2V** | Speech → picture | Optional | Speech | Opt-in Wan 14B |
 
 I2V prompt = **motion + one camera move**. Do not re-describe the coat and the city; the PNG already did.

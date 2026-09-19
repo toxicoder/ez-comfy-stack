@@ -50,24 +50,24 @@ PIN_OFF_BLURB = (
 )
 PIN_ENHANCE_OFF = frozenset(
     {
-        "shorts/go-see",
-        "shorts/still-here",
-        "shorts/switchyard",
-        "klein/talking-head",
-        "ltx/dialogue-5s",
-        "ltx/multishot-5s",
-        "ltx/product-hero",
-        "ltx/first-last-5s",
-        "ltx/audio-to-video-5s",
-        "wan/gif-loop",
-        "wan/bumper-loop",
-        "wan/sticker-loop",
-        "wan/orbit-still-5s",
-        "wan/push-in-still-5s",
-        "wan/parallax-still-5s",
-        "dcc/ltx/depth-control-5s",
-        "dcc/ltx/canny-control-5s",
-        "dcc/ltx/depth-control-shorts",
+        "films/go-see",
+        "films/still-here",
+        "films/switchyard",
+        "stills/talking-head",
+        "motion/av/dialogue-5s",
+        "motion/av/multishot-5s",
+        "motion/av/product-hero",
+        "motion/av/first-last-5s",
+        "motion/av/audio-to-video-5s",
+        "motion/loops/gif-loop",
+        "motion/loops/bumper-loop",
+        "motion/loops/sticker-loop",
+        "motion/silent/orbit-still-5s",
+        "motion/silent/push-in-still-5s",
+        "motion/silent/parallax-still-5s",
+        "dcc/depth-control-5s",
+        "dcc/canny-control-5s",
+        "dcc/depth-control-shorts",
         "audio/podcast/two-host-episode",
         "audio/podcast/radio-drama",
         "audio/music/rap-draft",
@@ -81,7 +81,7 @@ def enhance_pin_off(graph_id: str) -> bool:
     gid = str(graph_id or "")
     if gid in PIN_ENHANCE_OFF:
         return True
-    if gid.startswith("shorts/") and "/act-0" in gid:
+    if gid.startswith("films/") and "/act-0" in gid:
         return True
     if gid.startswith("music-rap-nill-bye-") or gid.startswith(
         "music-edm-drive-through-"
@@ -1294,29 +1294,29 @@ def enable_lab_graph(graph: dict[str, Any]) -> None:
 
 
 def main() -> None:
-    klein(lab_json("klein/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    klein(lab_json("klein/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
-    wan_i2v(lab_json("wan/still-to-video-5s.json"), WAN_I2V)
-    wan_t2v(lab_json("wan/text-to-video-5s.json"))
-    wan_i2v(lab_json("wan/still-to-shot.json"), GOSEE_WAN_I2V_01)
-    wan_i2v(lab_json("wan/first-last-5s.json"), WAN_I2V)
-    wan_i2v(lab_json("wan/vace-join.json"), WAN_VACE)
-    wan_i2v(lab_json("optional/wan/still-to-video-a14b.json"), WAN_I2V)
+    klein(lab_json("stills/still-draft.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    klein(lab_json("stills/still-hero.json"), KLEIN_STILL, neg=KLEIN_NEG_STILL)
+    wan_i2v(lab_json("motion/silent/still-to-video-5s.json"), WAN_I2V)
+    wan_t2v(lab_json("motion/silent/text-to-video-5s.json"))
+    wan_i2v(lab_json("motion/silent/still-to-shot.json"), GOSEE_WAN_I2V_01)
+    wan_i2v(lab_json("motion/silent/first-last-5s.json"), WAN_I2V)
+    wan_i2v(lab_json("motion/silent/vace-join.json"), WAN_VACE)
+    wan_i2v(lab_json("optional/still-to-video-a14b.json"), WAN_I2V)
     ltx_i2v(
-        lab_json("ltx/still-to-video-5s.json"),
+        lab_json("motion/av/still-to-video-5s.json"),
         LTX_I2V,
         LTX_AUDIO_HINT,
         "Motion / prompt",
     )
-    ltx_t2v(lab_json("ltx/text-to-video-5s.json"))
+    ltx_t2v(lab_json("motion/av/text-to-video-5s.json"))
     ltx_i2v(
-        lab_json("ltx/still-to-shot.json"),
+        lab_json("motion/av/still-to-shot.json"),
         GOSEE_LTX_I2V_01,
         LTX_AUDIO_HINT,
         "Motion + audio",
     )
     ltx_i2v(
-        lab_json("klein/talking-head.json"),
+        lab_json("stills/talking-head.json"),
         LTX_TALKING_HEAD,
         LTX_TALKING_AUDIO,
         "Motion / prompt",

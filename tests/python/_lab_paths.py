@@ -3,8 +3,8 @@
 Not collected by pytest (leading underscore). Builders and tests import
 ``lab_json`` instead of hardcoding a folder.
 
-Ids are ``_lab``-relative paths without ``.json`` (``klein/still-draft``,
-``wan/still-to-video-5s``). Basenames may collide across lanes; pass the relative
+Ids are ``_lab``-relative paths without ``.json`` (``stills/still-draft``,
+``motion/silent/still-to-video-5s``). Basenames may collide across lanes; pass the relative
 id when they do.
 """
 
@@ -20,10 +20,10 @@ LAB_ROOT = WF / "_lab"
 SHORTS_YAML = WF / "shorts"
 _LAB_GRAPH_CACHE: dict[Path, dict[str, Any]] | None = None
 ALLOWED_LANES = (
-    "klein",
-    "wan",
-    "ltx",
-    "shorts",
+    "stills",
+    "motion",
+    "creator",
+    "films",
     "dcc",
     "optional",
     "audio",
@@ -132,12 +132,15 @@ def lab_json(stem: str, *, root: Path | None = None) -> Path:
     """Return the unique ``_lab/**/<stem>.json`` path.
 
     ``stem`` may be a basename (``still-draft``), a file name, an old
-    leftover relative path, or a lab-relative id (``wan/still-to-video-5s``).
+    leftover relative path, or a lab-relative id (``motion/silent/still-to-video-5s``).
     """
+    from _lab_ids import rel_id
+
     text = str(stem).replace("\\", "/").lstrip("./")
     text = text.removeprefix("_lab/")
     if text.endswith(".json"):
         text = text[: -len(".json")]
+    text = rel_id(text)
     base = _lab_base(root)
     if "/" in text:
         path = base / f"{text}.json"
@@ -179,13 +182,16 @@ def _subdir_parts(subdir: str) -> tuple[str, ...]:
 def lab_dest(stem: str, *, lane: str | None = None, subdir: str | None = None) -> Path:
     """Path to write a lab graph. Creates the lane directory.
 
-    ``stem`` may be a lab-relative id (``klein/still-draft``) or a
+    ``stem`` may be a lab-relative id (``stills/still-draft``) or a
     basename. ``subdir`` is an optional relative path under the lane.
     """
+    from _lab_ids import rel_id
+
     text = str(stem).replace("\\", "/").lstrip("./")
     text = text.removeprefix("_lab/")
     if text.endswith(".json"):
         text = text[: -len(".json")]
+    text = rel_id(text)
     if "/" in text and (subdir is None or str(subdir).strip() == ""):
         dest = LAB_ROOT / f"{text}.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -228,7 +234,9 @@ def stamp_nodes2(graph: dict[str, Any]) -> dict[str, Any]:
 
 def apply_lab_identity(graph: dict[str, Any], rel: str) -> dict[str, Any]:
     """Set ``id`` to the file stem and ``extra.lab_rel`` to the relative id."""
-    clean = str(rel).removesuffix(".json")
+    from _lab_ids import rel_id
+
+    clean = rel_id(str(rel).removesuffix(".json"))
     graph["id"] = Path(clean).name
     extra = graph.setdefault("extra", {})
     extra["lab_rel"] = clean
@@ -256,24 +264,15 @@ def write_lab_graph(path: Path, graph: dict[str, Any]) -> Path:
 
 def lane_for_stem(stem: str) -> str:
     """Sidebar lane for a lab filename or relative path."""
+    from _lab_ids import rel_id
+
     rel = str(stem).replace("\\", "/").lstrip("./")
     rel = rel.removeprefix("_lab/")
-    name = Path(rel).name
-    first = rel.split("/", 1)[0]
+    mapped = rel_id(rel)
+    name = Path(mapped).name
+    first = mapped.split("/", 1)[0]
     if first in ALLOWED_LANES:
         return first
-    if rel.startswith("shorts/") or name.startswith("film-"):
-        return "shorts"
-    if rel.startswith("dcc/"):
-        return "dcc"
-    if rel.startswith("optional/"):
-        return "optional"
-    if name.startswith("klein-"):
-        return "klein"
-    if name.startswith("wan-"):
-        return "wan"
-    if name.startswith("ltx-"):
-        return "ltx"
     if (
         name.startswith("podcast-")
         or name.startswith("music-")
@@ -289,6 +288,9 @@ def lane_for_stem(stem: str) -> str:
         name.startswith("prompt-forge")
         or name.startswith("beat-sheet")
         or name.startswith("research-chat")
+        or name.startswith("cinema-rack")
+        or name.startswith("audio-rack")
+        or name.startswith("app-forge")
     ):
         return "inspire"
     raise ValueError(f"cannot map {stem!r} to a lab lane")

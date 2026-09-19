@@ -498,7 +498,7 @@ PY
 # Globals:
 #   None
 # Arguments:
-#   $1  relative path (e.g. _lab/klein/foo.json or klein-foo.json)
+#   $1  relative path (e.g. _lab/stills/foo.json or stills-foo.json)
 # Outputs:
 #   Lane name on stdout
 # Returns:
@@ -518,12 +518,16 @@ lab_workflow_lane() {
       printf '%s\n' "${rest}"
       return 0
       ;;
-    shorts/*) printf '%s\n' shorts ;;
+    stills/*) printf '%s\n' stills ;;
+    motion/*) printf '%s\n' motion ;;
+    creator/*) printf '%s\n' creator ;;
+    films/*) printf '%s\n' films ;;
+    shorts/*) printf '%s\n' films ;;
     dcc/*) printf '%s\n' dcc ;;
     optional/*) printf '%s\n' optional ;;
-    klein/* | klein-*) printf '%s\n' klein ;;
-    wan/* | wan-*) printf '%s\n' wan ;;
-    ltx/* | ltx-*) printf '%s\n' ltx ;;
+    klein/* | klein-*) printf '%s\n' stills ;;
+    wan/* | wan-*) printf '%s\n' motion ;;
+    ltx/* | ltx-*) printf '%s\n' motion ;;
     audio/* | podcast-* | music-* | dub-*) printf '%s\n' audio ;;
     inspire/* | prompt-forge-* | beat-sheet-* | research-chat-*) printf '%s\n' inspire ;;
     *) return 1 ;;
@@ -655,7 +659,7 @@ apply_lab_app_json_names() {
 log_lab_seed_counts() {
   local dest_lab="${1:?}"
   local lane n total=0
-  local -a lanes=(klein wan ltx shorts dcc optional audio inspire)
+  local -a lanes=(stills motion creator films dcc optional audio inspire)
   for lane in "${lanes[@]}"; do
     n=0
     if [[ -d ${dest_lab}/${lane} ]]; then

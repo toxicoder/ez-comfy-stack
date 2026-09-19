@@ -37,7 +37,7 @@ def _load(name: str) -> dict:
 
 
 def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
-    graph = _load("klein/still-draft.json")
+    graph = _load("stills/still-draft.json")
     profile = graph["extra"]["lab_profile"]
     note = graph["extra"]["lab_note"]
     stamped = stamp_app_mode(
@@ -55,7 +55,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
         lane="inspire",
         occupancy="klein",
         enhance_off_identity=False,
-        handoff=("klein/still-hero", "wan/still-to-video-5s"),
+        handoff=("stills/still-hero", "motion/silent/still-to-video-5s"),
     )
     extra = stamped["extra"]
     assert extra["lab_profile"] == profile
@@ -68,8 +68,8 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
     assert mode["occupancy"] == "klein"
     assert mode["enhance_off_identity"] is False
     assert mode["handoff"] == [
-        "klein/still-hero",
-        "wan/still-to-video-5s",
+        "stills/still-hero",
+        "motion/silent/still-to-video-5s",
     ]
     linear = extra["linearData"]
     by_id = {int(n["id"]): n for n in stamped["nodes"]}
@@ -87,7 +87,7 @@ def test_klein_still_draft_stamp_keeps_lab_profile_and_note() -> None:
 
 
 def test_wan_video_stamp_resolves_vhs_output() -> None:
-    graph = _load("wan/still-to-video-5s.json")
+    graph = _load("motion/silent/still-to-video-5s.json")
     stamped = stamp_app_mode(
         copy.deepcopy(graph),
         inputs=[
@@ -107,7 +107,7 @@ def test_wan_video_stamp_resolves_vhs_output() -> None:
 
 
 def test_missing_node_stamp_raises() -> None:
-    graph = _load("klein/still-draft.json")
+    graph = _load("stills/still-draft.json")
     with pytest.raises(ValueError, match="missing"):
         stamp_app_mode(
             graph,
@@ -119,7 +119,7 @@ def test_missing_node_stamp_raises() -> None:
 
 
 def test_banned_string_in_label_is_rejected() -> None:
-    graph = _load("klein/still-draft.json")
+    graph = _load("stills/still-draft.json")
     with pytest.raises(ValueError, match="banned"):
         stamp_app_mode(
             copy.deepcopy(graph),
@@ -152,7 +152,7 @@ def _widget_names(graph: dict) -> list[str]:
 
 
 def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
-    names = _widget_names(_load("klein/still-draft.json"))
+    names = _widget_names(_load("stills/still-draft.json"))
     assert names[:6] == ["quality", "sample", "prompt", "format", "style", "enhance"]
     assert "width" in names
     assert "height" in names
@@ -164,7 +164,7 @@ def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
 
 
 def test_image_studio_exposes_mode_look_size_and_unet() -> None:
-    names = _widget_names(_load("klein/image-studio.json"))
+    names = _widget_names(_load("stills/image-studio.json"))
     assert names[:6] == [
         "quality",
         "sample",
@@ -181,7 +181,7 @@ def test_image_studio_exposes_mode_look_size_and_unet() -> None:
 
 
 def test_still_studio_exposes_format_look_size_and_unet() -> None:
-    names = _widget_names(_load("klein/still-studio.json"))
+    names = _widget_names(_load("stills/still-studio.json"))
     assert names[:7] == [
         "quality",
         "sample",
@@ -201,7 +201,7 @@ def test_still_studio_exposes_format_look_size_and_unet() -> None:
 
 
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
-    names = _widget_names(_load("klein/still-daily.json"))
+    names = _widget_names(_load("stills/still-daily.json"))
     assert names[0] == "quality"
     assert names[1] == "sample"
     assert names[2] == "prompt"
@@ -215,7 +215,7 @@ def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
 
 
 def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("klein/dream-house.json"))
+    names = _widget_names(_load("stills/dream-house.json"))
     assert names.count("prompt") == 1
     assert names[0] == "quality"
     assert names[1] == "sample"
@@ -228,7 +228,7 @@ def test_dream_house_hides_join_shots_and_keeps_one_prompt() -> None:
 
 
 def test_dream_house_clay_hides_images_and_keeps_one_prompt() -> None:
-    names = _widget_names(_load("klein/dream-house-clay.json"))
+    names = _widget_names(_load("stills/dream-house-clay.json"))
     assert names.count("prompt") == 1
     assert names[0] == "quality"
     assert names[1] == "sample"
@@ -325,27 +325,27 @@ def _labels(graph: dict) -> list[str]:
 
 
 def test_unwired_or_bypassed_loadimage_is_not_an_app_input() -> None:
-    hero = _widget_names(_load("klein/still-hero.json"))
+    hero = _widget_names(_load("stills/still-hero.json"))
     assert "image" not in hero
-    thumb = _widget_names(_load("klein/thumbnail.json"))
+    thumb = _widget_names(_load("stills/thumbnail.json"))
     assert "image" not in thumb
-    t2v = _widget_names(_load("wan/text-to-video-5s.json"))
+    t2v = _widget_names(_load("motion/silent/text-to-video-5s.json"))
     assert "image" not in t2v
-    flf = _widget_names(_load("wan/first-last-5s.json"))
+    flf = _widget_names(_load("motion/silent/first-last-5s.json"))
     assert flf.count("image") == 1
-    vace = _widget_names(_load("wan/vace-join.json"))
+    vace = _widget_names(_load("motion/silent/vace-join.json"))
     assert vace.count("image") == 1
 
 
 def test_wired_edit_and_i2v_keep_image() -> None:
-    tweak = _widget_names(_load("klein/character-tweak.json"))
+    tweak = _widget_names(_load("stills/character-tweak.json"))
     assert "image" in tweak
-    swap = _widget_names(_load("klein/text-swap.json"))
+    swap = _widget_names(_load("stills/text-swap.json"))
     assert "image" in swap
     assert "style" not in swap
-    i2v = _widget_names(_load("wan/still-to-video-5s.json"))
+    i2v = _widget_names(_load("motion/silent/still-to-video-5s.json"))
     assert "image" in i2v
-    clay = _widget_names(_load("dcc/klein/clay-hero.json"))
+    clay = _widget_names(_load("dcc/clay-hero.json"))
     assert "image" in clay
 
 
@@ -354,7 +354,7 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert display_label(None, "prompt") == "Prompt"
     enh = next(
         node
-        for node in _load("klein/text-swap.json")["nodes"]
+        for node in _load("stills/text-swap.json")["nodes"]
         if node.get("type") == "EZKleinPromptEnhance"
     )
     help_text = widget_description("prompt", enh) or ""
@@ -363,27 +363,27 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
 
 
 def test_ltx_showcase_app_widgets() -> None:
-    flf = _load("ltx/first-last-5s.json")
+    flf = _load("motion/av/first-last-5s.json")
     names = _widget_names(flf)
     labels = _labels(flf)
     assert names.count("image") == 2
     assert "First frame" in labels
     assert "Last frame" in labels
-    a2v = _load("ltx/audio-to-video-5s.json")
+    a2v = _load("motion/av/audio-to-video-5s.json")
     assert "audio" in _widget_names(a2v)
     assert any("audio" in label.lower() for label in _labels(a2v))
 
 
 def test_i2v_hides_style_t2v_keeps_it() -> None:
-    i2v = _widget_names(_load("wan/still-to-video-5s.json"))
+    i2v = _widget_names(_load("motion/silent/still-to-video-5s.json"))
     assert "style" not in i2v
-    ltx_i2v = _widget_names(_load("ltx/still-to-video-5s.json"))
+    ltx_i2v = _widget_names(_load("motion/av/still-to-video-5s.json"))
     assert "style" not in ltx_i2v
-    t2v = _widget_names(_load("wan/text-to-video-5s.json"))
+    t2v = _widget_names(_load("motion/silent/text-to-video-5s.json"))
     assert "style" in t2v
-    ltx_t2v = _widget_names(_load("ltx/text-to-video-5s.json"))
+    ltx_t2v = _widget_names(_load("motion/av/text-to-video-5s.json"))
     assert "style" in ltx_t2v
-    still = _widget_names(_load("klein/still-draft.json"))
+    still = _widget_names(_load("stills/still-draft.json"))
     assert "style" in still
     assert still[0] == "quality"
     assert still[1] == "sample"
@@ -503,7 +503,7 @@ def test_linear_input_node_id_accepts_int_and_rejects_colon_join() -> None:
 
 
 def test_frontend_1496_drops_two_part_widget_ids() -> None:
-    graph = _load("klein/still-draft.json")
+    graph = _load("stills/still-draft.json")
     node_ids = {int(n["id"]) for n in graph["nodes"]}
     enhance = next(
         n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance"
@@ -515,7 +515,7 @@ def test_frontend_1496_drops_two_part_widget_ids() -> None:
 
 
 def test_stamped_inputs_survive_frontend_1496_prune() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft.json"))
+    graph = copy.deepcopy(_load("stills/still-draft.json"))
     stamped = stamp_app_mode(
         graph,
         inputs=[

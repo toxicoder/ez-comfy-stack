@@ -115,4 +115,4 @@ def test_pack3_registered_in_stamp_specs() -> None:
         assert spec["lane"] == "produce"
         assert spec["enhance_off_identity"] is pin
     assert pack3_pin_off() == frozenset(spec.rel for spec in PACK3 if spec.enhance_pin)
-    assert Path(LAB_ROOT / "klein" / "creator").is_dir()
+    assert Path(LAB_ROOT / "creator" / "stills").is_dir()

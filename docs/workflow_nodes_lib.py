@@ -383,12 +383,12 @@ def vhs_full() -> list[dict[str, Any]]:
         _w("frame_rate", key="frame_rate", typ="FLOAT", rng="lab 24 (GIF 12/16)", desc="Output frames per second.", gen="24 fps is the lab motion/AV printer. GIF loops use 12. Changing fps without changing frame count changes duration."),
         _w("loop_count", key="loop_count", typ="INT", rng="0 = infinite in players that honor it", desc="How many times the file loops.", gen="0 is the lab default (play once / player default)."),
         _w("filename_prefix", key="filename_prefix", typ="STRING", desc="Save prefix under the output folder.", gen="Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif)."),
-        _w("format", key="format", typ="COMBO", desc="Container / codec.", gen="video/h264-mp4 is every lab clip except wan/gif-loop (image/gif).", choices=[("video/h264-mp4", "H.264 MP4. Lab default; save_output must stay true."), ("image/gif", "Animated GIF. wan/gif-loop only.")]),
+        _w("format", key="format", typ="COMBO", desc="Container / codec.", gen="video/h264-mp4 is every lab clip except motion/loops/gif-loop (image/gif).", choices=[("video/h264-mp4", "H.264 MP4. Lab default; save_output must stay true."), ("image/gif", "Animated GIF. motion/loops/gif-loop only.")]),
         _w("pix_fmt", key="pix_fmt", typ="COMBO", rng="yuv420p", desc="Pixel format for H.264.", gen="yuv420p plays everywhere. Other formats can break QuickTime/YouTube."),
         _w("crf", key="crf", typ="INT", rng="lab 18", desc="H.264 constant-rate-factor. Lower is bigger/cleaner.", gen="18 is the lab visually-lossless-ish setting. Raising CRF shrinks files and adds blockiness."),
         _w("save_metadata", key="save_metadata", typ="BOOLEAN", desc="Embed workflow JSON in the file.", gen="true keeps provenance on the MP4."),
         _w("trim_to_audio", key="trim_to_audio", typ="BOOLEAN", desc="Cut picture to audio length.", gen="Lab false except when you mean to lock to a bed. ltx/a2v muxes the original wav instead."),
-        _w("pingpong", key="pingpong", typ="BOOLEAN", desc="Play frames forward then reverse.", gen="true on wan/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints."),
+        _w("pingpong", key="pingpong", typ="BOOLEAN", desc="Play frames forward then reverse.", gen="true on motion/loops/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints."),
         _w("save_output", key="save_output", typ="BOOLEAN", desc="Write the file to disk.", gen="Lab video graphs require true. After Queue, open the node for the inline preview."),
     ]
 

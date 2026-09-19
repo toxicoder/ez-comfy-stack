@@ -20,18 +20,18 @@ def _load(name: str) -> dict:
 
 
 EXISTING_LOADIMAGE_STEMS = (
-    "dcc/klein/clay-hero",
-    "dcc/klein/canny-hero",
-    "dcc/klein/clay-plates",
-    "dcc/ltx/depth-control-5s",
-    "dcc/ltx/canny-control-5s",
-    "dcc/ltx/depth-control-shorts",
-    "dcc/wan/first-last-from-guide",
+    "dcc/clay-hero",
+    "dcc/canny-hero",
+    "dcc/clay-plates",
+    "dcc/depth-control-5s",
+    "dcc/canny-control-5s",
+    "dcc/depth-control-shorts",
+    "dcc/first-last-from-guide",
 )
 LOADER_STEMS = (
-    "dcc/klein/guide-still",
-    "dcc/ltx/depth-from-loader",
-    "dcc/trellis/still-to-mesh",
+    "dcc/guide-still",
+    "dcc/depth-from-loader",
+    "dcc/still-to-mesh",
 )
 DCC_STEMS = EXISTING_LOADIMAGE_STEMS + LOADER_STEMS
 
@@ -51,7 +51,7 @@ def test_dcc_graphs_exist_and_ids() -> None:
 
 
 def test_klein_from_clay_contract() -> None:
-    graph = _load("dcc/klein/clay-hero.json")
+    graph = _load("dcc/clay-hero.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["enhance"] is True
     assert extra["lab_dcc"]["seed"] == 42
@@ -76,13 +76,13 @@ def test_klein_from_clay_contract() -> None:
     assert "1280" in note and "704" in note
     assert "overlay-qc" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
-        "dcc/ltx/depth-control-5s",
-        "wan/still-to-video-5s",
+        "dcc/depth-control-5s",
+        "motion/silent/still-to-video-5s",
     ]
 
 
 def test_ltx_iclora_envelope_contract() -> None:
-    graph = _load("dcc/ltx/depth-control-5s.json")
+    graph = _load("dcc/depth-control-5s.json")
     extra = graph["extra"]
     ic = extra["lab_iclora"]
     assert ic["templates"] == "LTX-2.5_ICLoRA_Union_Control_Distilled.json"
@@ -110,7 +110,7 @@ def test_dockerfile_still_has_no_dcc_binaries() -> None:
 
 
 def test_klein_from_canny_contract() -> None:
-    graph = _load("dcc/klein/canny-hero.json")
+    graph = _load("dcc/canny-hero.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["prefix"] == "ez_canny_hero"
     assert extra["lab_dcc"]["guide"] == "canny"
@@ -119,11 +119,11 @@ def test_klein_from_canny_contract() -> None:
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     assert load["widgets_values"][0] == "canny.png"
     assert extra["lab_app_mode"]["occupancy"] == "klein"
-    assert extra["lab_app_mode"]["handoff"] == ["dcc/ltx/canny-control-5s"]
+    assert extra["lab_app_mode"]["handoff"] == ["dcc/canny-control-5s"]
 
 
 def test_klein_from_clay_plates_contract() -> None:
-    graph = _load("dcc/klein/clay-plates.json")
+    graph = _load("dcc/clay-plates.json")
     extra = graph["extra"]
     plates = extra["lab_dcc"]["plates"]
     assert [p["id"] for p in plates] == ["hero", "packshot", "ig", "shorts"]
@@ -150,14 +150,14 @@ def test_klein_from_clay_plates_contract() -> None:
 
 
 def test_ltx_iclora_canny_and_shorts_contract() -> None:
-    canny = _load("dcc/ltx/canny-control-5s.json")
+    canny = _load("dcc/canny-control-5s.json")
     ic = canny["extra"]["lab_iclora"]
     assert ic["canny_default"] is True
     assert ic["depth_default"] is False
     assert ic["distilled_only"] is True
     assert ic["magcache"] is False
     assert not any(n.get("type") == "MagCache" for n in canny["nodes"])
-    shorts = _load("dcc/ltx/depth-control-shorts.json")
+    shorts = _load("dcc/depth-control-shorts.json")
     sic = shorts["extra"]["lab_iclora"]
     assert sic["size"] == [768, 1280]
     latent = next(n for n in shorts["nodes"] if n.get("type") == "LTXVImgToVideo")
@@ -167,7 +167,7 @@ def test_ltx_iclora_canny_and_shorts_contract() -> None:
 
 
 def test_wan_flf_from_guide_contract() -> None:
-    graph = _load("dcc/wan/first-last-from-guide.json")
+    graph = _load("dcc/first-last-from-guide.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["first"] == "first.png"
     assert extra["lab_dcc"]["last"] == "last.png"
@@ -210,11 +210,11 @@ def test_existing_seven_keep_loadimage_and_point_at_loaders() -> None:
         assert "LoadImage" in types, stem
         assert "EZDCCLoadGuideStill" not in types, stem
         note = (graph.get("extra") or {}).get("lab_note", "")
-        assert "dcc/klein/guide-still" in note, stem
+        assert "dcc/guide-still" in note, stem
 
 
 def test_klein_from_guide_loader_contract() -> None:
-    graph = _load("dcc/klein/guide-still.json")
+    graph = _load("dcc/guide-still.json")
     extra = graph["extra"]
     assert extra["lab_dcc"]["prefix"] == "ez_guide_hero"
     assert extra["lab_dcc"]["size"] == [1280, 704]
@@ -238,7 +238,7 @@ def test_klein_from_guide_loader_contract() -> None:
 
 
 def test_ltx_iclora_from_guide_loader_contract() -> None:
-    graph = _load("dcc/ltx/depth-from-loader.json")
+    graph = _load("dcc/depth-from-loader.json")
     extra = graph["extra"]
     assert extra["lab_iclora"]["magcache"] is False
     assert extra["lab_iclora"]["distilled_only"] is True
@@ -270,7 +270,7 @@ def test_ltx_iclora_from_guide_loader_contract() -> None:
 
 
 def test_trellis_from_klein_still_contract() -> None:
-    graph = _load("dcc/trellis/still-to-mesh.json")
+    graph = _load("dcc/still-to-mesh.json")
     extra = graph["extra"]
     assert extra["lab_app_mode"]["occupancy"] == "trellis"
     assert extra["lab_app_mode"]["lane"] == "dcc"

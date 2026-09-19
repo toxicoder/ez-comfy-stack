@@ -381,7 +381,7 @@ Type `COMBO`. Range / default: auto.
 
 Lab graph to clone.
 
-**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin klein/instagram-square to skip.
+**How it affects generation:** auto uses the GGUF planner or a keyword heuristic. Pin stills/instagram-square to skip.
 
 #### `slug`
 
@@ -1667,7 +1667,7 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    klein/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1838,7 +1838,7 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 
 !!! warning "Lab notes"
 
-    klein/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.
+    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2003,7 +2003,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on klein/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
 #### `prompt`
 
@@ -2808,7 +2808,7 @@ Resize a still to another image's exact width and height.
 
 !!! warning "Lab notes"
 
-    klein/text-swap restores the decode to the uploaded still's pixel size.
+    stills/text-swap restores the decode to the uploaded still's pixel size.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3194,7 +3194,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 !!! warning "Lab notes"
 
-    klein/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
+    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3892,7 +3892,7 @@ Resize a still to a target width/height.
 
 !!! warning "Lab notes"
 
-    dcc/klein/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
+    dcc/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4098,7 +4098,7 @@ Pin a still onto a latent frame (first-last-frame).
 
 !!! warning "Lab notes"
 
-    ltx/first-last-5s uses index 0 then -1 on the video latent before audio concat.
+    motion/av/first-last-5s uses index 0 then -1 on the video latent before audio concat.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4133,7 +4133,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on ltx/audio-to-video-5s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-5s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4290,7 +4290,7 @@ Couple audio and video during sampling (dialogue graphs).
 
 !!! warning "Lab notes"
 
-    ltx/dialogue-5s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
+    motion/av/dialogue-5s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4339,7 +4339,7 @@ Load a wav/mp3 from input/.
 
 !!! warning "Lab notes"
 
-    ltx/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+    motion/av/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4400,7 +4400,7 @@ Write a GLB/mesh file.
 
 !!! warning "Lab notes"
 
-    optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/still-to-mesh writes assets/objects/_lab-mug/mesh.
+    optional/trellis2 may leave the path empty (Comfy default). dcc/still-to-mesh writes assets/objects/_lab-mug/mesh.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5064,14 +5064,14 @@ Type `COMBO`.
 
 Container / codec.
 
-**How it affects generation:** video/h264-mp4 is every lab clip except wan/gif-loop (image/gif).
+**How it affects generation:** video/h264-mp4 is every lab clip except motion/loops/gif-loop (image/gif).
 
 **Other choices**
 
 | Choice | What it does |
 | --- | --- |
 | `video/h264-mp4` | H.264 MP4. Lab default; save_output must stay true. |
-| `image/gif` | Animated GIF. wan/gif-loop only. |
+| `image/gif` | Animated GIF. motion/loops/gif-loop only. |
 
 #### `pix_fmt`
 
@@ -5111,7 +5111,7 @@ Type `BOOLEAN`.
 
 Play frames forward then reverse.
 
-**How it affects generation:** true on wan/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints.
+**How it affects generation:** true on motion/loops/gif-loop, bumper-loop, sticker-loop. false on 5 s narrative prints.
 
 #### `save_output`
 

@@ -34,12 +34,12 @@ def test_workflow_renderer_version_is_vue_corrected() -> None:
 
 def test_stamp_nodes2_sets_root_and_nested_subgraph_extra() -> None:
     graph: dict[str, Any] = {
-        "extra": {"lab_rel": "klein/still-draft"},
+        "extra": {"lab_rel": "stills/still-draft"},
         "definitions": {"subgraphs": [{"id": "sg", "extra": {"lab_occupancy": "klein"}}]},
     }
     stamp_nodes2(graph)
     assert graph["extra"]["workflowRendererVersion"] == "Vue-corrected"
-    assert graph["extra"]["lab_rel"] == "klein/still-draft"
+    assert graph["extra"]["lab_rel"] == "stills/still-draft"
     assert graph["definitions"]["subgraphs"][0]["extra"]["workflowRendererVersion"] == (
         "Vue-corrected"
     )
@@ -48,9 +48,9 @@ def test_stamp_nodes2_sets_root_and_nested_subgraph_extra() -> None:
 
 def test_apply_lab_identity_stamps_nodes2() -> None:
     graph: dict[str, Any] = {"nodes": []}
-    apply_lab_identity(graph, "klein/still-draft")
+    apply_lab_identity(graph, "stills/still-draft")
     assert graph["id"] == "still-draft"
-    assert graph["extra"]["lab_rel"] == "klein/still-draft"
+    assert graph["extra"]["lab_rel"] == "stills/still-draft"
     assert graph["extra"]["workflowRendererVersion"] == "Vue-corrected"
 
 

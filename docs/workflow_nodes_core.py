@@ -238,7 +238,7 @@ def core_nodes() -> dict[str, Any]:
         "LoadAudio": _n(
             "Load Audio",
             "Load a wav/mp3 from input/.",
-            lab="ltx/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
+            lab="motion/av/audio-to-video-5s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
             sockets=[_s("AUDIO", "AUDIO", "out", "Waveform for LTXVAudioVAEEncode.")],
             widgets=[_w("audio", index=0, desc="Filename in input/.", gen="The original wav is muxed into the MP4 (no audio VAE decode on a2v).")],
         ),
@@ -268,7 +268,7 @@ def core_nodes() -> dict[str, Any]:
             "Snap image (div 16)",
             "Scale a still to the largest width and height that fit inside the source and are multiples of 16.",
             origin="ez_image",
-            lab="klein/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.",
+            lab="stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Snapped still."),
@@ -279,7 +279,7 @@ def core_nodes() -> dict[str, Any]:
             "Match image size",
             "Resize a still to another image's exact width and height.",
             origin="ez_image",
-            lab="klein/text-swap restores the decode to the uploaded still's pixel size.",
+            lab="stills/text-swap restores the decode to the uploaded still's pixel size.",
             sockets=[
                 _s("image", "IMAGE", "in", "Edited still."),
                 _s("size_src", "IMAGE", "in", "Source still whose H×W is the target."),
@@ -291,7 +291,7 @@ def core_nodes() -> dict[str, Any]:
             "Format / platform",
             "Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.",
             origin="ez_image",
-            lab="klein/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.",
+            lab="stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.",
             sockets=[
                 _s("width", "INT", "out", "Latent width (÷16)."),
                 _s("height", "INT", "out", "Latent height (÷16)."),
@@ -312,7 +312,7 @@ def core_nodes() -> dict[str, Any]:
             "Creator mode",
             "Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.",
             origin="ez_image",
-            lab="klein/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.",
+            lab="stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.",
             sockets=[
                 _s("context", "STRING", "in", "Optional look-recipe splice from EZImageFormat."),
                 _s("context", "STRING", "out", "Mode instruction plus incoming look splice."),
@@ -392,7 +392,7 @@ def core_nodes() -> dict[str, Any]:
         "ImageScale": _n(
             "Upscale Image",
             "Resize a still to a target width/height.",
-            lab="dcc/klein/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
+            lab="dcc/clay-plates scales one clay into 704 / 1:1 / 4:5 / 9:16.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Scaled still."),

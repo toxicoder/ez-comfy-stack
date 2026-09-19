@@ -16,7 +16,7 @@ from _stamp_app_mode import apply_lab_completeness_flags
 from _stamp_app_mode import ensure_occupancy_note
 from _stamp_app_mode import stamp_app_mode
 
-NOTE = """## optional/klein/trellis2
+NOTE = """## optional/trellis2
 
 Klein still → native TRELLIS.2 INT8 mesh (Comfy core nodes).
 
@@ -422,7 +422,7 @@ def build_trellis() -> dict[str, Any]:
         glb,
     ]
     graph: dict[str, Any] = {
-        "id": "optional/klein/trellis2",
+        "id": "optional/trellis2",
         "revision": 1,
         "last_node_id": 21,
         "last_link_id": lid - 1,
@@ -432,7 +432,7 @@ def build_trellis() -> dict[str, Any]:
         "config": {},
         "extra": {
             "lab_note": NOTE,
-            "lab_profile": "optional/klein/trellis2",
+            "lab_profile": "optional/trellis2",
             "lab_description": "Klein still to native TRELLIS.2 INT8 mesh. 512. TRELLIS-only.",
             "lab_trellis": {
                 "unet": "trellis_2_int8_convrot.safetensors",
@@ -456,7 +456,7 @@ def build_trellis() -> dict[str, Any]:
 
 
 def main() -> None:
-    dest = lab_dest("optional/klein/trellis2", lane="optional")
+    dest = lab_dest("optional/trellis2", lane="optional")
     graph = build_trellis()
     finalize_layout(graph)
     dest.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")

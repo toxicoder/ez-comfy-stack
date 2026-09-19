@@ -120,8 +120,8 @@ def _assert_shared(
             assert ace_w[0] == tags
         assert widgets[0] == tags
     assert "Note" in {n["type"] for n in graph["nodes"]}
-    assert "klein/thumbnail" in extra["lab_note"]
-    assert "klein/podcast-cover" in extra["lab_note"]
+    assert "stills/thumbnail" in extra["lab_note"]
+    assert "stills/podcast-cover" in extra["lab_note"]
     assert extra.get("lab_album")
     assert extra["lab_album"]["art_mode"] in {"skip", "upload", "generate"}
     assert any(n["type"] == "EZAudioMetadata" for n in graph["nodes"])
