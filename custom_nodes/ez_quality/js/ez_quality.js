@@ -1,43 +1,65 @@
 /**
- * EZQuality frontend: overlay KSampler steps/CFG and Klein 4B UNET on Queue.
+ * EZQuality frontend: overlay sampler + UNET/CLIP/VAE on named qualities.
  *
- * Nodes 2.0: writes widget.value (and widget.callback). Does not change size,
- * length, CLIP, or VAE. Lab restores the authored snapshot.
+ * Nodes 2.0: writes widget.value (and widget.callback). Does not change size
+ * or length. Custom freezes the last overlay. Lab restores the authored snapshot.
  */
 import { app } from "../../scripts/app.js";
 
-const QUALITY_LAB = "lab";
+const QUALITY_CUSTOM = "custom";
 const QUALITY_DRAFT = "draft";
+const QUALITY_LAB = "lab";
+const QUALITY_STANDARD = "standard";
 const QUALITY_HIGH = "high";
+const QUALITY_ULTRA = "ultra";
+const QUALITY_MAX = "max";
 
 const KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors";
+const KLEIN_NVFP4 = "flux-2-klein-4b-nvfp4.safetensors";
 const KLEIN_BASE = "flux-2-klein-base-4b-fp8.safetensors";
+const KLEIN_9B = "flux-2-klein-9b-fp8.safetensors";
+const KLEIN_9B_BASE = "flux-2-klein-base-9b-fp8.safetensors";
+const KLEIN_9B_NVFP4 = "flux-2-klein-9b-nvfp4.safetensors";
+const FLUX2_DEV = "flux2_dev_fp8mixed.safetensors";
+const CLIP_4B = "qwen_3_4b.safetensors";
+const CLIP_8B = "qwen_3_8b_fp8mixed.safetensors";
+const CLIP_MISTRAL = "mistral_3_small_flux2_bf16.safetensors";
+const CLIP_TYPE_FLUX2 = "flux2";
+const VAE_FULL = "flux2-vae.safetensors";
+const VAE_SMALL = "full_encoder_small_decoder.safetensors";
+
 const KLEIN_DRAFT_STEPS = 4;
 const KLEIN_DRAFT_CFG = 1.0;
+const KLEIN_STANDARD_STEPS = 8;
+const KLEIN_STANDARD_CFG = 1.0;
 const KLEIN_HIGH_DISTILLED_STEPS = 8;
 const KLEIN_HIGH_DISTILLED_CFG = 1.0;
 const KLEIN_HIGH_BASE_STEPS = 24;
 const KLEIN_HIGH_BASE_CFG = 3.5;
+const KLEIN_9B_STEPS = 4;
+const KLEIN_9B_CFG = 1.0;
+const KLEIN_9B_BASE_STEPS = 20;
+const KLEIN_9B_BASE_CFG = 5.0;
+const FLUX2_DEV_STEPS = 20;
+const FLUX2_DEV_CFG = 4.0;
 const WAN_DRAFT_STEPS = 12;
+const WAN_STANDARD_STEPS = 20;
 const WAN_HIGH_STEPS = 28;
+const WAN_MAX_STEPS = 32;
 const LTX_DRAFT_STEPS = 12;
+const LTX_STANDARD_STEPS = 20;
 const LTX_HIGH_STEPS = 28;
+const LTX_MAX_STEPS = 32;
 const AUDIO_DRAFT_STEPS = 4;
+const AUDIO_STANDARD_STEPS = 8;
 const AUDIO_HIGH_STEPS = 16;
+const AUDIO_MAX_STEPS = 24;
 const TRELLIS_DRAFT_STEPS = 8;
+const TRELLIS_STANDARD_STEPS = 12;
 const TRELLIS_HIGH_STEPS = 20;
+const TRELLIS_MAX_STEPS = 28;
 
-const BANNED = [
-  "flux.2-dev",
-  "flux-2-dev",
-  "flux2-dev",
-  "klein-9b",
-  "flux-2-klein-9b",
-  "minimax",
-  "seedance",
-  "kling",
-  "z_image_turbo",
-];
+const BANNED = ["minimax", "seedance", "kling", "z_image_turbo"];
 
 const snapshots = new WeakMap();
 let applying = false;
@@ -97,6 +119,16 @@ function isKlein4b(name) {
 }
 
 /**
+ * True when a UNET filename is Klein 9B.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isKlein9b(name) {
+  const blob = String(name || "").toLowerCase();
+  return blob.includes("klein") && blob.includes("9b");
+}
+
+/**
  * True when a UNET filename looks like Wan 14B.
  * @param {string} name
  * @returns {boolean}
@@ -105,6 +137,26 @@ function isWan14(name) {
   return String(name || "")
     .toLowerCase()
     .includes("14b");
+}
+
+/**
+ * True when a CLIP filename is a Flux.2 text encoder.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isFlux2Clip(name) {
+  const blob = String(name || "").toLowerCase();
+  return blob.includes("qwen_3_") || (blob.includes("mistral") && blob.includes("flux2"));
+}
+
+/**
+ * True when a VAE filename is a Flux.2 VAE.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isFlux2Vae(name) {
+  const blob = String(name || "").toLowerCase();
+  return blob.includes("flux2-vae") || blob.includes("small_decoder");
 }
 
 /**
@@ -199,61 +251,211 @@ function pickUnet(name, available) {
 }
 
 /**
- * Steps/CFG/UNET overlay for a quality choice, or {} for lab / no-op lanes.
+ * Return name when present in the combo (empty combo = no check).
+ * @param {string} name
+ * @param {string[]} available
+ * @returns {string|null}
+ */
+function pickFile(name, available) {
+  if (!name) {
+    return null;
+  }
+  if (available.length && !available.includes(name)) {
+    return null;
+  }
+  return name;
+}
+
+/**
+ * Wan 5B step overlay.
+ * @param {string} choice
+ * @returns {number}
+ */
+function wanSteps(choice) {
+  if (choice === QUALITY_DRAFT) {
+    return WAN_DRAFT_STEPS;
+  }
+  if (choice === QUALITY_STANDARD) {
+    return WAN_STANDARD_STEPS;
+  }
+  if (choice === QUALITY_MAX) {
+    return WAN_MAX_STEPS;
+  }
+  return WAN_HIGH_STEPS;
+}
+
+/**
+ * LTX step overlay.
+ * @param {string} choice
+ * @returns {number}
+ */
+function ltxSteps(choice) {
+  if (choice === QUALITY_DRAFT) {
+    return LTX_DRAFT_STEPS;
+  }
+  if (choice === QUALITY_STANDARD) {
+    return LTX_STANDARD_STEPS;
+  }
+  if (choice === QUALITY_MAX) {
+    return LTX_MAX_STEPS;
+  }
+  return LTX_HIGH_STEPS;
+}
+
+/**
+ * Apache high overlay (4B base if present).
+ * @param {number} authoredSteps
+ * @param {string} unetName
+ * @param {string[]} available
+ * @param {string[]} clips
+ * @param {string[]} vaes
+ * @returns {object}
+ */
+function kleinHigh(authoredSteps, unetName, available, clips, vaes) {
+  const base = pickUnet(KLEIN_BASE, available);
+  const clip = pickFile(CLIP_4B, clips);
+  const vae = pickFile(VAE_SMALL, vaes) || pickFile(VAE_FULL, vaes);
+  if (base && (isKlein4b(unetName) || isKlein9b(unetName) || !unetName)) {
+    return {
+      steps: KLEIN_HIGH_BASE_STEPS,
+      cfg: KLEIN_HIGH_BASE_CFG,
+      unet_name: base,
+      clip_name: clip,
+      vae_name: vae,
+      clip_type: CLIP_TYPE_FLUX2,
+    };
+  }
+  return {
+    steps: Math.max(authoredSteps, KLEIN_HIGH_DISTILLED_STEPS),
+    cfg: KLEIN_HIGH_DISTILLED_CFG,
+    unet_name: pickUnet(KLEIN_DISTILLED, available),
+    clip_name: clip,
+    vae_name: vae,
+    clip_type: CLIP_TYPE_FLUX2,
+  };
+}
+
+/**
+ * Steps/CFG/UNET/CLIP/VAE overlay for a quality choice, or {} for freeze / no-op.
  * @param {string} choice
  * @param {number} authoredSteps
  * @param {string} unetName
  * @param {string[]} available
+ * @param {string[]} clips
+ * @param {string[]} vaes
  * @returns {object}
  */
-function resolveOverlay(choice, authoredSteps, unetName, available) {
+function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes) {
   const occ = occupancy();
-  if (choice === QUALITY_LAB || occ === "llm" || occ === "none") {
+  if (
+    choice === QUALITY_LAB ||
+    choice === QUALITY_CUSTOM ||
+    occ === "llm" ||
+    occ === "none"
+  ) {
     return {};
   }
   if (isWan14(unetName) || graphHasWan14()) {
     return {};
   }
-  if (occ === "klein" || isKlein4b(unetName)) {
+  if (occ === "klein" || isKlein4b(unetName) || isKlein9b(unetName)) {
+    const clip4 = pickFile(CLIP_4B, clips);
+    const clip8 = pickFile(CLIP_8B, clips);
+    const vae = pickFile(VAE_SMALL, vaes) || pickFile(VAE_FULL, vaes);
     if (choice === QUALITY_DRAFT) {
-      const unet =
-        isKlein4b(unetName) && unetName === KLEIN_BASE
-          ? pickUnet(KLEIN_DISTILLED, available)
-          : null;
+      let unet = null;
+      if (isKlein4b(unetName) || isKlein9b(unetName)) {
+        unet = pickUnet(KLEIN_NVFP4, available) || pickUnet(KLEIN_DISTILLED, available);
+      }
       return {
         steps: KLEIN_DRAFT_STEPS,
         cfg: KLEIN_DRAFT_CFG,
         unet_name: unet,
+        clip_name: clip4,
+        vae_name: vae,
+        clip_type: CLIP_TYPE_FLUX2,
       };
     }
-    const base = pickUnet(KLEIN_BASE, available);
-    if (base && isKlein4b(unetName)) {
+    if (choice === QUALITY_STANDARD) {
       return {
-        steps: KLEIN_HIGH_BASE_STEPS,
-        cfg: KLEIN_HIGH_BASE_CFG,
-        unet_name: base,
+        steps: KLEIN_STANDARD_STEPS,
+        cfg: KLEIN_STANDARD_CFG,
+        unet_name: pickUnet(KLEIN_DISTILLED, available),
+        clip_name: clip4,
+        vae_name: vae,
+        clip_type: CLIP_TYPE_FLUX2,
       };
     }
-    return {
-      steps: Math.max(authoredSteps, KLEIN_HIGH_DISTILLED_STEPS),
-      cfg: KLEIN_HIGH_DISTILLED_CFG,
-    };
+    if (choice === QUALITY_ULTRA) {
+      const nine = pickUnet(KLEIN_9B, available) || pickUnet(KLEIN_9B_NVFP4, available);
+      if (nine) {
+        return {
+          steps: KLEIN_9B_STEPS,
+          cfg: KLEIN_9B_CFG,
+          unet_name: nine,
+          clip_name: clip8,
+          vae_name: vae,
+          clip_type: CLIP_TYPE_FLUX2,
+        };
+      }
+      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
+    }
+    if (choice === QUALITY_MAX) {
+      const nineBase = pickUnet(KLEIN_9B_BASE, available);
+      if (nineBase) {
+        return {
+          steps: KLEIN_9B_BASE_STEPS,
+          cfg: KLEIN_9B_BASE_CFG,
+          unet_name: nineBase,
+          clip_name: clip8,
+          vae_name: vae,
+          clip_type: CLIP_TYPE_FLUX2,
+        };
+      }
+      const dev = pickUnet(FLUX2_DEV, available);
+      if (dev) {
+        return {
+          steps: FLUX2_DEV_STEPS,
+          cfg: FLUX2_DEV_CFG,
+          unet_name: dev,
+          clip_name: pickFile(CLIP_MISTRAL, clips),
+          vae_name: vae,
+          clip_type: CLIP_TYPE_FLUX2,
+        };
+      }
+      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
+    }
+    return kleinHigh(authoredSteps, unetName, available, clips, vaes);
   }
   if (occ === "wan") {
-    return { steps: choice === QUALITY_DRAFT ? WAN_DRAFT_STEPS : WAN_HIGH_STEPS };
+    return { steps: wanSteps(choice) };
   }
   if (occ === "ltx" || occ === "film") {
-    return { steps: choice === QUALITY_DRAFT ? LTX_DRAFT_STEPS : LTX_HIGH_STEPS };
+    return { steps: ltxSteps(choice) };
   }
   if (occ === "audio") {
-    return {
-      steps: choice === QUALITY_DRAFT ? AUDIO_DRAFT_STEPS : AUDIO_HIGH_STEPS,
-    };
+    if (choice === QUALITY_DRAFT) {
+      return { steps: AUDIO_DRAFT_STEPS };
+    }
+    if (choice === QUALITY_STANDARD) {
+      return { steps: AUDIO_STANDARD_STEPS };
+    }
+    if (choice === QUALITY_MAX) {
+      return { steps: AUDIO_MAX_STEPS };
+    }
+    return { steps: AUDIO_HIGH_STEPS };
   }
   if (occ === "trellis") {
-    return {
-      steps: choice === QUALITY_DRAFT ? TRELLIS_DRAFT_STEPS : TRELLIS_HIGH_STEPS,
-    };
+    if (choice === QUALITY_DRAFT) {
+      return { steps: TRELLIS_DRAFT_STEPS };
+    }
+    if (choice === QUALITY_STANDARD) {
+      return { steps: TRELLIS_STANDARD_STEPS };
+    }
+    if (choice === QUALITY_MAX) {
+      return { steps: TRELLIS_MAX_STEPS };
+    }
+    return { steps: TRELLIS_HIGH_STEPS };
   }
   return {};
 }
@@ -275,7 +477,7 @@ function setWidget(widget, value) {
 }
 
 /**
- * Snapshot authored steps/cfg/unet_name so lab can restore them.
+ * Snapshot authored steps/cfg/loader names so lab can restore them.
  * @returns {void}
  */
 function snapshotGraph() {
@@ -288,7 +490,10 @@ function snapshotGraph() {
       if (
         widget.name === "steps" ||
         widget.name === "cfg" ||
-        widget.name === "unet_name"
+        widget.name === "unet_name" ||
+        widget.name === "clip_name" ||
+        widget.name === "vae_name" ||
+        widget.name === "type"
       ) {
         snap.push({ node, name: widget.name, value: widget.value });
       }
@@ -313,7 +518,7 @@ function restoreSnapshot() {
 }
 
 /**
- * Apply or restore a quality overlay across sampler/UNET widgets.
+ * Apply or restore a quality overlay across sampler/loader widgets.
  * @param {string} choice
  * @returns {void}
  */
@@ -326,23 +531,35 @@ function applyQuality(choice) {
     const normalized = String(choice || QUALITY_LAB)
       .trim()
       .toLowerCase();
+    if (normalized === QUALITY_CUSTOM) {
+      return;
+    }
     if (normalized === QUALITY_LAB) {
       restoreSnapshot();
       return;
     }
     const unetName = firstUnetName();
     const unetNode = (app.graph?.nodes || []).find((n) => n.type === "UNETLoader");
+    const clipNode = (app.graph?.nodes || []).find((n) => n.type === "CLIPLoader");
+    const vaeNode = (app.graph?.nodes || []).find((n) => n.type === "VAELoader");
     const available = comboValues(widgetByName(unetNode || {}, "unet_name"));
+    const clips = comboValues(widgetByName(clipNode || {}, "clip_name"));
+    const vaes = comboValues(widgetByName(vaeNode || {}, "vae_name"));
     for (const node of app.graph?.nodes || []) {
       const stepsWidget = widgetByName(node, "steps");
       const cfgWidget = widgetByName(node, "cfg");
       const unetWidget = widgetByName(node, "unet_name");
+      const clipWidget = widgetByName(node, "clip_name");
+      const typeWidget = widgetByName(node, "type");
+      const vaeWidget = widgetByName(node, "vae_name");
       const authoredSteps = Number(stepsWidget?.value) || 0;
       const overlay = resolveOverlay(
         normalized,
         authoredSteps,
         unetWidget?.value ? String(unetWidget.value) : unetName,
         available,
+        clips,
+        vaes,
       );
       if (stepsWidget && overlay.steps != null) {
         setWidget(stepsWidget, overlay.steps);
@@ -353,10 +570,27 @@ function applyQuality(choice) {
       if (
         unetWidget &&
         overlay.unet_name &&
-        isKlein4b(String(unetWidget.value || "")) &&
+        !isWan14(String(unetWidget.value || "")) &&
         !isBannedUnet(overlay.unet_name)
       ) {
         setWidget(unetWidget, overlay.unet_name);
+      }
+      if (
+        clipWidget &&
+        overlay.clip_name &&
+        (!clipWidget.value || isFlux2Clip(String(clipWidget.value)))
+      ) {
+        setWidget(clipWidget, overlay.clip_name);
+      }
+      if (typeWidget && overlay.clip_type && node.type === "CLIPLoader") {
+        setWidget(typeWidget, overlay.clip_type);
+      }
+      if (
+        vaeWidget &&
+        overlay.vae_name &&
+        (!vaeWidget.value || isFlux2Vae(String(vaeWidget.value)))
+      ) {
+        setWidget(vaeWidget, overlay.vae_name);
       }
     }
   } finally {
@@ -407,7 +641,12 @@ function bindAll() {
     if (node.type === "EZQuality" || node.comfyClass === "EZQuality") {
       bindQualityNode(node);
       const widget = widgetByName(node, "quality");
-      if (widget && widget.value && widget.value !== QUALITY_LAB) {
+      if (
+        widget &&
+        widget.value &&
+        widget.value !== QUALITY_LAB &&
+        widget.value !== QUALITY_CUSTOM
+      ) {
         applyQuality(widget.value);
       }
     }
