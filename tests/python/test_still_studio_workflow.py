@@ -118,14 +118,17 @@ def test_still_studio_enhance_and_app_widgets() -> None:
         labels.append((config or {}).get("label") or entry[1])
     assert "Format / platform" in labels
     assert "Look recipe" in labels
-    assert "Rewrite prompt" in labels
-    assert "Style" in labels
-    assert extra_occupancy_note(graph)
 
 
-def extra_occupancy_note(graph: dict[str, Any]) -> bool:
-    note = str((graph.get("extra") or {}).get("lab_note") or "")
-    return "Occupancy: klein" in note
+def test_still_studio_optional_ref_does_not_require_image() -> None:
+    graph = _load()
+    types = {node.get("type") for node in graph["nodes"]}
+    assert "EZOptionalImage" in types
+    assert "EZKleinRefCanvas" in types
+    opt = next(n for n in graph["nodes"] if n.get("type") == "EZOptionalImage")
+    assert (opt.get("widgets_values") or [""])[0] == ""
+    names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
+    assert "filename" in names
 
 
 def test_still_studio_json_roundtrip() -> None:

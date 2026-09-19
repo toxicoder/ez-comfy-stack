@@ -96,7 +96,8 @@ def test_pack_mappings_and_category() -> None:
         "EZImageFormat",
         "EZVideoFormat",
     }
-    assert ez_image.NODE_CLASS_MAPPINGS == NODE_CLASS_MAPPINGS
+    assert set(NODE_CLASS_MAPPINGS).issubset(ez_image.NODE_CLASS_MAPPINGS)
+    assert "EZOptionalImage" in ez_image.NODE_CLASS_MAPPINGS
     assert ez_image.WEB_DIRECTORY == "./js"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZSnapImage"] == "Snap image (div 16)"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZMatchImageSize"] == "Match image size"
