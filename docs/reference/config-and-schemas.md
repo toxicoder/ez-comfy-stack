@@ -43,7 +43,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | File | Purpose | Who consumes it | Safety |
 | --- | --- | --- | --- |
 | `config/disk-catalog.yaml` | Leftover signatures for disk-wizard (`risk` / `reclaim`) | `./scripts/manage.sh disk-wizard` → `scripts/lib/disk_catalog.py` | Keep-set weights and volume `ez-comfy-state` are **dangerous / none**. Never `docker system prune -a --volumes` |
-| `config/model-manifest.yaml` | Disk bible for `${MODELS_DIR}`: keep-set packs + **refuse** list | `reap-models`, `models-status`, `scripts/lib/model_manifest.py` / `models.sh`. License bible stays `LICENSE-MODELS.md` | Refuse includes MiniMax-H3, Klein 9B, FLUX.2-dev, DA3-LARGE, … |
+| `config/model-manifest.yaml` | Disk bible for `${MODELS_DIR}`: keep-set packs + **refuse** list | `reap-models`, `models-status`, `scripts/lib/model_manifest.py` / `models.sh`. License bible stays `LICENSE-MODELS.md` | Refuse includes MiniMax-H3, DA3-LARGE, … Klein 9B / FLUX.2-dev are opt-in packs (`default: false`) |
 | `config/resource-policy.yaml` | Human-readable GB10 headroom, mem 90g/80g, occupancy mode table, default model tiers | Operators; **mirrored** by `manage.sh` defaults (`MIN_HOST_FREE_GIB`, `MEM_LIMIT`, stack ports) | Do not lower `min_host_free_gib` without measuring SSH under load |
 | `config/spark-farm.example.env` | Copy-and-fill farm variables | `./scripts/utilities/spark-farm.sh` after `set -a; source …` | Placeholders only. Management SSH is **not** the 200 GbE fabric. MiniMax H3 banned. [Spark farm](../spark-farm.md) |
 | `.env.example` | Template `setup` copies to `.env` | `./scripts/manage.sh setup` / Compose interpolation | `HF_TOKEN=` stays commented. Do not commit a filled `.env` |

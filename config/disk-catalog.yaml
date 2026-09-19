@@ -64,7 +64,7 @@ signatures:
     risk: review
     reclaim: reap-models
     leftover_weight: 8
-    what: "Banned weight token (H3, Klein 9B, FLUX.2-dev, DA3-LARGE, …)"
+    what: "Banned weight token (H3, DA3-LARGE, …)"
     why: "An old download-h3 or refused pack was left on MODELS_DIR"
     leftover_when: "path matches the manifest refuse list"
     match_refuse: true

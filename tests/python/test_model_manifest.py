@@ -40,9 +40,13 @@ def test_default_filenames_in_keep_set() -> None:
         assert name in text
     refuse = " ".join(man["refuse"])
     assert "MiniMax-H3" in refuse
-    assert "FLUX.2-klein-9b" in refuse
-    assert "FLUX.2-dev" in refuse
+    assert "FLUX.2-klein-9b" not in refuse
+    assert "FLUX.2-dev" not in refuse
     assert "DA3-LARGE" in refuse
+    packs = man["packs"]
+    assert packs["klein-9b-fp8"]["default"] is False
+    assert "flux-2-klein-9b-fp8.safetensors" in packs["klein-9b-fp8"]["files"]
+    assert packs["flux2-dev"]["default"] is False
     assert "Inria-3DGS" in refuse
     assert "Pixal3D-as-default" in refuse
 

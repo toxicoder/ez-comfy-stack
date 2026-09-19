@@ -392,7 +392,7 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps th
 
 **Your Spark panel:** injected by `commands.js` into `article.md-content__inner` (not the Material header). Do not fork `header.html` / `tabs.html`. Do not add `display: none` to `extra.css` (theme tests). Collapse with `<details>` / the `hidden` attribute.
 
-**Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B and old `flux-to-ltx*` GHCR tags are banned/frozen mentions only.
+**Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B is opt-in FLUX Non-Commercial (`download-image --tier 9b`), not a lab UNET pin. Old `flux-to-ltx*` GHCR tags are frozen mentions only.
 
 ```bash
 bazelisk run //docs:docs   # strict build must stay green

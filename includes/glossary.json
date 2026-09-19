@@ -131,7 +131,7 @@
     "aliases": ["UNET"],
     "category": "Models",
     "short": "Denoiser / transformer weights that turn noise + conditioning into a sample.",
-    "long": "Comfy loaders still say UNET for many diffusion transformers, including Klein and Wan. The filename on the canvas must match a weight under MODELS_DIR. Lab graphs pin those names; do not swap in Klein 9B or FLUX.2-dev. See [Models and cache](models-and-cache.md).",
+    "long": "Comfy loaders still say UNET for many diffusion transformers, including Klein and Wan. The filename on the canvas must match a weight under MODELS_DIR. Lab graphs pin Apache Klein 4B; Klein 9B and FLUX.2-dev are opt-in Quality/download packs (FLUX Non-Commercial). See [Models and cache](models-and-cache.md).",
     "see_also": ["sampler", "latent", "models-dir"]
   },
   {
@@ -1040,7 +1040,7 @@
     "aliases": ["promote-workflow"],
     "category": "Studio",
     "short": "manage.sh copies a keeper graph into workflows/_lab/<lane>/. Does not commit.",
-    "long": "`./scripts/manage.sh promote-workflow --from PATH --lane LANE --id STEM` copies a live `_user` graph into `workflows/_lab/<lane>/`. Optional `--subdir`. Does not commit. Refuses MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / `z_image_turbo`. Never copy `_lab` into `_user`. See [manage.sh reference](manage-cli.md) and [Workflow catalog](studio-workflows.md).",
+    "long": "`./scripts/manage.sh promote-workflow --from PATH --lane LANE --id STEM` copies a live `_user` graph into `workflows/_lab/<lane>/`. Optional `--subdir`. Does not commit. Refuses MiniMax / Seedance / Kling / `z_image_turbo`, and UNET pins of Klein 9B / FLUX.2-dev. Never copy `_lab` into `_user`. See [manage.sh reference](manage-cli.md) and [Workflow catalog](studio-workflows.md).",
     "see_also": ["workflow", "lab-example", "manage-sh"]
   },
   {
@@ -1085,7 +1085,7 @@
     "aliases": ["download-image", "download-image.sh"],
     "category": "Downloads",
     "short": "Still UNET pack. Default --tier fast is Klein 4B FP8 plus TE and VAE.",
-    "long": "`download-image --tier fast` is the still half of `download-models`. `nvfp4` / `base` also pull Qwen TE + flux2-vae companions; `zimage` does not. There is no `quality` image tier (FLUX.2-dev is banned). See [Download tiers](download-tiers.md).",
+    "long": "`download-image --tier fast` is the still half of `download-models`. `nvfp4` / `base` also pull Qwen TE + flux2-vae companions; `zimage` does not. Klein 9B is `--tier 9b` (FLUX Non-Commercial, not YouTube-ok). FLUX.2-dev is `--tier flux2-dev`. There is no `quality` image `--tier` alias. See [Download tiers](download-tiers.md).",
     "see_also": ["download-tier", "download-models", "klein", "nvfp4", "z-image"]
   },
   {
@@ -1400,7 +1400,7 @@
     "aliases": ["Comfy Manager", "ComfyUI-Manager"],
     "category": "Studio",
     "short": "Node installer inside Comfy. Lab graphs must not depend on a Manager click.",
-    "long": "Custom nodes in this stack are baked or bind-mounted (`ez_*`). Do not install MiniMax / Klein 9B / FLUX.2-dev packs from Manager. See [Custom nodes](reference/custom-nodes.md).",
+    "long": "Custom nodes in this stack are baked or bind-mounted (`ez_*`). Do not install MiniMax packs from Manager. Klein 9B / FLUX.2-dev weights are opt-in downloads, not Manager packs. See [Custom nodes](reference/custom-nodes.md).",
     "see_also": ["comfyui", "us-safe", "nunchaku"]
   },
   {
@@ -1804,8 +1804,8 @@
     "title": "FLUX.2-dev",
     "aliases": ["FLUX.2-dev"],
     "category": "Licenses",
-    "short": "Banned still weights. There is no quality image tier. Use Klein 4B Apache.",
-    "long": "`download-image` refuses `quality`. `promote-workflow` refuses FLUX.2-dev graphs. See [Model licenses](licenses.md).",
+    "short": "FLUX Non-Commercial 32B. Opt-in `--tier flux2-dev`. Not the lab default.",
+    "long": "`download-image --tier flux2-dev` pulls `flux2_dev_fp8mixed` + Mistral TE (gated). Not YouTube-ok. Lab graphs stay Klein 4B. `quality` is not a `--tier` alias. See [Model licenses](licenses.md).",
     "see_also": ["klein", "h3", "klein-9b", "us-safe"]
   },
   {
@@ -1813,8 +1813,8 @@
     "title": "Klein 9B",
     "aliases": ["Klein 9B"],
     "category": "Licenses",
-    "short": "FLUX Non-Commercial 9B. Not the lab default. Distilled 4B Apache is.",
-    "long": "Do not download, Queue, or promote Klein 9B. NVFP4 9B is also out. See [Model licenses](licenses.md).",
+    "short": "FLUX Non-Commercial 9B. Opt-in `--tier 9b`. Distilled 4B Apache is the lab default.",
+    "long": "`download-image --tier 9b` (also `9b-base`, `9b-nvfp4`) after the gated HF agree. Needs `qwen_3_8b_fp8mixed` TE. Not YouTube-ok. Do not pin as the lab UNET. See [Model licenses](licenses.md).",
     "see_also": ["klein", "flux2-dev", "us-safe"]
   },
   {

@@ -1067,7 +1067,7 @@ def render_encyclopedia_page(
         "",
         "> Generated from `docs/workflow_nodes.py`. Do not hand-edit this file.",
         "",
-        "ComfyUI pin **v0.34.6**. MiniMax / Klein 9B / FLUX.2-dev are not lab defaults.",
+        "ComfyUI pin **v0.34.6**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.",
         "",
     ]
     dummy_nodes = [

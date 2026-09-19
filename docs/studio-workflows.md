@@ -113,7 +113,7 @@ Playbooks: [Still to motion to AV](visual-generative-ai.md), [Short films](short
 
 === "License"
 
-    MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are not defaults. See [Model licenses](licenses.md).
+    MiniMax H3 is **banned** (US Excluded Territory). Klein 9B and FLUX.2-dev are opt-in FLUX Non-Commercial packs, not lab UNET pins. See [Model licenses](licenses.md).
 
 ---
 

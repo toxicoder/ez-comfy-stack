@@ -19,9 +19,11 @@ teardown() {
   teardown_repo_env
 }
 
-@test "download-image CLI help status fast unknown and banned 9b" {
+@test "download-image CLI help status fast unknown and banned quality" {
   run bash "${DI}" --help
   [ "${status}" -eq 0 ]
+  [[ "${output}" == *"9b"* ]]
+  [[ "${output}" == *"Non-Commercial"* ]]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DI}\" status --tier fast --json"
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"tiers"* ]]
@@ -29,7 +31,37 @@ teardown() {
   [ "${status}" -ne 0 ]
   run bash "${DI}" run --tier quality
   [ "${status}" -ne 0 ]
-  [[ "${output}" == *"banned"* || "${output}" == *"Banned"* ]]
+  [[ "${output}" == *"banned"* || "${output}" == *"Banned"* || "${output}" == *"quality image tier"* ]]
+  run bash "${DI}" run --tier nunchaku
+  [ "${status}" -ne 0 ]
+}
+
+@test "download-image 9b is opt-in NC not default all" {
+  run tier_repo 9b
+  [[ "${output}" == *"FLUX.2-klein-9b-fp8"* ]]
+  run tier_include_patterns 9b
+  [[ "${output}" == *"flux-2-klein-9b-fp8.safetensors"* ]]
+  run tier_include_patterns te8b
+  [[ "${output}" == *"qwen_3_8b_fp8mixed"* ]]
+  run tier_include_patterns small-vae
+  [[ "${output}" == *"full_encoder_small_decoder"* ]]
+  run is_nc_image_tier 9b
+  [ "${status}" -eq 0 ]
+  run is_nc_image_tier fast
+  [ "${status}" -ne 0 ]
+  TIER=all
+  run tiers_to_process
+  [[ "${output}" != *"9b"* ]]
+  [[ "${output}" != *"flux2-dev"* ]]
+  TIER=9b
+  run tiers_to_process
+  [[ "${output}" == *"9b"* && "${output}" == *"te8b"* && "${output}" == *"small-vae"* ]]
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DI}\" run --tier 9b"
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Non-Commercial"* ]]
+  [[ -e "${MODELS_DIR}/comfy/diffusion_models/flux-2-klein-9b-fp8.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/text_encoders/qwen_3_8b_fp8mixed.safetensors" ]]
+  [[ -e "${MODELS_DIR}/comfy/vae/full_encoder_small_decoder.safetensors" ]]
 }
 
 @test "download-image helpers tier_repo min dir includes process" {

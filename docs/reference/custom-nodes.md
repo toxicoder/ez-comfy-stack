@@ -184,7 +184,7 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZAppForge` | App Forge | `sample` combo, `prompt` STRING (default 1:1 mug brief), `template` combo (`auto` + lab ids), `slug` STRING, `as_app` BOOLEAN (default on), `overwrite` BOOLEAN (default off), `catalog` STRING | `STRING` path | graph **`llm`** (not CLI `occupancy enter llm`) | Clones a shipped lab graph. Does not Queue. Fail-soft without a GGUF (keyword heuristic). Banned MiniMax / Klein 9B / FLUX.2-dev |
+| `EZAppForge` | App Forge | `sample` combo, `prompt` STRING (default 1:1 mug brief), `template` combo (`auto` + lab ids), `slug` STRING, `as_app` BOOLEAN (default on), `overwrite` BOOLEAN (default off), `catalog` STRING | `STRING` path | graph **`llm`** (not CLI `occupancy enter llm`) | Clones a shipped lab graph. Does not Queue. Fail-soft without a GGUF (keyword heuristic). Banned MiniMax |
 
 ---
 

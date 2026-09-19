@@ -17,7 +17,7 @@ tags: [contributing, pr, tdd, docs]
 
 - **Opening** a PR into `development` without copying the root file into MkDocs
 - **Finding** style and test gates from the published docs
-- **Keeping** MiniMax / Klein 9B / FLUX.2-dev graphs out of `_lab`
+- **Keeping** MiniMax graphs out of `_lab`, and Klein 9B / FLUX.2-dev off authored lab UNET pins
 
 Canonical source: [CONTRIBUTING.md on GitHub](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/CONTRIBUTING.md). Do not treat this page as a second source of truth.
 
@@ -61,7 +61,7 @@ Promote a live `_user` graph (does **not** commit):
   --id my-hook
 ```
 
-Must not contain MiniMax / Klein 9B / FLUX.2-dev / Seedance / Kling / z_image_turbo. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.
+Must not contain MiniMax / Seedance / Kling / z_image_turbo, and must not pin Klein 9B / FLUX.2-dev as the UNETLoader widget. Then stamp App Mode, add or adjust `_build_*.py` / tests, and `make test`. Never copy `_lab` into `_user`.
 
 Commit titles: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
 
