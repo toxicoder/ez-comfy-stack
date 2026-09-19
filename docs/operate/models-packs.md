@@ -65,6 +65,8 @@ Opt-in packs (not `download-models`):
 ./scripts/utilities/download-wan.sh run --tier s2v       # S2V-14B talking-head opt-in
 ./scripts/manage.sh download-longcat --tier video        # LongCat-Video MIT; no NCCL
 ./scripts/manage.sh download-dreamx --tier creator       # DreamX-Creator 1.0 Apache; not World
+./scripts/utilities/download-image.sh run --tier 9b      # Klein 9B distilled; FLUX Non-Commercial, not YouTube-ok
+./scripts/utilities/download-image.sh run --tier flux2-dev  # FLUX.2 [dev] FP8; FLUX Non-Commercial
 ```
 
 Unload LTX before Fun InP / TRELLIS / VACE. SeedVR2 is restore-only after concat. `reap-models --drop-pack` cannot eat shared VAEs. SuperSplat is a [host viewer](../splat-sidecar.md), not a download.

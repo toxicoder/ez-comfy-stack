@@ -105,7 +105,7 @@ flowchart TB
 | UI | port **`${COMFY_PORT}`** (default **8188**) |
 | Memory limit | **90g** (host headroom reserved for SSH) |
 
-Klein 9B, FLUX.2-dev, Nunchaku 9B, and MiniMax H3 are **not** defaults. Session variables and port-forward copy-paste live on [Getting Started](getting-started.md). Opt-in audio: [Local podcast](podcast.md) and [Local music](music.md) (not part of `download-models`).
+Klein 9B and FLUX.2-dev are **opt-in FLUX Non-Commercial** packs (`download-image --tier 9b` / `flux2-dev`), not defaults and not YouTube-ok. Nunchaku 9B and MiniMax H3 stay banned. Session variables and port-forward copy-paste live on [Getting Started](getting-started.md). Opt-in audio: [Local podcast](podcast.md) and [Local music](music.md) (not part of `download-models`).
 
 ---
 

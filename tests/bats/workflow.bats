@@ -101,7 +101,7 @@ lab_wf() {
   [[ ! -f ${dir}/wan-shot-lab-example.json ]]
   [[ ! -f ${shorts_yaml}/bridge-wan-lab-example.json ]]
   [[ -f ${shorts_yaml}/go-see.shots.yaml ]]
-  run grep -R -E 'z_image_turbo|FLUX\.2-dev|klein-9b|flux-2-klein-9b|MiniMax|Seedance|Kling' "${dir}"
+  run grep -R -E 'MiniMax|Seedance|Kling' "${dir}"
   [ "${status}" -ne 0 ]
   run python3 -c "
 import json, os

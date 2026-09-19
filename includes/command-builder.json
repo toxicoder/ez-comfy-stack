@@ -100,7 +100,27 @@
             },
             {
               "value": "all",
-              "label": "all \u2014 fast + nvfp4 + base + zimage"
+              "label": "all \u2014 fast + nvfp4 + base + zimage (Apache only)"
+            },
+            {
+              "value": "9b",
+              "label": "9b \u2014 Klein 9B distilled FP8 + Qwen3-8B TE (FLUX Non-Commercial, not YouTube-ok)"
+            },
+            {
+              "value": "9b-base",
+              "label": "9b-base \u2014 Klein 9B base FP8 (FLUX Non-Commercial)"
+            },
+            {
+              "value": "9b-nvfp4",
+              "label": "9b-nvfp4 \u2014 Klein 9B NVFP4 (FLUX Non-Commercial)"
+            },
+            {
+              "value": "small-vae",
+              "label": "small-vae \u2014 Apache FLUX.2 small decoder VAE"
+            },
+            {
+              "value": "flux2-dev",
+              "label": "flux2-dev \u2014 FLUX.2 [dev] FP8 + Mistral TE (FLUX Non-Commercial, not YouTube-ok)"
             }
           ]
         }

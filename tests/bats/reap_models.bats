@@ -119,7 +119,7 @@ teardown() {
   [[ "${output}" == *"ltx-2.5-video-vae-bf16.safetensors"* ]]
   run models_refuse_list
   [[ "${output}" == *"MiniMax-H3"* ]]
-  [[ "${output}" == *"FLUX.2-dev"* ]]
+  [[ "${output}" != *"FLUX.2-dev"* ]]
   [[ "${output}" == *"DA3-LARGE"* ]]
   [[ "${output}" == *"Inria-3DGS"* ]]
   run models_dir_is_safe

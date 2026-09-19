@@ -11,6 +11,7 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | FLUX.2 Klein 4B NVFP4 | black-forest-labs/FLUX.2-klein-4b-nvfp4 | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Qwen3-4B text encoder (Klein 4B companion) | Comfy-Org/flux2-klein-4B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | FLUX.2 VAE | Comfy-Org/flux2-dev (split_files/vae) | Apache 2.0 companion | Yes | Yes | none | follow card | No extra ban beyond card | Yes |
+| FLUX.2 small decoder VAE | black-forest-labs/FLUX.2-small-decoder | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Z-Image Turbo | Comfy-Org/z_image_turbo | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.2 TI2V-5B | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | Yes |
 | Wan 2.2 A14B T2V/I2V | Comfy-Org/Wan_2.2_ComfyUI_Repackaged | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
@@ -26,8 +27,13 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | LTX-2.5 distilled INT8-convrot | Lightricks/LTX-2.5 | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | Yes |
 | LTX-2.5 IC-LoRA Union Control | Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model. Distilled-only. Official 2.5 graph widgets `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors`. Refuse 19B Union. | No |
 | LTX-2.3 distilled FP8 | Kijai/LTX2.3_comfy | LTX Community License | Yes | Yes if company under cap | $10M COMPANY annual revenue (affiliates count) | disclose AI-generated media; do not strip provenance | Yes — do not distill into a competing model | No |
-| FLUX.2 Klein 9B | black-forest-labs/FLUX.2-klein-9b-nvfp4 | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| FLUX.2 Klein 9B | black-forest-labs/FLUX.2-klein-9b-fp8 | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| FLUX.2 Klein 9B base FP8 | black-forest-labs/FLUX.2-klein-base-9b-fp8 | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| FLUX.2 Klein 9B NVFP4 | black-forest-labs/FLUX.2-klein-9b-nvfp4 | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| Qwen3-8B text encoder (Klein 9B companion) | Comfy-Org/flux2-klein-9B | follow card | Yes (with 9B) | No | follow card | card | card | No |
 | FLUX.2 [dev] | black-forest-labs/FLUX.2-dev | FLUX.2-dev / Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| FLUX.2 [dev] FP8 Comfy pack | Comfy-Org/flux2-dev | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
+| Mistral Small Flux2 text encoder | Comfy-Org/flux2-dev (split_files/text_encoders) | FLUX Non-Commercial | Yes (non-commercial only) | No | paid BFL commercial license | card | card | No |
 | MiniMax H3 | Comfy-Org/MiniMax-H3 | MiniMax H3 Community License | No — US Excluded Territory for weights AND outputs | No | n/a | n/a | n/a | No |
 | Wan 2.5 / 2.6 / 2.7 / 3.0 | (API / partner) | API-only / partner | No (not local weights) | No as a lab default | n/a | n/a | n/a | No |
 | Seedance / Kling / Veo / fal / Comfy Cloud | (API / partner) | API-only / partner | No (not local weights) | No as a lab default | n/a | n/a | n/a | No |
@@ -60,8 +66,9 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 - MiniMax H3 and MiniMaxH3* nodes/workflows
 - MiniMax Music 3 as a lab default
 - Suno / Udio partner APIs
-- FLUX.2 [dev] as any default or “quality” tier
-- FLUX.2 Klein 9B (`flux-2-klein-9b`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the default image model
+- FLUX.2 [dev] as any default or “quality” image `--tier` alias (opt-in is `download-image --tier flux2-dev`)
+- FLUX.2 Klein 9B (`flux-2-klein-9b-fp8`, `FLUX.2-klein-9b-nvfp4`, Nunchaku 9B) as the **default** image model or a pinned lab UNET (opt-in is `download-image --tier 9b`)
+- Nunchaku 9B packs
 - API-only / US-excluded / paid-self-host-required models (Wan 2.5+, Seedance, Kling, Veo, fal, Comfy Cloud, MiniMax API)
 - F5-TTS official weights (CC-BY-NC-4.0), Coqui XTTS v2 (CPML), Echo-TTS (CC-BY-NC-SA)
 - Fish Audio S2 (research/NC), Higgs Boson (community/commercial traps)
@@ -74,6 +81,8 @@ TRELLIS.2 footnote: download `Comfy-Org/TRELLIS.2` (`trellis_2_int8_convrot` + s
 ## Default `download-models` pack
 
 Apache still: `flux-2-klein-4b-fp8.safetensors` + `qwen_3_4b.safetensors` + `flux2-vae.safetensors`
+
+Opt-in NC still (not in `download-models`): `flux-2-klein-9b-fp8.safetensors` + `qwen_3_8b_fp8mixed.safetensors` + `full_encoder_small_decoder.safetensors` via `download-image --tier 9b`. FLUX Non-Commercial — not monetized YouTube. `flux2_dev_fp8mixed.safetensors` + `mistral_3_small_flux2_bf16.safetensors` via `--tier flux2-dev`.
 
 Apache silent motion: `wan2.2_ti2v_5B_fp16.safetensors` + `wan2.2_vae.safetensors` + `umt5_xxl_fp8_e4m3fn_scaled.safetensors`
 

@@ -30,7 +30,7 @@ tags: [learn, klein, wan, ltx, pipeline, us-safe]
 | **Wan 2.2** TI2V-5B | Silent T2V / I2V ~5 s | UMT5-XXL · `wan` | Apache 2.0 — **no native audio** |
 | **LTX-2.5** distilled INT8-convrot | Joint AV ~5 s | Gemma4-with-proj · `ltxv` | Community License, **gated**, $10M company cap |
 
-Klein 9B and FLUX.2-dev are not defaults. MiniMax H3 is banned (US Excluded Territory). Canonical table: [Model licenses](../licenses.md).
+Klein 9B and FLUX.2-dev are opt-in FLUX Non-Commercial packs, not defaults. MiniMax H3 is banned (US Excluded Territory). Canonical table: [Model licenses](../licenses.md).
 
 ```mermaid
 flowchart LR

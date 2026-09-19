@@ -56,6 +56,19 @@ teardown() {
   [[ "${output}" == *"Usage:"* ]]
 }
 
+@test "promote_workflow refuses 9B UNET pin but allows 9B in notes" {
+  local src
+  # shellcheck disable=SC1091
+  source "${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
+  src="${TEST_TMP_DIR}/note.json"
+  printf '%s\n' '{"id":"ok","nodes":[],"extra":{"lab_note":"Quality ultra may select Klein 9B"}}' >"${src}"
+  run promote_refuse_banned "${src}"
+  [ "${status}" -eq 0 ]
+  printf '%s\n' '{"id":"x","nodes":[{"type":"UNETLoader","widgets_values":["flux-2-klein-9b-fp8.safetensors","default"]}]}' >"${src}"
+  run promote_refuse_banned "${src}"
+  [ "${status}" -ne 0 ]
+}
+
 @test "promote_workflow copies into _lab and never the reverse" {
   local src dest sh
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"

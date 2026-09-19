@@ -1118,19 +1118,19 @@ Exit codes:
 <!-- source: scripts/utilities/download-image.sh -->
 ## download-image
 
-Download Apache FLUX.2 Klein 4B (and optional Apache stills) into MODELS_DIR.
+Download Apache FLUX.2 Klein 4B (and optional stills) into MODELS_DIR.
 
 Purpose:
-  Selective Hugging Face pull for the US-safe studio still generator.
-  Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE.
-  Does not download Klein 9B or FLUX.2-dev.
+  Selective Hugging Face pull for the studio still generator.
+  Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE (Apache 2.0).
+  Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
 
 Audience:
   Operators on the Spark host. Prefer manage.sh download-models.
 
 ```bash
 Usage:
-  ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all] [--json]
+  ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]
   ./scripts/utilities/download-image.sh run [--tier ...]
   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
 

@@ -18,15 +18,23 @@ if str(_PY) not in sys.path:
 
 from _lab_layout import node_overlap_hits  # noqa: E402
 
-BANNED = (
-    "z_image_turbo",
-    "FLUX.2-dev",
-    "klein-9b",
-    "flux-2-klein-9b",
+# Whole-file needles (US-excluded / API / never mention in lab JSON).
+BANNED_ANYWHERE = (
     "MiniMax",
     "Seedance",
     "Kling",
 )
+# Authored loader widgets only (opt-in NC may appear in notes/docs, never as the pin).
+BANNED_LOADER = (
+    "z_image_turbo",
+    "FLUX.2-dev",
+    "flux-2-dev",
+    "flux2_dev",
+    "flux2-dev",
+    "klein-9b",
+    "flux-2-klein-9b",
+)
+LOADER_TYPES = ("UNETLoader", "CLIPLoader", "VAELoader")
 
 
 def _overlap_hit(graph: dict[str, Any]) -> str | None:
@@ -51,9 +59,18 @@ def audit_lab_graphs(lab_root: Path) -> int:
         stem = os.path.splitext(path.name)[0]
         if data.get("id") != stem:
             raise SystemExit(f"{path}: id {data.get('id')!r} != {stem!r}")
-        for needle in BANNED:
+        for needle in BANNED_ANYWHERE:
             if needle in text:
                 raise SystemExit(f"{path}: banned {needle!r}")
+        for node in data.get("nodes") or []:
+            ntype = str(node.get("type") or "")
+            if ntype not in LOADER_TYPES:
+                continue
+            blob = " ".join(str(v) for v in (node.get("widgets_values") or []))
+            lower = blob.lower()
+            for needle in BANNED_LOADER:
+                if needle.lower() in lower:
+                    raise SystemExit(f"{path}: pinned banned loader {needle!r}")
         hit = _overlap_hit(data)
         if hit:
             raise SystemExit(f"{path}: {hit}")

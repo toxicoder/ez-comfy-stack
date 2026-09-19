@@ -32,11 +32,17 @@ source "${REPO_ROOT}/scripts/lib/common.sh"
 readonly PROMOTE_LANES=(klein wan ltx shorts dcc optional audio inspire)
 readonly PROMOTE_BANNED=(
   MiniMax
-  klein-9b
-  FLUX.2-dev
   Seedance
   Kling
   z_image_turbo
+)
+readonly PROMOTE_BANNED_UNET=(
+  klein-9b
+  flux-2-klein-9b
+  FLUX.2-dev
+  flux2_dev
+  flux2-dev
+  flux-2-dev
 )
 
 #######################################
@@ -96,6 +102,30 @@ promote_refuse_banned() {
       return 1
     fi
   done
+  python3 - "${src}" "${PROMOTE_BANNED_UNET[@]}" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+needles = [n.lower() for n in sys.argv[2:]]
+try:
+    data = json.loads(open(path, encoding="utf-8").read())
+except (OSError, json.JSONDecodeError):
+    raise SystemExit(0)
+for node in data.get("nodes") or []:
+    if str(node.get("type") or "") != "UNETLoader":
+        continue
+    blob = " ".join(str(v) for v in (node.get("widgets_values") or [])).lower()
+    for needle in needles:
+        if needle in blob:
+            raise SystemExit(f"pinned banned UNET {needle}")
+raise SystemExit(0)
+PY
+  local pin_rc=$?
+  if [[ ${pin_rc} -ne 0 ]]; then
+    err "refusing banned UNET pin in ${src}"
+    return 1
+  fi
   return 0
 }
 

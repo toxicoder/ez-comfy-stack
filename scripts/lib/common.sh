@@ -2012,8 +2012,21 @@ hf_download() {
         *FLUX.2-klein-4b-nvfp4*)
           echo "mock" >"${dest}/flux-2-klein-4b-nvfp4.safetensors"
           ;;
+        *FLUX.2-klein-base-9b-fp8*)
+          echo "mock" >"${dest}/flux-2-klein-base-9b-fp8.safetensors"
+          ;;
+        *FLUX.2-klein-9b-fp8* | *FLUX.2-klein-9B-fp8*)
+          echo "mock" >"${dest}/flux-2-klein-9b-fp8.safetensors"
+          ;;
         *FLUX.2-klein-9b-nvfp4* | *FLUX.2-klein-9B-nvfp4*)
           echo "mock" >"${dest}/flux-2-klein-9b-nvfp4.safetensors"
+          ;;
+        *FLUX.2-small-decoder*)
+          echo "mock" >"${dest}/full_encoder_small_decoder.safetensors"
+          ;;
+        *flux2-klein-9B* | *flux2-klein-9b*)
+          mkdir -p "${dest}/split_files/text_encoders"
+          echo "mock" >"${dest}/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors"
           ;;
         *Nunchaku* | *nunchaku*)
           echo "mock" >"${dest}/flux-klein-nunchaku.safetensors"

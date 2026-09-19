@@ -1,5 +1,5 @@
 # Purpose:
-#   Disk bible for MODELS_DIR keep-set packs and refuse list (MiniMax-H3, Klein 9B, …).
+#   Disk bible for MODELS_DIR keep-set packs and refuse list (MiniMax-H3, …).
 # Source of truth: this file (LICENSE-MODELS.md stays the license bible)
 # Schema: restricted YAML, scripts/lib/model_manifest.py (schema 1)
 # Safety:
@@ -10,8 +10,6 @@
 schema: 1
 refuse:
   - MiniMax-H3
-  - FLUX.2-klein-9b
-  - FLUX.2-dev
   - DA3-LARGE
   - Inria-3DGS
   - Pixal3D-as-default
@@ -34,6 +32,51 @@ packs:
     tier_dir: Comfy-Org__flux2-dev_vae
     files:
       - flux2-vae.safetensors
+  klein-9b-fp8:
+    default: false
+    min_gb: 8
+    tier_dir: black-forest-labs__FLUX.2-klein-9b-fp8_9b
+    files:
+      - flux-2-klein-9b-fp8.safetensors
+    cmd: download-image --tier 9b
+  klein-9b-base:
+    default: false
+    min_gb: 8
+    tier_dir: black-forest-labs__FLUX.2-klein-base-9b-fp8_9b-base
+    files:
+      - flux-2-klein-base-9b-fp8.safetensors
+    cmd: download-image --tier 9b-base
+  klein-9b-nvfp4:
+    default: false
+    min_gb: 5
+    tier_dir: black-forest-labs__FLUX.2-klein-9b-nvfp4_9b-nvfp4
+    files:
+      - flux-2-klein-9b-nvfp4.safetensors
+    cmd: download-image --tier 9b-nvfp4
+  klein-9b-te:
+    default: false
+    min_gb: 4
+    tier_dir: Comfy-Org__flux2-klein-9B_te8b
+    files:
+      - qwen_3_8b_fp8mixed.safetensors
+    cmd: download-image --tier 9b
+  flux2-small-decoder:
+    default: false
+    min_gb: 1
+    tier_dir: black-forest-labs__FLUX.2-small-decoder_small-vae
+    files:
+      - full_encoder_small_decoder.safetensors
+    cmd: download-image --tier small-vae
+  flux2-dev:
+    default: false
+    min_gb: 20
+    tier_dir: Comfy-Org__flux2-dev_flux2-dev
+    files:
+      - flux2_dev_fp8mixed.safetensors
+      - mistral_3_small_flux2_bf16.safetensors
+    shares:
+      - flux2-vae
+    cmd: download-image --tier flux2-dev
   wan-fun-inp:
     default: false
     min_gb: 40

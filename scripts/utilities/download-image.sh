@@ -2,18 +2,18 @@
 #
 # ## download-image
 #
-# Download Apache FLUX.2 Klein 4B (and optional Apache stills) into MODELS_DIR.
+# Download Apache FLUX.2 Klein 4B (and optional stills) into MODELS_DIR.
 #
 # Purpose:
-#   Selective Hugging Face pull for the US-safe studio still generator.
-#   Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE.
-#   Does not download Klein 9B or FLUX.2-dev.
+#   Selective Hugging Face pull for the studio still generator.
+#   Default: Klein 4B distilled FP8 + Qwen3-4B TE + flux2 VAE (Apache 2.0).
+#   Opt-in FLUX Non-Commercial: 9b / 9b-base / 9b-nvfp4 / flux2-dev (gated, not YouTube-ok).
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-models.
 #
 # Usage:
-#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all] [--json]
+#   ./scripts/utilities/download-image.sh status [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]
 #   ./scripts/utilities/download-image.sh run [--tier ...]
 #   ./scripts/utilities/download-image.sh cleanup [--tier ...] [--dry-run|--yes]
 #
@@ -62,6 +62,12 @@ tier_repo() {
     te) echo "Comfy-Org/z_image_turbo" ;;
     vae) echo "Comfy-Org/flux2-dev" ;;
     zimage) echo "Comfy-Org/z_image_turbo" ;;
+    9b) echo "black-forest-labs/FLUX.2-klein-9b-fp8" ;;
+    9b-base) echo "black-forest-labs/FLUX.2-klein-base-9b-fp8" ;;
+    9b-nvfp4) echo "black-forest-labs/FLUX.2-klein-9b-nvfp4" ;;
+    te8b) echo "Comfy-Org/flux2-klein-9B" ;;
+    small-vae) echo "black-forest-labs/FLUX.2-small-decoder" ;;
+    flux2-dev) echo "Comfy-Org/flux2-dev" ;;
     *) echo "" ;;
   esac
 }
@@ -85,6 +91,12 @@ tier_min_gb() {
     te) echo 2 ;;
     vae) echo 0 ;;
     zimage) echo 4 ;;
+    9b) echo 8 ;;
+    9b-base) echo 8 ;;
+    9b-nvfp4) echo 5 ;;
+    te8b) echo 4 ;;
+    small-vae) echo 0 ;;
+    flux2-dev) echo 20 ;;
     *) echo 0 ;;
   esac
 }
@@ -121,6 +133,27 @@ tier_include_patterns() {
       printf '%s\n' \
         "split_files/diffusion_models/z_image_turbo_bf16.safetensors" \
         "split_files/text_encoders/qwen_3_4b.safetensors"
+      ;;
+    9b)
+      printf '%s\n' "flux-2-klein-9b-fp8.safetensors"
+      ;;
+    9b-base)
+      printf '%s\n' "flux-2-klein-base-9b-fp8.safetensors"
+      ;;
+    9b-nvfp4)
+      printf '%s\n' "flux-2-klein-9b-nvfp4.safetensors"
+      ;;
+    te8b)
+      printf '%s\n' "split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors"
+      ;;
+    small-vae)
+      printf '%s\n' "full_encoder_small_decoder.safetensors"
+      ;;
+    flux2-dev)
+      printf '%s\n' \
+        "split_files/diffusion_models/flux2_dev_fp8mixed.safetensors" \
+        "split_files/text_encoders/mistral_3_small_flux2_bf16.safetensors" \
+        "split_files/vae/flux2-vae.safetensors"
       ;;
     *)
       return 0
@@ -185,9 +218,48 @@ tiers_to_process() {
     nvfp4) echo "nvfp4 te vae" ;;
     base) echo "base te vae" ;;
     zimage) echo "zimage" ;;
-    te | vae) echo "${TIER}" ;;
+    9b) echo "9b te8b small-vae vae" ;;
+    9b-base) echo "9b-base te8b small-vae vae" ;;
+    9b-nvfp4) echo "9b-nvfp4 te8b small-vae vae" ;;
+    small-vae) echo "small-vae" ;;
+    flux2-dev) echo "flux2-dev" ;;
+    te | vae | te8b) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
+}
+
+#######################################
+# True when this image pack is FLUX Non-Commercial (gated, not YouTube-ok).
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   None
+# Returns:
+#   0 when NC; 1 otherwise
+#######################################
+is_nc_image_tier() {
+  case "${1}" in
+    9b | 9b-base | 9b-nvfp4 | flux2-dev) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+#######################################
+# Warn that an NC image pack is not a casual-commercial default.
+# Globals:
+#   None
+# Arguments:
+#   $1  Tier name
+# Outputs:
+#   Warning on stderr
+# Returns:
+#   0
+#######################################
+warn_flux_nc_image_tier() {
+  warn "FLUX Non-Commercial (${1}): not monetized YouTube without a paid BFL commercial license."
+  warn "Gated Hugging Face card — accept as the same user as HF_TOKEN. Not legal advice. See docs/licenses.md"
 }
 
 #######################################
@@ -208,8 +280,13 @@ parse_args() {
       --tier)
         TIER="${2:?}"
         case "${TIER}" in
-          quality | *dev* | *9b* | *9B* | *nunchaku*)
+          quality | *nunchaku*)
             err "Banned image tier: ${TIER}. See docs/licenses.md"
+            exit 1
+            ;;
+          fast | nvfp4 | base | te | vae | zimage | all | 9b | 9b-base | 9b-nvfp4 | te8b | small-vae | flux2-dev) ;;
+          *)
+            err "Unknown image tier: ${TIER}. See docs/licenses.md"
             exit 1
             ;;
         esac
@@ -219,16 +296,18 @@ parse_args() {
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup) CMD="${1}" ;;
       quality | --tier-quality)
-        err "FLUX.2-dev / quality tier is banned. See docs/licenses.md"
+        err "There is no quality image tier (that name is not FLUX.2-dev). Use --tier flux2-dev for the NC opt-in. See docs/licenses.md"
         exit 1
         ;;
-      *9b* | *9B* | *nunchaku*)
-        err "FLUX.2 Klein 9B / Nunchaku 9B is banned (FLUX Non-Commercial). See docs/licenses.md"
+      *nunchaku*)
+        err "Nunchaku packs are banned. See docs/licenses.md"
         exit 1
         ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all] [--json]" >&2
+        echo "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json]" >&2
         echo "  Default fast = Klein 4B distilled FP8 + qwen_3_4b + flux2-vae (Apache 2.0)" >&2
+        echo "  9b / 9b-base / 9b-nvfp4 / flux2-dev = FLUX Non-Commercial opt-in (not YouTube-ok, not in download-models)" >&2
+        echo "  small-vae = Apache FLUX.2 small decoder (full_encoder_small_decoder.safetensors)" >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
@@ -383,8 +462,8 @@ link_into_comfy() {
       diffusion_models/* | */diffusion_models/*) dest_sub="diffusion_models" ;;
       *)
         case "${base}" in
-          *text_projection* | *text_encoder* | *gemma*) dest_sub="text_encoders" ;;
-          *vae* | *audio*) dest_sub="vae" ;;
+          *text_projection* | *text_encoder* | *gemma* | *qwen_3_8b*) dest_sub="text_encoders" ;;
+          *vae* | *audio* | *decoder*) dest_sub="vae" ;;
           *) dest_sub="diffusion_models" ;;
         esac
         ;;
@@ -461,6 +540,9 @@ cmd_run() {
   check_hf_cli
   prepare_comfy_layout "${MODELS_DIR}" || exit 1
   clear_stale_hf_locks "${MODELS_DIR}"
+  if is_nc_image_tier "${TIER}"; then
+    warn_flux_nc_image_tier "${TIER}"
+  fi
   local tier repo ok=0 fail=0 pat dir i=0 n=0
   local -a include_args=() tiers=()
   read -r -a tiers <<<"$(tiers_to_process)"
@@ -593,7 +675,7 @@ main() {
     run) cmd_run ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup [--tier fast|nvfp4|base|zimage|all|9b|9b-base|9b-nvfp4|small-vae|flux2-dev] [--json] [--yes]"
       exit 1
       ;;
   esac

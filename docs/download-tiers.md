@@ -12,7 +12,7 @@ tags: [download, tier, models, klein, wan, ltx, podcast, dub, music]
 - **`--tier` vs `--limit`** — pack id versus Mbps
 - **Default pack** — `download-models` (no `--tier`)
 - **Per-family packs** — image, Wan, LTX, audio, 3D, extras
-- **Banned names** — `quality` on image, Klein 9B, FLUX.2-dev, DA3-LARGE, DreamX-World, MiniMax H3
+- **Banned names** — `quality` as an image `--tier` alias, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3. Klein 9B / FLUX.2-dev are **opt-in NC**, not defaults.
 
 **What this enables**
 
@@ -96,7 +96,7 @@ Basenames on disk: [Download packs](operate/models-packs.md). Mbps throttle: [Do
 
 | Utility | `--tier all` includes | Does not include |
 | --- | --- | --- |
-| Image | `fast` + `nvfp4` + `base` + `zimage` (and TE/VAE companions) | — |
+| Image | `fast` + `nvfp4` + `base` + `zimage` (and TE/VAE companions) | `9b`, `9b-base`, `9b-nvfp4`, `flux2-dev` (FLUX Non-Commercial; pick those flags on purpose) |
 | Wan | `5b` + `a14b` + `fun-inp` | `vace`, `s2v` |
 | LTX | `2.5` + `2.3` + `gemma` | `iclora` (and not `quality`; quality is a 2.3 alias you pick on purpose) |
 | Podcast | `analog` + `acestep` + `chatterbox` + `qwen3tts` | — |
@@ -107,7 +107,7 @@ Basenames on disk: [Download packs](operate/models-packs.md). Mbps throttle: [Do
 | LLM | `enhance` + `qwen36-35b-a3b` | putting 35B into `download-models` |
 | DreamX | same as `creator` | DreamX-World (refused) |
 
-Banned names (`quality` on image, Klein 9B, FLUX.2-dev, DA3-LARGE, DreamX-World, MiniMax H3) stay refused — [Model licenses](licenses.md).
+Banned names (`quality` as an image `--tier` alias, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3) stay refused. Klein 9B and FLUX.2-dev are gated **opt-in** packs (`--tier 9b` / `flux2-dev`), not lab defaults — [Model licenses](licenses.md).
 
 Occupancy: one heavy GPU job. `occupancy enter trellis` (unload LTX/Wan, stop Blender) before TRELLIS. Same rule for Fun InP / VACE / S2V / ACE-Step / llm-desk.
 
@@ -161,14 +161,19 @@ Stuck resume (`0 MiB/s`, `*.incomplete`): check **Delete stuck \*.incomplete** o
 | `nvfp4` | no | no | ~2 GB + companions | klein | Optional Klein 4B NVFP4 |
 | `base` | no | no | ~3 GB + companions | klein | Optional Klein 4B base FP8 |
 | `zimage` | no | no | ~4 GB | klein | Z-Image Turbo; no TE/VAE companions |
-| `all` | no | no | sum of the four | klein | `fast` + `nvfp4` + `base` + `zimage` |
+| `all` | no | no | sum of the four | klein | `fast` + `nvfp4` + `base` + `zimage` (Apache only; not 9B/dev) |
+| `9b` | no | no | ~8 GB + 8B TE + small VAE | klein | FLUX Non-Commercial Klein 9B distilled. Gated. Not YouTube-ok |
+| `9b-base` | no | no | ~8 GB + companions | klein | FLUX Non-Commercial 9B base |
+| `9b-nvfp4` | no | no | ~5 GB + companions | klein | FLUX Non-Commercial 9B NVFP4 |
+| `small-vae` | no | no | small | klein | Apache `full_encoder_small_decoder.safetensors` (official 9B Comfy VAE) |
+| `flux2-dev` | no | no | ~20 GB+ | klein | FLUX Non-Commercial 32B FP8 + Mistral TE. Gated. Not YouTube-ok |
 | `te` / `vae` | companions | with `fast` | — | — | Not a public first-run flag; `fast`/`nvfp4`/`base` pull them |
 
 ```ezcmd
 id: download-image
 ```
 
-The manage.sh default pack calls `download-image.sh run --tier fast`. There is no `quality` image tier (FLUX.2-dev is banned).
+The manage.sh default pack calls `download-image.sh run --tier fast`. There is no `quality` image `--tier` alias. FLUX.2-dev is the opt-in `--tier flux2-dev` (FLUX Non-Commercial).
 
 ---
 
@@ -330,8 +335,9 @@ id: download-llm
 
 | Name | What happens |
 | --- | --- |
-| Image `quality` / FLUX.2-dev | Refused |
-| Klein 9B | Refused |
+| Image `quality` as a `--tier` | Refused (use `flux2-dev` for the NC 32B pack) |
+| Klein 9B as a lab default / pinned UNET | Not the default. Opt-in `--tier 9b` (FLUX Non-Commercial) |
+| Nunchaku 9B | Refused |
 | `--tier da3-large` | Refused |
 | DreamX-World | Refused |
 | MiniMax H3 / `download-h3` | Refused |
