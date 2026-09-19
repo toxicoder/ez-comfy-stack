@@ -7,6 +7,7 @@ with plain dicts.
 
 from __future__ import annotations
 
+import inspect
 from typing import Any
 
 from .catalog import (
@@ -98,6 +99,27 @@ def handle_to_input(
     return _json_ok({"ok": True, "name": dest.name, "rel": dest.name})
 
 
+async def request_json(request: object) -> object:
+    """Read a JSON body from an aiohttp-like request.
+
+    Args:
+        request: Object with optional ``json`` callable (async or sync).
+
+    Returns:
+        Parsed body, or ``{}`` when missing/invalid.
+    """
+    json_fn = getattr(request, "json", None)
+    if not callable(json_fn):
+        return {}
+    try:
+        raw = json_fn()
+        if inspect.isawaitable(raw):
+            return await raw  # type: ignore[misc]
+        return raw
+    except Exception:  # noqa: BLE001 — empty/invalid body
+        return {}
+
+
 def register_routes(
     *,
     server: object | None = None,
@@ -157,11 +179,7 @@ def register_routes(
         Returns:
             JSON response from :func:`handle_delete`.
         """
-        try:
-            json_fn = getattr(request, "json", None)
-            body = await json_fn() if callable(json_fn) else {}
-        except Exception:  # noqa: BLE001 — empty/invalid body
-            body = {}
+        body = await request_json(request)
         if not isinstance(body, dict):
             body = {}
         status, payload = handle_delete(body)
@@ -176,11 +194,7 @@ def register_routes(
         Returns:
             JSON response from :func:`handle_to_input`.
         """
-        try:
-            json_fn = getattr(request, "json", None)
-            body = await json_fn() if callable(json_fn) else {}
-        except Exception:  # noqa: BLE001 — empty/invalid body
-            body = {}
+        body = await request_json(request)
         if not isinstance(body, dict):
             body = {}
         status, payload = handle_to_input(body)

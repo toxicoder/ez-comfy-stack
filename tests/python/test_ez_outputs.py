@@ -23,6 +23,7 @@ from ez_outputs.routes import (
     handle_list,
     handle_to_input,
     register_routes,
+    request_json,
 )
 
 
@@ -127,9 +128,19 @@ def test_route_handlers_ok_and_errors(tmp_path: Path) -> None:
 def test_register_routes_fail_soft_and_fake_server(tmp_path: Path) -> None:
     import asyncio
 
+    def _respond_early(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[str, Any]]:
+        return status, payload
+
     assert register_routes(server=object()) is False
     assert register_routes(server=SimpleNamespace(routes=None)) is False
     assert register_routes(server=SimpleNamespace(routes=SimpleNamespace())) is False
+    assert (
+        register_routes(
+            server=SimpleNamespace(routes=object()),
+            json_response=_respond_early,
+        )
+        is False
+    )
 
     recorded: list[tuple[str, str]] = []
     handlers: dict[str, Any] = {}
@@ -404,6 +415,48 @@ def test_register_routes_server_import_fails(monkeypatch: pytest.MonkeyPatch) ->
         register_routes(json_response=lambda payload, status=200: (status, payload))
         is False
     )
+
+
+def test_register_routes_uses_aiohttp(monkeypatch: pytest.MonkeyPatch) -> None:
+    import sys
+
+    class _Web:
+        @staticmethod
+        def json_response(payload: dict[str, Any], status: int = 200) -> tuple[int, dict[str, Any]]:
+            return status, payload
+
+    monkeypatch.setitem(sys.modules, "aiohttp", SimpleNamespace(web=_Web))
+
+    class _Adder:
+        def get(self, path: str) -> Any:
+            def deco(fn: Any) -> Any:
+                return fn
+
+            return deco
+
+        def post(self, path: str) -> Any:
+            def deco(fn: Any) -> Any:
+                return fn
+
+            return deco
+
+    assert register_routes(server=SimpleNamespace(routes=_Adder())) is True
+
+
+def test_request_json_sync_and_missing() -> None:
+    import asyncio
+
+    class _Sync:
+        def json(self) -> dict[str, str]:
+            return {"rel": "x.png"}
+
+    class _Boom:
+        def json(self) -> dict[str, str]:
+            raise ValueError("bad")
+
+    assert asyncio.run(request_json(SimpleNamespace())) == {}
+    assert asyncio.run(request_json(_Sync())) == {"rel": "x.png"}
+    assert asyncio.run(request_json(_Boom())) == {}
 
 
 def test_register_routes_aiohttp_missing(monkeypatch: pytest.MonkeyPatch) -> None:
