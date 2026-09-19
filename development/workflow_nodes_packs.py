@@ -284,22 +284,26 @@ def pack_nodes() -> dict[str, Any]:
     )
     nodes["EZQuality"] = _n(
         "Quality",
-        "Workflow-global Lab / Draft / High combo. JS overlays family-specific sampler and Klein UNET widgets.",
+        "Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.",
         origin="ez_quality",
-        lab="Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not --tier quality.",
-        sockets=[_s("quality", "STRING", "out", "Selected quality id (lab, draft, high).")],
+        lab="custom freezes the last overlay. lab restores authored widgets. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.",
+        sockets=[_s("quality", "STRING", "out", "Selected quality id.")],
         widgets=[
             _w(
                 "quality",
                 index=0,
                 typ="COMBO",
                 rng="lab",
-                desc="Lab default, Draft (faster), or High (slower).",
-                gen="Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs download-image --tier base.",
+                desc="custom freezes last overlay; lab restores graph defaults.",
+                gen="Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. ultra/max need download-image --tier 9b or flux2-dev.",
                 choices=[
+                    ("custom", "Freeze current widgets. Queue does not overlay."),
+                    ("draft", "Faster Apache Klein 4B (NVFP4 if on disk)."),
                     ("lab", "Authored lab widgets. Default."),
-                    ("draft", "Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled."),
-                    ("high", "Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0."),
+                    ("standard", "Distilled 4B, 8 steps, CFG 1.0."),
+                    ("high", "Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0."),
+                    ("ultra", "Klein 9B distilled when on disk (FLUX Non-Commercial). Else high."),
+                    ("max", "Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high."),
                 ],
             ),
         ],

@@ -12059,7 +12059,7 @@
           
             <div class="md-content" data-md-component="content">
               
-              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 19 Sep 2026, 22:14 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-19T22:14:01+00:00">19 Sep 2026</time></span>
+              <article class="md-content__inner md-typeset"><div class="ez-docs-dev-banner" role="status" style="margin:0.75rem 0 1rem;padding:0.65rem 0.9rem;border-left:4px solid #7c4dff;background:rgba(124,77,255,0.08);border-radius:4px;font-size:0.9rem;"><strong>Development docs</strong> — this site version tracks the <code>development</code> branch and may change without a release tag. Prefer <a href="../latest/">latest</a> for production-ready guidance.</div><span class="ez-published-chip" role="status" title="Last published 19 Sep 2026, 22:31 UTC"><svg class="ez-published-chip__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m0 16H5V10h14zM5 8V6h14v2z"></path></svg><span class="ez-published-chip__label">Last published</span><span class="ez-published-chip__sep" aria-hidden="true">·</span><time datetime="2026-09-19T22:31:07+00:00">19 Sep 2026</time></span>
                 
                   
 
@@ -13866,10 +13866,10 @@
 </tbody>
 </table>
 <h3 id="ezquality-quality"><code>EZQuality</code> — Quality<a class="headerlink" href="#ezquality-quality" title="Permanent link">&para;</a></h3>
-<p>Workflow-global <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="quality-widget" data-href="../../../../../glossary/#quality-widget" data-short="App-global Lab / Draft / High combo. Family-specific overlays. Not --tier quality." data-category="Studio" title="App-global Lab / Draft / High combo. Family-specific overlays. Not --tier quality.">Lab / Draft / High</span> combo. JS overlays family-specific sampler and Klein UNET widgets.</p>
+<p>Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.</p>
 <div class="admonition warning">
 <p class="admonition-title">Lab notes</p>
-<p>Default lab leaves authored widgets. Draft is faster. High is slower. Distilled Klein High without Klein base keeps CFG 1.0. Never selects banned weights. Not <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-tier" data-href="../../../../../glossary/#download-tier" data-short="Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps." data-category="Downloads" title="Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps.">--tier</span> quality.</p>
+<p>custom freezes the last overlay. lab restores authored widgets. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-tier" data-href="../../../../../glossary/#download-tier" data-short="Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps." data-category="Downloads" title="Pack selector on one downloader. Not a studio-wide quality ladder. --limit is Mbps.">--tier</span> quality.</p>
 </div>
 <table>
 <thead>
@@ -13885,14 +13885,14 @@
 <td><code>quality</code></td>
 <td>out</td>
 <td><code>STRING</code></td>
-<td>Selected quality id (lab, draft, high).</td>
+<td>Selected quality id.</td>
 </tr>
 </tbody>
 </table>
 <h4 id="quality"><code>quality</code><a class="headerlink" href="#quality" title="Permanent link">&para;</a></h4>
 <p>Type <code>COMBO</code>. Range / default: lab.</p>
-<p>Lab default, Draft (faster), or High (slower).</p>
-<p><strong>How it affects generation:</strong> Family-specific overlays on steps, CFG, and Klein 4B UNET. Does not change size, length, CLIP, or VAE. Klein base High needs <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-image" data-href="../../../../../glossary/#download-image" data-short="Still UNET pack. Default --tier fast is Klein 4B FP8 plus TE and VAE." data-category="Downloads" title="Still UNET pack. Default --tier fast is Klein 4B FP8 plus TE and VAE.">download-image</span> --tier base.</p>
+<p>custom freezes last overlay; lab restores graph defaults.</p>
+<p><strong>How it affects generation:</strong> Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. ultra/max need <span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="download-image" data-href="../../../../../glossary/#download-image" data-short="Still UNET pack. Default --tier fast is Klein 4B FP8 plus TE and VAE." data-category="Downloads" title="Still UNET pack. Default --tier fast is Klein 4B FP8 plus TE and VAE.">download-image</span> --tier 9b or flux2-dev.</p>
 <p><strong>This graph:</strong> <code>lab</code></p>
 <p><strong>Other choices</strong></p>
 <table>
@@ -13904,16 +13904,32 @@
 </thead>
 <tbody>
 <tr>
+<td><code>custom</code></td>
+<td>Freeze current widgets. Queue does not overlay.</td>
+</tr>
+<tr>
+<td><code>draft</code></td>
+<td>Faster Apache Klein 4B (<span class="ez-term" tabindex="0" role="button" aria-haspopup="dialog" aria-expanded="false" data-term="nvfp4" data-href="../../../../../glossary/#nvfp4" data-short="Optional Klein 4B still UNET quant. Apache. Not the distilled FP8 default." data-category="Models" title="Optional Klein 4B still UNET quant. Apache. Not the distilled FP8 default.">NVFP4</span> if on disk).</td>
+</tr>
+<tr>
 <td><code>lab</code></td>
 <td>Authored lab widgets. Default.</td>
 </tr>
 <tr>
-<td><code>draft</code></td>
-<td>Faster: fewer steps. Klein stays CFG 1.0 distilled when already distilled.</td>
+<td><code>standard</code></td>
+<td>Distilled 4B, 8 steps, CFG 1.0.</td>
 </tr>
 <tr>
 <td><code>high</code></td>
-<td>Slower: more steps. Klein base 4B + CFG 3.5 when that UNET is on disk; else extra distilled steps at CFG 1.0.</td>
+<td>Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0.</td>
+</tr>
+<tr>
+<td><code>ultra</code></td>
+<td>Klein 9B distilled when on disk (FLUX Non-Commercial). Else high.</td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high.</td>
 </tr>
 </tbody>
 </table>
