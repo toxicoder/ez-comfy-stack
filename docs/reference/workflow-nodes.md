@@ -1832,6 +1832,157 @@ How many stills in one Run.
 
 **How it affects generation:** Large canvases stay at 1.
 
+### `EZImageMode` — Creator mode
+
+Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.
+
+!!! warning "Lab notes"
+
+    klein/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
+| `context` | out | `STRING` | Mode instruction plus incoming look splice. |
+| `enhance_mode` | out | `STRING` | t2i, edit, identity, or text_swap. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+
+#### `category`
+
+Type `COMBO`. Range / default: Generate / Scene / Subject / ….
+
+Filter Creator mode.
+
+**How it affects generation:** JS hides modes outside this category. Python run() uses Mode even if Category is stale.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Generate` | generate |
+| `Scene` | edit_scene |
+| `Subject` | edit_subject |
+| `Object` | edit_object |
+| `Text` | text |
+| `Framing` | framing |
+| `Multi-ref` | multi_ref |
+| `Publish` | publish |
+| `Look` | look |
+| `Fix` | fix |
+
+#### `mode`
+
+Type `COMBO`. Range / default: Photoreal still / Background swap / Change text / ….
+
+Creator preset.
+
+**How it affects generation:** Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error.
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Photoreal still` | Generate a photoreal still. Natural light, real materials, empty of lettering. |
+| `Editorial portrait` | Editorial portrait still. Named shot size, millimetre-equivalent lens, motivated light. |
+| `Product packshot` | Clean product packshot on a simple sweep. Soft wrap light, sharp brand-free surfaces. |
+| `Food tabletop` | Overhead or three-quarter food tabletop. Steam, glaze, and practicals. Empty of type. |
+| `Portrait lock` | Single original character portrait. Identity-stable face, simple background, locked eyeline. |
+| `Interior room` | Architectural interior. Name the room program, window light, and furniture inventory. |
+| `Landscape` | Wide landscape still. Weather, time of day, and a clear near-to-far plane. |
+| `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
+| `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
+| `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
+| `Background swap` | Keep the subject from the reference still. Replace only the background and ground contact. |
+| `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
+| `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
+| `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |
+| `Season change` | Keep architecture. Change foliage, snow, and wardrobe season, not building massing. |
+| `Relight` | Keep the reference inventory. Change only lighting pattern and practicals. |
+| `Color grade` | Keep the reference scene. Apply a new color grade only; do not restage. |
+| `Move location` | Keep the subject identity. Place them in a new location named in the prompt. |
+| `Interior restyle` | Keep room camera and architecture. Restyle furniture, textiles, and finish only. |
+| `Crowd density` | Keep the place. Add or thin anonymous crowd density without named people. |
+| `Change outfit` | Keep face and body from the reference. Change clothing only as prompted. |
+| `Change hair` | Keep identity. Change haircut, color, or style only. |
+| `Change expression` | Keep identity and pose. Change facial expression only. |
+| `Age hint` | Keep identity. Shift apparent age slightly as prompted. Original character only. |
+| `Change pose` | Keep identity and wardrobe. Change pose and hands only. |
+| `Accessories` | Keep identity. Add or remove glasses, bag, hat, or jewelry as prompted. |
+| `Makeup` | Keep identity. Change makeup density and color only. |
+| `Gaze` | Keep identity. Change eyeline and head turn only. |
+| `Body framing` | Keep identity. Reframe the body: MCU, cowboy, or full, as prompted. |
+| `Identity lock` | Keep the reference face and body exactly. Change only what the prompt names. |
+| `Add object` | Keep the reference scene. Add one named object with matching light and contact. |
+| `Remove object` | Keep the reference. Remove the named object and reconstruct the occluded surface. |
+| `Replace object` | Keep the reference. Swap the named object for another; match scale and light. |
+| `Product in scene` | Place or restage a product in the reference scene. Keep identity of the set. |
+| `Material swap` | Keep shape. Change only surface material: metal, cloth, wood, stone, glass. |
+| `Wear and age` | Keep the object. Add honest wear, dust, or patina as prompted. |
+| `Cleanup` | Keep the scene. Remove crumbs, stray cables, and clutter. Empty of marks. |
+| `Sharpen detail` | Keep composition. Increase micro-detail and material resolution only. |
+| `Recolor object` | Keep shape and light. Change local color of the named object only. |
+| `Place original mark` | Keep the product. Place only original unmarked graphics the prompt invents. No real brands. |
+| `Change text` | Keep typeface, weight, tracking, and perspective. Replace only the lettering named in the prompt. |
+| `Relabel` | Keep the sign or label object. Swap the written words. Lock glyph geometry. |
+| `Poster type` | Design a poster with short original lettering. High contrast, empty of real brands. |
+| `UI mock type` | Interface mock still with original short labels. No real app chrome. |
+| `Quote card` | Quote card still. Original line, strong type, empty background. |
+| `Lower third plate` | Lower-third background plate. Leave a clean band for later type. |
+| `Infographic still` | Simple infographic still with original short labels and clear hierarchy. |
+| `Thumbnail type` | YouTube-style thumbnail still. Face or object large, original short word. |
+| `Empty of lettering` | Keep the reference. Remove all lettering and reconstruct surfaces. |
+| `Signage` | Keep the street or shop. Change only original invented signage. |
+| `Change ratio` | Keep the subject. Reframe onto a new aspect from Format. Outpaint edges as needed. |
+| `Outpaint` | Keep the reference center. Extend canvas to Format size with matching scene. |
+| `Crop reframe` | Keep identity. Crop and recompose to a new shot size. |
+| `Zoom in` | Tighter shot of the same subject. MCU or CU from the reference. |
+| `Pull out` | Wider shot of the same place. Reveal more environment. |
+| `Low angle` | Same subject from a low angle. Hero eyeline. |
+| `Top down` | Same scene from a top-down camera. Flatten the floor plan. |
+| `Profile` | Same identity in profile. Keep wardrobe and light logic. |
+| `Over shoulder` | Over-shoulder view of the same scene. Dirty or clean as prompted. |
+| `Dutch angle` | Same scene with a dutch tilt. Keep inventory. |
+| `Face lock` | Lock the reference face. Do not invent a new person. Original character only. |
+| `Face swap (best effort)` | Use ref 1 for the scene and ref 2 for identity. Best-effort Klein lock. Original characters only, no real-person likeness. |
+| `Wardrobe transfer` | Keep the person in ref 1. Transfer wardrobe look from ref 2. |
+| `Style match` | Keep the subject in ref 1. Match medium and grade from ref 2. |
+| `Product consistency` | Keep product geometry from ref 1. Match set lighting from ref 2. |
+| `Character sheet` | Turn the reference into a character sheet: front, three-quarter, and a CU. Same identity. |
+| `Before after` | Make a matching after plate of the reference. Same camera, named change only. |
+| `Colorway` | Keep the product or garment. Output an alternate colorway. |
+| `Set extension` | Extend the reference set left and right. Match architecture. |
+| `Multi concept` | Blend concepts from two references. Keep both inventories readable. |
+| `YouTube thumbnail` | YouTube thumbnail still. Large face or object, original short word, 16:9. |
+| `Shorts cover` | YouTube Shorts cover. 9:16, punchy subject, empty of tiny type. |
+| `Instagram post` | Instagram 1:1 or 4:5 still. Strong subject, clean background. |
+| `Instagram story` | Instagram story 9:16 still. Safe margins, one subject. |
+| `TikTok cover` | Vertical cover still. Hook pose, empty of platform chrome. |
+| `X post still` | Landscape still for an X post. Simple read at small size. |
+| `Podcast cover` | Podcast cover 1:1. Strong graphic, original title space. |
+| `Album cover` | Album cover 1:1. Graphic still, original invented title only. |
+| `End card` | End-card plate. Clean area for later type. Empty of lettering. |
+| `Open Graph card` | Open Graph 1.91:1 still. Simple subject, no tiny type. |
+| `Golden hour` | Golden-hour sidelight, long shadows, warm rim. Photoreal still. |
+| `Overcast` | Soft overcast skyfill. Low contrast, even skin. Photoreal still. |
+| `Noir` | Hard venetian or slash light, deep blacks. Noir still. |
+| `Bleach bypass` | Bleach-bypass grade: retained silver, crushed color. |
+| `Teal shadow warm key` | Warm key, cool teal shadows. No brand LUT names. |
+| `Studio softbox` | Studio softbox key, clean sweep, catchlights. |
+| `Practical night` | Night interior lit by practical lamps only. |
+| `Hazy morning` | Morning haze, low sun, soft bloom. |
+| `Hard noon` | Hard noon sun, short shadows, specular skin. |
+| `Film still` | Photoreal film-still language: named shot size, 35mm-equivalent, motivated light. |
+| `Fix hands` | Keep the reference. Correct extra fingers and melted hands only. |
+| `Fix eyes` | Keep identity. Correct eyeline, symmetry, and catchlights. |
+| `Fix skin` | Keep pores honest. Remove waxy plastic skin and extra limbs. |
+| `Fix type` | Keep the layout. Make original lettering legible without changing the words unless prompted. |
+| `Fix exposure` | Keep the scene. Correct blown highlights and crushed blacks. |
+| `Fix white balance` | Keep the scene. Correct white balance only. |
+| `Clean noise` | Keep detail. Reduce muddy noise without plastic smoothing. |
+| `Empty of marks` | Keep the scene. Remove watermarks and stray logos. Empty of marks. |
+| `Straighten` | Keep the scene. Straighten horizon and verticals. |
+| `Match grade` | Grade ref 1 to match ref 2. Keep inventory of ref 1. |
+
 ### `EZKleinPromptEnhance` — Klein Prompt Enhance
 
 Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.

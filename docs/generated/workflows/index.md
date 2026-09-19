@@ -147,6 +147,7 @@ tags: [workflows, generated, comfyui]
 | `klein/food-tabletop` | [klein/food-tabletop.md](klein/food-tabletop.md) |
 | `klein/hook-still` | [klein/hook-still.md](klein/hook-still.md) |
 | `klein/identity-sheet` | [klein/identity-sheet.md](klein/identity-sheet.md) |
+| `klein/image-studio` | [klein/image-studio.md](klein/image-studio.md) |
 | `klein/instagram-square` | [klein/instagram-square.md](klein/instagram-square.md) |
 | `klein/lighting-trio` | [klein/lighting-trio.md](klein/lighting-trio.md) |
 | `klein/lower-third-bg` | [klein/lower-third-bg.md](klein/lower-third-bg.md) |

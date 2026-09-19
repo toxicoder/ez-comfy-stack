@@ -158,6 +158,112 @@ def _ltx_i2v(motion: str, audio: str, camera: str) -> str:
     )
 
 
+def klein_image_studio() -> list[dict[str, str]]:
+    """Twenty recipes for klein/image-studio covering generate, edit, and text."""
+    return [
+        _row(
+            "photoreal-terrace",
+            "Photoreal terrace",
+            "A photoreal still of an original techno wizard in an unmarked teal running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering.",
+        ),
+        _row(
+            "background-swap",
+            "Background swap",
+            "Keep the subject from the reference. Replace the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original character only.",
+        ),
+        _row(
+            "change-text",
+            "Change text",
+            "Keep typeface, weight, tracking, and perspective. Replace the lettering with the original word HELLO. Lock glyph geometry.",
+        ),
+        _row(
+            "change-ratio",
+            "Change ratio",
+            "Keep the subject. Reframe onto the Format canvas. Outpaint edges with matching scene. Empty of new lettering.",
+        ),
+        _row(
+            "face-lock",
+            "Face lock",
+            "Lock the reference face. Same identity, wardrobe, and eyeline. Change only what the prompt names. Original character only.",
+        ),
+        _row(
+            "outfit-change",
+            "Outfit change",
+            "Keep face and body from the reference. Change clothing to an unmarked charcoal technical coat. Original character only.",
+        ),
+        _row(
+            "relight-night",
+            "Relight night",
+            "Keep the reference inventory. Relight as practical-lamp night interior. Warm pools, cool window rim.",
+        ),
+        _row(
+            "product-packshot",
+            "Product packshot",
+            "Clean packshot of an unmarked ceramic mug on a sweep. Soft wrap light, sharp unmarked surfaces, empty of type.",
+        ),
+        _row(
+            "youtube-thumb",
+            "YouTube thumbnail",
+            "YouTube thumbnail still. Large original character, one short original word, 16:9, high contrast, empty of real brands.",
+        ),
+        _row(
+            "quote-card",
+            "Quote card",
+            "Quote card still. Original line on a clean field. Strong type, empty background.",
+        ),
+        _row(
+            "sky-replace",
+            "Sky replace",
+            "Keep the scene from the reference. Replace only the sky with a storm front and the light it casts.",
+        ),
+        _row(
+            "add-object",
+            "Add object",
+            "Keep the reference scene. Add one unmarked brass lamp on the table with matching light and contact shadow.",
+        ),
+        _row(
+            "outpaint-wide",
+            "Outpaint wide",
+            "Keep the reference center. Extend the canvas to Format size with matching architecture left and right.",
+        ),
+        _row(
+            "fix-hands",
+            "Fix hands",
+            "Keep the reference. Correct extra fingers and melted hands only. Original character only.",
+        ),
+        _row(
+            "interior-room",
+            "Interior room",
+            "Architectural interior of a writing room. Window light, teak desk, unmarked shelves. Empty of signage.",
+        ),
+        _row(
+            "golden-hour-look",
+            "Golden hour look",
+            "Golden-hour sidelight, long shadows, warm rim. Photoreal still of the prompted place. Empty of lettering.",
+        ),
+        _row(
+            "instagram-post",
+            "Instagram post",
+            "Instagram 4:5 still. One original subject, clean background, empty of platform chrome and tiny type.",
+        ),
+        _row(
+            "relabel-sign",
+            "Relabel sign",
+            "Keep the sign object. Swap the written words to OPEN. Lock glyph geometry and perspective.",
+        ),
+        _row(
+            "wardrobe-transfer",
+            "Wardrobe transfer",
+            "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked teal coat. Original characters only.",
+        ),
+        _row(
+            "empty-lettering",
+            "Empty of lettering",
+            "Keep the reference. Remove all lettering and reconstruct surfaces. Empty of marks.",
+        ),
+    ]
+
+
 def klein_t2i() -> list[dict[str, str]]:
     return [
         _row("rooftop-golden-hour", "Rooftop golden hour", KLEIN_STILL),
@@ -1196,6 +1302,7 @@ def main() -> None:
     DEST.mkdir(parents=True, exist_ok=True)
     catalogs = {
         "klein_t2i": klein_t2i(),
+        "klein_image_studio": klein_image_studio(),
         "klein_identity": klein_identity(),
         "klein_place": klein_place(),
         "klein_character": klein_character(),
@@ -1214,6 +1321,7 @@ def main() -> None:
         "klein/still-draft": "klein_t2i",
         "klein/still-daily": "klein_t2i",
         "klein/still-studio": "klein_t2i",
+        "klein/image-studio": "klein_image_studio",
         "klein/still-hero": "klein_t2i",
         "klein/thumbnail": "klein_t2i",
         "klein/instagram-square": "klein_t2i",

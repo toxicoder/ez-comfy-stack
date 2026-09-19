@@ -190,13 +190,17 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 
 ## ez_image
 
-Category `ez-comfy/image`. Size helpers for Klein edit graphs plus still and video Format / platform pickers. Torch / Comfy `common_upscale` is lazy inside snap/match `run()`.
+Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional reference stills, and the 100-mode Creator mode node. Torch / Comfy `common_upscale` is lazy inside snap/match `run()`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | — | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
 | `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | — | Lanczos-resize to `size_src` H×W. No-op when already equal |
-| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio App only) is a Cinema Rack starter. Quality does not change size |
+| `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size |
+| `EZImageMode` | Creator mode | `category` combo, `mode` combo (100 labels), optional `context` STRING | `STRING` context/enhance_mode/prefix | klein | klein/image-studio. Category filters Mode. Queue splices an instruction, picks t2i/edit/text_swap/identity, and sets the save prefix. Optional refs never required |
+| `EZOptionalImage` | Optional reference stills | `filename` STRING (default empty), optional IMAGE×3 | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid. Presence is the tensor, not the filename |
+| `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE, optional IMAGE + has_image | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps ÷16, VAE-encodes, ReferenceLatent. Fail-soft |
+| `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | — | Fail-soft empty caption without VL weights. Klein graphs use EZKleinRefCanvas instead |
 | `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
 
 ---
@@ -207,7 +211,7 @@ Category `ez-comfy`. One combo on every `_lab` graph. Python does not walk sibli
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZQuality` | Quality | `quality` combo `lab` `draft` `high` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | Lab is authored widgets. Never writes banned UNETs. Klein base High needs `download-image --tier base`. Not `--tier quality`. Does not change size, length, CLIP, or VAE. Inspire/llm is a visible no-op |
+| `EZQuality` | Quality | `quality` combo `custom` `draft` `lab` `standard` `high` `ultra` `max` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | custom freezes the last overlay. lab restores authored widgets. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. ultra/max may select opt-in Non-Commercial weights. Not `--tier quality` |
 
 ---
 

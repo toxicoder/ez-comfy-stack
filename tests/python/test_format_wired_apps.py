@@ -53,7 +53,7 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
         assert "format" in names, rel
         assert "width" in names, rel
         assert "height" in names, rel
-        if rel == "klein/still-studio":
+        if rel in {"klein/still-studio", "klein/image-studio"}:
             assert "look" in names
         else:
             assert "look" not in names, rel

@@ -49,6 +49,7 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 def test_format_scope_covers_printers_and_skips_locked() -> None:
     assert format_kind("klein/still-draft") == "still"
     assert format_kind("klein/still-studio") == "still"
+    assert format_kind("klein/image-studio") == "still"
     assert format_kind("wan/still-to-video-5s") == "video"
     assert format_kind("ltx/text-to-video-5s") == "video"
     assert format_kind("klein/creator/youtube-channel-icon") == "still"

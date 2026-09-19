@@ -32,6 +32,7 @@ ENCYCLOPEDIA_PAGE = DOCS_DIR / "reference" / "workflow-nodes.md"
 MANIFEST_FILE = OUT_DIR / "manifest.json"
 STYLES_FILE = REPO_ROOT / "custom_nodes" / "ez_prompt_enhance" / "styles.json"
 FORMATS_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "formats.json"
+MODES_FILE = REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "modes.json"
 VIDEO_FORMATS_FILE = (
     REPO_ROOT / "custom_nodes" / "ez_image" / "js" / "video_formats.json"
 )
@@ -317,6 +318,79 @@ def _image_format_choices() -> list[dict[str, str]]:
     return out
 
 
+def _modes_payload() -> dict[str, Any]:
+    """Load ez_image modes.json as an object.
+
+    Returns:
+        Mapping with ``modes`` / ``categories`` lists (empty when missing).
+    """
+    if not MODES_FILE.is_file():
+        return {"modes": [], "categories": []}
+    raw = json.loads(MODES_FILE.read_text(encoding="utf-8"))
+    if isinstance(raw, list):
+        return {"modes": raw, "categories": []}
+    if isinstance(raw, dict):
+        return raw
+    return {"modes": [], "categories": []}
+
+
+def _image_mode_choices() -> list[dict[str, str]]:
+    """Load EZImageMode combo rows from modes.json.
+
+    Returns:
+        ``{id, description}`` rows keyed by label (the stored combo value).
+    """
+    rows = _modes_payload().get("modes")
+    if not isinstance(rows, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in rows:
+        if not isinstance(item, dict):
+            continue
+        label = str(item.get("label") or item.get("id") or "").strip()
+        if not label:
+            continue
+        instruction = str(item.get("instruction") or "").strip()
+        enhance = str(item.get("enhance_mode") or "t2i").strip()
+        desc = instruction or f"{enhance}. {item.get('id') or label}."
+        out.append({"id": label, "description": desc})
+    return out
+
+
+def _image_mode_category_choices() -> list[dict[str, str]]:
+    """Load EZImageMode category combo rows.
+
+    Returns:
+        ``{id, description}`` rows keyed by category label.
+    """
+    payload = _modes_payload()
+    rows = payload.get("categories")
+    out: list[dict[str, str]] = []
+    if isinstance(rows, list):
+        for item in rows:
+            if not isinstance(item, dict):
+                continue
+            label = str(item.get("label") or item.get("id") or "").strip()
+            cid = str(item.get("id") or "").strip()
+            if label:
+                out.append({"id": label, "description": cid or label})
+        if out:
+            return out
+    modes = payload.get("modes")
+    seen: set[str] = set()
+    if isinstance(modes, list):
+        for item in modes:
+            if not isinstance(item, dict):
+                continue
+            cid = str(item.get("category") or "").strip()
+            if not cid or cid in seen:
+                continue
+            seen.add(cid)
+            label = cid.replace("_", " ").title()
+            out.append({"id": label, "description": cid})
+    return out
+
+
 def _video_format_choices() -> list[dict[str, str]]:
     """Load EZVideoFormat combo rows from video_formats.json.
 
@@ -441,6 +515,10 @@ def expand_choices(
         return list(ace_keyscale)
     if source == "image_formats":
         return _image_format_choices()
+    if source == "image_modes":
+        return _image_mode_choices()
+    if source == "image_mode_categories":
+        return _image_mode_category_choices()
     if source == "video_formats":
         return _video_format_choices()
     if source == "video_families":

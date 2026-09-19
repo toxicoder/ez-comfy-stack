@@ -51,7 +51,7 @@ flowchart TB
   Need --> Loop["Loop / GIF / bumper"]
   Need --> Film["~90 s short"]
   Need --> Plate["Thumbnail / packshot / cover"]
-  Still --> K["klein-still-draft, still-studio, daily / hero"]
+  Still --> K["klein-still-draft, still-studio, image-studio, daily / hero"]
   Motion --> W["wan/still-to-video-5s or shot"]
   AV --> L["ltx/still-to-video-5s or shorts"]
   Loop --> G["wan-gif-loop or bumper-loop"]

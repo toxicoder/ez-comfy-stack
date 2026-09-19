@@ -1,0 +1,947 @@
+{
+  "default_id": "gen_photoreal",
+  "categories": [
+    {
+      "id": "generate",
+      "label": "Generate"
+    },
+    {
+      "id": "edit_scene",
+      "label": "Scene"
+    },
+    {
+      "id": "edit_subject",
+      "label": "Subject"
+    },
+    {
+      "id": "edit_object",
+      "label": "Object"
+    },
+    {
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "id": "framing",
+      "label": "Framing"
+    },
+    {
+      "id": "multi_ref",
+      "label": "Multi-ref"
+    },
+    {
+      "id": "publish",
+      "label": "Publish"
+    },
+    {
+      "id": "look",
+      "label": "Look"
+    },
+    {
+      "id": "fix",
+      "label": "Fix"
+    }
+  ],
+  "modes": [
+    {
+      "id": "gen_photoreal",
+      "label": "Photoreal still",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Generate a photoreal still. Natural light, real materials, empty of lettering.",
+      "prefix": "ez_gen_photoreal"
+    },
+    {
+      "id": "gen_editorial",
+      "label": "Editorial portrait",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Editorial portrait still. Named shot size, millimetre-equivalent lens, motivated light.",
+      "prefix": "ez_gen_editorial"
+    },
+    {
+      "id": "gen_product_packshot",
+      "label": "Product packshot",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Clean product packshot on a simple sweep. Soft wrap light, sharp brand-free surfaces.",
+      "prefix": "ez_gen_product_packshot"
+    },
+    {
+      "id": "gen_food_tabletop",
+      "label": "Food tabletop",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Overhead or three-quarter food tabletop. Steam, glaze, and practicals. Empty of type.",
+      "prefix": "ez_gen_food_tabletop"
+    },
+    {
+      "id": "gen_portrait_lock",
+      "label": "Portrait lock",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Single original character portrait. Identity-stable face, simple background, locked eyeline.",
+      "prefix": "ez_gen_portrait_lock"
+    },
+    {
+      "id": "gen_interior",
+      "label": "Interior room",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Architectural interior. Name the room program, window light, and furniture inventory.",
+      "prefix": "ez_gen_interior"
+    },
+    {
+      "id": "gen_landscape",
+      "label": "Landscape",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Wide landscape still. Weather, time of day, and a clear near-to-far plane.",
+      "prefix": "ez_gen_landscape"
+    },
+    {
+      "id": "gen_architecture",
+      "label": "Exterior architecture",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Exterior architecture still. Massing, facade material, and sun angle. Empty of signage.",
+      "prefix": "ez_gen_architecture"
+    },
+    {
+      "id": "gen_macro",
+      "label": "Macro detail",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Macro still of a small subject. Shallow depth, tactile material, no readable type.",
+      "prefix": "ez_gen_macro"
+    },
+    {
+      "id": "gen_illustration",
+      "label": "Illustration still",
+      "category": "generate",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Illustration still in a named medium (ink, gouache, woodcut). Not photoreal.",
+      "prefix": "ez_gen_illustration"
+    },
+    {
+      "id": "edit_bg_swap",
+      "label": "Background swap",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the subject from the reference still. Replace only the background and ground contact.",
+      "prefix": "ez_edit_bg_swap"
+    },
+    {
+      "id": "edit_sky_replace",
+      "label": "Sky replace",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene from the reference. Replace only the sky and the light it casts.",
+      "prefix": "ez_edit_sky_replace"
+    },
+    {
+      "id": "edit_time_of_day",
+      "label": "Time of day",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep inventory and camera. Relight the reference for a new time of day.",
+      "prefix": "ez_edit_time_of_day"
+    },
+    {
+      "id": "edit_weather",
+      "label": "Weather change",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the place. Change weather only: rain, snow, fog, or clear air as prompted.",
+      "prefix": "ez_edit_weather"
+    },
+    {
+      "id": "edit_season",
+      "label": "Season change",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep architecture. Change foliage, snow, and wardrobe season, not building massing.",
+      "prefix": "ez_edit_season"
+    },
+    {
+      "id": "edit_relight",
+      "label": "Relight",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference inventory. Change only lighting pattern and practicals.",
+      "prefix": "ez_edit_relight"
+    },
+    {
+      "id": "edit_color_grade",
+      "label": "Color grade",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference scene. Apply a new color grade only; do not restage.",
+      "prefix": "ez_edit_color_grade"
+    },
+    {
+      "id": "edit_location_move",
+      "label": "Move location",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the subject identity. Place them in a new location named in the prompt.",
+      "prefix": "ez_edit_location_move"
+    },
+    {
+      "id": "edit_interior_restyle",
+      "label": "Interior restyle",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep room camera and architecture. Restyle furniture, textiles, and finish only.",
+      "prefix": "ez_edit_interior_restyle"
+    },
+    {
+      "id": "edit_crowd_density",
+      "label": "Crowd density",
+      "category": "edit_scene",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the place. Add or thin anonymous crowd density without named people.",
+      "prefix": "ez_edit_crowd_density"
+    },
+    {
+      "id": "edit_outfit",
+      "label": "Change outfit",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep face and body from the reference. Change clothing only as prompted.",
+      "prefix": "ez_edit_outfit"
+    },
+    {
+      "id": "edit_hair",
+      "label": "Change hair",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Change haircut, color, or style only.",
+      "prefix": "ez_edit_hair"
+    },
+    {
+      "id": "edit_expression",
+      "label": "Change expression",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity and pose. Change facial expression only.",
+      "prefix": "ez_edit_expression"
+    },
+    {
+      "id": "edit_age_hint",
+      "label": "Age hint",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Shift apparent age slightly as prompted. Original character only.",
+      "prefix": "ez_edit_age_hint"
+    },
+    {
+      "id": "edit_pose",
+      "label": "Change pose",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity and wardrobe. Change pose and hands only.",
+      "prefix": "ez_edit_pose"
+    },
+    {
+      "id": "edit_accessories",
+      "label": "Accessories",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Add or remove glasses, bag, hat, or jewelry as prompted.",
+      "prefix": "ez_edit_accessories"
+    },
+    {
+      "id": "edit_makeup",
+      "label": "Makeup",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Change makeup density and color only.",
+      "prefix": "ez_edit_makeup"
+    },
+    {
+      "id": "edit_gaze",
+      "label": "Gaze",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Change eyeline and head turn only.",
+      "prefix": "ez_edit_gaze"
+    },
+    {
+      "id": "edit_body_framing",
+      "label": "Body framing",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Reframe the body: MCU, cowboy, or full, as prompted.",
+      "prefix": "ez_edit_body_framing"
+    },
+    {
+      "id": "edit_identity_lock",
+      "label": "Identity lock",
+      "category": "edit_subject",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference face and body exactly. Change only what the prompt names.",
+      "prefix": "ez_edit_identity_lock"
+    },
+    {
+      "id": "edit_add_object",
+      "label": "Add object",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference scene. Add one named object with matching light and contact.",
+      "prefix": "ez_edit_add_object"
+    },
+    {
+      "id": "edit_remove_object",
+      "label": "Remove object",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference. Remove the named object and reconstruct the occluded surface.",
+      "prefix": "ez_edit_remove_object"
+    },
+    {
+      "id": "edit_replace_object",
+      "label": "Replace object",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference. Swap the named object for another; match scale and light.",
+      "prefix": "ez_edit_replace_object"
+    },
+    {
+      "id": "edit_product_in_scene",
+      "label": "Product in scene",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Place or restage a product in the reference scene. Keep identity of the set.",
+      "prefix": "ez_edit_product_in_scene"
+    },
+    {
+      "id": "edit_material",
+      "label": "Material swap",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep shape. Change only surface material: metal, cloth, wood, stone, glass.",
+      "prefix": "ez_edit_material"
+    },
+    {
+      "id": "edit_wear_age",
+      "label": "Wear and age",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the object. Add honest wear, dust, or patina as prompted.",
+      "prefix": "ez_edit_wear_age"
+    },
+    {
+      "id": "edit_cleanup",
+      "label": "Cleanup",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene. Remove crumbs, stray cables, and clutter. Empty of marks.",
+      "prefix": "ez_edit_cleanup"
+    },
+    {
+      "id": "edit_sharpen_detail",
+      "label": "Sharpen detail",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep composition. Increase micro-detail and material resolution only.",
+      "prefix": "ez_edit_sharpen_detail"
+    },
+    {
+      "id": "edit_colorize",
+      "label": "Recolor object",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep shape and light. Change local color of the named object only.",
+      "prefix": "ez_edit_colorize"
+    },
+    {
+      "id": "edit_logo_placement",
+      "label": "Place original mark",
+      "category": "edit_object",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the product. Place only original unmarked graphics the prompt invents. No real brands.",
+      "prefix": "ez_edit_logo_placement"
+    },
+    {
+      "id": "edit_change_text",
+      "label": "Change text",
+      "category": "text",
+      "enhance_mode": "text_swap",
+      "needs_ref": 1,
+      "instruction": "Keep typeface, weight, tracking, and perspective. Replace only the lettering named in the prompt.",
+      "prefix": "ez_edit_change_text"
+    },
+    {
+      "id": "edit_relabel",
+      "label": "Relabel",
+      "category": "text",
+      "enhance_mode": "text_swap",
+      "needs_ref": 1,
+      "instruction": "Keep the sign or label object. Swap the written words. Lock glyph geometry.",
+      "prefix": "ez_edit_relabel"
+    },
+    {
+      "id": "edit_poster_type",
+      "label": "Poster type",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Design a poster with short original lettering. High contrast, empty of real brands.",
+      "prefix": "ez_edit_poster_type"
+    },
+    {
+      "id": "edit_ui_mock_text",
+      "label": "UI mock type",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Interface mock still with original short labels. No real app chrome.",
+      "prefix": "ez_edit_ui_mock_text"
+    },
+    {
+      "id": "edit_quote_card",
+      "label": "Quote card",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Quote card still. Original line, strong type, empty background.",
+      "prefix": "ez_edit_quote_card"
+    },
+    {
+      "id": "edit_lower_third",
+      "label": "Lower third plate",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Lower-third background plate. Leave a clean band for later type.",
+      "prefix": "ez_edit_lower_third"
+    },
+    {
+      "id": "edit_infographic",
+      "label": "Infographic still",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Simple infographic still with original short labels and clear hierarchy.",
+      "prefix": "ez_edit_infographic"
+    },
+    {
+      "id": "edit_thumbnail_type",
+      "label": "Thumbnail type",
+      "category": "text",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "YouTube-style thumbnail still. Face or object large, original short word.",
+      "prefix": "ez_edit_thumbnail_type"
+    },
+    {
+      "id": "edit_empty_lettering",
+      "label": "Empty of lettering",
+      "category": "text",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference. Remove all lettering and reconstruct surfaces.",
+      "prefix": "ez_edit_empty_lettering"
+    },
+    {
+      "id": "edit_signage",
+      "label": "Signage",
+      "category": "text",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the street or shop. Change only original invented signage.",
+      "prefix": "ez_edit_signage"
+    },
+    {
+      "id": "edit_change_ratio",
+      "label": "Change ratio",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the subject. Reframe onto a new aspect from Format. Outpaint edges as needed.",
+      "prefix": "ez_edit_change_ratio"
+    },
+    {
+      "id": "edit_outpaint",
+      "label": "Outpaint",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference center. Extend canvas to Format size with matching scene.",
+      "prefix": "ez_edit_outpaint"
+    },
+    {
+      "id": "edit_crop_reframe",
+      "label": "Crop reframe",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Crop and recompose to a new shot size.",
+      "prefix": "ez_edit_crop_reframe"
+    },
+    {
+      "id": "edit_zoom_in",
+      "label": "Zoom in",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Tighter shot of the same subject. MCU or CU from the reference.",
+      "prefix": "ez_edit_zoom_in"
+    },
+    {
+      "id": "edit_pull_out",
+      "label": "Pull out",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Wider shot of the same place. Reveal more environment.",
+      "prefix": "ez_edit_pull_out"
+    },
+    {
+      "id": "edit_low_angle",
+      "label": "Low angle",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Same subject from a low angle. Hero eyeline.",
+      "prefix": "ez_edit_low_angle"
+    },
+    {
+      "id": "edit_top_down",
+      "label": "Top down",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Same scene from a top-down camera. Flatten the floor plan.",
+      "prefix": "ez_edit_top_down"
+    },
+    {
+      "id": "edit_profile",
+      "label": "Profile",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Same identity in profile. Keep wardrobe and light logic.",
+      "prefix": "ez_edit_profile"
+    },
+    {
+      "id": "edit_over_shoulder",
+      "label": "Over shoulder",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Over-shoulder view of the same scene. Dirty or clean as prompted.",
+      "prefix": "ez_edit_over_shoulder"
+    },
+    {
+      "id": "edit_dutch",
+      "label": "Dutch angle",
+      "category": "framing",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Same scene with a dutch tilt. Keep inventory.",
+      "prefix": "ez_edit_dutch"
+    },
+    {
+      "id": "ref_face_lock",
+      "label": "Face lock",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Lock the reference face. Do not invent a new person. Original character only.",
+      "prefix": "ez_ref_face_lock"
+    },
+    {
+      "id": "ref_face_swap",
+      "label": "Face swap (best effort)",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Use ref 1 for the scene and ref 2 for identity. Best-effort Klein lock. Original characters only, no real-person likeness.",
+      "prefix": "ez_ref_face_swap"
+    },
+    {
+      "id": "ref_wardrobe_transfer",
+      "label": "Wardrobe transfer",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Keep the person in ref 1. Transfer wardrobe look from ref 2.",
+      "prefix": "ez_ref_wardrobe_transfer"
+    },
+    {
+      "id": "ref_style_match",
+      "label": "Style match",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Keep the subject in ref 1. Match medium and grade from ref 2.",
+      "prefix": "ez_ref_style_match"
+    },
+    {
+      "id": "ref_product_consistency",
+      "label": "Product consistency",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Keep product geometry from ref 1. Match set lighting from ref 2.",
+      "prefix": "ez_ref_product_consistency"
+    },
+    {
+      "id": "ref_character_sheet",
+      "label": "Character sheet",
+      "category": "multi_ref",
+      "enhance_mode": "identity",
+      "needs_ref": 1,
+      "instruction": "Turn the reference into a character sheet: front, three-quarter, and a CU. Same identity.",
+      "prefix": "ez_ref_character_sheet"
+    },
+    {
+      "id": "ref_before_after",
+      "label": "Before after",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Make a matching after plate of the reference. Same camera, named change only.",
+      "prefix": "ez_ref_before_after"
+    },
+    {
+      "id": "ref_colorway",
+      "label": "Colorway",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the product or garment. Output an alternate colorway.",
+      "prefix": "ez_ref_colorway"
+    },
+    {
+      "id": "ref_set_extension",
+      "label": "Set extension",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Extend the reference set left and right. Match architecture.",
+      "prefix": "ez_ref_set_extension"
+    },
+    {
+      "id": "ref_multi_concept",
+      "label": "Multi concept",
+      "category": "multi_ref",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Blend concepts from two references. Keep both inventories readable.",
+      "prefix": "ez_ref_multi_concept"
+    },
+    {
+      "id": "pub_yt_thumb",
+      "label": "YouTube thumbnail",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "YouTube thumbnail still. Large face or object, original short word, 16:9.",
+      "prefix": "ez_pub_yt_thumb"
+    },
+    {
+      "id": "pub_yt_shorts_cover",
+      "label": "Shorts cover",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "YouTube Shorts cover. 9:16, punchy subject, empty of tiny type.",
+      "prefix": "ez_pub_yt_shorts_cover"
+    },
+    {
+      "id": "pub_ig_post",
+      "label": "Instagram post",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Instagram 1:1 or 4:5 still. Strong subject, clean background.",
+      "prefix": "ez_pub_ig_post"
+    },
+    {
+      "id": "pub_ig_story",
+      "label": "Instagram story",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Instagram story 9:16 still. Safe margins, one subject.",
+      "prefix": "ez_pub_ig_story"
+    },
+    {
+      "id": "pub_tiktok_cover",
+      "label": "TikTok cover",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Vertical cover still. Hook pose, empty of platform chrome.",
+      "prefix": "ez_pub_tiktok_cover"
+    },
+    {
+      "id": "pub_x_post",
+      "label": "X post still",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Landscape still for an X post. Simple read at small size.",
+      "prefix": "ez_pub_x_post"
+    },
+    {
+      "id": "pub_podcast_cover",
+      "label": "Podcast cover",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Podcast cover 1:1. Strong graphic, original title space.",
+      "prefix": "ez_pub_podcast_cover"
+    },
+    {
+      "id": "pub_album_cover",
+      "label": "Album cover",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Album cover 1:1. Graphic still, original invented title only.",
+      "prefix": "ez_pub_album_cover"
+    },
+    {
+      "id": "pub_endcard",
+      "label": "End card",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "End-card plate. Clean area for later type. Empty of lettering.",
+      "prefix": "ez_pub_endcard"
+    },
+    {
+      "id": "pub_og_card",
+      "label": "Open Graph card",
+      "category": "publish",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Open Graph 1.91:1 still. Simple subject, no tiny type.",
+      "prefix": "ez_pub_og_card"
+    },
+    {
+      "id": "look_golden_hour",
+      "label": "Golden hour",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Golden-hour sidelight, long shadows, warm rim. Photoreal still.",
+      "prefix": "ez_look_golden_hour"
+    },
+    {
+      "id": "look_overcast",
+      "label": "Overcast",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Soft overcast skyfill. Low contrast, even skin. Photoreal still.",
+      "prefix": "ez_look_overcast"
+    },
+    {
+      "id": "look_noir",
+      "label": "Noir",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Hard venetian or slash light, deep blacks. Noir still.",
+      "prefix": "ez_look_noir"
+    },
+    {
+      "id": "look_bleach",
+      "label": "Bleach bypass",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Bleach-bypass grade: retained silver, crushed color.",
+      "prefix": "ez_look_bleach"
+    },
+    {
+      "id": "look_teal_shadow",
+      "label": "Teal shadow warm key",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Warm key, cool teal shadows. No brand LUT names.",
+      "prefix": "ez_look_teal_shadow"
+    },
+    {
+      "id": "look_studio_softbox",
+      "label": "Studio softbox",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Studio softbox key, clean sweep, catchlights.",
+      "prefix": "ez_look_studio_softbox"
+    },
+    {
+      "id": "look_practical_night",
+      "label": "Practical night",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Night interior lit by practical lamps only.",
+      "prefix": "ez_look_practical_night"
+    },
+    {
+      "id": "look_hazy_morning",
+      "label": "Hazy morning",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Morning haze, low sun, soft bloom.",
+      "prefix": "ez_look_hazy_morning"
+    },
+    {
+      "id": "look_hard_noon",
+      "label": "Hard noon",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Hard noon sun, short shadows, specular skin.",
+      "prefix": "ez_look_hard_noon"
+    },
+    {
+      "id": "look_film_still",
+      "label": "Film still",
+      "category": "look",
+      "enhance_mode": "t2i",
+      "needs_ref": 0,
+      "instruction": "Photoreal film-still language: named shot size, 35mm-equivalent, motivated light.",
+      "prefix": "ez_look_film_still"
+    },
+    {
+      "id": "fix_hands",
+      "label": "Fix hands",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the reference. Correct extra fingers and melted hands only.",
+      "prefix": "ez_fix_hands"
+    },
+    {
+      "id": "fix_eyes",
+      "label": "Fix eyes",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep identity. Correct eyeline, symmetry, and catchlights.",
+      "prefix": "ez_fix_eyes"
+    },
+    {
+      "id": "fix_skin",
+      "label": "Fix skin",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep pores honest. Remove waxy plastic skin and extra limbs.",
+      "prefix": "ez_fix_skin"
+    },
+    {
+      "id": "fix_text_legibility",
+      "label": "Fix type",
+      "category": "fix",
+      "enhance_mode": "text_swap",
+      "needs_ref": 1,
+      "instruction": "Keep the layout. Make original lettering legible without changing the words unless prompted.",
+      "prefix": "ez_fix_text_legibility"
+    },
+    {
+      "id": "fix_exposure",
+      "label": "Fix exposure",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene. Correct blown highlights and crushed blacks.",
+      "prefix": "ez_fix_exposure"
+    },
+    {
+      "id": "fix_wb",
+      "label": "Fix white balance",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene. Correct white balance only.",
+      "prefix": "ez_fix_wb"
+    },
+    {
+      "id": "fix_denoise_look",
+      "label": "Clean noise",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep detail. Reduce muddy noise without plastic smoothing.",
+      "prefix": "ez_fix_denoise_look"
+    },
+    {
+      "id": "fix_remove_marks",
+      "label": "Empty of marks",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene. Remove watermarks and stray logos. Empty of marks.",
+      "prefix": "ez_fix_remove_marks"
+    },
+    {
+      "id": "fix_straighten",
+      "label": "Straighten",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 1,
+      "instruction": "Keep the scene. Straighten horizon and verticals.",
+      "prefix": "ez_fix_straighten"
+    },
+    {
+      "id": "fix_match_grade",
+      "label": "Match grade",
+      "category": "fix",
+      "enhance_mode": "edit",
+      "needs_ref": 2,
+      "instruction": "Grade ref 1 to match ref 2. Keep inventory of ref 1.",
+      "prefix": "ez_fix_match_grade"
+    }
+  ]
+}

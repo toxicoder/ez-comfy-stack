@@ -1,0 +1,102 @@
+[
+  {
+    "id": "photoreal-terrace",
+    "label": "Photoreal terrace",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked teal running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering."
+  },
+  {
+    "id": "background-swap",
+    "label": "Background swap",
+    "prompt": "Keep the subject from the reference. Replace the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original character only."
+  },
+  {
+    "id": "change-text",
+    "label": "Change text",
+    "prompt": "Keep typeface, weight, tracking, and perspective. Replace the lettering with the original word HELLO. Lock glyph geometry."
+  },
+  {
+    "id": "change-ratio",
+    "label": "Change ratio",
+    "prompt": "Keep the subject. Reframe onto the Format canvas. Outpaint edges with matching scene. Empty of new lettering."
+  },
+  {
+    "id": "face-lock",
+    "label": "Face lock",
+    "prompt": "Lock the reference face. Same identity, wardrobe, and eyeline. Change only what the prompt names. Original character only."
+  },
+  {
+    "id": "outfit-change",
+    "label": "Outfit change",
+    "prompt": "Keep face and body from the reference. Change clothing to an unmarked charcoal technical coat. Original character only."
+  },
+  {
+    "id": "relight-night",
+    "label": "Relight night",
+    "prompt": "Keep the reference inventory. Relight as practical-lamp night interior. Warm pools, cool window rim."
+  },
+  {
+    "id": "product-packshot",
+    "label": "Product packshot",
+    "prompt": "Clean packshot of an unmarked ceramic mug on a sweep. Soft wrap light, sharp unmarked surfaces, empty of type."
+  },
+  {
+    "id": "youtube-thumb",
+    "label": "YouTube thumbnail",
+    "prompt": "YouTube thumbnail still. Large original character, one short original word, 16:9, high contrast, empty of real brands."
+  },
+  {
+    "id": "quote-card",
+    "label": "Quote card",
+    "prompt": "Quote card still. Original line on a clean field. Strong type, empty background."
+  },
+  {
+    "id": "sky-replace",
+    "label": "Sky replace",
+    "prompt": "Keep the scene from the reference. Replace only the sky with a storm front and the light it casts."
+  },
+  {
+    "id": "add-object",
+    "label": "Add object",
+    "prompt": "Keep the reference scene. Add one unmarked brass lamp on the table with matching light and contact shadow."
+  },
+  {
+    "id": "outpaint-wide",
+    "label": "Outpaint wide",
+    "prompt": "Keep the reference center. Extend the canvas to Format size with matching architecture left and right."
+  },
+  {
+    "id": "fix-hands",
+    "label": "Fix hands",
+    "prompt": "Keep the reference. Correct extra fingers and melted hands only. Original character only."
+  },
+  {
+    "id": "interior-room",
+    "label": "Interior room",
+    "prompt": "Architectural interior of a writing room. Window light, teak desk, unmarked shelves. Empty of signage."
+  },
+  {
+    "id": "golden-hour-look",
+    "label": "Golden hour look",
+    "prompt": "Golden-hour sidelight, long shadows, warm rim. Photoreal still of the prompted place. Empty of lettering."
+  },
+  {
+    "id": "instagram-post",
+    "label": "Instagram post",
+    "prompt": "Instagram 4:5 still. One original subject, clean background, empty of platform chrome and tiny type."
+  },
+  {
+    "id": "relabel-sign",
+    "label": "Relabel sign",
+    "prompt": "Keep the sign object. Swap the written words to OPEN. Lock glyph geometry and perspective."
+  },
+  {
+    "id": "wardrobe-transfer",
+    "label": "Wardrobe transfer",
+    "prompt": "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked teal coat. Original characters only."
+  },
+  {
+    "id": "empty-lettering",
+    "label": "Empty of lettering",
+    "prompt": "Keep the reference. Remove all lettering and reconstruct surfaces. Empty of marks."
+  }
+]
