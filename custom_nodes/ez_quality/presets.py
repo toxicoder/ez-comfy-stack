@@ -719,8 +719,6 @@ def apply_to_graph(
             if is_banned_unet(overlay.unet_name):
                 continue
             current = str(values[UNET_NAME_INDEX])
-            if current and is_wan_14b_unet(current):
-                continue
             if current and not (
                 is_klein_4b_unet(current)
                 or is_klein_9b_unet(current)
