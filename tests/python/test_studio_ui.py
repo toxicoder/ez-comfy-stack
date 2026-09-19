@@ -46,11 +46,14 @@ def test_watch_and_download_allowlist(tmp_path: Path, monkeypatch: pytest.Monkey
 
 
 def test_studio_packages_export_empty_node_maps() -> None:
+    import ez_outputs
     import ez_studio_app
     import ez_studio_blocks
 
     assert ez_studio_app.NODE_CLASS_MAPPINGS == {}
     assert ez_studio_app.WEB_DIRECTORY == "./js"
+    assert ez_outputs.NODE_CLASS_MAPPINGS == {}
+    assert ez_outputs.WEB_DIRECTORY == "./js"
     assert ez_studio_blocks.NODE_CLASS_MAPPINGS == {}
     assert "NODE_DISPLAY_NAME_MAPPINGS" in ez_studio_blocks.__all__
 

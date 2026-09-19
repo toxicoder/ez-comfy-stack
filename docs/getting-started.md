@@ -279,7 +279,7 @@ GHCR pull vs a local Dockerfile build (same `start` path, same safety): [collaps
 
 In ComfyUI, load **klein/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/still-draft.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue.
 
-**Verify:** PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png` (container `/outputs`). Missing Models on this graph → re-run download and `doctor` ([Models and workflows](operate/troubleshooting-models-workflows.md)).
+**Verify:** PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png` (container `/outputs`). Missing Models on this graph → re-run download and `doctor` ([Models and workflows](operate/troubleshooting-models-workflows.md)). After `stop` / image pull / `start`, Comfy **History** is empty — open the **Outputs** sidebar to preview, delete, or send a still to LoadImage. Files on `${COMFY_OUTPUT_DIR}` persist.
 
 **What you just did:** `start` launched ComfyUI (no auto-restart after reboot). The graph loaded Klein 4B distilled (4 steps, CFG 1.0) and wrote a still on the host — not inside the git repo. Canvas nouns: [ComfyUI basics](learn/comfyui.md).
 
