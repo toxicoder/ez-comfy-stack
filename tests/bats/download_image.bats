@@ -49,6 +49,10 @@ teardown() {
   [ "${status}" -eq 0 ]
   run is_nc_image_tier fast
   [ "${status}" -ne 0 ]
+  run warn_flux_nc_image_tier 9b
+  [ "${status}" -eq 0 ]
+  [[ "${output}" == *"Non-Commercial"* ]]
+  [[ "${output}" == *"not monetized YouTube"* ]]
   TIER=all
   run tiers_to_process
   [[ "${output}" != *"9b"* ]]
