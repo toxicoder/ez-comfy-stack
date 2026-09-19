@@ -25,14 +25,14 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[films/go-see](../generated/workflows/shorts/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
-| **[films/still-here](../generated/workflows/shorts/still-here.md)** | **One-click** household morning 90s (same shape) |
-| **[films/switchyard](../generated/workflows/shorts/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
-| **[films/tide-table/act-01](../generated/workflows/shorts/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02…05; concat 450s) |
-| **[films/night-oven/act-01](../generated/workflows/shorts/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
-| **[films/glasshouse/act-01](../generated/workflows/shorts/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
-| **[films/last-lane/act-01](../generated/workflows/shorts/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
-| **[films/breakwater/act-01](../generated/workflows/shorts/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
+| **[films/go-see](../generated/workflows/films/go-see.md)** | **One-click** first-person parkour 90s: Klein identity + 18 LTX 5.00s AV prints + stitch |
+| **[films/still-here](../generated/workflows/films/still-here.md)** | **One-click** household morning 90s (same shape) |
+| **[films/switchyard](../generated/workflows/films/switchyard.md)** | **One-click** night freight-yard 90s (same shape) |
+| **[films/tide-table/act-01](../generated/workflows/films/tide-table/act-01.md)** | Dawn skiff 7.5 min, act 1 of 5 (then act-02…05; concat 450s) |
+| **[films/night-oven/act-01](../generated/workflows/films/night-oven/act-01.md)** | Overnight bakery 7.5 min, act 1 of 5 |
+| **[films/glasshouse/act-01](../generated/workflows/films/glasshouse/act-01.md)** | Storm glasshouse 7.5 min, act 1 of 5 |
+| **[films/last-lane/act-01](../generated/workflows/films/last-lane/act-01.md)** | Night two-lane 7.5 min, act 1 of 5 |
+| **[films/breakwater/act-01](../generated/workflows/films/breakwater/act-01.md)** | Storm-wall walk 7.5 min, act 1 of 5 |
 | **[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)** | Optional silent rehearsal / six-shot concat demo |
 | **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)** | Generic 5.00 s AV print (non-film) |
 
