@@ -163,6 +163,23 @@ def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
     assert "unet_name" not in names
 
 
+def test_image_studio_exposes_mode_look_size_and_unet() -> None:
+    names = _widget_names(_load("klein/image-studio.json"))
+    assert names[:6] == [
+        "quality",
+        "sample",
+        "prompt",
+        "format",
+        "category",
+        "mode",
+    ]
+    assert "look" in names
+    assert "filename" in names
+    assert "unet_name" in names
+    assert names.index("category") < names.index("mode")
+    assert names.index("mode") < names.index("style")
+
+
 def test_still_studio_exposes_format_look_size_and_unet() -> None:
     names = _widget_names(_load("klein/still-studio.json"))
     assert names[:7] == [

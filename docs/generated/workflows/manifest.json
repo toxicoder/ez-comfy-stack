@@ -559,6 +559,12 @@
       "kind": "graph"
     },
     {
+      "id": "klein/image-studio",
+      "path": "generated/workflows/klein/image-studio.md",
+      "lane": "klein",
+      "kind": "graph"
+    },
+    {
       "id": "klein/instagram-square",
       "path": "generated/workflows/klein/instagram-square.md",
       "lane": "klein",
@@ -1351,6 +1357,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 458,
-  "page_count": 226
+  "graph_count": 459,
+  "page_count": 227
 }

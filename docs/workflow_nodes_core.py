@@ -308,6 +308,22 @@ def core_nodes() -> dict[str, Any]:
                 _w("batch_size", index=4, typ="INT", rng="1–4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
             ],
         ),
+        "EZImageMode": _n(
+            "Creator mode",
+            "Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.",
+            origin="ez_image",
+            lab="klein/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.",
+            sockets=[
+                _s("context", "STRING", "in", "Optional look-recipe splice from EZImageFormat."),
+                _s("context", "STRING", "out", "Mode instruction plus incoming look splice."),
+                _s("enhance_mode", "STRING", "out", "t2i, edit, identity, or text_swap."),
+                _s("prefix", "STRING", "out", "SaveImage filename prefix."),
+            ],
+            widgets=[
+                _w("category", index=0, typ="COMBO", rng="Generate / Scene / Subject / …", desc="Filter Creator mode.", gen="JS hides modes outside this category. Python run() uses Mode even if Category is stale.", choices_from="image_mode_categories"),
+                _w("mode", index=1, typ="COMBO", rng="Photoreal still / Background swap / Change text / …", desc="Creator preset.", gen="Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error.", choices_from="image_modes"),
+            ],
+        ),
         "EZOptionalImage": _n(
             "Optional reference stills",
             "Optional example or reference stills. Empty is valid — Queue without a file.",

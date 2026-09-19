@@ -265,6 +265,7 @@ WIDGET_ORDER = (
     "sources",
     "prompt",
     "format",
+    "category",
     "duration",
     "fetch_links",
     "template",
@@ -343,6 +344,7 @@ WIDGET_ORDER = (
     "steps",
     "cfg",
     "unet_name",
+    "filename",
 )
 HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock", "catalog"})
 STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace", "text_swap"})
@@ -620,6 +622,13 @@ def display_label(
             "height": "Height",
             "batch_size": "Batch",
         }.get(name, generic)
+    if ntype == "EZImageMode":
+        return {
+            "category": "Mode category",
+            "mode": "Creator mode",
+        }.get(name, generic)
+    if ntype == "EZOptionalImage" and name == "filename":
+        return "Example / reference (optional)"
     if ntype == "EZVideoFormat":
         return {
             "format": "Format / platform",
@@ -818,6 +827,22 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         )
     if name == "seconds" and ntype == "EmptyAceStep1.5LatentAudio":
         return "Bed or sting length in seconds."
+    if ntype == "EZImageMode":
+        return {
+            "category": (
+                "Filter Creator mode: Generate, Scene, Subject, Object, Text, "
+                "Framing, Multi-ref, Publish, Look, Fix."
+            ),
+            "mode": (
+                "Creator preset. Sets Enhance mode, save prefix, and a locked "
+                "instruction. Optional reference stills stay optional."
+            ),
+        }.get(name)
+    if ntype == "EZOptionalImage" and name == "filename":
+        return (
+            "Optional still. Empty is valid — Queue without a file. When set, "
+            "Klein uses it as a native reference."
+        )
     if ntype == "EZImageFormat":
         return {
             "format": (
@@ -926,6 +951,9 @@ def _widget_rank(name: str, node: Mapping[str, Any] | None = None) -> int:
         title = str(node.get("title") or "").lower()
         if "duration" in title:
             name = "seconds"
+    ntype = str((node or {}).get("type") or "")
+    if ntype == "EZImageMode" and name == "mode":
+        name = "category"
     try:
         return WIDGET_ORDER.index(name)
     except ValueError:
@@ -1100,6 +1128,16 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "wan/still-to-video-5s",
         "ltx/still-to-video-5s",
         "klein/text-swap",
+        expose_unet=True,
+        expose_look=True,
+    ),
+    "klein/image-studio": _spec(
+        "produce",
+        "klein",
+        "wan/still-to-video-5s",
+        "ltx/still-to-video-5s",
+        "klein/text-swap",
+        "klein/still-studio",
         expose_unet=True,
         expose_look=True,
     ),
@@ -1712,6 +1750,15 @@ def _collect_raw_inputs(
                     (nid, "batch_size", node),
                 )
             )
+        elif ntype == "EZImageMode":
+            raw.extend(
+                (
+                    (nid, "category", node),
+                    (nid, "mode", node),
+                )
+            )
+        elif ntype == "EZOptionalImage":
+            raw.append((nid, "filename", node))
         elif ntype == "EZVideoFormat":
             raw.extend(
                 (

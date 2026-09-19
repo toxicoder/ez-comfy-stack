@@ -249,6 +249,25 @@ def test_expand_choices_image_formats_and_cinema_recipes() -> None:
     )
     assert recipes[0]["id"] == "none"
     assert any(row["id"] == "Golden wide" for row in recipes)
+    modes = gen.expand_choices(
+        {"choices_from": "image_modes"},
+        styles={},
+        ace_language=[],
+        ace_keyscale=[],
+    )
+    mode_ids = {row["id"] for row in modes}
+    assert "Photoreal still" in mode_ids
+    assert "Background swap" in mode_ids
+    assert len(modes) == 100
+    cats = gen.expand_choices(
+        {"choices_from": "image_mode_categories"},
+        styles={},
+        ace_language=[],
+        ace_keyscale=[],
+    )
+    cat_ids = {row["id"] for row in cats}
+    assert "Generate" in cat_ids
+    assert "Scene" in cat_ids
 
 
 def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -256,6 +275,9 @@ def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest
     monkeypatch.setattr(gen, "FORMATS_FILE", tmp_path / "no-formats.json")
     monkeypatch.setattr(gen, "VIDEO_FORMATS_FILE", tmp_path / "no-video.json")
     monkeypatch.setattr(gen, "RECIPES_FILE", tmp_path / "no-recipes.json")
+    monkeypatch.setattr(gen, "MODES_FILE", tmp_path / "no-modes.json")
+    assert gen._image_mode_choices() == []
+    assert gen._image_mode_category_choices() == []
     assert gen._image_format_choices() == []
     assert gen._video_format_choices() == []
     assert gen._video_family_choices() == []
@@ -290,3 +312,29 @@ def test_format_choice_helpers_missing_files(tmp_path: Path, monkeypatch: pytest
     assert "832×480" in video_rows[1]["description"]
     family_rows = gen._video_family_choices()
     assert family_rows[0]["id"] == "Wan 5B"
+    (tmp_path / "no-modes.json").write_text("[]", encoding="utf-8")
+    assert gen._image_mode_choices() == []
+    assert gen._image_mode_category_choices() == []
+    (tmp_path / "no-modes.json").write_text("1", encoding="utf-8")
+    assert gen._modes_payload() == {"modes": [], "categories": []}
+    (tmp_path / "no-modes.json").write_text(
+        '[1, {"id": "a", "label": "A", "category": ""}, '
+        '{"id": "b", "label": "B", "category": "one"}, '
+        '{"id": "c", "label": "C", "category": "one"}]',
+        encoding="utf-8",
+    )
+    assert gen._image_mode_choices()[0]["id"] == "A"
+    cats = gen._image_mode_category_choices()
+    assert cats[0]["id"] == "One"
+    assert len(cats) == 1
+    (tmp_path / "no-modes.json").write_text(
+        '{"categories": [1, {"id": "one", "label": "One"}], '
+        '"modes": [1, {"id": "", "label": ""}, {"id": "a", "label": "A", '
+        '"category": "one", "instruction": ""}]}',
+        encoding="utf-8",
+    )
+    assert gen._image_mode_choices()[0]["id"] == "A"
+    assert gen._image_mode_category_choices()[0]["id"] == "One"
+    (tmp_path / "no-modes.json").write_text('{"modes": {}}', encoding="utf-8")
+    assert gen._image_mode_choices() == []
+    assert gen._image_mode_category_choices() == []

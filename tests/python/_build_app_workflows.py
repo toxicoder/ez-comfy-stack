@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from _lab_layout import (
     GROUP_TITLE_INSET,
@@ -35,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
+from ez_image.modes import default_category_label, default_mode_label  # noqa: E402
 from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -61,6 +63,19 @@ Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein 
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: wan/still-to-video-5s, ltx/still-to-video-5s, klein/text-swap.
+"""
+
+IMAGE_STUDIO_NOTE = """## klein/image-studio
+
+Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
+Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity), save prefix, and a locked instruction spliced into Enhance context.
+Format / platform still sets pixels and Look recipe. Custom uses Width × Height (snapped to ÷16, max 2048). Quality does not change size.
+Example / reference is optional — Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
+Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
+Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
+Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
+Handoff: wan/still-to-video-5s, ltx/still-to-video-5s, klein/text-swap, klein/still-studio.
 """
 
 STILL_NOTE = """## klein/still-daily
@@ -417,6 +432,106 @@ def build_still_studio() -> dict:
         _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
         _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 620, "#3f789e"),
         _group(3, "FORMAT", 1420, LAB_GROUP_Y0, 400, 720, "#a1309b"),
+        _group(4, "OUTPUT", 1860, LAB_GROUP_Y0, 360, 520, "#3f789e"),
+    ]
+    return graph
+
+
+def _input_named(node: dict, name: str) -> dict:
+    for item in node.get("inputs") or []:
+        if item.get("name") == name:
+            return item
+    raise KeyError(name)
+
+
+def _drop_output_link(node: dict, slot: int, link_id: int) -> None:
+    outputs = list(node.get("outputs") or [])
+    out = outputs[slot]
+    existing = [int(item) for item in (out.get("links") or []) if int(item) != int(link_id)]
+    out["links"] = existing
+    node["outputs"] = outputs
+
+
+def build_image_studio() -> dict:
+    graph = json.loads(lab_json("klein/still-studio.json").read_text(encoding="utf-8"))
+    apply_lab_identity(graph, "klein/image-studio")
+    nid = int(graph.get("last_node_id") or 0) + 1
+    graph["last_node_id"] = nid
+    graph["revision"] = int(graph.get("revision") or 0) + 1
+    fmt = _node(graph, "EZImageFormat")
+    enh = _node(graph, "EZKleinPromptEnhance")
+    save = _node(graph, "SaveImage")
+    note = _node(graph, "Note")
+    save["widgets_values"] = ["ez_gen_photoreal"]
+    save["title"] = "Save PNG"
+    enh_values = list(enh.get("widgets_values") or [])
+    while len(enh_values) < 7:
+        enh_values.append("")
+    enh_values[6] = "klein/image-studio"
+    enh["widgets_values"] = enh_values
+    note["widgets_values"] = [IMAGE_STUDIO_NOTE]
+    mode_inputs: list[dict[str, Any]] = [
+        {"name": "context", "type": "STRING", "link": None},
+    ]
+    mode: dict[str, Any] = {
+        "id": nid,
+        "type": "EZImageMode",
+        "pos": [1440, 80],
+        "size": [360, 140],
+        "flags": {},
+        "order": 12,
+        "mode": 0,
+        "inputs": mode_inputs,
+        "outputs": [
+            {"name": "context", "type": "STRING", "links": [], "slot_index": 0},
+            {"name": "enhance_mode", "type": "STRING", "links": [], "slot_index": 1},
+            {"name": "prefix", "type": "STRING", "links": [], "slot_index": 2},
+        ],
+        "properties": {"Node name for S&R": "EZImageMode"},
+        "widgets_values": [default_category_label(), default_mode_label()],
+        "title": "Creator mode",
+    }
+    graph["nodes"].append(mode)
+    ctx_in = _input_named(enh, "context")
+    ctx_link_id = int(ctx_in["link"])
+    ctx_row = next(row for row in graph["links"] if int(row[0]) == ctx_link_id)
+    enh_id = int(enh["id"])
+    _drop_output_link(fmt, 5, ctx_link_id)
+    ctx_row[3] = nid
+    ctx_row[4] = 0
+    mode_inputs[0]["link"] = ctx_link_id
+    _push_output_link(fmt, 5, ctx_link_id)
+    mode_ctx = _append_link(graph, nid, 0, enh_id, 1, "STRING")
+    ctx_in["link"] = mode_ctx
+    _push_output_link(mode, 0, mode_ctx)
+    mode_enh = _append_link(graph, nid, 1, enh_id, 2, "STRING")
+    enh_inputs = list(enh.get("inputs") or [])
+    enh_inputs.append(
+        {
+            "name": "mode",
+            "type": "STRING",
+            "link": mode_enh,
+            "widget": {"name": "mode"},
+        }
+    )
+    enh["inputs"] = enh_inputs
+    _push_output_link(mode, 1, mode_enh)
+    prefix_in = _input_named(save, "filename_prefix")
+    prefix_link_id = int(prefix_in["link"])
+    prefix_row = next(row for row in graph["links"] if int(row[0]) == prefix_link_id)
+    _drop_output_link(fmt, 4, prefix_link_id)
+    prefix_row[1] = nid
+    prefix_row[2] = 2
+    _push_output_link(mode, 2, prefix_link_id)
+    graph["extra"]["lab_profile"] = "klein/image-studio"
+    graph["extra"]["lab_note"] = IMAGE_STUDIO_NOTE
+    graph["extra"]["lab_description"] = (
+        "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref"
+    )
+    graph["groups"] = [
+        _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),
+        _group(2, "PROMPT", 460, LAB_GROUP_Y0, 920, 620, "#3f789e"),
+        _group(3, "FORMAT", 1420, LAB_GROUP_Y0, 400, 900, "#a1309b"),
         _group(4, "OUTPUT", 1860, LAB_GROUP_Y0, 360, 520, "#3f789e"),
     ]
     return graph
@@ -1674,6 +1789,7 @@ def build_text_swap() -> dict:
 def main() -> None:
     still = build_still_app()
     studio = build_still_studio()
+    image_studio = build_image_studio()
     gif = build_gif_loop()
     house = build_dream_house()
     house_clay = build_dream_house_clay()
@@ -1683,6 +1799,7 @@ def main() -> None:
     swap = build_text_swap()
     _dump(lab_json("klein/still-daily.json"), still)
     _dump(lab_dest("klein/still-studio"), studio)
+    _dump(lab_dest("klein/image-studio"), image_studio)
     _dump(lab_json("wan/gif-loop.json"), gif)
     _dump(lab_json("klein/dream-house.json"), house)
     _dump(lab_dest("klein/dream-house-clay"), house_clay)
@@ -1691,7 +1808,7 @@ def main() -> None:
     _dump(lab_dest("klein/character-tweak"), tweak)
     _dump(lab_dest("klein/text-swap"), swap)
     print(
-        "wrote still-app, still-studio, gif-loop, dream-house, dream-house-clay, "
+        "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
         "platform-pack, character draft/tweak, text-swap"
     )
 

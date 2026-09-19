@@ -56,6 +56,7 @@ KLEIN_GENERIC = frozenset(
         "klein/still-hero",
         "klein/still-daily",
         "klein/still-studio",
+        "klein/image-studio",
         "klein/thumbnail",
         "klein/instagram-square",
         "klein/open-graph",
@@ -103,6 +104,7 @@ VIDEO_GENERIC = frozenset(
 )
 STILL_REL_FORMAT = {
     "klein/still-studio": "aspect_16_9_ltx",
+    "klein/image-studio": "aspect_16_9_ltx",
     "klein/still-draft": "aspect_16_9_draft",
     "klein/still-hero": "aspect_16_9_ltx",
     "klein/still-daily": "aspect_16_9_mid",

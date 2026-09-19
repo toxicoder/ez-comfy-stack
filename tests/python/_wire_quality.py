@@ -23,7 +23,7 @@ QUALITY_LABEL = {
     "label": "Quality",
     "description": (
         "custom freezes the last overlay. lab restores graph defaults. "
-        "ultra/max may select Klein 9B or FLUX.2-dev (FLUX Non-Commercial). "
+        "ultra/max may select opt-in Non-Commercial weights when on disk. "
         "Family-specific — not --tier."
     ),
 }
