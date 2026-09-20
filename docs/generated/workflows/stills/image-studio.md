@@ -39,7 +39,7 @@ Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP t
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap, stills/still-studio.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap, stills/still-studio.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -554,7 +554,7 @@ Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP t
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap, stills/still-studio.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap, stills/still-studio.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -591,10 +591,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 ```
 
 #### `enhance`

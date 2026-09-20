@@ -15,7 +15,7 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 **What this enables**
 
 - **Queuing one file per film** instead of 18 separate 5 s graphs
-- **Printing a Blender clay** through Klein look-dev and an LTX 5.00 s envelope
+- **Printing a Blender clay** through Klein look-dev and an LTX 12.00 s App envelope
 
 **Who this is for:** studio users who already Queued a 5 s LTX clip. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Full loop: [90s shorts](../shorts.md). Outputs under `${COMFY_OUTPUT_DIR}`.
 
@@ -38,7 +38,7 @@ tags: [comfyui, workflows, shorts, dcc, ltx, catalog]
 
 Act graphs (Queue in order, then `concat-shots.sh --film`): `films/tide-table/act-01` `films/tide-table/act-02` `films/tide-table/act-03` `films/tide-table/act-04` `films/tide-table/act-05` · `films/night-oven/act-01` `films/night-oven/act-02` `films/night-oven/act-03` `films/night-oven/act-04` `films/night-oven/act-05` · `films/glasshouse/act-01` `films/glasshouse/act-02` `films/glasshouse/act-03` `films/glasshouse/act-04` `films/glasshouse/act-05` · `films/last-lane/act-01` `films/last-lane/act-02` `films/last-lane/act-03` `films/last-lane/act-04` `films/last-lane/act-05` · `films/breakwater/act-01` `films/breakwater/act-02` `films/breakwater/act-03` `films/breakwater/act-04` `films/breakwater/act-05`.
 
-Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave LTX **1280×704**. Do **not** set 241+ frames.
+Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave LTX **1280×704**. Film printers stay **121 frames**. Do **not** Queue a 30/60/90 s latent.
 
 ---
 
@@ -50,8 +50,8 @@ Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave L
 | **[dcc/clay-plates](../generated/workflows/dcc/clay-plates.md)** | One clay still → four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
 | **[dcc/canny-hero](../generated/workflows/dcc/canny-hero.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
 | **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
-| **[dcc/depth-control-5s](../generated/workflows/dcc/depth-control-5s.md)** | Lab envelope for a 5.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
-| **[dcc/canny-control-5s](../generated/workflows/dcc/canny-control-5s.md)** | Same envelope; wire `canny.mp4`. |
+| **[dcc/depth-control-12s](../generated/workflows/dcc/depth-control-12s.md)** | Lab envelope for a 12.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+| **[dcc/canny-control-12s](../generated/workflows/dcc/canny-control-12s.md)** | Same envelope; wire `canny.mp4`. |
 | **[dcc/depth-control-shorts](../generated/workflows/dcc/depth-control-shorts.md)** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
 | **[dcc/first-last-from-guide](../generated/workflows/dcc/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **[dcc/guide-still](../generated/workflows/dcc/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |

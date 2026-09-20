@@ -43,7 +43,7 @@ HOUSE_INVENTORY = (
 )
 
 ROOFTOP_INVENTORY = (
-    "unmarked sun-washed teal technical running coat with faint circuit-thread seams, "
+    "unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams, "
     "floating unmarked warm gold-cyan holographic glyph rings, compact unmarked data-staff, "
     "tropical rooftop terrace with palms, unmarked glass towers over a bright bay"
 )
@@ -61,8 +61,8 @@ KLEIN_NEG_STILL = (
 def _klein_still(lens: str) -> str:
     return (
         f"A {STYLE_LOCK} of a tropical coastal city rooftop terrace at golden hour. "
-        "An original techno wizard in an unmarked sun-washed teal technical running coat "
-        "with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan "
+        "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap "
+        "and faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan "
         "holographic glyph rings blooming from a compact unmarked data-staff as if the "
         "code were a spell. Hold a wide environmental terrace so palms and unmarked glass "
         "towers recede toward a bright bay. Match a standing eyeline. "
@@ -78,13 +78,13 @@ KLEIN_STILL_DAILY = _klein_still("35mm")
 
 CREATOR_IDENTITY = (
     f"A {STYLE_LOCK} of a tropical coastal city rooftop terrace at golden hour. An original "
-    "techno wizard in an unmarked sun-washed teal technical running coat with faint "
+    "techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint "
     "circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic "
     "glyph rings bloom from a compact unmarked data-staff, empty of lettering."
 )
 
 WAN_T2V = (
-    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and "
     "faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace "
     "at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked "
     "data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay "
@@ -103,7 +103,7 @@ WAN_I2V = (
 LTX_AUDIO_HINT = "world SFX matching the start image, no score"
 LTX_T2V = (
     f"A wide {STYLE_LOCK_VIDEO} of a tropical coastal city rooftop terrace at golden hour. "
-    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and "
     "faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic "
     "glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem "
     "and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a "
@@ -128,7 +128,7 @@ GIF_MOTION = (
 
 KLEIN_SHORTS = (
     f"A {STYLE_LOCK} vertical still for Shorts. An original "
-    "techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams "
+    "techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams "
     "stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings "
     "bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. "
     "35mm-equivalent classic reportage view, framed "
@@ -136,7 +136,7 @@ KLEIN_SHORTS = (
 )
 KLEIN_THUMBNAIL = (
     "A bold YouTube thumbnail still, 16:9. An original techno wizard in an "
-    "unmarked sun-washed teal technical running coat with faint circuit-thread seams fills the frame on a "
+    "unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams fills the frame on a "
     "tropical rooftop terrace at golden hour. High contrast key light, clear subject separation, warm gold-cyan "
     "holographic glyph rings and a compact unmarked data-staff, empty of lettering. Photoreal still, "
     "eye-catching, clean of burned-in words."
@@ -175,12 +175,12 @@ LTX_BROLL = (
     f"fixed-camera ambient B-roll of a tropical coastal city rooftop terrace at golden hour. Coat hem "
     "stirs, holographic glyph motes drift, palm fronds move, distant bay traffic and a warm breeze, "
     f"a glyph chime once. {STYLE_LOCK_VIDEO}, unmarked surfaces, "
-    "empty of lettering. No music and no score. Five seconds."
+    "empty of lettering. No music and no score. Twelve seconds."
 )
 LTX_WEATHER_AUDIO = "tropical rain, thunder far off, water on glass, palm slap, no score"
 LTX_WEATHER = (
     "fixed-camera weather B-roll. A tropical storm streaks across a rooftop terrace and a "
-    "sun-washed teal running coat; palms thrash and rain sheets off unmarked glass. Soft wind, "
+    "dark indigo-violet suede running coat; palms thrash and rain sheets off unmarked glass. Soft wind, "
     "rain on glass, thunder far off. Unmarked surfaces. No music and no score. Five seconds."
 )
 LTX_HOOK_AUDIO = "world SFX matching the start image, no score"
@@ -200,35 +200,35 @@ LTX_DIALOGUE_AUDIO = (
 )
 LTX_DIALOGUE = (
     "A medium photoreal shot of a tropical coastal city rooftop terrace at golden hour. "
-    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and "
     "faint circuit-thread seams stands at the glass, warm gold-cyan holographic glyph rings "
     "hovering over a compact unmarked data-staff. The camera holds a locked-off frame, then dollies in as the "
     "wizard turns toward lens, eyes bright, and says, \"The tools are already here — we "
     "just have to use them well.\" A warm terrace breeze and palm rustle sit under distant "
     "bay traffic; the voice is close and clear, then a single glyph chime. Unmarked surfaces, "
-    "empty of lettering. No music and no score. Five seconds."
+    "empty of lettering. No music and no score. Twelve seconds."
 )
 LTX_MULTISHOT_AUDIO = (
     "terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score"
 )
 LTX_MULTISHOT = (
     "A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. "
-    "An original techno wizard in an unmarked sun-washed teal technical running coat with "
+    "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and "
     "faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings "
     "bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright "
     "bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a "
-    "medium close-up of the glyph rings over the staff, motes drifting across the teal coat, "
+    "medium close-up of the glyph rings over the staff, motes drifting across the dark indigo-violet suede coat, "
     "the breeze continuing across the cut while traffic muffles. The wizard's mouth stays "
     "closed. A match cut connects to a low wide of the same terrace looking out at the bay, "
     "the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, "
-    "empty of lettering. No music and no score. Five seconds."
+    "empty of lettering. No music and no score. Twelve seconds."
 )
 LTX_PRODUCT_AUDIO = "soft tabletop room tone, a glass tick, fabric hush, no score"
 LTX_PRODUCT_HERO = (
     "The start image holds as the first frame. The camera orbits a few degrees right around "
     "the product on the table while keeping identity locked. Soft room tone sits under a "
     "single glass tick and a fabric hush. Keep every object and surface from the start "
-    "image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds."
+    "image; do not redesign. Unmarked, empty of lettering. No music and no score. Twelve seconds."
 )
 LTX_FLF_AUDIO = "terrace breeze, palm rustle, distant bay traffic, glyph chime at the last frame, no score"
 LTX_FLF = (

@@ -88,7 +88,7 @@ Stay on `:8188` after the dump (no `--install-inputs`): [Stay in Comfy after a B
 | --- | --- |
 | No Blender / Path D not ready | Dumps. Queue language stills (`klein-still-draft`, `klein-dream-house`). Overlay QC is skipped, not faked |
 | Need a walkable house | `blender-stills`. Use [house-views](dream-house.md) |
-| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-5s`) |
+| Talking-head / VO-locked picture | Union Control. Use A2V freeze (`motion/av/audio-to-video-12s`) |
 | Engine-final Cycles beauty | Path A (`dcc-final`) — not this suite |
 
 Occupancy: one GB10 heavy job. `export-guides` and `blender-stills` die (exit 2) if Compose is up and **not** parked. Safety is unchanged: `restart: "no"`, type **yes** on start, headroom, download-limit clear-on-exit.

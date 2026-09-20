@@ -78,7 +78,7 @@ GIF_PREVIEW_BULLET = (
 CREATOR_STEMS = (
     "stills/shorts-still",
     "motion/silent/shorts-still-5s",
-    "motion/av/shorts-still-5s",
+    "motion/av/shorts-still-12s",
     "stills/thumbnail",
     "stills/product-packshot",
     "stills/before-after",
@@ -304,8 +304,8 @@ def patch_existing_video_graphs() -> None:
         lab_json("motion/silent/still-to-video-5s.json"),
         lab_json("motion/silent/text-to-video-5s.json"),
         lab_json("motion/silent/still-to-shot.json"),
-        lab_json("motion/av/still-to-video-5s.json"),
-        lab_json("motion/av/text-to-video-5s.json"),
+        lab_json("motion/av/still-to-video-12s.json"),
+        lab_json("motion/av/text-to-video-12s.json"),
         lab_json("motion/av/still-to-shot.json"),
         lab_json("motion/loops/gif-loop.json"),
     ]
@@ -605,7 +605,7 @@ def build_creator_toolkit() -> None:
     note = f"""## stills/shorts-still
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-5s**.
+Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-12s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 """
     _set_note(g, note, "Klein 4B vertical 9:16 Shorts still")
@@ -650,8 +650,8 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
     _dump(lab_json("motion/silent/shorts-still-5s.json"), g)
 
     # 3. Vertical LTX I2V AV
-    g = _load(lab_json("motion/av/still-to-video-5s.json"))
-    g["id"] = "motion/av/shorts-still-5s"
+    g = _load(lab_json("motion/av/still-to-video-12s.json"))
+    g["id"] = "motion/av/shorts-still-12s"
     g["revision"] = 1
     wire_ltx_audio(g)
     # LTXVImgToVideo widgets include width/height/length
@@ -659,17 +659,17 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
     wvals = list(img2v["widgets_values"])
     # common: [width, height, length, ...]
     if len(wvals) >= 3:
-        wvals[0], wvals[1], wvals[2] = 768, 1280, 121
+        wvals[0], wvals[1], wvals[2] = 768, 1280, 289
         img2v["widgets_values"] = wvals
     img2v["title"] = "Vertical I2V (9:16)"
     audio = _node(g, "LTXVEmptyLatentAudio")
-    audio["widgets_values"][0] = 121
+    audio["widgets_values"][0] = 289
     vhs = _node(g, "VHS_VideoCombine")
     vhs["widgets_values"]["filename_prefix"] = "ez_shorts_ltx_video"
     polish_video_graph(g)
     prompt = LTX_SHORTS_I2V
     enh = _node(g, "EZLTXPromptEnhance")
-    enh["widgets_values"] = [prompt, True, "i2v", "5 seconds, 24 fps, 9:16", LTX_SHORTS_AUDIO, "none"]
+    enh["widgets_values"] = [prompt, True, "i2v", "12 seconds, 24 fps, 9:16", LTX_SHORTS_AUDIO, "none"]
     for n in g["nodes"]:
         if n.get("type") == "CLIPTextEncode" and n.get("title") in (
             "Positive",
@@ -677,18 +677,18 @@ PRIMARY OUTPUT: MP4 via VHS. Prefix `ez_shorts_wan_video`.
             "Motion + audio",
         ):
             n["widgets_values"] = [prompt]
-    note = f"""## motion/av/shorts-still-5s
+    note = f"""## motion/av/shorts-still-12s
 
 {LTX_CANVAS_PORTRAIT}
 
-Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
+Vertical AV Shorts I2V (~12 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
 
 {PREVIEW_BULLET}
 Disclose AI-generated media; do not strip provenance; do not distill. No score.
 """
-    _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~5s")
-    _dump(lab_json("motion/av/shorts-still-5s.json"), g)
+    _set_note(g, note, "LTX-2.5 vertical 9:16 AV I2V ~12s")
+    _dump(lab_json("motion/av/shorts-still-12s.json"), g)
 
     # 4. Thumbnail
     g = _load(lab_json("stills/still-hero.json"))
@@ -828,7 +828,7 @@ LoadImage: a still or logo plate. Leave ping-pong on for seamless loops.
     _dump(lab_json("motion/loops/bumper-loop.json"), g)
 
     # 9. LTX ambient B-roll
-    g = _load(lab_json("motion/av/text-to-video-5s.json"))
+    g = _load(lab_json("motion/av/text-to-video-12s.json"))
     g["id"] = "motion/av/broll-ambient"
     g["revision"] = 1
     wire_ltx_audio(g)
@@ -1388,7 +1388,7 @@ def _ltx_av(
     mode: str,
     audio_hint: str,
 ) -> None:
-    src = lab_json("motion/av/still-to-video-5s.json") if mode == "i2v" else lab_json("motion/av/text-to-video-5s.json")
+    src = lab_json("motion/av/still-to-video-12s.json") if mode == "i2v" else lab_json("motion/av/text-to-video-12s.json")
     g = _load(src)
     g["id"] = stem
     g["revision"] = 1
@@ -1399,7 +1399,7 @@ def _ltx_av(
     enh = _node(g, "EZLTXPromptEnhance")
     if mode == "i2v" and I2V_LOCK.lower() not in prompt.lower():
         prompt = f"{prompt.rstrip()} {I2V_LOCK}"
-    enh["widgets_values"] = [prompt, True, mode, "5 seconds, 24 fps", audio_hint, "none"]
+    enh["widgets_values"] = [prompt, True, mode, "12 seconds, 24 fps", audio_hint, "none"]
     for n in g["nodes"]:
         if n.get("type") == "CLIPTextEncode" and n.get("title") in (
             "Positive",

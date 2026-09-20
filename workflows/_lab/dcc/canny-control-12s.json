@@ -1,8 +1,8 @@
 {
-  "id": "still-to-video-5s",
-  "revision": 11,
-  "last_node_id": 23,
-  "last_link_id": 34,
+  "id": "canny-control-12s",
+  "revision": 10,
+  "last_node_id": 25,
+  "last_link_id": 33,
   "nodes": [
     {
       "id": 1,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        346
+        234
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        594
+        364
       ],
       "size": [
         400,
@@ -143,17 +143,17 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "example.png",
+        "first.png",
         "image"
       ],
-      "title": "Start frame"
+      "title": "Guide first.png"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        742
+        512
       ],
       "size": [
         420,
@@ -171,7 +171,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 26,
+          "link": 28,
           "widget": {
             "name": "text"
           }
@@ -191,16 +191,16 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
+        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
       ],
-      "title": "Motion / prompt"
+      "title": "Motion + audio"
     },
     {
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        974
+        744
       ],
       "size": [
         420,
@@ -218,7 +218,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 30,
+          "link": 32,
           "widget": {
             "name": "text"
           }
@@ -276,22 +276,6 @@
           "name": "image",
           "type": "IMAGE",
           "link": 5
-        },
-        {
-          "name": "width",
-          "type": "INT",
-          "link": 32,
-          "widget": {
-            "name": "width"
-          }
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "link": 33,
-          "widget": {
-            "name": "height"
-          }
         }
       ],
       "outputs": [
@@ -327,7 +311,7 @@
       "widgets_values": [
         1280,
         704,
-        121,
+        289,
         1
       ]
     },
@@ -336,7 +320,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1580,
-        666
+        374
       ],
       "size": [
         280,
@@ -475,7 +459,8 @@
           "type": "IMAGE",
           "links": [
             18,
-            25
+            25,
+            26
           ],
           "slot_index": 0
         }
@@ -512,7 +497,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_hero_frames"
+        "ez_gosee_b1_s1_ltx_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -521,7 +506,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        776
+        546
       ],
       "size": [
         360,
@@ -537,7 +522,7 @@
           "type": "VAE",
           "links": [
             19,
-            28
+            30
           ],
           "slot_index": 0
         }
@@ -555,7 +540,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1580,
-        820
+        528
       ],
       "size": [
         300,
@@ -585,7 +570,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        121,
+        289,
         24.0,
         1
       ],
@@ -595,7 +580,7 @@
       "id": 15,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1988,
+        1940,
         414
       ],
       "size": [
@@ -667,7 +652,7 @@
           "name": "audio_latent",
           "type": "LATENT",
           "links": [
-            27
+            29
           ],
           "slot_index": 1
         }
@@ -683,11 +668,11 @@
       "type": "Note",
       "pos": [
         40,
-        1234
+        1846
       ],
       "size": [
         960,
-        360
+        420
       ],
       "flags": {},
       "order": 17,
@@ -698,9 +683,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/still-to-video-5s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV I2V smoke (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps. LoadImage default example.png; after a still set ez_still_hero_*.png.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\n\nThis graph is a smoke/demo (121 frames). For 90s films use motion/av/still-to-shot (120 frames + last frame).\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## dcc/canny-control-12s\n\nLab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nSwitch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nLoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
-      "title": "Operator note \u2014 video output"
+      "title": "Operator note"
     },
     {
       "id": 18,
@@ -725,7 +710,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 29,
+          "link": 31,
           "shape": 7
         },
         {
@@ -755,7 +740,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_hero_video",
+        "filename_prefix": "ez_iclora_canny",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -768,10 +753,81 @@
     },
     {
       "id": 19,
+      "type": "ImageFromBatch",
+      "pos": [
+        2996,
+        572
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 50,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 26
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch",
+        "cnr_id": "comfy-core"
+      },
+      "widgets_values": [
+        119,
+        1
+      ],
+      "title": "Last frame"
+    },
+    {
+      "id": 20,
+      "type": "SaveImage",
+      "pos": [
+        2996,
+        724
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 51,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 27
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_gosee_b1_s1_last"
+      ],
+      "title": "Save last frame"
+    },
+    {
+      "id": 21,
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
-        742
+        512
       ],
       "size": [
         420,
@@ -780,23 +836,14 @@
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [
-        {
-          "name": "duration_hint",
-          "type": "STRING",
-          "link": 34,
-          "widget": {
-            "name": "duration_hint"
-          }
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
           "name": "prompt",
           "type": "STRING",
           "links": [
-            26,
-            31
+            28,
+            33
           ],
           "slot_index": 0
         }
@@ -806,40 +853,40 @@
       },
       "widgets_values": [
         "custom",
-        "The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.",
-        true,
+        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
+        false,
         "i2v",
-        "5 seconds, 24 fps",
+        "12 seconds, 24 fps",
         "world SFX matching the start image, no score",
         "none",
-        "motion/av/still-to-video-5s"
+        "dcc/canny-control-12s"
       ],
       "title": "LTX Prompt Enhance"
     },
     {
-      "id": 20,
+      "id": 22,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        2996,
-        572
+        3348,
+        80
       ],
       "size": [
         320,
         66
       ],
       "flags": {},
-      "order": 19,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 27
+          "link": 29
         },
         {
           "name": "audio_vae",
           "type": "VAE",
-          "link": 28
+          "link": 30
         }
       ],
       "outputs": [
@@ -847,7 +894,7 @@
           "name": "Audio",
           "type": "AUDIO",
           "links": [
-            29
+            31
           ],
           "slot_index": 0
         }
@@ -859,11 +906,42 @@
       "title": "Audio VAE Decode"
     },
     {
-      "id": 21,
+      "id": 23,
+      "type": "EZFilmDisclosure",
+      "pos": [
+        40,
+        900
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null,
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZFilmDisclosure"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "LTX AI-media disclosure (end-card)"
+    },
+    {
+      "id": 24,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620,
-        1666
+        620.0,
+        1354.0
       ],
       "size": [
         420,
@@ -876,7 +954,7 @@
         {
           "name": "positive",
           "type": "STRING",
-          "link": 31
+          "link": 33
         }
       ],
       "outputs": [
@@ -884,7 +962,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            30
+            32
           ],
           "slot_index": 0
         }
@@ -894,13 +972,13 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        true,
+        false,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
     },
     {
-      "id": 22,
+      "id": 25,
       "type": "EZQuality",
       "pos": [
         40.0,
@@ -929,64 +1007,6 @@
         "lab"
       ],
       "title": "Quality"
-    },
-    {
-      "id": 23,
-      "type": "EZVideoFormat",
-      "pos": [
-        1580,
-        414
-      ],
-      "size": [
-        360,
-        180
-      ],
-      "flags": {},
-      "order": 23,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "width",
-          "type": "INT",
-          "links": [
-            32
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "links": [
-            33
-          ],
-          "slot_index": 1
-        },
-        {
-          "name": "hint",
-          "type": "STRING",
-          "links": [
-            34
-          ],
-          "slot_index": 2
-        },
-        {
-          "name": "prefix",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 3
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZVideoFormat"
-      },
-      "widgets_values": [
-        "LTX-2.5",
-        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
-        1280,
-        704
-      ],
-      "title": "Format / platform"
     }
   ],
   "links": [
@@ -1152,73 +1172,65 @@
     ],
     [
       26,
+      10,
+      0,
       19,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      19,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      28,
+      21,
       0,
       5,
       1,
       "STRING"
     ],
     [
-      27,
+      29,
       16,
       1,
-      20,
+      22,
       0,
       "LATENT"
     ],
     [
-      28,
+      30,
       13,
       0,
-      20,
+      22,
       1,
       "VAE"
     ],
     [
-      29,
-      20,
+      31,
+      22,
       0,
       18,
       1,
       "AUDIO"
     ],
     [
-      30,
-      21,
+      32,
+      24,
       0,
       6,
       1,
       "STRING"
     ],
     [
-      31,
-      19,
-      0,
+      33,
       21,
       0,
-      "STRING"
-    ],
-    [
-      32,
-      23,
-      0,
-      7,
-      4,
-      "INT"
-    ],
-    [
-      33,
-      23,
-      1,
-      7,
-      5,
-      "INT"
-    ],
-    [
-      34,
-      23,
-      2,
-      19,
+      24,
       0,
       "STRING"
     ]
@@ -1226,24 +1238,26 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "motion/av/still-to-video-5s",
+    "lab_profile": "dcc/canny-control-12s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/still-to-video-5s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV I2V smoke (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps. LoadImage default example.png; after a still set ez_still_hero_*.png.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\n\nThis graph is a smoke/demo (121 frames). For 90s films use motion/av/still-to-shot (120 frames + last frame).\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## dcc/canny-control-12s\n\nLab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nSwitch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nLoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 AV I2V smoke, 121 frames @ 24 fps",
+    "lab_description": "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "produce",
+      "lane": "dcc",
       "occupancy": "ltx",
       "enhance_off_identity": false,
-      "handoff": []
+      "handoff": [
+        "audio/stem-mix"
+      ]
     },
     "linearData": {
       "inputs": [
         [
-          22,
+          25,
           "quality",
           {
             "label": "Quality",
@@ -1251,7 +1265,7 @@
           }
         ],
         [
-          19,
+          21,
           "sample",
           {
             "description": "Pick a lab recipe, or Custom to type your own.",
@@ -1259,7 +1273,7 @@
           }
         ],
         [
-          19,
+          21,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
@@ -1268,15 +1282,7 @@
           }
         ],
         [
-          23,
-          "format",
-          {
-            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
-            "label": "Format / platform"
-          }
-        ],
-        [
-          19,
+          21,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1284,7 +1290,7 @@
           }
         ],
         [
-          19,
+          21,
           "audio_notes",
           {
             "description": "World SFX to interleave. No score unless you asked for music.",
@@ -1297,7 +1303,7 @@
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Start frame"
+            "label": "Guide first.png"
           }
         ],
         [
@@ -1307,31 +1313,36 @@
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
           }
-        ],
-        [
-          23,
-          "width",
-          {
-            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
-            "label": "Width"
-          }
-        ],
-        [
-          23,
-          "height",
-          {
-            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
-            "label": "Height"
-          }
         ]
       ],
       "outputs": [
         12,
-        18
+        18,
+        20
       ]
     },
     "linearMode": true,
-    "lab_rel": "motion/av/still-to-video-5s",
+    "lab_iclora": {
+      "templates": "LTX-2.5_ICLoRA_Union_Control_Distilled.json",
+      "lora": "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors",
+      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control",
+      "tier": "iclora",
+      "distilled_only": true,
+      "frames": 120,
+      "size": [
+        1280,
+        704
+      ],
+      "depth_default": false,
+      "magcache": false,
+      "canny_default": true,
+      "guide": "canny.mp4"
+    },
+    "lab_disclosure": "LTX Community License",
+    "lab_optional_unwired": [
+      "EZFilmDisclosure"
+    ],
+    "lab_rel": "dcc/canny-control-12s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

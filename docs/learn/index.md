@@ -10,7 +10,7 @@ tags: [learn, comfyui, studio, dgx-spark, concepts]
 
 - What this project is (and is not)
 - Operator vs studio user
-- The still → silent 5 s → AV 5 s loop
+- The still → silent 5 s → AV 12 s loop
 - Where to read next
 
 **What this enables**

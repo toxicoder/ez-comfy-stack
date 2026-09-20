@@ -84,7 +84,7 @@ def test_locked_apps_do_not_gain_a_format_picker() -> None:
         "stills/text-swap",
         "stills/platform-pack",
         "stills/character-tweak",
-        "motion/av/audio-to-video-5s",
+        "motion/av/audio-to-video-12s",
         "motion/silent/first-last-5s",
         "films/go-see",
         "inspire/prompt-forge",

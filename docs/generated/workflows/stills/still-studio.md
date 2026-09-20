@@ -38,7 +38,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -548,7 +548,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -585,10 +585,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 ```
 
 #### `enhance`

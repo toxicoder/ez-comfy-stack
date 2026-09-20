@@ -602,10 +602,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. Empty of lettering. Photoreal still quote-card background.
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Square 1:1. Soft bokeh, quiet center so overlay text can sit later. Empty of lettering. Photoreal still quote-card background.
 ```
 
 #### `enhance`

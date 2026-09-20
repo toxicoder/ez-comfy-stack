@@ -56,7 +56,7 @@ EXEMPT = {
     "films/still-here",
     "films/switchyard",
     "dcc/clay-hero",
-    "dcc/depth-control-5s",
+    "dcc/depth-control-12s",
 }
 
 
@@ -82,6 +82,10 @@ def test_theme_module_lens_split_and_lock() -> None:
     assert "hope" not in KLEIN_STILL.lower()
     assert "humanity" not in KLEIN_STILL.lower()
     assert "bright future" not in KLEIN_STILL.lower()
+    assert "indigo-violet" in KLEIN_STILL
+    assert "suede" in KLEIN_STILL or "felt" in KLEIN_STILL or "silk" in KLEIN_STILL
+    assert "teal technical running coat" not in KLEIN_STILL.lower()
+    assert "teal running coat" not in KLEIN_STILL.lower()
 
 
 def test_theme_module_house_bible_is_camera_free_penthouse() -> None:

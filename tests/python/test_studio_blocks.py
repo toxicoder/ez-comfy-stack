@@ -14,13 +14,13 @@ SUBS = PACK / "subgraphs"
 EXPECTED = (
     "klein-t2i-backbone.json",
     "wan-i2v-5s.json",
-    "ltx-av-5s.json",
+    "ltx-av-12s.json",
     "ltx-film-shot.json",
 )
 OCCUPANCY = {
     "klein-t2i-backbone": "klein",
     "wan-i2v-5s": "wan",
-    "ltx-av-5s": "ltx",
+    "ltx-av-12s": "ltx",
     "ltx-film-shot": "film",
 }
 

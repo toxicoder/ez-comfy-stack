@@ -903,7 +903,7 @@
       "occupancy": "wan",
       "enhance_off_identity": false,
       "handoff": [
-        "dcc/depth-control-5s"
+        "dcc/depth-control-12s"
       ]
     },
     "linearData": {

@@ -1127,7 +1127,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "produce",
         "klein",
         "motion/silent/still-to-video-5s",
-        "motion/av/still-to-video-5s",
+        "motion/av/still-to-video-12s",
         "stills/text-swap",
         expose_unet=True,
         expose_look=True,
@@ -1136,7 +1136,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "produce",
         "klein",
         "motion/silent/still-to-video-5s",
-        "motion/av/still-to-video-5s",
+        "motion/av/still-to-video-12s",
         "stills/text-swap",
         "stills/still-studio",
         expose_unet=True,
@@ -1146,8 +1146,8 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "produce",
         "klein",
         "motion/silent/still-to-video-5s",
-        "motion/av/still-to-video-5s",
-        "motion/av/first-last-5s",
+        "motion/av/still-to-video-12s",
+        "motion/av/first-last-12s",
     ),
     "stills/thumbnail": _spec("produce", "klein"),
     "stills/text-swap": _spec(
@@ -1172,9 +1172,9 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "motion/silent/still-to-video-5s",
         "motion/av/hook-av",
     ),
-    "stills/talking-head": _spec("produce", "ltx", "motion/av/audio-to-video-5s"),
+    "stills/talking-head": _spec("produce", "ltx", "motion/av/audio-to-video-12s"),
     "motion/silent/still-to-video-5s": _spec(
-        "produce", "wan", "motion/av/still-to-video-5s"
+        "produce", "wan", "motion/av/still-to-video-12s"
     ),
     "motion/silent/text-to-video-5s": _spec("produce", "wan"),
     "motion/silent/first-last-5s": _spec("produce", "wan"),
@@ -1184,24 +1184,24 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "motion/loops/bumper-loop": _spec("produce", "wan"),
     "motion/loops/sticker-loop": _spec("produce", "wan"),
     "motion/silent/shorts-still-5s": _spec(
-        "produce", "wan", "motion/av/shorts-still-5s"
+        "produce", "wan", "motion/av/shorts-still-12s"
     ),
     "motion/silent/orbit-still-5s": _spec("produce", "wan"),
     "motion/silent/push-in-still-5s": _spec("produce", "wan"),
     "motion/silent/parallax-still-5s": _spec("produce", "wan"),
-    "motion/av/still-to-video-5s": _spec("produce", "ltx"),
-    "motion/av/text-to-video-5s": _spec("produce", "ltx"),
+    "motion/av/still-to-video-12s": _spec("produce", "ltx"),
+    "motion/av/text-to-video-12s": _spec("produce", "ltx"),
     "motion/av/still-to-shot": _spec("produce", "ltx"),
-    "motion/av/shorts-still-5s": _spec("produce", "ltx"),
+    "motion/av/shorts-still-12s": _spec("produce", "ltx"),
     "motion/av/hook-av": _spec("produce", "ltx"),
     "motion/av/broll-ambient": _spec("produce", "ltx"),
     "motion/av/weather-broll": _spec("produce", "ltx"),
     "motion/av/interior-ambience": _spec("produce", "ltx"),
-    "motion/av/dialogue-5s": _spec("produce", "ltx"),
-    "motion/av/multishot-5s": _spec("produce", "ltx"),
+    "motion/av/dialogue-12s": _spec("produce", "ltx"),
+    "motion/av/multishot-12s": _spec("produce", "ltx"),
     "motion/av/product-hero": _spec("produce", "ltx"),
-    "motion/av/first-last-5s": _spec("produce", "ltx"),
-    "motion/av/audio-to-video-5s": _spec("produce", "ltx"),
+    "motion/av/first-last-12s": _spec("produce", "ltx"),
+    "motion/av/audio-to-video-12s": _spec("produce", "ltx"),
     "films/go-see": _spec(
         "film",
         "film",
@@ -1249,13 +1249,13 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "dcc/clay-hero": _spec(
         "dcc",
         "klein",
-        "dcc/depth-control-5s",
+        "dcc/depth-control-12s",
         "motion/silent/still-to-video-5s",
     ),
     "dcc/canny-hero": _spec(
         "dcc",
         "klein",
-        "dcc/canny-control-5s",
+        "dcc/canny-control-12s",
     ),
     "dcc/clay-plates": _spec(
         "dcc",
@@ -1264,12 +1264,12 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "motion/silent/shorts-still-5s",
         "dcc/depth-control-shorts",
     ),
-    "dcc/depth-control-5s": _spec(
+    "dcc/depth-control-12s": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/canny-control-5s": _spec(
+    "dcc/canny-control-12s": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
@@ -1282,7 +1282,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "dcc/first-last-from-guide": _spec(
         "dcc",
         "wan",
-        "dcc/depth-control-5s",
+        "dcc/depth-control-12s",
     ),
     "dcc/guide-still": _spec(
         "dcc",
@@ -1345,8 +1345,8 @@ for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
 
 STUB_IDS = frozenset({"optional/longcat-video"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
-    "dcc/depth-control-5s": ("EZFilmDisclosure",),
-    "dcc/canny-control-5s": ("EZFilmDisclosure",),
+    "dcc/depth-control-12s": ("EZFilmDisclosure",),
+    "dcc/canny-control-12s": ("EZFilmDisclosure",),
     "dcc/depth-control-shorts": ("EZFilmDisclosure",),
     "dcc/depth-from-loader": (
         "EZFilmDisclosure",

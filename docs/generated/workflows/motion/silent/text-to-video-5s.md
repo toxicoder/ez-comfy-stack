@@ -321,7 +321,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `An original techno wizard in an unmarked sun-washed teal technical running coat…` |
+| Positive | `An original techno wizard in an unmarked dark indigo-violet suede running coat …` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `Wan22ImageToVideoLatent` — Wan 2.2 Image to Video Latent
@@ -776,10 +776,10 @@ Lazy motion sentence.
 
 **How it affects generation:** I2V rewrites to motion + one camera only. Do not prompt audio — Wan is silent.
 
-**This graph:** `An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-…`
+**This graph:** `An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden…`
 
 ```text
-An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Rake amber sidelight along fabric and terrace grit, golden-hour amber rims. 24mm-equivalent wide. The camera dollies in slowly toward the wizard over five seconds. Photoreal, YouTube 16:9. No audio.
+An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on a tropical coastal city rooftop terrace at golden hour, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Rake amber sidelight along fabric and terrace grit, golden-hour amber rims. 24mm-equivalent wide. The camera dollies in slowly toward the wizard over five seconds. Photoreal, YouTube 16:9. No audio.
 ```
 
 #### `enhance`

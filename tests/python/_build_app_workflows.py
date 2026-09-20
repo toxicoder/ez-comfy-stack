@@ -62,7 +62,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap.
 """
 
 IMAGE_STUDIO_NOTE = """## stills/image-studio
@@ -75,7 +75,7 @@ Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP t
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap, stills/still-studio.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap, stills/still-studio.
 """
 
 STILL_NOTE = """## stills/still-daily

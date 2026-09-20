@@ -191,7 +191,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Slow pour into an unmarked bowl. Liquid, ceramic clink. No score. Five seconds. Keep every object and surface from the start image; do not redesign."
+        "Slow pour into an unmarked bowl. Liquid, ceramic clink. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -327,7 +327,7 @@
       "widgets_values": [
         768,
         1280,
-        121,
+        289,
         1
       ]
     },
@@ -585,7 +585,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        121,
+        289,
         24.0,
         1
       ],
@@ -806,10 +806,10 @@
       },
       "widgets_values": [
         "custom",
-        "Slow pour into an unmarked bowl. Liquid, ceramic clink. No score. Five seconds. Keep every object and surface from the start image; do not redesign.",
+        "Slow pour into an unmarked bowl. Liquid, ceramic clink. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "5 seconds, 24 fps, 9:16",
+        "12 seconds, 24 fps, 9:16",
         "pour, ceramic clink, no score",
         "none",
         "creator/av/recipe-pour"

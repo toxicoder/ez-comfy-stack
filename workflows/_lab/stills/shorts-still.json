@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A photoreal still vertical still for Shorts. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for 9:16 with headroom for captions."
+        "A photoreal still vertical still for Shorts. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for 9:16 with headroom for captions."
       ],
       "title": "Positive"
     },
@@ -413,7 +413,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-5s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-12s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -457,7 +457,7 @@
       },
       "widgets_values": [
         "custom",
-        "A photoreal still vertical still for Shorts. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for 9:16 with headroom for captions.",
+        "A photoreal still vertical still for Shorts. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on a tropical rooftop terrace at golden hour. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Match a standing eyeline. 35mm-equivalent classic reportage view, framed for 9:16 with headroom for captions.",
         true,
         "t2i",
         "YouTube 16:9 still",
@@ -807,7 +807,7 @@
         0
       ]
     },
-    "lab_note": "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-5s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## stills/shorts-still\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nVertical Shorts/Reels still (Klein 4B distilled FP8). Default **432\u00d7768** (9:16).\nSave prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-12s**.\nWidgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B vertical 9:16 Shorts still",
     "lab_app_mode": {
       "enabled": true,

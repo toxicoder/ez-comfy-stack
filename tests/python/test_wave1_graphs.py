@@ -20,7 +20,7 @@ def test_app_mode_extra_on_lab_printers() -> None:
         "stills/still-draft.json",
         "stills/still-hero.json",
         "motion/silent/still-to-video-5s.json",
-        "motion/av/still-to-video-5s.json",
+        "motion/av/still-to-video-12s.json",
     ):
         extra = _load(name)["extra"]["lab_app_mode"]
         assert extra["enabled"] is True
@@ -65,7 +65,7 @@ def test_magcache_draft_only() -> None:
     assert mag["magcache_thresh"] == 0.04
     assert mag["magcache_K"] == 3
     assert mag["start_step"] == 2
-    ltx = _load("motion/av/still-to-video-5s.json")
+    ltx = _load("motion/av/still-to-video-12s.json")
     assert "lab_magcache" not in ltx.get("extra", {})
     flf = _load("motion/silent/first-last-5s.json")
     assert "lab_magcache" not in flf.get("extra", {})

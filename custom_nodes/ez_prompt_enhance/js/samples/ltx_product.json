@@ -2,7 +2,7 @@
   {
     "id": "orbit-tick",
     "label": "Orbit and glass tick",
-    "prompt": "The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds."
+    "prompt": "The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Twelve seconds."
   },
   {
     "id": "orbit-left",

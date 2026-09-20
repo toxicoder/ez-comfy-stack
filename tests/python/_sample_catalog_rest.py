@@ -53,7 +53,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "night-rail-pan",
             "Night rail pan",
             _wan_t2v(
-                "An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams",
+                "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams",
                 "stands at a tropical rooftop rail above unmarked glass towers and a dark bay.",
                 "Coat hem and glyph motes drift in a warm breeze.",
                 "pans left slowly along the rail",
@@ -63,7 +63,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "rain-track",
             "Rain tracking",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal running coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "walks under a terrace overhang while tropical rain sheets off unmarked glass.",
                 "Rain beads roll on fabric.",
                 "tracks beside the wizard",
@@ -73,7 +73,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "workshop-push",
             "Workshop push-in",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal shop coat",
+                "An original techno wizard in an unmarked dark indigo-violet felt shop coat",
                 "leans over a teak bench as warm-gold glyph rings bloom from a compact unmarked data-staff.",
                 "Metal filings stay put; rings drift.",
                 "dollies in slowly toward the staff",
@@ -83,7 +83,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "harbor-fixed",
             "Harbor fixed",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "stands on an unmarked concrete pier in fog.",
                 "Fog crawls; coat beads.",
                 "holds a fixed camera",
@@ -93,7 +93,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "ridge-dolly-out",
             "Ridge dolly out",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal running coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "walks a high unmarked switchback at first light.",
                 "Coat hem lifts in thin air.",
                 "dollies out slowly to show the valley",
@@ -103,7 +103,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "greenhouse-track",
             "Greenhouse track",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal linen coat",
+                "An original techno wizard in an unmarked dark indigo-violet silk-linen coat",
                 "walks a long unmarked greenhouse aisle.",
                 "Leaves shiver; condensation ticks.",
                 "tracks forward down the aisle",
@@ -113,7 +113,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "mesa-pan",
             "Mesa pan",
             _wan_t2v(
-                "An original techno wizard in an unmarked sun-washed teal coat",
+                "An original techno wizard in an unmarked sun-washed dark indigo-violet suede coat",
                 "stands on a high unmarked mesa at dusk.",
                 "Dust motes drift; glyph rings idle.",
                 "pans right across the stone",
@@ -123,7 +123,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "library-dolly",
             "Library dolly",
             _wan_t2v(
-                "An original techno wizard in an unmarked dark teal wool coat",
+                "An original techno wizard in an unmarked dark indigo-violet wool-felt coat",
                 "walks between tall unmarked wood stacks.",
                 "Dust turns in a window shaft.",
                 "dollies in slowly",
@@ -133,7 +133,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "platform-track",
             "Platform track",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal running coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "walks an unmarked underground platform as a train smear passes far.",
                 "Coat hem snaps once.",
                 "tracks beside the wizard",
@@ -143,7 +143,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "cliff-fixed",
             "Cliff fixed",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "stands on an unmarked cliff path above surf.",
                 "Wind pulls the coat; spray at the edge.",
                 "holds a fixed camera",
@@ -153,7 +153,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "snow-pan",
             "Snow pan",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal parka",
+                "An original techno wizard in an unmarked dark indigo-violet felt parka",
                 "crosses a high unmarked ridge among pines.",
                 "Snow sifts; breath shows.",
                 "pans left with the walk",
@@ -163,7 +163,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "alley-track",
             "Alley track",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "walks a narrow unmarked covered alley.",
                 "Cloth overhead stirs.",
                 "tracks forward",
@@ -173,7 +173,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "ferry-dolly",
             "Ferry dolly",
             _wan_t2v(
-                "An original techno wizard in an unmarked waxed teal coat",
+                "An original techno wizard in an unmarked waxed dark indigo-violet suede coat",
                 "stands at the rail of a small unmarked ferry at dusk.",
                 "Water glitter slides; coat hardware dull.",
                 "dollies in slowly",
@@ -183,7 +183,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "arcade-pan",
             "Arcade pan",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "walks an unmarked indoor arcade of colored practicals.",
                 "Light shimmer; cabinets blank.",
                 "pans right",
@@ -193,7 +193,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "courtyard-fixed",
             "Courtyard fixed",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "sits at an unmarked stone fountain.",
                 "Water beads; palms idle.",
                 "holds a fixed camera",
@@ -203,7 +203,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "concourse-track",
             "Concourse track",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal running coat mid-stride",
+                "An original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
                 "crosses a vast unmarked concourse.",
                 "Far figures smear; the coat stays sharp.",
                 "tracks beside the stride",
@@ -223,7 +223,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "studio-fixed",
             "Studio fixed",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "sits at an unmarked teak desk.",
                 "Paper stirs once; glyph rings idle.",
                 "holds a fixed camera",
@@ -233,7 +233,7 @@ def wan_t2v() -> list[dict[str, str]]:
             "observatory-pan",
             "Observatory pan",
             _wan_t2v(
-                "An original techno wizard in an unmarked teal coat",
+                "An original techno wizard in an unmarked dark indigo-violet suede coat",
                 "stands inside an unmarked dome with a slit of night sky.",
                 "Cool moonlight mix; metal ticks.",
                 "pans left along the slit",
@@ -624,7 +624,7 @@ def ltx_t2v() -> list[dict[str, str]]:
             "night-rail",
             "Night rail AV",
             _ltx_t2v(
-                "A wide photoreal shot of a tropical rooftop rail at night. An original techno wizard in an unmarked teal running coat stands as glyph rings idle.",
+                "A wide photoreal shot of a tropical rooftop rail at night. An original techno wizard in an unmarked dark indigo-violet suede running coat stands as glyph rings idle.",
                 "Warm lanterns and distant traffic sit under a single glyph chime.",
                 "The camera pans left slowly along the rail.",
             ),
@@ -651,7 +651,7 @@ def ltx_t2v() -> list[dict[str, str]]:
             "harbor-fog",
             "Harbor fog AV",
             _ltx_t2v(
-                "A photoreal shot of an unmarked pier in fog. A techno wizard in a teal coat stands at the edge.",
+                "A photoreal shot of an unmarked pier in fog. A techno wizard in a dark indigo-violet suede coat stands at the edge.",
                 "Fog hush, water lap, distant horn far off — not a carrier identity.",
                 "The camera holds a fixed frame.",
             ),
@@ -1324,97 +1324,97 @@ def ltx_dialogue() -> list[dict[str, str]]:
         (
             "use-them-well",
             "Use them well",
-            'A medium photoreal shot of a tropical rooftop terrace at golden hour. An original techno wizard in an unmarked teal running coat turns toward lens and says, "Use the tools in front of you well." A warm terrace breeze and palm rustle sit under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot of a tropical rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat turns toward lens and says, "Use the tools in front of you well." A warm terrace breeze and palm rustle sit under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "stay-on-box",
             "Stay on the box",
-            'A medium photoreal shot at an unmarked teak desk. The wizard looks to lens and says, "Stay on the machine in front of us." Room tone under a close voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at an unmarked teak desk. The wizard looks to lens and says, "Stay on the machine in front of us." Room tone under a close voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "weights-local",
             "Weights stay local",
-            'A medium photoreal shot on a terrace at night. The wizard says, "The weights stay on this box." Lantern hush under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot on a terrace at night. The wizard says, "The weights stay on this box." Lantern hush under the voice, then a glyph chime. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "cut-is-ours",
             "The cut is ours",
-            'A medium photoreal shot in an unmarked workshop. The wizard says, "If it ships from here, the cut is ours." A lamp hum under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot in an unmarked workshop. The wizard says, "If it ships from here, the cut is ours." A lamp hum under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "no-rented-beat",
             "No rented beat",
-            'A medium photoreal shot at a teak bench. The wizard says, "No rented beat. The booth is local." Room tone under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at a teak bench. The wizard says, "No rented beat. The booth is local." Room tone under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "card-hot",
             "Card runs hot",
-            'A medium photoreal shot, coat hem in a breeze. The wizard says, "The card runs hot. That is the point." Wind under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot, coat hem in a breeze. The wizard says, "The card runs hot. That is the point." Wind under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "own-the-silence",
             "Own the silence",
-            'A medium photoreal shot at a fountain. The wizard says, "Own the silence between the words." Water beads under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at a fountain. The wizard says, "Own the silence between the words." Water beads under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "one-job",
             "One job",
-            'A medium photoreal shot on a ridge. The wizard says, "One job on this box. Then we stop." Thin wind under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot on a ridge. The wizard says, "One job on this box. Then we stop." Thin wind under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "look-twice",
             "Look twice",
-            'A medium photoreal shot at unmarked glass. The wizard says, "Look twice before you print." Distant traffic under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at unmarked glass. The wizard says, "Look twice before you print." Distant traffic under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "keep-the-bible",
             "Keep the bible",
-            'A medium photoreal shot in an unmarked study. The wizard says, "Keep the bible. Change only the shot." Paper hush under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot in an unmarked study. The wizard says, "Keep the bible. Change only the shot." Paper hush under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "hands-free",
             "Hands stay free",
-            'A medium photoreal shot, empty palms visible. The wizard says, "Hands stay free. The staff is enough." Fabric hush under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot, empty palms visible. The wizard says, "Hands stay free. The staff is enough." Fabric hush under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "print-later",
             "Print later",
-            'A medium photoreal shot at first light. The wizard says, "Write cheap. Print later." Soft wind under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at first light. The wizard says, "Write cheap. Print later." Soft wind under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "no-score-line",
             "World only",
-            'A medium photoreal shot on a terrace. The wizard says, "World sound only. Let the street talk." Palm rustle under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot on a terrace. The wizard says, "World sound only. Let the street talk." Palm rustle under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "fog-line",
             "Fog line",
-            'A medium photoreal shot on an unmarked pier. The wizard says, "The harbor will wait." Water lap under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot on an unmarked pier. The wizard says, "The harbor will wait." Water lap under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "rain-line",
             "Rain line",
-            'A medium photoreal shot under an overhang. The wizard says, "Let the rain stem-mix the take." Rain on glass under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot under an overhang. The wizard says, "Let the rain stem-mix the take." Rain on glass under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "night-line",
             "Night line",
-            'A medium photoreal shot under lanterns. The wizard says, "Hold the last frame." Insect hush under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot under lanterns. The wizard says, "Hold the last frame." Insect hush under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "desk-line",
             "Desk line",
-            'A medium photoreal shot at a blank notebook. The wizard says, "The notebook stays empty until the shot is true." Room tone under the voice. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot at a blank notebook. The wizard says, "The notebook stays empty until the shot is true." Room tone under the voice. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "staff-line",
             "Staff line",
-            'A medium photoreal shot, glyph rings idle. The wizard says, "The staff is a tool, not a trick." A glyph chime after the line. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium photoreal shot, glyph rings idle. The wizard says, "The staff is a tool, not a trick." A glyph chime after the line. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
         (
             "close-line",
             "Close line",
-            'A medium close photoreal shot. The wizard says, "We are already at the work." Close voice, world SFX under. Unmarked surfaces. No music and no score. Five seconds.',
+            'A medium close photoreal shot. The wizard says, "We are already at the work." Close voice, world SFX under. Unmarked surfaces. No music and no score. Twelve seconds.',
         ),
     ]
     return [_row(sid, label, prompt) for sid, label, prompt in lines]
@@ -1426,97 +1426,97 @@ def ltx_multishot() -> list[dict[str, str]]:
         (
             "wide-close-bay",
             "Wide / close / bay",
-            "A wide photoreal terrace at golden hour, breeze under traffic. A hard cut to a medium close-up of glyph rings, breeze continuing. A match cut to a low wide of the bay, a glyph chime. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal terrace at golden hour, breeze under traffic. A hard cut to a medium close-up of glyph rings, breeze continuing. A match cut to a low wide of the bay, a glyph chime. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "workshop-cuts",
             "Workshop cuts",
-            "A wide photoreal workshop, lamp hum. A hard cut to hands on a compact unmarked data-staff. A match cut to the full bench as a metal tick lands. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal workshop, lamp hum. A hard cut to hands on a compact unmarked data-staff. A match cut to the full bench as a metal tick lands. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "rain-cuts",
             "Rain cuts",
-            "A wide photoreal rain terrace. A hard cut to rain on glass. A match cut back to the wizard under the overhang, rain continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal rain terrace. A hard cut to rain on glass. A match cut back to the wizard under the overhang, rain continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "night-cuts",
             "Night cuts",
-            "A wide photoreal night rail. A hard cut to lantern bokeh. A match cut to the wizard at the glass, traffic muffled. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal night rail. A hard cut to lantern bokeh. A match cut to the wizard at the glass, traffic muffled. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "harbor-cuts",
             "Harbor cuts",
-            "A wide photoreal pier in fog. A hard cut to water lap. A match cut to the coat at the rail, fog continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal pier in fog. A hard cut to water lap. A match cut to the coat at the rail, fog continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "ridge-cuts",
             "Ridge cuts",
-            "A wide photoreal switchback. A hard cut to boots on grit. A match cut to the valley slot, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal switchback. A hard cut to boots on grit. A match cut to the valley slot, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "library-cuts",
             "Library cuts",
-            "A wide photoreal stacks. A hard cut to a hand on wood. A match cut to the aisle, paper hush continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal stacks. A hard cut to a hand on wood. A match cut to the aisle, paper hush continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "platform-cuts",
             "Platform cuts",
-            "A wide photoreal platform. A hard cut to a train smear. A match cut to the wizard waiting, rumble continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal platform. A hard cut to a train smear. A match cut to the wizard waiting, rumble continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "greenhouse-cuts",
             "Greenhouse cuts",
-            "A wide photoreal aisle. A hard cut to a leaf. A match cut to the far glass, drip continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal aisle. A hard cut to a leaf. A match cut to the far glass, drip continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "mesa-cuts",
             "Mesa cuts",
-            "A wide photoreal mesa at dusk. A hard cut to glyph motes. A match cut to the horizon, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal mesa at dusk. A hard cut to glyph motes. A match cut to the horizon, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "ferry-cuts",
             "Ferry cuts",
-            "A wide photoreal ferry rail. A hard cut to water glitter. A match cut to the coat hardware, water slap continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal ferry rail. A hard cut to water glitter. A match cut to the coat hardware, water slap continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "arcade-cuts",
             "Arcade cuts",
-            "A wide photoreal arcade. A hard cut to blank cabinets. A match cut to the wizard walking, hum continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal arcade. A hard cut to blank cabinets. A match cut to the wizard walking, hum continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "courtyard-cuts",
             "Courtyard cuts",
-            "A wide photoreal courtyard. A hard cut to fountain water. A match cut to the seated wizard, water continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal courtyard. A hard cut to fountain water. A match cut to the seated wizard, water continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "concourse-cuts",
             "Concourse cuts",
-            "A wide photoreal concourse. A hard cut to shoes. A match cut to the stride, hush continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal concourse. A hard cut to shoes. A match cut to the stride, hush continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "storm-cuts",
             "Storm cuts",
-            "A wide photoreal rooftop in wind. A hard cut to cloak lining. A match cut to the gap ahead, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal rooftop in wind. A hard cut to cloak lining. A match cut to the gap ahead, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "studio-cuts",
             "Studio cuts",
-            "A wide photoreal desk. A hard cut to a blank notebook. A match cut to the idle staff, room tone continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal desk. A hard cut to a blank notebook. A match cut to the idle staff, room tone continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "snow-cuts",
             "Snow cuts",
-            "A wide photoreal snow ridge. A hard cut to breath. A match cut to pines, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal snow ridge. A hard cut to breath. A match cut to pines, wind continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "observatory-cuts",
             "Observatory cuts",
-            "A wide photoreal dome. A hard cut to the sky slit. A match cut to the wizard, metal tick continuing. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal dome. A hard cut to the sky slit. A match cut to the wizard, metal tick continuing. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
         (
             "audio-continues",
             "Audio continues",
-            "A wide photoreal terrace. A hard cut to a close-up; breeze continues across the cut. A match cut to the bay; a glyph chime. Mouth closed. Unmarked surfaces. No music and no score. Five seconds.",
+            "A wide photoreal terrace. A hard cut to a close-up; breeze continues across the cut. A match cut to the bay; a glyph chime. Mouth closed. Unmarked surfaces. No music and no score. Twelve seconds.",
         ),
     ]
     rows.extend(extras)

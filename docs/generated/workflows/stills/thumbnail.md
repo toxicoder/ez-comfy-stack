@@ -602,10 +602,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A bold YouTube thumbnail still, 16:9. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams fills the frame on a tropical rooftop terrace at …`
+**This graph:** `A bold YouTube thumbnail still, 16:9. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams fills the frame on a tropical ro…`
 
 ```text
-A bold YouTube thumbnail still, 16:9. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams fills the frame on a tropical rooftop terrace at golden hour. High contrast key light, clear subject separation, warm gold-cyan holographic glyph rings and a compact unmarked data-staff, empty of lettering. Photoreal still, eye-catching, clean of burned-in words.
+A bold YouTube thumbnail still, 16:9. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams fills the frame on a tropical rooftop terrace at golden hour. High contrast key light, clear subject separation, warm gold-cyan holographic glyph rings and a compact unmarked data-staff, empty of lettering. Photoreal still, eye-catching, clean of burned-in words.
 ```
 
 #### `enhance`
