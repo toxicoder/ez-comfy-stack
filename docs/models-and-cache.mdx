@@ -24,41 +24,36 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 <Callout type="info" title="Operator path">
   Most operators only need: set `MODELS_DIR` → `download-models` → confirm basenames. Layer pins, gated tokens, and multi-stack sharing are linked below.
 </Callout>
-\<div class="grid cards" markdown>
-
--   :material-key:\{ .lg .middle \} **Gated models**
-
+<Cards>
+  <Card title="Gated models">
     ---
 
     LTX-2.5 needs a Hugging Face license click. `HF_TOKEN` is not that click.
 
-    [:octicons-arrow-right-24: HF_TOKEN](operate/models-tokens.md)
-
--   :material-share-variant:\{ .lg .middle \} **Multi-stack sharing**
-
+    [HF_TOKEN](operate/models-tokens.md)
+  </Card>
+  <Card title="Multi-stack sharing">
     ---
 
     One `MODELS_DIR` for this Docker stack and nvidia-dgx-spark-lab hostPath.
 
-    [:octicons-arrow-right-24: Sharing](operate/models-sharing.md)
-
--   :material-flag:\{ .lg .middle \} **Which `--tier`**
-
+    [Sharing](operate/models-sharing.md)
+  </Card>
+  <Card title="Which `--tier`">
     ---
 
     Pack id per downloader, not a quality ladder. `--limit` is Mbps.
 
-    [:octicons-arrow-right-24: Download tiers](download-tiers.md)
-
--   :material-package-down:\{ .lg .middle \} **Download packs**
-
+    [Download tiers](download-tiers.md)
+  </Card>
+  <Card title="Download packs">
     ---
 
     Basenames, example graphs, LTX selective download, resume, GHCR pins.
 
-    [:octicons-arrow-right-24: Packs](operate/models-packs.md)
-
-\</div>
+    [Packs](operate/models-packs.md)
+  </Card>
+</Cards>
 
 ## Three stores
 

@@ -115,6 +115,22 @@ class NavContractTests(unittest.TestCase):
         )
 
 
+class LeftoverMkdocsTests(unittest.TestCase):
+    """MkDocs-only syntax that Fumadocs prints as text must not remain."""
+
+    def test_authored_pages_have_no_grid_cards(self) -> None:
+        """``<div class="grid cards">`` (escaped or not) is not a Fumadocs component."""
+        leftover: list[str] = []
+        for path in sorted(DOCS_DIR.rglob("*")):
+            if path.suffix not in {".md", ".mdx"}:
+                continue
+            if "generated" in path.parts:
+                continue
+            if "grid cards" in path.read_text(encoding="utf-8"):
+                leftover.append(path.relative_to(DOCS_DIR).as_posix())
+        self.assertEqual([], leftover)
+
+
 class FrontmatterTests(unittest.TestCase):
     """Authored navigable pages keep title, description, tags, and scan lists."""
 

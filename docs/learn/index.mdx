@@ -28,41 +28,36 @@ ez-comfy-stack is a **sample US-safe local studio**: ComfyUI in Docker on **one*
 
 It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). How the pieces fit: [Architecture](architecture.md). When to graduate: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
 
-\<div class="grid cards" markdown>
-
--   :material-account-cog:\{ .lg .middle \} **Operator**
-
+<Cards>
+  <Card title="Operator">
     ---
 
     SSH to the Spark. Run `./scripts/manage.sh` for setup, doctor, downloads, start (type **yes**), and stop.
 
-    [:octicons-arrow-right-24: Getting Started](../getting-started.md)
-
--   :material-palette:\{ .lg .middle \} **Studio user**
-
+    [Getting Started](../getting-started.md)
+  </Card>
+  <Card title="Studio user">
     ---
 
     Browser at port **8188**. Load a `_lab` graph, change widgets, Queue, pick PNG/MP4 from `COMFY_OUTPUT_DIR`.
 
-    [:octicons-arrow-right-24: ComfyUI basics](comfyui.md)
-
--   :material-shield-check:\{ .lg .middle \} **US-safe defaults**
-
+    [ComfyUI basics](comfyui.md)
+  </Card>
+  <Card title="US-safe defaults">
     ---
 
     Local weights only. Klein + Wan are Apache; LTX is Community License (gated, $10M cap). MiniMax H3 is banned.
 
-    [:octicons-arrow-right-24: Model licenses](../licenses.md)
-
--   :material-book-alphabet:\{ .lg .middle \} **Glossary**
-
+    [Model licenses](../licenses.md)
+  </Card>
+  <Card title="Glossary">
     ---
 
     Dotted terms open a definition dialog. This Learn section teaches the ideas behind those words.
 
-    [:octicons-arrow-right-24: Glossary](../glossary.md)
-
-\</div>
+    [Glossary](../glossary.md)
+  </Card>
+</Cards>
 
 ---
 
