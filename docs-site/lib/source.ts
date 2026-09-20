@@ -13,6 +13,7 @@ import type { Page } from "fumadocs-core/source";
 
 import { resolveHrefWith, withoutExtension } from "./href";
 import { docs } from "./content";
+import { slimSearchStructuredData } from "./search-index";
 
 /**
  * Route prefix of the pages.
@@ -101,7 +102,8 @@ function toTagList(tags: unknown): string[] | undefined {
  *
  * The built-in index builder covers title, description and body; it has no notion of
  * `tags`, which the old MkDocs search did index.  Structured data is resolved here because
- * the compiled document is loaded on demand.
+ * the compiled document is loaded on demand. Generated encyclopedias are slimmed so the
+ * static `/api/search` export stays under GitHub's 100 MiB blob limit.
  *
  * @param page A page from {@link source}.
  * @returns The record to insert into the search database.
@@ -122,7 +124,7 @@ export async function buildSearchIndex(page: Page): Promise<AdvancedIndex> {
     title: data.title ?? page.path,
     description: data.description,
     url: page.url,
-    structuredData: structured,
+    structuredData: slimSearchStructuredData(page.path, structured),
     tag: toTagList(data.tags)
   };
 }

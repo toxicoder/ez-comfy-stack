@@ -103,7 +103,7 @@ Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs sty
 | **`main`** | **`latest`** (default site) |
 | **`development`** | **`development`** |
 
-PR validation is `make docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
+PR validation is `make docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. The helper refuses any file at GitHub's 100 MiB blob limit. Generated encyclopedias are indexed by title, headings, and tags only so the static `/api/search` export stays under that cap. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
 
 Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/).
 
