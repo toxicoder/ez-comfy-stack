@@ -81,14 +81,14 @@ gates — `docs/requirements.txt` no longer installs MkDocs.
 
 ## Stable URLs
 
-The old site published `…/latest/` and `…/development/` through mike. Both aliases are now
-separate exports of the same commit, built with `DOCS_ALIAS=latest` and `development`
-(`//docs-site:build-latest`, `//docs-site:build-development`) so Next bakes
-`basePath=/ez-comfy-stack/<alias>` into asset URLs. `.github/workflows/deploy-docs.yml`
-assembles them under `_site/`, writes a root `.nojekyll` (legacy GitHub Pages runs Jekyll,
-which would otherwise drop `_next/`), and fast-forwards the `gh-pages` branch. Every previously
-published URL keeps resolving; a root `index.html` forwards bare `…/ez-comfy-stack/` traffic to
-`/latest/`, so no redirect service is needed.
+The old site published `…/latest/` and `…/development/` through mike. Each alias is a Next
+export with `basePath=/ez-comfy-stack/<alias>` baked into asset URLs
+(`//docs-site:build-latest`, `//docs-site:build-development`). `.github/workflows/deploy-docs.yml`
+builds **one** alias per run (`main` → `/latest/`, `development` → `/development/`) and keeps
+the other directory from the current `gh-pages` tree — two full 650-page exports OOM the
+GitHub-hosted runner. It writes a root `.nojekyll` (legacy GitHub Pages runs Jekyll, which
+would otherwise drop `_next/`) and fast-forwards `gh-pages`. Every previously published URL
+keeps resolving; a root `index.html` forwards bare `…/ez-comfy-stack/` traffic to `/latest/`.
 
 The development alias renders a banner. The branch used by “Edit on GitHub” and in-page source
 links comes from `EZ_DOCS_VERSION` (override locally with `EZ_DOCS_GIT_REF` or

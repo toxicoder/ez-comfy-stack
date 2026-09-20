@@ -4,8 +4,12 @@ name: Deploy Documentation
 # - main       → /latest/
 # - development → /development/
 #
+# Each run builds ONE alias (the branch that triggered it) and keeps the other
+# alias from the current gh-pages tree. Two full Next exports of ~650 pages
+# OOM the 7 GB GitHub-hosted runner (shutdown signal during the second compile).
+#
 # URL compatibility: the MkDocs site published under those aliases via mike.
-# Each alias is its own Next export with matching basePath.
+# A root index.html forwards bare /ez-comfy-stack/ traffic to /latest/.
 #
 # PR docs validation stays in ci.yml. This workflow runs only on push to
 # long-lived branches (or workflow_dispatch).
@@ -30,6 +34,10 @@ concurrency:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      NODE_OPTIONS: "--max-old-space-size=6144"
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -63,38 +71,40 @@ jobs:
       - name: Build and assemble the Pages tree
         env:
           EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
+          DOCS_ALIAS: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
         run: |
           set -euo pipefail
-          root="$(pwd)"
+          alias="${DOCS_ALIAS}"
+          case "${alias}" in
+            latest | development) ;;
+            *)
+              echo "deploy-docs: DOCS_ALIAS must be latest or development, got ${alias}" >&2
+              exit 1
+              ;;
+          esac
+
           rm -rf _site
-          mkdir -p _site/latest _site/development
+          mkdir -p _site
 
-          bazelisk run //docs-site:build-latest
-          cp -r docs-site/out/. _site/latest/
+          # Keep the other mike-compatible alias from the live Pages tree.
+          git fetch origin gh-pages || true
+          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+            git archive origin/gh-pages latest development 2>/dev/null | tar -x -C _site || true
+          fi
 
-          bazelisk run //docs-site:build-development
-          cp -r docs-site/out/. _site/development/
+          mkdir -p docs-site/public
+          if [[ -d docs/assets ]]; then
+            rm -rf docs-site/public/assets
+            cp -R docs/assets docs-site/public/assets
+          fi
+
+          rm -rf "_site/${alias}"
+          mkdir -p "_site/${alias}"
+          bazelisk run "//docs-site:build-${alias}"
+          cp -r docs-site/out/. "_site/${alias}/"
 
           touch _site/.nojekyll
-
-          cat >_site/index.html <<'HOR'
-          <!doctype html>
-          <html lang="en">
-            <head>
-              <meta charset="utf-8" />
-              <meta name="robots" content="index, follow" />
-              <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/" />
-              <meta http-equiv="refresh" content="0; url=https://toxicoder.github.io/ez-comfy-stack/latest/" />
-              <title>ez-comfy-stack documentation</title>
-            </head>
-            <body>
-              <p>
-                The documentation moved. <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">Continue to the latest docs</a>
-                &mdash; or read the <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development branch docs</a>.
-              </p>
-            </body>
-          </html>
-          HOR
+          cp docs-site/pages-root-index.html _site/index.html
 
       - name: Publish to the gh-pages branch
         run: |
