@@ -79,6 +79,7 @@ const SAVE_TYPES = new Set([
 ]);
 
 const BANNER_ID = "ez-studio-app-banner";
+const DESC_STYLE_ID = "ez-studio-app-desc-wrap";
 const CHIP = [
   "padding:10px 12px",
   "border-radius:10px",
@@ -86,7 +87,8 @@ const CHIP = [
   "color:#e8eef7",
   "font:12px/1.4 ui-sans-serif,system-ui,sans-serif",
   "box-shadow:0 8px 24px rgba(0,0,0,0.35)",
-  "pointer-events:none",
+  "pointer-events:auto",
+  "white-space:normal",
 ].join(";");
 
 /**
@@ -209,6 +211,44 @@ function mountBanner(el) {
 }
 
 /**
+ * Escape text for innerHTML banner lines.
+ * @param {*} value
+ * @returns {string}
+ */
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+/**
+ * Inject CSS so App Mode widget descriptions wrap instead of truncating.
+ * @returns {void}
+ */
+function ensureDescriptionCss() {
+  if (document.getElementById(DESC_STYLE_ID)) {
+    return;
+  }
+  const style = document.createElement("style");
+  style.id = DESC_STYLE_ID;
+  style.textContent = `
+[data-testid="linear-widgets"] .p-form-helper-text,
+[data-testid="linear-widgets"] [class*="description"],
+[data-testid="linear-widgets"] .widget-info,
+[data-testid="linear-widgets"] small {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  height: auto !important;
+  max-height: none !important;
+}
+`;
+  document.head.appendChild(style);
+}
+
+/**
  * Show occupancy, run status, and handoff copy when App Mode is enabled.
  * @param {string} status
  * @returns {void}
@@ -225,21 +265,31 @@ function renderBanner(status) {
   const occupancy = mode.occupancy || "none";
   const stop = OCCUPANCY_STOP[occupancy] || "check the Note";
   const handoff = (mode.handoff || []).slice(0, 3).join(" · ");
+  const extra = app.graph?.extra || {};
+  const summary = String(extra.lab_description || "").trim();
+  const qualityCaption = String(extra.lab_quality_caption || "").trim();
   const lines = [
-    `<strong>${occupancy}</strong> — stop ${stop}. One GB10 job.`,
+    `<strong>${escapeHtml(occupancy)}</strong> — stop ${escapeHtml(stop)}. One GB10 job.`,
   ];
+  if (summary) {
+    lines.push(escapeHtml(summary));
+  }
+  if (qualityCaption) {
+    lines.push(escapeHtml(qualityCaption));
+  }
   if (status) {
-    lines.push(status);
+    lines.push(escapeHtml(status));
   }
   if (handoff) {
-    lines.push(`Next: ${handoff}`);
+    lines.push(`Next: ${escapeHtml(handoff)}`);
   }
-  const album = app.graph?.extra?.lab_album;
+  const album = extra.lab_album;
   if (album?.role === "album" && album.artist_slug && album.album_slug) {
     lines.push(
-      `Full album: ./scripts/manage.sh album-render --album ${album.artist_slug}/${album.album_slug} --art skip|upload|generate`,
+      `Full album: ./scripts/manage.sh album-render --album ${escapeHtml(album.artist_slug)}/${escapeHtml(album.album_slug)} --art skip|upload|generate`,
     );
   }
+  el.title = summary || qualityCaption || "";
   el.innerHTML = lines.join("<br>");
 }
 
@@ -258,6 +308,7 @@ app.registerExtension({
    * @returns {Promise<void>}
    */
   async setup() {
+    ensureDescriptionCss();
     let done = 0;
     const api = app.api;
     const graph = app.graph;

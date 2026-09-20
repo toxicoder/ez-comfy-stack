@@ -9,9 +9,7 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
-  EditOnGitHub,
-  PageBreadcrumb,
-  PageFooter
+  EditOnGitHub
 } from "fumadocs-ui/layouts/docs/page";
 import { Banner } from "fumadocs-ui/components/banner";
 
@@ -90,7 +88,20 @@ export default async function DocsRoute({ params }: PageProps) {
           </span>
         </Banner>
       )}
-      <DocsPage toc={data.toc} full={data.full}>
+      <DocsPage
+        toc={data.toc}
+        full={data.full}
+        footer={{
+          items: neighborsOf(source, page.path),
+          children: (
+            <div className="flex flex-wrap items-center gap-4 pt-6">
+              <EditOnGitHub href={editUrl(page.path)} className="ms-auto">
+                Edit this page
+              </EditOnGitHub>
+            </div>
+          )
+        }}
+      >
         <DocsBody>
           {stamp ? (
             <PublishedChip iso={stamp.toISOString()} label={formatPublishedLabel(stamp)} />
@@ -101,14 +112,6 @@ export default async function DocsRoute({ params }: PageProps) {
             <TableChrome />
             <Body components={mdxComponentsFor(page)} />
           </CommandVarsProvider>
-          <PageFooter items={neighborsOf(source, page.path)}>
-            <div className="flex flex-wrap items-center gap-4 pt-6">
-              <PageBreadcrumb />
-              <EditOnGitHub href={editUrl(page.path)} className="ms-auto">
-                Edit this page
-              </EditOnGitHub>
-            </div>
-          </PageFooter>
         </DocsBody>
       </DocsPage>
     </DocsLayout>

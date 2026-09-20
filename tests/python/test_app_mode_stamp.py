@@ -209,8 +209,15 @@ def test_still_studio_exposes_format_look_size_and_unet() -> None:
     assert "height" in names
     assert "batch_size" in names
     assert "unet_name" in names
-    assert "steps" not in names
+    assert "steps" in names
+    assert "cfg" in names
     assert names.index("look") < names.index("seed")
+
+
+def test_expose_unet_graphs_also_stamp_sampler_steps() -> None:
+    for rel, spec in STAMP_SPECS.items():
+        if spec.get("expose_unet"):
+            assert spec.get("sampler_steps_cfg"), rel
 
 
 def test_daily_still_exposes_latent_and_unet_after_prompt() -> None:
