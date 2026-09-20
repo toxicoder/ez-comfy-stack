@@ -56,6 +56,14 @@ CALLOUT_TYPES = {
 
 #: Trees that are generated or non-page content (mirrors mkdocs.yml exclude_docs).
 _EXCLUDED_PARTS = frozenset({"generated", "includes", "assets", "tests", "node_modules", "__pycache__"})
+#: Generated pages that live outside ``docs/generated/``. ``workflow-nodes.md`` is
+#: written by ``docs/generate_workflow_docs.py`` and keeps ``!!!`` for remarkAdmonition.
+_EXCLUDED_RELATIVE = frozenset(
+    {
+        "reference/workflow-nodes.md",
+        "reference/workflow-nodes.mdx",
+    }
+)
 
 _FENCE_RE = re.compile(r"^(?P<indent>[ \t]*)(?P<fence>`{3,}|~{3,})(?P<info>.*)$")
 #: Inline code spans; their content is literal and must not be escaped.
@@ -940,11 +948,15 @@ def default_targets() -> list[pathlib.Path]:
         been renamed: a re-run finds the plain pages already converted and reports them as
         unchanged rather than skipping them.
     """
-    return sorted(
-        path
-        for path in chain(DOCS_DIR.rglob("**/*.md"), DOCS_DIR.rglob("**/*.mdx"))
-        if not _EXCLUDED_PARTS & set(path.relative_to(DOCS_DIR).parts)
-    )
+    found: list[pathlib.Path] = []
+    for path in chain(DOCS_DIR.rglob("**/*.md"), DOCS_DIR.rglob("**/*.mdx")):
+        relative = path.relative_to(DOCS_DIR)
+        if _EXCLUDED_PARTS & set(relative.parts):
+            continue
+        if relative.as_posix() in _EXCLUDED_RELATIVE:
+            continue
+        found.append(path)
+    return sorted(found)
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -7,9 +7,11 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from _docs_paths import docs_file
+
 ROOT = Path(__file__).resolve().parents[2]
 LICENSE_ROOT = ROOT / "LICENSE-MODELS.md"
-LICENSE_DOCS = ROOT / "docs" / "licenses.md"
+LICENSE_DOCS = docs_file(ROOT / "docs" / "licenses.md")
 
 HEADER_COLS = (
     "model",

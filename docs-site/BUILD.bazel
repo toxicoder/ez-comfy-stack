@@ -20,6 +20,14 @@ load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 package(default_visibility = ["//visibility:private"])
 
+# npm runners need the Next app, the markdown tree, and repo-root JSON
+# (glossary + command-builder) so tsc/vitest can resolve ../../includes/*.json.
+_NPM_DATA = [
+    ":sources",
+    "//docs:content",
+    "//includes",
+]
+
 filegroup(
     name = "sources",
     srcs = glob(
@@ -75,10 +83,7 @@ sh_binary(
     name = "install",
     srcs = ["run_npm.sh"],
     args = ["install"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -86,10 +91,7 @@ sh_binary(
     name = "dev",
     srcs = ["run_npm.sh"],
     args = ["dev"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -97,10 +99,7 @@ sh_binary(
     name = "build",
     srcs = ["run_npm.sh"],
     args = ["build"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -111,10 +110,7 @@ sh_binary(
     name = "build-latest",
     srcs = ["run_npm.sh"],
     args = ["build-latest"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -122,10 +118,7 @@ sh_binary(
     name = "build-development",
     srcs = ["run_npm.sh"],
     args = ["build-development"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -145,10 +138,7 @@ sh_test(
     timeout = "moderate",
     srcs = ["run_npm.sh"],
     args = ["typecheck"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -160,10 +150,7 @@ sh_test(
     timeout = "moderate",
     srcs = ["run_npm.sh"],
     args = ["unit"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -173,10 +160,7 @@ sh_test(
     size = "small",
     srcs = ["run_python_test.sh"],
     args = ["test_gen_nav.py"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -186,10 +170,7 @@ sh_test(
     size = "small",
     srcs = ["run_python_test.sh"],
     args = ["test_codemod.py"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -201,10 +182,7 @@ sh_test(
     size = "small",
     srcs = ["run_python_test.sh"],
     args = ["test_visual_tooling.py"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -221,10 +199,8 @@ sh_test(
     timeout = "long",
     srcs = ["run_npm.sh"],
     args = ["visual"],
-    data = [
-        ":sources",
+    data = _NPM_DATA + [
         ":visual-goldens",
-        "//docs:content",
     ],
     tags = [
         "docs",
@@ -237,10 +213,8 @@ sh_binary(
     name = "visual",
     srcs = ["run_npm.sh"],
     args = ["visual"],
-    data = [
-        ":sources",
+    data = _NPM_DATA + [
         ":visual-goldens",
-        "//docs:content",
     ],
     visibility = ["//visibility:public"],
 )
@@ -252,10 +226,8 @@ sh_binary(
     name = "visual-update",
     srcs = ["run_npm.sh"],
     args = ["visual-update"],
-    data = [
-        ":sources",
+    data = _NPM_DATA + [
         ":visual-goldens",
-        "//docs:content",
     ],
     visibility = ["//visibility:public"],
 )
@@ -268,10 +240,7 @@ sh_binary(
 sh_binary(
     name = "visual-linux",
     srcs = ["scripts/visual_linux.sh"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )
 
@@ -279,9 +248,6 @@ sh_binary(
 sh_binary(
     name = "npm",
     srcs = ["run_npm.sh"],
-    data = [
-        ":sources",
-        "//docs:content",
-    ],
+    data = _NPM_DATA,
     visibility = ["//visibility:public"],
 )

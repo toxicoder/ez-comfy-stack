@@ -8,19 +8,23 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _docs_paths import docs_file
 from _lab_paths import load_lab_graph
 
 ROOT = Path(__file__).resolve().parents[2]
 LAB = ROOT / "workflows" / "_lab"
 DOCS = ROOT / "docs"
 
-CATALOG_PAGES = (
-    DOCS / "studio-workflows.md",
-    DOCS / "create" / "workflows-stills.md",
-    DOCS / "create" / "workflows-motion.md",
-    DOCS / "create" / "workflows-creator.md",
-    DOCS / "create" / "workflows-film.md",
-    DOCS / "create" / "workflows-audio.md",
+CATALOG_PAGES = tuple(
+    docs_file(path)
+    for path in (
+        DOCS / "studio-workflows.md",
+        DOCS / "create" / "workflows-stills.md",
+        DOCS / "create" / "workflows-motion.md",
+        DOCS / "create" / "workflows-creator.md",
+        DOCS / "create" / "workflows-film.md",
+        DOCS / "create" / "workflows-audio.md",
+    )
 )
 
 SKIP_NAMES = frozenset({"album.json", "cover.json"})

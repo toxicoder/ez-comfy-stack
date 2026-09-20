@@ -6,3 +6,4 @@ out-linux/
 .deps-linux-stamp/
 public/assets/
 __pycache__/
+tsconfig.tsbuildinfo

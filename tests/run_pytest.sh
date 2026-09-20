@@ -27,6 +27,7 @@ if python3 -c 'import pytest, pytest_cov' 2>/dev/null; then
     --cov=scripts/lib \
     --cov=studio-ui \
     --cov=tools \
+    --cov-config=tests/.coveragerc \
     --cov-report=term-missing \
     --cov-fail-under=100
 else

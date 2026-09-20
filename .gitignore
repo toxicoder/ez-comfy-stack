@@ -58,6 +58,7 @@ docs-site/out/
 docs-site/out-linux/
 docs-site/.deps-linux-stamp/
 docs-site/public/assets/
+docs-site/tsconfig.tsbuildinfo
 .venv-docs/
 
 # Bazel build artifacts (never commit outputs)

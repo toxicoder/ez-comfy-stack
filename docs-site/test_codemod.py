@@ -546,6 +546,12 @@ class MainGuardTests(unittest.TestCase):
 class RealContentTests(unittest.TestCase):
     """The guard holds across every hand-written page in the repository."""
 
+    def test_generated_encyclopedia_is_not_a_hand_written_target(self) -> None:
+        """``docs/reference/workflow-nodes.md`` is generated; leave ``!!!`` for remarkAdmonition."""
+        rels = {path.relative_to(codemod.DOCS_DIR).as_posix() for path in codemod.default_targets()}
+        self.assertNotIn("reference/workflow-nodes.md", rels)
+        self.assertNotIn("reference/workflow-nodes.mdx", rels)
+
     def test_all_hand_written_pages_survive_the_guard(self) -> None:
         """The tool is idempotent: re-running it on the migrated tree changes nothing."""
         paths = codemod.default_targets()
