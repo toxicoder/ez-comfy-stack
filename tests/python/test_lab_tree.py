@@ -34,6 +34,18 @@ def test_rel_id_maps_old_stems() -> None:
     assert len(OLD_TO_REL) >= 60
 
 
+def test_lab_graph_paths_ignores_untracked_scratch() -> None:
+    """Pytest must not collect BATS leftovers such as ``stills/my-hook.json``."""
+    scratch = LAB_ROOT / "stills" / "ci-scratch-hook.json"
+    scratch.write_text("{}\n", encoding="utf-8")
+    try:
+        paths = lab_graph_paths()
+        assert scratch not in paths
+        assert any(path.name == "still-draft.json" for path in paths)
+    finally:
+        scratch.unlink(missing_ok=True)
+
+
 def test_every_lab_graph_lives_under_allowed_lane() -> None:
     paths = lab_graph_paths()
     assert len(paths) >= 8

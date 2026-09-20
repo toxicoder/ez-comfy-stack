@@ -13,6 +13,10 @@ setup() {
 }
 
 teardown() {
+  # These copies land in the live repo tree. Pytest is no-sandbox and
+  # parametrizes lab JSON at collection time, so leftovers race CI.
+  rm -f "${REPO_ROOT}/workflows/_lab/stills/my-hook.json"
+  rm -rf "${REPO_ROOT}/workflows/_lab/audio/albums/demo"
   teardown_repo_env
 }
 

@@ -19,6 +19,8 @@ WF = ROOT / "workflows"
 LAB_ROOT = WF / "_lab"
 SHORTS_YAML = WF / "shorts"
 _LAB_GRAPH_CACHE: dict[Path, dict[str, Any]] | None = None
+_TRACKED_LAB_JSON: frozenset[str] | None = None
+_TRACKED_LAB_JSON_LOADED = False
 ALLOWED_LANES = (
     "stills",
     "motion",
@@ -35,14 +37,73 @@ ALLOWED_LANES = (
 WORKFLOW_RENDERER_VERSION = "Vue-corrected"
 
 
+def _git_tracked_lab_json() -> frozenset[str] | None:
+    """Git-tracked ``workflows/_lab/**/*.json`` paths, repo-relative.
+
+    Parallel no-sandbox Bazel tests (``promote_workflow.bats``) may write scratch
+    JSON into the live ``_lab`` tree. Pytest parametrize must ignore those files
+    or it collects a path that is gone by the time the test runs.
+
+    Returns:
+        A frozenset of posix relative paths, or ``None`` when git cannot answer
+        so callers fall back to a directory walk.
+    """
+    global _TRACKED_LAB_JSON, _TRACKED_LAB_JSON_LOADED
+    if _TRACKED_LAB_JSON_LOADED:
+        return _TRACKED_LAB_JSON
+    import subprocess
+
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(ROOT), "ls-files", "-z", "--", "workflows/_lab"],
+            check=False,
+            capture_output=True,
+        )
+    except OSError:
+        _TRACKED_LAB_JSON_LOADED = True
+        _TRACKED_LAB_JSON = None
+        return None
+    if completed.returncode != 0:
+        _TRACKED_LAB_JSON_LOADED = True
+        _TRACKED_LAB_JSON = None
+        return None
+    tracked = frozenset(
+        part.replace("\\", "/")
+        for part in completed.stdout.decode("utf-8", errors="replace").split("\0")
+        if part.endswith(".json")
+    )
+    _TRACKED_LAB_JSON_LOADED = True
+    _TRACKED_LAB_JSON = tracked
+    return tracked
+
+
 def lab_graph_paths(root: Path | None = None) -> list[Path]:
-    """Every ``*.json`` under ``workflows/_lab``."""
+    """Every ``*.json`` under ``workflows/_lab``.
+
+    The default tree (``root is None``) keeps only git-tracked files so a
+    parallel BATS leftover cannot enter pytest parametrize.
+    """
     base = LAB_ROOT if root is None else Path(root) / "_lab"
     if not base.is_dir():
         base = Path(root) if root is not None else LAB_ROOT
     if not base.is_dir():
         return []
-    return sorted(path for path in base.rglob("*.json") if path.is_file())
+    paths = sorted(path for path in base.rglob("*.json") if path.is_file())
+    if root is not None:
+        return paths
+    tracked = _git_tracked_lab_json()
+    if tracked is None:
+        return paths
+    kept: list[Path] = []
+    root_resolved = ROOT.resolve()
+    for path in paths:
+        try:
+            rel = path.resolve().relative_to(root_resolved).as_posix()
+        except ValueError:
+            continue
+        if rel in tracked:
+            kept.append(path)
+    return kept
 
 
 def lab_example_paths(root: Path | None = None) -> list[Path]:
