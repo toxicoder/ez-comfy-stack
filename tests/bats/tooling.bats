@@ -78,6 +78,8 @@ teardown() {
   grep -qF '//:lint' "${gh}"
   grep -qF -- '--test_tag_filters=manual' "${gh}"
   grep -qF './.github/actions/setup-bazel' "${gh}"
+  grep -qF 'max-old-space-size' "${gh}"
+  grep -qF 'max-old-space-size' "${REPO_ROOT}/docs/manage-docs.sh"
   run grep -E 'dashboard-unit|dashboard-hermetic|//dashboard:' "${gh}"
   [ "$status" -ne 0 ]
 }

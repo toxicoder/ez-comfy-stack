@@ -106,7 +106,7 @@ sync_public_assets() {
 #######################################
 # Generate + static export.
 # Globals:
-#   REPO_ROOT, SITE_DIR
+#   REPO_ROOT, SITE_DIR, NODE_OPTIONS, NEXT_TELEMETRY_DISABLED
 # Arguments:
 #   Optional --version latest|development
 # Outputs:
@@ -133,6 +133,10 @@ docs_build() {
   docs_node_is_ready
   generate_code_docs
   sync_public_assets
+  export NEXT_TELEMETRY_DISABLED="${NEXT_TELEMETRY_DISABLED:-1}"
+  if [[ -z ${NODE_OPTIONS:-} ]]; then
+    export NODE_OPTIONS="--max-old-space-size=6144"
+  fi
   local build_script="build"
   case "${version}" in
     "") ;;

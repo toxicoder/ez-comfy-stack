@@ -90,6 +90,12 @@ jobs:
       needs.changes.outputs.docs == 'true' ||
       needs.changes.outputs.ci-graph == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Same cap as deploy-docs.yml. A full Fumadocs export of ~650 pages OOMs
+      # the 7 GB GitHub-hosted runner (shutdown signal / exit 143 during next build).
+      NODE_OPTIONS: "--max-old-space-size=6144"
     steps:
       - uses: actions/checkout@v5
         with:
