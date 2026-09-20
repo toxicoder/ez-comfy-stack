@@ -81,6 +81,9 @@ FROZEN_MANAGE_VERBS=(
   download-llm
   llm-sidecar
   blender-install
+  setup-client
+  onboard
+  spark-ui
 )
 
 @test "cmd_disk_wizard --plan is read-only" {
@@ -105,6 +108,15 @@ FROZEN_MANAGE_VERBS=(
 
 @test "audio-still-video verb dispatches" {
   run type cmd_audio_still_video
+  [ "${status}" -eq 0 ]
+}
+
+@test "setup-client onboard spark-ui verbs dispatch" {
+  run type cmd_setup_client
+  [ "${status}" -eq 0 ]
+  run type cmd_onboard
+  [ "${status}" -eq 0 ]
+  run type cmd_spark_ui
   [ "${status}" -eq 0 ]
 }
 

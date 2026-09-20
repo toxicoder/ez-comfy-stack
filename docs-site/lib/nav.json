@@ -69,6 +69,14 @@
         "path": "getting-started.md"
       },
       {
+        "title": "Set up this computer",
+        "path": "start/this-computer.md"
+      },
+      {
+        "title": "Onboard",
+        "path": "start/onboard.md"
+      },
+      {
         "title": "Model licenses",
         "path": "licenses.md"
       },

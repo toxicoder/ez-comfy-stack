@@ -527,6 +527,42 @@ Outputs:
 Returns:
   disk-wizard status
 
+### Command: setup-client
+
+Operator laptop bootstrap (tools + SSH Host ez-spark). Does not start Comfy.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  setup-client.sh flags
+Outputs:
+  Status via log
+Returns:
+  setup-client.sh status
+
+### Command: onboard
+
+Spark setup locally, or laptop client plus remote doctor. Never auto-start.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  --download and setup-client flags
+Outputs:
+  Status via log
+Returns:
+  setup-client.sh status
+
+### Command: spark-ui
+
+Foreground SSH LocalForward to Host ez-spark. Stack must already be started.
+Globals:
+  REPO_ROOT
+Arguments:
+  $@  unused
+Outputs:
+  Status via log; may exec ssh
+Returns:
+  setup-client.sh status
+
 ### Command: cleanup
 
 After DELETE confirmation, remove Compose volumes (Comfy install state only).
@@ -572,6 +608,9 @@ Usage:
 !!! warning
 
     Safety: Read-only PATH probe. No GPU, Docker, or network.
+
+<!-- source: scripts/lib/client_os.sh -->
+### Function `detect_client_os`
 
 <!-- source: scripts/lib/common.sh -->
 ## common
@@ -1803,6 +1842,21 @@ Usage:
     Safety:
       Only invokes scripts under scripts/utilities/; each utility keeps its
       own confirmations and download-limit clear-on-exit.
+
+<!-- source: scripts/utilities/setup-client.sh -->
+## setup-client
+
+Operator laptop bootstrap: tools, SSH Host ez-spark, optional remote Spark
+setup. Never auto-starts Comfy (restart: "no", type yes on start).
+
+```bash
+Usage:
+  ./scripts/utilities/setup-client.sh [--host H] [--user U] [--port N]
+  ./scripts/utilities/setup-client.sh --onboard [...]
+  ./scripts/utilities/setup-client.sh --ui
+```
+
+### Command: setup-client
 
 <!-- source: scripts/utilities/shot-sheet.sh -->
 ## shot-sheet

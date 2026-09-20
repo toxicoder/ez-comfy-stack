@@ -113,6 +113,8 @@ nav:
       - Glossary: glossary.md
   - Get started:
       - Getting Started: getting-started.md
+      - Set up this computer: start/this-computer.md
+      - Onboard: start/onboard.md
       - Model licenses: licenses.md
       - FAQ: start/faq.md
       - When to use vs spark-lab: start/when-to-use-vs-spark-lab.md
