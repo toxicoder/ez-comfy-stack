@@ -285,6 +285,24 @@ for (const scheme of ["light", "dark"]) {
 // context, and reusing one across many navigations exhausts the per-host socket pool.
 console.log("\n### WIDGETS");
 
+const homeCards = await withPage(async (page) => {
+  await goto(page, "/", 2500);
+  return page.evaluate(() => {
+    const text = (document.body.innerText ?? "").replace(/\s+/gu, " ");
+    return {
+      rawGrid: text.includes("grid cards"),
+      material: text.includes(":material-"),
+      title: text.includes("New to the studio")
+    };
+  });
+});
+check(
+  "home path cards render as Cards, not MkDocs markup",
+  homeCards !== PROBE_FAILED && homeCards.title && !homeCards.rawGrid && !homeCards.material,
+  JSON.stringify(homeCards)
+);
+
+
 const diagrams = await withPage(async (page) => {
   await goto(page, "/architecture/", 4500);
   return page.evaluate(() => {

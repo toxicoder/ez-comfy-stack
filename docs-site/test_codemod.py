@@ -171,6 +171,58 @@ class CardGridTests(unittest.TestCase):
         result = codemod.transform_text(self.SOURCE)
         self.assertEqual(2, result.count("<Card title="))
 
+    # Authored pages were escaped by to_mdx() after the title regex refused
+    # Material icon prefixes, so the live site prints the grid markup as text.
+    ICON_SOURCE = (
+        '\\<div class="grid cards" markdown>\n\n'
+        "-   :material-school:\\{ .lg .middle \\} **New to the studio**\n\n"
+        "    ---\n\n"
+        "    What ComfyUI means.\n\n"
+        "    [:octicons-arrow-right-24: How the studio works](learn/index.md)\n\n"
+        "\\</div>\n"
+    )
+
+    def test_escaped_icon_cards_render_as_components(self) -> None:
+        """MDX-escaped grids with Material/Octicons titles still become Cards."""
+        result = codemod.transform_text(self.ICON_SOURCE)
+        self.assertIn("<Cards>", result)
+        self.assertIn('<Card title="New to the studio">', result)
+        self.assertNotIn("grid cards", result)
+        self.assertNotIn(":material-school:", result)
+        self.assertNotIn(":octicons-arrow-right-24:", result)
+        self.assertIn("[How the studio works](learn/index.md)", result)
+        self.assertIn("What ComfyUI means.", result)
+
+    def test_unescaped_icon_cards_render_as_components(self) -> None:
+        """The same grid before to_mdx escaping also converts."""
+        source = (
+            '<div class="grid cards" markdown>\n\n'
+            "-   :material-school:{ .lg .middle } **New to the studio**\n\n"
+            "    ---\n\n"
+            "    Body.\n\n"
+            "    [:octicons-arrow-right-24: Getting Started](getting-started.md)\n\n"
+            "</div>\n"
+        )
+        result = codemod.transform_text(source)
+        self.assertIn('<Card title="New to the studio">', result)
+        self.assertIn("[Getting Started](getting-started.md)", result)
+        self.assertNotIn(":octicons-arrow-right-24:", result)
+
+    def test_icon_cards_preserve_prose(self) -> None:
+        """Icon shortcodes and { .lg .middle } are syntax, not wording."""
+        converted = codemod.transform_text(self.ICON_SOURCE)
+        self.assertEqual(
+            codemod.prose_projection(self.ICON_SOURCE),
+            codemod.prose_projection(converted),
+        )
+
+    def test_escaped_empty_grid_is_still_pending(self) -> None:
+        """A declined escaped grid stays visible to pending_markers."""
+        source = '\\<div class="grid cards" markdown>\n\n\\</div>\n'
+        self.assertEqual(codemod.transform_text(source), source)
+        markers = [line for _, line in codemod.pending_markers(source)]
+        self.assertTrue(any("grid cards" in line for line in markers))
+
 
 class ProsePreservationTests(unittest.TestCase):
     """The guard: no run may alter wording, and the guard must actually fire."""

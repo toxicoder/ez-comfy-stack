@@ -75,10 +75,18 @@ _ADMON_RE = re.compile(
 )
 _TABS_RE = re.compile(r'^(?P<indent>[ \t]*)===[ \t]+"(?P<title>[^"]*)"(?P<tail>.*)$')
 _SNIPPET_RE = re.compile(r'^[ \t]*--8<--[ \t]*"(?P<path>[^"]+)"(?P<tail>[^\n]*)$')
-_CARD_GRID_OPEN_RE = re.compile(r'^[ \t]*<div[ \t]+class=["\']grid cards["\'][^>]*>[ \t]*$')
-_CARD_GRID_CLOSE_RE = re.compile(r"^[ \t]*</div>[ \t]*$")
+_CARD_GRID_OPEN_RE = re.compile(
+    r'^[ \t]*\\?<div[ \t]+class=["\']grid cards["\'][^>]*>[ \t]*$'
+)
+_CARD_GRID_CLOSE_RE = re.compile(r"^[ \t]*\\?</div>[ \t]*$")
 _CARD_ITEM_RE = re.compile(r"^(?P<dash>-)[ \t]{1,4}(?P<text>.*)$")
 _CARD_TITLE_RE = re.compile(r"^\*\*(?P<title>.+)\*\*$")
+#: Material / Octicons / FontAwesome shortcodes MkDocs rendered as icons.
+_ICON_TOKEN_RE = re.compile(r":(?:material|octicons|fontawesome)-[a-z0-9-]+:")
+#: pymdownx attribute lists (``{ .lg .middle }``), optionally MDX-escaped.
+_ATTR_LIST_RE = re.compile(
+    r"\\?\{\s*\.[a-z][a-z0-9-]*(?:\s+\.[a-z][a-z0-9-]*)*\s*\\?\}"
+)
 
 #: Component tags the codemod emits or deletes, used by the prose projection.
 _COMPONENT_TAG_RE = re.compile(
@@ -356,6 +364,28 @@ def _tab_block_end(lines: list[str], markers: list[int], position: int, end: int
     return markers[position + 1] if position + 1 < len(markers) else end
 
 
+def _strip_mkdocs_icons(text: str) -> str:
+    """Drop Material/Octicons shortcodes and pymdownx ``{ .class }`` lists.
+
+    Args:
+        text: A card title line or card body line.
+
+    Returns:
+        The same line with icon syntax removed and inner whitespace collapsed.
+        Leading indentation is preserved so nested markdown stays nested.
+    """
+    indent_len = len(text) - len(text.lstrip(" \t"))
+    indent, rest = text[:indent_len], text[indent_len:]
+    rest = _ICON_TOKEN_RE.sub(" ", rest)
+    rest = _ATTR_LIST_RE.sub(" ", rest)
+    rest = re.sub(r"[ \t]+", " ", rest)
+    rest = rest.replace("[ ", "[")
+    rest = rest.strip()
+    if not rest:
+        return ""
+    return f"{indent}{rest}" if indent else rest
+
+
 def _render_card_grid(lines: list[str], start: int, end: int) -> list[str] | None:
     """Convert a ``grid cards`` md_in_html block into ``<Cards>``/``<Card>``.
 
@@ -384,12 +414,15 @@ def _render_card_grid(lines: list[str], start: int, end: int) -> list[str] | Non
 
     out = ["<Cards>"]
     for item in items:
-        title = _CARD_TITLE_RE.match(item[0].strip())
+        title = _CARD_TITLE_RE.match(_strip_mkdocs_icons(item[0].strip()))
         if title is None:
             return None
         content = _dedent(item, 1, len(item))
+        cleaned: list[str] = []
+        for line in content:
+            cleaned.append("" if not line.strip() else _strip_mkdocs_icons(line))
         out.append(f'  <Card title="{_attr_escape(title.group("title"))}">')
-        out.extend(_indented("\n".join(content).strip("\n"), "    ").split("\n"))
+        out.extend(_indented("\n".join(cleaned).strip("\n"), "    ").split("\n"))
         out.append("  </Card>")
     out.append("</Cards>")
     return out
@@ -925,6 +958,10 @@ def prose_projection(text: str) -> str:
     # MDX renders an escaped character as itself, so `\<` and `<` are the same prose.
     # Unescape before stripping tags so `\<div` and `<div` compare equal.
     body = re.sub(r"\\([<>{}])", r"\1", body)
+    # Material/Octicons shortcodes and pymdownx ``{ .lg .middle }`` lists are chrome.
+    body = _ICON_TOKEN_RE.sub(" ", body)
+    body = _ATTR_LIST_RE.sub(" ", body)
+    body = re.sub(r"\[\s+", "[", body)
     for pattern, replacement in _PROSE_LINE_RULES:
         body = pattern.sub(replacement, body)
     body = _COMPONENT_TAG_RE.sub(_component_tag_projection, body)
