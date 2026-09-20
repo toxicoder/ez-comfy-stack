@@ -133,20 +133,29 @@ def test_getting_started_session_vars_and_port_forward() -> None:
 def test_mkdocs_nav_is_grouped_journey() -> None:
     nav = json.loads((ROOT / "docs-site" / "lib" / "nav.json").read_text(encoding="utf-8"))
     titles = [tab["title"] for tab in nav]
-    for heading in ("Learn", "Start", "Create", "Operate", "Contribute"):
+    for heading in ("Learn", "Get started", "Studio", "Operate", "Reference", "Contribute"):
         assert heading in titles, f"nav.json missing grouped tab {heading!r}"
-    assert titles.index("Learn") < titles.index("Start") < titles.index("Create") < titles.index("Operate")
+    assert (
+        titles.index("Learn")
+        < titles.index("Get started")
+        < titles.index("Studio")
+        < titles.index("Operate")
+        < titles.index("Reference")
+        < titles.index("Contribute")
+    )
     blob = json.dumps(nav)
     assert blob.index("getting-started.md") < blob.index("shorts.md")
     assert blob.index("licenses.md") < blob.index("shorts.md")
-    assert blob.index("prompting.md") < blob.index("visual-generative-ai.md")
+    assert blob.index("visual-generative-ai.md") < blob.index("prompting.md")
     assert blob.index("visual-generative-ai.md") < blob.index("studio-workflows.md")
-    assert titles.index("Operate") < titles.index("Contribute")
     assert blob.index("glossary.md") < blob.index("getting-started.md")
+    assert blob.index('"path": "operate/daily.md"') < blob.index('"path": "occupancy.md"')
     assert blob.index("models-and-cache.md") < blob.index("download-tiers.md")
     assert blob.index("download-tiers.md") < blob.index("download-limit.md")
     assert blob.index("download-limit.md") < blob.index("operate/models-packs.md")
     assert blob.index("operate/models-packs.md") < blob.index("operate/models-tokens.md")
+    assert blob.index("manage-cli.md") > blob.index("operate/daily.md")
+    assert "learn/occupancy.md" in blob
 
 
 def test_fun_inp_pages_do_not_advertise_40gb_alone() -> None:

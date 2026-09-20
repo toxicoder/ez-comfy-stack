@@ -100,31 +100,30 @@ nav:
   - Home: index.md
   - Learn:
       - How the studio works: learn/index.md
-      - Architecture: learn/architecture.md
       - ComfyUI basics: learn/comfyui.md
       - Image and video generation: learn/generation.md
       - Klein, Wan, and LTX: learn/pipeline.md
+      - Why one heavy job: learn/occupancy.md
+      - Hardware, memory, and safety: learn/hardware.md
+      - Architecture: learn/architecture.md
       - Clay to finish: learn/clay-to-finish.md
       - Blender creator suite: learn/blender-creator.md
       - Stay in Comfy after a Blender dump: learn/comfy-first-blender.md
       - Dream-house tours: learn/dream-house.md
-      - Hardware, memory, and safety: learn/hardware.md
       - Glossary: glossary.md
-  - Start:
+  - Get started:
       - Getting Started: getting-started.md
+      - Model licenses: licenses.md
+      - FAQ: start/faq.md
+      - When to use vs spark-lab: start/when-to-use-vs-spark-lab.md
+  - Studio:
+      - Still to motion to AV: visual-generative-ai.md
+      - ComfyUI Apps: studio-apps.md
       - Prompting: prompting.md
       - Cinema Rack: create/cinema-rack.md
       - Audio Rack: create/audio-rack.md
       - App Forge: create/app-forge.md
-      - Model licenses: licenses.md
-      - FAQ: start/faq.md
-      - When to use vs spark-lab: start/when-to-use-vs-spark-lab.md
-  - Create:
-      - Still to motion to AV: visual-generative-ai.md
-      - ComfyUI Apps: studio-apps.md
       - Workflow catalog: studio-workflows.md
-      - Workflow details: create/workflows-index.md
-      - Node parameter encyclopedia: reference/workflow-nodes.md
       - Stills graphs: create/workflows-stills.md
       - Motion graphs: create/workflows-motion.md
       - Creator pack: create/workflows-creator.md
@@ -142,15 +141,10 @@ nav:
       - Blender GB10 sidecar: blender-gb10-sidecar.md
       - DCC guide pack: dcc-workflows.md
       - Splat sidecar: splat-sidecar.md
-      - Custom nodes: reference/custom-nodes.md
-      - Config and schemas: reference/config-and-schemas.md
-      - studio-ui board: reference/studio-ui.md
   - Operate:
+      - Daily loop: operate/daily.md
       - Occupancy desk: occupancy.md
-      - Occupancy matrix: operate/occupancy-matrix.md
       - MCP and SSH tunnels: operate/mcp.md
-      - manage.sh reference: manage-cli.md
-      - Generated shell reference: generated/shell/reference.md
       - Models and cache: models-and-cache.md
       - Download tiers: download-tiers.md
       - Download limit: download-limit.md
@@ -168,6 +162,15 @@ nav:
       - Downloads: operate/troubleshooting-downloads.md
       - Start and runtime: operate/troubleshooting-start-runtime.md
       - Models and workflows: operate/troubleshooting-models-workflows.md
+  - Reference:
+      - manage.sh reference: manage-cli.md
+      - Generated shell reference: generated/shell/reference.md
+      - Occupancy matrix: operate/occupancy-matrix.md
+      - Workflow details: create/workflows-index.md
+      - Node parameter encyclopedia: reference/workflow-nodes.md
+      - Custom nodes: reference/custom-nodes.md
+      - Config and schemas: reference/config-and-schemas.md
+      - studio-ui board: reference/studio-ui.md
   - Contribute:
       - Conventions: project-conventions.md
       - Building with Bazel: contribute/building-with-bazel.md

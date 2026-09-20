@@ -1,0 +1,75 @@
+---
+title: Daily loop
+description: Doctor, start (type yes), Queue, stop — the returning operator path on one Spark.
+tags: [operate, doctor, start, stop, occupancy]
+---
+
+# Daily loop
+
+**What's on this page**
+
+- The loop you run on a host that already has models
+- When to `doctor` vs download vs occupancy park
+- Stop before reboot
+- Where troubleshooting lives
+
+**What this enables**
+
+- **Opening** ComfyUI without re-reading Getting Started
+- **Leaving** the host in a state SSH can recover
+- **Jumping** to occupancy or troubleshooting when the loop breaks
+
+**Who this is for:** operators after the first successful still. First install: [Getting Started](../getting-started.md).
+
+---
+
+## You will end here
+
+| Goal | Detail |
+| --- | --- |
+| **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` (or laptop port-forward) |
+| **Job** | One occupant (klein / wan / ltx / desk) |
+| **Stop** | Container down before reboot |
+
+Do not weaken `restart: "no"`, type **yes** on `start`, headroom, or download-limit **clear-on-exit**.
+
+---
+
+## Loop
+
+1. `./scripts/manage.sh doctor` — expect `Doctor OK`. Fail: [Host and Docker](troubleshooting-host-docker.md).
+2. `./scripts/manage.sh start` — type **yes**. Headroom is a hard fail.
+3. Open the UI. Load a `_lab` App. Queue **one** occupancy chip at a time.
+4. Optional: park for Blender or the writing desk — [Occupancy desk](../occupancy.md).
+5. `./scripts/manage.sh stop` before reboot — [Reboot safety](../reboot-safety.md).
+
+From a laptop, forward the port:
+
+```bash
+ssh -L "${COMFY_PORT}:127.0.0.1:${COMFY_PORT}" "${SPARK_USER}@${SPARK_HOST}"
+```
+
+Then open `http://127.0.0.1:${COMFY_PORT}`.
+
+Weights already on disk? Skip `download-models`. Missing Models on the canvas is a cache problem, not a graph bug — [Models and workflows](troubleshooting-models-workflows.md).
+
+---
+
+## Next
+
+<Cards>
+  <Card title="Occupancy desk">
+    ---
+
+    Park Comfy without a full stop when you need Workbench or the 35B desk.
+
+    [Occupancy desk](../occupancy.md)
+  </Card>
+  <Card title="Something broke">
+    ---
+
+    Doctor first, then the matching troubleshooting page.
+
+    [Troubleshooting](../troubleshooting.md)
+  </Card>
+</Cards>

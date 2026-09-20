@@ -11,7 +11,7 @@ tags: [comfyui, klein, wan, ltx, dgx-spark, docker]
 - What this project is (and is not)
 - Choose a path: learn, first install, create, recover
 - Default stack and the four SSH-safe guards
-- Documentation map (Learn / Start / Create / Operate / Contribute)
+- Documentation map (Learn / Get started / Studio / Operate / Reference / Contribute)
 
 **What this enables**
 
@@ -134,23 +134,26 @@ Why those exist: [Hardware, memory, and safety](learn/hardware.md). Operator det
 ```mermaid
 flowchart TB
   Home["Home"] --> Learn["Learn"]
-  Home --> Start["Start"]
-  Home --> Create["Create"]
+  Home --> Start["Get started"]
+  Home --> Studio["Studio"]
   Home --> Operate["Operate"]
+  Home --> Ref["Reference"]
   Home --> Contribute["Contribute"]
-  Learn --> L1["architecture · ComfyUI · pipeline · glossary"]
+  Learn --> L1["syllabus · ComfyUI · pipeline · occupancy idea · glossary"]
   Start --> S1["Getting Started · licenses · FAQ"]
-  Create --> C1["still → motion → AV · workflows"]
-  Operate --> O1["occupancy · doctor · troubleshooting"]
+  Studio --> C1["still → motion → AV · catalogs · playbooks"]
+  Operate --> O1["daily loop · occupancy desk · troubleshooting"]
+  Ref --> R1["manage.sh · occupancy matrix · node encyclopedia"]
   Contribute --> N1["conventions · docs-style · tests"]
 ```
 
 | When | Read |
 | --- | --- |
-| **What is this?** | [How the studio works](learn/index.md) · [Architecture](learn/architecture.md) · [Glossary](glossary.md) |
+| **What is this?** | [How the studio works](learn/index.md) · [Glossary](glossary.md) |
 | **This repo or the lab?** | [When to use vs spark-lab](start/when-to-use-vs-spark-lab.md) |
 | **First run** | [Getting Started](getting-started.md) · [FAQ](start/faq.md) |
 | **Licenses before a 30 GB pull** | [Model licenses](licenses.md) |
-| **Still → silent 5 s → AV 12 s** | [Visual Generative AI](visual-generative-ai.md) |
+| **Still → silent 5 s → AV 12 s** | [Still to motion to AV](visual-generative-ai.md) |
 | **Something broke** | [Troubleshooting](troubleshooting.md) |
+| **Exact CLI / widgets** | [manage.sh reference](manage-cli.md) · [Workflow details](create/workflows-index.md) |
 | **Contributing** | [Conventions](project-conventions.md) |
