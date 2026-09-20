@@ -1150,6 +1150,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "stills/text-swap",
         expose_unet=True,
         expose_look=True,
+        sampler_steps_cfg=True,
     ),
     "stills/image-studio": _spec(
         "produce",
@@ -1160,6 +1161,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "stills/still-studio",
         expose_unet=True,
         expose_look=True,
+        sampler_steps_cfg=True,
     ),
     "stills/still-hero": _spec(
         "produce",

@@ -80,7 +80,10 @@ const TRELLIS_MAX_STEPS = 28;
 const BANNED = ["minimax", "seedance", "kling", "z_image_turbo"];
 
 const snapshots = new WeakMap();
-let applying = false;
+const applyingByGraph = new WeakMap();
+const defaulted = new WeakMap();
+const seedingByGraph = new WeakMap();
+const LAST_QUALITY_KEY = "ez-comfy.quality.last";
 
 /**
  * Find a widget by name on a node.
@@ -215,13 +218,15 @@ function formatMatches(value, ids) {
 /**
  * Snap generic 16:9 / 9:16 still formats to LTX feeder sizes.
  * Named platform jobs, Custom, and already-feeder rows stay put.
+ * @param {object|undefined} graph
  * @returns {void}
  */
-function retargetClipFormat() {
-  if (occupancy() !== "klein") {
+function retargetClipFormat(graph) {
+  const g = graph || app.graph;
+  if (occupancy(g) !== "klein") {
     return;
   }
-  for (const node of app.graph?.nodes || []) {
+  for (const node of g?.nodes || []) {
     const ntype = node?.comfyClass || node?.type || "";
     if (ntype !== "EZImageFormat") {
       continue;
@@ -231,9 +236,9 @@ function retargetClipFormat() {
       continue;
     }
     if (formatMatches(widget.value, GENERIC_16_9)) {
-      setWidget(widget, CLIP_16_9_LABEL);
+      setWidgetValue(node, widget, CLIP_16_9_LABEL);
     } else if (formatMatches(widget.value, GENERIC_9_16)) {
-      setWidget(widget, CLIP_9_16_LABEL);
+      setWidgetValue(node, widget, CLIP_9_16_LABEL);
     }
   }
 }
@@ -260,14 +265,16 @@ function isFlux2Vae(name) {
 
 /**
  * Infer graph occupancy from extra.lab_app_mode or node types.
+ * @param {object|undefined} graph
  * @returns {string}
  */
-function occupancy() {
-  const mode = app.graph?.extra?.lab_app_mode?.occupancy;
+function occupancy(graph) {
+  const g = graph || app.graph;
+  const mode = g?.extra?.lab_app_mode?.occupancy;
   if (mode) {
     return String(mode);
   }
-  const types = new Set((app.graph?.nodes || []).map((n) => n.type));
+  const types = new Set((g?.nodes || []).map((n) => n.type));
   if (types.has("EZFilmConcat")) {
     return "film";
   }
@@ -278,7 +285,7 @@ function occupancy() {
     return "audio";
   }
   if (types.has("VHS_VideoCombine") || types.has("SaveVideo")) {
-    for (const node of app.graph?.nodes || []) {
+    for (const node of g?.nodes || []) {
       if (node.type !== "UNETLoader") {
         continue;
       }
@@ -301,10 +308,11 @@ function occupancy() {
 
 /**
  * First UNETLoader unet_name on the graph, or empty.
+ * @param {object|undefined} graph
  * @returns {string}
  */
-function firstUnetName() {
-  for (const node of app.graph?.nodes || []) {
+function firstUnetName(graph) {
+  for (const node of graph?.nodes || []) {
     if (node.type !== "UNETLoader") {
       continue;
     }
@@ -318,10 +326,11 @@ function firstUnetName() {
 
 /**
  * True when any UNETLoader is Wan 14B (overlay is a no-op then).
+ * @param {object|undefined} graph
  * @returns {boolean}
  */
-function graphHasWan14() {
-  for (const node of app.graph?.nodes || []) {
+function graphHasWan14(graph) {
+  for (const node of graph?.nodes || []) {
     if (node.type !== "UNETLoader") {
       continue;
     }
@@ -442,10 +451,11 @@ function kleinHigh(authoredSteps, unetName, available, clips, vaes) {
  * @param {string[]} available
  * @param {string[]} clips
  * @param {string[]} vaes
+ * @param {object|undefined} graph
  * @returns {object}
  */
-function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes) {
-  const occ = occupancy();
+function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes, graph) {
+  const occ = occupancy(graph);
   if (
     choice === QUALITY_LAB ||
     choice === QUALITY_CUSTOM ||
@@ -454,7 +464,7 @@ function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes)
   ) {
     return {};
   }
-  if (isWan14(unetName) || graphHasWan14()) {
+  if (isWan14(unetName) || graphHasWan14(graph)) {
     return {};
   }
   if (choice === QUALITY_FREE_COMMERCIAL) {
@@ -574,28 +584,122 @@ function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes)
 }
 
 /**
- * Set a widget value and fire its callback when the value actually changes.
+ * Set a widget value and notify Vue / App Mode (Nodes 2.0).
+ * @param {object|undefined} node
  * @param {object|undefined} widget
  * @param {*} value
  * @returns {void}
  */
-function setWidget(widget, value) {
+function setWidgetValue(node, widget, value) {
   if (!widget || widget.value === value) {
     return;
   }
   widget.value = value;
+  if (node?.widgets) {
+    node.widgets_values = node.widgets.map((item) => item.value);
+  }
   if (typeof widget.callback === "function") {
-    widget.callback(value);
+    widget.callback(value, app.canvas, node);
+  }
+  const graph = node?.graph;
+  if (graph && typeof graph.setDirtyCanvas === "function") {
+    graph.setDirtyCanvas(true, true);
+  }
+  if (graph && typeof graph.change === "function") {
+    graph.change();
+  }
+}
+
+/**
+ * Persist the last named quality for newly opened Apps.
+ * @param {*} value
+ * @returns {void}
+ */
+function persistLastQuality(value) {
+  const normalized = normalizeQuality(value);
+  if (normalized === QUALITY_CUSTOM) {
+    return;
+  }
+  try {
+    localStorage.setItem(LAST_QUALITY_KEY, normalized);
+  } catch {
+    // private mode / blocked storage
+  }
+}
+
+/**
+ * Last named quality chosen in this browser, or empty.
+ * @returns {string}
+ */
+function readLastQuality() {
+  try {
+    return String(localStorage.getItem(LAST_QUALITY_KEY) || "");
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * Short App Mode caption for the active overlay.
+ * @param {string} choice
+ * @param {object} overlay
+ * @param {string} occ
+ * @returns {string}
+ */
+function overlayCaption(choice, overlay, occ) {
+  const bits = [String(choice)];
+  if (overlay && overlay.steps != null) {
+    bits.push(`${overlay.steps} steps`);
+  }
+  const unet = overlay && overlay.unet_name ? String(overlay.unet_name) : "";
+  if (unet.includes("9b")) {
+    bits.push("Klein 9B");
+  } else if (unet.includes("base") && unet.includes("4b")) {
+    bits.push("Klein 4B base");
+  } else if (unet.includes("klein")) {
+    bits.push("Klein 4B distilled");
+  } else if (occ === "wan") {
+    bits.push("Wan");
+  } else if (occ === "ltx" || occ === "film") {
+    bits.push("LTX");
+  } else if (occ === "audio") {
+    bits.push("ACE");
+  }
+  return bits.join(" · ");
+}
+
+/**
+ * Stamp a live Quality caption onto the graph extra and Quality widget.
+ * @param {object|undefined} graph
+ * @param {string} caption
+ * @returns {void}
+ */
+function stampQualityCaption(graph, caption) {
+  if (!graph) {
+    return;
+  }
+  graph.extra = graph.extra || {};
+  graph.extra.lab_quality_caption = caption;
+  for (const node of graph.nodes || []) {
+    if (node.type !== "EZQuality" && node.comfyClass !== "EZQuality") {
+      continue;
+    }
+    const widget = widgetByName(node, "quality");
+    if (widget) {
+      widget.label = caption ? `Quality — ${caption}` : "Quality";
+    }
   }
 }
 
 /**
  * Snapshot authored steps/cfg/loader names so lab can restore them.
+ * @param {object|undefined} graph
  * @returns {void}
  */
-function snapshotGraph() {
+function snapshotGraph(graph) {
+  const g = graph || app.graph;
   const snap = [];
-  for (const node of app.graph?.nodes || []) {
+  for (const node of g?.nodes || []) {
     if (!node?.widgets) {
       continue;
     }
@@ -612,51 +716,58 @@ function snapshotGraph() {
       }
     }
   }
-  snapshots.set(app.graph, snap);
+  snapshots.set(g, snap);
 }
 
 /**
- * Restore the last authored snapshot onto the live graph.
+ * Restore the last authored snapshot onto one graph.
+ * @param {object|undefined} graph
  * @returns {void}
  */
-function restoreSnapshot() {
-  const snap = snapshots.get(app.graph);
+function restoreSnapshot(graph) {
+  const snap = snapshots.get(graph);
   if (!snap) {
     return;
   }
   for (const row of snap) {
     const widget = widgetByName(row.node, row.name);
-    setWidget(widget, row.value);
+    setWidgetValue(row.node, widget, row.value);
   }
 }
 
 /**
  * Apply or restore a quality overlay across sampler/loader widgets.
  * @param {string} choice
+ * @param {object|undefined} qualityNode
  * @returns {void}
  */
-function applyQuality(choice) {
-  if (applying) {
+function applyQuality(choice, qualityNode) {
+  const graph = qualityNode?.graph || app.graph;
+  if (!graph || applyingByGraph.get(graph)) {
     return;
   }
-  applying = true;
+  applyingByGraph.set(graph, true);
   try {
     const normalized = normalizeQuality(choice);
     if (normalized === QUALITY_CUSTOM) {
+      stampQualityCaption(graph, "custom · last overlay frozen");
       return;
     }
     if (normalized === QUALITY_LAB) {
-      restoreSnapshot();
+      restoreSnapshot(graph);
+      stampQualityCaption(graph, "lab · authored defaults");
       return;
     }
-    const unetName = firstUnetName();
-    const unetNode = (app.graph?.nodes || []).find((n) => n.type === "UNETLoader");
-    const clipNode = (app.graph?.nodes || []).find((n) => n.type === "CLIPLoader");
-    const vaeNode = (app.graph?.nodes || []).find((n) => n.type === "VAELoader");
+    const unetName = firstUnetName(graph);
+    const unetNode = (graph.nodes || []).find((n) => n.type === "UNETLoader");
+    const clipNode = (graph.nodes || []).find((n) => n.type === "CLIPLoader");
+    const vaeNode = (graph.nodes || []).find((n) => n.type === "VAELoader");
     const available = comboValues(widgetByName(unetNode || {}, "unet_name"));
     const clips = comboValues(widgetByName(clipNode || {}, "clip_name"));
     const vaes = comboValues(widgetByName(vaeNode || {}, "vae_name"));
-    for (const node of app.graph?.nodes || []) {
+    let captionOverlay = {};
+    const occ = occupancy(graph);
+    for (const node of graph.nodes || []) {
       const stepsWidget = widgetByName(node, "steps");
       const cfgWidget = widgetByName(node, "cfg");
       const unetWidget = widgetByName(node, "unet_name");
@@ -671,12 +782,16 @@ function applyQuality(choice) {
         available,
         clips,
         vaes,
+        graph,
       );
+      if (overlay && Object.keys(overlay).length) {
+        captionOverlay = overlay;
+      }
       if (stepsWidget && overlay.steps != null) {
-        setWidget(stepsWidget, overlay.steps);
+        setWidgetValue(node, stepsWidget, overlay.steps);
       }
       if (cfgWidget && overlay.cfg != null) {
-        setWidget(cfgWidget, overlay.cfg);
+        setWidgetValue(node, cfgWidget, overlay.cfg);
       }
       if (
         unetWidget &&
@@ -684,31 +799,32 @@ function applyQuality(choice) {
         !isWan14(String(unetWidget.value || "")) &&
         !isBannedUnet(overlay.unet_name)
       ) {
-        setWidget(unetWidget, overlay.unet_name);
+        setWidgetValue(node, unetWidget, overlay.unet_name);
       }
       if (
         clipWidget &&
         overlay.clip_name &&
         (!clipWidget.value || isFlux2Clip(String(clipWidget.value)))
       ) {
-        setWidget(clipWidget, overlay.clip_name);
+        setWidgetValue(node, clipWidget, overlay.clip_name);
       }
       if (typeWidget && overlay.clip_type && node.type === "CLIPLoader") {
-        setWidget(typeWidget, overlay.clip_type);
+        setWidgetValue(node, typeWidget, overlay.clip_type);
       }
       if (
         vaeWidget &&
         overlay.vae_name &&
         (!vaeWidget.value || isFlux2Vae(String(vaeWidget.value)))
       ) {
-        setWidget(vaeWidget, overlay.vae_name);
+        setWidgetValue(node, vaeWidget, overlay.vae_name);
       }
     }
     if (normalized === QUALITY_FREE_COMMERCIAL) {
-      retargetClipFormat();
+      retargetClipFormat(graph);
     }
+    stampQualityCaption(graph, overlayCaption(normalized, captionOverlay, occ));
   } finally {
-    applying = false;
+    applyingByGraph.set(graph, false);
   }
 }
 
@@ -734,15 +850,66 @@ function bindQualityNode(node) {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
     }
-    applyQuality(value);
+    if (!seedingByGraph.get(node.graph)) {
+      persistLastQuality(value);
+    }
+    applyQuality(value, node);
   };
   /**
    * Re-apply the current quality immediately before Queue.
    * @returns {void}
    */
   widget.beforeQueued = function () {
-    applyQuality(widget.value);
+    applyQuality(widget.value, node);
   };
+}
+
+/**
+ * True when this graph object is a newly opened App (or a different lab_rel).
+ * @param {object} graph
+ * @returns {boolean}
+ */
+function isNewlyOpenedGraph(graph) {
+  const rel = String(graph?.extra?.lab_rel || graph?.id || "");
+  const prev = defaulted.get(graph);
+  if (prev === rel) {
+    return false;
+  }
+  defaulted.set(graph, rel);
+  snapshots.delete(graph);
+  return true;
+}
+
+/**
+ * Apply last-chosen quality to a newly opened App still at lab, else current.
+ * @param {object} graph
+ * @param {object} node
+ * @param {object|undefined} widget
+ * @returns {void}
+ */
+function applyDefaultOrCurrent(graph, node, widget) {
+  if (!widget) {
+    return;
+  }
+  const last = readLastQuality();
+  const current = normalizeQuality(widget.value);
+  if (
+    current === QUALITY_LAB &&
+    last &&
+    last !== QUALITY_LAB &&
+    last !== QUALITY_CUSTOM
+  ) {
+    seedingByGraph.set(graph, true);
+    try {
+      setWidgetValue(node, widget, last);
+    } finally {
+      seedingByGraph.set(graph, false);
+    }
+    return;
+  }
+  if (widget.value && widget.value !== QUALITY_LAB && widget.value !== QUALITY_CUSTOM) {
+    applyQuality(widget.value, node);
+  }
 }
 
 /**
@@ -750,18 +917,27 @@ function bindQualityNode(node) {
  * @returns {void}
  */
 function bindAll() {
-  snapshotGraph();
-  for (const node of app.graph?.nodes || []) {
+  const graph = app.graph;
+  if (!graph) {
+    return;
+  }
+  const fresh = isNewlyOpenedGraph(graph);
+  if (fresh || !snapshots.has(graph)) {
+    snapshotGraph(graph);
+  }
+  for (const node of graph.nodes || []) {
     if (node.type === "EZQuality" || node.comfyClass === "EZQuality") {
       bindQualityNode(node);
       const widget = widgetByName(node, "quality");
-      if (
+      if (fresh) {
+        applyDefaultOrCurrent(graph, node, widget);
+      } else if (
         widget &&
         widget.value &&
         widget.value !== QUALITY_LAB &&
         widget.value !== QUALITY_CUSTOM
       ) {
-        applyQuality(widget.value);
+        applyQuality(widget.value, node);
       }
     }
   }

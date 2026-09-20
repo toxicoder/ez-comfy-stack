@@ -23,18 +23,29 @@ function widgetByName(node, name) {
 }
 
 /**
- * Set a widget value and fire its callback when the value actually changes.
+ * Set a widget value and notify Vue / App Mode (Nodes 2.0).
+ * @param {object|undefined} node
  * @param {object|undefined} widget
  * @param {*} value
  * @returns {void}
  */
-function setWidget(widget, value) {
+function setWidgetValue(node, widget, value) {
   if (!widget || widget.value === value) {
     return;
   }
   widget.value = value;
+  if (node?.widgets) {
+    node.widgets_values = node.widgets.map((item) => item.value);
+  }
   if (typeof widget.callback === "function") {
-    widget.callback(value);
+    widget.callback(value, app.canvas, node);
+  }
+  const graph = node?.graph;
+  if (graph && typeof graph.setDirtyCanvas === "function") {
+    graph.setDirtyCanvas(true, true);
+  }
+  if (graph && typeof graph.change === "function") {
+    graph.change();
   }
 }
 
@@ -158,7 +169,7 @@ function syncFormatOptions(node) {
   formatWidget.options.values = labels;
   const current = String(formatWidget.value || "");
   if (!labels.includes(current)) {
-    setWidget(formatWidget, defaultLabelForFamily(familyWidget.value));
+    setWidgetValue(node, formatWidget, defaultLabelForFamily(familyWidget.value));
   }
 }
 
@@ -180,8 +191,8 @@ function applyFormat(node) {
     return;
   }
   applying = true;
-  setWidget(widthWidget, Number(row.width));
-  setWidget(heightWidget, Number(row.height));
+  setWidgetValue(node, widthWidget, Number(row.width));
+  setWidgetValue(node, heightWidget, Number(row.height));
   applying = false;
 }
 
@@ -210,7 +221,7 @@ function maybeMarkCustom(node) {
     return;
   }
   applying = true;
-  setWidget(formatWidget, CUSTOM_LABEL);
+  setWidgetValue(node, formatWidget, CUSTOM_LABEL);
   applying = false;
 }
 

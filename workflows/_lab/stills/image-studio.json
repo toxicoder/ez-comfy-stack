@@ -1335,6 +1335,22 @@
           }
         ],
         [
+          7,
+          "steps",
+          {
+            "description": "Sampler steps. Distilled Klein stays at 4 unless you swapped to base.",
+            "label": "Steps"
+          }
+        ],
+        [
+          7,
+          "cfg",
+          {
+            "description": "Guidance. Distilled Klein stays at 1.0 unless you swapped to base.",
+            "label": "CFG"
+          }
+        ],
+        [
           1,
           "unet_name",
           {
