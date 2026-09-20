@@ -107,9 +107,20 @@ write_assembled_pages_tree() {
 
 @test "publish-pages-tree.sh names inventory functions" {
   [ -f "${SCRIPT}" ]
-  for fn in assert_assembled_pages_tree configure_pages_git_identity add_pages_worktree cleanup_pages_worktree publish_pages_tree; do
+  for fn in assert_assembled_pages_tree assert_pages_tree_file_sizes configure_pages_git_identity add_pages_worktree cleanup_pages_worktree publish_pages_tree; do
     grep -qE "^${fn}\\(\\)" "${SCRIPT}"
   done
+}
+
+@test "assert_pages_tree_file_sizes rejects a blob at the GitHub limit" {
+  write_assembled_pages_tree
+  mkdir -p "${ASSEMBLED}/development/api"
+  head -c 200 /dev/zero >"${ASSEMBLED}/development/api/search"
+  export PAGES_MAX_FILE_BYTES=100
+  run bash "${SCRIPT}" "${ASSEMBLED}"
+  [ "$status" -ne 0 ]
+  [[ ${output} == *"api/search"* ]]
+  [[ ${output} == *"GitHub limit"* ]]
 }
 
 @test "assert_assembled_pages_tree rejects a tree without .nojekyll" {

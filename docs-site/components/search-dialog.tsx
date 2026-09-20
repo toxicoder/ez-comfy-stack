@@ -20,9 +20,10 @@ import { useI18n } from "fumadocs-ui/contexts/i18n";
  *
  * The build is a static export, so there is no server to query at click time: the index
  * that `app/api/search/route.ts` writes out is fetched once and matched in the browser by
- * the Orama/ZBSearch static client.  Results cover titles, descriptions, headings and body
- * text, plus the `tags` frontmatter contributed through `buildSearchIndex` in
- * `lib/source.ts`.
+ * the Orama/ZBSearch static client.  Results cover titles, descriptions, headings, and
+ * (on authored pages) a bounded slice of body text, plus `tags` from `buildSearchIndex`.
+ * Generated encyclopedias are heading-only so `/api/search` stays under GitHub's 100 MiB
+ * blob limit.
  */
 export function SearchDialog(props: SharedProps) {
   const { locale } = useI18n();

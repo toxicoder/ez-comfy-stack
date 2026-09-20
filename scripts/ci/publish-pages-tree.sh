@@ -18,6 +18,8 @@
 set -euo pipefail
 
 PAGES_WORKTREE=""
+# GitHub rejects blobs at 100 MiB. The Fumadocs /api/search export was 379 MiB.
+PAGES_MAX_FILE_BYTES="${PAGES_MAX_FILE_BYTES:-104857600}"
 
 #######################################
 # Fail unless the assembled tree has root files and at least one alias.
@@ -46,6 +48,35 @@ assert_assembled_pages_tree() {
   fi
   if [[ ! -d "${root}/latest" && ! -d "${root}/development" ]]; then
     echo "publish-pages-tree: assembled tree needs latest/ or development/" >&2
+    return 1
+  fi
+}
+
+#######################################
+# Fail if any file is at or over GitHub's blob size limit.
+# Globals:
+#   PAGES_MAX_FILE_BYTES (read)
+# Arguments:
+#   $1 - assembled Pages directory
+# Outputs:
+#   Oversize paths on stderr
+# Returns:
+#   0 when every file is under the limit, 1 otherwise
+#######################################
+assert_pages_tree_file_sizes() {
+  local root="${1}"
+  local max_bytes="${PAGES_MAX_FILE_BYTES}"
+  local too_big=0
+  local f sz rel
+  while IFS= read -r -d '' f; do
+    sz="$(wc -c <"${f}" | tr -d '[:space:]')"
+    if [[ ${sz} -ge ${max_bytes} ]]; then
+      rel="${f#"${root}"/}"
+      echo "publish-pages-tree: ${rel} is ${sz} bytes (GitHub limit ${max_bytes})" >&2
+      too_big=1
+    fi
+  done < <(find "${root}" -type f -print0)
+  if [[ ${too_big} -eq 1 ]]; then
     return 1
   fi
 }
@@ -132,6 +163,7 @@ publish_pages_tree() {
   local assembled repo_root
   assembled="$(cd "${1}" && pwd)"
   assert_assembled_pages_tree "${assembled}"
+  assert_pages_tree_file_sizes "${assembled}"
   repo_root="$(git rev-parse --show-toplevel)"
   cd "${repo_root}"
 
