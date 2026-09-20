@@ -32,7 +32,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
-Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
+Real single-stage freeze is **motion/av/audio-to-video-10s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
 Wan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280×704 (divisible by 32). Lab printers stay 5.00 s.
@@ -393,7 +393,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `batch_size`
 
@@ -631,7 +631,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `frame_rate`
 
@@ -701,7 +701,7 @@ Markdown-ish operator note.
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
-Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
+Real single-stage freeze is **motion/av/audio-to-video-10s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
 Wan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v
 Banned lip-sync OSS packs stay out of this tree.
 Canvas is 1280×704 (divisible by 32). Lab printers stay 5.00 s.
@@ -903,7 +903,7 @@ Duration hint.
 
 **How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `10 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -1247,7 +1247,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1433,6 +1433,16 @@ Match a loaded still's aspect, or keep Format / platform.
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 **This graph:** `Match input`
+
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `10 seconds`
 
 ### `EZImageUpscale` — Upscale still
 

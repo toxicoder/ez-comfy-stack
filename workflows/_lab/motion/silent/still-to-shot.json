@@ -830,7 +830,8 @@
         "Wan \u00b7 16:9 YouTube (832\u00d7480)",
         832,
         480,
-        "Match input"
+        "Match input",
+        "5 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1153,6 +1154,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          20,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

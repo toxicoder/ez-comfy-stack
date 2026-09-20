@@ -42,8 +42,8 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[motion/av/still-to-video-12s](../generated/workflows/motion/av/still-to-video-12s.md)** | ~12 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
-| **[motion/av/text-to-video-12s](../generated/workflows/motion/av/text-to-video-12s.md)** | ~12 s T2V AV. Default **1280×704**; same Format / platform combo |
+| **[motion/av/still-to-video-10s](../generated/workflows/motion/av/still-to-video-10s.md)** | ~12 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
+| **[motion/av/text-to-video-10s](../generated/workflows/motion/av/text-to-video-10s.md)** | ~12 s T2V AV. Default **1280×704**; same Format / platform combo |
 
 ---
 
@@ -53,11 +53,11 @@ Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 12.00 s / 289 
 
 | Workflow | What it does |
 | --- | --- |
-| **[motion/av/dialogue-12s](../generated/workflows/motion/av/dialogue-12s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
-| **[motion/av/multishot-12s](../generated/workflows/motion/av/multishot-12s.md)** | Native multishot T2V: named hard cut + match cut in one 12 s clip. Prefix `ez_ltx_multishot` |
+| **[motion/av/dialogue-10s](../generated/workflows/motion/av/dialogue-10s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
+| **[motion/av/multishot-10s](../generated/workflows/motion/av/multishot-10s.md)** | Native multishot T2V: named hard cut + match cut in one 12 s clip. Prefix `ez_ltx_multishot` |
 | **[motion/av/product-hero](../generated/workflows/motion/av/product-hero.md)** | I2V from **[stills/product-packshot](../generated/workflows/stills/product-packshot.md)** (`ez_packshot_*.png`). Slow orbit + table SFX. Prefix `ez_ltx_product` |
-| **[motion/av/first-last-12s](../generated/workflows/motion/av/first-last-12s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
-| **[motion/av/audio-to-video-12s](../generated/workflows/motion/av/audio-to-video-12s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
+| **[motion/av/first-last-10s](../generated/workflows/motion/av/first-last-10s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
+| **[motion/av/audio-to-video-10s](../generated/workflows/motion/av/audio-to-video-10s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
 
 <Callout type="warning" title="LTX width/height must be divisible by 32">
   Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. On LTX Apps pick **Format / platform → LTX · 16:9 YouTube (1280×704)** instead of typing 720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](../troubleshooting.md).
@@ -71,7 +71,7 @@ Pack 1 motion / AV (stills companions: [Stills catalog](workflows-stills.md)):
 | Workflow | What it does |
 | --- | --- |
 | **[motion/silent/shorts-still-5s](../generated/workflows/motion/silent/shorts-still-5s.md)** | Vertical silent I2V from that still |
-| **[motion/av/shorts-still-12s](../generated/workflows/motion/av/shorts-still-12s.md)** | Vertical AV I2V (~12 s) with world audio |
+| **[motion/av/shorts-still-10s](../generated/workflows/motion/av/shorts-still-10s.md)** | Vertical AV I2V (~12 s) with world audio |
 | **[motion/loops/bumper-loop](../generated/workflows/motion/loops/bumper-loop.md)** | Loopable MP4 bumper (ping-pong) |
 | **[motion/av/broll-ambient](../generated/workflows/motion/av/broll-ambient.md)** | Ambient B-roll AV plate (~12 s) |
 

@@ -573,7 +573,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-12s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-10s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -758,7 +758,8 @@
         "Wan \u00b7 9:16 Shorts (480\u00d7832)",
         480,
         832,
-        "Match input"
+        "Match input",
+        "5 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1010,7 +1011,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-12s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-10s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_profile": "creator/silent/zoom-punch",
     "lab_description": "Silent 9:16 hook zoom punch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
@@ -1028,7 +1029,7 @@
       "occupancy": "wan",
       "enhance_off_identity": true,
       "handoff": [
-        "motion/av/shorts-still-12s"
+        "motion/av/shorts-still-10s"
       ]
     },
     "lab_magcache": {
@@ -1090,6 +1091,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          18,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

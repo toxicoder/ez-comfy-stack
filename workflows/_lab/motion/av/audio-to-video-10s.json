@@ -1,8 +1,8 @@
 {
-  "id": "depth-control-12s",
-  "revision": 11,
+  "id": "audio-to-video-10s",
+  "revision": 12,
   "last_node_id": 26,
-  "last_link_id": 39,
+  "last_link_id": 44,
   "nodes": [
     {
       "id": 1,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        234
+        346
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        364
+        594
       ],
       "size": [
         400,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            39
+            44
           ],
           "slot_index": 0
         },
@@ -144,17 +144,17 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "first.png",
+        "example.png",
         "image"
       ],
-      "title": "Guide first.png"
+      "title": "Start image"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        512
+        466
       ],
       "size": [
         420,
@@ -172,7 +172,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 28,
+          "link": 26,
           "widget": {
             "name": "text"
           }
@@ -192,16 +192,16 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score."
+        "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Ten seconds."
       ],
-      "title": "Motion + audio"
+      "title": "Motion / prompt"
     },
     {
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        1036
+        710
       ],
       "size": [
         420,
@@ -219,7 +219,7 @@
         {
           "name": "text",
           "type": "STRING",
-          "link": 32,
+          "link": 30,
           "widget": {
             "name": "text"
           }
@@ -277,6 +277,22 @@
           "name": "image",
           "type": "IMAGE",
           "link": 5
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 36,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 37,
+          "widget": {
+            "name": "height"
+          }
         }
       ],
       "outputs": [
@@ -312,7 +328,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        241,
         1
       ]
     },
@@ -321,7 +337,7 @@
       "type": "LTXVConditioning",
       "pos": [
         1580,
-        374
+        666
       ],
       "size": [
         280,
@@ -460,8 +476,7 @@
           "type": "IMAGE",
           "links": [
             18,
-            25,
-            26
+            25
           ],
           "slot_index": 0
         }
@@ -477,7 +492,7 @@
       "type": "SaveImage",
       "pos": [
         2668,
-        572
+        802
       ],
       "size": [
         280,
@@ -498,7 +513,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_gosee_b1_s1_ltx_frames"
+        "ez_ltx_a2v_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -507,7 +522,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        546
+        776
       ],
       "size": [
         360,
@@ -522,8 +537,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            19,
-            30
+            33
           ],
           "slot_index": 0
         }
@@ -537,51 +551,10 @@
       "title": "LTX-2.5 audio VAE"
     },
     {
-      "id": 14,
-      "type": "LTXVEmptyLatentAudio",
-      "pos": [
-        1580,
-        528
-      ],
-      "size": [
-        300,
-        130
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 19
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Latent",
-          "type": "LATENT",
-          "links": [
-            21
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVEmptyLatentAudio"
-      },
-      "widgets_values": [
-        289,
-        24.0,
-        1
-      ],
-      "title": "Empty LTX audio latent"
-    },
-    {
       "id": 15,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1940,
+        1988,
         414
       ],
       "size": [
@@ -600,7 +573,7 @@
         {
           "name": "audio_latent",
           "type": "LATENT",
-          "link": 21
+          "link": 34
         }
       ],
       "outputs": [
@@ -652,9 +625,7 @@
         {
           "name": "audio_latent",
           "type": "LATENT",
-          "links": [
-            29
-          ],
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -669,11 +640,11 @@
       "type": "Note",
       "pos": [
         40,
-        1846
+        1260
       ],
       "size": [
         960,
-        420
+        360
       ],
       "flags": {},
       "order": 17,
@@ -684,9 +655,9 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dcc/depth-control-12s\n\nLab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nDepth is wired by default. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control \u2014 official 2.5 graph widgets this 2.3 Union file)\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nThis envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.\n\nStop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## motion/av/audio-to-video-10s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~10 s). Drop a ~10 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates \u2192 LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
-      "title": "Operator note"
+      "title": "Operator note \u2014 video output"
     },
     {
       "id": 18,
@@ -711,7 +682,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 31,
+          "link": 35,
           "shape": 7
         },
         {
@@ -741,7 +712,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_iclora_depth",
+        "filename_prefix": "ez_ltx_a2v",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -754,81 +725,10 @@
     },
     {
       "id": 19,
-      "type": "ImageFromBatch",
-      "pos": [
-        2996,
-        572
-      ],
-      "size": [
-        240,
-        80
-      ],
-      "flags": {},
-      "order": 50,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 26
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            27
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "ImageFromBatch",
-        "cnr_id": "comfy-core"
-      },
-      "widgets_values": [
-        119,
-        1
-      ],
-      "title": "Last frame"
-    },
-    {
-      "id": 20,
-      "type": "SaveImage",
-      "pos": [
-        2996,
-        1016
-      ],
-      "size": [
-        280,
-        270
-      ],
-      "flags": {},
-      "order": 51,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 27
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "SaveImage"
-      },
-      "widgets_values": [
-        "ez_gosee_b1_s1_last"
-      ],
-      "title": "Save last frame"
-    },
-    {
-      "id": 21,
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
-        512
+        466
       ],
       "size": [
         420,
@@ -839,9 +739,17 @@
       "mode": 0,
       "inputs": [
         {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 38,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
           "name": "image_desc",
           "type": "STRING",
-          "link": 35
+          "link": 40
         }
       ],
       "outputs": [
@@ -849,8 +757,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            28,
-            33
+            26,
+            31
           ],
           "slot_index": 0
         }
@@ -860,95 +768,22 @@
       },
       "widgets_values": [
         "custom",
-        "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
+        "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Ten seconds.",
         false,
         "i2v",
-        "12 seconds, 24 fps",
-        "world SFX matching the start image, no score",
+        "10 seconds, 24 fps",
+        "use the loaded clip; do not invent a score",
         "none",
-        "dcc/depth-control-12s"
+        "motion/av/audio-to-video-10s"
       ],
       "title": "LTX Prompt Enhance"
     },
     {
-      "id": 22,
-      "type": "LTXVAudioVAEDecode",
-      "pos": [
-        3348,
-        80
-      ],
-      "size": [
-        320,
-        66
-      ],
-      "flags": {},
-      "order": 52,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 29
-        },
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 30
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Audio",
-          "type": "AUDIO",
-          "links": [
-            31
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVAudioVAEDecode"
-      },
-      "widgets_values": [],
-      "title": "Audio VAE Decode"
-    },
-    {
-      "id": 23,
-      "type": "EZFilmDisclosure",
-      "pos": [
-        40,
-        900
-      ],
-      "size": [
-        420,
-        120
-      ],
-      "flags": {},
-      "order": 23,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": [],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "EZFilmDisclosure"
-      },
-      "widgets_values": [
-        ""
-      ],
-      "title": "LTX AI-media disclosure (end-card)"
-    },
-    {
-      "id": 24,
+      "id": 21,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620.0,
-        1354.0
+        620,
+        1692
       ],
       "size": [
         420,
@@ -961,7 +796,7 @@
         {
           "name": "positive",
           "type": "STRING",
-          "link": 33
+          "link": 31
         }
       ],
       "outputs": [
@@ -969,7 +804,7 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            32
+            30
           ],
           "slot_index": 0
         }
@@ -985,7 +820,83 @@
       "title": "Negative Prompt Enhance"
     },
     {
-      "id": 25,
+      "type": "LoadAudio",
+      "pos": [
+        40,
+        968
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            32,
+            35
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "ez_a2v_bed.wav"
+      ],
+      "title": "Audio file",
+      "id": 22,
+      "order": 20
+    },
+    {
+      "type": "LTXVAudioVAEEncode",
+      "pos": [
+        40,
+        1122
+      ],
+      "size": [
+        300,
+        66
+      ],
+      "flags": {},
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 32
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode + freeze bed",
+      "id": 23,
+      "order": 21
+    },
+    {
+      "id": 24,
       "type": "EZQuality",
       "pos": [
         40.0,
@@ -1016,11 +927,71 @@
       "title": "Quality"
     },
     {
+      "id": 25,
+      "type": "EZVideoFormat",
+      "pos": [
+        1580,
+        414
+      ],
+      "size": [
+        360,
+        180
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            37
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            38
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZVideoFormat"
+      },
+      "widgets_values": [
+        "LTX-2.5",
+        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        1280,
+        704,
+        "Match input",
+        "10 seconds"
+      ],
+      "title": "Format / platform"
+    },
+    {
       "id": 26,
       "type": "EZImageDescribe",
       "pos": [
         620,
-        1004
+        958
       ],
       "size": [
         280,
@@ -1041,7 +1012,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 39
+          "link": 44
         }
       ],
       "outputs": [
@@ -1049,7 +1020,7 @@
           "name": "caption",
           "type": "STRING",
           "links": [
-            35
+            40
           ],
           "slot_index": 0
         }
@@ -1169,27 +1140,11 @@
       "IMAGE"
     ],
     [
-      19,
-      13,
-      0,
-      14,
-      0,
-      "VAE"
-    ],
-    [
       20,
       7,
       2,
       15,
       0,
-      "LATENT"
-    ],
-    [
-      21,
-      14,
-      0,
-      15,
-      1,
       "LATENT"
     ],
     [
@@ -1226,46 +1181,54 @@
     ],
     [
       26,
-      10,
-      0,
       19,
-      0,
-      "IMAGE"
-    ],
-    [
-      27,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
-    ],
-    [
-      28,
-      21,
       0,
       5,
       1,
       "STRING"
     ],
     [
-      29,
-      16,
-      1,
-      22,
+      30,
+      21,
       0,
-      "LATENT"
+      6,
+      1,
+      "STRING"
     ],
     [
-      30,
+      31,
+      19,
+      0,
+      21,
+      0,
+      "STRING"
+    ],
+    [
+      32,
+      22,
+      0,
+      23,
+      0,
+      "AUDIO"
+    ],
+    [
+      33,
       13,
       0,
-      22,
+      23,
       1,
       "VAE"
     ],
     [
-      31,
+      34,
+      23,
+      0,
+      15,
+      1,
+      "LATENT"
+    ],
+    [
+      35,
       22,
       0,
       18,
@@ -1273,31 +1236,39 @@
       "AUDIO"
     ],
     [
-      32,
-      24,
+      36,
+      25,
       0,
-      6,
+      7,
+      4,
+      "INT"
+    ],
+    [
+      37,
+      25,
+      1,
+      7,
+      5,
+      "INT"
+    ],
+    [
+      38,
+      25,
+      2,
+      19,
+      0,
+      "STRING"
+    ],
+    [
+      40,
+      26,
+      0,
+      19,
       1,
       "STRING"
     ],
     [
-      33,
-      21,
-      0,
-      24,
-      0,
-      "STRING"
-    ],
-    [
-      35,
-      26,
-      0,
-      21,
-      0,
-      "STRING"
-    ],
-    [
-      39,
+      44,
       4,
       0,
       26,
@@ -1308,21 +1279,19 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "dcc/depth-control-12s",
+    "lab_profile": "motion/av/audio-to-video-10s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## dcc/depth-control-12s\n\nLab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.\n\nThis tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nDepth is wired by default. LoRA (opt-in, not download-models):\n\n  ./scripts/manage.sh download-ltx --tier iclora\n  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors\n  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control \u2014 official 2.5 graph widgets this 2.3 Union file)\n\nRefuse 19B Union. Do not pair IC-LoRA with a dev transformer.\n\nThis envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.\n\nStop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n\nStay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## motion/av/audio-to-video-10s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~10 s). Drop a ~10 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates \u2192 LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "LTX-2.5 A2V freeze: encode bed, mux original waveform\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
       "frontend_min": "1.41.13",
-      "lane": "dcc",
+      "lane": "produce",
       "occupancy": "ltx",
       "enhance_off_identity": false,
-      "handoff": [
-        "audio/stem-mix"
-      ]
+      "handoff": []
     },
     "linearData": {
       "inputs": [
@@ -1331,11 +1300,11 @@
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Guide first.png"
+            "label": "Start image"
           }
         ],
         [
-          25,
+          24,
           "quality",
           {
             "label": "Quality",
@@ -1343,7 +1312,7 @@
           }
         ],
         [
-          21,
+          19,
           "sample",
           {
             "description": "Pick a lab recipe, or Custom to type your own.",
@@ -1351,12 +1320,36 @@
           }
         ],
         [
-          21,
+          19,
           "prompt",
           {
             "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
+          }
+        ],
+        [
+          25,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          25,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          25,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [
@@ -1368,7 +1361,7 @@
           }
         ],
         [
-          21,
+          19,
           "enhance",
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
@@ -1376,12 +1369,20 @@
           }
         ],
         [
-          21,
+          19,
           "audio_notes",
           {
             "description": "World SFX to interleave. No score unless you asked for music.",
             "label": "Audio notes",
             "height": 80
+          }
+        ],
+        [
+          22,
+          "audio",
+          {
+            "description": "Wav/mp3 already in COMFY_OUTPUT_DIR/input (container /inputs). ~5 s. Original waveform is muxed into the MP4.",
+            "label": "Audio file"
           }
         ],
         [
@@ -1391,34 +1392,31 @@
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
           }
+        ],
+        [
+          25,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          25,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
         ]
       ],
       "outputs": [
         12,
-        18,
-        20
+        18
       ]
     },
     "linearMode": true,
-    "lab_iclora": {
-      "templates": "LTX-2.5_ICLoRA_Union_Control_Distilled.json",
-      "lora": "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors",
-      "repo": "Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control",
-      "tier": "iclora",
-      "distilled_only": true,
-      "frames": 120,
-      "size": [
-        1280,
-        704
-      ],
-      "depth_default": true,
-      "magcache": false
-    },
-    "lab_disclosure": "LTX Community License",
-    "lab_optional_unwired": [
-      "EZFilmDisclosure"
-    ],
-    "lab_rel": "dcc/depth-control-12s",
+    "lab_rel": "motion/av/audio-to-video-10s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

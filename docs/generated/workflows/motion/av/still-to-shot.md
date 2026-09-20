@@ -1320,7 +1320,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1506,6 +1506,16 @@ Match a loaded still's aspect, or keep Format / platform.
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 **This graph:** `Match input`
+
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `10 seconds`
 
 ### `EZImageDescribe` — Describe image
 

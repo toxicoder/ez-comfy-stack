@@ -26,6 +26,8 @@ from .upscale import (
 )
 from .video_formats import (
     DEFAULT_FAMILY,
+    DURATION_CHOICES,
+    DURATION_DEFAULT,
     FAMILY_LTX,
     default_video_format_label,
     family_combo_labels,
@@ -344,6 +346,7 @@ class EZVideoFormat:
                     },
                 ),
                 "size_mode": (list(SIZE_MODE_CHOICES), {"default": SIZE_MODE_MATCH}),
+                "duration_s": (list(DURATION_CHOICES), {"default": DURATION_DEFAULT}),
             },
             "optional": {
                 "image": ("IMAGE",),
@@ -360,8 +363,8 @@ class EZVideoFormat:
         "Wan / LTX clip canvas. Family picks the VAE grid (Wan ÷16, LTX ÷32). "
         "Format / platform sets width, height, and Enhance framing. Custom "
         "uses the width/height widgets. Match input snaps aspect to a "
-        "provided still. Length stays on the latent node. Quality does "
-        "not change size."
+        "provided still. Duration is LTX-only (5/8/10/12 s) and writes the "
+        "latent length in the frontend. Quality does not change size."
     )
 
     def run(
@@ -371,6 +374,7 @@ class EZVideoFormat:
         width: object = 832,
         height: object = 480,
         size_mode: object = SIZE_MODE_MATCH,
+        duration_s: object = DURATION_DEFAULT,
         image: object = None,
     ) -> dict[str, Any]:
         """Resolve family and format widgets to a clip canvas.
@@ -381,6 +385,7 @@ class EZVideoFormat:
             width: Custom width; ignored unless format is Custom.
             height: Custom height; ignored unless format is Custom.
             size_mode: Match input or Force format.
+            duration_s: LTX clip length combo; Wan ignores this at Queue.
             image: Optional still used when matching input ratio.
 
         Returns:
@@ -395,7 +400,7 @@ class EZVideoFormat:
             size_mode=size_mode,
             image=image,
         )
-        summary = f"{result.width}×{result.height} · {result.label}"
+        summary = f"{result.width}×{result.height} · {result.label} · {duration_s}"
         return {
             "ui": {"text": (summary,)},
             "result": (

@@ -1,6 +1,6 @@
 ---
 title: "creator/av/asmr-macro"
-description: "Quiet macro foley AV ~12 s"
+description: "Quiet macro foley AV ~10 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 
@@ -31,7 +31,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
-Quiet macro foley AV ~12 s. Lab size **1280×704**. Prefix `ez_asmr`.
+Quiet macro foley AV ~10 s. Lab size **1280×704**. Prefix `ez_asmr`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 Handoff: none.
@@ -343,7 +343,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `Macro of an unmarked surface. Soft taps, close mic. No score. Twelve seconds. K…` |
+| Motion / prompt | `Macro of an unmarked surface. Soft taps, close mic. No score. Ten seconds. Keep…` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `LTXVImgToVideo` — LTX Image to Video
@@ -392,7 +392,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `batch_size`
 
@@ -630,7 +630,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `frame_rate`
 
@@ -692,14 +692,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## creator/av/asmr-macro Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Quiet macro foley AV ~12 s. Lab size **1280×704**. Prefix `ez_asmr`. Empty of letter…`
+**This graph:** `## creator/av/asmr-macro Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Quiet macro foley AV ~10 s. Lab size **1280×704**. Prefix `ez_asmr`. Empty of letter…`
 
 ```text
 ## creator/av/asmr-macro
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
-Quiet macro foley AV ~12 s. Lab size **1280×704**. Prefix `ez_asmr`.
+Quiet macro foley AV ~10 s. Lab size **1280×704**. Prefix `ez_asmr`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 Handoff: none.
@@ -862,10 +862,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `Macro of an unmarked surface. Soft taps, close mic. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign.`
+**This graph:** `Macro of an unmarked surface. Soft taps, close mic. No score. Ten seconds. Keep every object and surface from the start image; do not redesign.`
 
 ```text
-Macro of an unmarked surface. Soft taps, close mic. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign.
+Macro of an unmarked surface. Soft taps, close mic. No score. Ten seconds. Keep every object and surface from the start image; do not redesign.
 ```
 
 #### `enhance`
@@ -904,7 +904,7 @@ Duration hint.
 
 **How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `10 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -1248,7 +1248,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1434,6 +1434,16 @@ Match a loaded still's aspect, or keep Format / platform.
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 **This graph:** `Match input`
+
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `10 seconds`
 
 ### `EZImageDescribe` — Describe image
 

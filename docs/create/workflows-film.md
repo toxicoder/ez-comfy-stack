@@ -50,8 +50,8 @@ Full loop: [90s shorts](../shorts.md). One file per film — Queue once. Leave L
 | **[dcc/clay-plates](../generated/workflows/dcc/clay-plates.md)** | One clay still → four plates (hero 704, packshot 1:1, IG 4:5, shorts 9:16). Prefix `ez_clay_pack_*`. |
 | **[dcc/canny-hero](../generated/workflows/dcc/canny-hero.md)** | Klein 4B edit of `canny.png`. Prefix `ez_canny_hero`. Handoff: `ltx-iclora-canny`. |
 | **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Instagram 4:5 Path B: ten Klein edits of `house-views` clay (1024×1280). Not an LTX pack. |
-| **[dcc/depth-control-12s](../generated/workflows/dcc/depth-control-12s.md)** | Lab envelope for a 12.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
-| **[dcc/canny-control-12s](../generated/workflows/dcc/canny-control-12s.md)** | Same envelope; wire `canny.mp4`. |
+| **[dcc/depth-control-10s](../generated/workflows/dcc/depth-control-10s.md)** | Lab envelope for a 12.00s depth-guided LTX print. Official Union Control graph is **Templates → LTX-2.5**. Opt-in `download-ltx --tier iclora`. MagCache off. Distilled-only. Joint AV is a world bed. |
+| **[dcc/canny-control-10s](../generated/workflows/dcc/canny-control-10s.md)** | Same envelope; wire `canny.mp4`. |
 | **[dcc/depth-control-shorts](../generated/workflows/dcc/depth-control-shorts.md)** | Depth envelope at **768×1280**. Dump with `export-guides --width 768 --height 1280`. |
 | **[dcc/first-last-from-guide](../generated/workflows/dcc/first-last-from-guide.md)** | Fun InP first+last from the pack. Opt-in `download-wan --tier fun-inp`. MagCache off. |
 | **[dcc/guide-still](../generated/workflows/dcc/guide-still.md)** | Stay on `:8188`. `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. |

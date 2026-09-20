@@ -1,6 +1,6 @@
 ---
 title: "creator/av/rain-window"
-description: "Rain-on-glass AV ~12 s"
+description: "Rain-on-glass AV ~10 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 
@@ -31,7 +31,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
-Rain-on-glass AV ~12 s. Lab size **1280×704**. Prefix `ez_rain`.
+Rain-on-glass AV ~10 s. Lab size **1280×704**. Prefix `ez_rain`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 Handoff: none.
@@ -301,7 +301,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `Rain on a dark window. Drops, distant thunder hush. No score. Twelve seconds.` |
+| Positive | `Rain on a dark window. Drops, distant thunder hush. No score. Ten seconds.` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `EmptyLTXVLatentVideo` — Empty LTX Latent Video
@@ -344,7 +344,7 @@ Frame count.
 
 **How it affects generation:** Standalone Apps default 289 @ 24 fps ≈ 12.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
 
-**This graph:** `289`
+**This graph:** `241`
 
 ### `LTXVConditioning` — LTX Conditioning
 
@@ -572,7 +572,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `frame_rate`
 
@@ -634,14 +634,14 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## creator/av/rain-window Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Rain-on-glass AV ~12 s. Lab size **1280×704**. Prefix `ez_rain`. Empty of lettering…`
+**This graph:** `## creator/av/rain-window Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Rain-on-glass AV ~10 s. Lab size **1280×704**. Prefix `ez_rain`. Empty of lettering…`
 
 ```text
 ## creator/av/rain-window
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
-Rain-on-glass AV ~12 s. Lab size **1280×704**. Prefix `ez_rain`.
+Rain-on-glass AV ~10 s. Lab size **1280×704**. Prefix `ez_rain`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 Handoff: none.
@@ -804,10 +804,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `Rain on a dark window. Drops, distant thunder hush. No score. Twelve seconds.`
+**This graph:** `Rain on a dark window. Drops, distant thunder hush. No score. Ten seconds.`
 
 ```text
-Rain on a dark window. Drops, distant thunder hush. No score. Twelve seconds.
+Rain on a dark window. Drops, distant thunder hush. No score. Ten seconds.
 ```
 
 #### `enhance`
@@ -846,7 +846,7 @@ Duration hint.
 
 **How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `10 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -1190,7 +1190,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1376,3 +1376,13 @@ Match a loaded still's aspect, or keep Format / platform.
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 **This graph:** `Match input`
+
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `10 seconds`

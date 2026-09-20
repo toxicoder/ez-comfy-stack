@@ -96,7 +96,7 @@ Distilled Klein is **CFG 1.0 / 4 steps** — quality is almost entirely the Posi
     Second door — **stills/dream-house-clay**: same bible and shot cards, but each still `ReferenceLatent`s a clay plate (`ez_house_clay_01`…`10`). `start` seeds LoadImage; optional Workbench dump with `./scripts/manage.sh house-views` while Comfy is **down**. Prompt the **look** (style dropdown, materials); do not re-describe the floorplan — the greybox already locked cameras and adjacency. Prefix `ez_dream_house_clay_01`…`10`. Language-only (no geometry) → T2I tour. Playbook: [Dream-house tours](learn/dream-house.md).
   </Tab>
   <Tab value="LTX-2.5 AV">
-    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **motion/av/dialogue-12s** puts speech in `"quotes"`; **motion/av/multishot-12s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **motion/av/first-last-12s** describes the transition between two stills; **motion/av/audio-to-video-12s** lets the loaded wav own timing.
+    Flowing paragraph, present tense, audio beside the action (wind, footsteps, a shop bell) — not a sound trailer at the end. Shorts: world SFX, **no score**. Do not paste a Wan or Kling shot list unchanged. 90s films bake one `ltx_i2v` paragraph per shot (I2V: motion + one camera + interleaved foley; start image owns look). All three 90s films pin Enhance **off** so the identity and each shot paragraph are encoded as written. Showcase Apps: **motion/av/dialogue-10s** puts speech in `"quotes"`; **motion/av/multishot-10s** names the cut in prose (`hard cut`, `match cut`) and says whether audio continues; **motion/av/first-last-10s** describes the transition between two stills; **motion/av/audio-to-video-10s** lets the loaded wav own timing.
 
     First-person body-cam (go-see): one signature stunt per 5 s; eye-level chest-cam; only the wearer's own sleeves and gloves along the bottom edge — never a person occupying the plate. Look at the landing before a jump; dip on impact then recover; land the last frame on a readable plant for the next I2V. Close-mic breath + surface foley beside the move. No speech. Identity still is already at a dead sprint. I2V describes motion from the start frame; do not restate a second body.
 
@@ -150,7 +150,7 @@ STRING out → CLIPTextEncode `text` input.
 | --- | --- |
 | 90s films and 7.5 min acts (identity + 18 LTX shots) | Baked `shots.yaml`; rewriter changes camera and foley |
 | Talking-head LTX I2V | A2V freeze recipe |
-| **motion/av/dialogue-12s** / **multishot-5s** / **product-hero** / **first-last-5s** / **audio-to-video-5s** | Authored LTX-2.5 showcase; quoted speech, named cuts, freeze bed |
+| **motion/av/dialogue-10s** / **multishot-5s** / **product-hero** / **first-last-5s** / **audio-to-video-5s** | Authored LTX-2.5 showcase; quoted speech, named cuts, freeze bed |
 | GIF / bumper / sticker loops | Ping-pong needs cyclic locked-camera motion |
 | Orbit / push-in / parallax I2V | The canned camera verb **is** the param |
 | IC-LoRA depth | Clay already locked camera |

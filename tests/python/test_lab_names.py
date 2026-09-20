@@ -44,7 +44,7 @@ def test_rel_renames_are_unique_short_and_stable() -> None:
 def test_rel_id_maps_legacy_example_stems() -> None:
     """*-lab-example stems land on the descriptive rel, not the cryptic hop."""
     assert rel_id("wan-i2v-5s-lab-example") == "motion/silent/still-to-video-5s"
-    assert rel_id("ltx-i2v-5s-lab-example") == "motion/av/still-to-video-12s"
+    assert rel_id("ltx-i2v-5s-lab-example") == "motion/av/still-to-video-10s"
     assert rel_id("klein-ig-square-lab-example") == "stills/instagram-square"
     assert rel_id("klein-from-clay-lab-example") == "dcc/clay-hero"
     assert rel_id("dub-localize-lab-example") == "audio/dub/clone-translate"

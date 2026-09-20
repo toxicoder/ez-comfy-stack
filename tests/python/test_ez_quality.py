@@ -369,7 +369,7 @@ def test_apply_wan_does_not_change_frames_or_unet() -> None:
 
 
 def test_apply_ltx_does_not_change_length() -> None:
-    graph = copy.deepcopy(_load("motion/av/still-to-video-12s.json"))
+    graph = copy.deepcopy(_load("motion/av/still-to-video-10s.json"))
     video = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     before = list(video["widgets_values"])
     apply_to_graph(graph, QUALITY_HIGH)
@@ -1014,7 +1014,7 @@ def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
     assert latent["widgets_values"] == before
     assert _unet(still)["widgets_values"][UNET_NAME_INDEX] == KLEIN_BASE
     assert _sampler(still)["widgets_values"][KSAMPLER_STEPS_INDEX] == KLEIN_HIGH_BASE_STEPS
-    ltx_graph = copy.deepcopy(_load("motion/av/still-to-video-12s.json"))
+    ltx_graph = copy.deepcopy(_load("motion/av/still-to-video-10s.json"))
     video = next(n for n in ltx_graph["nodes"] if n.get("type") == "LTXVImgToVideo")
     length_before = list(video["widgets_values"])
     apply_to_graph(ltx_graph, QUALITY_FREE_COMMERCIAL)

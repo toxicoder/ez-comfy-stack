@@ -29,7 +29,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## dcc/depth-from-loader
 
-Lab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
+Lab envelope for Path B depth-guided 10.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **241 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
 
 Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` → OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
 
@@ -354,7 +354,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `batch_size`
 
@@ -592,7 +592,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `frame_rate`
 
@@ -654,12 +654,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## dcc/depth-from-loader Lab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 fram…`
+**This graph:** `## dcc/depth-from-loader Lab envelope for Path B depth-guided 10.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **241 fram…`
 
 ```text
 ## dcc/depth-from-loader
 
-Lab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
+Lab envelope for Path B depth-guided 10.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **241 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
 
 Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` → OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
 
@@ -898,7 +898,7 @@ Duration hint.
 
 **How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `10 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -1242,7 +1242,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

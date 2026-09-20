@@ -661,6 +661,8 @@ def test_ez_video_format_run_packs_ui_and_result() -> None:
     assert required["family"][1]["default"] == FAMILY_WAN_LABEL
     assert required["format"][1]["default"] == default_video_format_label()
     assert required["size_mode"][1]["default"] == SIZE_MODE_MATCH
+    assert required["duration_s"][1]["default"] == "10 seconds"
+    assert vfmt.DURATION_SECONDS[vfmt.DURATION_DEFAULT] == 10.00
     assert "image" in types["optional"]
     packed = EZVideoFormat().run(
         FAMILY_LTX_LABEL,

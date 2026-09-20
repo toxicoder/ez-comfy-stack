@@ -27,9 +27,9 @@ def test_five_seconds_is_121() -> None:
     assert validate_ltx_frames(121) == 121
 
 
-def test_twelve_second_apps_are_289() -> None:
-    assert DURATION_APP_S == 12.00
-    assert ltx_frames_for_duration(DURATION_APP_S) == FRAMES_APP == 289
+def test_ten_second_apps_are_241() -> None:
+    assert DURATION_APP_S == 10.00
+    assert ltx_frames_for_duration(DURATION_APP_S) == FRAMES_APP == 241
     assert validate_ltx_frames(FRAMES_APP) == FRAMES_APP
 
 

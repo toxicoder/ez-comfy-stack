@@ -8,7 +8,7 @@ into `$COMFY_HOME/custom_nodes/ez_studio_blocks/`.
 | --- | --- |
 | `klein-t2i-backbone` | klein |
 | `wan-i2v-5s` | wan |
-| `ltx-av-12s` | ltx |
+| `ltx-av-10s` | ltx |
 | `ltx-film-shot` | film |
 
 Source of truth: `tests/python/_build_studio_blocks.py`. Do not vendor official

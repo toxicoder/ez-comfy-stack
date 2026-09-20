@@ -269,9 +269,9 @@ def _polish_t2v(graph: dict, stem: str, prefix: str, prompt: str, audio: str, no
 
 
 def build_dialogue() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/dialogue-12s")
+    graph = _clone("motion/av/text-to-video-10s", "motion/av/dialogue-10s")
     _insert_modality(graph)
-    note = f"""## motion/av/dialogue-12s
+    note = f"""## motion/av/dialogue-10s
 
 {LTX_CANVAS}
 
@@ -287,7 +287,7 @@ Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 """
     _polish_t2v(
         graph,
-        "motion/av/dialogue-12s",
+        "motion/av/dialogue-10s",
         "ez_ltx_dialogue",
         LTX_DIALOGUE,
         LTX_DIALOGUE_AUDIO,
@@ -297,8 +297,8 @@ Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 
 
 def build_multishot() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/multishot-12s")
-    note = f"""## motion/av/multishot-12s
+    graph = _clone("motion/av/text-to-video-10s", "motion/av/multishot-10s")
+    note = f"""## motion/av/multishot-10s
 
 {LTX_CANVAS}
 
@@ -312,7 +312,7 @@ LTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation
 """
     _polish_t2v(
         graph,
-        "motion/av/multishot-12s",
+        "motion/av/multishot-10s",
         "ez_ltx_multishot",
         LTX_MULTISHOT,
         LTX_MULTISHOT_AUDIO,
@@ -322,7 +322,7 @@ LTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation
 
 
 def build_product() -> None:
-    graph = _clone("motion/av/still-to-video-12s", "motion/av/product-hero")
+    graph = _clone("motion/av/still-to-video-10s", "motion/av/product-hero")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     loader["widgets_values"] = ["example.png", "image"]
@@ -394,7 +394,7 @@ def _add_guide(title: str, pos: list[float], frame_idx: int) -> dict:
 
 
 def build_flf() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/first-last-12s")
+    graph = _clone("motion/av/text-to-video-10s", "motion/av/first-last-10s")
     empty = _node(graph, "EmptyLTXVLatentVideo")
     pos_enc = _node(graph, "CLIPTextEncode", "Positive")
     neg_enc = _node(graph, "CLIPTextEncode", "Negative")
@@ -461,7 +461,7 @@ def build_flf() -> None:
 
     _set_prefix(graph, "ez_ltx_flf")
     _set_prompt(graph, LTX_FLF, mode="i2v", audio_hint=LTX_FLF_AUDIO, enhance=False)
-    note = f"""## motion/av/first-last-12s
+    note = f"""## motion/av/first-last-10s
 
 {LTX_CANVAS}
 
@@ -475,11 +475,11 @@ Official FLF2V subgraph stays in Comfy **Templates → LTX-2.5**.
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 first-last-frame AV using core AddGuide nodes")
-    _dump("motion/av/first-last-12s", graph)
+    _dump("motion/av/first-last-10s", graph)
 
 
 def build_a2v() -> None:
-    graph = _clone("motion/av/still-to-video-12s", "motion/av/audio-to-video-12s")
+    graph = _clone("motion/av/still-to-video-10s", "motion/av/audio-to-video-10s")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     concat = _node(graph, "LTXVConcatAVLatent")
@@ -542,7 +542,7 @@ def build_a2v() -> None:
 
     _set_prefix(graph, "ez_ltx_a2v")
     _set_prompt(graph, LTX_A2V, mode="i2v", audio_hint=LTX_A2V_AUDIO, enhance=False)
-    note = f"""## motion/av/audio-to-video-12s
+    note = f"""## motion/av/audio-to-video-10s
 
 {LTX_CANVAS}
 
@@ -558,7 +558,7 @@ Handoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unlo
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 A2V freeze: encode bed, mux original waveform")
-    _dump("motion/av/audio-to-video-12s", graph)
+    _dump("motion/av/audio-to-video-10s", graph)
 
 
 def patch_talking_head() -> None:
@@ -566,9 +566,9 @@ def patch_talking_head() -> None:
     graph = _load(path)
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
-    if "motion/av/audio-to-video-12s" not in note:
+    if "motion/av/audio-to-video-10s" not in note:
         insert = (
-            "Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). "
+            "Real single-stage freeze is **motion/av/audio-to-video-10s** (LoadAudio + encode, mux original wav). "
         )
         note = note.replace(
             "Official two-stage A2V lives in Comfy Templates → LTX-2.5.",

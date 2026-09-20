@@ -1,10 +1,10 @@
 ---
-title: "motion/av/audio-to-video-12s"
-description: "LTX-2.5 A2V freeze: encode bed, mux original waveform Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded a"
-tags: [workflows, generated, comfyui, motion]
+title: "dcc/canny-control-10s"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
+tags: [workflows, generated, comfyui, dcc]
 ---
 
-# motion/av/audio-to-video-12s
+# dcc/canny-control-10s
 
 **What's on this page**
 
@@ -18,37 +18,44 @@ tags: [workflows, generated, comfyui, motion]
 - **Queuing this filename** with known widgets
 - **Changing a parameter** with a documented generation effect
 
-**Who this is for:** studio users who loaded `motion/av/audio-to-video-12s` from Apps or Workflows.
+**Who this is for:** studio users who loaded `dcc/canny-control-10s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/motion/av/audio-to-video-12s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/dcc/canny-control-10s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
 
 ## Purpose
 
 Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
-## motion/av/audio-to-video-12s
+## dcc/canny-control-10s
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Lab envelope for Path B **canny**-guided 10.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **241 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
-LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
+This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-LTX-2.5 distilled **audio-to-video freeze** (~12 s). Drop a ~12 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
-Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
-Audio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.
-Two-stage A2V with frozen tokens in both stages lives in Comfy **Templates → LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
+Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
-Handoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.
+  ./scripts/manage.sh download-ltx --tier iclora
+  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
+
+Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
+
+LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+
+Stay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
+Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ## How to Queue
 
 1. `./scripts/manage.sh start` so `_lab` is seeded
-2. Load **motion/av/audio-to-video-12s** from **Apps** or **Workflows**
+2. Load **dcc/canny-control-10s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
@@ -60,8 +67,8 @@ flowchart LR
   N1["LTX-2.5 distilled INT8-convrot"]
   N2["LTX-2.5 video VAE"]
   N3["Gemma4-with-proj (ltxv)"]
-  N4["Start image"]
-  N5["Motion / prompt"]
+  N4["Guide first.png"]
+  N5["Motion + audio"]
   N6["Negative"]
   N7["LTX Img→Video condition"]
   N8["LTX frame rate cond"]
@@ -69,16 +76,18 @@ flowchart LR
   N10["VAE Decode"]
   N12["Save frames (secondary)"]
   N13["LTX-2.5 audio VAE"]
+  N14["Empty LTX audio latent"]
   N15["Concat AV latents"]
   N16["Separate AV latents"]
-  N17["Operator note — video output"]
+  N17["Operator note"]
   N18["Save video (MP4) — open node for preview"]
-  N19["LTX Prompt Enhance"]
-  N21["Negative Prompt Enhance"]
-  N22["Audio file"]
-  N23["Encode + freeze bed"]
-  N24["Quality"]
-  N25["Format / platform"]
+  N19["Last frame"]
+  N20["Save last frame"]
+  N21["LTX Prompt Enhance"]
+  N22["Audio VAE Decode"]
+  N23["LTX AI-media disclosure (end-card)"]
+  N24["Negative Prompt Enhance"]
+  N25["Quality"]
   N26["Describe image"]
   N1 --> N9
   N2 --> N7
@@ -95,18 +104,19 @@ flowchart LR
   N9 --> N16
   N10 --> N12
   N10 --> N18
-  N13 --> N23
+  N10 --> N19
+  N13 --> N14
+  N13 --> N22
+  N14 --> N15
   N15 --> N9
   N16 --> N10
-  N19 --> N5
-  N19 --> N21
-  N21 --> N6
-  N22 --> N23
+  N16 --> N22
+  N19 --> N20
+  N21 --> N5
+  N21 --> N24
   N22 --> N18
-  N23 --> N15
-  N25 --> N7
-  N25 --> N19
-  N26 --> N19
+  N24 --> N6
+  N26 --> N21
 ```
 
 ## Nodes on this graph
@@ -116,8 +126,8 @@ flowchart LR
 | 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | Ungrouped |
 | 2 | LTX-2.5 video VAE | `VAELoader` | Ungrouped |
 | 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | Ungrouped |
-| 4 | Start image | `LoadImage` | Ungrouped |
-| 5 | Motion / prompt | `CLIPTextEncode` | Ungrouped |
+| 4 | Guide first.png | `LoadImage` | Ungrouped |
+| 5 | Motion + audio | `CLIPTextEncode` | Ungrouped |
 | 6 | Negative | `CLIPTextEncode` | Ungrouped |
 | 7 | LTX Img→Video condition | `LTXVImgToVideo` | Ungrouped |
 | 8 | LTX frame rate cond | `LTXVConditioning` | Ungrouped |
@@ -125,16 +135,18 @@ flowchart LR
 | 10 | VAE Decode | `VAEDecode` | Ungrouped |
 | 12 | Save frames (secondary) | `SaveImage` | Ungrouped |
 | 13 | LTX-2.5 audio VAE | `VAELoader` | Ungrouped |
+| 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | Ungrouped |
 | 15 | Concat AV latents | `LTXVConcatAVLatent` | Ungrouped |
 | 16 | Separate AV latents | `LTXVSeparateAVLatent` | Ungrouped |
-| 17 | Operator note — video output | `Note` | Ungrouped |
+| 17 | Operator note | `Note` | Ungrouped |
 | 18 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | Ungrouped |
-| 19 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
-| 21 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 22 | Audio file | `LoadAudio` | Ungrouped |
-| 23 | Encode + freeze bed | `LTXVAudioVAEEncode` | Ungrouped |
-| 24 | Quality | `EZQuality` | Ungrouped |
-| 25 | Format / platform | `EZVideoFormat` | Ungrouped |
+| 19 | Last frame | `ImageFromBatch` | Ungrouped |
+| 20 | Save last frame | `SaveImage` | Ungrouped |
+| 21 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
+| 22 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
+| 23 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | Ungrouped |
+| 24 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 25 | Quality | `EZQuality` | Ungrouped |
 | 26 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
@@ -310,7 +322,7 @@ Filename in input/.
 
 **How it affects generation:** Point at the Klein still you just saved (ez_still_draft_*.png, ez_character_*.png, first.png).
 
-**This graph:** `example.png`
+**This graph:** `first.png`
 
 #### `upload`
 
@@ -346,7 +358,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `The start image holds as the first frame. The subject listens and moves with th…` |
+| Motion + audio | `The start image holds as the first frame. The first-person body-cam surges into…` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `LTXVImgToVideo` — LTX Image to Video
@@ -395,7 +407,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `241`
 
 #### `batch_size`
 
@@ -614,7 +626,49 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph:** `ez_ltx_a2v_frames`
+| Instance | Value |
+| --- | --- |
+| Save frames (secondary) | `ez_gosee_b1_s1_ltx_frames` |
+| Save last frame | `ez_gosee_b1_s1_last` |
+
+### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
+
+Allocate a silent/world-audio latent matching video length.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `audio_vae` | in | `VAE` | Audio VAE (sets latent channels). |
+| `Latent` | out | `LATENT` | Empty audio latent. |
+
+#### `frames`
+
+Type `INT`. Range / default: 121.
+
+Must match video length.
+
+**How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
+
+**This graph:** `241`
+
+#### `frame_rate`
+
+Type `FLOAT`. Range / default: 24.0.
+
+Audio timeline fps.
+
+**How it affects generation:** Keep 24 with the rest of the printer.
+
+**This graph:** `24.0`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1.
+
+Clips per Queue.
+
+**How it affects generation:** Stay 1.
+
+**This graph:** `1`
 
 ### `LTXVConcatAVLatent` — LTX Concat AV Latent
 
@@ -656,25 +710,32 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/audio-to-video-12s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are i…`
+**This graph:** `## dcc/canny-control-10s Lab envelope for Path B **canny**-guided 10.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **241 frames @ 24 fps**. MagCache…`
 
 ```text
-## motion/av/audio-to-video-12s
+## dcc/canny-control-10s
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Lab envelope for Path B **canny**-guided 10.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **241 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
-LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
+This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-LTX-2.5 distilled **audio-to-video freeze** (~12 s). Drop a ~12 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
-Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
-Audio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.
-Two-stage A2V with frozen tokens in both stages lives in Comfy **Templates → LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
+Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
-Handoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.
+  ./scripts/manage.sh download-ltx --tier iclora
+  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
+
+Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
+
+LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+
+Stay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
+Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ### `VHS_VideoCombine` — VHS Video Combine
@@ -721,7 +782,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_ltx_a2v`
+**This graph:** `ez_iclora_canny`
 
 #### `format`
 
@@ -800,6 +861,39 @@ Write the file to disk.
 
 **This graph:** `true`
 
+### `ImageFromBatch` — Image From Batch
+
+Pick one frame out of a decoded video batch.
+
+!!! warning "Lab notes"
+
+    Last-frame savers: index 120 on 121-frame LTX (0-based last), 119 on 120-frame Wan shots.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded frame batch. |
+| `IMAGE` | out | `IMAGE` | Single frame. |
+
+#### `batch_index`
+
+Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
+
+0-based frame index.
+
+**How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
+
+**This graph:** `119`
+
+#### `length`
+
+Type `INT`. Range / default: 1.
+
+How many frames to take.
+
+**How it affects generation:** Stay 1 (one still).
+
+**This graph:** `1`
+
 ### `EZLTXPromptEnhance` — LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
@@ -830,10 +924,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every obj…`
+**This graph:** `The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard …`
 
 ```text
-The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Twelve seconds.
+The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.
 ```
 
 #### `enhance`
@@ -872,7 +966,7 @@ Duration hint.
 
 **How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `10 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -882,7 +976,7 @@ World SFX / no-score policy.
 
 **How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
-**This graph:** `use the loaded clip; do not invent a score`
+**This graph:** `world SFX matching the start image, no score`
 
 #### `style`
 
@@ -1208,7 +1302,39 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-**This graph:** `motion/av/audio-to-video-12s`
+**This graph:** `dcc/canny-control-10s`
+
+### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
+
+Decode LTX audio latent to AUDIO for the MP4 mux.
+
+!!! warning "Lab notes"
+
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `samples` | in | `LATENT` | Audio latent. |
+| `audio_vae` | in | `VAE` | ltx-2.5-audio-vae-bf16. |
+| `Audio` | out | `AUDIO` | World bed / dialogue stem. |
+
+No widgets. Sockets only.
+
+### `EZFilmDisclosure` — LTX AI-media disclosure
+
+Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `text` | out | `STRING` | Disclosure (+ optional extra). |
+
+#### `text`
+
+Type `STRING`.
+
+Optional extra line after the stock disclosure.
+
+**How it affects generation:** Empty = stock sentence only. Do not strip provenance.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -1265,40 +1391,6 @@ Which negative family.
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
 
-### `LoadAudio` — Load Audio
-
-Load a wav/mp3 from input/.
-
-!!! warning "Lab notes"
-
-    motion/av/audio-to-video-12s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `AUDIO` | out | `AUDIO` | Waveform for LTXVAudioVAEEncode. |
-
-#### `audio`
-
-Type `STRING`.
-
-Filename in input/.
-
-**How it affects generation:** The original wav is muxed into the MP4 (no audio VAE decode on a2v).
-
-**This graph:** `ez_a2v_bed.wav`
-
-### `LTXVAudioVAEEncode` — LTX Audio VAE Encode
-
-Encode a wav into the LTX audio latent (A2V freeze).
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `audio` | in | `AUDIO` | LoadAudio wav. |
-| `audio_vae` | in | `VAE` | Audio VAE. |
-| `Latent` | out | `LATENT` | Frozen audio latent concatenated before sample. |
-
-No widgets. Sockets only.
-
 ### `EZQuality` — Quality
 
 Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, and VAE widgets.
@@ -1333,93 +1425,6 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
-
-### `EZVideoFormat` — Format / platform (video)
-
-Pick a Wan or LTX clip canvas (aspect or named platform).
-
-!!! warning "Lab notes"
-
-    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size. Match input snaps aspect to a loaded still.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
-| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
-| `hint` | out | `STRING` | Enhance duration / framing line. |
-| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
-
-#### `family`
-
-Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
-
-Which VAE grid to use.
-
-**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
-
-**This graph:** `LTX-2.5`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `Wan 5B` | wan VAE grid ÷16. |
-| `LTX-2.5` | ltx VAE grid ÷32. |
-
-#### `format`
-
-Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
-
-Aspect or named platform job.
-
-**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
-
-**This graph:** `LTX · 16:9 YouTube (1280×704)`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
-| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
-| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
-| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
-| `Wan · 1:1 square (768×768)` | 768×768. wan. |
-| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
-| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
-| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
-| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
-
-#### `width`
-
-Type `INT`. Range / default: 16–1280.
-
-Custom width.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
-
-**This graph:** `1280`
-
-#### `height`
-
-Type `INT`. Range / default: 16–1280.
-
-Custom height.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
-
-**This graph:** `704`
-
-#### `size_mode`
-
-Type `COMBO`. Range / default: Match input / Force format.
-
-Match a loaded still's aspect, or keep Format / platform.
-
-**How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
-
-**This graph:** `Match input`
 
 ### `EZImageDescribe` — Describe image
 

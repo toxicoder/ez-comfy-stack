@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Twelve seconds."
+        "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Ten seconds."
       ],
       "title": "Positive"
     },
@@ -250,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        289
+        241
       ]
     },
     {
@@ -505,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        241,
         24.0,
         1
       ],
@@ -618,7 +618,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/interior-ambience\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~12 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## motion/av/interior-ambience\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~10 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -726,10 +726,10 @@
       },
       "widgets_values": [
         "custom",
-        "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Twelve seconds.",
+        "Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Ten seconds.",
         true,
         "t2v",
-        "12 seconds, 24 fps",
+        "10 seconds, 24 fps",
         "kettle, house creak, no score",
         "none",
         "motion/av/interior-ambience"
@@ -905,7 +905,8 @@
         "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
         1280,
         704,
-        "Match input"
+        "Match input",
+        "10 seconds"
       ],
       "title": "Format / platform"
     }
@@ -1117,7 +1118,7 @@
   "extra": {
     "lab_profile": "motion/av/interior-ambience",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/interior-ambience\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~12 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## motion/av/interior-ambience\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nInterior room-tone AV (~10 s T2V). LTX-2.5 distilled. Community License \u2014 not Apache.\nPrefix `ez_interior_video`.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 interior ambience AV ~5s",
     "lab_app_mode": {
@@ -1170,6 +1171,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          21,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

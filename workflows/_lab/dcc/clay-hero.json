@@ -906,7 +906,7 @@
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": [
-        "dcc/depth-control-12s",
+        "dcc/depth-control-10s",
         "motion/silent/still-to-video-5s"
       ]
     },
