@@ -48,6 +48,78 @@ def _image_present(image: object) -> bool:
         return False
 
 
+def _filename_str(value: object) -> str:
+    """Strip a filename widget to a path string.
+
+    Args:
+        value: Combo or STRING widget.
+
+    Returns:
+        Stripped filename, or empty.
+    """
+    if isinstance(value, str):
+        return value.strip()
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def input_still_choices() -> list[str]:
+    """Return ``input/`` still names with an empty first choice.
+
+    Empty stays valid so optional refs Queue without a file.
+
+    Returns:
+        Combo values starting with ``""``.
+    """
+    names: list[str] = [""]
+    try:
+        import folder_paths  # type: ignore[import-not-found]
+
+        found = folder_paths.get_filename_list("input")
+    except Exception:  # noqa: BLE001 — hermetic tests / missing Comfy
+        found = None
+    if found:
+        names.extend(str(item) for item in found if str(item).strip())
+    return names
+
+
+def load_input_still(filename: object) -> object | None:
+    """Load a still from Comfy ``input/`` when ``filename`` is set.
+
+    Args:
+        filename: Combo value (empty is a no-op).
+
+    Returns:
+        BHWC float batch, or None when empty/unreadable.
+    """
+    name = _filename_str(filename)
+    if not name:
+        return None
+    try:
+        import numpy as np
+        from PIL import Image
+
+        import folder_paths  # type: ignore[import-not-found]
+    except Exception:  # noqa: BLE001 — hermetic tests / missing deps
+        return None
+    try:
+        path = folder_paths.get_annotated_filepath(name)
+    except Exception:  # noqa: BLE001 — missing helper
+        path = None
+    if not path:
+        return None
+    try:
+        with Image.open(path) as img:
+            rgb = img.convert("RGB")
+            arr = (np.asarray(rgb).astype("float32") / 255.0)
+    except Exception:  # noqa: BLE001 — unreadable file
+        return None
+    if getattr(arr, "ndim", 0) != 3:
+        return None
+    return arr[None, ...]
+
+
 class EZOptionalImage:
     """Optional example/reference stills. Empty filename or no tensor is fine."""
 
@@ -59,10 +131,12 @@ class EZOptionalImage:
             Optional image/filename map.
         """
         img = ("IMAGE",)
+        choices = input_still_choices()
+        upload = (choices, {"default": "", "image_upload": True})
         path = ("STRING", {"default": "", "multiline": False})
         return {
             "required": {
-                "filename": path,
+                "filename": upload,
             },
             "optional": {
                 "image": img,
@@ -106,8 +180,13 @@ class EZOptionalImage:
         Returns:
             First present image (or None), count, and has_image flag.
         """
-        del filename, filename_2, filename_3
-        present = [item for item in (image, image_2, image_3) if _image_present(item)]
+        del filename_2, filename_3
+        loaded = load_input_still(filename) if not _image_present(image) else None
+        present = [
+            item
+            for item in (image, loaded, image_2, image_3)
+            if _image_present(item)
+        ]
         count = len(present)
         first = present[0] if present else None
         has_image = count > 0

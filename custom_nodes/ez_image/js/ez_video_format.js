@@ -299,7 +299,85 @@ function bindFormatNode(node) {
       return value;
     };
   }
+  const durationWidget = widgetByName(node, "duration_s");
+  const durationCb = durationWidget?.callback;
+  if (durationWidget) {
+    /**
+     * Write LTX latent length when Duration changes.
+     * @param {*} value
+     * @returns {void}
+     */
+    durationWidget.callback = function (value) {
+      durationCb?.apply(this, arguments);
+      applyDuration(node);
+      return value;
+    };
+  }
   applyFormat(node);
+  applyDuration(node);
+}
+
+/**
+ * Legal LTX frame count for a duration combo (1+8n).
+ * @param {*} value
+ * @returns {number|null}
+ */
+function ltxFramesForDuration(value) {
+  const folded = String(value || "").toLowerCase();
+  const seconds = Number.parseFloat(folded);
+  if (!(seconds > 0)) {
+    return null;
+  }
+  const target = Math.round(seconds * 24);
+  const k = Math.max(0, Math.round((target - 1) / 8));
+  return 1 + 8 * k;
+}
+
+/**
+ * True when this graph is LTX occupancy / family.
+ * @param {object} node
+ * @returns {boolean}
+ */
+function isLtxGraph(node) {
+  const family = widgetByName(node, "family")?.value;
+  if (String(family || "").toLowerCase().includes("ltx")) {
+    return true;
+  }
+  const occ = node.graph?.extra?.lab_app_mode?.occupancy || app.graph?.extra?.lab_app_mode?.occupancy;
+  return String(occ || "") === "ltx";
+}
+
+/**
+ * Write Duration onto LTX length widgets. Wan stays put.
+ * @param {object} node
+ * @returns {void}
+ */
+function applyDuration(node) {
+  if (!isLtxGraph(node)) {
+    return;
+  }
+  const frames = ltxFramesForDuration(widgetByName(node, "duration_s")?.value);
+  if (!frames) {
+    return;
+  }
+  const graph = node.graph || app.graph;
+  for (const item of graph?.nodes || []) {
+    const ntype = item?.comfyClass || item?.type || "";
+    const lengthName = ntype === "LTXVEmptyLatentAudio" ? "length" : "length";
+    if (
+      ntype !== "LTXVImgToVideo" &&
+      ntype !== "EmptyLTXVLatentVideo" &&
+      ntype !== "LTXVEmptyLatentAudio"
+    ) {
+      continue;
+    }
+    const widget = widgetByName(item, lengthName) || item.widgets?.[2] || item.widgets?.[0];
+    if (ntype === "LTXVEmptyLatentAudio") {
+      setWidgetValue(item, item.widgets?.[0], frames);
+    } else {
+      setWidgetValue(item, item.widgets?.[2] || widget, frames);
+    }
+  }
 }
 
 /**

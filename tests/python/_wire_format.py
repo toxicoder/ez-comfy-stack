@@ -24,10 +24,14 @@ if str(CUSTOM) not in sys.path:
 
 from ez_image.formats import (  # noqa: E402
     CUSTOM_ID,
+    SIZE_MODE_CHOICES,
+    SIZE_MODE_MATCH,
     get_format,
     load_formats,
 )
 from ez_image.video_formats import (  # noqa: E402
+    DURATION_CHOICES,
+    DURATION_DEFAULT,
     FAMILY_LTX,
     FAMILY_WAN,
     get_family,
@@ -499,7 +503,14 @@ def _make_still_node(
             {"name": "context", "type": "STRING", "links": [], "slot_index": 5},
         ],
         "properties": {"Node name for S&R": STILL_FORMAT_TYPE},
-        "widgets_values": [spec.label, "none", width, height, batch],
+        "widgets_values": [
+            spec.label,
+            "none",
+            width,
+            height,
+            batch,
+            SIZE_MODE_MATCH,
+        ],
         "title": "Format / platform",
     }
 
@@ -528,9 +539,56 @@ def _make_video_node(
             {"name": "prefix", "type": "STRING", "links": [], "slot_index": 3},
         ],
         "properties": {"Node name for S&R": VIDEO_FORMAT_TYPE},
-        "widgets_values": [family_label, spec.label, width, height],
+        "widgets_values": [
+            family_label,
+            spec.label,
+            width,
+            height,
+            SIZE_MODE_MATCH,
+            DURATION_DEFAULT,
+        ],
         "title": "Format / platform",
     }
+
+
+def _values_have(values: list[Any], choices: tuple[str, ...]) -> bool:
+    """Return True when a combo value from ``choices`` is already stored."""
+    wanted = {item.casefold() for item in choices}
+    for item in values:
+        if isinstance(item, str) and item.strip().casefold() in wanted:
+            return True
+    return False
+
+
+def ensure_format_widgets(graph: dict[str, Any]) -> bool:
+    """Append Match input / Duration widgets onto existing format nodes.
+
+    Args:
+        graph: Serialized lab graph (mutated).
+
+    Returns:
+        True when any widgets_values list grew.
+    """
+    changed = False
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        values = node.get("widgets_values")
+        if not isinstance(values, list):
+            continue
+        if ntype == STILL_FORMAT_TYPE:
+            if not _values_have(values, SIZE_MODE_CHOICES):
+                values.append(SIZE_MODE_MATCH)
+                node["widgets_values"] = values
+                changed = True
+        elif ntype == VIDEO_FORMAT_TYPE:
+            if not _values_have(values, SIZE_MODE_CHOICES):
+                values.append(SIZE_MODE_MATCH)
+                changed = True
+            if not _values_have(values, DURATION_CHOICES):
+                values.append(DURATION_DEFAULT)
+                changed = True
+            node["widgets_values"] = values
+    return changed
 
 
 def wire_still_format(graph: dict[str, Any]) -> bool:
@@ -543,6 +601,7 @@ def wire_still_format(graph: dict[str, Any]) -> bool:
         True when a new format node was inserted.
     """
     if _nodes_of(graph, STILL_FORMAT_TYPE):
+        ensure_format_widgets(graph)
         ensure_format_note(graph)
         return False
     latents = _still_latents(graph)
@@ -598,6 +657,7 @@ def wire_video_format(graph: dict[str, Any]) -> bool:
         True when a new format node was inserted.
     """
     if _nodes_of(graph, VIDEO_FORMAT_TYPE):
+        ensure_format_widgets(graph)
         ensure_format_note(graph)
         return False
     latents = _video_latents(graph)
@@ -667,6 +727,7 @@ def dump_wired_graph(path: Path, graph: dict[str, Any]) -> None:
 
     apply_lab_identity(graph, rel)
     wire_lab_graph(graph)
+    ensure_format_widgets(graph)
     wire_upscale(graph, rel)
     wire_image_describe(graph)
     stamp_suite_graph(graph)

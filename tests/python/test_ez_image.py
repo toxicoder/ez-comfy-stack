@@ -27,6 +27,8 @@ from ez_image.formats import (  # noqa: E402
     LOOK_NONE,
     MAX_DIM,
     MIN_DIM,
+    SIZE_MODE_FORCE,
+    SIZE_MODE_MATCH,
     FormatSpec,
     clamp_dim,
     default_format_id,
@@ -36,6 +38,7 @@ from ez_image.formats import (  # noqa: E402
     load_formats,
     look_combo_labels,
     ltx_clip_format_id,
+    nearest_aspect_format,
     resolve_canvas,
     splice_look,
 )
@@ -73,6 +76,7 @@ from ez_image.video_formats import (  # noqa: E402
     family_format_labels,
     get_video_format,
     load_video_formats,
+    nearest_video_format,
     resolve_family,
     resolve_video_canvas,
     video_format_combo_labels,
@@ -378,6 +382,35 @@ def test_custom_snaps_1920x1080_and_unknown_falls_back() -> None:
     assert clamp_dim(17) == snap_dim(17)
 
 
+def test_match_input_snaps_portrait_and_force_keeps_format() -> None:
+    class _FakeImg:
+        def __init__(self, height: int, width: int) -> None:
+            self.shape = (1, height, width, 3)
+
+    current = get_format("16:9 draft (768×432)")
+    portrait = nearest_aspect_format(768, 1280, current)
+    assert portrait.height > portrait.width
+    img = _FakeImg(1280, 768)
+    forced = resolve_canvas(
+        "16:9 draft (768×432)",
+        size_mode=SIZE_MODE_FORCE,
+        image=img,
+    )
+    matched = resolve_canvas(
+        "16:9 draft (768×432)",
+        size_mode=SIZE_MODE_MATCH,
+        image=img,
+    )
+    assert forced.width > forced.height
+    assert matched.height >= matched.width
+    empty = resolve_canvas("16:9 draft (768×432)", size_mode=SIZE_MODE_MATCH)
+    assert empty.width == 768
+    assert empty.height == 432
+    types = EZImageFormat.INPUT_TYPES()
+    assert SIZE_MODE_MATCH in types["required"]["size_mode"][0]
+    assert "image" in types["optional"]
+
+
 def test_look_none_is_empty_and_recipe_splices_klein() -> None:
     none = resolve_canvas(default_format_label(), look=LOOK_NONE)
     assert none.context == ""
@@ -397,6 +430,7 @@ def test_ez_image_format_run_packs_ui_and_result() -> None:
     required = types["required"]
     assert required["format"][1]["default"] == default_format_label()
     assert LOOK_NONE in required["look"][0]
+    assert required["size_mode"][1]["default"] == SIZE_MODE_MATCH
     packed = EZImageFormat().run(
         "Instagram · 4:5 portrait (1024×1280)",
         look=LOOK_NONE,
@@ -415,6 +449,33 @@ def test_format_helpers_cover_remaining_branches(
     monkeypatch: pytest.MonkeyPatch,
     tmp_path: Path,
 ) -> None:
+    assert fmt.image_hw(object()) is None
+    assert fmt.image_hw(None) is None
+    assert fmt.is_match_input("") is True
+    assert fmt.is_match_input("Force format") is False
+    assert fmt.is_match_input("match_input") is True
+
+    class _BadShape:
+        shape = "nope"
+
+    class _Tiny:
+        shape = (1, 1, 1, 3)
+
+    assert fmt.image_hw(_BadShape()) is None
+    assert fmt.image_hw(_Tiny()) is None
+    empty_current = FormatSpec(
+        id="custom",
+        label="Custom",
+        group="aspect",
+        width=0,
+        height=0,
+        prefix="ez",
+        hint="",
+        lock="",
+    )
+    with monkeypatch.context() as patch:
+        patch.setattr(fmt, "load_formats", lambda: (empty_current,))
+        assert fmt.nearest_aspect_format(64, 64, empty_current) is empty_current
     assert fmt._as_str(None) == ""
     assert fmt._as_str(12) == "12"
     assert fmt._as_int(True, 4) == 4
@@ -599,6 +660,10 @@ def test_ez_video_format_run_packs_ui_and_result() -> None:
     required = types["required"]
     assert required["family"][1]["default"] == FAMILY_WAN_LABEL
     assert required["format"][1]["default"] == default_video_format_label()
+    assert required["size_mode"][1]["default"] == SIZE_MODE_MATCH
+    assert required["duration_s"][1]["default"] == "8 seconds"
+    assert vfmt.DURATION_SECONDS[vfmt.DURATION_DEFAULT] == 8.00
+    assert "image" in types["optional"]
     packed = EZVideoFormat().run(
         FAMILY_LTX_LABEL,
         "LTX · 9:16 Shorts (768×1280)",
@@ -609,6 +674,19 @@ def test_ez_video_format_run_packs_ui_and_result() -> None:
     assert packed["result"][1] == 1280
     assert packed["result"][3] == "ez_ltx_shorts"
     assert "768×1280" in packed["ui"]["text"][0]
+
+    class _Portrait:
+        shape = (1, 1280, 768, 3)
+
+    matched = EZVideoFormat().run(
+        FAMILY_WAN_LABEL,
+        default_video_format_label(),
+        size_mode=SIZE_MODE_MATCH,
+        image=_Portrait(),
+    )
+    assert matched["result"][1] >= matched["result"][0]
+    current = get_video_format(default_video_format_label(), family=FAMILY_WAN)
+    assert nearest_video_format(64, 64, current, "not-a-family") is current
 
 
 def test_video_catalog_file_errors(

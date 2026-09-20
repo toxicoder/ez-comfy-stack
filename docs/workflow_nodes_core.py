@@ -305,8 +305,9 @@ def core_nodes() -> dict[str, Any]:
             "Format / platform",
             "Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.",
             origin="ez_image",
-            lab="stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.",
+            lab="stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.",
             sockets=[
+                _s("image", "IMAGE", "in", "Optional still used when Output size is Match input."),
                 _s("width", "INT", "out", "Latent width (÷16)."),
                 _s("height", "INT", "out", "Latent height (÷16)."),
                 _s("batch", "INT", "out", "Batch size."),
@@ -320,6 +321,7 @@ def core_nodes() -> dict[str, Any]:
                 _w("width", index=2, typ="INT", rng="16–2048, step 16", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("height", index=3, typ="INT", rng="16–2048, step 16", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("batch_size", index=4, typ="INT", rng="1–4", desc="How many stills in one Run.", gen="Large canvases stay at 1."),
+                _w("size_mode", index=5, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size."),
             ],
         ),
         "EZImageMode": _n(
@@ -342,7 +344,7 @@ def core_nodes() -> dict[str, Any]:
             "Optional reference stills",
             "Optional example or reference stills. Empty is valid — Queue without a file.",
             origin="ez_image",
-            lab="Klein T2I Apps attach a present still via EZKleinRefCanvas. Filename may be empty.",
+            lab="Klein T2I Apps attach a present still via EZKleinRefCanvas. Upload or pick a file already on the drive; filename may be empty.",
             sockets=[
                 _s("image", "IMAGE", "in", "Optional first still."),
                 _s("image_2", "IMAGE", "in", "Optional second still."),
@@ -352,7 +354,7 @@ def core_nodes() -> dict[str, Any]:
                 _s("has_image", "BOOLEAN", "out", "True when at least one still is present."),
             ],
             widgets=[
-                _w("filename", index=0, desc="Optional path or App upload. Empty is valid.", gen="Leave empty to Queue a T2I. Presence is the tensor, not this string."),
+                _w("filename", index=0, typ="COMBO", rng="empty / input stills", desc="Upload or pick a still on the drive. Empty is valid.", gen="Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/."),
             ],
         ),
         "EZKleinRefCanvas": _n(
@@ -389,8 +391,9 @@ def core_nodes() -> dict[str, Any]:
             "Format / platform (video)",
             "Pick a Wan or LTX clip canvas (aspect or named platform).",
             origin="ez_image",
-            lab="Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.",
+            lab="Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Duration writes LTX length (default 8 s). Quality does not change size. Match input snaps aspect to a loaded still.",
             sockets=[
+                _s("image", "IMAGE", "in", "Optional still used when Output size is Match input."),
                 _s("width", "INT", "out", "Latent width (Wan ÷16, LTX ÷32)."),
                 _s("height", "INT", "out", "Latent height (Wan ÷16, LTX ÷32)."),
                 _s("hint", "STRING", "out", "Enhance duration / framing line."),
@@ -401,6 +404,8 @@ def core_nodes() -> dict[str, Any]:
                 _w("format", index=1, typ="COMBO", rng="16:9 YouTube / 9:16 Shorts / Custom", desc="Aspect or named platform job.", gen="Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.", choices_from="video_formats"),
                 _w("width", index=2, typ="INT", rng="16–1280", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704."),
                 _w("height", index=3, typ="INT", rng="16–1280", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
+                _w("size_mode", index=4, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Quality does not change size."),
+                _w("duration_s", index=5, typ="COMBO", rng="5 / 8 / 10 / 12 seconds", desc="LTX clip length.", gen="Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121."),
             ],
         ),
         "ImageScale": _n(

@@ -11,6 +11,8 @@ from .formats import (
     MAX_DIM,
     MIN_BATCH,
     MIN_DIM,
+    SIZE_MODE_CHOICES,
+    SIZE_MODE_MATCH,
     default_format_label,
     format_combo_labels,
     look_combo_labels,
@@ -24,6 +26,8 @@ from .upscale import (
 )
 from .video_formats import (
     DEFAULT_FAMILY,
+    DURATION_CHOICES,
+    DURATION_DEFAULT,
     FAMILY_LTX,
     default_video_format_label,
     family_combo_labels,
@@ -228,7 +232,11 @@ class EZImageFormat:
                         "step": 1,
                     },
                 ),
-            }
+                "size_mode": (list(SIZE_MODE_CHOICES), {"default": SIZE_MODE_MATCH}),
+            },
+            "optional": {
+                "image": ("IMAGE",),
+            },
         }
 
     # Comfy node contract.
@@ -240,8 +248,9 @@ class EZImageFormat:
     DESCRIPTION = (
         "Klein still canvas. Format / platform sets width, height, SaveImage "
         "prefix, and Enhance framing. Custom uses the width/height widgets "
-        "(snapped to ÷16). Look recipe splices a Cinema Rack starter into "
-        "Enhance context. Quality does not change size. Empty of lettering."
+        "(snapped to ÷16). Match input snaps aspect to a provided still. "
+        "Look recipe splices a Cinema Rack starter into Enhance context. "
+        "Quality does not change size. Empty of lettering."
     )
 
     def run(
@@ -251,6 +260,8 @@ class EZImageFormat:
         width: object = 1280,
         height: object = 704,
         batch_size: object = DEFAULT_BATCH,
+        size_mode: object = SIZE_MODE_MATCH,
+        image: object = None,
     ) -> dict[str, Any]:
         """Resolve format widgets to a Klein canvas.
 
@@ -260,6 +271,8 @@ class EZImageFormat:
             width: Custom width; ignored unless format is Custom.
             height: Custom height; ignored unless format is Custom.
             batch_size: Batch widget.
+            size_mode: Match input or Force format.
+            image: Optional still used when matching input ratio.
 
         Returns:
             Comfy output-node payload with width, height, batch, hint,
@@ -271,6 +284,8 @@ class EZImageFormat:
             height=height,
             batch=batch_size,
             look=look,
+            size_mode=size_mode,
+            image=image,
         )
         summary = f"{result.width}×{result.height} · {result.prefix} · {result.label}"
         return {
@@ -330,7 +345,12 @@ class EZVideoFormat:
                         "step": family_spec.grid,
                     },
                 ),
-            }
+                "size_mode": (list(SIZE_MODE_CHOICES), {"default": SIZE_MODE_MATCH}),
+                "duration_s": (list(DURATION_CHOICES), {"default": DURATION_DEFAULT}),
+            },
+            "optional": {
+                "image": ("IMAGE",),
+            },
         }
 
     # Comfy node contract.
@@ -342,8 +362,10 @@ class EZVideoFormat:
     DESCRIPTION = (
         "Wan / LTX clip canvas. Family picks the VAE grid (Wan ÷16, LTX ÷32). "
         "Format / platform sets width, height, and Enhance framing. Custom "
-        "uses the width/height widgets. Length stays on the latent node. "
-        "Quality does not change size."
+        "uses the width/height widgets. Match input snaps aspect to a "
+        "provided still. Duration is LTX-only (5/8/10/12 s, default 8) and "
+        "writes the latent length in the frontend. Quality does not change "
+        "size."
     )
 
     def run(
@@ -352,6 +374,9 @@ class EZVideoFormat:
         format: object,
         width: object = 832,
         height: object = 480,
+        size_mode: object = SIZE_MODE_MATCH,
+        duration_s: object = DURATION_DEFAULT,
+        image: object = None,
     ) -> dict[str, Any]:
         """Resolve family and format widgets to a clip canvas.
 
@@ -360,6 +385,9 @@ class EZVideoFormat:
             format: Format / platform combo (id or label).
             width: Custom width; ignored unless format is Custom.
             height: Custom height; ignored unless format is Custom.
+            size_mode: Match input or Force format.
+            duration_s: LTX clip length combo; Wan ignores this at Queue.
+            image: Optional still used when matching input ratio.
 
         Returns:
             Comfy output-node payload with width, height, Enhance hint,
@@ -370,8 +398,10 @@ class EZVideoFormat:
             format,
             width=width,
             height=height,
+            size_mode=size_mode,
+            image=image,
         )
-        summary = f"{result.width}×{result.height} · {result.label}"
+        summary = f"{result.width}×{result.height} · {result.label} · {duration_s}"
         return {
             "ui": {"text": (summary,)},
             "result": (

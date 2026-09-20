@@ -13,7 +13,15 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from .formats import CUSTOM_ID, CUSTOM_LABEL, _as_int, _as_str
+from .formats import (
+    CUSTOM_ID,
+    CUSTOM_LABEL,
+    SIZE_MODE_MATCH,
+    _as_int,
+    _as_str,
+    image_hw,
+    is_match_input,
+)
 
 # Catalog path, family ids/labels, default family for INPUT_TYPES.
 VIDEO_FORMATS_PATH = Path(__file__).resolve().parent / "js" / "video_formats.json"
@@ -22,6 +30,14 @@ FAMILY_LTX = "ltx"
 FAMILY_WAN_LABEL = "Wan 5B"
 FAMILY_LTX_LABEL = "LTX-2.5"
 DEFAULT_FAMILY = FAMILY_WAN
+DURATION_CHOICES = ("5 seconds", "8 seconds", "10 seconds", "12 seconds")
+DURATION_DEFAULT = "8 seconds"
+DURATION_SECONDS = {
+    "5 seconds": 5.00,
+    "8 seconds": 8.00,
+    "10 seconds": 10.00,
+    "12 seconds": 12.00,
+}
 
 
 @dataclass(frozen=True)
@@ -373,12 +389,46 @@ def _compose_hint(spec: VideoFormatSpec, width: int, height: int) -> str:
     return ". ".join(parts)
 
 
+def nearest_video_format(
+    src_w: int, src_h: int, current: VideoFormatSpec, family: str
+) -> VideoFormatSpec:
+    """Pick the family aspect row closest to the source ratio.
+
+    Args:
+        src_w: Source width.
+        src_h: Source height.
+        current: Format already resolved from the combo.
+        family: ``wan`` or ``ltx``.
+
+    Returns:
+        Nearest non-custom spec for ``family``.
+    """
+    rows = [
+        row
+        for row in load_video_formats()
+        if row.family == family and row.width > 0 and row.height > 0
+    ]
+    if not rows:
+        return current
+    src_ratio = float(src_w) / float(max(src_h, 1))
+    current_area = max(int(current.width) * int(current.height), 1)
+    ranked: list[tuple[tuple[float, float], VideoFormatSpec]] = []
+    for row in rows:
+        ratio_err = abs(float(row.width) / float(max(row.height, 1)) - src_ratio)
+        area_err = abs(row.width * row.height - current_area) / float(current_area)
+        ranked.append(((ratio_err, area_err), row))
+    ranked.sort(key=lambda item: item[0])
+    return ranked[0][1]
+
+
 def resolve_video_canvas(
     family: object,
     format_value: object,
     *,
     width: object = 0,
     height: object = 0,
+    size_mode: object = SIZE_MODE_MATCH,
+    image: object = None,
 ) -> VideoFormatResult:
     """Resolve widgets to a Queue clip canvas.
 
@@ -387,12 +437,17 @@ def resolve_video_canvas(
         format_value: Format combo (id or label).
         width: Custom width widget (used when format is Custom).
         height: Custom height widget.
+        size_mode: Match input or Force format.
+        image: Optional IMAGE tensor used when matching input ratio.
 
     Returns:
         Snapped canvas, hint, and prefix.
     """
     family_spec = get_family(family)
     spec = get_video_format(format_value, family=family_spec.id)
+    hw = image_hw(image)
+    if is_match_input(size_mode) and hw is not None:
+        spec = nearest_video_format(hw[0], hw[1], spec, family_spec.id)
     if spec.id == CUSTOM_ID:
         resolved_w = clamp_video_dim(
             _as_int(width, family_spec.custom_width),

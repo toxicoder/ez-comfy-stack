@@ -2,7 +2,7 @@
   "id": "still-to-shot",
   "revision": 7,
   "last_node_id": 21,
-  "last_link_id": 29,
+  "last_link_id": 30,
   "nodes": [
     {
       "id": 1,
@@ -132,7 +132,7 @@
           "type": "IMAGE",
           "links": [
             6,
-            29
+            30
           ],
           "slot_index": 0
         },
@@ -829,7 +829,9 @@
         "Wan 5B",
         "Wan \u00b7 16:9 YouTube (832\u00d7480)",
         832,
-        480
+        480,
+        "Match input",
+        "8 seconds"
       ],
       "title": "Format / platform"
     },
@@ -859,7 +861,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 29
+          "link": 30
         }
       ],
       "outputs": [
@@ -1059,7 +1061,7 @@
       "STRING"
     ],
     [
-      29,
+      30,
       4,
       0,
       21,
@@ -1144,6 +1146,22 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          20,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          20,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

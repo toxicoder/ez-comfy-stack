@@ -68,7 +68,7 @@ Klein sentence order is cinematic grammar, not widget order: shot size → angle
 | `wan_i2v` | Camera + time/optical/edit only. Subject ignored. Start image owns look. |
 | `ltx_t2v` / `ltx_i2v` | Present-tense clauses. Weather/optical `audio` interleaved. I2V still drops look axes. |
 
-Style dropdown on the Enhance nodes stays **none** so `apply_style_to_prompt` does not strip cinema grade language. Use the 150 style presets when you want a medium (anime, watercolor); use Cinema Rack when you want camera/light/time.
+Style dropdown on the Enhance nodes stays **none** so `apply_style_to_prompt` does not strip cinema grade language. Use the 300 style presets when you want a medium (anime, watercolor); use Cinema Rack when you want camera/light/time.
 
 Lazy Prompt Enhance (Klein / Wan / LTX and the other visual families) now **writes** this same catalog language: named shot sizes, lighting patterns, millimetre-equivalent lenses, recipe packages adapted to the user's inventory, and exactly one Wan token. The rack remains the deterministic dropdown splice; Enhance is the 4B rewriter that should sound like the rack.
 

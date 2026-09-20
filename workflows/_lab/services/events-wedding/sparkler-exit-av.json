@@ -2,7 +2,7 @@
   "id": "sparkler-exit-av",
   "revision": 1,
   "last_node_id": 24,
-  "last_link_id": 40,
+  "last_link_id": 41,
   "nodes": [
     {
       "id": 1,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            40
+            41
           ],
           "slot_index": 0
         },
@@ -990,7 +990,9 @@
         "LTX-2.5",
         "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
         1280,
-        704
+        704,
+        "Match input",
+        "8 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1020,7 +1022,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 40
+          "link": 41
         }
       ],
       "outputs": [
@@ -1284,7 +1286,7 @@
       "STRING"
     ],
     [
-      40,
+      41,
       4,
       0,
       24,
@@ -1350,6 +1352,22 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          23,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          23,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [
