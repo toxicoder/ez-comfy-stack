@@ -115,7 +115,7 @@ def trellis_nodes() -> dict[str, Any]:
         "MeshToFile3D": _n(
             "Mesh to File 3D",
             "Write a GLB/mesh file.",
-            lab="optional/klein/trellis2 may leave the path empty (Comfy default). dcc/trellis/still-to-mesh writes assets/objects/_lab-mug/mesh.",
+            lab="optional/trellis2 may leave the path empty (Comfy default). dcc/still-to-mesh writes assets/objects/_lab-mug/mesh.",
             origin="comfy-extras",
             sockets=[
                 _s("mesh", "MESH", "in", "Painted mesh."),
