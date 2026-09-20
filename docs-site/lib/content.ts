@@ -1,15 +1,13 @@
 /**
- * Content source for the documentation site.
+ * Frontmatter schemas for authored and generated documentation pages.
  *
- * Point the Fumadocs MDX source at the repository's existing `docs/` tree so the shell,
- * workflow, cinema, and audio generators keep writing into `docs/generated/**` and
- * contributors keep editing markdown where they always have. Nothing is copied into this
- * package.
+ * The Fumadocs collection itself lives in `source.config.ts` (`dynamic: true`) so webpack
+ * does not compile every markdown file during `next build`. These schemas stay here so
+ * `source.config.ts` can import them without duplicating Zod shapes.
  */
 
 import { z } from "zod";
-import { defineDocs } from "fumadocs-mdx/macro";
-import { metaSchema, pageSchema } from "fumadocs-core/source/schema";
+import { pageSchema } from "fumadocs-core/source/schema";
 
 /**
  * Frontmatter of a hand-written page.
@@ -30,30 +28,4 @@ export const docSchema = pageSchema.extend({
 export const generatedSchema = pageSchema.extend({
   title: z.string().optional(),
   tags: z.union([z.string(), z.array(z.string())]).optional()
-});
-
-/**
- * Mirrors files that are not pages: Material JS/CSS, Python, Bazel, and the includes
- * tree (command-builder + glossary JSON live at repo `includes/`, not under `docs/`).
- *
- * Both extensions are listed: pages that needed MkDocs syntax rewritten to JSX were renamed
- * to `.mdx` by `scripts/codemod_mkdocs_to_mdx.py` (the MDX compiler drops literal JSX in
- * `.md`), while the rest of the corpus — including everything under `generated/` — stays `.md`.
- *
- * The list has to stay inline string literals: the bundler macro reads it statically to
- * decide which files to bundle, and rejects anything computed.
- */
-export const docs = defineDocs({
-  dir: "../docs",
-  docs: {
-    files: ["**/*.md", "**/*.mdx", "!javascripts/**", "!stylesheets/**", "!**/*.json"],
-    schema({ path }) {
-      return /(^|\/)generated(\/|$)/.test(path.replace(/\\/g, "/")) ? generatedSchema : docSchema;
-    }
-  },
-  meta: {
-    // Generator manifests are JSON but not Fumadocs folder meta.json files.
-    files: [],
-    schema: metaSchema
-  }
 });

@@ -12,7 +12,7 @@ tags: [testing, coverage, fumadocs, contributing]
 - **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
 - **Shell function inventory** (invoked by a test, not only named)
 - **`deploy-docs.yml`** — `main` → `latest`, `development` → `development` (one Next export per run)
-- **`bazelisk run //docs:docs`** — generators then Fumadocs `next build --webpack` into `docs-site/out/`
+- **`bazelisk run //docs:docs`** — generators then Fumadocs `next build --webpack` into `docs-site/out/` (MDX compiles on demand; webpack does not bundle the ~850-page corpus)
 
 **What this enables**
 

@@ -4,6 +4,9 @@
  * The pages stay where they always were — in `docs/`, written by contributors and by the
  * shell and dashboard generators — and are read straight from there.  Nothing is copied
  * into this package, so `bazelisk run //docs:docs` style generators keep working unchanged.
+ *
+ * The collection is the generated `.source/dynamic` entry (`dynamic: true` in
+ * `source.config.ts`) so webpack does not compile every markdown file up front.
  */
 
 import { loader, PathUtils } from "fumadocs-core/source";
@@ -11,8 +14,9 @@ import { createFromSource } from "fumadocs-core/search/server";
 import type { AdvancedIndex } from "fumadocs-core/search/server";
 import type { Page } from "fumadocs-core/source";
 
+import { docs } from "../.source/dynamic";
+
 import { resolveHrefWith, withoutExtension } from "./href";
-import { docs } from "./content";
 import { slimSearchStructuredData } from "./search-index";
 
 /**
