@@ -38,7 +38,7 @@ This extends `ez_film`. It does **not** replace the 5.00s printer or the sidecar
 ./scripts/manage.sh occupancy enter blender-desk
 ./scripts/manage.sh export-guides --engine blender --film go-see --shot 12 --blend /path/to/shot.blend --print ltx-iclora-depth
 ./scripts/manage.sh occupancy enter klein --yes
-# Queue workflows/_lab/dcc/klein/clay-hero.json on first.png
+# Queue workflows/_lab/dcc/clay-hero.json on first.png
 ./scripts/manage.sh overlay-qc --film go-see --shot 12 --look /path/to/ez_clay_hero.png
 # After download-ltx --tier iclora: Templates → LTX-2.5 Union Control, depth from depth.mp4
 # Stop LTX. Stem mix (occupancy audio):
@@ -100,16 +100,16 @@ Clay is Workbench. **Beauty MP4 is Path A only** (engine-final ingest in a later
 | Graph | Occupancy | Notes |
 | --- | --- | --- |
 | **inspire/beat-sheet** | none | Script desk. Logline, audio policy, 18 cards. `shot-sheet` writes YAML. |
-| **dcc/klein/clay-hero** | klein | Edit `first.png`, Enhance **on**, seed **42**, 1280×704. Overlay-qc after Queue. |
-| **dcc/klein/clay-plates** | klein | One clay still → hero / packshot / IG / shorts. Ctrl+B unused groups. |
-| **dcc/klein/canny-hero** | klein | Edit `canny.png`, 1280×704, prefix `ez_canny_hero`. |
-| **dcc/ltx/depth-control-5s** | ltx | Envelope. Templates → LTX-2.5 Union Control. Depth default. Distilled-only. Refuse 19B. MagCache off. |
-| **dcc/ltx/canny-control-5s** | ltx | Same envelope; wire `canny.mp4`. |
-| **dcc/ltx/depth-control-shorts** | ltx | Same envelope at **768×1280**. Dump with `--width 768 --height 1280`. |
-| **dcc/wan/first-last-from-guide** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
-| **dcc/klein/guide-still** | klein | In-canvas `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. Stay on `:8188`. |
-| **dcc/ltx/depth-from-loader** | ltx | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
-| **dcc/trellis/still-to-mesh** | trellis | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. |
+| **dcc/clay-hero** | klein | Edit `first.png`, Enhance **on**, seed **42**, 1280×704. Overlay-qc after Queue. |
+| **dcc/clay-plates** | klein | One clay still → hero / packshot / IG / shorts. Ctrl+B unused groups. |
+| **dcc/canny-hero** | klein | Edit `canny.png`, 1280×704, prefix `ez_canny_hero`. |
+| **dcc/depth-control-5s** | ltx | Envelope. Templates → LTX-2.5 Union Control. Depth default. Distilled-only. Refuse 19B. MagCache off. |
+| **dcc/canny-control-5s** | ltx | Same envelope; wire `canny.mp4`. |
+| **dcc/depth-control-shorts** | ltx | Same envelope at **768×1280**. Dump with `--width 768 --height 1280`. |
+| **dcc/first-last-from-guide** | wan | Fun InP `first.png` + `last.png`. Opt-in `download-wan --tier fun-inp`. MagCache off. |
+| **dcc/guide-still** | klein | In-canvas `EZDCCLoadGuideStill` + occupancy gate. Prefix `ez_guide_hero`. Stay on `:8188`. |
+| **dcc/depth-from-loader** | ltx | Envelope from loaders + `depth.mp4` path. MagCache off. Distilled-only. Prefix `ez_iclora_guide`. |
+| **dcc/still-to-mesh** | trellis | Still pack `plate=mug` → native TRELLIS.2 INT8. Output `assets/objects/_lab-mug/`. |
 | **audio/stem-mix** | audio | Stem mix desk. Host `stem-mix.sh`. ACE-Step group stays off. |
 
 Print modes `wan-vace`, `wan-denk-cn`, and `dcc-final` stay valid on `shot.yaml` but are **not** lab printers in this suite (VACE stays 17-frame join; Fun Control / Path A beauty are later).
@@ -132,7 +132,7 @@ Godot is a first-class blocking engine in a later PR, not a second Blender. Open
 
 ## Instagram clay stills (not this pack)
 
-`house-views` is a **different** contract: ten 1024×1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **klein/dream-house-clay**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280×704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
+`house-views` is a **different** contract: ten 1024×1280 Workbench stills + greybox GLB under `assets/sets/<slug>/`, then **stills/dream-house-clay**. Do not dump Instagram 4:5 into `guides/` or reuse `ez.guide.shot.v1` (that QC is 1280×704 / 120 frames). Playbook: [Dream-house tours](learn/dream-house.md).
 
 ```bash
 ./scripts/manage.sh occupancy enter blender-desk

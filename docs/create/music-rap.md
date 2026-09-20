@@ -35,7 +35,7 @@ Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same rol
 | DURATION | App **Duration (seconds)** (primitive **32** s) → `EmptyAceStep1.5LatentAudio` | — |
 | PROMPT | App **Tags**, **Lyrics**, **Rewrite prompt**, **Vocal / instrumental**. `EZAceStepPromptEnhance` enhance **off** so tags, BPM, and `[verse]`/`[chorus]` stay as written. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_prompt` |
 | OUTPUT | `VAEDecodeAudio` → FLAC + 320 kbps MP3 | `ez_rap_draft` |
-| COVER | Queue **klein/thumbnail** or **klein/podcast-cover** separately | `ez_thumbnail` / `ez_podcast` |
+| COVER | Queue **stills/thumbnail** or **stills/podcast-cover** separately | `ez_thumbnail` / `ez_podcast` |
 
 Default tags (both graphs):
 

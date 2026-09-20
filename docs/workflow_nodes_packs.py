@@ -317,7 +317,7 @@ def pack_nodes() -> dict[str, Any]:
         widgets=[
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Sample brief or Custom.", gen="Custom uses the Brief box."),
             _w("prompt", index=1, desc="Brief.", gen="What the new App should make. Template auto picks a lab graph."),
-            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin klein/instagram-square to skip."),
+            _w("template", index=2, typ="COMBO", rng="auto", desc="Lab graph to clone.", gen="auto uses the GGUF planner or a keyword heuristic. Pin stills/instagram-square to skip."),
             _w("slug", index=3, desc="Filename stem.", gen="Live _user/<slug>.app.json. Lowercase letters, digits, hyphen."),
             _w("as_app", index=4, typ="BOOLEAN", rng="true", desc="Write an App.", gen="true writes *.app.json for the Apps sidebar."),
             _w("overwrite", index=5, typ="BOOLEAN", rng="false", desc="Replace existing.", gen="false refuses an existing _user file."),

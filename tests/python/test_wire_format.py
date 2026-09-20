@@ -47,28 +47,28 @@ def _src(graph: dict[str, Any], node: dict[str, Any], name: str) -> dict[str, An
 
 
 def test_format_scope_covers_printers_and_skips_locked() -> None:
-    assert format_kind("klein/still-draft") == "still"
-    assert format_kind("klein/still-studio") == "still"
-    assert format_kind("klein/image-studio") == "still"
-    assert format_kind("wan/still-to-video-5s") == "video"
-    assert format_kind("ltx/text-to-video-5s") == "video"
-    assert format_kind("klein/creator/youtube-channel-icon") == "still"
-    assert format_kind("wan/creator/tiktok-hook") == "video"
-    assert format_kind("klein/text-swap") is None
-    assert format_kind("klein/platform-pack") is None
-    assert format_kind("shorts/go-see") is None
-    assert format_kind("ltx/audio-to-video-5s") is None
-    assert "klein/still-draft" in STILL_SCOPE
-    assert "wan/gif-loop" in VIDEO_SCOPE
+    assert format_kind("stills/still-draft") == "still"
+    assert format_kind("stills/still-studio") == "still"
+    assert format_kind("stills/image-studio") == "still"
+    assert format_kind("motion/silent/still-to-video-5s") == "video"
+    assert format_kind("motion/av/text-to-video-5s") == "video"
+    assert format_kind("creator/stills/youtube-channel-icon") == "still"
+    assert format_kind("creator/silent/tiktok-hook") == "video"
+    assert format_kind("stills/text-swap") is None
+    assert format_kind("stills/platform-pack") is None
+    assert format_kind("films/go-see") is None
+    assert format_kind("motion/av/audio-to-video-5s") is None
+    assert "stills/still-draft" in STILL_SCOPE
+    assert "motion/loops/gif-loop" in VIDEO_SCOPE
     assert FORMAT_SCOPE == STILL_SCOPE | VIDEO_SCOPE
 
 
 def test_pick_still_and_video_defaults() -> None:
-    draft = pick_still_format("klein/still-draft", 768, 432, "ez_still_draft")
+    draft = pick_still_format("stills/still-draft", 768, 432, "ez_still_draft")
     assert draft.id == "aspect_16_9_draft"
-    thumb = pick_still_format("klein/creator/youtube-channel-icon", 768, 768, "ez_yt_icon")
+    thumb = pick_still_format("creator/stills/youtube-channel-icon", 768, 768, "ez_yt_icon")
     assert thumb.id == "youtube_channel_icon"
-    custom = pick_still_format("klein/style-lock", 768, 960, "ez_style_lock")
+    custom = pick_still_format("stills/style-lock", 768, 960, "ez_style_lock")
     assert custom.id == "custom"
     wan = pick_video_format("wan", 832, 480)
     assert wan.id == "wan_16_9"
@@ -104,7 +104,7 @@ def _strip_format(graph: dict[str, Any], ntype: str) -> None:
 
 
 def test_wire_still_draft_links_latent_and_hint() -> None:
-    graph = copy.deepcopy(_load("klein/still-draft"))
+    graph = copy.deepcopy(_load("stills/still-draft"))
     assert wire_still_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZImageFormat")
     latent = next(
@@ -125,7 +125,7 @@ def test_wire_still_draft_links_latent_and_hint() -> None:
 
 
 def test_wire_video_links_wan_latent() -> None:
-    graph = copy.deepcopy(_load("wan/still-to-video-5s"))
+    graph = copy.deepcopy(_load("motion/silent/still-to-video-5s"))
     assert wire_video_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZVideoFormat")
     latent = next(
@@ -144,15 +144,15 @@ def test_wire_video_links_wan_latent() -> None:
 
 
 def test_wire_skips_out_of_scope_and_mixed_pack() -> None:
-    swap = copy.deepcopy(_load("klein/text-swap"))
+    swap = copy.deepcopy(_load("stills/text-swap"))
     assert wire_lab_graph(swap) is False
-    pack = copy.deepcopy(_load("klein/platform-pack"))
+    pack = copy.deepcopy(_load("stills/platform-pack"))
     assert wire_lab_graph(pack) is False
     assert not any(node.get("type") == "EZImageFormat" for node in pack["nodes"])
 
 
 def test_gif_loop_skips_hint_link() -> None:
-    graph = copy.deepcopy(_load("wan/gif-loop"))
+    graph = copy.deepcopy(_load("motion/loops/gif-loop"))
     assert wire_video_format(graph) is False
     fmt = next(node for node in graph["nodes"] if node.get("type") == "EZVideoFormat")
     enh = next(

@@ -1834,7 +1834,7 @@ Probe independent Comfy workers on multiple Sparks (no NCCL, no H3 farm).
 Purpose:
   status: SSH each SPARK_HOSTS entry (docker ps, disk, nvidia-smi, fabric ping).
   sync-models: rsync MODELS_DIR/comfy over SPARK_FABRIC_IPS only (not mgmt NIC).
-  run: refuses MiniMax H3 names; operators Queue wan/still-to-shot / ltx/still-to-shot
+  run: refuses MiniMax H3 names; operators Queue motion/silent/still-to-shot / motion/av/still-to-shot
   graphs per host, then concat-shots.sh locally.
   Never starts compose on a remote node — prints the local manage.sh start.
 

@@ -26,15 +26,15 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[wan/still-to-video-5s](../generated/workflows/wan/still-to-video-5s.md)** | Silent I2V smoke. Default 832×480; **Format / platform** (YouTube 16:9 / Shorts 9:16 / Custom). **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
-| **[wan/first-last-5s](../generated/workflows/wan/first-last-5s.md)** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
-| **[wan/vace-join](../generated/workflows/wan/vace-join.md)** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
-| **[optional/wan/still-to-video-a14b](../generated/workflows/optional/wan/still-to-video-a14b.md)** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `_lab/optional/` |
-| **[optional/klein/trellis2](../generated/workflows/optional/klein/trellis2.md)** | Klein still → native TRELLIS.2 INT8 mesh (512). `download-3d --tier trellis2`. `occupancy enter trellis`. Under `_lab/optional/` |
+| **[motion/silent/still-to-video-5s](../generated/workflows/motion/silent/still-to-video-5s.md)** | Silent I2V smoke. Default 832×480; **Format / platform** (YouTube 16:9 / Shorts 9:16 / Custom). **121** frames @ 24 fps. MagCache **draft-only** (`extra.lab_magcache`) |
+| **[motion/silent/first-last-5s](../generated/workflows/motion/silent/first-last-5s.md)** | Fun InP first-last-frame 5 s (opt-in `download-wan --tier fun-inp`). MagCache off |
+| **[motion/silent/vace-join](../generated/workflows/motion/silent/vace-join.md)** | Wan 2.1 VACE 1.3B 17-frame join (`1+8n`). Opt-in `download-wan --tier vace`. MagCache off |
+| **[optional/still-to-video-a14b](../generated/workflows/optional/still-to-video-a14b.md)** | Optional A14B FP8: high+low UNET on canvas, Queue on high-noise 8-step (`download-wan --tier a14b`). MagCache off. Unload 5B first. Under `_lab/optional/` |
+| **[optional/trellis2](../generated/workflows/optional/trellis2.md)** | Klein still → native TRELLIS.2 INT8 mesh (512). `download-3d --tier trellis2`. `occupancy enter trellis`. Under `_lab/optional/` |
 | **[optional/longcat-video](../generated/workflows/optional/longcat-video.md)** | LongCat-Video MIT stub (note, not a 90s default). `download-longcat --tier video`. No NCCL. Under `_lab/optional/` |
-| **[wan/text-to-video-5s](../generated/workflows/wan/text-to-video-5s.md)** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
-| **[wan/still-to-shot](../generated/workflows/wan/still-to-shot.md)** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
-| **[wan/gif-loop](../generated/workflows/wan/gif-loop.md)** | Wan 5B I2V GIF (49 frames @ 12 fps, ping-pong). Prefix `ez_gif_loop`. Occupancy **wan** |
+| **[motion/silent/text-to-video-5s](../generated/workflows/motion/silent/text-to-video-5s.md)** | Silent T2V smoke, 121 frames (LoadImage bypassed) |
+| **[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)** | Concat-safe **120** frames + last-frame SaveImage. 90s shots, or prefix `ez_shot_01..06` |
+| **[motion/loops/gif-loop](../generated/workflows/motion/loops/gif-loop.md)** | Wan 5B I2V GIF (49 frames @ 12 fps, ping-pong). Prefix `ez_gif_loop`. Occupancy **wan** |
 
 ---
 
@@ -42,8 +42,8 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[ltx/still-to-video-5s](../generated/workflows/ltx/still-to-video-5s.md)** | ~5 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
-| **[ltx/text-to-video-5s](../generated/workflows/ltx/text-to-video-5s.md)** | ~5 s T2V AV. Default **1280×704**; same Format / platform combo |
+| **[motion/av/still-to-video-5s](../generated/workflows/motion/av/still-to-video-5s.md)** | ~5 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
+| **[motion/av/text-to-video-5s](../generated/workflows/motion/av/text-to-video-5s.md)** | ~5 s T2V AV. Default **1280×704**; same Format / platform combo |
 
 ---
 
@@ -53,11 +53,11 @@ Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 5.00 s / 121 /
 
 | Workflow | What it does |
 | --- | --- |
-| **[ltx/dialogue-5s](../generated/workflows/ltx/dialogue-5s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
-| **[ltx/multishot-5s](../generated/workflows/ltx/multishot-5s.md)** | Native multishot T2V: named hard cut + match cut in one 5 s clip. Prefix `ez_ltx_multishot` |
-| **[ltx/product-hero](../generated/workflows/ltx/product-hero.md)** | I2V from **[klein/product-packshot](../generated/workflows/klein/product-packshot.md)** (`ez_packshot_*.png`). Slow orbit + table SFX. Prefix `ez_ltx_product` |
-| **[ltx/first-last-5s](../generated/workflows/ltx/first-last-5s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
-| **[ltx/audio-to-video-5s](../generated/workflows/ltx/audio-to-video-5s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
+| **[motion/av/dialogue-5s](../generated/workflows/motion/av/dialogue-5s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
+| **[motion/av/multishot-5s](../generated/workflows/motion/av/multishot-5s.md)** | Native multishot T2V: named hard cut + match cut in one 5 s clip. Prefix `ez_ltx_multishot` |
+| **[motion/av/product-hero](../generated/workflows/motion/av/product-hero.md)** | I2V from **[stills/product-packshot](../generated/workflows/stills/product-packshot.md)** (`ez_packshot_*.png`). Slow orbit + table SFX. Prefix `ez_ltx_product` |
+| **[motion/av/first-last-5s](../generated/workflows/motion/av/first-last-5s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
+| **[motion/av/audio-to-video-5s](../generated/workflows/motion/av/audio-to-video-5s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
 
 !!! warning "LTX width/height must be divisible by 32"
 
@@ -71,21 +71,21 @@ Pack 1 motion / AV (stills companions: [Stills catalog](workflows-stills.md)):
 
 | Workflow | What it does |
 | --- | --- |
-| **[wan/shorts-still-5s](../generated/workflows/wan/shorts-still-5s.md)** | Vertical silent I2V from that still |
-| **[ltx/shorts-still-5s](../generated/workflows/ltx/shorts-still-5s.md)** | Vertical AV I2V (~5 s) with world audio |
-| **[wan/bumper-loop](../generated/workflows/wan/bumper-loop.md)** | Loopable MP4 bumper (ping-pong) |
-| **[ltx/broll-ambient](../generated/workflows/ltx/broll-ambient.md)** | Ambient B-roll AV plate (~5 s) |
+| **[motion/silent/shorts-still-5s](../generated/workflows/motion/silent/shorts-still-5s.md)** | Vertical silent I2V from that still |
+| **[motion/av/shorts-still-5s](../generated/workflows/motion/av/shorts-still-5s.md)** | Vertical AV I2V (~5 s) with world audio |
+| **[motion/loops/bumper-loop](../generated/workflows/motion/loops/bumper-loop.md)** | Loopable MP4 bumper (ping-pong) |
+| **[motion/av/broll-ambient](../generated/workflows/motion/av/broll-ambient.md)** | Ambient B-roll AV plate (~5 s) |
 
 Pack 2 — motion / AV:
 
 | Workflow | What it does |
 | --- | --- |
-| **[wan/orbit-still-5s](../generated/workflows/wan/orbit-still-5s.md)** | Slow orbit I2V ~5 s |
-| **[wan/push-in-still-5s](../generated/workflows/wan/push-in-still-5s.md)** | Hero push-in I2V ~5 s |
-| **[wan/parallax-still-5s](../generated/workflows/wan/parallax-still-5s.md)** | Subtle parallax I2V ~5 s |
-| **[wan/sticker-loop](../generated/workflows/wan/sticker-loop.md)** | Looping sticker MP4 |
-| **[ltx/weather-broll](../generated/workflows/ltx/weather-broll.md)** | Rain / wind B-roll AV |
-| **[ltx/interior-ambience](../generated/workflows/ltx/interior-ambience.md)** | Interior room-tone AV |
-| **[ltx/hook-av](../generated/workflows/ltx/hook-av.md)** | ~5 s AV cold open |
+| **[motion/silent/orbit-still-5s](../generated/workflows/motion/silent/orbit-still-5s.md)** | Slow orbit I2V ~5 s |
+| **[motion/silent/push-in-still-5s](../generated/workflows/motion/silent/push-in-still-5s.md)** | Hero push-in I2V ~5 s |
+| **[motion/silent/parallax-still-5s](../generated/workflows/motion/silent/parallax-still-5s.md)** | Subtle parallax I2V ~5 s |
+| **[motion/loops/sticker-loop](../generated/workflows/motion/loops/sticker-loop.md)** | Looping sticker MP4 |
+| **[motion/av/weather-broll](../generated/workflows/motion/av/weather-broll.md)** | Rain / wind B-roll AV |
+| **[motion/av/interior-ambience](../generated/workflows/motion/av/interior-ambience.md)** | Interior room-tone AV |
+| **[motion/av/hook-av](../generated/workflows/motion/av/hook-av.md)** | ~5 s AV cold open |
 
-90s shot printers (**[wan/still-to-shot](../generated/workflows/wan/still-to-shot.md)**, **[ltx/still-to-shot](../generated/workflows/ltx/still-to-shot.md)**) live with the films: [Film catalog](workflows-film.md).
+90s shot printers (**[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)**, **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)**) live with the films: [Film catalog](workflows-film.md).

@@ -37,7 +37,7 @@ US-safe learning episode (Option C). Sequential Queue — do not load Klein + Wa
 4. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck −15 dB.
 6. Saves: `ez_learn_ep` FLAC master + `ez_learn_mix` 320 kbps MP3.
-7. Cover separately: Queue **klein/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
+7. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
 8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
 
 25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.
@@ -1001,7 +1001,7 @@ US-safe learning episode (Option C). Sequential Queue — do not load Klein + Wa
 4. Disclosure is prepended by the node (do not type it): Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 5. Kokoro-82M built-in voices (Apache). ACE-Step 1.5 native bed: 30 s instrumental, looped under the speech, duck −15 dB.
 6. Saves: `ez_learn_ep` FLAC master + `ez_learn_mix` 320 kbps MP3.
-7. Cover separately: Queue **klein/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
+7. Cover separately: Queue **stills/podcast-cover.json** (prefix `ez_podcast`, 1024²). Do not embed Klein here.
 8. Loudness: `./scripts/utilities/podcast-loudnorm.sh run --in FILE` (−16 LUFS podcast / `--youtube` −14). Comfy cannot loudnorm.
 
 25 min seminar is the slow CPU-TTS path. Weights: `./scripts/manage.sh download-podcast --tier analog` then `--tier acestep`.

@@ -25,9 +25,9 @@ BANNED_STEM = re.compile(
 def test_rel_renames_are_unique_short_and_stable() -> None:
     """Every alias is unique, under the stem cap, and idempotent via rel_id."""
     assert REL_RENAMES
-    news = list(REL_RENAMES.values())
-    assert len(news) == len(set(news))
     assert len(set(REL_RENAMES)) == len(REL_RENAMES)
+    # Folder moves are many-to-one (cryptic + previous path → job folder).
+    assert len(set(REL_RENAMES.values())) <= len(REL_RENAMES)
     stems = stem_renames()
     assert stems
     for old, new in REL_RENAMES.items():
@@ -43,14 +43,15 @@ def test_rel_renames_are_unique_short_and_stable() -> None:
 
 def test_rel_id_maps_legacy_example_stems() -> None:
     """*-lab-example stems land on the descriptive rel, not the cryptic hop."""
-    assert rel_id("wan-i2v-5s-lab-example") == "wan/still-to-video-5s"
-    assert rel_id("ltx-i2v-5s-lab-example") == "ltx/still-to-video-5s"
-    assert rel_id("klein-ig-square-lab-example") == "klein/instagram-square"
-    assert rel_id("klein-from-clay-lab-example") == "dcc/klein/clay-hero"
+    assert rel_id("wan-i2v-5s-lab-example") == "motion/silent/still-to-video-5s"
+    assert rel_id("ltx-i2v-5s-lab-example") == "motion/av/still-to-video-5s"
+    assert rel_id("klein-ig-square-lab-example") == "stills/instagram-square"
+    assert rel_id("klein-from-clay-lab-example") == "dcc/clay-hero"
     assert rel_id("dub-localize-lab-example") == "audio/dub/clone-translate"
     assert rel_id("audio-finish-lab-example") == "audio/stem-mix"
     assert rel_id("podcast-audio-first-lab-example") == "audio/podcast/two-host-episode"
-    assert rel_id("klein/still-draft") == "klein/still-draft"
+    assert rel_id("klein/still-draft") == "stills/still-draft"
+    assert rel_id("stills/still-draft") == "stills/still-draft"
 
 
 def test_rewrite_skips_subgraph_and_print_mode_hyphens() -> None:
@@ -62,8 +63,8 @@ def test_rewrite_skips_subgraph_and_print_mode_hyphens() -> None:
     out = rewrite_lab_names(blob)
     assert "wan-i2v-5s" in out
     assert "klein-from-clay" in out
-    assert "wan/still-to-video-5s" in out
-    assert "dcc/klein/clay-hero" in out
+    assert "motion/silent/still-to-video-5s" in out
+    assert "dcc/clay-hero" in out
     assert "wan/i2v-5s" not in out
     assert "dcc/klein/from-clay" not in out
     prose = "Clay to finish. Cache hits still finish in 0s. matte finish."

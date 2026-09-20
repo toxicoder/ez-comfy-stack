@@ -22,7 +22,7 @@ teardown() {
   run promote_usage
   [ "${status}" -eq 0 ]
   [[ "${output}" == *"Usage:"* ]]
-  run promote_lane_ok klein
+  run promote_lane_ok stills
   [ "${status}" -eq 0 ]
   run promote_lane_ok nope
   [ "${status}" -ne 0 ]
@@ -40,16 +40,16 @@ teardown() {
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/bad.json"
   printf '%s\n' '{"id":"x","note":"MiniMax"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane klein --id my-hook
+  run bash "${sh}" --from "${src}" --lane stills --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"MiniMax"* ]]
   printf '%s\n' '{"id":"ok"}' >"${src}"
-  run bash "${sh}" --from "${src}" --lane klein --id '..'
+  run bash "${sh}" --from "${src}" --lane stills --id '..'
   [ "${status}" -ne 0 ]
   run bash "${sh}" --from "${src}" --lane nope --id my-hook
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"unknown lane"* ]]
-  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane klein --id my-hook
+  run bash "${sh}" --from "${TEST_TMP_DIR}/missing.json" --lane stills --id my-hook
   [ "${status}" -ne 0 ]
   run bash "${sh}" --help
   [ "${status}" -ne 0 ]
@@ -74,8 +74,8 @@ teardown() {
   sh="${REPO_ROOT}/scripts/utilities/promote-workflow.sh"
   src="${TEST_TMP_DIR}/keep-me.json"
   printf '%s\n' '{"id":"my-hook","nodes":[]}' >"${src}"
-  dest="${REPO_ROOT}/workflows/_lab/klein/my-hook.json"
-  run bash "${sh}" --from "${src}" --lane klein --id my-hook
+  dest="${REPO_ROOT}/workflows/_lab/stills/my-hook.json"
+  run bash "${sh}" --from "${src}" --lane stills --id my-hook
   [ "${status}" -eq 0 ]
   [[ -f ${dest} ]]
   grep -F 'my-hook' "${dest}"
@@ -86,8 +86,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ -f ${dest} ]]
   rm -rf "${REPO_ROOT}/workflows/_lab/audio/albums/demo"
-  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/klein/still-draft.json" \
-    --lane klein --id cloned
+  run bash "${sh}" --from "${REPO_ROOT}/workflows/_lab/stills/still-draft.json" \
+    --lane stills --id cloned
   [ "${status}" -ne 0 ]
   [[ "${output}" == *"never copy _lab"* ]]
 }

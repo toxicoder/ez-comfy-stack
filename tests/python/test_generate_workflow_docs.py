@@ -65,14 +65,14 @@ def _mini_graph() -> dict[str, Any]:
                 "type": "Note",
                 "title": "Operator note",
                 "pos": [40, 400],
-                "widgets_values": ["## klein/still-draft\n\nOccupancy: klein.\n"],
+                "widgets_values": ["## stills/still-draft\n\nOccupancy: klein.\n"],
                 "inputs": [],
                 "outputs": [],
             },
         ],
         "groups": [],
         "extra": {
-            "lab_rel": "klein/still-draft",
+            "lab_rel": "stills/still-draft",
             "lab_description": "Draft still",
             "lab_app_mode": {"occupancy": "klein"},
         },
@@ -149,7 +149,7 @@ def test_render_graph_page_chrome_and_params() -> None:
     from workflow_nodes import ACE_KEYSCALE_CHOICES, ACE_LANGUAGE_CHOICES, encyclopedia
 
     page = gen.render_graph_page(
-        "klein/still-draft",
+        "stills/still-draft",
         _mini_graph(),
         encyclopedia(),
         styles={},
@@ -157,7 +157,7 @@ def test_render_graph_page_chrome_and_params() -> None:
         ace_keyscale=ACE_KEYSCALE_CHOICES,
     )
     assert page.startswith("---\n")
-    assert "# klein/still-draft\n" in page
+    assert "# stills/still-draft\n" in page
     assert "**What's on this page**" in page
     assert "**What this enables**" in page
     assert "## Node parameter reference" in page
@@ -186,7 +186,7 @@ def test_inject_nav_nests_workflow_details() -> None:
         nav,
         [
             {"id": "index", "path": "generated/workflows/index.md", "lane": "index", "kind": "index"},
-            {"id": "klein/still-draft", "path": "generated/workflows/klein/still-draft.md", "lane": "klein", "kind": "graph"},
+            {"id": "stills/still-draft", "path": "generated/workflows/stills/still-draft.md", "lane": "klein", "kind": "graph"},
         ],
     )
     create = out[1]["Create"]
@@ -194,7 +194,7 @@ def test_inject_nav_nests_workflow_details() -> None:
     children = details["Workflow details"]
     assert any("Overview" in item for item in children if isinstance(item, dict))
     klein = next(item for item in children if isinstance(item, dict) and "klein" in item)
-    assert klein["klein"][0]["still-draft"] == "generated/workflows/klein/still-draft.md"
+    assert klein["klein"][0]["still-draft"] == "generated/workflows/stills/still-draft.md"
 
 
 def test_main_calls_generate(monkeypatch: Any) -> None:

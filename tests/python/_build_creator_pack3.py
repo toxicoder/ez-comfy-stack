@@ -158,7 +158,7 @@ def _set_prompt_klein(graph: dict, prompt: str, *, enhance: bool) -> None:
 
 
 def _klein_single(spec: Pack3Spec) -> None:
-    src = "klein/still-hero.json" if spec.template == "hero" else "klein/still-draft.json"
+    src = "stills/still-hero.json" if spec.template == "hero" else "stills/still-draft.json"
     graph = cv._load(lab_json(src))
     graph["id"] = spec.rel
     graph["revision"] = 1
@@ -219,7 +219,7 @@ def _set_wan_motion(graph: dict, motion: str, *, enhance: bool, hint: str) -> No
 
 
 def _wan_i2v(spec: Pack3Spec) -> None:
-    src = "wan/shorts-still-5s.json" if spec.portrait else "wan/still-to-video-5s.json"
+    src = "motion/silent/shorts-still-5s.json" if spec.portrait else "motion/silent/still-to-video-5s.json"
     graph = cv._load(lab_json(src))
     graph["id"] = spec.rel
     graph["revision"] = 1
@@ -242,7 +242,7 @@ def _wan_i2v(spec: Pack3Spec) -> None:
 
 
 def _wan_loop(spec: Pack3Spec) -> None:
-    graph = cv._load(lab_json("wan/gif-loop.json"))
+    graph = cv._load(lab_json("motion/loops/gif-loop.json"))
     graph["id"] = spec.rel
     graph["revision"] = 1
     lat = cv._node(graph, "Wan22ImageToVideoLatent")
@@ -356,7 +356,7 @@ def _write_catalog() -> None:
         "- **Queuing a job-named App** (channel art, 4:5 feed, Canvas loop, BRB screen) instead of restyling a generic still",
         "- **Keeping occupancy XOR** — Klein, Wan, and LTX still do not share a GB10 session",
         "",
-        "**Who this is for:** studio users after `klein/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).",
+        "**Who this is for:** studio users after `stills/still-draft`. Index: [Workflow catalog](../studio-workflows.md). Occupancy and widgets: [ComfyUI Apps](../studio-apps.md).",
         "",
         "These graphs clone the shipped Klein 4B / Wan 2.2 / LTX-2.5 printers. They do **not** add models. Empty of lettering — composite titles later. LTX feeders stay **÷32**. Spotify Canvas is **silent**.",
         "",

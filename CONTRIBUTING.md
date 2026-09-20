@@ -17,7 +17,7 @@ To ship a keeper from a live `_user` graph (does **not** commit):
 ```bash
 ./scripts/manage.sh promote-workflow \
   --from "${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/my-hook.json" \
-  --lane klein \
+  --lane stills \
   --id my-hook
 ```
 

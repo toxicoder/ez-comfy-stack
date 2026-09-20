@@ -29,7 +29,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 # shellcheck source=../lib/common.sh disable=SC1091
 source "${REPO_ROOT}/scripts/lib/common.sh"
 
-readonly PROMOTE_LANES=(klein wan ltx shorts dcc optional audio inspire)
+readonly PROMOTE_LANES=(stills motion creator films dcc optional audio inspire)
 readonly PROMOTE_BANNED=(
   MiniMax
   Seedance
@@ -182,7 +182,7 @@ promote_run() {
     return 1
   fi
   promote_lane_ok "${lane}" || {
-    err "unknown lane ${lane} (klein|wan|ltx|shorts|dcc|optional|audio|inspire)"
+    err "unknown lane ${lane} (stills|motion|creator|films|dcc|optional|audio|inspire)"
     return 1
   }
   if [[ ! -f ${from} ]]; then

@@ -37,7 +37,7 @@ US-safe rap **180 s diss** take: **lab coat lecture**. Fictional MCs **Nill Bye*
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
 6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 88, language en, timesignature 4, generate_audio_codes true. Seed 42.
 7. Saves: `01 - Lab Coat Lecture` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
-8. Cover separately: Queue **klein/thumbnail.json** or **klein/podcast-cover.json**. Do not embed Klein here.
+8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
 10. Do not co-resident with LTX / Wan / Klein on this Spark.
 
@@ -8272,7 +8272,7 @@ Type `COMBO`. Range / default: custom.
 
 Lab sample prompt or Custom.
 
-**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on klein/dream-house).
+**How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 20 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
 **This graph:** `custom`
 

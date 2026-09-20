@@ -53,7 +53,7 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
         assert "format" in names, rel
         assert "width" in names, rel
         assert "height" in names, rel
-        if rel in {"klein/still-studio", "klein/image-studio"}:
+        if rel in {"stills/still-studio", "stills/image-studio"}:
             assert "look" in names
         else:
             assert "look" not in names, rel
@@ -81,12 +81,12 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
 
 def test_locked_apps_do_not_gain_a_format_picker() -> None:
     locked = (
-        "klein/text-swap",
-        "klein/platform-pack",
-        "klein/character-tweak",
-        "ltx/audio-to-video-5s",
-        "wan/first-last-5s",
-        "shorts/go-see",
+        "stills/text-swap",
+        "stills/platform-pack",
+        "stills/character-tweak",
+        "motion/av/audio-to-video-5s",
+        "motion/silent/first-last-5s",
+        "films/go-see",
         "inspire/prompt-forge",
     )
     for rel in locked:

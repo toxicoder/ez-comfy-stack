@@ -53,7 +53,7 @@ GIF_NEG = (
     "watermark, burned-in text"
 )
 
-STUDIO_NOTE = """## klein/still-studio
+STUDIO_NOTE = """## stills/still-studio
 
 Klein 4B still desk. Pick Format / platform for pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048).
 Look recipe is an optional Cinema Rack starter (Enhance context). Style stays on Rewrite prompt. Quality does not change size.
@@ -62,10 +62,10 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: wan/still-to-video-5s, ltx/still-to-video-5s, klein/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap.
 """
 
-IMAGE_STUDIO_NOTE = """## klein/image-studio
+IMAGE_STUDIO_NOTE = """## stills/image-studio
 
 Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
 Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity), save prefix, and a locked instruction spliced into Enhance context.
@@ -75,10 +75,10 @@ Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP t
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: wan/still-to-video-5s, ltx/still-to-video-5s, klein/text-swap, klein/still-studio.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-5s, stills/text-swap, stills/still-studio.
 """
 
-STILL_NOTE = """## klein/still-daily
+STILL_NOTE = """## stills/still-daily
 
 Daily Klein 4B still app. Click the UNET filename to swap Apache Klein 4B weights.
 CLIP (qwen_3_4b, type flux2) and flux2-vae stay the same for every Klein 4B UNET.
@@ -93,7 +93,7 @@ Save prefix: ez_still_app.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.
 """
 
-GIF_NOTE = """## wan/gif-loop
+GIF_NOTE = """## motion/loops/gif-loop
 
 Wan 2.2 TI2V-5B Apache silent GIF (~4 s @ 12 fps, 49 frames).
 Models: wan2.2_ti2v_5B_fp16.safetensors + umt5_xxl_fp8_e4m3fn_scaled.safetensors (CLIP type wan) + wan2.2_vae.safetensors.
@@ -105,7 +105,7 @@ Do not Queue 121-frame Wan drafts here. Prefix: ez_gif_loop.
 Prompt enhance is **off** so the locked-camera cyclic motion stays ping-pong safe. Turn Enhance on only if you want the 4B rewriter.
 """
 
-HOUSE_NOTE = """## klein/dream-house
+HOUSE_NOTE = """## stills/dream-house
 
 Ten Instagram 4:5 stills: a virtual tour of **one place** (Klein 4B distilled, 4 steps, CFG 1.0, 1024x1280). Type any place in HOUSE IDENTITY — the default placeholder is the lab penthouse.
 HOUSE IDENTITY is a camera-free world bible (rooms, furniture, outdoor lamps, sky, surroundings, time of day). Enhance extracts only the rooms and furniture you named — name lounge, kitchen, dining, bath, bedroom, terrace, study, and outdoor lamps so the tour can enter them. Name each room’s backdrop in the bible (which wall or opening that room faces). Hidden SHOT cards are camera stations (tower, foyer, lounge, kitchen, dining, bedroom, bath, terrace, drone, study): lens, camera height, a distinct room program (entrance hall, living hall, cook line, dining hall, sleep chamber, wet room, open-air terrace, writing room), near/far planes, and which room — not a penthouse template and not one volume restyled. They do not name dusk, materials, or architecture. Prompt Join lock=view front-loads the shot and closes with “this still is only the room and backdrop the shot names.” Shots 02–10 are independent T2I (empty latent, same seed 42); they do not ReferenceLatent the identity still.
@@ -119,7 +119,7 @@ CLAY_LOCK = (
     "Do not redesign layout."
 )
 
-HOUSE_CLAY_NOTE = """## klein/dream-house-clay
+HOUSE_CLAY_NOTE = """## stills/dream-house-clay
 
 Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
 
@@ -139,22 +139,22 @@ Reseed LoadImage plates without Blender (compose may stay up):
 
   ./scripts/manage.sh house-views --slug lab-penthouse --seed-inputs
 
-HOUSE IDENTITY is the same camera-free world bible as klein/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
+HOUSE IDENTITY is the same camera-free world bible as stills/dream-house. Shot cards are camera stations from place_10 (lens, camera height, a distinct room program, near/far planes, and which room). Prompt Join lock=view. Each shot VAEEncodes its clay plate into ReferenceLatent. Shot cards are not Klein-t2i-enhanced.
 
-Language-only tour (no geometry) → klein/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
+Language-only tour (no geometry) → stills/dream-house. Do not substitute T2I stills or example.png as clay. Occupancy XOR: do not Blender-dump while compose is up. Seed/copy-inputs may run while compose is up.
 Optional style dropdown applies to the bible. Unused SHOT groups may be bypassed (Ctrl+B).
 """
 
-CHARACTER_DRAFT_NOTE = """## klein/character-draft
+CHARACTER_DRAFT_NOTE = """## stills/character-draft
 
 Klein 4B character still. Type a character, pick a style, Queue. 1024x1280 (Instagram 4:5), seed 42, Enhance on (t2i so style applies). Prefix `ez_character`.
 
-Handoff: load **klein/character-tweak**, pick `ez_character_*.png`, and prompt the change.
+Handoff: load **stills/character-tweak**, pick `ez_character_*.png`, and prompt the change.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """
 
-CHARACTER_TWEAK_NOTE = """## klein/character-tweak
+CHARACTER_TWEAK_NOTE = """## stills/character-tweak
 
 Klein 4B **edit** of a character still. LoadImage: `ez_character_*.png` from Character Draft (or any Klein still). Prompt only the change. Enhance **edit**. Style restyles medium/grade; identity stays in the reference image. Prefix `ez_character_tweak`. Size 1024x1280.
 
@@ -163,7 +163,7 @@ VAEEncode + ReferenceLatent. Do not Queue without a start image.
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 """
 
-TEXT_SWAP_NOTE = """## klein/text-swap
+TEXT_SWAP_NOTE = """## stills/text-swap
 
 Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). Prefix `ez_text_swap`.
 
@@ -173,7 +173,7 @@ VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Oc
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden — the source still owns look.
 """
 
-PACK_NOTE = """## klein/platform-pack
+PACK_NOTE = """## stills/platform-pack
 
 One identity, six platform plates (Klein 4B distilled, 4 steps, CFG 1.0, seed 42). Type any subject in PACK IDENTITY. Identity-mode enhance is **on** (camera-free bible). Each plate is independent T2I (own latent, no ReferenceLatent across aspect ratios). Hidden cards are framing only.
 
@@ -271,8 +271,8 @@ def _assert_no_overlap(graph: dict, pad: float = 20) -> None:
 
 
 def build_still_app() -> dict:
-    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
-    graph["id"] = "klein/still-daily"
+    graph = json.loads(lab_json("stills/still-draft.json").read_text(encoding="utf-8"))
+    graph["id"] = "stills/still-daily"
     graph["revision"] = 1
     unet = _node(graph, "UNETLoader")
     unet["title"] = "Image model — click filename to swap"
@@ -287,7 +287,7 @@ def build_still_app() -> dict:
     save["title"] = "Save PNG"
     note = _node(graph, "Note")
     note["widgets_values"] = [STILL_NOTE]
-    graph["extra"]["lab_profile"] = "klein/still-daily"
+    graph["extra"]["lab_profile"] = "stills/still-daily"
     graph["extra"]["lab_note"] = STILL_NOTE
     graph["extra"]["lab_description"] = "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
     enh = _node(graph, "EZKleinPromptEnhance")
@@ -349,8 +349,8 @@ def _add_widget_input(node: dict, name: str, typ: str, link_id: int) -> int:
 
 
 def build_still_studio() -> dict:
-    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
-    apply_lab_identity(graph, "klein/still-studio")
+    graph = json.loads(lab_json("stills/still-draft.json").read_text(encoding="utf-8"))
+    apply_lab_identity(graph, "stills/still-studio")
     nid = int(graph.get("last_node_id") or 0) + 1
     graph["last_node_id"] = nid
     graph["revision"] = 1
@@ -371,7 +371,7 @@ def build_still_studio() -> dict:
     enh_values[3] = "t2i"
     enh_values[4] = "YouTube 16:9 still, LTX feeder"
     enh_values[5] = "none"
-    enh_values[6] = "klein/still-studio"
+    enh_values[6] = "stills/still-studio"
     enh["widgets_values"] = enh_values
     note = _node(graph, "Note")
     note["widgets_values"] = [STUDIO_NOTE]
@@ -423,7 +423,7 @@ def build_still_studio() -> dict:
     enh_inputs.append({"name": "context", "type": "STRING", "link": ctx_link})
     enh["inputs"] = enh_inputs
     _push_output_link(fmt, 5, ctx_link)
-    graph["extra"]["lab_profile"] = "klein/still-studio"
+    graph["extra"]["lab_profile"] = "stills/still-studio"
     graph["extra"]["lab_note"] = STUDIO_NOTE
     graph["extra"]["lab_description"] = (
         "Klein 4B still desk: format/platform picker, style, enhance, look recipe"
@@ -453,8 +453,8 @@ def _drop_output_link(node: dict, slot: int, link_id: int) -> None:
 
 
 def build_image_studio() -> dict:
-    graph = json.loads(lab_json("klein/still-studio.json").read_text(encoding="utf-8"))
-    apply_lab_identity(graph, "klein/image-studio")
+    graph = json.loads(lab_json("stills/still-studio.json").read_text(encoding="utf-8"))
+    apply_lab_identity(graph, "stills/image-studio")
     nid = int(graph.get("last_node_id") or 0) + 1
     graph["last_node_id"] = nid
     graph["revision"] = int(graph.get("revision") or 0) + 1
@@ -467,7 +467,7 @@ def build_image_studio() -> dict:
     enh_values = list(enh.get("widgets_values") or [])
     while len(enh_values) < 7:
         enh_values.append("")
-    enh_values[6] = "klein/image-studio"
+    enh_values[6] = "stills/image-studio"
     enh["widgets_values"] = enh_values
     note["widgets_values"] = [IMAGE_STUDIO_NOTE]
     mode_inputs: list[dict[str, Any]] = [
@@ -523,7 +523,7 @@ def build_image_studio() -> dict:
     prefix_row[1] = nid
     prefix_row[2] = 2
     _push_output_link(mode, 2, prefix_link_id)
-    graph["extra"]["lab_profile"] = "klein/image-studio"
+    graph["extra"]["lab_profile"] = "stills/image-studio"
     graph["extra"]["lab_note"] = IMAGE_STUDIO_NOTE
     graph["extra"]["lab_description"] = (
         "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref"
@@ -538,8 +538,8 @@ def build_image_studio() -> dict:
 
 
 def build_gif_loop() -> dict:
-    graph = json.loads(lab_json("wan/still-to-video-5s.json").read_text(encoding="utf-8"))
-    graph["id"] = "wan/gif-loop"
+    graph = json.loads(lab_json("motion/silent/still-to-video-5s.json").read_text(encoding="utf-8"))
+    graph["id"] = "motion/loops/gif-loop"
     graph["revision"] = 1
     lat = _node(graph, "Wan22ImageToVideoLatent")
     lat["widgets_values"][2] = 49
@@ -561,7 +561,7 @@ def build_gif_loop() -> dict:
     neg["widgets_values"] = [GIF_NEG]
     note = _node(graph, "Note")
     note["widgets_values"] = [GIF_NOTE]
-    graph["extra"]["lab_profile"] = "wan/gif-loop"
+    graph["extra"]["lab_profile"] = "motion/loops/gif-loop"
     graph["extra"]["lab_note"] = GIF_NOTE
     graph["extra"]["lab_description"] = "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps"
     groups = list(graph.get("groups") or [])
@@ -867,7 +867,7 @@ def build_dream_house() -> dict:
 
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein/dream-house",
+        "id": "stills/dream-house",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -876,7 +876,7 @@ def build_dream_house() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein/dream-house",
+            "lab_profile": "stills/dream-house",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_NOTE,
             "lab_description": "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)",
@@ -1223,7 +1223,7 @@ def build_dream_house_clay() -> dict:
 
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein/dream-house-clay",
+        "id": "stills/dream-house-clay",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -1232,7 +1232,7 @@ def build_dream_house_clay() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein/dream-house-clay",
+            "lab_profile": "stills/dream-house-clay",
             "lab_flux_tier": "fast",
             "lab_note": HOUSE_CLAY_NOTE,
             "lab_description": (
@@ -1493,7 +1493,7 @@ def build_platform_pack() -> dict:
         )
     last_id = max(n["id"] for n in nodes)
     return {
-        "id": "klein/platform-pack",
+        "id": "stills/platform-pack",
         "revision": 1,
         "last_node_id": last_id,
         "last_link_id": link_id,
@@ -1502,7 +1502,7 @@ def build_platform_pack() -> dict:
         "groups": groups,
         "config": {},
         "extra": {
-            "lab_profile": "klein/platform-pack",
+            "lab_profile": "stills/platform-pack",
             "lab_flux_tier": "fast",
             "lab_note": PACK_NOTE,
             "lab_description": "Six Klein platform plates from one identity; independent T2I per aspect",
@@ -1513,8 +1513,8 @@ def build_platform_pack() -> dict:
 
 
 def build_character_draft() -> dict:
-    graph = json.loads(lab_json("klein/still-draft.json").read_text(encoding="utf-8"))
-    graph["id"] = "klein/character-draft"
+    graph = json.loads(lab_json("stills/still-draft.json").read_text(encoding="utf-8"))
+    graph["id"] = "stills/character-draft"
     graph["revision"] = 1
     latent = _node(graph, "EmptyFlux2LatentImage")
     latent["widgets_values"] = [1024, 1280, 1]
@@ -1535,7 +1535,7 @@ def build_character_draft() -> dict:
     note = _node(graph, "Note")
     note["widgets_values"] = [CHARACTER_DRAFT_NOTE]
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "klein/character-draft"
+    extra["lab_profile"] = "stills/character-draft"
     extra["lab_note"] = CHARACTER_DRAFT_NOTE
     extra["lab_description"] = "Klein 4B character still, 1024x1280, style on, prefix ez_character"
     return graph
@@ -1545,10 +1545,10 @@ def build_character_tweak() -> dict:
     from _build_dcc_workflows import build_klein_from_clay
 
     graph = build_klein_from_clay()
-    graph["id"] = "klein/character-tweak"
+    graph["id"] = "stills/character-tweak"
     graph["revision"] = 1
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "klein/character-tweak"
+    extra["lab_profile"] = "stills/character-tweak"
     extra["lab_note"] = CHARACTER_TWEAK_NOTE
     extra["lab_description"] = (
         "Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak."
@@ -1737,10 +1737,10 @@ def _rewire_text_swap_canvas(graph: dict) -> None:
 
 def build_text_swap() -> dict:
     graph = build_character_tweak()
-    graph["id"] = "klein/text-swap"
+    graph["id"] = "stills/text-swap"
     graph["revision"] = 1
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "klein/text-swap"
+    extra["lab_profile"] = "stills/text-swap"
     extra["lab_note"] = TEXT_SWAP_NOTE
     extra["lab_description"] = (
         "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. "
@@ -1797,16 +1797,16 @@ def main() -> None:
     draft = build_character_draft()
     tweak = build_character_tweak()
     swap = build_text_swap()
-    _dump(lab_json("klein/still-daily.json"), still)
-    _dump(lab_dest("klein/still-studio"), studio)
-    _dump(lab_dest("klein/image-studio"), image_studio)
-    _dump(lab_json("wan/gif-loop.json"), gif)
-    _dump(lab_json("klein/dream-house.json"), house)
-    _dump(lab_dest("klein/dream-house-clay"), house_clay)
-    _dump(lab_json("klein/platform-pack.json"), pack)
-    _dump(lab_dest("klein/character-draft"), draft)
-    _dump(lab_dest("klein/character-tweak"), tweak)
-    _dump(lab_dest("klein/text-swap"), swap)
+    _dump(lab_json("stills/still-daily.json"), still)
+    _dump(lab_dest("stills/still-studio"), studio)
+    _dump(lab_dest("stills/image-studio"), image_studio)
+    _dump(lab_json("motion/loops/gif-loop.json"), gif)
+    _dump(lab_json("stills/dream-house.json"), house)
+    _dump(lab_dest("stills/dream-house-clay"), house_clay)
+    _dump(lab_json("stills/platform-pack.json"), pack)
+    _dump(lab_dest("stills/character-draft"), draft)
+    _dump(lab_dest("stills/character-tweak"), tweak)
+    _dump(lab_dest("stills/text-swap"), swap)
     print(
         "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
         "platform-pack, character draft/tweak, text-swap"

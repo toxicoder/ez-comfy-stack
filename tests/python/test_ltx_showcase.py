@@ -18,11 +18,11 @@ from _stamp_app_mode import linear_input_node_id
 BANNED = ("MiniMax", "MiniMaxH3", "minimax_h3", "klein-9b", "FLUX.2-dev", "Wav2Lip", "wav2lip")
 
 SHOWCASE = (
-    ("ltx/dialogue-5s", "ez_ltx_dialogue", "t2v"),
-    ("ltx/multishot-5s", "ez_ltx_multishot", "t2v"),
-    ("ltx/product-hero", "ez_ltx_product", "i2v"),
-    ("ltx/first-last-5s", "ez_ltx_flf", "flf"),
-    ("ltx/audio-to-video-5s", "ez_ltx_a2v", "a2v"),
+    ("motion/av/dialogue-5s", "ez_ltx_dialogue", "t2v"),
+    ("motion/av/multishot-5s", "ez_ltx_multishot", "t2v"),
+    ("motion/av/product-hero", "ez_ltx_product", "i2v"),
+    ("motion/av/first-last-5s", "ez_ltx_flf", "flf"),
+    ("motion/av/audio-to-video-5s", "ez_ltx_a2v", "a2v"),
 )
 
 
@@ -96,8 +96,8 @@ def test_showcase_files_prefixes_and_occupancy() -> None:
 
 
 def test_dialogue_and_multishot_are_t2v_av() -> None:
-    dialogue = _load("ltx/dialogue-5s.json")
-    multi = _load("ltx/multishot-5s.json")
+    dialogue = _load("motion/av/dialogue-5s.json")
+    multi = _load("motion/av/multishot-5s.json")
     for graph, prompt in ((dialogue, LTX_DIALOGUE), (multi, LTX_MULTISHOT)):
         types = {n.get("type") for n in graph["nodes"]}
         assert "LTXVImgToVideo" not in types
@@ -121,11 +121,11 @@ def test_dialogue_and_multishot_are_t2v_av() -> None:
 
 
 def test_product_hero_is_i2v_from_packshot() -> None:
-    graph = _load("ltx/product-hero.json")
+    graph = _load("motion/av/product-hero.json")
     assert any(n.get("type") == "LTXVImgToVideo" for n in graph["nodes"])
     note = graph["extra"]["lab_note"]
     assert "packshot" in note.lower()
-    assert "klein/product-packshot" in note or "ez_packshot" in note
+    assert "stills/product-packshot" in note or "ez_packshot" in note
     blob = json.dumps(graph)
     assert LTX_PRODUCT_HERO[:40] in blob
     img = next(n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo")
@@ -135,7 +135,7 @@ def test_product_hero_is_i2v_from_packshot() -> None:
 
 
 def test_flf_guides_video_latent_before_concat() -> None:
-    graph = _load("ltx/first-last-5s.json")
+    graph = _load("motion/av/first-last-5s.json")
     loaders = _by_type(graph, "LoadImage")
     assert len(loaders) == 2
     titles = {str(n.get("title") or "") for n in loaders}
@@ -166,7 +166,7 @@ def test_flf_guides_video_latent_before_concat() -> None:
 
 
 def test_a2v_muxes_original_audio_not_decode() -> None:
-    graph = _load("ltx/audio-to-video-5s.json")
+    graph = _load("motion/av/audio-to-video-5s.json")
     types = {n.get("type") for n in graph["nodes"]}
     assert "LoadAudio" in types
     assert "LTXVAudioVAEEncode" in types
@@ -216,6 +216,6 @@ def test_showcase_app_mode_integer_ids() -> None:
 
 
 def test_talking_head_note_points_at_real_a2v() -> None:
-    graph = _load("klein/talking-head.json")
+    graph = _load("stills/talking-head.json")
     note = graph["extra"]["lab_note"]
-    assert "ltx/audio-to-video-5s" in note
+    assert "motion/av/audio-to-video-5s" in note

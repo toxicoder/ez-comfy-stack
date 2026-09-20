@@ -72,7 +72,7 @@
   {
     "id": "cover-later",
     "label": "Cover later",
-    "prompt": "Do not load Klein in the same session as ACE-Step plus TTS. Queue klein/podcast-cover later. Prefix ez_podcast. 1024 square. Add the show title in an editor. Mux with audio-still-video if YouTube wants a video."
+    "prompt": "Do not load Klein in the same session as ACE-Step plus TTS. Queue stills/podcast-cover later. Prefix ez_podcast. 1024 square. Add the show title in an editor. Mux with audio-still-video if YouTube wants a video."
   },
   {
     "id": "prompt-enhance-cpu",

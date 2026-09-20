@@ -18,7 +18,7 @@ tags: [getting-started, docker, comfyui]
 
 - A first successful open of ComfyUI at `${COMFY_PORT}` (default **8188**)
 - Safe model downloads that leave bandwidth for SSH
-- One queued **`_lab/klein/still-draft`** PNG under `${COMFY_OUTPUT_DIR}`
+- One queued **`_lab/stills/still-draft`** PNG under `${COMFY_OUTPUT_DIR}`
 - Knowing *why* you typed `yes` and *where* the PNG went — [How the studio works](learn/index.md)
 - Short answers after first run: [FAQ](start/faq.md)
 
@@ -29,7 +29,7 @@ tags: [getting-started, docker, comfyui]
 | Goal | Detail |
 | --- | --- |
 | **UI** | ComfyUI at `http://${SPARK_HOST}:${COMFY_PORT}` |
-| **Workflow** | **`_lab/klein/still-draft`** queued without missing-weight errors |
+| **Workflow** | **`_lab/stills/still-draft`** queued without missing-weight errors |
 | **Weights** | Klein 4B + Wan 2.2 5B + LTX-2.5 distilled under `${MODELS_DIR}` (default `/mnt/models`) |
 | **Output** | `ez_still_draft_*.png` under `${COMFY_OUTPUT_DIR}` (default `/mnt/comfy-output`) |
 
@@ -275,9 +275,9 @@ GHCR pull vs a local Dockerfile build (same `start` path, same safety): [collaps
 
 ---
 
-### 7. Queue `_lab/klein/still-draft`
+### 7. Queue `_lab/stills/still-draft`
 
-In ComfyUI, load **klein/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/klein/`**). Host file: `workflows/_lab/klein/still-draft.json`. It is seeded as `*.app.json` under `_lab/klein/`. Leave **Enhance** off. Queue.
+In ComfyUI, load **stills/still-draft** from the **Apps** sidebar (or **Workflows → `_lab/stills/`**). Host file: `workflows/_lab/stills/still-draft.json`. It is seeded as `*.app.json` under `_lab/stills/`. Leave **Enhance** off. Queue.
 
 **Verify:** PNG lands at `${COMFY_OUTPUT_DIR}/ez_still_draft_*.png` (container `/outputs`). Missing Models on this graph → re-run download and `doctor` ([Models and workflows](operate/troubleshooting-models-workflows.md)).
 

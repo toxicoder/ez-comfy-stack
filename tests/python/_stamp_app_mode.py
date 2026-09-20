@@ -1020,71 +1020,71 @@ def _spec(
 
 
 STAMP_SPECS: dict[str, dict[str, Any]] = {
-    "klein/still-draft": _spec(
+    "stills/still-draft": _spec(
         "inspire",
         "klein",
-        "klein/still-hero",
-        "wan/still-to-video-5s",
-        "klein/platform-pack",
+        "stills/still-hero",
+        "motion/silent/still-to-video-5s",
+        "stills/platform-pack",
     ),
-    "klein/identity-sheet": _spec(
+    "stills/identity-sheet": _spec(
         "inspire", "klein"
     ),
-    "klein/storyboard-6up": _spec(
+    "stills/storyboard-6up": _spec(
         "inspire",
         "klein",
-        "wan/still-to-shot",
-        "ltx/still-to-shot",
+        "motion/silent/still-to-shot",
+        "motion/av/still-to-shot",
     ),
-    "klein/dream-house": _spec(
+    "stills/dream-house": _spec(
         "inspire",
         "klein",
-        "wan/gif-loop",
-        "wan/bumper-loop",
-        "wan/sticker-loop",
+        "motion/loops/gif-loop",
+        "motion/loops/bumper-loop",
+        "motion/loops/sticker-loop",
     ),
-    "klein/dream-house-clay": _spec(
+    "stills/dream-house-clay": _spec(
         "inspire",
         "klein",
-        "wan/gif-loop",
-        "wan/bumper-loop",
-        "wan/sticker-loop",
+        "motion/loops/gif-loop",
+        "motion/loops/bumper-loop",
+        "motion/loops/sticker-loop",
         hide_images=True,
     ),
-    "klein/style-lock": _spec(
+    "stills/style-lock": _spec(
         "inspire", "klein"
     ),
-    "klein/lighting-trio": _spec("inspire", "klein"),
-    "klein/camera-angles": _spec("inspire", "klein"),
-    "klein/color-moods": _spec("inspire", "klein"),
-    "klein/time-of-day": _spec("inspire", "klein"),
-    "klein/hook-still": _spec(
-        "inspire", "klein", "wan/shorts-still-5s"
+    "stills/lighting-trio": _spec("inspire", "klein"),
+    "stills/camera-angles": _spec("inspire", "klein"),
+    "stills/color-moods": _spec("inspire", "klein"),
+    "stills/time-of-day": _spec("inspire", "klein"),
+    "stills/hook-still": _spec(
+        "inspire", "klein", "motion/silent/shorts-still-5s"
     ),
-    "klein/character-draft": _spec(
+    "stills/character-draft": _spec(
         "inspire",
         "klein",
-        "klein/character-tweak",
-        "klein/identity-sheet",
-        "wan/still-to-video-5s",
+        "stills/character-tweak",
+        "stills/identity-sheet",
+        "motion/silent/still-to-video-5s",
     ),
-    "klein/character-tweak": _spec(
+    "stills/character-tweak": _spec(
         "inspire",
         "klein",
-        "klein/identity-sheet",
-        "wan/still-to-video-5s",
+        "stills/identity-sheet",
+        "motion/silent/still-to-video-5s",
     ),
     "inspire/prompt-forge": _spec(
         "inspire",
         "llm",
-        "klein/still-draft",
+        "stills/still-draft",
         forge_widgets=True,
     ),
     "inspire/cinema-rack": _spec(
         "inspire",
         "llm",
         "inspire/prompt-forge",
-        "klein/still-draft",
+        "stills/still-draft",
         cinema_widgets=True,
     ),
     "inspire/audio-rack": _spec(
@@ -1098,124 +1098,124 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "inspire",
         "llm",
         "inspire/prompt-forge",
-        "klein/still-draft",
+        "stills/still-draft",
         research_widgets=True,
     ),
     "inspire/app-forge": _spec(
         "inspire",
         "llm",
         "inspire/prompt-forge",
-        "klein/still-draft",
+        "stills/still-draft",
         app_forge_widgets=True,
     ),
     "inspire/beat-sheet": _spec(
         "inspire",
         "none",
-        "klein/identity-sheet",
-        "dcc/klein/clay-hero",
-        "shorts/go-see",
+        "stills/identity-sheet",
+        "dcc/clay-hero",
+        "films/go-see",
         primitive_strings=True,
     ),
-    "klein/still-daily": _spec(
+    "stills/still-daily": _spec(
         "produce",
         "klein",
         expose_unet=True,
         sampler_steps_cfg=True,
     ),
-    "klein/still-studio": _spec(
+    "stills/still-studio": _spec(
         "produce",
         "klein",
-        "wan/still-to-video-5s",
-        "ltx/still-to-video-5s",
-        "klein/text-swap",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-5s",
+        "stills/text-swap",
         expose_unet=True,
         expose_look=True,
     ),
-    "klein/image-studio": _spec(
+    "stills/image-studio": _spec(
         "produce",
         "klein",
-        "wan/still-to-video-5s",
-        "ltx/still-to-video-5s",
-        "klein/text-swap",
-        "klein/still-studio",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-5s",
+        "stills/text-swap",
+        "stills/still-studio",
         expose_unet=True,
         expose_look=True,
     ),
-    "klein/still-hero": _spec(
+    "stills/still-hero": _spec(
         "produce",
         "klein",
-        "wan/still-to-video-5s",
-        "ltx/still-to-video-5s",
-        "ltx/first-last-5s",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-5s",
+        "motion/av/first-last-5s",
     ),
-    "klein/thumbnail": _spec("produce", "klein"),
-    "klein/text-swap": _spec(
+    "stills/thumbnail": _spec("produce", "klein"),
+    "stills/text-swap": _spec(
         "produce",
         "klein",
-        "wan/still-to-video-5s",
+        "motion/silent/still-to-video-5s",
     ),
-    "klein/product-packshot": _spec("produce", "klein", "ltx/product-hero"),
-    "klein/instagram-square": _spec("produce", "klein"),
-    "klein/open-graph": _spec("produce", "klein"),
-    "klein/banner-wide": _spec("produce", "klein"),
-    "klein/podcast-cover": _spec("produce", "klein"),
-    "klein/endcard-cta": _spec("produce", "klein"),
-    "klein/quote-bg": _spec("produce", "klein"),
-    "klein/lower-third-bg": _spec("produce", "klein"),
-    "klein/food-tabletop": _spec("produce", "klein"),
-    "klein/shorts-still": _spec("produce", "klein"),
-    "klein/before-after": _spec("produce", "klein"),
-    "klein/platform-pack": _spec(
+    "stills/product-packshot": _spec("produce", "klein", "motion/av/product-hero"),
+    "stills/instagram-square": _spec("produce", "klein"),
+    "stills/open-graph": _spec("produce", "klein"),
+    "stills/banner-wide": _spec("produce", "klein"),
+    "stills/podcast-cover": _spec("produce", "klein"),
+    "stills/endcard-cta": _spec("produce", "klein"),
+    "stills/quote-bg": _spec("produce", "klein"),
+    "stills/lower-third-bg": _spec("produce", "klein"),
+    "stills/food-tabletop": _spec("produce", "klein"),
+    "stills/shorts-still": _spec("produce", "klein"),
+    "stills/before-after": _spec("produce", "klein"),
+    "stills/platform-pack": _spec(
         "produce",
         "klein",
-        "wan/still-to-video-5s",
-        "ltx/hook-av",
+        "motion/silent/still-to-video-5s",
+        "motion/av/hook-av",
     ),
-    "klein/talking-head": _spec("produce", "ltx", "ltx/audio-to-video-5s"),
-    "wan/still-to-video-5s": _spec(
-        "produce", "wan", "ltx/still-to-video-5s"
+    "stills/talking-head": _spec("produce", "ltx", "motion/av/audio-to-video-5s"),
+    "motion/silent/still-to-video-5s": _spec(
+        "produce", "wan", "motion/av/still-to-video-5s"
     ),
-    "wan/text-to-video-5s": _spec("produce", "wan"),
-    "wan/first-last-5s": _spec("produce", "wan"),
-    "wan/vace-join": _spec("produce", "wan"),
-    "wan/still-to-shot": _spec("produce", "wan"),
-    "wan/gif-loop": _spec("produce", "wan"),
-    "wan/bumper-loop": _spec("produce", "wan"),
-    "wan/sticker-loop": _spec("produce", "wan"),
-    "wan/shorts-still-5s": _spec(
-        "produce", "wan", "ltx/shorts-still-5s"
+    "motion/silent/text-to-video-5s": _spec("produce", "wan"),
+    "motion/silent/first-last-5s": _spec("produce", "wan"),
+    "motion/silent/vace-join": _spec("produce", "wan"),
+    "motion/silent/still-to-shot": _spec("produce", "wan"),
+    "motion/loops/gif-loop": _spec("produce", "wan"),
+    "motion/loops/bumper-loop": _spec("produce", "wan"),
+    "motion/loops/sticker-loop": _spec("produce", "wan"),
+    "motion/silent/shorts-still-5s": _spec(
+        "produce", "wan", "motion/av/shorts-still-5s"
     ),
-    "wan/orbit-still-5s": _spec("produce", "wan"),
-    "wan/push-in-still-5s": _spec("produce", "wan"),
-    "wan/parallax-still-5s": _spec("produce", "wan"),
-    "ltx/still-to-video-5s": _spec("produce", "ltx"),
-    "ltx/text-to-video-5s": _spec("produce", "ltx"),
-    "ltx/still-to-shot": _spec("produce", "ltx"),
-    "ltx/shorts-still-5s": _spec("produce", "ltx"),
-    "ltx/hook-av": _spec("produce", "ltx"),
-    "ltx/broll-ambient": _spec("produce", "ltx"),
-    "ltx/weather-broll": _spec("produce", "ltx"),
-    "ltx/interior-ambience": _spec("produce", "ltx"),
-    "ltx/dialogue-5s": _spec("produce", "ltx"),
-    "ltx/multishot-5s": _spec("produce", "ltx"),
-    "ltx/product-hero": _spec("produce", "ltx"),
-    "ltx/first-last-5s": _spec("produce", "ltx"),
-    "ltx/audio-to-video-5s": _spec("produce", "ltx"),
-    "shorts/go-see": _spec(
+    "motion/silent/orbit-still-5s": _spec("produce", "wan"),
+    "motion/silent/push-in-still-5s": _spec("produce", "wan"),
+    "motion/silent/parallax-still-5s": _spec("produce", "wan"),
+    "motion/av/still-to-video-5s": _spec("produce", "ltx"),
+    "motion/av/text-to-video-5s": _spec("produce", "ltx"),
+    "motion/av/still-to-shot": _spec("produce", "ltx"),
+    "motion/av/shorts-still-5s": _spec("produce", "ltx"),
+    "motion/av/hook-av": _spec("produce", "ltx"),
+    "motion/av/broll-ambient": _spec("produce", "ltx"),
+    "motion/av/weather-broll": _spec("produce", "ltx"),
+    "motion/av/interior-ambience": _spec("produce", "ltx"),
+    "motion/av/dialogue-5s": _spec("produce", "ltx"),
+    "motion/av/multishot-5s": _spec("produce", "ltx"),
+    "motion/av/product-hero": _spec("produce", "ltx"),
+    "motion/av/first-last-5s": _spec("produce", "ltx"),
+    "motion/av/audio-to-video-5s": _spec("produce", "ltx"),
+    "films/go-see": _spec(
         "film",
         "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
-    "shorts/still-here": _spec(
+    "films/still-here": _spec(
         "film",
         "film",
         default_view="graph",
         film_minimal=True,
         enhance_off_identity=True,
     ),
-    "shorts/switchyard": _spec(
+    "films/switchyard": _spec(
         "film",
         "film",
         default_view="graph",
@@ -1223,7 +1223,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         enhance_off_identity=True,
     ),
     **{
-        f"shorts/{film}/act-0{act}": _spec(
+        f"films/{film}/act-0{act}": _spec(
             "film",
             "film",
             default_view="graph",
@@ -1245,56 +1245,56 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "audio/dub/clone-translate": _spec("audio", "audio"),
     "audio/music/rap-draft": _spec("audio", "audio"),
     "audio/music/rap-full": _spec("audio", "audio"),
-    "dcc/klein/clay-hero": _spec(
+    "dcc/clay-hero": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/depth-control-5s",
-        "wan/still-to-video-5s",
+        "dcc/depth-control-5s",
+        "motion/silent/still-to-video-5s",
     ),
-    "dcc/klein/canny-hero": _spec(
+    "dcc/canny-hero": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/canny-control-5s",
+        "dcc/canny-control-5s",
     ),
-    "dcc/klein/clay-plates": _spec(
+    "dcc/clay-plates": _spec(
         "dcc",
         "klein",
-        "wan/still-to-video-5s",
-        "wan/shorts-still-5s",
-        "dcc/ltx/depth-control-shorts",
+        "motion/silent/still-to-video-5s",
+        "motion/silent/shorts-still-5s",
+        "dcc/depth-control-shorts",
     ),
-    "dcc/ltx/depth-control-5s": _spec(
+    "dcc/depth-control-5s": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/ltx/canny-control-5s": _spec(
+    "dcc/canny-control-5s": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/ltx/depth-control-shorts": _spec(
+    "dcc/depth-control-shorts": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/wan/first-last-from-guide": _spec(
+    "dcc/first-last-from-guide": _spec(
         "dcc",
         "wan",
-        "dcc/ltx/depth-control-5s",
+        "dcc/depth-control-5s",
     ),
-    "dcc/klein/guide-still": _spec(
+    "dcc/guide-still": _spec(
         "dcc",
         "klein",
-        "dcc/ltx/depth-from-loader",
-        "dcc/trellis/still-to-mesh",
+        "dcc/depth-from-loader",
+        "dcc/still-to-mesh",
     ),
-    "dcc/ltx/depth-from-loader": _spec(
+    "dcc/depth-from-loader": _spec(
         "dcc",
         "ltx",
         "audio/stem-mix",
     ),
-    "dcc/trellis/still-to-mesh": _spec(
+    "dcc/still-to-mesh": _spec(
         "dcc",
         "trellis",
         default_view="graph",
@@ -1304,7 +1304,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "audio",
         primitive_strings=True,
     ),
-    "optional/wan/still-to-video-a14b": _spec("produce", "wan", default_view="graph"),
+    "optional/still-to-video-a14b": _spec("produce", "wan", default_view="graph"),
 }
 
 def _nill_bye_stems() -> tuple[str, ...]:
@@ -1344,15 +1344,15 @@ for _drive_through_stem in DRIVE_THROUGH_STAMP_STEMS:
 
 STUB_IDS = frozenset({"optional/longcat-video"})
 OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
-    "dcc/ltx/depth-control-5s": ("EZFilmDisclosure",),
-    "dcc/ltx/canny-control-5s": ("EZFilmDisclosure",),
-    "dcc/ltx/depth-control-shorts": ("EZFilmDisclosure",),
-    "dcc/ltx/depth-from-loader": (
+    "dcc/depth-control-5s": ("EZFilmDisclosure",),
+    "dcc/canny-control-5s": ("EZFilmDisclosure",),
+    "dcc/depth-control-shorts": ("EZFilmDisclosure",),
+    "dcc/depth-from-loader": (
         "EZFilmDisclosure",
         "EZDCCLoadGuideVideo",
     ),
     "audio/stem-mix": ("SaveAudio", "PrimitiveNode"),
-    "optional/wan/still-to-video-a14b": ("UNETLoader",),
+    "optional/still-to-video-a14b": ("UNETLoader",),
     "audio/podcast/radio-drama": ("UNETLoader", "VHS_VideoCombine"),
     "inspire/prompt-forge": (
         "EZKleinPromptEnhance",
@@ -1372,8 +1372,8 @@ OPTIONAL_UNWIRED: dict[str, tuple[str, ...]] = {
     ),
     "inspire/research-chat": ("EZCreativeResearch",),
     "inspire/app-forge": ("EZAppForge",),
-    "wan/first-last-5s": ("LoadImage",),
-    "wan/vace-join": ("LoadImage",),
+    "motion/silent/first-last-5s": ("LoadImage",),
+    "motion/silent/vace-join": ("LoadImage",),
 }
 
 

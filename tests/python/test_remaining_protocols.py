@@ -56,7 +56,7 @@ def test_optional_backend_hook_protocol() -> None:
 
 def test_forge_planner_skips_when_template_pinned() -> None:
     plan, status, reason = forge._planner_result(  # noqa: SLF001
-        "still of a mug", "klein/still-draft", use_llm=True
+        "still of a mug", "stills/still-draft", use_llm=True
     )
     assert plan is None
     assert status == "heuristic"

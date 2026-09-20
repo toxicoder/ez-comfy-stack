@@ -41,7 +41,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 2. Optional **Context**: paste a research brief or bible. Empty is fine.
 3. Set family mode (t2i / i2v / t2v / s2v / iclora / vc), style, and aspect / duration hint on each enhance node.
 4. Queue. Each Enhance node previews the rewritten STRING. Klein, Wan, LTX, Z-Image, LongCat, and DreamX read the same Prompt and Context.
-5. Copy the family you need into **klein/still-draft** (Spark Still) or an opt-in graph.
+5. Copy the family you need into **stills/still-draft** (Spark Still) or an opt-in graph.
 
 Turn Enhance off to pin the widget text. Context is ignored when Enhance is off.
 Z-Image Turbo ignores a separate negative — exclusions stay in the positive.
@@ -62,8 +62,8 @@ Write YAML on the host:
 That writes `${COMFY_OUTPUT_DIR}/films/<slug>/shots.yaml`. The entrypoint does **not**
 copy YAML. Do not overwrite `workflows/shorts/*.shots.yaml` unless `--lab-example`.
 
-Next: klein/identity-sheet, or export-guides if clay is required, then
-dcc/klein/clay-hero.
+Next: stills/identity-sheet, or export-guides if clay is required, then
+dcc/clay-hero.
 
 Shot-card keys (defaults fail-closed):
 
@@ -94,7 +94,7 @@ network or GGUF is missing.
 1. Type a question (look, camera, lighting, world, reference).
 2. Mode **research** (planner + search subagents) or **chat** (one turn).
 3. Queue. Read **Reply** and **Sources**. Copy prompt ingredients into
-   **inspire/prompt-forge**, then **klein/still-draft**.
+   **inspire/prompt-forge**, then **stills/still-draft**.
 
 Laptop agents: `./scripts/manage.sh research-mcp --stdio` (Path D). Same
 pipeline as this App. Does not queue Comfy. Does not refuse a GPU session.
@@ -113,7 +113,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down, then a keyword
 heuristic if the GGUF is missing. CPU 4B is required next to Wan/LTX/TRELLIS.
 
 1. Type a **Brief** (or pick a sample). Leave **Template** on auto, or pin
-   a lab id such as klein/instagram-square.
+   a lab id such as stills/instagram-square.
 2. Set **Slug** (lowercase, hyphen). **As app** on writes `*.app.json`.
 3. Queue. Read **Path**, **Picked template**, and **Result occupancy**.
 4. Open `_user/<slug>` from the Apps sidebar. Queue that graph when GB10
@@ -139,7 +139,7 @@ Falls back to on-box Qwen3-4B if the sidecar is down. CPU 4B is required next to
 3. Pick at most one technique per axis (shot size, angle, move, lens, …).
 4. Set **Family** (klein, wan_t2v, ltx_t2v, or the i2v / identity flavors).
 5. Queue. Each Enhance node previews the rewritten STRING. Style stays **none** so cinema clauses are not stripped.
-6. Copy the family you need into **klein/still-draft** or an I2V graph.
+6. Copy the family you need into **stills/still-draft** or an I2V graph.
 
 Wan emits **one** camera verb. I2V drops look axes (start image owns grade). Editing is omitted on stills.
 Cinema Rack is deterministic (no LLM). Enhance is optional downstream.

@@ -83,7 +83,7 @@ print_blender_host_hint() {
   err "occupancy enter blender-desk does not install Blender."
   err "Install: ./scripts/manage.sh blender-install"
   err "  or: sudo apt-get install -y blender"
-  err "No Blender → house-views --seed-inputs or klein/dream-house (T2I)."
+  err "No Blender → house-views --seed-inputs or stills/dream-house (T2I)."
   err "See docs/blender-gb10-sidecar.md"
 }
 

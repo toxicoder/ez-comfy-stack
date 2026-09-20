@@ -46,7 +46,7 @@ Graph: **audio/podcast/two-host-episode** (`extra.lab_profile` `us-safe-podcast`
 | VOICES | App **Speaker A / B**, **Include announcer**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M ONNX/CPU built-ins. Voice-clone refs stay graph-only | `ez_podcast_voice` |
 | BEDS | App **Bed tags**, **Rewrite bed**, **Bed length (seconds)**. Native Comfy ACE-Step 1.5, instrumental (lyrics hidden) | `ez_podcast_bed` |
 | MIX | Duck −15 dB + overlay. FLAC master + 320 kbps MP3 | `ez_podcast_ep` / `ez_podcast_mix` |
-| COVER | Queue **klein/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
+| COVER | Queue **stills/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
 
 First spoken line is always:
 
@@ -58,7 +58,7 @@ Do not type that line yourself. The disclosure node prepends it.
 
 Graph: **audio/podcast/radio-drama** (`us-safe-radio`). Same legal engines. Writer prompt is lab-original fiction (`radio_drama.txt`), not a news rewrite. App Mode: **Script**, **Sting tags** / **Bed tags**, sting and bed length, **Speaker A / B / Announcer**, **Include announcer**, **Speaking speed**. ACE-Step sting + bed stay instrumental (lyrics hidden). One master mix (`ez_radio_ep` / `ez_radio_mix`).
 
-Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **wan/bumper-loop** or **ltx/hook-av** in a later session. Not a one-graph film.
+Optional Wan silent bumper / LTX 5s hook **groups default off** (node mode never). Queue **motion/loops/bumper-loop** or **motion/av/hook-av** in a later session. Not a one-graph film.
 
 ### Option C — learning episode
 
@@ -73,7 +73,7 @@ Paste a lazy blob of notes, `https://` links, captioned video URLs, or local `.t
 | VOICES | App **Speaker A / B**, **Speaking speed**. `EZKokoroTTS` Kokoro-82M built-ins | `ez_learn_voice` |
 | BEDS | App **Bed tags**. Native ACE-Step 1.5, **30 s** instrumental, looped under the speech (`EZAudioLoopToMatch`). Duck −15 dB | `ez_learn_bed` |
 | MIX | Overlay. FLAC master + 320 kbps MP3 | `ez_learn_ep` / `ez_learn_mix` |
-| COVER | Queue **klein/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
+| COVER | Queue **stills/podcast-cover** separately (1024², `ez_podcast`) | `ez_podcast` |
 
 | Format | Shape |
 | --- | --- |
@@ -195,7 +195,7 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
 2. Optional: `pip install kokoro-onnx onnxruntime` in the Comfy venv (runtime; see [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md))
 3. `./scripts/manage.sh start` — type **yes**
 4. Load **audio/podcast/two-host-episode** (authored script) or **audio/podcast/learn-episode** (paste sources, pick Format + Duration). Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_podcast_ep_*.flac` / `ez_learn_ep_*.flac` (plus the matching `*_mix_*.mp3`)
-5. Load **klein/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
+5. Load **stills/podcast-cover** in a **later** session. Queue `ez_podcast_*.png`
 6. Loudness (ffmpeg; Comfy cannot LUFS):
 
 ```bash

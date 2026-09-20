@@ -21,20 +21,26 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue. Node-by-node widgets: [Workflow details](create/workflows-index.md). Encyclopedia: [Workflow node parameters](reference/workflow-nodes.md).
 
-After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`klein/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
+After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
 Sidebar tree after start:
 
 ```text
 user/default/workflows/
   _lab/
-    klein/     stills, plates, identity, platform pack, dream-house, dream-house-clay, creator/…
-    wan/       silent 5s, gif/bumper/sticker, first-last, vace, shot, creator/…
-    ltx/       AV 5s, hook, b-roll, shorts, first-last, audio-to-video, shot, creator/…
-    shorts/    go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05 (7.5 min)
-    dcc/       clay → print, plates, canny, depth/canny control, first-last from guide, in-canvas loaders
-    optional/  a14b, longcat stub, klein-trellis2
-    audio/     podcast (two-host, radio-drama, learn-episode), dub, music/rap-draft, music/rap-full
+    stills/    draft, hero, studio, identity, character, plates, dream-house
+    motion/
+      silent/  Wan I2V / T2V, first-last, vace, shot
+      loops/   gif, bumper, sticker
+      av/      LTX I2V / T2V, hook, b-roll, dialogue, A2V
+    creator/
+      stills/  YouTube / IG / Twitch / merch plates
+      silent/  Wan loops and I2V jobs
+      av/      LTX AV jobs
+    films/     go-see, still-here, switchyard (90s); tide-table / night-oven / glasshouse / last-lane / breakwater act-01…05
+    dcc/       clay → print, plates, canny, depth/canny control, first-last from guide
+    optional/  a14b, longcat stub, trellis2
+    audio/     podcast, dub, music/rap-draft, music/rap-full
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  five Drive-through albums
     inspire/   prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
@@ -51,12 +57,12 @@ flowchart TB
   Need --> Loop["Loop / GIF / bumper"]
   Need --> Film["~90 s short"]
   Need --> Plate["Thumbnail / packshot / cover"]
-  Still --> K["klein-still-draft, still-studio, image-studio, daily / hero"]
-  Motion --> W["wan/still-to-video-5s or shot"]
-  AV --> L["ltx/still-to-video-5s or shorts"]
-  Loop --> G["wan-gif-loop or bumper-loop"]
-  Film --> F["film-*-90s one-click"]
-  Plate --> C["klein-thumbnail / packshot / cover"]
+  Still --> K["stills/still-draft, still-studio, image-studio, daily / hero"]
+  Motion --> W["motion/silent/still-to-video-5s or shot"]
+  AV --> L["motion/av/still-to-video-5s or shorts"]
+  Loop --> G["motion/loops/gif-loop or bumper-loop"]
+  Film --> F["films/go-see one-click"]
+  Plate --> C["stills/thumbnail / packshot / cover"]
 ```
 
 ---
@@ -134,8 +140,8 @@ No UNET still. Occupancy **llm** or **none**. Full Apps Lane A Klein stills: [St
 
 ## Notes that apply to every lab graph
 
-Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[wan/gif-loop](generated/workflows/wan/gif-loop.md)** emits `image/gif`.
+Every seeded lab graph includes an on-canvas **Note** (purpose, models, sampler, prompting tips, run steps). Video graphs emit MP4 via VHS with **`save_output: true`**; after Queue, open **Save video (MP4) — open node for preview**. LTX graphs decode audio (`LTXVAudioVAEDecode`) into the MP4. **[motion/loops/gif-loop](generated/workflows/motion/loops/gif-loop.md)** emits `image/gif`.
 
-Optional Wan A14B is a Queue graph (`workflows/_lab/optional/wan/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
+Optional Wan A14B is a Queue graph (`workflows/_lab/optional/still-to-video-a14b.json`): **both** high-noise and low-noise FP8 UNETs on the canvas. Queue uses the high-noise expert at 8 Lightning-style steps (MagCache **off**) so the graph loads. Dual-expert KSampler split is the full I2V recipe after both weights exist (Comfy Templates / operator). Download `download-wan.sh run --tier a14b` and unload 5B first.
 
 Daily loop: [Still to motion to AV](visual-generative-ai.md). Prompt shapes: [Prompting](prompting.md).

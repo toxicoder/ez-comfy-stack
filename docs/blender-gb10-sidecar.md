@@ -51,7 +51,7 @@ tags: [blender, sidecar, occupancy, gb10]
 # or: sudo apt-get install -y blender
 ```
 
-Never apt/pip inside the Comfy container or `docker/Dockerfile`. Ubuntu aarch64 universe `blender` (4.0.x) is enough for Workbench. Official blender.org Linux tarballs are x64 only. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only. No DCC → `house-views --seed-inputs` or **klein/dream-house**.
+Never apt/pip inside the Comfy container or `docker/Dockerfile`. Ubuntu aarch64 universe `blender` (4.0.x) is enough for Workbench. Official blender.org Linux tarballs are x64 only. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only. No DCC → `house-views --seed-inputs` or **stills/dream-house**.
 
 Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
 

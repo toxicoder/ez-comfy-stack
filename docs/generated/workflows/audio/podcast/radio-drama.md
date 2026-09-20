@@ -33,8 +33,8 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session — not a one-graph film.
-- Cover: Queue **klein/podcast-cover.json** separately.
+- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **motion/loops/bumper-loop** / **motion/av/hook-av** in a later session — not a one-graph film.
+- Cover: Queue **stills/podcast-cover.json** separately.
 
 Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -962,8 +962,8 @@ US-safe one-graph radio drama (Option B). Lab-original fiction. Same legal engin
 
 - Writer flavor `radio_drama` (enhance **off** so Speaker A/B / Announcer labels stay parser input). Announcer + two Kokoro stock voices.
 - ACE-Step sting + bed, instrumental only, empty lyrics. Script STRING is wired into both ACE enhance nodes as context. One 48 kHz-class master (`ez_radio_ep` / `ez_radio_mix`).
-- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **wan/bumper-loop** / **ltx/hook-av** in a later session — not a one-graph film.
-- Cover: Queue **klein/podcast-cover.json** separately.
+- Optional Wan silent bumper / LTX 5s hook groups are **off** (node mode never). Queue **motion/loops/bumper-loop** / **motion/av/hook-av** in a later session — not a one-graph film.
+- Cover: Queue **stills/podcast-cover.json** separately.
 
 Voices and music on this show are synthesized. The hosts are original characters, not recordings of real people.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.

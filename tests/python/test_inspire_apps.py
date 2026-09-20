@@ -55,7 +55,7 @@ def test_prompt_forge_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["enabled"] is True
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
     labels = []
     for entry in extra["linearData"]["inputs"]:
         config = entry[2] if len(entry) > 2 else {}
@@ -90,7 +90,7 @@ def test_cinema_rack_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["enabled"] is True
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
-    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
     names = [entry[1] for entry in extra["linearData"]["inputs"]]
     assert names[0] == "quality"
     assert names[1] == "subject"
@@ -140,7 +140,7 @@ def test_research_chat_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
-    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
     assert extra["lab_mcp"]["server"] == "research-mcp"
     assert extra["lab_mcp"]["tools"] == ["chat", "web_search", "research"]
     labels = []
@@ -183,7 +183,7 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
     assert extra["lab_app_mode"]["lane"] == "inspire"
     assert extra["lab_app_mode"]["occupancy"] == "llm"
     assert "inspire/prompt-forge" in extra["lab_app_mode"]["handoff"]
-    assert "klein/still-draft" in extra["lab_app_mode"]["handoff"]
+    assert "stills/still-draft" in extra["lab_app_mode"]["handoff"]
     assert extra["lab_mcp"]["server"] == "studio-mcp"
     assert "generate_app" in extra["lab_mcp"]["tools"]
     labels = []
@@ -212,10 +212,10 @@ def test_app_forge_has_no_unet_and_stamps_llm() -> None:
 
 
 def test_character_draft_is_t2i_without_reference() -> None:
-    graph = _load("klein/character-draft")
+    graph = _load("stills/character-draft")
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
-    assert "klein/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
+    assert "stills/character-tweak" in graph["extra"]["lab_app_mode"]["handoff"]
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     values = enh["widgets_values"]
     if len(values) >= 7:
@@ -239,7 +239,7 @@ def test_character_draft_is_t2i_without_reference() -> None:
 
 
 def test_character_tweak_wires_reference_latent() -> None:
-    graph = _load("klein/character-tweak")
+    graph = _load("stills/character-tweak")
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     enh = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
     values = enh["widgets_values"]
@@ -293,9 +293,9 @@ def test_beat_sheet_documents_yaml_contract_and_has_no_unet() -> None:
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "none"
     assert graph["extra"]["lab_app_mode"]["lane"] == "inspire"
     handoff = graph["extra"]["lab_app_mode"]["handoff"]
-    assert "shorts/go-see" in handoff
-    assert "dcc/klein/clay-hero" in handoff
-    assert "klein/identity-sheet" in handoff
+    assert "films/go-see" in handoff
+    assert "dcc/clay-hero" in handoff
+    assert "stills/identity-sheet" in handoff
     assert "1280×720" not in blob and "1280x720" not in blob
     assert "MODELS_DIR" not in blob
     for needle in BANNED:

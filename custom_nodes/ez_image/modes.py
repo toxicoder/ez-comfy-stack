@@ -489,7 +489,7 @@ class EZImageMode:
     CATEGORY = CATEGORY
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "100 creator modes for klein/image-studio. Category filters the Mode "
+        "100 creator modes for stills/image-studio. Category filters the Mode "
         "combo in the App. Queue splices the mode instruction into Enhance "
         "context, selects t2i/edit/text_swap/identity, and sets the save "
         "prefix. Optional reference stills stay optional — modes never error "

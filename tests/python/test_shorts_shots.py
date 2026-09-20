@@ -46,9 +46,9 @@ SHOT_INDEX_RE = re.compile(r"Shot \d+ of 18")
 WAN_AUDIO_WORDS = ("score", "music", "audio", "sound", "breath")
 LTX_CLOSE = "No music and no score."
 BIBLES = {
-    "go-see": "shorts/go-see.json",
-    "still-here": "shorts/still-here.json",
-    "switchyard": "shorts/switchyard.json",
+    "go-see": "films/go-see.json",
+    "still-here": "films/still-here.json",
+    "switchyard": "films/switchyard.json",
 }
 
 
@@ -60,7 +60,7 @@ def test_print_template_ltx_and_dfr() -> None:
     assert print_template("ltx") == LTX_PRINT_TEMPLATE
     assert print_template("dfr") == DFR_TEMPLATE
     assert print_template("ltx-iclora-depth") == ICLORA_TEMPLATE
-    assert print_template("wan-flf") == "wan/first-last-5s.json"
+    assert print_template("wan-flf") == "motion/silent/first-last-5s.json"
     assert print_template("dcc-final") == "dcc-final"
     assert DFR_TEMPLATE.startswith("templates/ltx-2.5/")
     try:
@@ -354,8 +354,8 @@ def test_creative_locks() -> None:
 def _json_files() -> list[Path]:
     from _lab_paths import LAB_ROOT
 
-    files = sorted(p for p in (LAB_ROOT / "shorts").rglob("*.json") if p.is_file())
-    assert files, "expected shorts lab JSON"
+    files = sorted(p for p in (LAB_ROOT / "films").rglob("*.json") if p.is_file())
+    assert files, "expected films lab JSON"
     return files
 
 
@@ -367,13 +367,13 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
     from _lab_paths import lab_rel_of
 
     expected = {
-        "shorts/go-see",
-        "shorts/still-here",
-        "shorts/switchyard",
+        "films/go-see",
+        "films/still-here",
+        "films/switchyard",
     }
     for film in LONG:
         for act in range(1, 6):
-            expected.add(f"shorts/{film[0]}/act-0{act}")
+            expected.add(f"films/{film[0]}/act-0{act}")
     names = {lab_rel_of(p) for p in _json_files()}
     assert names == expected
     for path in _json_files():
@@ -402,8 +402,8 @@ def test_shorts_json_parse_ids_and_banned_strings() -> None:
 
 
 def test_shot_graphs_are_five_second_i2v() -> None:
-    wan = json.loads(lab_json("wan/still-to-shot.json").read_text(encoding="utf-8"))
-    ltx = json.loads(lab_json("ltx/still-to-shot.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("motion/silent/still-to-shot.json").read_text(encoding="utf-8"))
+    ltx = json.loads(lab_json("motion/av/still-to-shot.json").read_text(encoding="utf-8"))
     wan_len = next(
         n["widgets_values"][2]
         for n in wan["nodes"]
@@ -585,7 +585,7 @@ def test_long_film_act_graphs() -> None:
     for film, slug in LONG:
         parsed = parse_shots_yaml(_path(film).read_text(encoding="utf-8"))
         for act in range(1, 6):
-            rel = f"shorts/{film}/act-0{act}"
+            rel = f"films/{film}/act-0{act}"
             graph = json.loads(lab_json(rel).read_text(encoding="utf-8"))
             printers = [n for n in graph["nodes"] if n.get("type") == "LTXVImgToVideo"]
             assert len(printers) == 18, rel

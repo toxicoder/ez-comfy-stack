@@ -154,7 +154,7 @@ class EZMatchImageSize:
     CATEGORY = CATEGORY
     DESCRIPTION = (
         "Lanczos-resize ``image`` to ``size_src`` width and height. No-op when "
-        "they already match. klein/text-swap uses this so the PNG matches the "
+        "they already match. stills/text-swap uses this so the PNG matches the "
         "uploaded still, including odd sizes such as 1920x1080."
     )
 

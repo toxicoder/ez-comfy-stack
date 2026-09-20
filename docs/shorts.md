@@ -33,7 +33,7 @@ tags: [shorts, wan, ltx, klein, youtube, comfyui]
 
     1. Stack is up (`manage.sh start`, type **yes**). LTX-2.5 weights on disk.
     2. Optional: fill **inspire/beat-sheet** (occupancy **none**, no UNET) then `./scripts/manage.sh shot-sheet run --film go-see` — writes `films/<slug>/shots.yaml`. Lab YAML is not copied by the entrypoint.
-    3. Load **shorts/go-see** (or still-here / switchyard).
+    3. Load **films/go-see** (or still-here / switchyard).
     4. All three films pin Enhance **off** so the identity and each baked LTX paragraph are encoded as written. Leave LTX **1280×704**. Queue **once**.
     5. Wall-clock is 18 sequential 5 s prints (tens of minutes to a couple of hours). That is expected.
     6. The stitched MP4 is **already on disk**: `${COMFY_OUTPUT_DIR}/ez_gosee_90s.mp4` (container `/outputs`), plus `ez_gosee_90s.html`. A **90s film ready** overlay offers play and download. Optional board: `docker compose --profile studio-ui up studio-ui` then http://localhost:8190/watch/gosee
@@ -84,13 +84,13 @@ flowchart LR
 | Identity still | Group **1. Identity (Klein)** | Klein 4B distilled FP8 | Apache 2.0 |
 | Print + synced world audio | Groups **3–8** (beats) | LTX-2.5 distilled I2V | Community License (not Apache) |
 | Stitch + preview | Group **9. Publish 90s MP4** (left column) | `EZFilmConcat` (H.264 CRF 18 + AAC + YouTube loudnorm + faststart) | — |
-| Optional silent rehearsal | `workflows/_lab/wan/still-to-shot.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
+| Optional silent rehearsal | `workflows/_lab/motion/silent/still-to-shot.json` | Wan 2.2 TI2V-5B I2V | Apache 2.0, silent |
 
 One-click film files:
 
-- `workflows/_lab/shorts/go-see.json`
-- `workflows/_lab/shorts/still-here.json`
-- `workflows/_lab/shorts/switchyard.json`
+- `workflows/_lab/films/go-see.json`
+- `workflows/_lab/films/still-here.json`
+- `workflows/_lab/films/switchyard.json`
 
 Deliverable MP4s are **LTX I2V heroes** (breath, world objects, **no score**) with audio muxed per shot via `LTXVAudioVAEDecode` → `VHS_VideoCombine`, then stitched. Wan is an optional cheap motion draft — skip it if you already like the camera.
 
@@ -100,13 +100,13 @@ LTX-2.5 native multishot (several cuts in one 5–10s clip) is an optional exper
 
 ## Operator loop
 
-Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/shorts/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/shorts/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
+Each film graph ships **Klein identity + 18 LTX 5.00s printers + in-graph stitch**. Prompts are baked from `{film}.shots.yaml` (Klein `identity_look`, LTX `ltx_i2v`). Host JSON lives at `workflows/_lab/films/`; YAML shot lists stay at `workflows/shorts/*.shots.yaml` (not copied into Comfy). The entrypoint rsyncs JSON into `user/default/workflows/_lab/films/`. Restart so `custom_nodes/ez_film` is copied with the other in-tree packs.
 
-1. Load one film graph (`shorts/go-see` / `shorts/still-here` / `shorts/switchyard`).
+1. Load one film graph (`films/go-see` / `films/still-here` / `films/switchyard`).
 2. Queue **once**. Klein runs first (4-step). Models unload. Then 18 × **5.00s** LTX prints chain last-frame → next start. All three films pin Enhance **off** on identity and every LTX shot. Leave LTX **1280×704**.
 3. Wall-clock is 18 sequential 5s prints (tens of minutes to a couple of hours on GB10). That is expected, not a hang. Headroom preflight still applies at start.
 4. After Queue, the stitched file is already written to `${COMFY_OUTPUT_DIR}/ez_<slug>_90s.mp4` (H.264 + AAC + faststart) plus `ez_<slug>_90s.html`. A **90s film ready** overlay plays and downloads it. Per-shot files remain as `ez_<slug>_bN_sM_ltx_video_*.mp4`. Copy off the Spark with `scp`. Optional: studio-ui `/watch/<slug>`.
-5. Optional silent rehearsal of one frame: **wan/still-to-shot**. Optional single-shot iterate: **ltx/still-to-shot**.
+5. Optional silent rehearsal of one frame: **motion/silent/still-to-shot**. Optional single-shot iterate: **motion/av/still-to-shot**.
    Shot-level resume lives under `${COMFY_OUTPUT_DIR}/films/<slug>/` (`state.json`, `shots/NN.mp4`). A dropped SSH session is not a two-hour requeue:
 
    ```bash
@@ -161,7 +161,7 @@ ACE-Step 90 s bed → `manage.sh stop` / unload → LTX A2V freeze. Qwen3-TTS is
 
 Official LTX-2.5 quality/control graphs (two-stage DFR, A2V freeze, IC-LoRA) live in Comfy **Templates → LTX-2.5**. Repo note: `workflows/quality/ltx-2.5/NOTICE.md`. Lab printers stay 5.00 s. Depth-guided hybrid (clay dump → Klein look → Union Control): [DCC guide pack](dcc-workflows.md). Opt-in `download-ltx --tier iclora` (not `download-models`).
 
-Optional silent **first-last-frame** draft: `wan/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `wan/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
+Optional silent **first-last-frame** draft: `motion/silent/first-last-5s` after `./scripts/utilities/download-wan.sh run --tier fun-inp` (~47 GB, Apache). Unload LTX first. MagCache is **draft-only** on `motion/silent/still-to-video-5s` (`extra.lab_magcache`; never on LTX heroes).
 
 Post-concat restore (opt-in Apache SeedVR2-3B):
 
@@ -175,7 +175,7 @@ Optional 17-frame VACE join (`1+8n`, MagCache **off**). Unload LTX first:
 
 ```bash
 ./scripts/utilities/download-wan.sh run --tier vace
-# load wan/vace-join (Shot A last → Shot B first)
+# load motion/silent/vace-join (Shot A last → Shot B first)
 ```
 
 Host 3D sidecars (Comfy **must be stopped**): [Studio sidecars](studio-sidecars.md), [Blender](blender-gb10-sidecar.md), [SuperSplat](splat-sidecar.md).
@@ -184,13 +184,13 @@ Wave 4 hero path (opt-in, occupancy: one heavy job):
 
 ```bash
 ./scripts/utilities/download-wan.sh run --tier a14b   # A14B FP8 8-step silent hero; MagCache off
-# load optional/wan/still-to-video-a14b — unload 5B first
+# load optional/still-to-video-a14b — unload 5B first
 ./scripts/manage.sh download-longcat --tier video     # MIT; no NCCL
 # load workflows/_lab/optional/longcat-video.json (note, not 90s default)
 ./scripts/manage.sh download-dreamx --tier creator    # Apache joint AV; not DreamX-World
 ```
 
-Identity sheet: `klein/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `klein/talking-head` (I2V smoke) or **`ltx/audio-to-video-5s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
+Identity sheet: `stills/identity-sheet` (seed **42**, Enhance **on**, identity mode, 1280×704). Talking-head: `stills/talking-head` (I2V smoke) or **`motion/av/audio-to-video-5s`** (LoadAudio freeze; S2V opt-in `--tier s2v`). DFR two-stage stays in Comfy **Templates → LTX-2.5**; YAML `print: dfr` selects that path. Lab printers stay 5.00 s. Showcase AV: [Motion catalog](create/workflows-motion.md#showcase-ltx-25).
 
 ```bash
 ./scripts/manage.sh stop
@@ -265,11 +265,11 @@ Five festival-length titles share the same 5.00s LTX printer. Each film is **5 �
 
 | Film | Graph | Identity | Master |
 | --- | --- | --- | --- |
-| **tide-table** | `shorts/tide-table/act-01` … `act-05` | Unmarked skiff bow | `ez_tidetable_450s.mp4` |
-| **night-oven** | `shorts/night-oven/act-01` … `act-05` | Flour-dusted linen apron | `ez_nightoven_450s.mp4` |
-| **glasshouse** | `shorts/glasshouse/act-01` … `act-05` | Unmarked copper watering can | `ez_glasshouse_450s.mp4` |
-| **last-lane** | `shorts/last-lane/act-01` … `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
-| **breakwater** | `shorts/breakwater/act-01` … `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
+| **tide-table** | `films/tide-table/act-01` … `act-05` | Unmarked skiff bow | `ez_tidetable_450s.mp4` |
+| **night-oven** | `films/night-oven/act-01` … `act-05` | Flour-dusted linen apron | `ez_nightoven_450s.mp4` |
+| **glasshouse** | `films/glasshouse/act-01` … `act-05` | Unmarked copper watering can | `ez_glasshouse_450s.mp4` |
+| **last-lane** | `films/last-lane/act-01` … `act-05` | Dashboard + blank gloves (POV) | `ez_lastlane_450s.mp4` |
+| **breakwater** | `films/breakwater/act-01` … `act-05` | Yellow slicker sleeves + blank gloves (chest-cam) | `ez_breakwater_450s.mp4` |
 
 1. `./scripts/utilities/compile-film.sh tide-table` (any of the five ids).
 2. Queue **act-01**. Klein identity, then 18 prints. Overlay writes `ez_<slug>_act1_90s.mp4`.
@@ -317,8 +317,8 @@ Identity owns every later I2V. Distilled LTX audio talks if the mix is only a pr
 
 1. Queue identity only if you can isolate it; otherwise Queue the film graph and **stop after the identity PNG** (`ez_gosee_identity_*.png`).
 2. Accept the still only if: chest-cam POV, only the wearer's own arms along the bottom edge, contralateral pump, blank gloves, hands free, **no second person in front of the camera**, no staff or pole, no handlebar, no circular mask, gap already in center.
-3. Re-roll identity (seed **42** is frozen in YAML — if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `klein/still-hero` off-graph, then paste the winning look back into YAML.
-4. Print b1s1–s3 with `ltx/still-to-shot` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
+3. Re-roll identity (seed **42** is frozen in YAML — if the still is illegal, change **prompt text**, not the seed, then rebuild). If you must explore seeds, do it on `stills/still-hero` off-graph, then paste the winning look back into YAML.
+4. Print b1s1–s3 with `motion/av/still-to-shot` / `./scripts/manage.sh print-shot go-see N` until last frames still show gloves in the lower third.
 5. `take-promote` winners. `film-resume` the rest.
 6. `./scripts/manage.sh film-accept go-see` must exit 0 before anyone calls the file a deliverable. In-graph `EZFilmConcat` refuses missing/short stems and unlinks a master that is not 90.00±0.10s.
 7. Listen on headphones. If you hear words, reprint that shot; do not “EQ the announcer out” unless you are on the stems path and dropping DX.
@@ -331,7 +331,7 @@ Optional salvage on a **locked** picture (not the lab default, not in the one-cl
 
 ## Spark farm
 
-The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **ltx/still-to-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
+The one-click film graph is **sequential on one host**. Three Sparks can still Queue **different beats** in parallel as independent 5s jobs (shared `${MODELS_DIR}`) on **motion/av/still-to-shot**. Concat stays on one host (`concat-shots.sh --film`). `spark-farm.sh run --film go-see` prints that Queue reminder (it does not POST graphs). No NCCL. See [Spark farm](spark-farm.md).
 
 ---
 

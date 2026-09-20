@@ -17,10 +17,10 @@ def _load(name: str) -> dict:
 
 def test_app_mode_extra_on_lab_printers() -> None:
     for name in (
-        "klein/still-draft.json",
-        "klein/still-hero.json",
-        "wan/still-to-video-5s.json",
-        "ltx/still-to-video-5s.json",
+        "stills/still-draft.json",
+        "stills/still-hero.json",
+        "motion/silent/still-to-video-5s.json",
+        "motion/av/still-to-video-5s.json",
     ):
         extra = _load(name)["extra"]["lab_app_mode"]
         assert extra["enabled"] is True
@@ -29,8 +29,8 @@ def test_app_mode_extra_on_lab_printers() -> None:
 
 def test_identity_enhance_on() -> None:
     for name in (
-        "klein/still-draft.json",
-        "klein/still-hero.json",
+        "stills/still-draft.json",
+        "stills/still-hero.json",
     ):
         graph = _load(name)
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
@@ -41,10 +41,10 @@ def test_identity_enhance_on() -> None:
 
 def test_klein_i2v_feeders_are_1280x704() -> None:
     for name in (
-        "klein/still-hero.json",
-        "shorts/go-see.json",
-        "shorts/still-here.json",
-        "shorts/switchyard.json",
+        "stills/still-hero.json",
+        "films/go-see.json",
+        "films/still-here.json",
+        "films/switchyard.json",
     ):
         graph = _load(name)
         hits = [
@@ -59,21 +59,21 @@ def test_klein_i2v_feeders_are_1280x704() -> None:
 
 
 def test_magcache_draft_only() -> None:
-    wan = _load("wan/still-to-video-5s.json")
+    wan = _load("motion/silent/still-to-video-5s.json")
     mag = wan["extra"]["lab_magcache"]
     assert mag["enabled"] is True
     assert mag["magcache_thresh"] == 0.04
     assert mag["magcache_K"] == 3
     assert mag["start_step"] == 2
-    ltx = _load("ltx/still-to-video-5s.json")
+    ltx = _load("motion/av/still-to-video-5s.json")
     assert "lab_magcache" not in ltx.get("extra", {})
-    flf = _load("wan/first-last-5s.json")
+    flf = _load("motion/silent/first-last-5s.json")
     assert "lab_magcache" not in flf.get("extra", {})
     assert not any(n.get("type") == "MagCache" for n in ltx["nodes"])
 
 
 def test_fun_inp_flf_graph() -> None:
-    graph = _load("wan/first-last-5s.json")
+    graph = _load("motion/silent/first-last-5s.json")
     assert graph["id"] == "first-last-5s"
     titles = [n.get("title") for n in graph["nodes"]]
     assert "End frame (Fun InP)" in titles

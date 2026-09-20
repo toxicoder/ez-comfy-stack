@@ -41,8 +41,8 @@ from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
 
 ACE_CKPT = "ace_step_1.5_turbo_aio.safetensors"
 ACE_TAGS = BOOM_BAP_TAGS_88
-COVER_THUMB = "klein/thumbnail.json"
-COVER_PODCAST = "klein/podcast-cover.json"
+COVER_THUMB = "stills/thumbnail.json"
+COVER_PODCAST = "stills/podcast-cover.json"
 
 DRAFT_NOTE = f"""## audio/music/rap-draft
 
@@ -734,7 +734,7 @@ def _node(graph: dict, ntype: str) -> dict:
 
 def build_cover(info: AlbumInfo) -> dict:
     """Klein 1024×1024 square still for one album cover."""
-    graph = json.loads(lab_json("klein/instagram-square").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("stills/instagram-square").read_text(encoding="utf-8"))
     rel = album_rel(info["artist_slug"], info["slug"], "cover")
     apply_lab_identity(graph, rel)
     prefix = f"albums/{info['artist']}/{info['title']}/cover"

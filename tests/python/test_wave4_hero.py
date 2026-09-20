@@ -14,9 +14,9 @@ WF = ROOT / "workflows"
 
 def test_film_graphs_carry_dfr_extra() -> None:
     for name in (
-        "shorts/go-see.json",
-        "shorts/still-here.json",
-        "shorts/switchyard.json",
+        "films/go-see.json",
+        "films/still-here.json",
+        "films/switchyard.json",
     ):
         extra = json.loads(lab_json(name).read_text(encoding="utf-8"))["extra"]
         assert extra["lab_dfr"]["print"] == "ltx"
@@ -28,9 +28,9 @@ def _overlap_hits(graph: dict) -> list[str]:
 
 
 def test_a14b_hero_is_eight_step_magcache_off() -> None:
-    graph = json.loads(lab_json("optional/wan/still-to-video-a14b.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("optional/still-to-video-a14b.json").read_text(encoding="utf-8"))
     assert graph["id"] == "still-to-video-a14b"
-    assert graph["extra"].get("lab_rel") == "optional/wan/still-to-video-a14b"
+    assert graph["extra"].get("lab_rel") == "optional/still-to-video-a14b"
     assert graph["extra"]["lab_a14b"]["steps"] == 8
     assert graph["extra"]["lab_a14b"]["magcache"] is False
     assert "lab_magcache" not in graph["extra"]
@@ -48,9 +48,9 @@ def test_a14b_hero_is_eight_step_magcache_off() -> None:
 
 
 def test_talking_head_graph() -> None:
-    graph = json.loads(lab_json("klein/talking-head.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("stills/talking-head.json").read_text(encoding="utf-8"))
     assert graph["id"] == "talking-head"
-    assert graph["extra"].get("lab_rel") == "klein/talking-head"
+    assert graph["extra"].get("lab_rel") == "stills/talking-head"
     assert graph["extra"]["lab_talking_head"]["s2v_tier"] == "s2v"
     blob = json.dumps(graph)
     assert "Wav2Lip" not in blob
@@ -62,7 +62,7 @@ def test_talking_head_graph() -> None:
 
 
 def test_identity_sheet_seed_and_size() -> None:
-    graph = json.loads(lab_json("klein/identity-sheet.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("stills/identity-sheet.json").read_text(encoding="utf-8"))
     assert graph["extra"]["lab_identity"]["seed"] == 42
     assert graph["extra"]["lab_identity"]["enhance"] is True
     prefixes = [n["widgets_values"][0] for n in graph["nodes"] if n.get("type") == "SaveImage"]

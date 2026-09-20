@@ -12,10 +12,10 @@ BANNED = ("Pixal3D", "pixal3d", "MiniMax", "MagCache")
 
 
 def test_klein_trellis2_graph_contract() -> None:
-    graph = json.loads(lab_json("optional/klein/trellis2.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("optional/trellis2.json").read_text(encoding="utf-8"))
     assert graph["id"] == "trellis2"
-    assert graph["extra"].get("lab_rel") == "optional/klein/trellis2"
-    assert "optional" in lab_json("optional/klein/trellis2.json").parts
+    assert graph["extra"].get("lab_rel") == "optional/trellis2"
+    assert "optional" in lab_json("optional/trellis2.json").parts
     extra = graph["extra"]
     assert extra["lab_app_mode"]["occupancy"] == "trellis"
     assert extra["lab_app_mode"]["lane"] == "optional"

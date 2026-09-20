@@ -47,16 +47,16 @@ LOCK = ("photoreal still", "techno wizard")
 
 # Packs that already use a different subject (house is wizard-home; mug, 90s still-here/switchyard, DCC).
 EXEMPT = {
-    "klein/product-packshot",
-    "klein/podcast-cover",
-    "klein/food-tabletop",
-    "klein/before-after",
-    "klein/text-swap",
-    "ltx/interior-ambience",
-    "shorts/still-here",
-    "shorts/switchyard",
-    "dcc/klein/clay-hero",
-    "dcc/ltx/depth-control-5s",
+    "stills/product-packshot",
+    "stills/podcast-cover",
+    "stills/food-tabletop",
+    "stills/before-after",
+    "stills/text-swap",
+    "motion/av/interior-ambience",
+    "films/still-here",
+    "films/switchyard",
+    "dcc/clay-hero",
+    "dcc/depth-control-5s",
 }
 
 
@@ -107,8 +107,8 @@ def test_theme_module_house_bible_is_camera_free_penthouse() -> None:
 
 
 def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
-    draft = load_lab_graph(lab_json("klein/still-draft.json"))
-    hero = load_lab_graph(lab_json("klein/still-hero.json"))
+    draft = load_lab_graph(lab_json("stills/still-draft.json"))
+    hero = load_lab_graph(lab_json("stills/still-hero.json"))
 
     def pos(graph: dict) -> str:
         node = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
@@ -152,15 +152,15 @@ def test_lab_example_graphs_drop_superhero_theme() -> None:
 
 
 def test_lab_identity_graphs_lock_techno_wizard() -> None:
-    draft = lab_json("klein/still-draft.json").read_text(encoding="utf-8")
+    draft = lab_json("stills/still-draft.json").read_text(encoding="utf-8")
     for needle in LOCK:
         assert needle in draft
 
 
 def test_exempt_packs_keep_their_own_subjects() -> None:
-    house = lab_json("klein/dream-house.json").read_text(encoding="utf-8").lower()
-    clay = lab_json("klein/dream-house-clay.json").read_text(encoding="utf-8").lower()
-    style = lab_json("klein/style-lock.json").read_text(encoding="utf-8").lower()
+    house = lab_json("stills/dream-house.json").read_text(encoding="utf-8").lower()
+    clay = lab_json("stills/dream-house-clay.json").read_text(encoding="utf-8").lower()
+    style = lab_json("stills/style-lock.json").read_text(encoding="utf-8").lower()
     for blob in (house, clay, style):
         assert "warm-glass" in blob
         assert "crown penthouse" in blob
@@ -171,7 +171,7 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
         assert "cedar" not in blob
         assert "alpine" not in blob
         assert "charcoal-glass" not in blob
-    film = lab_json("shorts/go-see.json").read_text(encoding="utf-8").lower()
+    film = lab_json("films/go-see.json").read_text(encoding="utf-8").lower()
     assert "storm-cloak" in film
     assert "ink-black" in film
     assert "parkour" in film

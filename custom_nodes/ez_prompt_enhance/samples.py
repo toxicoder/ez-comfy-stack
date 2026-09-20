@@ -156,7 +156,7 @@ def catalog_for_rel(lab_rel: str) -> str:
     """Map a lab-relative id (or a catalog id) to a catalog file stem.
 
     Args:
-        lab_rel: ``klein/still-draft``, ``klein_t2i``, or empty.
+        lab_rel: ``stills/still-draft``, ``klein_t2i``, or empty.
 
     Returns:
         Catalog id, or empty when this graph has no sample catalog.
@@ -349,7 +349,7 @@ def sample_combo_labels(preferred: str = "") -> list[str]:
 
     JS binds ``widget.options.values`` to one catalog so App Mode cannot
     show foreign recipes. The Python combo is the union of every catalog so
-    a graph like ``klein/dream-house`` (``klein_place``) does not fail
+    a graph like ``stills/dream-house`` (``klein_place``) does not fail
     frontend validation when the App picks a place recipe such as Cliff villa.
 
     Args:

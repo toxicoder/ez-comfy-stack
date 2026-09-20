@@ -643,19 +643,19 @@ teardown() {
 @test "lab_workflow_lane maps _lab and legacy globs" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
-  run lab_workflow_lane "_lab/klein/still-draft.json"
+  run lab_workflow_lane "_lab/stills/still-draft.json"
   [ "${status}" -eq 0 ]
-  [ "${output}" = "klein" ]
-  run lab_workflow_lane "klein/still-draft.json"
+  [ "${output}" = "stills" ]
+  run lab_workflow_lane "stills/still-draft.json"
   [ "${status}" -eq 0 ]
-  [ "${output}" = "klein" ]
-  run lab_workflow_lane "shorts/go-see.json"
+  [ "${output}" = "stills" ]
+  run lab_workflow_lane "films/go-see.json"
   [ "${status}" -eq 0 ]
-  [ "${output}" = "shorts" ]
-  run lab_workflow_lane "dcc/klein/clay-hero.json"
+  [ "${output}" = "films" ]
+  run lab_workflow_lane "dcc/clay-hero.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "dcc" ]
-  run lab_workflow_lane "optional/wan/still-to-video-a14b.json"
+  run lab_workflow_lane "optional/still-to-video-a14b.json"
   [ "${status}" -eq 0 ]
   [ "${output}" = "optional" ]
   run lab_workflow_lane "audio/podcast/two-host-episode.json"
@@ -692,51 +692,52 @@ teardown() {
   src="${TEST_TMP_DIR}/wf"
   dest="${TEST_TMP_DIR}/user_wf"
   mkdir -p \
-    "${src}/_lab/klein" \
-    "${src}/_lab/shorts" \
+    "${src}/_lab/stills" \
+    "${src}/_lab/films" \
     "${src}/_lab/dcc" \
     "${src}/_lab/optional" \
     "${src}/_lab/audio/nill-bye/phase0" \
     "${src}/_lab/audio/drive-through/phase0" \
     "${src}/_user" \
     "${src}/shorts" \
+    "${src}/films" \
     "${src}/quality/ltx-2.5" \
-    "${dest}/_lab/klein" \
-    "${dest}/klein" \
+    "${dest}/_lab/stills" \
+    "${dest}/stills" \
     "${dest}/_user"
-  mkdir -p "${src}/_lab/dcc/klein" "${src}/_lab/optional/wan"
-  echo '{}' >"${src}/_lab/klein/still-draft.json"
-  echo '{}' >"${src}/_lab/shorts/go-see.json"
-  echo '{}' >"${src}/_lab/dcc/klein/clay-hero.json"
-  echo '{}' >"${src}/_lab/optional/wan/still-to-video-a14b.json"
+  mkdir -p "${src}/_lab/dcc" "${src}/_lab/optional"
+  echo '{}' >"${src}/_lab/stills/still-draft.json"
+  echo '{}' >"${src}/_lab/films/go-see.json"
+  echo '{}' >"${src}/_lab/dcc/clay-hero.json"
+  echo '{}' >"${src}/_lab/optional/still-to-video-a14b.json"
   echo '{}' >"${src}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json"
   echo '{}' >"${src}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json"
   echo '{}' >"${src}/_user/keep-me.json"
-  echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
+  echo 'film: go-see' >"${src}/films/go-see.shots.yaml"
   echo 'notice' >"${src}/quality/ltx-2.5/NOTICE.md"
   echo poison >"${dest}/_user/keep-me.json"
-  echo leftover >"${dest}/klein/still-draft.json"
-  echo stale >"${dest}/_lab/klein/stale-gone-lab-example.json"
+  echo leftover >"${dest}/stills/still-draft.json"
+  echo stale >"${dest}/_lab/stills/stale-gone-lab-example.json"
   run sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ -f ${dest}/_lab/klein/still-draft.json ]]
-  [[ -f ${dest}/_lab/shorts/go-see.json ]]
-  [[ -f ${dest}/_lab/dcc/klein/clay-hero.json ]]
-  [[ -f ${dest}/_lab/optional/wan/still-to-video-a14b.json ]]
+  [[ -f ${dest}/_lab/stills/still-draft.json ]]
+  [[ -f ${dest}/_lab/films/go-see.json ]]
+  [[ -f ${dest}/_lab/dcc/clay-hero.json ]]
+  [[ -f ${dest}/_lab/optional/still-to-video-a14b.json ]]
   [[ -f ${dest}/_lab/audio/nill-bye/phase0/music-rap-nill-bye-lab-coat-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/drive-through/phase0/music-edm-drive-through-open-lane-lab-example.json ]]
-  [[ ! -f ${dest}/shorts/go-see.json ]]
+  [[ ! -f ${dest}/films/go-see.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
-  [[ ! -f ${dest}/_lab/shorts/go-see.shots.yaml ]]
+  [[ ! -f ${dest}/_lab/films/go-see.shots.yaml ]]
   [[ ! -f ${dest}/NOTICE.md ]]
-  [[ ! -f ${dest}/_lab/klein/stale-gone-lab-example.json ]]
+  [[ ! -f ${dest}/_lab/stills/stale-gone-lab-example.json ]]
   [[ -f ${dest}/_user/keep-me.json ]]
   [[ "$(cat "${dest}/_user/keep-me.json")" == poison ]]
-  [[ -f ${dest}/klein/still-draft.json ]]
-  [[ "$(cat "${dest}/klein/still-draft.json")" == leftover ]]
-  [[ "${output}" == *"in _lab/klein"* ]]
+  [[ -f ${dest}/stills/still-draft.json ]]
+  [[ "$(cat "${dest}/stills/still-draft.json")" == leftover ]]
+  [[ "${output}" == *"in _lab/stills"* ]]
   run log_lab_seed_counts "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
@@ -752,11 +753,11 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf_legacy"
   dest="${TEST_TMP_DIR}/user_wf_legacy"
-  mkdir -p "${src}/klein" "${src}/shorts" "${src}/dcc" "${src}/optional" "${src}/audio"
-  echo '{}' >"${src}/klein/still-draft.json"
+  mkdir -p "${src}/stills" "${src}/films" "${src}/dcc" "${src}/optional" "${src}/audio" "${src}/shorts"
+  echo '{}' >"${src}/stills/still-draft.json"
   echo '{}' >"${src}/klein-still-hero-lab-example.json"
   echo '{}' >"${src}/audio/podcast-audio-first.json"
-  echo '{}' >"${src}/shorts/go-see.json"
+  echo '{}' >"${src}/films/go-see.json"
   echo '{}' >"${src}/dcc/clay-hero.json"
   echo '{}' >"${src}/optional/still-to-video-a14b.json"
   echo 'film: go-see' >"${src}/shorts/go-see.shots.yaml"
@@ -764,13 +765,13 @@ teardown() {
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ -f ${dest}/_lab/klein/still-draft.json ]]
-  [[ -f ${dest}/_lab/klein/klein-still-hero-lab-example.json ]]
+  [[ -f ${dest}/_lab/stills/still-draft.json ]]
+  [[ -f ${dest}/_lab/stills/klein-still-hero-lab-example.json ]]
   [[ -f ${dest}/_lab/audio/podcast-audio-first.json ]]
-  [[ -f ${dest}/_lab/shorts/go-see.json ]]
+  [[ -f ${dest}/_lab/films/go-see.json ]]
   [[ -f ${dest}/_lab/dcc/clay-hero.json ]]
   [[ -f ${dest}/_lab/optional/still-to-video-a14b.json ]]
-  [[ ! -f ${dest}/klein/still-draft.json ]]
+  [[ ! -f ${dest}/stills/still-draft.json ]]
   [[ ! -f ${dest}/go-see.shots.yaml ]]
   [[ -d ${dest}/_user ]]
 }
@@ -781,22 +782,22 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf_apps"
   dest="${TEST_TMP_DIR}/user_wf_apps"
-  mkdir -p "${src}/_lab/klein" "${src}/_lab/inspire" "${src}/_lab/shorts" "${dest}"
+  mkdir -p "${src}/_lab/stills" "${src}/_lab/inspire" "${src}/_lab/films" "${src}/_lab/klein" "${dest}"
   printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
-    >"${src}/_lab/klein/still-draft.json"
+    >"${src}/_lab/stills/still-draft.json"
   printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
     >"${src}/_lab/inspire/prompt-forge.json"
   printf '%s\n' '{"extra":{"lab_app_mode":{"enabled":true,"default_view":"graph"}}}' \
-    >"${src}/_lab/shorts/go-see.json"
+    >"${src}/_lab/films/go-see.json"
   echo '{}' >"${src}/_lab/klein/plain-lab-example.json"
   echo 'not json' >"${src}/_lab/klein/broken-lab-example.json"
-  mkdir -p "${dest}/_lab/klein"
-  echo '{}' >"${dest}/_lab/klein/still-draft.json"
-  run lab_workflow_is_app "${src}/_lab/klein/still-draft.json"
+  mkdir -p "${dest}/_lab/stills"
+  echo '{}' >"${dest}/_lab/stills/still-draft.json"
+  run lab_workflow_is_app "${src}/_lab/stills/still-draft.json"
   [ "${status}" -eq 0 ]
   run lab_workflow_is_app "${src}/_lab/inspire/prompt-forge.json"
   [ "${status}" -eq 0 ]
-  run lab_workflow_is_app "${src}/_lab/shorts/go-see.json"
+  run lab_workflow_is_app "${src}/_lab/films/go-see.json"
   [ "${status}" -eq 1 ]
   run lab_workflow_is_app "${src}/_lab/klein/plain-lab-example.json"
   [ "${status}" -eq 1 ]
@@ -804,12 +805,12 @@ teardown() {
   [ "${status}" -eq 1 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ -f "${dest}/_lab/klein/still-draft.app.json" ]
-  [ ! -f "${dest}/_lab/klein/still-draft.json" ]
+  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
+  [ ! -f "${dest}/_lab/stills/still-draft.json" ]
   [ -f "${dest}/_lab/inspire/prompt-forge.app.json" ]
   [ ! -f "${dest}/_lab/inspire/prompt-forge.json" ]
-  [ -f "${dest}/_lab/shorts/go-see.json" ]
-  [ ! -f "${dest}/_lab/shorts/go-see.app.json" ]
+  [ -f "${dest}/_lab/films/go-see.json" ]
+  [ ! -f "${dest}/_lab/films/go-see.app.json" ]
   [ -f "${dest}/_lab/klein/plain-lab-example.json" ]
   [ ! -f "${dest}/_lab/klein/plain-lab-example.app.json" ]
   [ -f "${dest}/_lab/klein/broken-lab-example.json" ]
@@ -818,8 +819,8 @@ teardown() {
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [ -f "${dest}/_lab/klein/still-draft.app.json" ]
-  [ ! -f "${dest}/_lab/klein/still-draft.json" ]
+  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
+  [ ! -f "${dest}/_lab/stills/still-draft.json" ]
 }
 
 @test "install_lab_workflows rescues operator _lab JSON into _user" {
@@ -828,18 +829,18 @@ teardown() {
   local src dest
   src="${TEST_TMP_DIR}/wf_rescue"
   dest="${TEST_TMP_DIR}/user_wf_rescue"
-  mkdir -p "${src}/_lab/klein" "${dest}/_lab/klein" "${dest}/_user/klein"
+  mkdir -p "${src}/_lab/stills" "${src}/_lab/klein" "${dest}/_lab/stills" "${dest}/_lab/klein" "${dest}/_user/klein"
   printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
-    >"${src}/_lab/klein/still-draft.json"
+    >"${src}/_lab/stills/still-draft.json"
   echo '{}' >"${src}/_lab/klein/plain.json"
   echo 'user-hook' >"${dest}/_lab/klein/my-hook.app.json"
-  echo 'edited-lab' >"${dest}/_lab/klein/still-draft.app.json"
+  echo 'edited-lab' >"${dest}/_lab/stills/still-draft.app.json"
   echo 'stale' >"${dest}/_lab/klein/stale-gone.json"
   echo 'poison' >"${dest}/_user/keep-me.json"
   echo 'mine' >"${dest}/_user/klein/my-hook.app.json"
-  run lab_src_json_for_dest "${src}/_lab" "klein/still-draft.app.json"
+  run lab_src_json_for_dest "${src}/_lab" "stills/still-draft.app.json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"/klein/still-draft.json" ]]
+  [[ "${output}" == *"/stills/still-draft.json" ]]
   run lab_src_json_for_dest "${src}/_lab" "klein/missing.json"
   [ "${status}" -ne 0 ]
   run rescue_unique_path "${dest}/_user/keep-me.json" "${dest}/_user/keep-me.json"
@@ -857,10 +858,10 @@ teardown() {
   [[ "${output}" == *"_rescued"* ]]
   [ ! -f "${dest}/_lab/klein/my-hook.app.json" ]
   [ ! -f "${dest}/_lab/klein/stale-gone.json" ]
-  [ -f "${dest}/_lab/klein/still-draft.app.json" ]
-  [ "$(cat "${dest}/_lab/klein/still-draft.app.json")" = "$(cat "${src}/_lab/klein/still-draft.json")" ]
-  [ -f "${dest}/_user/_rescued/klein/still-draft.app.json" ]
-  [ "$(cat "${dest}/_user/_rescued/klein/still-draft.app.json")" = "edited-lab" ]
+  [ -f "${dest}/_lab/stills/still-draft.app.json" ]
+  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
+  [ -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
+  [ "$(cat "${dest}/_user/_rescued/stills/still-draft.app.json")" = "edited-lab" ]
   [ -f "${dest}/_user/klein/stale-gone.json" ]
   [ "$(cat "${dest}/_user/klein/stale-gone.json")" = "stale" ]
   [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
@@ -871,7 +872,7 @@ teardown() {
   [ "$(cat "${collided[0]}")" = "user-hook" ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  local -a rescued_edits=("${dest}/_user/_rescued/klein/still-draft.app.json")
+  local -a rescued_edits=("${dest}/_user/_rescued/stills/still-draft.app.json")
   [ "${#rescued_edits[@]}" -eq 1 ]
   local -a collided2=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
   [ "${#collided2[@]}" -eq 1 ]

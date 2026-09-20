@@ -14,41 +14,41 @@ from _stamp_app_mode import STAMP_SPECS, linear_input_node_id, suite_json_paths
 ROOT = Path(__file__).resolve().parents[2]
 
 CREATORS = (
-    ("klein/shorts-still", "ez_shorts_still", False),
-    ("wan/shorts-still-5s", "ez_shorts_wan_video", True),
-    ("ltx/shorts-still-5s", "ez_shorts_ltx_video", True),
-    ("klein/thumbnail", "ez_thumbnail", False),
-    ("klein/product-packshot", "ez_packshot", False),
-    ("klein/before-after", "ez_before", False),
-    ("klein/style-lock", "ez_style_01", False),
-    ("wan/bumper-loop", "ez_bumper", True),
-    ("ltx/broll-ambient", "ez_broll_video", True),
-    ("klein/storyboard-6up", "ez_board_01", False),
-    ("klein/endcard-cta", "ez_endcard", False),
-    ("klein/quote-bg", "ez_quote_bg", False),
-    ("klein/open-graph", "ez_og", False),
-    ("klein/podcast-cover", "ez_podcast", False),
-    ("klein/banner-wide", "ez_banner", False),
-    ("klein/instagram-square", "ez_ig_square", False),
-    ("klein/hook-still", "ez_hook_still", False),
-    ("klein/lower-third-bg", "ez_lowerthird", False),
-    ("klein/food-tabletop", "ez_tabletop", False),
-    ("klein/lighting-trio", "ez_light_01", False),
-    ("klein/time-of-day", "ez_tod_01", False),
-    ("klein/camera-angles", "ez_angle_wide", False),
-    ("klein/color-moods", "ez_mood_01", False),
-    ("wan/orbit-still-5s", "ez_orbit_video", True),
-    ("wan/push-in-still-5s", "ez_pushin_video", True),
-    ("wan/parallax-still-5s", "ez_parallax_video", True),
-    ("wan/sticker-loop", "ez_sticker", True),
-    ("ltx/weather-broll", "ez_weather_video", True),
-    ("ltx/interior-ambience", "ez_interior_video", True),
-    ("ltx/hook-av", "ez_hook_video", True),
-    ("ltx/dialogue-5s", "ez_ltx_dialogue", True),
-    ("ltx/multishot-5s", "ez_ltx_multishot", True),
-    ("ltx/product-hero", "ez_ltx_product", True),
-    ("ltx/first-last-5s", "ez_ltx_flf", True),
-    ("ltx/audio-to-video-5s", "ez_ltx_a2v", True),
+    ("stills/shorts-still", "ez_shorts_still", False),
+    ("motion/silent/shorts-still-5s", "ez_shorts_wan_video", True),
+    ("motion/av/shorts-still-5s", "ez_shorts_ltx_video", True),
+    ("stills/thumbnail", "ez_thumbnail", False),
+    ("stills/product-packshot", "ez_packshot", False),
+    ("stills/before-after", "ez_before", False),
+    ("stills/style-lock", "ez_style_01", False),
+    ("motion/loops/bumper-loop", "ez_bumper", True),
+    ("motion/av/broll-ambient", "ez_broll_video", True),
+    ("stills/storyboard-6up", "ez_board_01", False),
+    ("stills/endcard-cta", "ez_endcard", False),
+    ("stills/quote-bg", "ez_quote_bg", False),
+    ("stills/open-graph", "ez_og", False),
+    ("stills/podcast-cover", "ez_podcast", False),
+    ("stills/banner-wide", "ez_banner", False),
+    ("stills/instagram-square", "ez_ig_square", False),
+    ("stills/hook-still", "ez_hook_still", False),
+    ("stills/lower-third-bg", "ez_lowerthird", False),
+    ("stills/food-tabletop", "ez_tabletop", False),
+    ("stills/lighting-trio", "ez_light_01", False),
+    ("stills/time-of-day", "ez_tod_01", False),
+    ("stills/camera-angles", "ez_angle_wide", False),
+    ("stills/color-moods", "ez_mood_01", False),
+    ("motion/silent/orbit-still-5s", "ez_orbit_video", True),
+    ("motion/silent/push-in-still-5s", "ez_pushin_video", True),
+    ("motion/silent/parallax-still-5s", "ez_parallax_video", True),
+    ("motion/loops/sticker-loop", "ez_sticker", True),
+    ("motion/av/weather-broll", "ez_weather_video", True),
+    ("motion/av/interior-ambience", "ez_interior_video", True),
+    ("motion/av/hook-av", "ez_hook_video", True),
+    ("motion/av/dialogue-5s", "ez_ltx_dialogue", True),
+    ("motion/av/multishot-5s", "ez_ltx_multishot", True),
+    ("motion/av/product-hero", "ez_ltx_product", True),
+    ("motion/av/first-last-5s", "ez_ltx_flf", True),
+    ("motion/av/audio-to-video-5s", "ez_ltx_a2v", True),
     ("audio/podcast/two-host-episode", "ez_podcast_ep", False),
     ("audio/podcast/radio-drama", "ez_radio_ep", False),
     ("audio/podcast/learn-episode", "ez_learn_ep", False),
@@ -93,18 +93,18 @@ def test_creator_toolkit_files_and_prefixes() -> None:
 
 
 def test_vertical_shorts_sizes() -> None:
-    still = json.loads(lab_json("klein/shorts-still.json").read_text(encoding="utf-8"))
+    still = json.loads(lab_json("stills/shorts-still.json").read_text(encoding="utf-8"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][0] == 432
     assert latent["widgets_values"][1] == 768
-    wan = json.loads(lab_json("wan/shorts-still-5s.json").read_text(encoding="utf-8"))
+    wan = json.loads(lab_json("motion/silent/shorts-still-5s.json").read_text(encoding="utf-8"))
     wlat = next(n for n in wan["nodes"] if n.get("type") == "Wan22ImageToVideoLatent")
     assert wlat["widgets_values"][0] == 480
     assert wlat["widgets_values"][1] == 832
 
 
 def test_before_after_and_storyboard_prefixes() -> None:
-    before = json.loads(lab_json("klein/before-after.json").read_text(encoding="utf-8"))
+    before = json.loads(lab_json("stills/before-after.json").read_text(encoding="utf-8"))
     prefixes = {
         n["widgets_values"][0]
         for n in before["nodes"]
@@ -112,7 +112,7 @@ def test_before_after_and_storyboard_prefixes() -> None:
     }
     assert "ez_before" in prefixes
     assert "ez_after" in prefixes
-    board = json.loads(lab_json("klein/storyboard-6up.json").read_text(encoding="utf-8"))
+    board = json.loads(lab_json("stills/storyboard-6up.json").read_text(encoding="utf-8"))
     board_prefixes = {
         n["widgets_values"][0]
         for n in board["nodes"]
@@ -131,7 +131,7 @@ def _save_prefixes(stem: str) -> set[str]:
 
 
 def test_hook_still_is_vertical() -> None:
-    still = json.loads(lab_json("klein/hook-still.json").read_text(encoding="utf-8"))
+    still = json.loads(lab_json("stills/hook-still.json").read_text(encoding="utf-8"))
     latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
     assert latent["widgets_values"][0] == 432
     assert latent["widgets_values"][1] == 768
@@ -160,7 +160,7 @@ def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "stat
     assert len(joins) == len(prefixes)
     for join in joins:
         values = join["widgets_values"]
-        if stem == "klein/before-after":
+        if stem == "stills/before-after":
             assert values[1].strip(), stem
         else:
             assert values[1].strip() == "", stem
@@ -203,50 +203,50 @@ def _identity_plate_contract(stem: str, prefixes: set[str], persist: str = "stat
 
 
 def test_pack_v2_prefixes() -> None:
-    assert _save_prefixes("klein/lighting-trio") == {
+    assert _save_prefixes("stills/lighting-trio") == {
         "ez_light_01",
         "ez_light_02",
         "ez_light_03",
     }
-    assert _save_prefixes("klein/time-of-day") == {
+    assert _save_prefixes("stills/time-of-day") == {
         f"ez_tod_{i:02d}" for i in range(1, 5)
     }
-    assert _save_prefixes("klein/camera-angles") == {
+    assert _save_prefixes("stills/camera-angles") == {
         "ez_angle_wide",
         "ez_angle_med",
         "ez_angle_close",
     }
-    assert _save_prefixes("klein/color-moods") == {
+    assert _save_prefixes("stills/color-moods") == {
         f"ez_mood_{i:02d}" for i in range(1, 5)
     }
     _identity_plate_contract(
-        "klein/lighting-trio",
+        "stills/lighting-trio",
         {"ez_light_01", "ez_light_02", "ez_light_03"},
     )
     _identity_plate_contract(
-        "klein/time-of-day",
+        "stills/time-of-day",
         {f"ez_tod_{i:02d}" for i in range(1, 5)},
     )
     _identity_plate_contract(
-        "klein/camera-angles",
+        "stills/camera-angles",
         {"ez_angle_wide", "ez_angle_med", "ez_angle_close"},
         persist="view",
     )
     _identity_plate_contract(
-        "klein/color-moods",
+        "stills/color-moods",
         {f"ez_mood_{i:02d}" for i in range(1, 5)},
     )
     _identity_plate_contract(
-        "klein/before-after",
+        "stills/before-after",
         {"ez_before", "ez_after"},
     )
     _identity_plate_contract(
-        "klein/style-lock",
+        "stills/style-lock",
         {f"ez_style_{i:02d}" for i in range(1, 5)},
         persist="view",
     )
     _identity_plate_contract(
-        "klein/storyboard-6up",
+        "stills/storyboard-6up",
         {f"ez_board_{i:02d}" for i in range(1, 7)},
         persist="view",
     )
@@ -290,9 +290,9 @@ PACK_PLATES = (
 
 
 def test_platform_pack_prefixes_sizes_and_independent_t2i() -> None:
-    graph = json.loads(lab_json("klein/platform-pack.json").read_text(encoding="utf-8"))
+    graph = json.loads(lab_json("stills/platform-pack.json").read_text(encoding="utf-8"))
     assert graph["id"] == "platform-pack"
-    assert graph["extra"].get("lab_rel") == "klein/platform-pack"
+    assert graph["extra"].get("lab_rel") == "stills/platform-pack"
     assert graph["extra"]["lab_app_mode"]["lane"] == "produce"
     assert graph["extra"]["lab_app_mode"]["occupancy"] == "klein"
     assert graph["extra"]["lab_app_mode"]["enhance_off_identity"] is False

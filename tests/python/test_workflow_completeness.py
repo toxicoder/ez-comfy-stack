@@ -296,7 +296,7 @@ def test_beat_sheet_desk_reaches_every_ltx_enhance() -> None:
 
 
 def test_film_identity_is_context_for_every_ltx_shot() -> None:
-    for rel in ("shorts/go-see.json", "shorts/still-here.json", "shorts/switchyard.json"):
+    for rel in ("films/go-see.json", "films/still-here.json", "films/switchyard.json"):
         graph = _load(lab_json(rel))
         klein = next(n for n in graph["nodes"] if n.get("type") == "EZKleinPromptEnhance")
         ltx = [n for n in graph["nodes"] if n.get("type") == "EZLTXPromptEnhance"]
