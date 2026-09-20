@@ -54,7 +54,7 @@ def test_mkdocs_enables_sticky_tabs_not_autohide() -> None:
 def test_mkdocs_wires_extra_css() -> None:
     """Voltage stylesheet and widgets live in the Fumadocs app."""
     css = _read(EXTRA_CSS)
-    assert "--color-fd-primary: #c67a0a" in css
+    assert "--color-fd-primary: #c46e16" in css
     assert ".ez-table-pin" in css
     assert ".ez-spark-panel" in css
     assert TABLES_TS.is_file()

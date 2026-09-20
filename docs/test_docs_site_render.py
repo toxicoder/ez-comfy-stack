@@ -183,9 +183,9 @@ class ThemeTests(unittest.TestCase):
     def test_global_css_uses_voltage_not_indigo(self) -> None:
         """Overeazy Voltage tokens are present; Material primary is not used."""
         css = (SITE_DIR / "app" / "global.css").read_text(encoding="utf-8")
-        self.assertIn("--color-fd-background: #f7f3eb", css)
-        self.assertIn("--color-fd-primary: #c67a0a", css)
-        self.assertIn("#e8a317", css)
+        self.assertIn("--color-fd-background: #f5f2ee", css)
+        self.assertIn("--color-fd-primary: #c46e16", css)
+        self.assertIn("#e89424", css)
         self.assertIn(".ez-table-pin", css)
         self.assertNotIn("--md-primary-fg-color", css)
 
