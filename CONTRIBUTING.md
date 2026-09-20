@@ -10,6 +10,8 @@ Thanks for improving **ez-comfy-stack**.
 4. Run `bazelisk test //:lint --test_tag_filters=manual` and `bazelisk run //docs:docs` (`make lint` / `make docs` shims)
 5. Open a PR into `development`
 
+How merge commits, squash, rebase, and stacked PRs work: [docs/learn/merges.mdx](docs/learn/merges.mdx). Land each PR **into `development`**. A GitHub Merged badge on a PR whose base is another topic branch does not update `development`.
+
 Install Python test tools once: `pip install -r tests/requirements.txt`.
 
 To ship a keeper from a live `_user` graph (does **not** commit):

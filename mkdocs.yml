@@ -106,6 +106,7 @@ nav:
       - Why one heavy job: learn/occupancy.md
       - Hardware, memory, and safety: learn/hardware.md
       - Architecture: learn/architecture.md
+      - How we land changes: learn/merges.md
       - Clay to finish: learn/clay-to-finish.md
       - Blender creator suite: learn/blender-creator.md
       - Stay in Comfy after a Blender dump: learn/comfy-first-blender.md
