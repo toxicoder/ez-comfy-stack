@@ -5,8 +5,9 @@ name: Deploy Documentation
 # - development → /development/
 #
 # Each run builds ONE alias (the branch that triggered it) and keeps the other
-# alias from the current gh-pages tree. Two full Next exports of ~650 pages
+# alias from the current gh-pages tree. Two full Next exports of ~850 pages
 # OOM the 7 GB GitHub-hosted runner (shutdown signal during the second compile).
+# One webpack export with --max-old-space-size=4096 is the cap that fits.
 #
 # URL compatibility: the MkDocs site published under those aliases via mike.
 # A root index.html forwards bare /ez-comfy-stack/ traffic to /latest/.
@@ -39,7 +40,7 @@ jobs:
     timeout-minutes: 45
     env:
       NEXT_TELEMETRY_DISABLED: "1"
-      NODE_OPTIONS: "--max-old-space-size=6144"
+      NODE_OPTIONS: "--max-old-space-size=4096"
     steps:
       - name: Checkout
         uses: actions/checkout@v5

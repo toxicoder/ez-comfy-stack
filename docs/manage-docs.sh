@@ -134,8 +134,9 @@ docs_build() {
   generate_code_docs
   sync_public_assets
   export NEXT_TELEMETRY_DISABLED="${NEXT_TELEMETRY_DISABLED:-1}"
+  # 6144 leaves no OS headroom on GitHub's 7 GB runner (shutdown / 143).
   if [[ -z ${NODE_OPTIONS:-} ]]; then
-    export NODE_OPTIONS="--max-old-space-size=6144"
+    export NODE_OPTIONS="--max-old-space-size=4096"
   fi
   local build_script="build"
   case "${version}" in

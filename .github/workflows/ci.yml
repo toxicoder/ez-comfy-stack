@@ -93,9 +93,6 @@ jobs:
     timeout-minutes: 45
     env:
       NEXT_TELEMETRY_DISABLED: "1"
-      # Same cap as deploy-docs.yml. A full Fumadocs export of ~650 pages OOMs
-      # the 7 GB GitHub-hosted runner (shutdown signal / exit 143 during next build).
-      NODE_OPTIONS: "--max-old-space-size=6144"
     steps:
       - uses: actions/checkout@v5
         with:
@@ -129,7 +126,13 @@ jobs:
             --config=ci
 
       - name: Docs export
+        env:
+          # 6144 left no OS headroom on the 7 GB runner (shutdown during next
+          # build). Webpack + one worker (docs-site next.config / package.json)
+          # plus 4096 after bazelisk shutdown is the cap that fits.
+          NODE_OPTIONS: "--max-old-space-size=4096"
         run: |
+          bazelisk shutdown
           bazelisk run //docs:docs --config=ci
           bazelisk run //docs:render-check --config=ci
 

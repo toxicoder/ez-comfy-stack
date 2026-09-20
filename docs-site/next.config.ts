@@ -47,6 +47,17 @@ const nextConfig: NextConfig = {
    */
   trailingSlash: true,
   reactStrictMode: true,
+  /**
+   * GitHub-hosted runners are 7 GB. Next 16.3 Turbopack static generation
+   * retains per-page memory across ~850 MDX pages and the runner is SIGKILL'd
+   * (shutdown signal / exit 143). Webpack + one export worker leave headroom
+   * for Bazel/OS when NODE_OPTIONS is --max-old-space-size=4096.
+   */
+  experimental: {
+    cpus: 1,
+    staticGenerationMaxConcurrency: 1,
+    webpackMemoryOptimizations: true
+  },
   turbopack: {
     /**
      * Pin the bundler root to this package.
