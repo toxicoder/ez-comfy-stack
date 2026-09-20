@@ -90,7 +90,7 @@ jobs:
       needs.changes.outputs.docs == 'true' ||
       needs.changes.outputs.ci-graph == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       NEXT_TELEMETRY_DISABLED: "1"
     steps:
@@ -127,14 +127,14 @@ jobs:
 
       - name: Docs export
         env:
-          # 6144 left no OS headroom on the 7 GB runner (shutdown during next
-          # build). Webpack + one worker (docs-site next.config / package.json)
-          # plus 4096 after bazelisk shutdown is the cap that fits.
-          NODE_OPTIONS: "--max-old-space-size=4096"
+          # webpack compile of ~850 pages needs >4 GB. bazelisk run keeps a
+          # JVM next to Node and 6144 then SIGKILL'd the 7 GB runner. Shut
+          # Bazel down and call manage-docs.sh so Next is the only heap.
+          NODE_OPTIONS: "--max-old-space-size=5120"
         run: |
           bazelisk shutdown
-          bazelisk run //docs:docs --config=ci
-          bazelisk run //docs:render-check --config=ci
+          ./docs/manage-docs.sh build
+          python3 docs/test_docs_site_render.py
 
   validate-gate:
     needs: [changes, bazel-core, docs-and-render]

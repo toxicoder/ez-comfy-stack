@@ -208,6 +208,7 @@ class NextExportMemoryTests(unittest.TestCase):
         text = (SITE_DIR / "next.config.ts").read_text(encoding="utf-8")
         self.assertIn("cpus: 1", text)
         self.assertIn("staticGenerationMaxConcurrency: 1", text)
+        self.assertIn("webpackBuildWorker: false", text)
         self.assertIn("webpackMemoryOptimizations: true", text)
 
 

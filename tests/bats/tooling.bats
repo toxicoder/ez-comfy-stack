@@ -78,11 +78,16 @@ teardown() {
   grep -qF '//:lint' "${gh}"
   grep -qF -- '--test_tag_filters=manual' "${gh}"
   grep -qF './.github/actions/setup-bazel' "${gh}"
-  grep -qF 'max-old-space-size=4096' "${gh}"
-  grep -qF 'max-old-space-size=4096' "${REPO_ROOT}/docs/manage-docs.sh"
+  grep -qF 'max-old-space-size=5120' "${gh}"
+  grep -qF 'max-old-space-size=5120' "${REPO_ROOT}/docs/manage-docs.sh"
   grep -qF 'bazelisk shutdown' "${gh}"
+  grep -qF './docs/manage-docs.sh build' "${gh}"
   grep -qF 'next build --webpack' "${REPO_ROOT}/docs-site/package.json"
+  run grep -F 'bazelisk run //docs:docs' "${gh}"
+  [ "$status" -ne 0 ]
   run grep -F 'max-old-space-size=6144' "${gh}"
+  [ "$status" -ne 0 ]
+  run grep -F 'max-old-space-size=4096' "${gh}"
   [ "$status" -ne 0 ]
   run grep -E 'dashboard-unit|dashboard-hermetic|//dashboard:' "${gh}"
   [ "$status" -ne 0 ]
@@ -113,10 +118,14 @@ teardown() {
   local deploy="${REPO_ROOT}/.github/workflows/deploy-docs.yml"
   [ -f "${deploy}" ]
   grep -qF 'DOCS_ALIAS' "${deploy}"
-  grep -qF 'build-${alias}' "${deploy}"
   grep -qF 'pages-root-index.html' "${deploy}"
-  grep -qF 'max-old-space-size=4096' "${deploy}"
+  grep -qF 'max-old-space-size=5120' "${deploy}"
+  grep -qF 'npm run "build:${alias}"' "${deploy}"
   run grep -F 'max-old-space-size=6144' "${deploy}"
+  [ "$status" -ne 0 ]
+  run grep -F 'max-old-space-size=4096' "${deploy}"
+  [ "$status" -ne 0 ]
+  run grep -F 'docs-site:build-' "${deploy}"
   [ "$status" -ne 0 ]
   grep -qF 'scripts/ci/publish-pages-tree.sh' "${deploy}"
   run grep -E 'bazelisk run //docs-site:build-latest' "${deploy}"

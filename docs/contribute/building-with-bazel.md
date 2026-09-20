@@ -80,7 +80,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test` then `bazelisk shutdown` and `//docs:docs`. Export is `next build --webpack` with one static-generation worker and `NODE_OPTIONS=--max-old-space-size=4096` (same as deploy-docs). A 6 GB heap plus Turbopack OOMs the 7 GB runner |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test` then `bazelisk shutdown` and `./docs/manage-docs.sh build` (no Bazel JVM during Next). Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner |
 | **validate-gate** | always | `scripts/ci_check_only.sh` |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys include `github.job` plus `MODULE.bazel.lock` + `.bazelversion`.
