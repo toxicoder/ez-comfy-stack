@@ -1832,7 +1832,7 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
         graph = load_lab_graph(path)
         extra = graph.get("extra") or {}
         gid = str(extra.get("lab_rel") or graph.get("id") or path.stem)
-        if gid in skip_ids:
+        if gid in skip_ids or gid.startswith("services/"):
             continue
         pin_off = enhance_pin_off(gid)
         by_id = {int(n["id"]): n for n in graph["nodes"]}

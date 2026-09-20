@@ -47,8 +47,8 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_ltx_spatial` | empty | Runtime snap of LTX spatial dims |
 | `ez_music` | 3 nodes | Rap lyrics, album tags, zip |
 | `ez_podcast` | 5 nodes | Script, learn, loop bed, disclosure, Kokoro TTS |
-| `ez_prompt_enhance` | 12 nodes | Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack |
-| `ez_image` | 4 nodes | Snap / match Klein edit sizes; still and video Format / platform pickers |
+| `ez_prompt_enhance` | 14 nodes | Describe still; Klein / Wan / LTX / Z-Image / LongCat / DreamX / negative / join / context join / ACE-Step / sample prompt / cinema rack / audio rack |
+| `ez_image` | 9 nodes | Snap / match / optional upscale; still and video Format / platform; optional refs; Creator mode |
 | `ez_quality` | 1 node | Global Lab / Draft / High combo; JS overlays sampler / Klein UNET |
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
@@ -146,10 +146,11 @@ Category `ez-comfy/podcast`. [Local podcast](../podcast.md).
 
 ## ez_prompt_enhance
 
-Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft without a GGUF (`download-models`). Style combo is `none` plus ids from `custom_nodes/ez_prompt_enhance/styles.json` (file order). [Prompting](../prompting.md).
+Category `ez-comfy/prompt`. On-box Qwen3-4B-Instruct-2507 GGUF. Fail-soft without a GGUF (`download-models`). Optional still caption is `EZImageDescribe` (`download-llm --tier describe`). Style combo is `none` plus ids from `custom_nodes/ez_prompt_enhance/styles.json` (file order). [Prompting](../prompting.md).
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
+| `EZImageDescribe` | Describe image | `enable` BOOLEAN (default off); optional lazy `image` IMAGE | `STRING` caption | CPU VLM (not a CLI occupancy mode) | Off (default) returns empty and does not load the describe GGUF. On captions a source still into Enhance `image_desc`. Opt-in weights: `download-llm --tier describe` (Qwen2.5-VL-3B Apache). Not `EZDescribeImage` |
 | `EZKleinPromptEnhance` | Klein Prompt Enhance | `sample` combo (App dropdown: this graph’s 20 `js/samples/` recipes + `custom`; Python union still accepts other catalogs for Queue), `prompt` STRING, `enhance` BOOLEAN (default on), `mode` combo `t2i` `edit` `identity` `text_swap` (default `t2i`), `duration_hint` STRING (default `YouTube 16:9 still`), `style` combo, `catalog` STRING (hidden); optional `context` STRING (forceInput) | `STRING` prompt | CPU GGUF (not a CLI occupancy mode) | identity mode is camera-free bible. `text_swap` is glyph-lock lettering (style ignored; source still owns look). Context is bible/research; ignored when Enhance is off. Sample recipes live in `js/samples/`. JS filters the dropdown via the hidden `catalog` widget / `extra.lab_rel` (place recipes such as Cliff villa on **stills/dream-house**) |
 | `EZWanPromptEnhance` | Wan Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `flf` `vace` `s2v` (default `t2v`), `duration_hint` (default `5 seconds, 24 fps`), `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | T2V look+motion+one camera; I2V motion+camera only; `flf` Fun InP first-last; `vace` join/inpaint; `s2v` talking-head (wav owns lip-sync). **No audio** except s2v. Style ignored on I2V/flf/vace/s2v. Context ignored when Enhance is off |
 | `EZLTXPromptEnhance` | LTX Prompt Enhance | `sample`, `prompt`, `enhance`, `mode` combo `t2v` `i2v` `iclora` (default `t2v`), `duration_hint`, `audio_notes` STRING, `style`, `catalog`; optional `context` | `STRING` prompt | CPU GGUF | Flowing present-tense paragraph with audio interleaved. `iclora` describes look/materials, not the control type. Style ignored on I2V. Context (identity/logline) ignored when Enhance is off |
@@ -190,17 +191,18 @@ Category `ez-comfy/studio`. Same pipeline as **inspire/app-forge**. Writes `${CO
 
 ## ez_image
 
-Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional reference stills, and the 100-mode Creator mode node. Torch / Comfy `common_upscale` is lazy inside snap/match `run()`.
+Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video Format / platform pickers, optional lanczos upscale, optional reference stills, and the 100-mode Creator mode node. Torch / Comfy `common_upscale` is lazy inside snap/match/upscale `run()`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZSnapImage` | Snap image (div 16) | `image` IMAGE | `IMAGE` image | — | Largest width/height that fit inside the source and are multiples of 16 (Flux.2 Klein VAE) |
 | `EZMatchImageSize` | Match image size | `image` IMAGE, `size_src` IMAGE | `IMAGE` image | — | Lanczos-resize to `size_src` H×W. No-op when already equal |
+| `EZImageUpscale` | Upscale still | `image` IMAGE, `upscale` combo `none` `2x` `4x` `4K` (default `none`) | `IMAGE` image, `STRING` upscale | — | Optional lanczos after decode, wired before SaveImage on stills. `none` is a passthrough. `4K` fits a 3840×2160 box (portrait 2160×3840). No extra weights. Not a Manager pack |
 | `EZImageFormat` | Format / platform | `format` combo, `look` combo, `width`/`height`/`batch_size` INT | `INT` width/height/batch, `STRING` hint/prefix/context | klein | Preset sets ÷16 canvas and Enhance framing. Custom snaps Width×Height. Look recipe (still-studio / image-studio) is a Cinema Rack starter. Quality does not change size |
 | `EZImageMode` | Creator mode | `category` combo, `mode` combo (100 labels), optional `context` STRING | `STRING` context/enhance_mode/prefix | klein | stills/image-studio. Category filters Mode. Queue splices an instruction, picks t2i/edit/text_swap/identity, and sets the save prefix. Optional refs never required |
 | `EZOptionalImage` | Optional reference stills | `filename` STRING (default empty), optional IMAGE×3 | `IMAGE` image, `INT` count, `BOOLEAN` has_image | klein | Empty is valid. Presence is the tensor, not the filename |
 | `EZKleinRefCanvas` | Klein canvas (optional ref) | `latent` LATENT, `vae` VAE, optional IMAGE + has_image | `LATENT` latent, `IMAGE` image | klein | Empty still passes the Flux2 latent through. Present still snaps ÷16, VAE-encodes, ReferenceLatent. Fail-soft |
-| `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | — | Fail-soft empty caption without VL weights. Klein graphs use EZKleinRefCanvas instead |
+| `EZDescribeImage` | Describe reference still | `has_image` BOOLEAN, optional IMAGE | `STRING` caption | — | Fail-soft empty caption without VL weights. Lab graphs use `EZImageDescribe` (prompt-enhance pack) instead |
 | `EZVideoFormat` | Format / platform (video) | `family` combo (Wan 5B / LTX-2.5), `format` combo, `width`/`height` INT | `INT` width/height, `STRING` hint/prefix | wan / ltx | Preset sets Spark-safe clip pixels (Wan ÷16 max 1024, LTX ÷32 max 1280). Custom snaps 720→704 on LTX. Length stays on the latent. App Mode hides Family. Quality does not change size |
 
 ---

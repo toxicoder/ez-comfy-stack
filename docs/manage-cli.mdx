@@ -34,6 +34,9 @@ Run from the **repo root**. `manage.sh` loads `.env`. Session exports (`SPARK_HO
 | --- | --- | --- |
 | `help` | Print the command list | — |
 | `setup [--install-docker] [--yes]` | `.env`, dirs, optional Docker CE, `hf` CLI, then doctor | Skip doctor failures |
+| `setup-client` | Laptop bootstrap: SSH Host ez-spark + LocalForward. Does not start Comfy. [This computer](start/this-computer.md) | Start Compose from the laptop; skip WSL on Windows |
+| `onboard` | Spark: `setup --install-docker` then doctor. Laptop: `setup-client` then remote clone/setup/doctor. Never auto-start. [Onboard](start/onboard.md) | Treat this as `start` |
+| `spark-ui` | Foreground SSH LocalForward to Host ez-spark (stack must already be started) | Bind `0.0.0.0`; start Compose from the laptop |
 | `doctor` | Preflight (docker, GPU, RAM/disk, dirs, `hf` CLI, license one-liner, spark-timing) | Treat missing weights as a hard fail (they are a warning) |
 | `status [--json]` | Compose project; prints `MODELS_DIR`, `COMFY_OUTPUT_DIR`, port | — |
 | `start` | Type `yes`; headroom; `compose up -d`; returns detached (not tied to this shell). Follow: `logs`. `LAB_STACK_FOLLOW=1` waits for the UI | Weaken confirm or `restart: "no"`; treat logout as stop |
