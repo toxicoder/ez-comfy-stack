@@ -464,7 +464,7 @@ class EZLTXPromptEnhance:
         """
         return _visual_input_types(
             catalog_id="ltx_t2v",
-            duration_default="5 seconds, 24 fps",
+            duration_default="12 seconds, 24 fps",
             modes=["t2v", "i2v", "iclora"],
             audio_notes=True,
         )

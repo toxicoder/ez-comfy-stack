@@ -1,6 +1,6 @@
 ---
 title: Image and video generation
-description: Latents, CLIP, VAE, steps, CFG, and why this studio iterates 5 s clips instead of a 90 s denoise.
+description: Latents, CLIP, VAE, steps, CFG, and why this studio iterates 5 s Wan / 12 s LTX clips instead of a 90 s denoise.
 tags: [learn, diffusion, latent, vae, clip, comfyui]
 ---
 
@@ -53,7 +53,7 @@ The sampler does not paint a PNG directly. It denoises a **latent** tensor. Widt
 | --- | --- | --- |
 | Fast still | Klein draft **768×432**, 4 steps | Minutes, not a hero |
 | I2V feeder / LTX | **1280×704** | LTX VAE is **÷32**. 1280×720 is not (720/16=45) |
-| ~5 s motion | LTX **121** frames (`1+8n`) @ 24 fps ≈ **5.04 s**; Wan shot **120** = **5.00 s** | Iterate in minutes |
+| ~5 s Wan / ~12 s LTX App | LTX Apps **289** frames (`1+8n`) @ 24 fps ≈ **12.04 s**; film printers **121** ≈ **5.04 s**; Wan shot **120** = **5.00 s** | Iterate in minutes |
 | 90 s film | **18 × 5.00 s** + stitch | Not a 90 s denoise |
 
 Typing 720 or 1080 on an LTX widget is auto-snapped (704 / 1056) by `ez_ltx_spatial`. Prefer 704 so you skip the extra crop. The same pack snaps illegal **120** length to **121** (`1+8n`). Portrait shorts I2V is **768×1280**.
@@ -78,7 +78,7 @@ Wan and LTX pin their own steps on the canvas. Change them on purpose; do not co
 | **T2I** | Text → still | No | — | Klein 4B |
 | **I2V** | Still → clip | **Yes — owns look** | Wan silent / LTX world audio | Wan 5B or LTX-2.5 |
 | **T2V** | Text → clip | No | Wan silent / LTX AV | Wan 5B or LTX-2.5 |
-| **A2V** | Soundtrack → picture | Often a freeze still | Input audio | **motion/av/audio-to-video-5s** (talking-head is I2V smoke) |
+| **A2V** | Soundtrack → picture | Often a freeze still | Input audio | **motion/av/audio-to-video-12s** (talking-head is I2V smoke) |
 | **S2V** | Speech → picture | Optional | Speech | Opt-in Wan 14B |
 
 I2V prompt = **motion + one camera move**. Do not re-describe the coat and the city; the PNG already did.

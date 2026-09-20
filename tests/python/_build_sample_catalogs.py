@@ -147,7 +147,7 @@ def _loop(motion: str) -> str:
 
 def _ltx_t2v(action: str, audio: str, camera: str) -> str:
     return (
-        f"{action} {camera} {audio} {UNMARKED} {NO_SCORE} Five seconds."
+        f"{action} {camera} {audio} {UNMARKED} {NO_SCORE} Twelve seconds."
     )
 
 
@@ -164,7 +164,7 @@ def klein_image_studio() -> list[dict[str, str]]:
         _row(
             "photoreal-terrace",
             "Photoreal terrace",
-            "A photoreal still of an original techno wizard in an unmarked teal running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering.",
         ),
         _row(
             "background-swap",
@@ -254,7 +254,7 @@ def klein_image_studio() -> list[dict[str, str]]:
         _row(
             "wardrobe-transfer",
             "Wardrobe transfer",
-            "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked teal coat. Original characters only.",
+            "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked dark indigo-violet suede coat. Original characters only.",
         ),
         _row(
             "empty-lettering",
@@ -271,7 +271,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "night-bay-overlook",
             "Night bay overlook",
             _klein(
-                "an original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams",
                 "stands at a tropical rooftop rail above a dense unmarked city and a dark bay",
                 "Practical terrace lanterns and distant tower lights; cool rim from the bay, warm coat lining.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -281,7 +281,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "rain-terrace",
             "Rain on the terrace",
             _klein(
-                "an original techno wizard in an unmarked sun-washed teal technical running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap",
                 "pauses under a terrace overhang while tropical rain sheets off unmarked glass",
                 "Overcast daylight, wet stone grit, rain beads on fabric weave.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -291,7 +291,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "dawn-switchback",
             "Dawn mountain road",
             _klein(
-                "an original techno wizard in an unmarked teal running coat with a compact unmarked data-staff",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat with a compact unmarked data-staff",
                 "walks a high unmarked switchback above a tropical valley of palms",
                 "First light rakes the ridge; long cool shadows, clear air.",
                 "Slightly below eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -301,7 +301,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "workshop-bench",
             "Workshop bench",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "leans over a teak workbench with warm-gold holographic glyph rings blooming from a compact unmarked data-staff",
                 "A single practical lamp, tight falloff, metal filings and wood grain.",
                 "Chest-cam height. 50mm-equivalent. Framed for YouTube 16:9.",
@@ -311,7 +311,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "fog-harbor",
             "Fog harbor",
             _klein(
-                "an original techno wizard in an unmarked teal running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "stands on an unmarked concrete pier as fog holds a quiet tropical harbor",
                 "Soft overcast, low contrast, wet concrete and rope texture.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -321,7 +321,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "greenhouse-aisle",
             "Greenhouse aisle",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "walks a long unmarked greenhouse aisle of palms and broad leaves",
                 "Dappled glass light, humid air, leaf sheen and condensation.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -331,7 +331,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "desert-mesa",
             "Desert mesa dusk",
             _klein(
-                "an original techno wizard in an unmarked teal running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "stands on a high unmarked mesa as the last sun hits red stone",
                 "Hard warm sidelight, long shadows, grit in the air.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -341,7 +341,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "library-stacks",
             "Library stacks",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "pauses between tall unmarked wood stacks in a quiet reading hall",
                 "Warm practicals, dust in a window shaft, paper and wood texture.",
                 "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
@@ -351,7 +351,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "train-platform",
             "Night platform",
             _klein(
-                "an original techno wizard in an unmarked teal running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "waits on an unmarked underground platform as a train smear passes",
                 "Cool overhead fluorescents, warm coat lining, tiled grit.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -361,7 +361,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "coastal-cliff",
             "Coastal cliff",
             _klein(
-                "an original techno wizard in an unmarked teal coat with glyph rings at the staff",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat with glyph rings at the staff",
                 "stands on an unmarked cliff path above bright surf",
                 "Hard noon sun, salt haze, fabric snap in wind.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -371,7 +371,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "snow-ridge",
             "Snow pine ridge",
             _klein(
-                "an original techno wizard in an unmarked teal running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "crosses a high unmarked ridge among snow-loaded pines",
                 "Thin winter sun, blue shadow, breath in cold air.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -381,7 +381,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "market-alley",
             "Covered alley",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "walks a narrow unmarked covered alley of stone and hanging cloth",
                 "Dappled bounce light, warm cloth, cool stone.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -391,7 +391,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "observatory",
             "Observatory dome",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "stands inside an unmarked dome with a slit of night sky",
                 "Cool moonlight mix with a warm floor practical, metal and stone.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -401,7 +401,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "river-ferry",
             "River ferry",
             _klein(
-                "an original techno wizard in an unmarked teal running coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat",
                 "stands at the rail of a small unmarked ferry on a wide river at dusk",
                 "Warm low sun, water glitter, paint and rust texture.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -411,7 +411,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "arcade-neon",
             "Unmarked arcade",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "walks an unmarked indoor arcade of colored practicals and empty cabinets",
                 "Mixed neon bounce, no readable cabinet art, floor shine.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -421,7 +421,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "courtyard-fountain",
             "Stone courtyard",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "sits at an unmarked stone fountain in a quiet courtyard of palms",
                 "Open shade, specular water, warm stone.",
                 "Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9.",
@@ -431,7 +431,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "subway-concourse",
             "Concourse rush",
             _klein(
-                "an original techno wizard in an unmarked teal running coat mid-stride",
+                "an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride",
                 "crosses a vast unmarked concourse of concrete and glass",
                 "Cool overhead banks, motion blur in the far crowd only, coat sharp.",
                 "Hip height. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -441,7 +441,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "rooftop-night-storm",
             "Storm rooftop",
             _klein(
-                "an original techno wizard in an unmarked teal coat with a short storm-cloak",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat with a short storm-cloak",
                 "braces on a tropical rooftop as wind pulls the cloak",
                 "Lightning far off, wet stone, warm lining flash.",
                 "Match a standing eyeline. 24mm-equivalent wide. Framed for YouTube 16:9.",
@@ -451,7 +451,7 @@ def klein_t2i() -> list[dict[str, str]]:
             "quiet-studio",
             "Quiet studio",
             _klein(
-                "an original techno wizard in an unmarked teal coat",
+                "an original techno wizard in an unmarked dark indigo-violet suede coat",
                 "sits at an unmarked teak desk with a compact data-staff resting beside a blank notebook",
                 "Soft north window, paper tooth, wood grain.",
                 "Match a standing eyeline. 50mm-equivalent. Framed for YouTube 16:9.",
@@ -471,7 +471,7 @@ def klein_identity() -> list[dict[str, str]]:
         _row(
             "workshop-maker",
             "Workshop maker bible",
-            "A photoreal still of an original techno wizard in an unmarked worn teal shop coat, brass-thread seams, leather apron, compact unmarked data-staff on a teak bench. Warm practicals, wood and metal. No camera. Unmarked workshop, empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked worn dark indigo-violet felt shop coat, brass-thread seams, leather apron, compact unmarked data-staff on a teak bench. Warm practicals, wood and metal. No camera. Unmarked workshop, empty of lettering.",
         ),
         _row(
             "night-operator",
@@ -486,52 +486,52 @@ def klein_identity() -> list[dict[str, str]]:
         _row(
             "ferry-coat",
             "Ferry coat bible",
-            "A photoreal still of an original techno wizard in an unmarked waxed teal coat, salt-dull hardware, compact unmarked data-staff, warm-gold lining. River light. No camera. Unmarked ferry, empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked waxed dark indigo-violet suede coat, salt-dull hardware, compact unmarked data-staff, warm-gold lining. River light. No camera. Unmarked ferry, empty of lettering.",
         ),
         _row(
             "winter-ridge",
             "Winter ridge bible",
-            "A photoreal still of an original techno wizard in an unmarked heavy teal parka with circuit-thread seams, blank gloves, compact unmarked data-staff. Snow and pine. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked heavy dark indigo-violet felt parka with circuit-thread seams, blank gloves, compact unmarked data-staff. Snow and pine. No camera. Empty of lettering.",
         ),
         _row(
             "desert-dust",
             "Desert dust bible",
-            "A photoreal still of an original techno wizard in an unmarked sun-washed sand-teal coat, dust on seams, compact unmarked data-staff, glyph motes. Mesa stone. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked sun-washed dark indigo-violet suede coat, dust on seams, compact unmarked data-staff, glyph motes. Mesa stone. No camera. Empty of lettering.",
         ),
         _row(
             "library-reader",
             "Library reader bible",
-            "A photoreal still of an original techno wizard in an unmarked dark teal wool coat, compact unmarked data-staff used as a quiet pointer, warm-gold rings dim. Wood stacks. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet wool-felt coat, compact unmarked data-staff used as a quiet pointer, warm-gold rings dim. Wood stacks. No camera. Empty of lettering.",
         ),
         _row(
             "greenhouse-keeper",
             "Greenhouse keeper bible",
-            "A photoreal still of an original techno wizard in an unmarked light teal linen coat, damp hems, compact unmarked data-staff, leaf-shadow on fabric. Glass house. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet silk-linen coat, damp hems, compact unmarked data-staff, leaf-shadow on fabric. Glass house. No camera. Empty of lettering.",
         ),
         _row(
             "platform-commuter",
             "Platform commuter bible",
-            "A photoreal still of an original techno wizard in an unmarked teal running coat, compact unmarked data-staff tucked, blank gloves. Tile and cool light. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat, compact unmarked data-staff tucked, blank gloves. Tile and cool light. No camera. Empty of lettering.",
         ),
         _row(
             "cliff-wind",
             "Cliff wind bible",
-            "A photoreal still of an original techno wizard in an unmarked teal coat snapping in salt wind, compact unmarked data-staff, glyph rings pulled thin. Surf below unnamed. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede coat snapping in salt wind, compact unmarked data-staff, glyph rings pulled thin. Surf below unnamed. No camera. Empty of lettering.",
         ),
         _row(
             "arcade-night",
             "Arcade night bible",
-            "A photoreal still of an original techno wizard in an unmarked teal coat under mixed practical color, compact unmarked data-staff, glyph rings matching the bounce. Indoor arcade, cabinets blank. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede coat under mixed practical color, compact unmarked data-staff, glyph rings matching the bounce. Indoor arcade, cabinets blank. No camera. Empty of lettering.",
         ),
         _row(
             "courtyard-rest",
             "Courtyard rest bible",
-            "A photoreal still of an original techno wizard in an unmarked teal coat seated, compact unmarked data-staff across the knees, glyph rings idle. Stone and palms. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede coat seated, compact unmarked data-staff across the knees, glyph rings idle. Stone and palms. No camera. Empty of lettering.",
         ),
         _row(
             "studio-quiet",
             "Studio quiet bible",
-            "A photoreal still of an original techno wizard in an unmarked teal coat at a teak desk, compact unmarked data-staff beside a blank notebook, no screens. North light. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede coat at a teak desk, compact unmarked data-staff beside a blank notebook, no screens. North light. No camera. Empty of lettering.",
         ),
         _row(
             "storm-cloak",
@@ -541,22 +541,22 @@ def klein_identity() -> list[dict[str, str]]:
         _row(
             "harbor-fog",
             "Harbor fog bible",
-            "A photoreal still of an original techno wizard in an unmarked teal coat beaded with fog, compact unmarked data-staff dim, glyph rings faint. Concrete pier. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede coat beaded with fog, compact unmarked data-staff dim, glyph rings faint. Concrete pier. No camera. Empty of lettering.",
         ),
         _row(
             "ridge-dawn",
             "Ridge dawn bible",
-            "A photoreal still of an original techno wizard in an unmarked teal running coat, compact unmarked data-staff, first-light rim. High unmarked switchback. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat, compact unmarked data-staff, first-light rim. High unmarked switchback. No camera. Empty of lettering.",
         ),
         _row(
             "concourse-stride",
             "Concourse stride bible",
-            "A photoreal still of an original techno wizard in an unmarked teal running coat mid-stride, compact unmarked data-staff, blank gloves. Vast unmarked concourse. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat mid-stride, compact unmarked data-staff, blank gloves. Vast unmarked concourse. No camera. Empty of lettering.",
         ),
         _row(
             "mesa-staff",
             "Mesa staff bible",
-            "A photoreal still of an original techno wizard in an unmarked sun-washed teal coat, compact unmarked data-staff raised with warm-gold glyph rings. Red stone, clear air. No camera. Empty of lettering.",
+            "A photoreal still of an original techno wizard in an unmarked sun-washed dark indigo-violet suede coat, compact unmarked data-staff raised with warm-gold glyph rings. Red stone, clear air. No camera. Empty of lettering.",
         ),
     ]
 
@@ -668,8 +668,8 @@ def klein_character() -> list[dict[str, str]]:
         ("lab-original", "Lab original", CHARACTER_DRAFT),
         (
             "teal-runner",
-            "Teal runner",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed teal technical running coat with faint circuit-thread seams, blank gloves, compact unmarked data-staff as the signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "Indigo runner",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams, blank gloves, compact unmarked data-staff as the signature prop. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "storm-cloak",
@@ -679,7 +679,7 @@ def klein_character() -> list[dict[str, str]]:
         (
             "workshop-maker",
             "Workshop maker",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked worn teal shop coat, leather apron, rolled sleeves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked worn dark indigo-violet felt shop coat, leather apron, rolled sleeves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "field-botanist",
@@ -694,72 +694,72 @@ def klein_character() -> list[dict[str, str]]:
         (
             "ferry-hand",
             "Ferry hand",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked waxed teal coat, salt-dull hardware. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked waxed dark indigo-violet suede coat, salt-dull hardware. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "winter-ridge",
             "Winter ridge",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked heavy teal parka, blank gloves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked heavy dark indigo-violet felt parka, blank gloves. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "desert-guide",
             "Desert guide",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed sand-teal coat, dust on seams. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed dark indigo-violet suede coat, dust on seams. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "library-reader",
             "Library reader",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark teal wool coat. Signature prop: compact unmarked data-staff used as a quiet pointer. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet wool-felt coat. Signature prop: compact unmarked data-staff used as a quiet pointer. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "greenhouse-keeper",
             "Greenhouse keeper",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked light teal linen coat, damp hems. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet silk-linen coat, damp hems. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "platform-commuter",
             "Platform commuter",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat, blank gloves. Signature prop: compact unmarked data-staff tucked at the hip. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede running coat, blank gloves. Signature prop: compact unmarked data-staff tucked at the hip. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "cliff-walker",
             "Cliff walker",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat snapping in wind. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede coat snapping in wind. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "arcade-night",
             "Arcade night",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat under mixed practical color. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede coat under mixed practical color. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "courtyard-rest",
             "Courtyard rest",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat, seated then standing pose, staff across the body. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede coat, seated then standing pose, staff across the body. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "studio-quiet",
             "Studio quiet",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat, calm hands. Signature prop: compact unmarked data-staff beside a blank notebook. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede coat, calm hands. Signature prop: compact unmarked data-staff beside a blank notebook. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "rain-sprint",
             "Rain sprint",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat beaded with rain, mid-stride. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede running coat beaded with rain, mid-stride. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "harbor-fog",
             "Harbor fog",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal coat beaded with fog. Signature prop: compact unmarked data-staff dim. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede coat beaded with fog. Signature prop: compact unmarked data-staff dim. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "ridge-dawn",
             "Ridge dawn",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked teal running coat, first-light rim. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked dark indigo-violet suede running coat, first-light rim. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
         (
             "mesa-staff",
             "Mesa staff",
-            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed teal coat, staff raised with warm-gold glyph rings. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
+            "A photoreal still of an original character, standing, full body with headroom, Instagram 4:5. Distinct face, unmarked sun-washed dark indigo-violet suede coat, staff raised with warm-gold glyph rings. Signature prop: compact unmarked data-staff. Unmarked surfaces, empty of lettering. Eye-level 35mm.",
         ),
     ]
     return [_row(sid, label, prompt) for sid, label, prompt in drafts]
@@ -942,7 +942,7 @@ def klein_product() -> list[dict[str, str]]:
         (
             "wax-coat-hook",
             "Waxed coat",
-            "A photoreal still of one unmarked waxed teal coat hung on a plain wood peg, packshot crop. Soft key, fabric sheen, empty of lettering. Eye-level 50mm, 1:1.",
+            "A photoreal still of one unmarked waxed dark indigo-violet suede coat hung on a plain wood peg, packshot crop. Soft key, fabric sheen, empty of lettering. Eye-level 50mm, 1:1.",
         ),
         (
             "glyph-ring",
@@ -1368,21 +1368,21 @@ def main() -> None:
         "motion/silent/orbit-still-5s": "wan_orbit",
         "motion/silent/push-in-still-5s": "wan_push_in",
         "motion/silent/parallax-still-5s": "wan_parallax",
-        "motion/av/text-to-video-5s": "ltx_t2v",
-        "motion/av/still-to-video-5s": "ltx_i2v",
+        "motion/av/text-to-video-12s": "ltx_t2v",
+        "motion/av/still-to-video-12s": "ltx_i2v",
         "motion/av/still-to-shot": "ltx_i2v",
-        "motion/av/shorts-still-5s": "ltx_i2v",
+        "motion/av/shorts-still-12s": "ltx_i2v",
         "motion/av/broll-ambient": "ltx_broll",
         "motion/av/weather-broll": "ltx_broll",
         "motion/av/interior-ambience": "ltx_broll",
         "motion/av/hook-av": "ltx_hook",
-        "motion/av/dialogue-5s": "ltx_dialogue",
-        "motion/av/multishot-5s": "ltx_multishot",
+        "motion/av/dialogue-12s": "ltx_dialogue",
+        "motion/av/multishot-12s": "ltx_multishot",
         "motion/av/product-hero": "ltx_product",
-        "motion/av/first-last-5s": "ltx_flf",
-        "motion/av/audio-to-video-5s": "ltx_a2v",
-        "dcc/depth-control-5s": "ltx_iclora",
-        "dcc/canny-control-5s": "ltx_iclora",
+        "motion/av/first-last-12s": "ltx_flf",
+        "motion/av/audio-to-video-12s": "ltx_a2v",
+        "dcc/depth-control-12s": "ltx_iclora",
+        "dcc/canny-control-12s": "ltx_iclora",
         "dcc/depth-control-shorts": "ltx_iclora",
         "dcc/depth-from-loader": "ltx_iclora",
         "films/go-see": "film_gosee",

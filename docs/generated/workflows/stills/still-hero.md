@@ -36,7 +36,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Widgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.
 SaveImage prefix: ez_still_hero.
 
-Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-5s.
+Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-12s.
 Distilled is 4-step-optimized; extra steps are optional.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
@@ -547,7 +547,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Widgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.
 SaveImage prefix: ez_still_hero.
 
-Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-5s.
+Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-12s.
 Distilled is 4-step-optimized; extra steps are optional.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
@@ -619,10 +619,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace, warm gold-cyan holographic glyph rings blooming from a compact unmarked data-staff as if the code were a spell. Hold a wide environmental terrace so palms and unmarked glass towers recede toward a bright bay. Match a standing eyeline. 24mm-equivalent wide. Rake amber sidelight along fabric and terrace grit so long shadows stripe the terrace and highlights go honey. Locked as if a crawl dolly-in frozen. Framed for YouTube 16:9. Clean unmarked surfaces, empty of lettering.
 ```
 
 #### `enhance`

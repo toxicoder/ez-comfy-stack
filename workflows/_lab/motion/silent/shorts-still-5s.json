@@ -958,7 +958,7 @@
       "occupancy": "wan",
       "enhance_off_identity": false,
       "handoff": [
-        "motion/av/shorts-still-5s"
+        "motion/av/shorts-still-12s"
       ]
     },
     "lab_magcache": {

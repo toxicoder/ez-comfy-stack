@@ -11,7 +11,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "custom_nodes"))
 
 from ez_film.ltx_timing import (  # noqa: E402
+    DURATION_APP_S,
     DURATION_HEAD_S,
+    FRAMES_APP,
     ltx_decoded_frames,
     ltx_frames_for_duration,
     preflight_duration_s,
@@ -23,6 +25,12 @@ from ez_film.ltx_timing import (  # noqa: E402
 def test_five_seconds_is_121() -> None:
     assert ltx_frames_for_duration(5.00) == 121
     assert validate_ltx_frames(121) == 121
+
+
+def test_twelve_second_apps_are_289() -> None:
+    assert DURATION_APP_S == 12.00
+    assert ltx_frames_for_duration(DURATION_APP_S) == FRAMES_APP == 289
+    assert validate_ltx_frames(FRAMES_APP) == FRAMES_APP
 
 
 def test_snap_120_to_121_not_vae_floor() -> None:

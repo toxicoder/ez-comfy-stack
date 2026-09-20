@@ -33,7 +33,7 @@ Format / platform sets pixels (Custom uses Width × Height). Quality does not ch
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Interior room-tone AV (~12 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_interior_video`.
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -312,7 +312,7 @@ Allocate a T2V LTX video latent (no start image).
 
 !!! warning "Lab notes"
 
-    Width/height must be ÷32. Length must be 1+8n (121 for ~5 s). ez_ltx_spatial snaps illegal values.
+    Width/height must be ÷32. Length must be 1+8n (289 for ~12 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -340,13 +340,13 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 121 = 1+8n.
+Type `INT`. Range / default: 289 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** 121 @ 24 fps ≈ 5.04 s. 120 is illegal on LTX (snaps to 121). Do not type 241.
+**How it affects generation:** Standalone Apps default 289 @ 24 fps ≈ 12.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
 
-**This graph:** `121`
+**This graph:** `289`
 
 ### `LTXVConditioning` — LTX Conditioning
 
@@ -574,7 +574,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `121`
+**This graph:** `289`
 
 #### `frame_rate`
 
@@ -645,7 +645,7 @@ Format / platform sets pixels (Custom uses Width × Height). Quality does not ch
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-Interior room-tone AV (~5 s T2V). LTX-2.5 distilled. Community License — not Apache.
+Interior room-tone AV (~12 s T2V). LTX-2.5 distilled. Community License — not Apache.
 Prefix `ez_interior_video`.
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -784,7 +784,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -808,10 +808,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds.`
+**This graph:** `Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Twelve seconds.`
 
 ```text
-Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Five seconds.
+Locked-camera interior B-roll. A quiet unmarked kitchen at first light. Steam from a kettle, a ceramic mug on oak. House creak, kettle hush, distant clock. No music and no score. Twelve seconds.
 ```
 
 #### `enhance`
@@ -844,13 +844,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 5 seconds, 24 fps.
+Type `STRING`. Range / default: 12 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `5 seconds, 24 fps`
+**This graph:** `12 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -858,7 +858,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `kettle, house creak, no score`
 
@@ -1044,7 +1044,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-5s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

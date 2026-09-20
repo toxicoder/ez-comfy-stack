@@ -75,7 +75,7 @@ Shot-card keys (defaults fail-closed):
 
 Shot 1 of beat 1 load_from: identity. Later shots load_from: <prev_prefix>_last.
 
-Do not type a 30/60/90 s denoise. One LTX print is 5.00 s (121 frames = 1+8n @ 24 fps).
+Do not type a 30/60/90 s denoise. Standalone LTX Apps default to 12.00 s (289 frames = 1+8n @ 24 fps); film printers stay 5.00 s.
 """
 
 RESEARCH_NOTE = """## inspire/research-chat

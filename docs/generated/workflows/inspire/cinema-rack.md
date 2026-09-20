@@ -815,7 +815,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -871,11 +871,11 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 5 seconds, 24 fps.
+Type `STRING`. Range / default: 12 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 **This graph:** `5 seconds, 24 fps`
 
@@ -885,7 +885,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `world SFX, no score`
 

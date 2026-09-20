@@ -1,10 +1,10 @@
 ---
-title: "motion/av/shorts-still-5s"
-description: "LTX-2.5 vertical 9:16 AV I2V ~5s"
-tags: [workflows, generated, comfyui, motion]
+title: "dcc/depth-control-12s"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
+tags: [workflows, generated, comfyui, dcc]
 ---
 
-# motion/av/shorts-still-5s
+# dcc/depth-control-12s
 
 **What's on this page**
 
@@ -18,35 +18,47 @@ tags: [workflows, generated, comfyui, motion]
 - **Queuing this filename** with known widgets
 - **Changing a parameter** with a documented generation effect
 
-**Who this is for:** studio users who loaded `motion/av/shorts-still-5s` from Apps or Workflows.
+**Who this is for:** studio users who loaded `dcc/depth-control-12s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/motion/av/shorts-still-5s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/dcc/depth-control-12s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
 
 ## Purpose
 
 Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
-## motion/av/shorts-still-5s
+## dcc/depth-control-12s
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Lab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
-LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).
+This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
-LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
-Disclose AI-generated media; do not strip provenance; do not distill. No score.
+Depth is wired by default. LoRA (opt-in, not download-models):
+
+  ./scripts/manage.sh download-ltx --tier iclora
+  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
+  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control — official 2.5 graph widgets this 2.3 Union file)
+
+Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
+
+This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
+
+Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+
+Stay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ## How to Queue
 
 1. `./scripts/manage.sh start` so `_lab` is seeded
-2. Load **motion/av/shorts-still-5s** from **Apps** or **Workflows**
+2. Load **dcc/depth-control-12s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
@@ -58,10 +70,10 @@ flowchart LR
   N1["LTX-2.5 distilled INT8-convrot"]
   N2["LTX-2.5 video VAE"]
   N3["Gemma4-with-proj (ltxv)"]
-  N4["Start frame"]
-  N5["Motion / prompt"]
+  N4["Guide first.png"]
+  N5["Motion + audio"]
   N6["Negative"]
-  N7["Vertical I2V (9:16)"]
+  N7["LTX Img→Video condition"]
   N8["LTX frame rate cond"]
   N9["KSampler"]
   N10["VAE Decode"]
@@ -70,13 +82,15 @@ flowchart LR
   N14["Empty LTX audio latent"]
   N15["Concat AV latents"]
   N16["Separate AV latents"]
-  N17["Operator note — video output"]
+  N17["Operator note"]
   N18["Save video (MP4) — open node for preview"]
-  N19["LTX Prompt Enhance"]
-  N20["Audio VAE Decode"]
-  N21["Negative Prompt Enhance"]
-  N22["Quality"]
-  N23["Format / platform"]
+  N19["Last frame"]
+  N20["Save last frame"]
+  N21["LTX Prompt Enhance"]
+  N22["Audio VAE Decode"]
+  N23["LTX AI-media disclosure (end-card)"]
+  N24["Negative Prompt Enhance"]
+  N25["Quality"]
   N1 --> N9
   N2 --> N7
   N2 --> N10
@@ -91,18 +105,18 @@ flowchart LR
   N9 --> N16
   N10 --> N12
   N10 --> N18
+  N10 --> N19
   N13 --> N14
-  N13 --> N20
+  N13 --> N22
   N14 --> N15
   N15 --> N9
   N16 --> N10
-  N16 --> N20
-  N19 --> N5
-  N19 --> N21
-  N20 --> N18
-  N21 --> N6
-  N23 --> N7
-  N23 --> N19
+  N16 --> N22
+  N19 --> N20
+  N21 --> N5
+  N21 --> N24
+  N22 --> N18
+  N24 --> N6
 ```
 
 ## Nodes on this graph
@@ -112,10 +126,10 @@ flowchart LR
 | 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | Ungrouped |
 | 2 | LTX-2.5 video VAE | `VAELoader` | Ungrouped |
 | 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | Ungrouped |
-| 4 | Start frame | `LoadImage` | Ungrouped |
-| 5 | Motion / prompt | `CLIPTextEncode` | Ungrouped |
+| 4 | Guide first.png | `LoadImage` | Ungrouped |
+| 5 | Motion + audio | `CLIPTextEncode` | Ungrouped |
 | 6 | Negative | `CLIPTextEncode` | Ungrouped |
-| 7 | Vertical I2V (9:16) | `LTXVImgToVideo` | Ungrouped |
+| 7 | LTX Img→Video condition | `LTXVImgToVideo` | Ungrouped |
 | 8 | LTX frame rate cond | `LTXVConditioning` | Ungrouped |
 | 9 | KSampler | `KSampler` | Ungrouped |
 | 10 | VAE Decode | `VAEDecode` | Ungrouped |
@@ -124,13 +138,15 @@ flowchart LR
 | 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | Ungrouped |
 | 15 | Concat AV latents | `LTXVConcatAVLatent` | Ungrouped |
 | 16 | Separate AV latents | `LTXVSeparateAVLatent` | Ungrouped |
-| 17 | Operator note — video output | `Note` | Ungrouped |
+| 17 | Operator note | `Note` | Ungrouped |
 | 18 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | Ungrouped |
-| 19 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
-| 20 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
-| 21 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 22 | Quality | `EZQuality` | Ungrouped |
-| 23 | Format / platform | `EZVideoFormat` | Ungrouped |
+| 19 | Last frame | `ImageFromBatch` | Ungrouped |
+| 20 | Save last frame | `SaveImage` | Ungrouped |
+| 21 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
+| 22 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
+| 23 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | Ungrouped |
+| 24 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 25 | Quality | `EZQuality` | Ungrouped |
 
 ## Node parameter reference
 
@@ -305,7 +321,7 @@ Filename in input/.
 
 **How it affects generation:** Point at the Klein still you just saved (ez_still_draft_*.png, ez_character_*.png, first.png).
 
-**This graph:** `example.png`
+**This graph:** `first.png`
 
 #### `upload`
 
@@ -341,7 +357,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Motion / prompt | `The start image holds as the first frame in vertical Shorts framing. World SFX …` |
+| Motion + audio | `The start image holds as the first frame. The first-person body-cam surges into…` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `LTXVImgToVideo` — LTX Image to Video
@@ -370,7 +386,7 @@ Frame width.
 
 **How it affects generation:** Must be ÷32. 720p width is fine; height 720 is not.
 
-**This graph:** `768`
+**This graph:** `1280`
 
 #### `height`
 
@@ -380,7 +396,7 @@ Frame height.
 
 **How it affects generation:** 704 not 720. Shorts 1280.
 
-**This graph:** `1280`
+**This graph:** `704`
 
 #### `length`
 
@@ -390,7 +406,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `121`
+**This graph:** `289`
 
 #### `batch_size`
 
@@ -609,7 +625,10 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph:** `ez_ltx_hero_frames`
+| Instance | Value |
+| --- | --- |
+| Save frames (secondary) | `ez_gosee_b1_s1_ltx_frames` |
+| Save last frame | `ez_gosee_b1_s1_last` |
 
 ### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
 
@@ -628,7 +647,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `121`
+**This graph:** `289`
 
 #### `frame_rate`
 
@@ -690,23 +709,35 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/shorts-still-5s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are inva…`
+**This graph:** `## dcc/depth-control-12s Lab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **o…`
 
 ```text
-## motion/av/shorts-still-5s
+## dcc/depth-control-12s
 
-Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+Lab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
-LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).
+This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
-Vertical AV Shorts I2V (~5 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
-LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
+  Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
-Disclose AI-generated media; do not strip provenance; do not distill. No score.
+Depth is wired by default. LoRA (opt-in, not download-models):
+
+  ./scripts/manage.sh download-ltx --tier iclora
+  ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
+  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control — official 2.5 graph widgets this 2.3 Union file)
+
+Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
+
+This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
+
+Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
+
+LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
+
+Stay on :8188 after a dump: dcc/guide-still / dcc/depth-from-loader / dcc/still-to-mesh (EZDCCLoadGuideStill + OccupancyGate). The LoadImage + --install-inputs path on this graph still works.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 ```
 
 ### `VHS_VideoCombine` — VHS Video Combine
@@ -753,7 +784,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_shorts_ltx_video`
+**This graph:** `ez_iclora_depth`
 
 #### `format`
 
@@ -832,13 +863,46 @@ Write the file to disk.
 
 **This graph:** `true`
 
+### `ImageFromBatch` — Image From Batch
+
+Pick one frame out of a decoded video batch.
+
+!!! warning "Lab notes"
+
+    Last-frame savers: index 120 on 121-frame LTX (0-based last), 119 on 120-frame Wan shots.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded frame batch. |
+| `IMAGE` | out | `IMAGE` | Single frame. |
+
+#### `batch_index`
+
+Type `INT`. Range / default: 120 (LTX 121) / 119 (Wan 120).
+
+0-based frame index.
+
+**How it affects generation:** Must be length-1 for the last frame. Off-by-one here breaks shot continuity.
+
+**This graph:** `119`
+
+#### `length`
+
+Type `INT`. Range / default: 1.
+
+How many frames to take.
+
+**How it affects generation:** Stay 1 (one still).
+
+**This graph:** `1`
+
 ### `EZLTXPromptEnhance` — LTX Prompt Enhance
 
 Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -862,10 +926,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `The start image holds as the first frame in vertical Shorts framing. World SFX matching the start image sit under a slow push-in. Keep every object and surface from the start image; do not redesign. …`
+**This graph:** `The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard …`
 
 ```text
-The start image holds as the first frame in vertical Shorts framing. World SFX matching the start image sit under a slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score.
+The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.
 ```
 
 #### `enhance`
@@ -876,7 +940,7 @@ Run the rewriter.
 
 **How it affects generation:** Off keeps authored film/shot text pinned.
 
-**This graph:** `true`
+**This graph:** `false`
 
 #### `mode`
 
@@ -898,13 +962,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 5 seconds, 24 fps.
+Type `STRING`. Range / default: 12 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `5 seconds, 24 fps, 9:16`
+**This graph:** `12 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -912,7 +976,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `world SFX matching the start image, no score`
 
@@ -1090,7 +1154,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-**This graph:** `motion/av/shorts-still-5s`
+**This graph:** `dcc/depth-control-12s`
 
 ### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
 
@@ -1098,7 +1162,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-5s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1107,6 +1171,22 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 | `Audio` | out | `AUDIO` | World bed / dialogue stem. |
 
 No widgets. Sockets only.
+
+### `EZFilmDisclosure` — LTX AI-media disclosure
+
+Prepend the LTX Community License AI-media disclosure. Idempotent. Not legal advice.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `text` | out | `STRING` | Disclosure (+ optional extra). |
+
+#### `text`
+
+Type `STRING`.
+
+Optional extra line after the stock disclosure.
+
+**How it affects generation:** Empty = stock sentence only. Do not strip provenance.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -1139,7 +1219,7 @@ Rewrite using the positive as context.
 
 **How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
 
-**This graph:** `true`
+**This graph:** `false`
 
 #### `family`
 
@@ -1197,79 +1277,3 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
-
-### `EZVideoFormat` — Format / platform (video)
-
-Pick a Wan or LTX clip canvas (aspect or named platform).
-
-!!! warning "Lab notes"
-
-    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
-| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
-| `hint` | out | `STRING` | Enhance duration / framing line. |
-| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
-
-#### `family`
-
-Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
-
-Which VAE grid to use.
-
-**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
-
-**This graph:** `LTX-2.5`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `Wan 5B` | wan VAE grid ÷16. |
-| `LTX-2.5` | ltx VAE grid ÷32. |
-
-#### `format`
-
-Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
-
-Aspect or named platform job.
-
-**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
-
-**This graph:** `LTX · 9:16 Shorts (768×1280)`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
-| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
-| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
-| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
-| `Wan · 1:1 square (768×768)` | 768×768. wan. |
-| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
-| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
-| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
-| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
-
-#### `width`
-
-Type `INT`. Range / default: 16–1280.
-
-Custom width.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
-
-**This graph:** `768`
-
-#### `height`
-
-Type `INT`. Range / default: 16–1280.
-
-Custom height.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
-
-**This graph:** `1280`

@@ -31,9 +31,9 @@ Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupa
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
 """
 
-LTX_NOTE = """## dcc/depth-control-5s
+LTX_NOTE = """## dcc/depth-control-12s
 
-Lab envelope for Path B depth-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
@@ -47,7 +47,7 @@ Depth is wired by default. LoRA (opt-in, not download-models):
 
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
 
-This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
+This envelope keeps the lab 12.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
 
 Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
 
@@ -79,9 +79,9 @@ LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupan
 Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
 """
 
-LTX_CANNY_NOTE = """## dcc/canny-control-5s
+LTX_CANNY_NOTE = """## dcc/canny-control-12s
 
-Lab envelope for Path B **canny**-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
@@ -101,7 +101,7 @@ LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not str
 
 LTX_SHORTS_NOTE = """## dcc/depth-control-shorts
 
-Lab envelope for Path B depth-guided **portrait** 5.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B depth-guided **portrait** 12.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 Dump the pack with:
 
@@ -155,7 +155,7 @@ blender-desk fails the gate (park is for dumps). After Queue, overlay-qc. Path D
 
 LTX_LOADER_NOTE = """## dcc/depth-from-loader
 
-Lab envelope for Path B depth-guided 5.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
+Lab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.
 
 Occupancy: **ltx**. EZDCCLoadGuideStill ``first`` → OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.
 
@@ -485,11 +485,11 @@ def build_klein_from_clay() -> dict:
 
 def build_ltx_iclora() -> dict:
     graph = copy.deepcopy(_load("motion/av/still-to-shot.json"))
-    graph["id"] = "dcc/depth-control-5s"
+    graph["id"] = "dcc/depth-control-12s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/depth-control-5s"
+    extra["lab_profile"] = "dcc/depth-control-12s"
     extra["lab_note"] = LTX_NOTE
-    extra["lab_description"] = "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default"
+    extra["lab_description"] = "LTX-2.5 IC-LoRA Union Control envelope, 289 frames, depth default"
     extra["lab_iclora"] = {
         "templates": "LTX-2.5_ICLoRA_Union_Control_Distilled.json",
         "lora": "ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors",
@@ -920,11 +920,11 @@ def _set_vhs_prefix(graph: dict, prefix: str) -> None:
 
 def build_ltx_iclora_canny() -> dict:
     graph = build_ltx_iclora()
-    graph["id"] = "dcc/canny-control-5s"
+    graph["id"] = "dcc/canny-control-12s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/canny-control-5s"
+    extra["lab_profile"] = "dcc/canny-control-12s"
     extra["lab_description"] = (
-        "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default"
+        "LTX-2.5 IC-LoRA Union Control envelope, 289 frames, canny default"
     )
     extra["lab_iclora"] = dict(extra.get("lab_iclora") or {})
     extra["lab_iclora"]["depth_default"] = False
@@ -941,7 +941,7 @@ def build_ltx_iclora_depth_shorts() -> dict:
     extra = graph.setdefault("extra", {})
     extra["lab_profile"] = "dcc/depth-control-shorts"
     extra["lab_description"] = (
-        "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 120 frames, depth default"
+        "LTX-2.5 IC-LoRA Union Control envelope, 768x1280, 289 frames, depth default"
     )
     extra["lab_iclora"] = dict(extra.get("lab_iclora") or {})
     extra["lab_iclora"]["size"] = [768, 1280]
@@ -1161,8 +1161,8 @@ def main() -> int:
         ("dcc/clay-hero.json", klein),
         ("dcc/canny-hero.json", canny),
         ("dcc/clay-plates.json", plates),
-        ("dcc/depth-control-5s.json", ltx),
-        ("dcc/canny-control-5s.json", ltx_canny),
+        ("dcc/depth-control-12s.json", ltx),
+        ("dcc/canny-control-12s.json", ltx_canny),
         ("dcc/depth-control-shorts.json", ltx_shorts),
         ("dcc/first-last-from-guide.json", flf),
         ("dcc/guide-still.json", klein_loader),

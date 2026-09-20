@@ -1,8 +1,8 @@
 {
-  "id": "first-last-5s",
+  "id": "text-to-video-12s",
   "revision": 10,
-  "last_node_id": 25,
-  "last_link_id": 41,
+  "last_node_id": 21,
+  "last_link_id": 27,
   "nodes": [
     {
       "id": 1,
@@ -58,9 +58,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            2,
-            27,
-            32
+            2
           ],
           "slot_index": 0
         }
@@ -143,7 +141,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            25
+            5
           ],
           "slot_index": 0
         }
@@ -152,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Five seconds. Keep every object and surface from the start image; do not redesign."
+        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in on a locked wheeled support, tightening without zooming. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score."
       ],
       "title": "Positive"
     },
@@ -190,7 +188,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            26
+            6
           ],
           "slot_index": 0
         }
@@ -217,13 +215,30 @@
       "flags": {},
       "order": 6,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 25,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 26,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            28
+            13
           ],
           "slot_index": 0
         }
@@ -235,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        121
+        289
       ]
     },
     {
@@ -256,12 +271,12 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 35
+          "link": 5
         },
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 36
+          "link": 6
         }
       ],
       "outputs": [
@@ -269,8 +284,7 @@
           "name": "positive",
           "type": "CONDITIONING",
           "links": [
-            8,
-            38
+            8
           ],
           "slot_index": 0
         },
@@ -278,10 +292,9 @@
           "name": "negative",
           "type": "CONDITIONING",
           "links": [
-            9,
-            39
+            9
           ],
-          "slot_index": 1
+          "slot_index": 0
         }
       ],
       "properties": {
@@ -369,7 +382,7 @@
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 41
+          "link": 17
         },
         {
           "name": "vae",
@@ -419,7 +432,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_flf_frames"
+        "ez_ltx_t2v_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -462,7 +475,7 @@
       "type": "LTXVEmptyLatentAudio",
       "pos": [
         1080,
-        774
+        1026
       ],
       "size": [
         300,
@@ -492,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        121,
+        289,
         24.0,
         1
       ],
@@ -516,7 +529,7 @@
         {
           "name": "video_latent",
           "type": "LATENT",
-          "link": 37
+          "link": 13
         },
         {
           "name": "audio_latent",
@@ -566,7 +579,7 @@
           "name": "video_latent",
           "type": "LATENT",
           "links": [
-            40
+            17
           ],
           "slot_index": 0
         },
@@ -590,7 +603,7 @@
       "type": "Note",
       "pos": [
         40,
-        960
+        1032
       ],
       "size": [
         960,
@@ -605,7 +618,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/first-last-5s\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~5 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## motion/av/text-to-video-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV T2V smoke (~12 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n289 frames @ 24 fps. No LoadImage \u2014 text to AV.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nFor I2V from a still, use motion/av/still-to-video-12s.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -662,7 +675,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_flf",
+        "filename_prefix": "ez_ltx_t2v_video",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -687,7 +700,16 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 27,
+          "widget": {
+            "name": "duration_hint"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -704,13 +726,13 @@
       },
       "widgets_values": [
         "custom",
-        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Five seconds. Keep every object and surface from the start image; do not redesign.",
-        false,
-        "i2v",
-        "5 seconds, 24 fps",
-        "terrace breeze, palm rustle, distant bay traffic, glyph chime at the last frame, no score",
+        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in on a locked wheeled support, tightening without zooming. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.",
+        true,
+        "t2v",
+        "12 seconds, 24 fps",
+        "world SFX matching the start image, no score",
         "none",
-        "motion/av/first-last-5s"
+        "motion/av/text-to-video-12s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -761,7 +783,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         620,
-        1392
+        1464
       ],
       "size": [
         420,
@@ -792,304 +814,13 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        false,
+        true,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
     },
     {
-      "type": "LoadImage",
-      "pos": [
-        1080,
-        976
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            29
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "First frame",
       "id": 20,
-      "order": 18
-    },
-    {
-      "type": "LoadImage",
-      "pos": [
-        1088,
-        1474
-      ],
-      "size": [
-        320,
-        314
-      ],
-      "flags": {},
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            34
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null,
-          "slot_index": 1
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "example.png",
-        "image"
-      ],
-      "title": "Last frame",
-      "id": 21,
-      "order": 19
-    },
-    {
-      "type": "LTXVAddGuide",
-      "pos": [
-        1448,
-        970
-      ],
-      "size": [
-        320,
-        180
-      ],
-      "flags": {},
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 25
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 26
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 27
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "link": 28
-        },
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 29
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            30
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            31
-          ],
-          "slot_index": 1
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            33
-          ],
-          "slot_index": 2
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVAddGuide"
-      },
-      "widgets_values": [
-        0,
-        1.0
-      ],
-      "title": "Guide first frame",
-      "id": 22,
-      "order": 20
-    },
-    {
-      "type": "LTXVAddGuide",
-      "pos": [
-        1448,
-        1222
-      ],
-      "size": [
-        320,
-        180
-      ],
-      "flags": {},
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 30
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 31
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 32
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "link": 33
-        },
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 34
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            35
-          ],
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": [
-            36
-          ],
-          "slot_index": 1
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            37
-          ],
-          "slot_index": 2
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVAddGuide"
-      },
-      "widgets_values": [
-        -1,
-        1.0
-      ],
-      "title": "Guide last frame",
-      "id": 23,
-      "order": 21
-    },
-    {
-      "type": "LTXVCropGuides",
-      "pos": [
-        2268,
-        914
-      ],
-      "size": [
-        280,
-        86
-      ],
-      "flags": {},
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 38
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 39
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "link": 40
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": null,
-          "slot_index": 0
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "links": null,
-          "slot_index": 1
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            41
-          ],
-          "slot_index": 2
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVCropGuides"
-      },
-      "widgets_values": [],
-      "title": "Crop guide frames",
-      "id": 24,
-      "order": 22
-    },
-    {
-      "id": 25,
       "type": "EZQuality",
       "pos": [
         40.0,
@@ -1118,6 +849,64 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 21,
+      "type": "EZVideoFormat",
+      "pos": [
+        1080,
+        774
+      ],
+      "size": [
+        360,
+        180
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            26
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            27
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZVideoFormat"
+      },
+      "widgets_values": [
+        "LTX-2.5",
+        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        1280,
+        704
+      ],
+      "title": "Format / platform"
     }
   ],
   "links": [
@@ -1154,6 +943,22 @@
       "CLIP"
     ],
     [
+      5,
+      4,
+      0,
+      7,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      6,
+      5,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
       8,
       7,
       0,
@@ -1186,6 +991,14 @@
       "VAE"
     ],
     [
+      13,
+      6,
+      0,
+      13,
+      0,
+      "LATENT"
+    ],
+    [
       14,
       12,
       0,
@@ -1206,6 +1019,14 @@
       8,
       0,
       14,
+      0,
+      "LATENT"
+    ],
+    [
+      17,
+      14,
+      0,
+      9,
       0,
       "LATENT"
     ],
@@ -1267,149 +1088,37 @@
     ],
     [
       25,
-      4,
+      21,
       0,
-      22,
+      6,
       0,
-      "CONDITIONING"
+      "INT"
     ],
     [
       26,
-      5,
-      0,
-      22,
+      21,
       1,
-      "CONDITIONING"
+      6,
+      1,
+      "INT"
     ],
     [
       27,
-      2,
-      0,
-      22,
-      2,
-      "VAE"
-    ],
-    [
-      28,
-      6,
-      0,
-      22,
-      3,
-      "LATENT"
-    ],
-    [
-      29,
-      20,
-      0,
-      22,
-      4,
-      "IMAGE"
-    ],
-    [
-      30,
-      22,
-      0,
-      23,
-      0,
-      "CONDITIONING"
-    ],
-    [
-      31,
-      22,
-      1,
-      23,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      32,
-      2,
-      0,
-      23,
-      2,
-      "VAE"
-    ],
-    [
-      33,
-      22,
-      2,
-      23,
-      3,
-      "LATENT"
-    ],
-    [
-      34,
       21,
-      0,
-      23,
-      4,
-      "IMAGE"
-    ],
-    [
-      35,
-      23,
-      0,
-      7,
-      0,
-      "CONDITIONING"
-    ],
-    [
-      36,
-      23,
-      1,
-      7,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      37,
-      23,
       2,
-      13,
+      17,
       0,
-      "LATENT"
-    ],
-    [
-      38,
-      7,
-      0,
-      24,
-      0,
-      "CONDITIONING"
-    ],
-    [
-      39,
-      7,
-      1,
-      24,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      40,
-      14,
-      0,
-      24,
-      2,
-      "LATENT"
-    ],
-    [
-      41,
-      24,
-      2,
-      9,
-      0,
-      "LATENT"
+      "STRING"
     ]
   ],
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "motion/av/first-last-5s",
+    "lab_profile": "motion/av/text-to-video-12s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/first-last-5s\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~5 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## motion/av/text-to-video-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV T2V smoke (~12 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n289 frames @ 24 fps. No LoadImage \u2014 text to AV.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nFor I2V from a still, use motion/av/still-to-video-12s.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 first-last-frame AV using core AddGuide nodes\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_description": "LTX-2.5 AV T2V smoke, 289 frames @ 24 fps",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1422,7 +1131,7 @@
     "linearData": {
       "inputs": [
         [
-          25,
+          20,
           "quality",
           {
             "label": "Quality",
@@ -1447,6 +1156,22 @@
           }
         ],
         [
+          21,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          17,
+          "style",
+          {
+            "description": "Optional look. Hidden on I2V \u2014 the start image owns look.",
+            "label": "Style"
+          }
+        ],
+        [
           17,
           "enhance",
           {
@@ -1464,27 +1189,27 @@
           }
         ],
         [
-          20,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "First frame"
-          }
-        ],
-        [
-          21,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Last frame"
-          }
-        ],
-        [
           8,
           "seed",
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          21,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          21,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
           }
         ]
       ],
@@ -1494,7 +1219,7 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "motion/av/first-last-5s",
+    "lab_rel": "motion/av/text-to-video-12s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

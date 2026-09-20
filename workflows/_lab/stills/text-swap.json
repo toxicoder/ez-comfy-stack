@@ -854,8 +854,8 @@
       "enhance_off_identity": false,
       "handoff": [
         "motion/silent/still-to-video-5s",
-        "motion/av/still-to-video-5s",
-        "motion/av/first-last-5s"
+        "motion/av/still-to-video-12s",
+        "motion/av/first-last-12s"
       ]
     },
     "linearData": {

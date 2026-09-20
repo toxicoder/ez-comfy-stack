@@ -1,6 +1,6 @@
 {
-  "id": "text-to-video-5s",
-  "revision": 10,
+  "id": "multishot-12s",
+  "revision": 11,
   "last_node_id": 21,
   "last_link_id": 27,
   "nodes": [
@@ -150,7 +150,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in on a locked wheeled support, tightening without zooming. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score."
+        "A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a medium close-up of the glyph rings over the staff, motes drifting across the dark indigo-violet suede coat, the breeze continuing across the cut while traffic muffles. The wizard's mouth stays closed. A match cut connects to a low wide of the same terrace looking out at the bay, the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, empty of lettering. No music and no score. Twelve seconds."
       ],
       "title": "Positive"
     },
@@ -250,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        121
+        289
       ]
     },
     {
@@ -432,7 +432,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_t2v_frames"
+        "ez_ltx_multishot_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -505,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        121,
+        289,
         24.0,
         1
       ],
@@ -618,7 +618,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/text-to-video-5s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV T2V smoke (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps. No LoadImage \u2014 text to AV.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nFor I2V from a still, use motion/av/still-to-video-5s.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## motion/av/multishot-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n289 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -675,7 +675,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_ltx_t2v_video",
+        "filename_prefix": "ez_ltx_multishot",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -726,13 +726,13 @@
       },
       "widgets_values": [
         "custom",
-        "A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked sun-washed teal technical running coat with faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in on a locked wheeled support, tightening without zooming. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.",
-        true,
+        "A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a medium close-up of the glyph rings over the staff, motes drifting across the dark indigo-violet suede coat, the breeze continuing across the cut while traffic muffles. The wizard's mouth stays closed. A match cut connects to a low wide of the same terrace looking out at the bay, the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, empty of lettering. No music and no score. Twelve seconds.",
+        false,
         "t2v",
-        "5 seconds, 24 fps",
-        "world SFX matching the start image, no score",
+        "12 seconds, 24 fps",
+        "terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score",
         "none",
-        "motion/av/text-to-video-5s"
+        "motion/av/multishot-12s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -814,7 +814,7 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        true,
+        false,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
@@ -1114,11 +1114,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "motion/av/text-to-video-5s",
+    "lab_profile": "motion/av/multishot-12s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/text-to-video-5s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled AV T2V smoke (~5 s). LTX Community License \u2014 not Apache. $10M company-revenue cap.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n121 frames @ 24 fps. No LoadImage \u2014 text to AV.\nPRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.\nFor I2V from a still, use motion/av/still-to-video-5s.\nGated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## motion/av/multishot-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\n289 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 AV T2V smoke, 121 frames @ 24 fps",
+    "lab_description": "LTX-2.5 native multishot AV T2V with named cuts\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1219,7 +1219,7 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "motion/av/text-to-video-5s",
+    "lab_rel": "motion/av/multishot-12s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

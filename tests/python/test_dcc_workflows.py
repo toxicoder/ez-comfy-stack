@@ -23,8 +23,8 @@ EXISTING_LOADIMAGE_STEMS = (
     "dcc/clay-hero",
     "dcc/canny-hero",
     "dcc/clay-plates",
-    "dcc/depth-control-5s",
-    "dcc/canny-control-5s",
+    "dcc/depth-control-12s",
+    "dcc/canny-control-12s",
     "dcc/depth-control-shorts",
     "dcc/first-last-from-guide",
 )
@@ -76,13 +76,13 @@ def test_klein_from_clay_contract() -> None:
     assert "1280" in note and "704" in note
     assert "overlay-qc" in extra["lab_note"]
     assert extra["lab_app_mode"]["handoff"] == [
-        "dcc/depth-control-5s",
+        "dcc/depth-control-12s",
         "motion/silent/still-to-video-5s",
     ]
 
 
 def test_ltx_iclora_envelope_contract() -> None:
-    graph = _load("dcc/depth-control-5s.json")
+    graph = _load("dcc/depth-control-12s.json")
     extra = graph["extra"]
     ic = extra["lab_iclora"]
     assert ic["templates"] == "LTX-2.5_ICLoRA_Union_Control_Distilled.json"
@@ -119,7 +119,7 @@ def test_klein_from_canny_contract() -> None:
     load = next(n for n in graph["nodes"] if n.get("type") == "LoadImage")
     assert load["widgets_values"][0] == "canny.png"
     assert extra["lab_app_mode"]["occupancy"] == "klein"
-    assert extra["lab_app_mode"]["handoff"] == ["dcc/canny-control-5s"]
+    assert extra["lab_app_mode"]["handoff"] == ["dcc/canny-control-12s"]
 
 
 def test_klein_from_clay_plates_contract() -> None:
@@ -150,7 +150,7 @@ def test_klein_from_clay_plates_contract() -> None:
 
 
 def test_ltx_iclora_canny_and_shorts_contract() -> None:
-    canny = _load("dcc/canny-control-5s.json")
+    canny = _load("dcc/canny-control-12s.json")
     ic = canny["extra"]["lab_iclora"]
     assert ic["canny_default"] is True
     assert ic["depth_default"] is False

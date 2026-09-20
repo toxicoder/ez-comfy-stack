@@ -783,7 +783,7 @@
       "occupancy": "klein",
       "enhance_off_identity": false,
       "handoff": [
-        "dcc/canny-control-5s"
+        "dcc/canny-control-12s"
       ]
     },
     "linearData": {

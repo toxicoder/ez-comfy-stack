@@ -35,7 +35,7 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
 
-LTX-2.5 distilled **product hero** I2V (~5 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX-2.5 distilled **product hero** I2V (~12 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
 Slow orbit + table/glass SFX. Start image owns look. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
@@ -389,7 +389,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `121`
+**This graph:** `289`
 
 #### `batch_size`
 
@@ -627,7 +627,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `121`
+**This graph:** `289`
 
 #### `frame_rate`
 
@@ -700,7 +700,7 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
 
-LTX-2.5 distilled **product hero** I2V (~5 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
+LTX-2.5 distilled **product hero** I2V (~12 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
 Slow orbit + table/glass SFX. Start image owns look. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
@@ -836,7 +836,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -863,7 +863,7 @@ Lazy sentence or authored LTX paragraph.
 **This graph:** `The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabr…`
 
 ```text
-The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Five seconds.
+The start image holds as the first frame. The camera orbits a few degrees right around the product on the table while keeping identity locked. Soft room tone sits under a single glass tick and a fabric hush. Keep every object and surface from the start image; do not redesign. Unmarked, empty of lettering. No music and no score. Twelve seconds.
 ```
 
 #### `enhance`
@@ -896,13 +896,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 5 seconds, 24 fps.
+Type `STRING`. Range / default: 12 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `5 seconds, 24 fps`
+**This graph:** `12 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -910,7 +910,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `soft tabletop room tone, a glass tick, fabric hush, no score`
 
@@ -1096,7 +1096,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-5s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

@@ -1,10 +1,10 @@
 ---
-title: "dcc/depth-control-5s"
-description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
+title: "dcc/canny-control-12s"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
 tags: [workflows, generated, comfyui, dcc]
 ---
 
-# dcc/depth-control-5s
+# dcc/canny-control-12s
 
 **What's on this page**
 
@@ -18,34 +18,31 @@ tags: [workflows, generated, comfyui, dcc]
 - **Queuing this filename** with known widgets
 - **Changing a parameter** with a documented generation effect
 
-**Who this is for:** studio users who loaded `dcc/depth-control-5s` from Apps or Workflows.
+**Who this is for:** studio users who loaded `dcc/canny-control-12s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/dcc/depth-control-5s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/dcc/canny-control-12s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
 
 ## Purpose
 
 Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
-## dcc/depth-control-5s
+## dcc/canny-control-12s
 
-Lab envelope for Path B depth-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
   Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-Depth is wired by default. LoRA (opt-in, not download-models):
+Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
   ./scripts/manage.sh download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
-  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control — official 2.5 graph widgets this 2.3 Union file)
 
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
 
-This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
-
-Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
+LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
@@ -58,7 +55,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 ## How to Queue
 
 1. `./scripts/manage.sh start` so `_lab` is seeded
-2. Load **dcc/depth-control-5s** from **Apps** or **Workflows**
+2. Load **dcc/canny-control-12s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
@@ -406,7 +403,7 @@ Frame count.
 
 **How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
 
-**This graph:** `120`
+**This graph:** `289`
 
 #### `batch_size`
 
@@ -647,7 +644,7 @@ Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `120`
+**This graph:** `289`
 
 #### `frame_rate`
 
@@ -709,28 +706,25 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## dcc/depth-control-5s Lab envelope for Path B depth-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off…`
+**This graph:** `## dcc/canny-control-12s Lab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache…`
 
 ```text
-## dcc/depth-control-5s
+## dcc/canny-control-12s
 
-Lab envelope for Path B depth-guided 5.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **120 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 This tree does **not** vendor Lightricks UUID subgraphs. Queue the official Templates graph:
 
   Templates → LTX-2.5 → LTX-2.5_ICLoRA_Union_Control_Distilled.json
 
-Depth is wired by default. LoRA (opt-in, not download-models):
+Switch the annotator to **canny**. Wire ``canny.mp4`` from the guide pack. LoRA (opt-in, not download-models):
 
   ./scripts/manage.sh download-ltx --tier iclora
   ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors
-  (Lightricks/LTX-2.3-22b-IC-LoRA-Union-Control — official 2.5 graph widgets this 2.3 Union file)
 
 Refuse 19B Union. Do not pair IC-LoRA with a dev transformer.
 
-This envelope keeps the lab 5.00s / INT8-convrot / EZFilmDisclosure contract so print-shot can grow ``--from-guide`` later. LoadImage: guide ``first.png``. Wire depth.mp4 in the Templates graph.
-
-Stop Klein first. After print, stop LTX and run audio-finish / stem-mix (occupancy audio). Joint AV is a world bed, not a master.
+LoadImage: guide ``first.png``. Stop Klein first. After print, audio-finish / stem-mix.
 
 LTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.
 
@@ -784,7 +778,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_iclora_depth`
+**This graph:** `ez_iclora_canny`
 
 #### `format`
 
@@ -902,7 +896,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 5 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -962,13 +956,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 5 seconds, 24 fps.
+Type `STRING`. Range / default: 12 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 121 frames — LTXVImgToVideo does.
+**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `5 seconds, 24 fps`
+**This graph:** `12 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -976,7 +970,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 5 s printers ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `world SFX matching the start image, no score`
 
@@ -1154,7 +1148,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-**This graph:** `dcc/depth-control-5s`
+**This graph:** `dcc/canny-control-12s`
 
 ### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
 
@@ -1162,7 +1156,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-5s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

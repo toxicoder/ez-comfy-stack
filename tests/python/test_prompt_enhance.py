@@ -1275,8 +1275,8 @@ def test_lab_graphs_use_model_native_prompts_and_enhance_nodes() -> None:
     assert klein_d["widgets_values"][0] == SAMPLE_CUSTOM
     wan_t = json.loads(lab_json("motion/silent/text-to-video-5s.json").read_text(encoding="utf-8"))
     wan_i = json.loads(lab_json("motion/silent/still-to-video-5s.json").read_text(encoding="utf-8"))
-    ltx_t = json.loads(lab_json("motion/av/text-to-video-5s.json").read_text(encoding="utf-8"))
-    ltx_i = json.loads(lab_json("motion/av/still-to-video-5s.json").read_text(encoding="utf-8"))
+    ltx_t = json.loads(lab_json("motion/av/text-to-video-12s.json").read_text(encoding="utf-8"))
+    ltx_i = json.loads(lab_json("motion/av/still-to-video-12s.json").read_text(encoding="utf-8"))
     wan_tp = _enh_prompt(next(n for n in wan_t["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"])
     wan_ip = _enh_prompt(next(n for n in wan_i["nodes"] if n.get("type") == "EZWanPromptEnhance")["widgets_values"])
     ltx_tp = _enh_prompt(next(n for n in ltx_t["nodes"] if n.get("type") == "EZLTXPromptEnhance")["widgets_values"])
@@ -1521,7 +1521,7 @@ def test_enhance_context_ignored_when_off_included_when_on() -> None:
         "t2i",
         "YouTube 16:9 still",
         "none",
-        "bible: teal coat, no staff",
+        "bible: indigo-violet suede coat, no staff",
     )
     assert off["result"] == ("A rooftop.",)
     assert off["ui"]["passthrough"][0] == "enhance off"
@@ -1542,7 +1542,7 @@ def test_enhance_context_ignored_when_off_included_when_on() -> None:
     assert "Context block" in system or "supporting bible" in system.lower()
     wan = EZWanPromptEnhance()
     with patch.object(client, "complete", return_value=("motion", None)) as mock:
-        wan.run("push in", True, "i2v", "5 seconds, 24 fps", "none", "keep the teal coat")
+        wan.run("push in", True, "i2v", "5 seconds, 24 fps", "none", "keep the dark indigo-violet suede coat")
     wan_system = mock.call_args[0][0]
     assert "start frame owns look" in wan_system.lower() or "do not restate look" in wan_system.lower()
     ace = EZAceStepPromptEnhance()

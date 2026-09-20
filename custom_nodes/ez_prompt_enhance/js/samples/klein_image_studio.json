@@ -2,7 +2,7 @@
   {
     "id": "photoreal-terrace",
     "label": "Photoreal terrace",
-    "prompt": "A photoreal still of an original techno wizard in an unmarked teal running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering."
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat on a tropical rooftop terrace at golden hour. Warm sidelight, palms, unmarked glass towers, empty of lettering."
   },
   {
     "id": "background-swap",
@@ -92,7 +92,7 @@
   {
     "id": "wardrobe-transfer",
     "label": "Wardrobe transfer",
-    "prompt": "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked teal coat. Original characters only."
+    "prompt": "Keep the person in the first reference. Transfer wardrobe look from a second still if present, else an unmarked dark indigo-violet suede coat. Original characters only."
   },
   {
     "id": "empty-lettering",

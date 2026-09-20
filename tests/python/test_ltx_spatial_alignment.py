@@ -22,7 +22,7 @@ def _portrait_stems() -> frozenset[str]:
         for spec in PACK3
         if spec.occupancy == "ltx" and spec.portrait
     }
-    return frozenset({"shorts-still-5s", "depth-control-shorts"}) | extra
+    return frozenset({"shorts-still-12s", "depth-control-shorts"}) | extra
 
 
 PORTRAIT_STEMS = _portrait_stems()
