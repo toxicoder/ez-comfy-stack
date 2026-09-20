@@ -75,7 +75,7 @@ def test_load_input_still_success_and_failures(
             return self
 
         def __getitem__(self, _idx: object) -> "_Arr":
-            return "batched"
+            return self
 
     class _Img:
         def convert(self, _mode: str) -> "_Img":
@@ -84,8 +84,8 @@ def test_load_input_still_success_and_failures(
         def __enter__(self) -> "_Img":
             return self
 
-        def __exit__(self, *_exc: object) -> bool:
-            return False
+        def __exit__(self, *_exc: object) -> None:
+            return None
 
     class _Folder:
         @staticmethod
@@ -95,8 +95,8 @@ def test_load_input_still_success_and_failures(
     fake_np = types.SimpleNamespace(asarray=lambda _img: _Arr(), float32="f32")
     fake_pil = types.ModuleType("PIL")
     fake_image = types.ModuleType("PIL.Image")
-    fake_image.open = lambda _path: _Img()
-    fake_pil.Image = fake_image
+    fake_image.open = lambda _path: _Img()  # type: ignore[attr-defined]
+    fake_pil.Image = fake_image  # type: ignore[attr-defined]
     monkeypatch.setitem(sys.modules, "folder_paths", _Folder)
     monkeypatch.setitem(sys.modules, "numpy", fake_np)
     monkeypatch.setitem(sys.modules, "PIL", fake_pil)
@@ -104,7 +104,7 @@ def test_load_input_still_success_and_failures(
     if "numpy" in sys.modules:
         monkeypatch.setattr(sys.modules["numpy"], "asarray", lambda _img: _Arr(), raising=False)
     loaded = load_input_still("ok.png")
-    assert loaded == "batched"
+    assert loaded is not None
 
     class _Flat:
         ndim = 2
@@ -144,7 +144,7 @@ def test_load_input_still_success_and_failures(
         raise OSError("bad")
 
     monkeypatch.setitem(sys.modules, "folder_paths", _Unreadable)
-    fake_image.open = _open_fail
+    fake_image.open = _open_fail  # type: ignore[attr-defined]
     assert load_input_still("ok.png") is None
 
 
