@@ -1,2 +1,2 @@
 :HL["/ez-comfy-stack/development/_next/static/chunks/3z2uggggdlwdw.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"slug","param":{"type":"oc","key":"generated/workflows/creator/silent/paper-flip","siblings":["api"]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"rakShDvM94NTF4WBmeXhg"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"slug","param":{"type":"oc","key":"generated/workflows/creator/silent/paper-flip","siblings":["api"]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}},"staleTime":300,"buildId":"AR2fRYAaEsKQXCv30UBDG"}
