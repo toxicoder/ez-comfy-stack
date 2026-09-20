@@ -23,6 +23,7 @@ QUALITY_LABEL = {
     "label": "Quality",
     "description": (
         "custom freezes the last overlay. lab restores graph defaults. "
+        "Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). "
         "ultra/max may select opt-in Non-Commercial weights when on disk. "
         "Family-specific — not --tier."
     ),

@@ -103,6 +103,16 @@
       "lock": "Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
     },
     {
+      "id": "aspect_9_16_ltx",
+      "label": "9:16 LTX feeder (768×1280)",
+      "group": "aspect",
+      "width": 768,
+      "height": 1280,
+      "prefix": "ez_still_studio",
+      "hint": "Shorts 9:16 still, LTX feeder",
+      "lock": "LTX I2V feeders stay 768×1280. Vertical 9:16. Keep the subject in the middle third; top and bottom stay quiet for platform UI. Empty of lettering."
+    },
+    {
       "id": "aspect_191",
       "label": "~1.91:1 landscape (1216×640)",
       "group": "aspect",

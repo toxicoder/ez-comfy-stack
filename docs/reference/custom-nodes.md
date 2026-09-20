@@ -212,7 +212,7 @@ Category `ez-comfy`. One combo on every `_lab` graph. Python does not walk sibli
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
-| `EZQuality` | Quality | `quality` combo `custom` `draft` `lab` `standard` `high` `ultra` `max` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | custom freezes the last overlay. lab restores authored widgets. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. ultra/max may select opt-in Non-Commercial weights. Not `--tier quality` |
+| `EZQuality` | Quality | `quality` combo `custom` `draft` `lab` `standard` `high` `Free Commercial Use (<$10M)` `ultra` `max` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | custom freezes the last overlay. lab restores authored widgets. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. Free Commercial Use is Klein 4B + LTX-2.5 (never 9B / FLUX.2-dev). ultra/max may select opt-in Non-Commercial weights. Not `--tier quality` |
 
 ---
 

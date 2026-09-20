@@ -35,6 +35,7 @@ from ez_image.formats import (  # noqa: E402
     get_format,
     load_formats,
     look_combo_labels,
+    ltx_clip_format_id,
     resolve_canvas,
     splice_look,
 )
@@ -267,6 +268,32 @@ def test_default_format_is_ltx_feeder() -> None:
     assert spec.height == 704
     unknown = get_format("not-a-real-format")
     assert unknown.id == "aspect_16_9_ltx"
+
+
+def test_nine_sixteen_ltx_feeder_exists() -> None:
+    spec = get_format("aspect_9_16_ltx")
+    assert spec.id == "aspect_9_16_ltx"
+    assert spec.label == "9:16 LTX feeder (768×1280)"
+    assert spec.group == "aspect"
+    assert spec.width == 768
+    assert spec.height == 1280
+    assert spec.width % GRID == 0
+    assert spec.height % GRID == 0
+    assert "768×1280" in spec.lock or "LTX" in spec.lock
+
+
+def test_ltx_clip_format_id_maps_generic_aspects_only() -> None:
+    assert ltx_clip_format_id("aspect_16_9_draft") == "aspect_16_9_ltx"
+    assert ltx_clip_format_id("16:9 (1280×720)") == "aspect_16_9_ltx"
+    assert ltx_clip_format_id("aspect_16_9_mid") == "aspect_16_9_ltx"
+    assert ltx_clip_format_id("aspect_9_16_draft") == "aspect_9_16_ltx"
+    assert ltx_clip_format_id("9:16 (576×1024)") == "aspect_9_16_ltx"
+    assert ltx_clip_format_id("aspect_16_9_ltx") is None
+    assert ltx_clip_format_id("9:16 LTX feeder (768×1280)") is None
+    assert ltx_clip_format_id("Custom") is None
+    assert ltx_clip_format_id("YouTube · thumbnail (1280×720)") is None
+    assert ltx_clip_format_id("1:1 square (1024×1024)") is None
+    assert ltx_clip_format_id("4:5 portrait (1024×1280)") is None
 
 
 def test_custom_snaps_1920x1080_and_unknown_falls_back() -> None:

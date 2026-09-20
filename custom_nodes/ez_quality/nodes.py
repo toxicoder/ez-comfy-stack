@@ -38,6 +38,8 @@ class EZQuality:
     DESCRIPTION = (
         "custom freezes the last overlay. lab restores graph defaults. "
         "draft / standard / high are Apache Klein 4B. "
+        "Free Commercial Use (<$10M) is Klein 4B stills (never 9B or FLUX.2-dev) "
+        "plus LTX-2.5 steps; Wan / audio / trellis are no-ops. "
         "ultra is Klein 9B distilled when on disk (FLUX Non-Commercial, not YouTube-ok). "
         "max is 9B base or FLUX.2-dev when on disk (same NC license). "
         "Named qualities may swap UNET, CLIP, and VAE. Never changes size. "

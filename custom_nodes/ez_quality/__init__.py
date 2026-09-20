@@ -1,4 +1,4 @@
-"""ez-comfy global Quality combo (Lab / Draft / High)."""
+"""ez-comfy global Quality combo (Lab / Draft / High / Free Commercial Use)."""
 
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS
 

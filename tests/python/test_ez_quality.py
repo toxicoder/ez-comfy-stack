@@ -53,6 +53,7 @@ from ez_quality.presets import (  # noqa: E402
     QUALITY_CHOICES,
     QUALITY_CUSTOM,
     QUALITY_DRAFT,
+    QUALITY_FREE_COMMERCIAL,
     QUALITY_HIGH,
     QUALITY_LAB,
     QUALITY_MAX,
@@ -116,6 +117,11 @@ def test_pack_mappings() -> None:
     types = EZQuality.INPUT_TYPES()
     combo = types["required"]["quality"][0]
     assert list(combo) == list(QUALITY_CHOICES)
+    assert QUALITY_FREE_COMMERCIAL in QUALITY_CHOICES
+    high_at = QUALITY_CHOICES.index(QUALITY_HIGH)
+    free_at = QUALITY_CHOICES.index(QUALITY_FREE_COMMERCIAL)
+    ultra_at = QUALITY_CHOICES.index(QUALITY_ULTRA)
+    assert high_at < free_at < ultra_at
 
 
 def test_report_normalizes_unknown() -> None:
@@ -129,6 +135,10 @@ def test_normalize_quality() -> None:
     assert normalize_quality("Draft") == QUALITY_DRAFT
     assert normalize_quality(None) == QUALITY_LAB
     assert normalize_quality("weird") == QUALITY_LAB
+    assert normalize_quality(QUALITY_FREE_COMMERCIAL) == QUALITY_FREE_COMMERCIAL
+    assert normalize_quality("free_commercial") == QUALITY_FREE_COMMERCIAL
+    assert normalize_quality("FREE_COMMERCIAL") == QUALITY_FREE_COMMERCIAL
+    assert normalize_quality("  Free Commercial Use (<$10M)  ") == QUALITY_FREE_COMMERCIAL
 
 
 def test_banned_unet_needles() -> None:
@@ -859,6 +869,158 @@ def test_apply_skips_non_flux2_clip_and_vae() -> None:
     assert _values(_graph_node(graph, 0))[0] == KLEIN_9B
     assert _values(_graph_node(graph, 1))[0] == "umt5_xxl_fp8_e4m3fn_scaled.safetensors"
     assert _values(_graph_node(graph, 2))[0] == "wan2.2_vae.safetensors"
+
+
+def test_free_commercial_klein_matches_high_and_never_nc() -> None:
+    nc = (KLEIN_DISTILLED, KLEIN_BASE, KLEIN_9B, KLEIN_9B_BASE, FLUX2_DEV)
+    clips = (CLIP_4B, CLIP_8B)
+    vaes = (VAE_SMALL,)
+    commercial = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=nc,
+        available_clips=clips,
+        available_vaes=vaes,
+    )
+    high = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_HIGH,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=nc,
+        available_clips=clips,
+        available_vaes=vaes,
+    )
+    assert commercial == high
+    assert commercial.unet_name == KLEIN_BASE
+    assert commercial.steps == KLEIN_HIGH_BASE_STEPS
+    assert commercial.cfg == KLEIN_HIGH_BASE_CFG
+    assert commercial.clip_name == CLIP_4B
+    from_nine = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_9B,
+        available_unets=nc,
+        available_clips=clips,
+        available_vaes=vaes,
+    )
+    assert from_nine.unet_name == KLEIN_BASE
+    from_dev = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=4,
+        authored_cfg=4.0,
+        unet_name=FLUX2_DEV,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B, FLUX2_DEV),
+        available_clips=clips,
+        available_vaes=vaes,
+    )
+    assert from_dev.unet_name == KLEIN_DISTILLED
+    assert from_dev.steps == KLEIN_HIGH_DISTILLED_STEPS
+    no_base = resolve_overlay(
+        occupancy="klein",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name=KLEIN_DISTILLED,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B, FLUX2_DEV),
+    )
+    assert no_base.unet_name is None
+    assert no_base.steps == KLEIN_HIGH_DISTILLED_STEPS
+
+
+def test_free_commercial_ltx_is_high_steps_wan_audio_are_noop() -> None:
+    ltx = resolve_overlay(
+        occupancy="ltx",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    )
+    film = resolve_overlay(
+        occupancy="film",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=20,
+        authored_cfg=1.0,
+        unet_name="ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+    )
+    assert ltx.steps == LTX_HIGH_STEPS
+    assert film.steps == LTX_HIGH_STEPS
+    assert ltx.cfg is None and ltx.unet_name is None
+    wan = resolve_overlay(
+        occupancy="wan",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=20,
+        authored_cfg=5.0,
+        unet_name="wan2.2_ti2v_5B_fp16.safetensors",
+    )
+    assert wan == QualityOverlay()
+    audio = resolve_overlay(
+        occupancy="audio",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=8,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    trellis = resolve_overlay(
+        occupancy="trellis",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=12,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    llm = resolve_overlay(
+        occupancy="llm",
+        quality=QUALITY_FREE_COMMERCIAL,
+        authored_steps=4,
+        authored_cfg=1.0,
+        unet_name="",
+    )
+    assert audio == QualityOverlay()
+    assert trellis == QualityOverlay()
+    assert llm == QualityOverlay()
+
+
+def test_apply_free_commercial_keeps_size_and_skips_wan() -> None:
+    still = copy.deepcopy(_load("stills/still-draft.json"))
+    latent = next(n for n in still["nodes"] if n.get("type") == "EmptyFlux2LatentImage")
+    before = list(latent["widgets_values"])
+    apply_to_graph(
+        still,
+        QUALITY_FREE_COMMERCIAL,
+        available_unets=(KLEIN_DISTILLED, KLEIN_9B, FLUX2_DEV, KLEIN_BASE),
+    )
+    assert latent["widgets_values"] == before
+    assert _unet(still)["widgets_values"][UNET_NAME_INDEX] == KLEIN_BASE
+    assert _sampler(still)["widgets_values"][KSAMPLER_STEPS_INDEX] == KLEIN_HIGH_BASE_STEPS
+    ltx_graph = copy.deepcopy(_load("motion/av/still-to-video-5s.json"))
+    video = next(n for n in ltx_graph["nodes"] if n.get("type") == "LTXVImgToVideo")
+    length_before = list(video["widgets_values"])
+    apply_to_graph(ltx_graph, QUALITY_FREE_COMMERCIAL)
+    assert video["widgets_values"] == length_before
+    assert _sampler(ltx_graph)["widgets_values"][KSAMPLER_STEPS_INDEX] == LTX_HIGH_STEPS
+    wan_graph = copy.deepcopy(_load("motion/silent/still-to-video-5s.json"))
+    wan_steps = list(_sampler(wan_graph)["widgets_values"])
+    wan_unet = _unet(wan_graph)["widgets_values"][UNET_NAME_INDEX]
+    apply_to_graph(wan_graph, QUALITY_FREE_COMMERCIAL)
+    assert list(_sampler(wan_graph)["widgets_values"]) == wan_steps
+    assert _unet(wan_graph)["widgets_values"][UNET_NAME_INDEX] == wan_unet
+
+
+def test_js_mentions_free_commercial_and_clip_feeders() -> None:
+    body = JS.read_text(encoding="utf-8")
+    assert QUALITY_FREE_COMMERCIAL in body
+    assert "free_commercial" in body
+    assert "16:9 LTX feeder (1280×704)" in body
+    assert "9:16 LTX feeder (768×1280)" in body
+    assert "aspect_16_9_draft" in body
+    assert "aspect_9_16_draft" in body
 
 
 def test_klein_overlay_unknown_choice_uses_high() -> None:

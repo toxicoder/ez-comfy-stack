@@ -166,8 +166,8 @@
     "title": "SeedVR2",
     "aliases": ["SeedVR2-3B", "SeedVR2"],
     "category": "Models",
-    "short": "Optional Apache restorer for a stitched 90s master. Not part of download-models.",
-    "long": "SeedVR2-3B is a post-concat restore (`download-restore --tier seedvr2-3b`). Conservative 1.3–1.5× on the master only. Occupancy: stop Comfy first if you restore on GPU. See [90s shorts](shorts.md).",
+    "short": "Optional Apache restorer for a still PNG or a stitched 90s master. Not part of download-models.",
+    "long": "SeedVR2-3B is opt-in Apache (`download-restore --tier seedvr2-3b`). Use it as optional polish on a Klein 4B PNG (Free Commercial Use quality: add detail, do not jump to 4K) or as a conservative 1.3–1.5× restore on a film master after concat. Occupancy: stop Comfy first if you restore on GPU. See [90s shorts](shorts.md) and [Still to motion to AV](visual-generative-ai.md).",
     "see_also": ["occupancy", "last-frame"]
   },
   {
@@ -407,10 +407,10 @@
   {
     "id": "quality-widget",
     "title": "Quality widget",
-    "aliases": ["Quality dropdown", "EZQuality", "Lab / Draft / High"],
+    "aliases": ["Quality dropdown", "EZQuality", "Lab / Draft / High", "Free Commercial Use"],
     "category": "Studio",
-    "short": "App-global Lab / Draft / High combo. Family-specific overlays. Not --tier quality.",
-    "long": "Every `_lab` graph has an `EZQuality` combo stamped first in App Mode. **Lab** keeps authored widgets. **Draft** is faster (fewer steps). **High** is slower (more steps; Klein base 4B + CFG 3.5 only when that UNET is on disk). It does not change size, length, CLIP, or VAE, and it never selects banned weights. LTX `--tier quality` is a 2.3 download alias, not this widget. See [ComfyUI Apps](studio-apps.md).",
+    "short": "App-global Lab / Draft / High / Free Commercial Use combo. Family-specific overlays. Not --tier quality.",
+    "long": "Every `_lab` graph has an `EZQuality` combo stamped first in App Mode. **Lab** keeps authored widgets. **Draft** is faster (fewer steps). **High** is slower (more steps; Klein base 4B + CFG 3.5 only when that UNET is on disk). **Free Commercial Use (<$10M)** pins Apache Klein 4B (never 9B or FLUX.2-dev) and LTX-2.5 steps; generic 16:9 / 9:16 still Formats retarget to LTX feeder pixels. Wan / audio / trellis are no-ops. Named qualities may swap UNET, CLIP, and VAE when files are on disk. They never change length. LTX `--tier quality` is a 2.3 download alias, not this widget. See [ComfyUI Apps](studio-apps.md).",
     "see_also": ["app-mode", "cfg", "download-tier", "sampler"]
   },
   {

@@ -20,6 +20,12 @@ CUSTOM_LABEL = "Custom"
 LOOK_NONE = "none"
 DEFAULT_FORMAT_ID = "aspect_16_9_ltx"
 DEFAULT_PREFIX = "ez_still_studio"
+LTX_FEEDER_16_9_ID = "aspect_16_9_ltx"
+LTX_FEEDER_9_16_ID = "aspect_9_16_ltx"
+GENERIC_16_9_FORMAT_IDS = frozenset(
+    {"aspect_16_9_draft", "aspect_16_9", "aspect_16_9_mid"}
+)
+GENERIC_9_16_FORMAT_IDS = frozenset({"aspect_9_16_draft", "aspect_9_16"})
 GRID = 16
 """Flux.2 Klein VAE spatial multiple (matches ``ez_image.nodes.GRID``)."""
 MIN_DIM = GRID
@@ -268,6 +274,26 @@ def get_format(value: object) -> FormatSpec:
         if row.label.casefold() == folded:
             return row
     return by_id.get(default_format_id(), rows[0])
+
+
+def ltx_clip_format_id(value: object) -> str | None:
+    """Return the LTX feeder id for a generic 16:9 or 9:16 aspect.
+
+    Custom, named platform jobs, already-feeder rows, and other aspects
+    stay put (None). Used by the Free Commercial Use quality overlay.
+
+    Args:
+        value: Format id or combo label.
+
+    Returns:
+        ``aspect_16_9_ltx`` / ``aspect_9_16_ltx``, or None.
+    """
+    spec = get_format(value)
+    if spec.id in GENERIC_16_9_FORMAT_IDS:
+        return LTX_FEEDER_16_9_ID
+    if spec.id in GENERIC_9_16_FORMAT_IDS:
+        return LTX_FEEDER_9_16_ID
+    return None
 
 
 def _compose_hint(spec: FormatSpec, width: int, height: int) -> str:

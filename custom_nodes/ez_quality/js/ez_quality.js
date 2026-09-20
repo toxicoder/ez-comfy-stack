@@ -11,8 +11,26 @@ const QUALITY_DRAFT = "draft";
 const QUALITY_LAB = "lab";
 const QUALITY_STANDARD = "standard";
 const QUALITY_HIGH = "high";
+const QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)";
+const QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial";
 const QUALITY_ULTRA = "ultra";
 const QUALITY_MAX = "max";
+const CLIP_16_9_LABEL = "16:9 LTX feeder (1280×704)";
+const CLIP_9_16_LABEL = "9:16 LTX feeder (768×1280)";
+const GENERIC_16_9 = [
+  "aspect_16_9_draft",
+  "16:9 draft (768×432)",
+  "aspect_16_9",
+  "16:9 (1280×720)",
+  "aspect_16_9_mid",
+  "16:9 mid (1024×576)",
+];
+const GENERIC_9_16 = [
+  "aspect_9_16_draft",
+  "9:16 draft (432×768)",
+  "aspect_9_16",
+  "9:16 (576×1024)",
+];
 
 const KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors";
 const KLEIN_NVFP4 = "flux-2-klein-4b-nvfp4.safetensors";
@@ -137,6 +155,87 @@ function isWan14(name) {
   return String(name || "")
     .toLowerCase()
     .includes("14b");
+}
+
+/**
+ * True when a UNET filename looks like FLUX.2-dev.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isFlux2Dev(name) {
+  const blob = String(name || "")
+    .toLowerCase()
+    .replaceAll(".", "-");
+  return blob.includes("flux2-dev") || blob.includes("flux-2-dev");
+}
+
+/**
+ * Return a legal quality id, defaulting to lab.
+ * @param {*} value
+ * @returns {string}
+ */
+function normalizeQuality(value) {
+  const folded = String(value || QUALITY_LAB)
+    .trim()
+    .toLowerCase();
+  if (
+    folded === QUALITY_FREE_COMMERCIAL_ALIAS ||
+    folded === QUALITY_FREE_COMMERCIAL.toLowerCase()
+  ) {
+    return QUALITY_FREE_COMMERCIAL;
+  }
+  const known = [
+    QUALITY_CUSTOM,
+    QUALITY_DRAFT,
+    QUALITY_LAB,
+    QUALITY_STANDARD,
+    QUALITY_HIGH,
+    QUALITY_ULTRA,
+    QUALITY_MAX,
+  ];
+  if (known.includes(folded)) {
+    return folded;
+  }
+  return QUALITY_LAB;
+}
+
+/**
+ * True when a format combo value is in a generic aspect list.
+ * @param {string} value
+ * @param {string[]} ids
+ * @returns {boolean}
+ */
+function formatMatches(value, ids) {
+  const folded = String(value || "")
+    .trim()
+    .toLowerCase();
+  return ids.some((item) => item.toLowerCase() === folded);
+}
+
+/**
+ * Snap generic 16:9 / 9:16 still formats to LTX feeder sizes.
+ * Named platform jobs, Custom, and already-feeder rows stay put.
+ * @returns {void}
+ */
+function retargetClipFormat() {
+  if (occupancy() !== "klein") {
+    return;
+  }
+  for (const node of app.graph?.nodes || []) {
+    const ntype = node?.comfyClass || node?.type || "";
+    if (ntype !== "EZImageFormat") {
+      continue;
+    }
+    const widget = widgetByName(node, "format");
+    if (!widget) {
+      continue;
+    }
+    if (formatMatches(widget.value, GENERIC_16_9)) {
+      setWidget(widget, CLIP_16_9_LABEL);
+    } else if (formatMatches(widget.value, GENERIC_9_16)) {
+      setWidget(widget, CLIP_9_16_LABEL);
+    }
+  }
 }
 
 /**
@@ -358,6 +457,20 @@ function resolveOverlay(choice, authoredSteps, unetName, available, clips, vaes)
   if (isWan14(unetName) || graphHasWan14()) {
     return {};
   }
+  if (choice === QUALITY_FREE_COMMERCIAL) {
+    if (
+      occ === "klein" ||
+      isKlein4b(unetName) ||
+      isKlein9b(unetName) ||
+      isFlux2Dev(unetName)
+    ) {
+      return kleinHigh(authoredSteps, unetName, available, clips, vaes);
+    }
+    if (occ === "ltx" || occ === "film") {
+      return { steps: LTX_HIGH_STEPS };
+    }
+    return {};
+  }
   if (occ === "klein" || isKlein4b(unetName) || isKlein9b(unetName)) {
     const clip4 = pickFile(CLIP_4B, clips);
     const clip8 = pickFile(CLIP_8B, clips);
@@ -528,9 +641,7 @@ function applyQuality(choice) {
   }
   applying = true;
   try {
-    const normalized = String(choice || QUALITY_LAB)
-      .trim()
-      .toLowerCase();
+    const normalized = normalizeQuality(choice);
     if (normalized === QUALITY_CUSTOM) {
       return;
     }
@@ -592,6 +703,9 @@ function applyQuality(choice) {
       ) {
         setWidget(vaeWidget, overlay.vae_name);
       }
+    }
+    if (normalized === QUALITY_FREE_COMMERCIAL) {
+      retargetClipFormat();
     }
   } finally {
     applying = false;

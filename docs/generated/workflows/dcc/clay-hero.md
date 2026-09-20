@@ -932,7 +932,7 @@ Workflow-global quality combo. JS overlays family-specific sampler, UNET, CLIP, 
 
 !!! warning "Lab notes"
 
-    custom freezes the last overlay. lab restores authored widgets. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.
+    custom freezes the last overlay. lab restores authored widgets. Free Commercial Use (<$10M) pins Apache Klein 4B (never 9B / FLUX.2-dev) and LTX-2.5 steps; Wan / audio / trellis are no-ops. ultra/max may select Klein 9B or FLUX.2-dev when those files are on disk (FLUX Non-Commercial, not YouTube-ok). Never changes size. Not --tier quality.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -944,7 +944,7 @@ Type `COMBO`. Range / default: lab.
 
 custom freezes last overlay; lab restores graph defaults.
 
-**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. ultra/max need download-image --tier 9b or flux2-dev.
+**How it affects generation:** Named qualities may swap UNET, CLIP, and VAE. Does not change size or length. Free Commercial Use (<$10M) is Klein 4B + LTX (never 9B / FLUX.2-dev). ultra/max need download-image --tier 9b or flux2-dev.
 
 **This graph:** `lab`
 
@@ -957,5 +957,6 @@ custom freezes last overlay; lab restores graph defaults.
 | `lab` | Authored lab widgets. Default. |
 | `standard` | Distilled 4B, 8 steps, CFG 1.0. |
 | `high` | Klein base 4B + CFG 3.5 when on disk; else extra distilled steps at CFG 1.0. |
+| `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
