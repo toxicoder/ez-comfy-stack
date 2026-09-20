@@ -98,5 +98,55 @@
     "id": "ink-pot",
     "label": "Ink pot",
     "prompt": "A photoreal still of one unmarked matte-black ink pot and a plain dip pen on teak. Soft key, empty of lettering. Eye-level 50mm, 1:1."
+  },
+  {
+    "id": "harbor-crane",
+    "label": "Harbor crane",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands on a high unmarked crane catwalk above a tropical harbor at late day. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "tram-interior",
+    "label": "Tram interior",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams rides an unmarked tram, wet streets sliding past the glass. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "quarry-noon",
+    "label": "Quarry noon",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams walks a pale unmarked quarry floor at hard noon, dust in the air. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "clock-hall",
+    "label": "Clock hall",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams pauses in an unmarked civic clock hall, dust in a high window shaft. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "ferry-deck",
+    "label": "Ferry deck",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands at an unmarked ferry rail, wake water and a far island. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "market-awning",
+    "label": "Market awning",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams waits under an unmarked market awning while rain sheets the street. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "observatory-rail",
+    "label": "Observatory rail",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams leans on an unmarked observatory rail under a clear night. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "switchyard-dawn",
+    "label": "Switchyard dawn",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams crosses unmarked rails at first light, long cool shadows. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "glasshouse-dusk",
+    "label": "Glasshouse dusk",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams walks an unmarked glasshouse aisle as last sun hits the panes. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
+  },
+  {
+    "id": "archive-stacks",
+    "label": "Archive stacks",
+    "prompt": "A photoreal still of an original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands between unmarked archive stacks with a compact data-staff. Match a standing eyeline. 35mm-equivalent classic reportage view. Framed for YouTube 16:9. Unmarked surfaces, empty of lettering."
   }
 ]
