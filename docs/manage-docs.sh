@@ -31,18 +31,17 @@ CMD="${1:-build}"
 shift || true
 
 #######################################
-# Ensure Node 20+ and docs-site dependencies.
+# Ensure Node 22+ and docs-site dependencies.
 # Globals:
 #   SITE_DIR, AUTO_SETUP_DOCS, SCRIPT_DIR
 # Arguments:
-#   $1 - "install" to force npm ci
+#   None
 # Outputs:
 #   Error lines when the toolchain is missing
 # Returns:
 #   Exits 1 when Node/npm cannot satisfy the build
 #######################################
 docs_node_is_ready() {
-  local force="${1:-}"
   if ! command -v node >/dev/null 2>&1 || ! command -v npm >/dev/null 2>&1; then
     echo "docs: Node.js 22+ and npm are required for the documentation site." >&2
     echo "docs: On a host: brew install node@22" >&2
@@ -54,13 +53,13 @@ docs_node_is_ready() {
     echo "docs: Node is too old for Next 16 (need 22+)." >&2
     exit 1
   fi
-  if [[ ${force} == "install" || ! -x ${SITE_DIR}/node_modules/.bin/next ]]; then
+  if [[ ! -x ${SITE_DIR}/node_modules/.bin/next ]]; then
     if [[ ${AUTO_SETUP_DOCS} == "true" ]]; then
       QUIET=true "${SCRIPT_DIR}/setup-docs.sh" || {
         echo "docs: failed to prepare the docs site via docs/setup-docs.sh" >&2
         exit 1
       }
-    elif [[ ! -x ${SITE_DIR}/node_modules/.bin/next ]]; then
+    else
       echo "docs: docs-site/node_modules is missing. Run ./docs/setup-docs.sh first." >&2
       exit 1
     fi
