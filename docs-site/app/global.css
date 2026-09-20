@@ -183,10 +183,16 @@ article table:not([class]) {
 }
 
 .ez-glossary-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(32rem, calc(100vw - 2rem));
+  height: fit-content;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
   border: 1px solid var(--color-fd-border);
   border-radius: 0.5rem;
   padding: 0;
-  max-width: min(32rem, calc(100vw - 2rem));
   color: var(--color-fd-foreground);
   background: var(--color-fd-card);
 }
