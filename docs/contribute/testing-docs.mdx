@@ -41,7 +41,7 @@ Makefile shims call Bazelisk when present. Canonical commands: [Building with Ba
 
 | Target | What it runs |
 | --- | --- |
-| **`bazelisk test //:test-fast`** / **`make test`** | BATS + Python + Pyright + mypy |
+| **`bazelisk test //:test-fast`** / **`make test`** | BATS + Python (`pytest-xdist` when installed) + Pyright + mypy |
 | **`make coverage`** | Same as `//:test-fast` via Bazel, else `tests/coverage.sh` |
 | **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier (Pyright + mypy live in `//:test-fast`) |
 | **`make typecheck`** | Pyright (Pylance) + mypy |
