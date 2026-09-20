@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useId, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 
 import { loadGlossaryTerms } from "@/lib/remark-glossary";
 
@@ -13,11 +13,15 @@ interface EzTermProps {
 
 /**
  * First-occurrence glossary trigger. Hover shows the short definition; click opens
- * the definition dialog (same contract as `docs/javascripts/glossary.js`).
+ * the definition dialog via ``showModal()`` so the panel is top-layer and viewport-centered
+ * (same contract as ``docs/javascripts/glossary.js``).
  */
 export function EzTerm({ termId, category, short, children }: EzTermProps) {
   const [open, setOpen] = useState(false);
   const titleId = useId();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLSpanElement>(null);
   const term = loadGlossaryTerms().find((row) => row.id === termId);
   const href = `/glossary/#${termId}`;
 
@@ -29,17 +33,39 @@ export function EzTerm({ termId, category, short, children }: EzTermProps) {
   }, []);
 
   useEffect(() => {
-    if (!open) return;
-    const onEsc = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-    document.addEventListener("keydown", onEsc);
-    return () => document.removeEventListener("keydown", onEsc);
+    const dialog = dialogRef.current;
+    if (!dialog) {
+      return;
+    }
+    if (open) {
+      if (!dialog.open && typeof dialog.showModal === "function") {
+        dialog.showModal();
+      }
+      closeRef.current?.focus();
+      return;
+    }
+    if (dialog.open) {
+      dialog.close();
+    }
   }, [open]);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) {
+      return;
+    }
+    const onClose = () => {
+      setOpen(false);
+      triggerRef.current?.focus();
+    };
+    dialog.addEventListener("close", onClose);
+    return () => dialog.removeEventListener("close", onClose);
+  }, []);
 
   return (
     <>
       <span
+        ref={triggerRef}
         className="ez-term"
         tabIndex={0}
         role="button"
@@ -55,23 +81,27 @@ export function EzTerm({ termId, category, short, children }: EzTermProps) {
       >
         {children}
       </span>
-      {open ? (
-        <dialog className="ez-glossary-dialog" open onClick={(event) => event.currentTarget === event.target && setOpen(false)}>
-          <div className="ez-glossary-dialog__panel">
-            <button type="button" className="ez-glossary-dialog__close" onClick={() => setOpen(false)}>
-              Close
-            </button>
-            <h2 className="ez-glossary-dialog__title" id={titleId}>
-              {term?.title ?? termId}
-            </h2>
-            <p className="ez-glossary-dialog__category">{category}</p>
-            <p className="ez-glossary-dialog__body">{short}</p>
-            <p className="ez-glossary-dialog__more">
-              <a href={href}>Open full glossary entry</a>
-            </p>
-          </div>
-        </dialog>
-      ) : null}
+      <dialog
+        ref={dialogRef}
+        className="ez-glossary-dialog"
+        aria-labelledby={titleId}
+        aria-modal="true"
+        onClick={(event) => event.currentTarget === event.target && setOpen(false)}
+      >
+        <div className="ez-glossary-dialog__panel">
+          <button ref={closeRef} type="button" className="ez-glossary-dialog__close" onClick={() => setOpen(false)}>
+            Close
+          </button>
+          <h2 className="ez-glossary-dialog__title" id={titleId}>
+            {term?.title ?? termId}
+          </h2>
+          <p className="ez-glossary-dialog__category">{category}</p>
+          <p className="ez-glossary-dialog__body">{short}</p>
+          <p className="ez-glossary-dialog__more">
+            <a href={href}>Open full glossary entry</a>
+          </p>
+        </div>
+      </dialog>
     </>
   );
 }

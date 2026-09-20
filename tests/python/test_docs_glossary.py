@@ -20,6 +20,7 @@ GLOSSARY_JSON = ROOT / "includes" / "glossary.json"
 GLOSSARY_MD = ROOT / "docs" / "glossary.md"
 GLOSSARY_JS = ROOT / "docs" / "javascripts" / "glossary.js"
 EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
+EZ_TERM_TSX = ROOT / "docs-site" / "components" / "ez-term.tsx"
 NAV_JSON = ROOT / "docs-site" / "lib" / "nav.json"
 HOOKS_PY = ROOT / "docs" / "hooks.py"
 REMARK_GLOSSARY = ROOT / "docs-site" / "lib" / "remark-glossary.ts"
@@ -358,6 +359,19 @@ def test_glossary_js_uses_native_dialog() -> None:
     assert "ez-term" in js
     assert "ez-glossary-dialog" in js
     assert "keydown" in js
+
+
+def test_ez_term_opens_centered_modal() -> None:
+    """Fumadocs glossary uses showModal so the dialog is viewport-centered."""
+    tsx = EZ_TERM_TSX.read_text(encoding="utf-8")
+    assert "showModal" in tsx
+    assert "aria-modal" in tsx
+    assert "dialogRef" in tsx
+    css = EXTRA_CSS.read_text(encoding="utf-8")
+    assert ".ez-glossary-dialog" in css
+    assert re.search(r"\.ez-glossary-dialog\s*\{[^}]*position:\s*fixed", css, re.S)
+    assert re.search(r"\.ez-glossary-dialog\s*\{[^}]*inset:\s*0", css, re.S)
+    assert re.search(r"\.ez-glossary-dialog\s*\{[^}]*margin:\s*auto", css, re.S)
 
 
 def test_extra_css_styles_modal_without_hiding_header() -> None:

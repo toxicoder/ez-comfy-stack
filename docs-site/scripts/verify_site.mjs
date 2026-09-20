@@ -422,6 +422,44 @@ const abbrStyle = await withPage(async (page) => {
 });
 check("glossary tooltips are styled", Boolean(abbrStyle) && abbrStyle !== "none" && abbrStyle !== PROBE_FAILED, String(abbrStyle));
 
+async function glossaryDialogGeometry(viewport) {
+  return withPage(async (page) => {
+    await goto(page, "/learn/", 2000);
+    const terms = await page.locator(".ez-term").count();
+    if (terms === 0) return { terms: 0 };
+    await page.locator(".ez-term").first().click();
+    await page.waitForSelector("dialog.ez-glossary-dialog[open]", { state: "attached", timeout: 8000 });
+    return page.evaluate(() => {
+      const dialog = document.querySelector("dialog.ez-glossary-dialog");
+      if (!dialog) return { terms: 1, open: false };
+      const box = dialog.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      return {
+        terms: 1,
+        open: dialog.open,
+        dx: Math.abs(box.left + box.width / 2 - vw / 2) / vw,
+        dy: Math.abs(box.top + box.height / 2 - vh / 2) / vh
+      };
+    });
+  }, "light", viewport);
+}
+
+const glossaryDesktop = await glossaryDialogGeometry({ width: 1440, height: 950 });
+const okGlossaryDesktop = glossaryDesktop !== PROBE_FAILED;
+check(
+  "glossary dialog opens centered (desktop)",
+  okGlossaryDesktop && glossaryDesktop.terms > 0 && glossaryDesktop.open && glossaryDesktop.dx <= 0.1 && glossaryDesktop.dy <= 0.1,
+  JSON.stringify(glossaryDesktop)
+);
+const glossaryMobile = await glossaryDialogGeometry({ width: 390, height: 844 });
+const okGlossaryMobile = glossaryMobile !== PROBE_FAILED;
+check(
+  "glossary dialog opens centered (mobile)",
+  okGlossaryMobile && glossaryMobile.terms > 0 && glossaryMobile.open && glossaryMobile.dx <= 0.1 && glossaryMobile.dy <= 0.1,
+  JSON.stringify(glossaryMobile)
+);
+
 // ------------------------------------------------------------------ search
 console.log("\n### SEARCH");
 const search = await withPage(async (page) => {
