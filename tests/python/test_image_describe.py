@@ -20,6 +20,69 @@ from ez_prompt_enhance.nodes import EZImageDescribe, EZKleinPromptEnhance  # noq
 from ez_prompt_enhance import client  # noqa: E402
 
 
+class _FakeArr:
+    """Minimal array stand-in for hermetic encode tests (no numpy)."""
+
+    def __init__(self, ndim: int, shape: tuple[int, ...]) -> None:
+        self.ndim = ndim
+        self.shape = shape
+
+    def astype(self, _kind: str) -> "_FakeArr":
+        return self
+
+    def __mul__(self, _other: object) -> "_FakeArr":
+        return self
+
+    def __getitem__(self, index: int) -> "_FakeArr":
+        if index == 0 and self.ndim == 4:
+            return _FakeArr(self.ndim - 1, self.shape[1:])
+        raise IndexError(index)
+
+
+def _fake_numpy_module() -> types.ModuleType:
+    """Return a numpy stub with asarray/clip."""
+
+    mod = types.ModuleType("numpy")
+
+    def asarray(value: object) -> _FakeArr:
+        if isinstance(value, _FakeArr):
+            return value
+        if hasattr(value, "shape") and hasattr(value, "ndim"):
+            shape = tuple(getattr(value, "shape"))
+            return _FakeArr(int(getattr(value, "ndim")), shape)
+        return _FakeArr(3, (8, 8, 3))
+
+    def clip(array: _FakeArr, _lo: float, _hi: float) -> _FakeArr:
+        return array
+
+    mod.asarray = asarray  # type: ignore[attr-defined]
+    mod.clip = clip  # type: ignore[attr-defined]
+    return mod
+
+
+def _fake_pil_module() -> tuple[types.ModuleType, types.ModuleType]:
+    """Return (PIL, PIL.Image) stubs that write a tiny PNG payload."""
+
+    pil = types.ModuleType("PIL")
+    image_mod = types.ModuleType("PIL.Image")
+
+    class _Image:
+        def resize(self, size: tuple[int, int]) -> "_Image":
+            del size
+            return self
+
+        def save(self, buf: Any, format: str = "PNG") -> None:
+            del format
+            buf.write(b"png-bytes")
+
+    def fromarray(_pixels: object) -> _Image:
+        return _Image()
+
+    image_mod.fromarray = fromarray  # type: ignore[attr-defined]
+    pil.Image = image_mod  # type: ignore[attr-defined]
+    return pil, image_mod
+
+
 def test_describe_enable_off_does_not_call_vision() -> None:
     desc.reset_describe_for_tests()
     with patch.object(desc, "_vision_complete", return_value=("caption", None)) as mock:
@@ -47,6 +110,10 @@ def test_describe_enable_on_uses_backend() -> None:
     assert text == "a red mug on a teak desk"
     mock.assert_called_once()
     assert desc.last_status() == ""
+    with patch.object(desc, "_image_to_png_b64", return_value="abc"):
+        with patch.object(desc, "_vision_complete", return_value=("", None)):
+            assert desc.describe_image(enable=True, image=object()) == ""
+            assert desc.last_status() == desc.REASON_EMPTY
 
 
 def test_describe_paths_fail_soft(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -174,7 +241,30 @@ def test_describe_paths_fail_soft(monkeypatch: pytest.MonkeyPatch, tmp_path: Pat
     with patch.dict("sys.modules", {"llama_cpp": fake_mod2}):
         with patch.object(desc, "_gguf_ready", return_value=True):
             llm, reason = desc._get_vision()
-    assert llm is not None or reason == desc.REASON_LLAMA_UNAVAILABLE
+    assert llm is not None
+    assert reason is None
+
+    class _TypeThenBoom:
+        def __init__(self, **kwargs: object) -> None:
+            if "clip_model_path" in kwargs:
+                raise TypeError("no clip")
+            raise RuntimeError("still no")
+
+    desc.reset_describe_for_tests()
+    fake_boom_clip = types.SimpleNamespace(Llama=_TypeThenBoom)
+    with patch.dict("sys.modules", {"llama_cpp": fake_boom_clip}):
+        with patch.object(desc, "_gguf_ready", return_value=True):
+            llm, reason = desc._get_vision()
+    assert llm is None
+    assert reason == desc.REASON_LLAMA_UNAVAILABLE
+
+    cached = object()
+    desc._VISION = cached
+    desc._VISION_PATH = desc.describe_gguf_path()
+    with patch.object(desc, "_gguf_ready", return_value=True):
+        llm, reason = desc._get_vision()
+    assert llm is cached
+    assert reason is None
 
     class _BadBody:
         def create_chat_completion(self, **kwargs: object) -> dict[str, object]:
@@ -194,20 +284,6 @@ def test_describe_image_encode_branches(monkeypatch: pytest.MonkeyPatch) -> None
     llm, reason = desc._get_vision()
     assert llm is None
     assert reason == desc.REASON_GGUF_MISSING
-    np = pytest.importorskip("numpy")
-
-    class _Tensor:
-        def detach(self) -> "_Tensor":
-            return self
-
-        def cpu(self) -> "_Tensor":
-            return self
-
-        def numpy(self) -> object:
-            return np.zeros((8, 8, 3), dtype="float32")
-
-    png = desc._image_to_png_b64(_Tensor())
-    assert png
     import builtins
 
     real_import = builtins.__import__
@@ -221,57 +297,46 @@ def test_describe_image_encode_branches(monkeypatch: pytest.MonkeyPatch) -> None
     assert desc._image_to_png_b64(object()) == ""
     monkeypatch.setattr(builtins, "__import__", real_import)
 
+    np_mod = _fake_numpy_module()
+    monkeypatch.setitem(sys.modules, "numpy", np_mod)
+
     def _no_pil(name: str, *args: Any, **kwargs: Any) -> Any:
         if name == "PIL" or name.startswith("PIL."):
             raise ImportError("no pil")
         return real_import(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, "__import__", _no_pil)
-    small = np.zeros((1, 8, 8, 3), dtype="float32")
-    assert desc._image_to_png_b64(small) == ""
-    big = np.zeros((1, 1024, 1024, 3), dtype="float32")
-    assert desc._image_to_png_b64(big) == ""
+    assert desc._image_to_png_b64(_FakeArr(3, (8, 8, 3))) == ""
+    assert desc._image_to_png_b64(_FakeArr(3, (1024, 1024, 3))) == ""
     monkeypatch.setattr(builtins, "__import__", real_import)
-    with patch.object(np, "asarray", side_effect=RuntimeError("bad tensor")):
-        assert desc._image_to_png_b64(object()) == ""
 
+    pil, pil_image = _fake_pil_module()
+    monkeypatch.setitem(sys.modules, "PIL", pil)
+    monkeypatch.setitem(sys.modules, "PIL.Image", pil_image)
 
-def test_describe_image_png_roundtrip_and_empty_vision() -> None:
-    desc.reset_describe_for_tests()
-    np = pytest.importorskip("numpy")
-    batch = np.zeros((1, 32, 32, 3), dtype="float32")
-    batch[0, 0, 0] = 1.0
-    png = desc._image_to_png_b64(batch)
-    assert isinstance(png, str)
-    assert len(png) > 20
-    big = np.zeros((1, 1024, 1024, 3), dtype="float32")
-    png_big = desc._image_to_png_b64(big)
-    assert isinstance(png_big, str)
-    with patch.object(desc, "_image_to_png_b64", return_value="abc"):
-        with patch.object(desc, "_vision_complete", return_value=("", desc.REASON_EMPTY)):
-            assert desc.describe_image(enable=True, image=object()) == ""
-            assert desc.last_status() == desc.REASON_EMPTY
-    cached = object()
-    desc._VISION = cached
-    desc._VISION_PATH = desc.describe_gguf_path()
-    with patch.object(desc, "_gguf_ready", return_value=True):
-        llm, reason = desc._get_vision()
-    assert llm is cached
-    assert reason is None
+    class _Tensor:
+        def detach(self) -> "_Tensor":
+            return self
 
-    class _TypeThenBoom:
-        def __init__(self, **kwargs: object) -> None:
-            if "clip_model_path" in kwargs:
-                raise TypeError("no clip")
-            raise RuntimeError("still no")
+        def cpu(self) -> "_Tensor":
+            return self
 
-    desc.reset_describe_for_tests()
-    fake = types.SimpleNamespace(Llama=_TypeThenBoom)
-    with patch.dict("sys.modules", {"llama_cpp": fake}):
-        with patch.object(desc, "_gguf_ready", return_value=True):
-            llm, reason = desc._get_vision()
-    assert llm is None
-    assert reason == desc.REASON_LLAMA_UNAVAILABLE
+        def numpy(self) -> _FakeArr:
+            return _FakeArr(3, (8, 8, 3))
+
+    png = desc._image_to_png_b64(_Tensor())
+    assert png
+    batch = _FakeArr(4, (1, 32, 32, 3))
+    assert desc._image_to_png_b64(batch)
+    big = _FakeArr(3, (1024, 1024, 3))
+    assert desc._image_to_png_b64(big)
+
+    def _boom_asarray(value: object) -> _FakeArr:
+        del value
+        raise RuntimeError("bad tensor")
+
+    monkeypatch.setattr(np_mod, "asarray", _boom_asarray, raising=False)
+    assert desc._image_to_png_b64(object()) == ""
 
 
 def test_enhance_splices_image_desc_into_context() -> None:
