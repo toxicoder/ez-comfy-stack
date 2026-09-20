@@ -1,6 +1,6 @@
 ---
-title: stills/still-studio
-description: Klein 4B still desk: format/platform picker, style, enhance, look recipe
+title: "stills/still-studio"
+description: "Klein 4B still desk: format/platform picker, style, enhance, look recipe"
 tags: [workflows, generated, comfyui, stills]
 ---
 

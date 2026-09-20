@@ -1,6 +1,6 @@
 ---
-title: stills/character-draft
-description: Klein 4B character still, 1024x1280, style on, prefix ez_character
+title: "stills/character-draft"
+description: "Klein 4B character still, 1024x1280, style on, prefix ez_character"
 tags: [workflows, generated, comfyui, stills]
 ---
 

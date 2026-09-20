@@ -1,6 +1,6 @@
 ---
-title: motion/av/shorts-still-5s
-description: LTX-2.5 vertical 9:16 AV I2V ~5s
+title: "motion/av/shorts-still-5s"
+description: "LTX-2.5 vertical 9:16 AV I2V ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

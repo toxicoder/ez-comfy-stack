@@ -1,6 +1,6 @@
 ---
-title: creator/stills/merch-mug
-description: Merch mug mock 1:1
+title: "creator/stills/merch-mug"
+description: "Merch mug mock 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

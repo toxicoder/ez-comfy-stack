@@ -1,6 +1,6 @@
 ---
-title: stills/food-tabletop
-description: Klein 4B food tabletop 4:5
+title: "stills/food-tabletop"
+description: "Klein 4B food tabletop 4:5"
 tags: [workflows, generated, comfyui, stills]
 ---
 

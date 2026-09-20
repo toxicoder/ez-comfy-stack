@@ -1,6 +1,6 @@
 ---
-title: stills/talking-head
-description: Talking-head: Klein still + LTX A2V freeze smoke. MagCache off. S2V opt-in. Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fi
+title: "stills/talking-head"
+description: "Talking-head: Klein still + LTX A2V freeze smoke. MagCache off. S2V opt-in. Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fi"
 tags: [workflows, generated, comfyui, stills]
 ---
 

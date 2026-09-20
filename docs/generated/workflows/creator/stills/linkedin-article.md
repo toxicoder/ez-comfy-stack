@@ -1,6 +1,6 @@
 ---
-title: creator/stills/linkedin-article
-description: LinkedIn article cover ~1.91:1
+title: "creator/stills/linkedin-article"
+description: "LinkedIn article cover ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

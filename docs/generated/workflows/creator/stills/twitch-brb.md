@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-brb
-description: Twitch BRB screen 16:9
+title: "creator/stills/twitch-brb"
+description: "Twitch BRB screen 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

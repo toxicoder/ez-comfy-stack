@@ -1,6 +1,6 @@
 ---
-title: creator/av/instagram-reel-lifestyle
-description: Instagram lifestyle reel AV 9:16
+title: "creator/av/instagram-reel-lifestyle"
+description: "Instagram lifestyle reel AV 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -25,5 +25,8 @@ python3 -m pip install --user -r tests/requirements.txt
 if [[ -f docs/requirements.txt ]]; then
   python3 -m pip install --user -r docs/requirements.txt || true
 fi
+if command -v npm >/dev/null 2>&1 && [[ -f docs-site/package.json ]]; then
+  (cd docs-site && npm ci --legacy-peer-deps)
+fi
 bazelisk version
 echo "post-create: ready — bazelisk run //:validate"

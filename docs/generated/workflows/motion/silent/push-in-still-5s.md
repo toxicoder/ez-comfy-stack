@@ -1,6 +1,6 @@
 ---
-title: motion/silent/push-in-still-5s
-description: Wan 5B silent push-in I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance
+title: "motion/silent/push-in-still-5s"
+description: "Wan 5B silent push-in I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance"
 tags: [workflows, generated, comfyui, motion]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/silent/ken-burns
-description: Silent Ken Burns pan/zoom ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance
+title: "creator/silent/ken-burns"
+description: "Silent Ken Burns pan/zoom ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance"
 tags: [workflows, generated, comfyui, creator]
 ---
 

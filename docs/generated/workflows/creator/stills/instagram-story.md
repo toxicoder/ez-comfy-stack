@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-story
-description: Instagram Story 9:16 with UI-safe edges
+title: "creator/stills/instagram-story"
+description: "Instagram Story 9:16 with UI-safe edges"
 tags: [workflows, generated, comfyui, creator]
 ---
 

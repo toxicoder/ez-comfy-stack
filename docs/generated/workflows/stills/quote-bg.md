@@ -1,6 +1,6 @@
 ---
-title: stills/quote-bg
-description: Klein 4B quote-card background 1:1
+title: "stills/quote-bg"
+description: "Klein 4B quote-card background 1:1"
 tags: [workflows, generated, comfyui, stills]
 ---
 

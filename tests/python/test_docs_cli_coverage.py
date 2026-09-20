@@ -8,9 +8,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _docs_paths import docs_file
+
 ROOT = Path(__file__).resolve().parents[2]
 MANAGE = ROOT / "scripts" / "manage.sh"
-MANAGE_CLI = ROOT / "docs" / "manage-cli.md"
+MANAGE_CLI = docs_file(ROOT / "docs" / "manage-cli.md")
 GENERATED = ROOT / "docs" / "generated" / "shell" / "reference.md"
 BUILDER = ROOT / "includes" / "command-builder.json"
 

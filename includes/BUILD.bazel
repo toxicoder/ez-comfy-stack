@@ -1,4 +1,4 @@
-"""Package purpose: MkDocs includes (command builder + glossary JSON)."""
+"""Package purpose: Docs-site JSON includes (command builder + glossary)."""
 
 package(default_visibility = ["//visibility:public"])
 

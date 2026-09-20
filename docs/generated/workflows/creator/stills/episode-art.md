@@ -1,6 +1,6 @@
 ---
-title: creator/stills/episode-art
-description: Per-episode podcast art 1:1
+title: "creator/stills/episode-art"
+description: "Per-episode podcast art 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

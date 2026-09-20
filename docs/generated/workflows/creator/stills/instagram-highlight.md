@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-highlight
-description: Instagram Highlight cover, circle-safe
+title: "creator/stills/instagram-highlight"
+description: "Instagram Highlight cover, circle-safe"
 tags: [workflows, generated, comfyui, creator]
 ---
 

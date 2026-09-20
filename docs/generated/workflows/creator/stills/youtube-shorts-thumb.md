@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-shorts-thumb
-description: YouTube Shorts thumbnail 9:16
+title: "creator/stills/youtube-shorts-thumb"
+description: "YouTube Shorts thumbnail 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -21,7 +21,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 - Consistent, reviewable contributions with a Bazel-first test/lint/docs graph and without the lab K8s surface
 - Shell that matches industry practice while staying safe on remote DGX Spark hosts
 - First-party Python that is annotated and Google-style documented (JSDoc on custom-node frontends)
-- MkDocs pages operators can **scan** (not only search)
+- Fumadocs pages operators can **scan** (not only search)
 
 ## Principles
 
@@ -31,7 +31,7 @@ tags: [conventions, contributing, safety, shell, google-style]
 | Explicit resources | Docker mem limits always set |
 | No auto-start | `restart: "no"` |
 | Hermetic tests | BATS/pytest/Pyright/mypy without real Spark |
-| Docs as code | MkDocs pages with required sections |
+| Docs as code | Fumadocs pages with required sections |
 | Keep it small | No K8s/Ansible/dashboard/NCCL |
 | Bazel-first | `bazelisk run //:validate`; Makefile is a shim |
 | Style as gate | ShellCheck + shfmt + Pyright (Pylance) + mypy on every change |
@@ -68,7 +68,7 @@ flowchart TB
   Root --> Util["scripts/utilities/*<br/>download-image · download-wan · download-ltx · download-limit · download-dub · concat-shots · blender-guide · blender-stills · spark-farm · blender-mcp · research-mcp · studio-mcp"]
   Root --> Docker["docker/*<br/>compose · Dockerfile · entrypoint · patch"]
   Root --> Cfg["config/resource-policy.yaml"]
-  Root --> Docs["docs/ · MkDocs"]
+  Root --> Docs["docs/ · docs-site/ Fumadocs"]
   Root --> Tests["tests/bats · tests/python"]
   Root --> Wf["workflows/_lab/<lane> shipped JSON<br/>workflows/_user local only<br/>workflows/shorts YAML"]
   Manage --> Lib
@@ -174,7 +174,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
     """
 ```
 
-Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site JS in `docs/javascripts/` already follows that pattern.
+Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site widgets live in `docs-site/components/` (leftover Material JS in `docs/javascripts/` still follows that pattern until it is deleted).
 
 ### Entry script skeleton
 
@@ -323,23 +323,23 @@ flowchart LR
 
 Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How docs tests work: [Testing docs](contribute/testing-docs.md). Comment-derived CLI: [Generated shell reference](generated/shell/reference.md). **AI-drafted docs still need a human pass** before merge.
 
-- Local / PR: `bazelisk run //docs:docs` (or `make docs`) — generators then strict MkDocs Material into `site/`
-- Public site (per long-lived branch) via **mike** on GitHub Pages:
+- Local / PR: `bazelisk run //docs:docs` (or `make docs`) — generators then Fumadocs static export into `docs-site/out/`
+- Dev server: `bazelisk run //docs:serve` (or `./docs/manage-docs.sh serve`) at http://localhost:3005
+- Public site (per long-lived branch) via two Next exports on GitHub Pages:
   - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)
-- Stack is **MkDocs 1.x + Material** (`docs/requirements.txt`). Do **not** upgrade to MkDocs 2.x (incompatible with Material plugins/theme; no migration path). CI and `make docs` set `NO_MKDOCS_2_WARNING=1` to suppress Material’s advisory. Revisit only if migrating tooling (e.g. Zensical evaluation).
-- Keep the top nav on screen while scrolling: `navigation.tabs` **and** `navigation.tabs.sticky` in `mkdocs.yml`. Do **not** enable `header.autohide` (Material hides the tabs row on scroll without sticky).
-- Header compact-on-scroll lives in `docs/stylesheets/extra.css` (wired via `extra_css`). Do not fork Material `header.html` / `tabs.html` for this. All header controls stay visible; only padding/height shrinks after the page title scrolls away. The same stylesheet sets `.md-typeset { font-size: 0.875rem }` (Material default is `0.8rem`); do not raise `html` font-size or the rem-based header will grow with the article.
-- Code appearance matches [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) text styling, not their body type scale: `theme.font.code` is **Roboto Mono**; `pymdownx.highlight` uses `line_spans: __span` and `pygments_lang_class: true`; fenced `.md-typeset pre > code` uses `line-height: 1.55` and extra padding; prose / table / list `code` is terminal green `rgb(134, 183, 55)`. Do **not** paint `pre > code` solid green (pygments tokens stay). Do **not** copy spark-lab table `overflow: hidden` (breaks `.ez-table-pin`) or their `0.82rem` typeset.
-- Table headers: `docs/javascripts/tables.js` clones `.md-typeset table:not([class]) thead` into a `.ez-table-pin` overlay that sits under `.md-header` while scrolling, then releases so the last row and 25% of the previous row stay visible. Hide the pin **and** the h-scroll bar once the table is fully above the navbar or below the viewport (`inStickyBand`) so a `position: fixed` clone cannot stay stuck after the table has scrolled past. The clone pans with wrap `scrollLeft` (`translateX`) so column labels stay aligned while the table scrolls horizontally. When the table is wider than the article **and** taller than the viewport, the native wrap bar sits off-screen at wrap bottom — `tables.js` mirrors it with a `position: fixed` `.ez-table-hscroll` bar at the viewport bottom (same `scrollLeft`). Do **not** use `position: sticky` on `th` or the h-scroll bar — Material’s `html { overflow-x: hidden }` plus `display: inline-block; overflow: auto` on the table prevent Chromium from pinning cells, and a sticky `top` offset paints `thead` over the body rows. Keep **`display: table`** and **overflow visible** on the table. Leave Material’s `.md-typeset__scrollwrap { overflow-x: auto }` as the real scrollport. Do not fork table templates. Do not `position: fixed` the original thead (the overlay is the fixed clone).
+- Stack is **Fumadocs** on Next.js 16 (`docs-site/`). Content stays in `docs/`. Node 22+, `npm ci --legacy-peer-deps` inside `docs-site/`. Python `docs/requirements.txt` is generators only. Sidebar groups live in `docs-site/lib/nav.json`.
+- Keep the top nav on screen while scrolling (`root: true` folders in `docs-site/lib/nav.ts`). Do **not** hide the header (`translateY(-100%)` / autohide). Chrome lives in `docs-site/app/global.css` (Overeazy Voltage `--color-fd-*`). Article copy is `0.875rem`; do not raise `html` font-size. Do not add `display: none` hide rules (theme tests).
+- Code appearance matches [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) text styling, not their body type scale: **Roboto Mono** / `ui-monospace` stack; fenced `article pre > code` uses `line-height: 1.55` and extra padding; prose / table / list `code` is terminal green `rgb(134, 183, 55)`. Do **not** paint `pre > code` solid green. Do **not** copy spark-lab table `overflow: hidden` (breaks `.ez-table-pin`) or their `0.82rem` typeset.
+- Table headers: `docs-site/components/table-chrome.tsx` clones `table:not([class]) thead` into a `.ez-table-pin` overlay that sits under the navbar while scrolling, then releases so the last row and 25% (`0.25`) of the previous row stay visible. Hide the pin **and** the h-scroll bar once the table is fully above the navbar or below the viewport (`inStickyBand`) so a `position: fixed` clone cannot stay stuck after the table has scrolled past. The clone pans with wrap `scrollLeft` (`translateX`) so column labels stay aligned while the table scrolls horizontally. When the table is wider than the article **and** taller than the viewport, the native wrap bar sits off-screen at wrap bottom — the component mirrors it with a `position: fixed` `.ez-table-hscroll` bar at the viewport bottom (same `scrollLeft`). Do **not** use `position: sticky` on `th` or the h-scroll bar. Keep **`display: table`** and **overflow visible** on the table. Do not `position: fixed` the original thead (the overlay is the fixed clone).
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
-- Branch-stamped at build time via `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` (optional `EZ_DOCS_GIT_REF` override):
+- Branch-stamped at build time via `docs-site/lib/site.ts` (same behaviour as leftover `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` / `DGX_DOCS_VERSION`; optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)
   - This-repo GitHub `blob` / `tree` URLs
-  - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); hooks stamp `main` or `development` to match the published alias
+  - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); the app stamps `main` or `development` to match the published alias
 - Operator docs that mean “the branch for **these** docs” must use `__DOCS_GIT_REF__`, not a hardcoded long-lived branch name. Contributor workflow text (“branch from `development`”) stays literal.
-- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the mike alias, injected beside the page `h1` by `docs/hooks.py` (not per-page git history, not the Material header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip — never wall-clock `now()`. `javascripts/published.js` rewrites the visible `<time>` to a relative label (“2 days ago”); the `datetime` attribute stays absolute UTC. Do not fork `header.html` for this. Do not hide the chip with `display: none`.
+- **Last published** chip (`.ez-published-chip`): site-wide build stamp for the published alias, injected beside the page `h1` by `docs-site/components/published-chip.tsx` (not per-page git history, not the site header). Deploy sets `EZ_DOCS_PUBLISHED_AT` (UTC ISO) in `.github/workflows/deploy-docs.yml`; local / PR `make docs` falls back to `SOURCE_DATE_EPOCH` then git HEAD. Invalid or missing stamps omit the chip — never wall-clock `now()`. The chip rewrites the visible `<time>` to a relative label (“2 days ago”); the `datetime` attribute stays absolute UTC. Do not hide the chip with `display: none`.
 
 ### Docs formatting (human readability)
 
@@ -347,13 +347,13 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 
 **Source spacing** (enforced by `tests/python/test_docs_markdown.py`): no trailing whitespace (including two-space hard breaks), at most one blank line between blocks, files end with a single newline, ATX headings and column-0 fences/tables/admonitions sit next to a blank line. Do not hand-edit `docs/generated/shell/reference.md` — `docs/generate_shell_docs.py` collapses extra blanks.
 
-**Required page chrome** (every `docs/*.md` page, including `docs/learn/`):
+**Required page chrome** (every `docs/*.md` / `docs/*.mdx` page, including `docs/learn/`):
 
 1. YAML frontmatter: `title`, `description`, `tags`
 2. **What's on this page** (bullet list)
 3. **What this enables** (bullet list)
 
-Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps the first pair after the page `h1` into `.ez-page-brief` (`docs/page_brief.py` + `docs/stylesheets/extra.css`): a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card.
+Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and leftover `docs/hooks.py` `wrap_page_brief` / `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe …: …"`).
 
 **Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
 
@@ -363,37 +363,35 @@ Author those two lists as **bold + bullets** in source. `docs/hooks.py` wraps th
 - Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`
 - `short` is one line (CSS hover bubble via `data-short` / `data-category`, dialog body, and `title=` fallback); `long` is markdown on [glossary.md](glossary.md)
 - First occurrence per term **per page**; skip `code` / `pre` / headings / links / the glossary page itself
-- `docs/glossary.py` wraps HTML; `docs/javascripts/glossary.js` opens a native `<dialog>` with a category line
+- `docs/glossary.py` wraps HTML for hermetic tests; `docs-site/lib/remark-glossary.ts` + `EzTerm` open a native `<dialog>` with a category line
 - Do **not** enable Material `abbr` + snippets `auto_append` (hover-only, double-wraps)
-- Do **not** enable `content.instant` unless you re-test the glossary modal, `javascripts/commands.js`, **and** `javascripts/tables.js` on client-side navigation
 
-**Rich formatting patterns** (MkDocs Material — see `mkdocs.yml`):
+**Rich formatting patterns** (Fumadocs — see `docs-site/components/mdx-components.tsx`):
 
 | Pattern | Use for |
 | --- | --- |
 | Numbered steps | Operator sequences (`setup` → `start` → `stop`) |
 | Tables | Defaults, symptom → action, file basenames |
-| `!!! tip` / `!!! warning` / `!!! danger` / `!!! success` | Side notes that must not break narrative flow |
-| `??? …` collapsible | Advanced, optional, “how it works”, long diagrams |
-| `=== "…"` content tabs | Mutually exclusive paths (interactive vs non-interactive; image vs video) |
+| `<Callout type="info\|warning\|error">` | Side notes that must not break narrative flow |
+| `<details>` | Advanced, optional, “how it works”, long diagrams |
+| `<Tabs>` / `<Tab>` | Mutually exclusive paths (interactive vs non-interactive; image vs video) |
 | Task lists `- [ ]` | Prerequisites the operator can check off |
-| `++ctrl+c++` (`pymdownx.keys`) | Keyboard shortcuts |
 | Mermaid | Architecture / decision trees — **after** actionable commands when the reader’s job is to run something |
-| Card grids (`<div class="grid cards" markdown>`) | Home / Learn indexes — equal-weight next steps |
 | Page brief (`.ez-page-brief`) | Required What's on this page / What this enables lists, rendered as a two-column scan card |
-| `:material-…:` / `:octicons-…:` icons | Cards and scan anchors (`pymdownx.emoji` twemoji) |
 | Bold first phrase in list items | Scan anchors |
+
+Generated `docs/generated/**/*.md` may still use `!!! warning`; `remarkAdmonition` still parses those fences. New authored pages use `<Callout>`.
 
 **Getting Started** is the primary operator path: keep the happy path short; park image-layer, cold-start, and lab-internals content in collapsible blocks.
 
-**Session variables:** operator command fences **and inline `code`** should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs/javascripts/commands.js` substitutes `${VAR}` and `${VAR:-default}` at runtime from `localStorage` (`ez-comfy.cmdvars`), renders each known token as an editable `.ez-var` chip, and sets Material copy to `data-clipboard-text`. Token split lives in `docs/commands.py` (`split_var_template`) — keep the JS regex in sync.
+**Session variables:** operator command fences **and inline `code`** should reuse `SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT` (defaults from `.env.example`) so blocks are paste-and-run. Do not hardcode `<spark-ip>`. `docs-site/lib/command-vars.ts` substitutes `${VAR}` and `${VAR:-default}` at runtime from `localStorage` (`ez-comfy.cmdvars`) and renders each known token as an editable `.ez-var` chip. Token split lives in `docs/commands.py` (`split_var_template`) — keep the TypeScript regex in sync.
 
-**Interactive commands (`ezcmd`):** flagged download examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. `docs/hooks.py` expands the fence (do not add `mkdocs-placeholder-plugin`; its `xNAMEx` tokens fight bash `${VAR}` and InnerHTML replace breaks Material search). Recipes and substitution live in `docs/commands.py` — keep `commands.js` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
+**Interactive commands (`ezcmd`):** flagged download examples use `<EzCommand id="…" />` on authored MDX, or a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json` (generated `.md` still uses the fence). Recipes and substitution live in `docs/commands.py` — keep `command-vars.ts` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id**; document it on [Download tiers](download-tiers.md), not as a global quality flag.
 
-**Your Spark panel:** injected by `commands.js` into `article.md-content__inner` (not the Material header). Do not fork `header.html` / `tabs.html`. Do not add `display: none` to `extra.css` (theme tests). Collapse with `<details>` / the `hidden` attribute.
+**Your Spark panel:** injected by command-vars into the article (not the site header). Do not add `display: none` to `docs-site/app/global.css` (theme tests). Collapse with `<details>` / the `hidden` attribute.
 
 **Default stack vocabulary:** Klein 4B + Wan 2.2 5B + LTX-2.5. Lab CLIP is `qwen_3_4b` (type `flux2`) and LTX-2.5 `CLIPLoader` Gemma4-with-proj. Klein 9B is opt-in FLUX Non-Commercial (`download-image --tier 9b`), not a lab UNET pin. Old `flux-to-ltx*` GHCR tags are frozen mentions only.
 
 ```bash
-bazelisk run //docs:docs   # strict build must stay green
+bazelisk run //docs:docs   # Fumadocs export must stay green
 ```

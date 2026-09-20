@@ -15,6 +15,13 @@ tests/bats/tmp
 **/.DS_Store
 **/*~
 node_modules/
+docs-site/node_modules/
+docs-site/out/
+docs-site/out-linux/
+docs-site/.next/
+docs-site/.source/
+docs-site/.deps-linux-stamp
+docs-site/public/assets/
 
 # Operator-private Comfy dumps (never inputs)
 workflows/_user/

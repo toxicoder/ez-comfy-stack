@@ -1,6 +1,6 @@
 ---
-title: dcc/canny-hero
-description: Klein 4B edit of DCC canny.png. Enhance on. 1280x704. Seed 42.
+title: "dcc/canny-hero"
+description: "Klein 4B edit of DCC canny.png. Enhance on. 1280x704. Seed 42."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

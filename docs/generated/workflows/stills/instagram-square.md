@@ -1,6 +1,6 @@
 ---
-title: stills/instagram-square
-description: Klein 4B Instagram 1:1 still
+title: "stills/instagram-square"
+description: "Klein 4B Instagram 1:1 still"
 tags: [workflows, generated, comfyui, stills]
 ---
 

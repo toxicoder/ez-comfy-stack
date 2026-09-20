@@ -1,6 +1,6 @@
 ---
-title: audio/podcast/radio-drama
-description: US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil
+title: "audio/podcast/radio-drama"
+description: "US-safe radio drama: Kokoro cast + ACE-Step sting/bed; Wan/LTX bumpers off Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil"
 tags: [workflows, generated, comfyui, audio]
 ---
 

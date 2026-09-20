@@ -5,7 +5,7 @@ Bazel is the primary entry point: test, lint, docs, and operational scripts.
 Common entry points:
 
   bazelisk run //:validate              # git-aware build + test + lint + docs
-  bazelisk test //:test                 # hermetic suite including strict MkDocs
+  bazelisk test //:test                 # hermetic suite including docs render contract
   bazelisk test //:test-fast            # CI core (BATS + pytest + typecheck + inventory)
   bazelisk test //:lint --test_tag_filters=manual
   bazelisk run //:manage -- doctor
@@ -20,7 +20,8 @@ package(default_visibility = ["//visibility:private"])
 
 exports_files([
     "fix.sh",
-    "mkdocs.yml",
+    "CONTRIBUTING.md",
+    "README.md",
     "mypy.ini",
     "pyrightconfig.json",
 ])
@@ -83,7 +84,7 @@ test_suite(
 test_suite(
     name = "test",
     tests = _TEST_FAST + [
-        "//docs:test_mkdocs_build",
+        "//docs:test_docs_site_render",
     ],
     visibility = ["//visibility:public"],
 )

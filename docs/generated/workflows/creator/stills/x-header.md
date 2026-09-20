@@ -1,6 +1,6 @@
 ---
-title: creator/stills/x-header
-description: X header 3:1
+title: "creator/stills/x-header"
+description: "X header 3:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: inspire/beat-sheet
-description: Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML
+title: "inspire/beat-sheet"
+description: "Script desk: logline, audio policy, 18 shot cards → shot-sheet YAML"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

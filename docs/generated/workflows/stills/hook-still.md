@@ -1,6 +1,6 @@
 ---
-title: stills/hook-still
-description: Klein 4B 9:16 Shorts hook still
+title: "stills/hook-still"
+description: "Klein 4B 9:16 Shorts hook still"
 tags: [workflows, generated, comfyui, stills]
 ---
 

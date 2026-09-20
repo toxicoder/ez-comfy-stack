@@ -1,6 +1,6 @@
 ---
-title: stills/endcard-cta
-description: Klein 4B end-card / CTA plate 1280x720
+title: "stills/endcard-cta"
+description: "Klein 4B end-card / CTA plate 1280x720"
 tags: [workflows, generated, comfyui, stills]
 ---
 

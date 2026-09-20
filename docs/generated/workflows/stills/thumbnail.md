@@ -1,6 +1,6 @@
 ---
-title: stills/thumbnail
-description: Klein 4B YouTube thumbnail 1280x720
+title: "stills/thumbnail"
+description: "Klein 4B YouTube thumbnail 1280x720"
 tags: [workflows, generated, comfyui, stills]
 ---
 

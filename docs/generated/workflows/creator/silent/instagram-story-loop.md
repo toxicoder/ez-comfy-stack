@@ -1,6 +1,6 @@
 ---
-title: creator/silent/instagram-story-loop
-description: Silent Instagram Story loop 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan
+title: "creator/silent/instagram-story-loop"
+description: "Silent Instagram Story loop 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan"
 tags: [workflows, generated, comfyui, creator]
 ---
 

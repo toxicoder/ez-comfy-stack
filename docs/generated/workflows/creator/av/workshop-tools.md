@@ -1,6 +1,6 @@
 ---
-title: creator/av/workshop-tools
-description: Workshop tools AV ~5 s
+title: "creator/av/workshop-tools"
+description: "Workshop tools AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

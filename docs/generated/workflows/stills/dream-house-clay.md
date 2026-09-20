@@ -1,6 +1,6 @@
 ---
-title: stills/dream-house-clay
-description: Ten Instagram 4:5 Klein edits of Blender clay views (3D persistence, AI finish)
+title: "stills/dream-house-clay"
+description: "Ten Instagram 4:5 Klein edits of Blender clay views (3D persistence, AI finish)"
 tags: [workflows, generated, comfyui, stills]
 ---
 

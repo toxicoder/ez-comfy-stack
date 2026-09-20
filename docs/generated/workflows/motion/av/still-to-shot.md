@@ -1,6 +1,6 @@
 ---
-title: motion/av/still-to-shot
-description: LTX-2.5 concat-safe AV I2V print, 121 frames (1+8n) + last frame
+title: "motion/av/still-to-shot"
+description: "LTX-2.5 concat-safe AV I2V print, 121 frames (1+8n) + last frame"
 tags: [workflows, generated, comfyui, motion]
 ---
 

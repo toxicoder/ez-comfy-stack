@@ -1,6 +1,6 @@
 ---
-title: creator/silent/x-post-5s
-description: Silent X clip ~5 s 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on onl
+title: "creator/silent/x-post-5s"
+description: "Silent X clip ~5 s 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on onl"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-offline
-description: Twitch offline screen 16:9
+title: "creator/stills/twitch-offline"
+description: "Twitch offline screen 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,0 +1,112 @@
+---
+title: Testing docs
+description: bazelisk test-fast, coverage, lint, docs, typecheck — 100% Python gate, shell inventory, Fumadocs aliases, generate_shell_docs.py.
+tags: [testing, coverage, fumadocs, contributing]
+---
+
+# Testing docs
+
+**What's on this page**
+
+- **Bazel / Make targets** — `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
+- **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
+- **Shell function inventory** (invoked by a test, not only named)
+- **`deploy-docs.yml`** — `main` → `latest`, `development` → `development` (two Next exports)
+- **`bazelisk run //docs:docs`** — generators then Fumadocs `next build` into `docs-site/out/`
+
+**What this enables**
+
+- **Running** the same gates CI uses before a docs PR
+- **Knowing** the 100% gate is every first-party production Python module, with GPU/bpy/network branches covered by hermetic fakes
+- **Publishing** versioned docs without mike or MkDocs
+
+Style: [Docs style](docs-style.md). Root workflow: [Contributing](contributing.md).
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+Hermetic tests do not need a Spark. Docs JS session vars still use those names in fences.
+
+---
+
+## Make targets
+
+Makefile shims call Bazelisk when present. Canonical commands: [Building with Bazel](building-with-bazel.md).
+
+| Target | What it runs |
+| --- | --- |
+| **`bazelisk test //:test-fast`** / **`make test`** | BATS + Python + Pyright + mypy |
+| **`make coverage`** | Same as `//:test-fast` via Bazel, else `tests/coverage.sh` |
+| **`bazelisk test //:lint --test_tag_filters=manual`** | ShellCheck + shfmt + buildifier (Pyright + mypy live in `//:test-fast`) |
+| **`make typecheck`** | Pyright (Pylance) + mypy |
+| **`bazelisk run //docs:docs`** | generators then Fumadocs static export (`docs-site/out/`) |
+| **`bazelisk run //:fix`** | buildifier + `shfmt -w` |
+| **`make doctor`** | `bazelisk run //:manage -- doctor` (host; not hermetic) |
+
+Install once: `pip install -r tests/requirements.txt` and Node 22+ (`./docs/setup-docs.sh`).
+
+Pyright errors and mypy errors are **defects**. Do not skip the gate.
+
+---
+
+## 100% Python gate
+
+`make coverage` / `tests/run_pytest.sh` fail-under **100** on every first-party production package:
+
+- `custom_nodes`
+- `docker` (UM patches, `seed_clay_inputs`, `pythonpath/sitecustomize`)
+- `docs` generators (`hooks.py` leftover until the first green preview)
+- `scripts/lib`
+- `studio-ui`
+- `tools` (Blender exporters; `bpy` is faked)
+
+Vendored `custom_nodes/ez_dcc/_guide_pack.py` is included (same tests as `scripts/lib/guide_pack.py`). GPU loaders, llama.cpp, and host Blender are exercised with `sys.modules` fakes — tests stay hermetic.
+
+`PYTHONPATH=docker:docker/pythonpath:custom_nodes:scripts/lib:studio-ui:docs:tools`.
+
+---
+
+## Shell function inventory
+
+Every function under `scripts/**/*.sh` and `docker/**/*.sh` must be **invoked by a test** under `tests/` (strict; a comment that only names the function does not count). Entrypoint `main` is skipped. New library functions ship with BATS/pytest in the **same commit**. kcov remains optional and non-fatal.
+
+---
+
+## make docs
+
+```bash
+python3 docs/generate_shell_docs.py
+python3 docs/generate_workflow_docs.py
+python3 docs/generate_cinema_docs.py
+python3 docs/generate_audio_docs.py
+(cd docs-site && npm ci --legacy-peer-deps && npm run build)
+```
+
+`generate_shell_docs.py` writes `docs/generated/shell/reference.md` from `# ##`, `# @command`, and `# @function` comments. `generate_workflow_docs.py` writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `_lab` JSON plus `docs/workflow_nodes.py`. `generate_cinema_docs.py` writes `docs/generated/cinema/` from Cinema Rack JSON. `generate_audio_docs.py` writes `docs/generated/audio/` from Audio Rack JSON. Do not hand-edit those files. The Next export fails closed on MDX/TypeScript errors.
+
+Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs style](docs-style.md).
+
+---
+
+## deploy-docs.yml
+
+`.github/workflows/deploy-docs.yml` runs on push to **`main`** / **`development`** (docs paths) or `workflow_dispatch`.
+
+| Git branch | Pages alias |
+| --- | --- |
+| **`main`** | **`latest`** (default site) |
+| **`development`** | **`development`** |
+
+PR validation is `make docs` in CI only (no Pages push). Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
+
+Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/).
+
+<Callout type="warning" title="AI-drafted docs still need a human pass">
+  Green `make docs` does not prove the page matches the code. Read `nodes.py` / compose / occupancy before merge.
+</Callout>

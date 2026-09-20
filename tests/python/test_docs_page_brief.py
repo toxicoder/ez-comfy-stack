@@ -17,7 +17,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 PAGE_BRIEF_PY = ROOT / "docs" / "page_brief.py"
 HOOKS_PY = ROOT / "docs" / "hooks.py"
-EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
+EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 DOCS = ROOT / "docs"
 

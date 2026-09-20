@@ -1,6 +1,6 @@
 ---
-title: optional/trellis2
-description: Klein still to native TRELLIS.2 INT8 mesh. 512. TRELLIS-only.
+title: "optional/trellis2"
+description: "Klein still to native TRELLIS.2 INT8 mesh. 512. TRELLIS-only."
 tags: [workflows, generated, comfyui, optional]
 ---
 

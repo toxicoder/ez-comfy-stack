@@ -1,6 +1,6 @@
 ---
-title: creator/silent/unbox-hands
-description: Silent unbox / hands motion ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan
+title: "creator/silent/unbox-hands"
+description: "Silent unbox / hands motion ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan"
 tags: [workflows, generated, comfyui, creator]
 ---
 

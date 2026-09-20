@@ -49,6 +49,8 @@ def _read(path: Path) -> str:
     Returns:
         Entire file contents.
     """
+    if not path.is_file() and path.suffix == ".md":
+        path = path.with_suffix(".mdx")
     assert path.is_file(), path
     return path.read_text(encoding="utf-8")
 

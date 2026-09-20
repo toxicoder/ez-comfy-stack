@@ -1,6 +1,6 @@
 ---
-title: creator/silent/lyric-bg-loop
-description: Silent lyric-background loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enha
+title: "creator/silent/lyric-bg-loop"
+description: "Silent lyric-background loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enha"
 tags: [workflows, generated, comfyui, creator]
 ---
 

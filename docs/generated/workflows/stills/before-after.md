@@ -1,6 +1,6 @@
 ---
-title: stills/before-after
-description: Klein 4B before/after still pair
+title: "stills/before-after"
+description: "Klein 4B before/after still pair"
 tags: [workflows, generated, comfyui, stills]
 ---
 

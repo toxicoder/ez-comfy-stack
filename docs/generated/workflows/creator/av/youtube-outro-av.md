@@ -1,6 +1,6 @@
 ---
-title: creator/av/youtube-outro-av
-description: YouTube outro AV ~5 s with room tone
+title: "creator/av/youtube-outro-av"
+description: "YouTube outro AV ~5 s with room tone"
 tags: [workflows, generated, comfyui, creator]
 ---
 

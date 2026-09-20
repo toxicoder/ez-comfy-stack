@@ -643,11 +643,12 @@ def _frontmatter(title: str, description: str, tags: list[str]) -> str:
         Frontmatter block including trailing newline.
     """
     tag_s = ", ".join(tags)
-    desc = description.replace("\n", " ").strip()
+    desc = description.replace("\n", " ").strip().replace("\\", "\\\\").replace('"', '\\"')
+    title_s = title.replace("\\", "\\\\").replace('"', '\\"')
     return (
         "---\n"
-        f"title: {title}\n"
-        f"description: {desc}\n"
+        f'title: "{title_s}"\n'
+        f'description: "{desc}"\n'
         f"tags: [{tag_s}]\n"
         "---\n"
     )

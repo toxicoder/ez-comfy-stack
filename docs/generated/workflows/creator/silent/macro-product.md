@@ -1,6 +1,6 @@
 ---
-title: creator/silent/macro-product
-description: Silent macro product crawl ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhanc
+title: "creator/silent/macro-product"
+description: "Silent macro product crawl ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhanc"
 tags: [workflows, generated, comfyui, creator]
 ---
 

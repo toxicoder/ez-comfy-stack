@@ -1,6 +1,6 @@
 ---
-title: creator/av/crowd-ambience
-description: Distant crowd bed AV ~5 s
+title: "creator/av/crowd-ambience"
+description: "Distant crowd bed AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

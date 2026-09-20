@@ -1,6 +1,6 @@
 ---
-title: inspire/research-chat
-description: No-UNET creative research chat: web search + sequential subagents
+title: "inspire/research-chat"
+description: "No-UNET creative research chat: web search + sequential subagents"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

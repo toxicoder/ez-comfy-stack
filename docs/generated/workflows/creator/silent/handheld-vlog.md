@@ -1,6 +1,6 @@
 ---
-title: creator/silent/handheld-vlog
-description: Silent handheld vlog micro-shake 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn
+title: "creator/silent/handheld-vlog"
+description: "Silent handheld vlog micro-shake 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn"
 tags: [workflows, generated, comfyui, creator]
 ---
 

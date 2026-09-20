@@ -1,6 +1,6 @@
 ---
-title: audio/podcast/learn-episode
-description: US-safe learning episode: paste sources, pick format and duration, Kokoro TTS + looped ACE-Step bed
+title: "audio/podcast/learn-episode"
+description: "US-safe learning episode: paste sources, pick format and duration, Kokoro TTS + looped ACE-Step bed"
 tags: [workflows, generated, comfyui, audio]
 ---
 

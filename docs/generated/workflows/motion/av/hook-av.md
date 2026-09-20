@@ -1,6 +1,6 @@
 ---
-title: motion/av/hook-av
-description: LTX-2.5 AV hook / cold open ~5s
+title: "motion/av/hook-av"
+description: "LTX-2.5 AV hook / cold open ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

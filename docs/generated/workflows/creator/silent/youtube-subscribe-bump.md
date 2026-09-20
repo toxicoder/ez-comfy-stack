@@ -1,6 +1,6 @@
 ---
-title: creator/silent/youtube-subscribe-bump
-description: Silent YouTube subscribe bumper loop Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn E
+title: "creator/silent/youtube-subscribe-bump"
+description: "Silent YouTube subscribe bumper loop Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn E"
 tags: [workflows, generated, comfyui, creator]
 ---
 

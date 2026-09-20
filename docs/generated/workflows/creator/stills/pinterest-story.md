@@ -1,6 +1,6 @@
 ---
-title: creator/stills/pinterest-story
-description: Pinterest Idea Pin 9:16
+title: "creator/stills/pinterest-story"
+description: "Pinterest Idea Pin 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

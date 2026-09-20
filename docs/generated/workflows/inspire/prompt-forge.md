@@ -1,6 +1,6 @@
 ---
-title: inspire/prompt-forge
-description: No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview
+title: "inspire/prompt-forge"
+description: "No-UNET Prompt Forge: shared prompt + Klein / Wan / LTX / Z-Image / LongCat / DreamX enhance preview"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

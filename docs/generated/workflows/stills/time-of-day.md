@@ -1,6 +1,6 @@
 ---
-title: stills/time-of-day
-description: Klein 4B time-of-day four-still pack
+title: "stills/time-of-day"
+description: "Klein 4B time-of-day four-still pack"
 tags: [workflows, generated, comfyui, stills]
 ---
 

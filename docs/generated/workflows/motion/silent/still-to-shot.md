@@ -1,6 +1,6 @@
 ---
-title: motion/silent/still-to-shot
-description: Wan 2.2 5B concat-safe I2V shot, 120 frames + last frame
+title: "motion/silent/still-to-shot"
+description: "Wan 2.2 5B concat-safe I2V shot, 120 frames + last frame"
 tags: [workflows, generated, comfyui, motion]
 ---
 

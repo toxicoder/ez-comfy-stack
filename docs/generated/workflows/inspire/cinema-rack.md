@@ -1,6 +1,6 @@
 ---
-title: inspire/cinema-rack
-description: No-UNET Cinema Rack: splice cinematography axes into Klein / Wan / LTX
+title: "inspire/cinema-rack"
+description: "No-UNET Cinema Rack: splice cinematography axes into Klein / Wan / LTX"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

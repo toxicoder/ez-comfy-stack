@@ -51,6 +51,15 @@ comfy-state/
 # Docs build
 site/
 .cache/
+docs-site/node_modules/
+docs-site/.next/
+docs-site/.source/
+docs-site/out/
+docs-site/out-linux/
+docs-site/.deps-linux-stamp/
+docs-site/public/assets/
+docs-site/tsconfig.tsbuildinfo
+.venv-docs/
 
 # Bazel build artifacts (never commit outputs)
 bazel-*

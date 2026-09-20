@@ -1,6 +1,6 @@
 ---
-title: dcc/depth-from-loader
-description: LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path.
+title: "dcc/depth-from-loader"
+description: "LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

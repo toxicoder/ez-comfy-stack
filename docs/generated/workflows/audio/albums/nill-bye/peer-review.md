@@ -1,6 +1,6 @@
 ---
-title: audio/albums/nill-bye/peer-review
-description: Album graphs under audio/albums/nill-bye/peer-review (tracks, cover, album pack).
+title: "audio/albums/nill-bye/peer-review"
+description: "Album graphs under audio/albums/nill-bye/peer-review (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

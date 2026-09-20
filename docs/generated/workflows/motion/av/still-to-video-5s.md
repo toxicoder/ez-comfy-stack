@@ -1,6 +1,6 @@
 ---
-title: motion/av/still-to-video-5s
-description: LTX-2.5 AV I2V smoke, 121 frames @ 24 fps
+title: "motion/av/still-to-video-5s"
+description: "LTX-2.5 AV I2V smoke, 121 frames @ 24 fps"
 tags: [workflows, generated, comfyui, motion]
 ---
 

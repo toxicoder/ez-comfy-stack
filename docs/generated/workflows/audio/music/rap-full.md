@@ -1,6 +1,6 @@
 ---
-title: audio/music/rap-full
-description: US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or f
+title: "audio/music/rap-full"
+description: "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or f"
 tags: [workflows, generated, comfyui, audio]
 ---
 

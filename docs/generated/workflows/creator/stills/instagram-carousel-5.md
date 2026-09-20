@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-carousel-5
-description: Instagram 4:5 carousel, five slides
+title: "creator/stills/instagram-carousel-5"
+description: "Instagram 4:5 carousel, five slides"
 tags: [workflows, generated, comfyui, creator]
 ---
 

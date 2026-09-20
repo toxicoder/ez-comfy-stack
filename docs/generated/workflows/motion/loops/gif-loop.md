@@ -1,6 +1,6 @@
 ---
-title: motion/loops/gif-loop
-description: Wan 5B looping GIF, 49 frames ping-pong @ 12 fps Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as wri
+title: "motion/loops/gif-loop"
+description: "Wan 5B looping GIF, 49 frames ping-pong @ 12 fps Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as wri"
 tags: [workflows, generated, comfyui, motion]
 ---
 

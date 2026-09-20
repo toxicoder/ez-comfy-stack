@@ -1,0 +1,121 @@
+---
+title: Docs style
+description: Page template, ezcmd, glossary.json, page-brief, session vars, inverted pyramid. AI-drafted docs still need a human pass.
+tags: [docs, contributing, fumadocs, style]
+---
+
+# Docs style
+
+**What's on this page**
+
+- **Required page chrome** — frontmatter, H1, What's on this page, What this enables
+- **ezcmd** — `id` must exist in `includes/command-builder.json`
+- **glossary.json** — do not inline a second glossary
+- **page-brief** (`.ez-page-brief` via leftover `docs/hooks.py` / Fumadocs remark) and session vars
+- **What not to do** — hide the header, paint indigo, hand-edit `docs/generated/`
+- **Code appearance** — Roboto Mono, fenced line-height from nvidia-dgx-spark-lab, inline terminal green
+
+**What this enables**
+
+- **Matching** the scan card every operator page already uses
+- **Keeping** Fumadocs + Overeazy Voltage tokens
+- **Matching** nvidia-dgx-spark-lab fenced line-height and inline terminal-green `code`
+- **Remembering** that **AI-drafted docs still need a human pass**
+- **Regenerating** `_lab` workflow pages from `docs/workflow_nodes.py` (do not hand-edit `docs/generated/workflows/`)
+
+Canonical conventions (shell, Docker, testing): [Project conventions](../project-conventions.md). Workflow: [Contributing](contributing.md).
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
+export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
+```
+
+<Callout type="warning" title="Human review">
+  **AI-drafted docs still need a human pass** before merge. Invented product features, TBD headings, real IPs, and secrets are defects.
+</Callout>
+
+---
+
+## Page template
+
+Every `docs/**/*.md` / `docs/**/*.mdx` page (including `docs/learn/`):
+
+1. YAML frontmatter: `title`, `description`, `tags`
+2. H1 **matching** `title`
+3. **What's on this page** — bullet list (bold first phrase)
+4. **What this enables** — bullet list (bold first phrase)
+
+Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and leftover `docs/hooks.py` `on_post_page`) wraps the first pair after the page `h1` into `.ez-page-brief` via `docs/page_brief.py`. Titles stay `<p>`, not headings (they must not enter the TOC). Do not rewrite the pair as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon.
+
+**Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
+
+**Workflow details:** `python3 docs/generate_workflow_docs.py` (also `make docs`) writes `docs/generated/workflows/` and `docs/reference/workflow-nodes.md` from `workflows/_lab/**/*.json` plus `docs/workflow_nodes.py`. Do not hand-edit those generated pages. Combo lists must match ComfyUI v0.34.6 / lab `INPUT_TYPES`. `docs-site/lib/nav.ts` injects the pages under Create → Workflow details from `manifest.json`.
+
+**Cinema catalogs:** `python3 docs/generate_cinema_docs.py` writes `docs/generated/cinema/` from `custom_nodes/ez_prompt_enhance/cinema/*.json`. Illustration clips live at `docs/assets/cinema/<axis_id>/<technique_id>.mp4` (Git LFS) with a JPEG poster; the generator links them when both files exist. Compress with `./scripts/utilities/compress-cinema-clip.sh`. Prompt recipes: `python3 docs/cinema_clip_prompts.py --axis camera_movement`. Playbook: [Cinema Rack](../create/cinema-rack.md).
+
+**Audio catalogs:** `python3 docs/generate_audio_docs.py` writes `docs/generated/audio/` from `custom_nodes/ez_prompt_enhance/audio/*.json`. Playbook: [Audio Rack](../create/audio-rack.md).
+
+**Source spacing:** no trailing whitespace, at most one blank line between blocks, a single trailing newline, and a blank line around ATX headings and column-0 fences/tables/admonitions (`tests/python/test_docs_markdown.py`).
+
+Safety callouts: `<Callout type="error">` / `<Callout type="warning">` for occupancy XOR, `restart: "no"`, headroom, download-limit, licenses. Generated pages may still emit `!!! warning`; `remarkAdmonition` still parses those fences.
+
+Operator git clone / blob refs: write `__DOCS_GIT_REF__` (`docs-site/lib/site.ts` stamps `main` or `development` for the published alias). Contributor workflow text (“branch from `development`”) stays literal.
+
+---
+
+## ezcmd
+
+Interactive command widgets. Authored MDX:
+
+```mdx
+<EzCommand id="doctor" />
+```
+
+Generated `.md` may still use a fenced `ezcmd` block whose body is `id: doctor`. The `id` **must** exist in `includes/command-builder.json`. Recipes and substitution live in `docs/commands.py`. Keep `docs-site/lib/command-vars.ts` aligned with `substitute_vars` / `render_command`. `--tier` is a per-utility **pack id** ([Download tiers](../download-tiers.md)), not a global quality flag.
+
+Unknown ids fail the hermetic command tests. Do not invent recipe ids in prose.
+
+---
+
+## Glossary
+
+Source of truth: **`includes/glossary.json`** only (JSON, not YAML). Unique `id` (`[a-z0-9-]+`) and unique case-insensitive `aliases`. `short` is one line (hover bubble + dialog); `long` is markdown on [glossary.md](../glossary.md). Wrap spans carry `data-short` and `data-category` for the CSS hover bubble (`title=` stays for no-JS).
+
+Do **not** inline a second glossary on a feature page. First occurrence per term per page via `remark-glossary.ts`; skip `code` / `pre` / headings / links / the glossary page itself. Prefer aliases that appear in **prose** (`IC-LoRA`, `NVFP4`, `Hugging Face`, `Blender`) so in-page tooltips actually fire.
+
+---
+
+## Session variables
+
+Operator fences **and** inline `code` reuse:
+
+`SPARK_HOST`, `SPARK_USER`, `MODELS_DIR`, `COMFY_OUTPUT_DIR`, `COMFY_PORT`, `DOWNLOAD_LIMIT`
+
+Defaults match `.env.example`. Do not hardcode `<spark-ip>` or real IPs. `docs-site/lib/command-vars.ts` substitutes `${VAR}` / `${VAR:-default}` from `localStorage` (`ez-comfy.cmdvars`).
+
+---
+
+## Code appearance
+
+Fenced blocks and inline `code` follow [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) (`docs-site/app/global.css`, **Roboto Mono** / `ui-monospace`):
+
+- Fenced `pre > code`: `line-height: 1.55`, padding `0.9em 1.05em`, radius `0.25rem`.
+- Prose / list / table `code`: terminal green `rgb(134, 183, 55)`. Do not apply that color to `pre > code`.
+- Keep this site’s `article { font-size: 0.875rem }`, sticky table pin (`.ez-table-pin`), and floating horizontal scrollbar (`.ez-table-hscroll` in `table-chrome.tsx`). Both hide once the table has scrolled past the viewport. Do not copy spark-lab’s `0.82rem` typeset or table `overflow: hidden`. Do not `position: sticky` the header or the h-scroll bar.
+
+---
+
+## Fumadocs — do not
+
+| Do not | Why |
+| --- | --- |
+| **Hide the header** (`translateY(-100%)` / autohide) | Sidebar groups must stay on screen while scrolling |
+| **Paint indigo / `--md-primary-fg-color`** | Overeazy Voltage lives in `--color-fd-*` |
+| **Hand-edit `docs/generated/`** | Generators own those pages; `make docs` rewrites them |
+| **Add `display: none` hide rules in `global.css`** | Theme tests reject them |
+
+Testing the docs build: [Testing docs](testing-docs.md). Migration leftovers: repo-root [MIGRATION.md](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/MIGRATION.md).

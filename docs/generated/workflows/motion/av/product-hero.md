@@ -1,6 +1,6 @@
 ---
-title: motion/av/product-hero
-description: LTX-2.5 product-hero I2V from a Klein packshot Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as writt
+title: "motion/av/product-hero"
+description: "LTX-2.5 product-hero I2V from a Klein packshot Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as writt"
 tags: [workflows, generated, comfyui, motion]
 ---
 

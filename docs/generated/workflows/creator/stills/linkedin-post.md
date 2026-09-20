@@ -1,6 +1,6 @@
 ---
-title: creator/stills/linkedin-post
-description: LinkedIn square post 1:1
+title: "creator/stills/linkedin-post"
+description: "LinkedIn square post 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

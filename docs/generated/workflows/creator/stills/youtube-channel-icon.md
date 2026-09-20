@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-channel-icon
-description: YouTube channel icon, circle-safe 1:1
+title: "creator/stills/youtube-channel-icon"
+description: "YouTube channel icon, circle-safe 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

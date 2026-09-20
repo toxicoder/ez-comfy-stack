@@ -61,10 +61,10 @@ bazelisk run //scripts:run-utility -- download-limit status
 | Target | What it runs |
 | --- | --- |
 | `//:test-fast` | Split BATS + pytest 100% (all first-party Python) + Pyright + mypy + shell inventory |
-| `//:test` | test-fast + strict MkDocs |
+| `//:test` | test-fast + Fumadocs render contract (`//docs:test_docs_site_render`) |
 | `//:lint` | ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools) |
 | `//:validate` | Git-aware core + docs slices |
-| `//docs:docs` | `generate_shell_docs.py` + `generate_workflow_docs.py` + `generate_cinema_docs.py` + `generate_audio_docs.py` + `mkdocs build --strict` |
+| `//docs:docs` | generators + Fumadocs static export (`docs-site/out/`) |
 
 Queries:
 
@@ -80,7 +80,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/** or CI graph | `docs/manage-docs.sh build` (no Bazel) |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test` then `//docs:docs` |
 | **validate-gate** | always | `scripts/ci_check_only.sh` |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys include `github.job` plus `MODULE.bazel.lock` + `.bazelversion`.

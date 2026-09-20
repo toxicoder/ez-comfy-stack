@@ -1,6 +1,6 @@
 ---
-title: audio/albums/nill-bye/pardon-flood
-description: Album graphs under audio/albums/nill-bye/pardon-flood (tracks, cover, album pack).
+title: "audio/albums/nill-bye/pardon-flood"
+description: "Album graphs under audio/albums/nill-bye/pardon-flood (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

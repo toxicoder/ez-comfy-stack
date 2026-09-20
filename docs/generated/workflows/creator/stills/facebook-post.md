@@ -1,6 +1,6 @@
 ---
-title: creator/stills/facebook-post
-description: Facebook shared-image still ~1.91:1
+title: "creator/stills/facebook-post"
+description: "Facebook shared-image still ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

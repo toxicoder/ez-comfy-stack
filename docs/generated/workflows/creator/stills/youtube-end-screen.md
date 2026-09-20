@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-end-screen
-description: YouTube end-screen plate, left-weighted
+title: "creator/stills/youtube-end-screen"
+description: "YouTube end-screen plate, left-weighted"
 tags: [workflows, generated, comfyui, creator]
 ---
 

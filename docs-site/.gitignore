@@ -1,0 +1,9 @@
+node_modules/
+.next/
+.source/
+out/
+out-linux/
+.deps-linux-stamp/
+public/assets/
+__pycache__/
+tsconfig.tsbuildinfo

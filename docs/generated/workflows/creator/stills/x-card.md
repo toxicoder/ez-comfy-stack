@@ -1,6 +1,6 @@
 ---
-title: creator/stills/x-card
-description: X link-card still ~1.91:1
+title: "creator/stills/x-card"
+description: "X link-card still ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

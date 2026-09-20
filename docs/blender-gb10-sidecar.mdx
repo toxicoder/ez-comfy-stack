@@ -1,0 +1,68 @@
+---
+title: Blender GB10 sidecar
+description: Host Blender next to the US-safe studio. Refuses if Compose is up. Never in the Dockerfile.
+tags: [blender, sidecar, occupancy, gb10]
+---
+
+# Blender GB10 sidecar
+
+**What's on this page**
+
+- Why Blender stays on the host
+- `manage.sh blender-install` (Ubuntu universe apt; never in the Dockerfile)
+- `manage.sh blender` occupancy refuse
+- Dump verbs: `export-guides` (5.00s pack) and `blender-stills` (creator plates)
+
+**What this enables**
+
+- Optional DCC pass on the same Spark after Comfy is parked
+- No Blender layer in `docker/Dockerfile` (image stays Comfy + torch)
+
+<Callout type="error" title="One heavy GPU job">
+  `blender.sh` **dies** if Compose is up and **not** parked. Park first:
+
+  ```bash
+  ./scripts/manage.sh blender-install
+  ./scripts/manage.sh occupancy enter blender-desk
+  ./scripts/manage.sh blender -- --background
+  ```
+
+  NVENC proxies still die if compose is up (encoder is a GPU job). Cycles CUDA while Compose is up is refused. `restart: "no"` is unchanged. See [Occupancy desk](occupancy.md).
+</Callout>
+---
+
+## Operator path
+
+```bash
+./scripts/manage.sh blender-install
+./scripts/manage.sh occupancy enter blender-desk
+./scripts/manage.sh blender -- --background
+# or: ./scripts/utilities/blender.sh -- /path/to/scene.blend
+./scripts/manage.sh export-guides --film go-see --shot 12 --blend /path/to/shot.blend
+./scripts/manage.sh blender-stills --film go-see --plate mug --blend /path/to/prop.blend --size 1024x1024
+# hammer: ./scripts/manage.sh occupancy idle
+```
+
+`occupancy enter blender-desk` parks Comfy. It does **not** install Blender. If no host binary is found (`PATH`, `BLENDER_BIN`, or `~/.local/bin/blender`), dumps print an install hint and exit 1:
+
+```bash
+./scripts/manage.sh blender-install
+# or: sudo apt-get install -y blender
+```
+
+Never apt/pip inside the Comfy container or `docker/Dockerfile`. Ubuntu aarch64 universe `blender` (4.0.x) is enough for Workbench. Official blender.org Linux tarballs are x64 only. Community GB10 CUDA builds are Path A Cycles **after** `occupancy idle` only. No DCC → `house-views --seed-inputs` or **stills/dream-house**.
+
+Exit **2** means Compose is a heavy job (not parked, or the queue is busy):
+
+```bash
+./scripts/manage.sh occupancy enter blender-desk
+./scripts/manage.sh blender
+```
+
+## What this is not
+
+- Not a Compose profile (unlike optional [studio-ui](shorts.md))
+- Not inside the Comfy container
+- Not a reason to weaken `mem_limit: 90g` or headroom `min_host_free_gib: 28`
+
+Guide packs (clay / depth / canny / first+last): [DCC guide pack](dcc-workflows.md) (`manage.sh export-guides`). Creator stills: [Blender creator suite](learn/blender-creator.md) (`manage.sh blender-stills`). Instagram 4:5 greybox stills: [Dream-house tours](learn/dream-house.md) (`manage.sh house-views`). TRELLIS.2 / DA3-BASE weights: [Studio sidecars](studio-sidecars.md). Splat viewer: [Splat sidecar](splat-sidecar.md).

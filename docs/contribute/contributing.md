@@ -15,7 +15,7 @@ tags: [contributing, pr, tdd, docs]
 
 **What this enables**
 
-- **Opening** a PR into `development` without copying the root file into MkDocs
+- **Opening** a PR into `development` without copying the root file into the docs site
 - **Finding** style and test gates from the published docs
 - **Keeping** MiniMax graphs out of `_lab`, and Klein 9B / FLUX.2-dev off authored lab UNET pins
 
@@ -72,7 +72,7 @@ Commit titles: `feat`, `fix`, `docs`, `test`, `chore`, `ci`, `refactor`.
 - [ ] Tests updated in the same commits as the code they exercise
 - [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% first-party Python + Pyright + mypy)
 - [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
-- [ ] `bazelisk run //docs:docs` (mkdocs strict)
+- [ ] `bazelisk run //docs:docs` (Fumadocs static export)
 - [ ] Safety impact called out if Docker/resources/download-limit changed
 - [ ] Docs updated for operator-facing changes
 - [ ] **AI-drafted docs still received a human pass**
@@ -87,6 +87,6 @@ Do not weaken `restart: "no"`, heavy confirm on `start`, headroom, or download-l
 | --- | --- |
 | Shell / Docker / docs chrome | [Project conventions](../project-conventions.md) |
 | Page template / ezcmd | [Docs style](docs-style.md) |
-| Make targets / mike | [Testing docs](testing-docs.md) |
+| Make targets / Pages aliases | [Testing docs](testing-docs.md) |
 | Vulnerability reporting | [Security](security.md) |
 | Agent workflow | [AGENTS.md on GitHub](https://github.com/toxicoder/ez-comfy-stack/blob/__DOCS_GIT_REF__/AGENTS.md) |

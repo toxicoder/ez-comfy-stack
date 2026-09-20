@@ -1,6 +1,6 @@
 ---
-title: creator/stills/spotify-playlist
-description: Spotify playlist cover 1:1
+title: "creator/stills/spotify-playlist"
+description: "Spotify playlist cover 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

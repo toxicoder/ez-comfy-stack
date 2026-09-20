@@ -1,6 +1,6 @@
 ---
-title: films/last-lane/act-01
-description: One-click night two-lane · Gravel cone: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film sh
+title: "films/last-lane/act-01"
+description: "One-click night two-lane · Gravel cone: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film sh"
 tags: [workflows, generated, comfyui, films]
 ---
 

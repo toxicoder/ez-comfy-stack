@@ -49,6 +49,8 @@ def _iter_production_py() -> list[Path]:
         for path in root.rglob("*.py"):
             if any(part in SKIP_PARTS for part in path.parts):
                 continue
+            if path.name.startswith("test_"):
+                continue
             files.append(path)
     return sorted(files)
 

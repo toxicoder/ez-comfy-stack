@@ -1,6 +1,6 @@
 ---
-title: stills/storyboard-6up
-description: Klein 4B six-frame storyboard pack, new cameras
+title: "stills/storyboard-6up"
+description: "Klein 4B six-frame storyboard pack, new cameras"
 tags: [workflows, generated, comfyui, stills]
 ---
 

@@ -56,6 +56,7 @@ sh_test(
     timeout = "long",
     srcs = ["run_pytest.sh"],
     data = [
+        ".coveragerc",
         "repo_root.sh",
         "//scripts:doc_sources",
     ],

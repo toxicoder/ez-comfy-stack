@@ -1,6 +1,6 @@
 ---
-title: stills/still-draft
-description: Klein 4B draft still, 768x432, 4 steps, batch 2
+title: "stills/still-draft"
+description: "Klein 4B draft still, 768x432, 4 steps, batch 2"
 tags: [workflows, generated, comfyui, stills]
 ---
 

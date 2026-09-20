@@ -1,6 +1,6 @@
 ---
-title: audio/albums/nill-bye/thirty-four-counts
-description: Album graphs under audio/albums/nill-bye/thirty-four-counts (tracks, cover, album pack).
+title: "audio/albums/nill-bye/thirty-four-counts"
+description: "Album graphs under audio/albums/nill-bye/thirty-four-counts (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

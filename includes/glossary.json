@@ -1436,7 +1436,7 @@
     "aliases": ["Your Spark"],
     "category": "Studio",
     "short": "Docs panel that stores SPARK_HOST and friends in this browser for copy buttons.",
-    "long": "Injected into the article, not the Material header. Click a highlighted chip in any copyable command to edit the same keys. Defaults match `.env.example`. See [Getting Started](getting-started.md).",
+    "long": "Injected into the article, not the site header. Click a highlighted chip in any copyable command to edit the same keys. Defaults match `.env.example`. See [Getting Started](getting-started.md).",
     "see_also": ["ezcmd", "env-file", "manage-sh"]
   },
   {

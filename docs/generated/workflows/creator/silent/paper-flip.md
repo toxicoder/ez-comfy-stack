@@ -1,6 +1,6 @@
 ---
-title: creator/silent/paper-flip
-description: Silent page / carousel flip ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan
+title: "creator/silent/paper-flip"
+description: "Silent page / carousel flip ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhan"
 tags: [workflows, generated, comfyui, creator]
 ---
 

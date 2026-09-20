@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-chapter-card
-description: YouTube chapter plate 16:9
+title: "creator/stills/youtube-chapter-card"
+description: "YouTube chapter plate 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

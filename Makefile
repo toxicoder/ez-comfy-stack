@@ -122,16 +122,13 @@ validate:
 	  exit 1; \
 	fi
 
-# @target docs — generate CLI + workflow references, then strict MkDocs Material build
+# @target docs — generate CLI + workflow references, then Fumadocs static export
 docs:
 	@if [ -n "$(BAZEL)" ]; then \
 	  echo "→ Bazel primary: bazelisk run //docs:docs"; \
 	  $(BAZEL) run //docs:docs; \
 	else \
-	  python3 docs/generate_shell_docs.py; \
-	  python3 docs/generate_workflow_docs.py; \
-	  NO_MKDOCS_2_WARNING=1 python3 -m mkdocs build --strict; \
-	  touch site/.nojekyll; \
+	  bash docs/manage-docs.sh build; \
 	fi
 
 # @target doctor — host preflight without starting the stack
@@ -144,5 +141,6 @@ doctor:
 
 # @target clean — remove local build/test artifacts (not models or git state)
 clean:
-	rm -rf site coverage .coverage htmlcov .pytest_cache .mypy_cache
+	rm -rf site coverage .coverage htmlcov .pytest_cache .mypy_cache \
+	  docs-site/.next docs-site/out docs-site/.source
 	@if [ -n "$(BAZEL)" ]; then $(BAZEL) clean --expunge || true; fi

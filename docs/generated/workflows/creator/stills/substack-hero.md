@@ -1,6 +1,6 @@
 ---
-title: creator/stills/substack-hero
-description: Substack / blog hero ~1.91:1
+title: "creator/stills/substack-hero"
+description: "Substack / blog hero ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

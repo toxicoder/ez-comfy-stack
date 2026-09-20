@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from _docs_paths import docs_file
 from _lab_paths import lab_json
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -45,7 +46,7 @@ def test_sidecar_docs_exist() -> None:
         "splat-sidecar.md",
         "dcc-workflows.md",
     ):
-        path = ROOT / "docs" / name
+        path = docs_file(ROOT / "docs" / name)
         text = path.read_text(encoding="utf-8")
         assert "What's on this page" in text
         assert "What this enables" in text

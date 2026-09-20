@@ -1,6 +1,6 @@
 ---
-title: creator/av/product-unbox-av
-description: Unbox AV with paper SFX ~5 s
+title: "creator/av/product-unbox-av"
+description: "Unbox AV with paper SFX ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

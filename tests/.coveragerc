@@ -1,0 +1,4 @@
+# Coverage config for tests/run_pytest.sh (100% fail-under on first-party Python).
+[run]
+omit =
+    docs/test_*.py

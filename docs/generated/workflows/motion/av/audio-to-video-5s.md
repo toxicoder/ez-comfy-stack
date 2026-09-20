@@ -1,6 +1,6 @@
 ---
-title: motion/av/audio-to-video-5s
-description: LTX-2.5 A2V freeze: encode bed, mux original waveform Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded a
+title: "motion/av/audio-to-video-5s"
+description: "LTX-2.5 A2V freeze: encode bed, mux original waveform Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded a"
 tags: [workflows, generated, comfyui, motion]
 ---
 

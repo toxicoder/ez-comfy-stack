@@ -1,6 +1,6 @@
 ---
-title: audio/albums/drive-through/hour-1
-description: Album graphs under audio/albums/drive-through/hour-1 (tracks, cover, album pack).
+title: "audio/albums/drive-through/hour-1"
+description: "Album graphs under audio/albums/drive-through/hour-1 (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

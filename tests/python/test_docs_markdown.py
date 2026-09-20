@@ -27,9 +27,13 @@ def _doc_paths() -> list[Path]:
     """Return authored docs pages plus CONTRIBUTING.md.
 
     Returns:
-        Sorted markdown paths under docs/ and the repo-root contributing file.
+        Sorted markdown/MDX paths under docs/ and the repo-root contributing file.
     """
-    pages = sorted(DOCS.rglob("*.md"))
+    pages = sorted(
+        path
+        for path in list(DOCS.rglob("*.md")) + list(DOCS.rglob("*.mdx"))
+        if "generated" not in path.parts and path.name != "workflow-nodes.mdx" and path.name != "workflow-nodes.md"
+    )
     pages.append(CONTRIBUTING)
     return pages
 
@@ -146,8 +150,10 @@ def test_docs_markdown_spacing() -> None:
 
 def test_conventions_document_markdown_spacing() -> None:
     """Style pages name the spacing contract so later edits keep it."""
-    text = CONVENTIONS.read_text(encoding="utf-8")
-    style = DOCS_STYLE.read_text(encoding="utf-8")
+    conventions = CONVENTIONS if CONVENTIONS.is_file() else CONVENTIONS.with_suffix(".mdx")
+    style_path = DOCS_STYLE if DOCS_STYLE.is_file() else DOCS_STYLE.with_suffix(".mdx")
+    text = conventions.read_text(encoding="utf-8")
+    style = style_path.read_text(encoding="utf-8")
     assert "trailing whitespace" in text.lower()
     assert "blank line" in text.lower()
     assert "trailing whitespace" in style.lower() or "spacing" in style.lower()

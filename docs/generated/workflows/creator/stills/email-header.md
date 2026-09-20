@@ -1,6 +1,6 @@
 ---
-title: creator/stills/email-header
-description: Newsletter / email header ~1.91:1
+title: "creator/stills/email-header"
+description: "Newsletter / email header ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: dcc/clay-plates
-description: Klein 4B edit of one clay still into four creator plates. Enhance on. Seed 42.
+title: "dcc/clay-plates"
+description: "Klein 4B edit of one clay still into four creator plates. Enhance on. Seed 42."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

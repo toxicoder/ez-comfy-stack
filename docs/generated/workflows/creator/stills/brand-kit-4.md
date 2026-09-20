@@ -1,6 +1,6 @@
 ---
-title: creator/stills/brand-kit-4
-description: Four brand plates, same camera, different lights
+title: "creator/stills/brand-kit-4"
+description: "Four brand plates, same camera, different lights"
 tags: [workflows, generated, comfyui, creator]
 ---
 

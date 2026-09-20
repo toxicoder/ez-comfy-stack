@@ -1,6 +1,6 @@
 ---
-title: stills/identity-sheet
-description: Klein 4B three-angle identity sheet 1280x704
+title: "stills/identity-sheet"
+description: "Klein 4B three-angle identity sheet 1280x704"
 tags: [workflows, generated, comfyui, stills]
 ---
 

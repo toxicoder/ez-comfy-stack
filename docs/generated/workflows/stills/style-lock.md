@@ -1,6 +1,6 @@
 ---
-title: stills/style-lock
-description: Klein 4B four-still place views, locked identity
+title: "stills/style-lock"
+description: "Klein 4B four-still place views, locked identity"
 tags: [workflows, generated, comfyui, stills]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/silent/zoom-punch
-description: Silent 9:16 hook zoom punch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on
+title: "creator/silent/zoom-punch"
+description: "Silent 9:16 hook zoom punch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on"
 tags: [workflows, generated, comfyui, creator]
 ---
 

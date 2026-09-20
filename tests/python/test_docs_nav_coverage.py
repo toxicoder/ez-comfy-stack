@@ -1,6 +1,6 @@
-"""Every public docs page is listed in mkdocs.yml nav.
+"""Every public docs page is listed in docs-site/lib/nav.json.
 
-Hermetic: stdlib. No MkDocs build.
+Hermetic: stdlib. No Next build.
 """
 
 from __future__ import annotations
@@ -9,7 +9,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-MKDOCS = ROOT / "mkdocs.yml"
+NAV_JSON = ROOT / "docs-site" / "lib" / "nav.json"
 DOCS = ROOT / "docs"
 WORKFLOW_MANIFEST = DOCS / "generated" / "workflows" / "manifest.json"
 CINEMA_MANIFEST = DOCS / "generated" / "cinema" / "manifest.json"
@@ -20,31 +20,32 @@ SKIP_SUFFIXES = {".py", ".js", ".css"}
 SKIP_NAMES = {"requirements.txt"}
 
 
-def _nav_targets(nav_text: str) -> set[str]:
-    """Collect ``path.md`` entries from the MkDocs nav block.
+def _nav_targets_from_json(payload: object) -> set[str]:
+    """Collect page paths from nested nav.json nodes.
 
     Args:
-        nav_text: mkdocs.yml contents.
+        payload: Parsed nav.json (list of tabs).
 
     Returns:
-        Relative paths as written in nav (posix).
+        Relative paths as written in nav (posix), including ``.mdx``.
     """
     targets: set[str] = set()
-    in_nav = False
-    for line in nav_text.splitlines():
-        if line.startswith("nav:"):
-            in_nav = True
-            continue
-        if in_nav and line and not line.startswith((" ", "\t", "-")):
-            break
-        if not in_nav:
-            continue
-        if ".md" not in line:
-            continue
-        _, _, rest = line.partition(":")
-        path = rest.strip()
-        if path.endswith(".md"):
+
+    def walk(nodes: object) -> None:
+        if isinstance(nodes, list):
+            for node in nodes:
+                walk(node)
+            return
+        if not isinstance(nodes, dict):
+            return
+        path = nodes.get("path")
+        if isinstance(path, str) and path.endswith((".md", ".mdx")):
             targets.add(path)
+        pages = nodes.get("pages")
+        if isinstance(pages, list):
+            walk(pages)
+
+    walk(payload)
     return targets
 
 
@@ -113,31 +114,31 @@ def test_mkdocs_nav_lists_every_docs_markdown_page() -> None:
     ``docs/generated/audio/manifest.json``. Cinema technique clip pages are
     linked from axis tables and stay off nav.
     """
-    nav = MKDOCS.read_text(encoding="utf-8")
+    nav = json.loads(NAV_JSON.read_text(encoding="utf-8"))
     listed = (
-        _nav_targets(nav)
+        {p.replace(".mdx", ".md") for p in _nav_targets_from_json(nav)}
         | _workflow_manifest_paths()
         | _cinema_manifest_paths()
         | _audio_manifest_paths()
     )
     pages = sorted(
-        p.relative_to(DOCS).as_posix()
-        for p in DOCS.rglob("*.md")
+        p.relative_to(DOCS).as_posix().replace(".mdx", ".md")
+        for p in list(DOCS.rglob("*.md")) + list(DOCS.rglob("*.mdx"))
         if p.name not in SKIP_NAMES
         # Technique clip pages live under generated/cinema/<axis>/<id>.md
-        # and are linked from axis tables, not MkDocs nav.
+        # and are linked from axis tables, not the sidebar.
         and not (p.parent.parent.name == "cinema" and p.parent.name != "cinema")
     )
     missing = [p for p in pages if p not in listed]
     extra = sorted(listed - set(pages))
-    assert missing == [], "docs pages missing from mkdocs.yml nav:\n" + "\n".join(missing)
+    assert missing == [], "docs pages missing from nav.json:\n" + "\n".join(missing)
     assert extra == [], "nav entries with no markdown file:\n" + "\n".join(extra)
 
 
 def test_nav_includes_planned_homes() -> None:
     """Coverage homes from the docs enhancement plan are in nav."""
-    nav = MKDOCS.read_text(encoding="utf-8")
-    listed = _nav_targets(nav)
+    nav = json.loads(NAV_JSON.read_text(encoding="utf-8"))
+    listed = {p.replace(".mdx", ".md") for p in _nav_targets_from_json(nav)}
     required = (
         "learn/architecture.md",
         "start/faq.md",

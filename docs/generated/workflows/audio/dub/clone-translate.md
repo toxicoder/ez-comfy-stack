@@ -1,6 +1,6 @@
 ---
-title: audio/dub/clone-translate
-description: US-safe multi-speaker dub: rights-gated ingest, diarize, translate, Chatterbox ML V3 clone, duration-locked YouTube track Prompt enhance is **off** so authore
+title: "audio/dub/clone-translate"
+description: "US-safe multi-speaker dub: rights-gated ingest, diarize, translate, Chatterbox ML V3 clone, duration-locked YouTube track Prompt enhance is **off** so authore"
 tags: [workflows, generated, comfyui, audio]
 ---
 
