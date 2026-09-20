@@ -1554,6 +1554,7 @@ def test_enhance_context_ignored_when_off_included_when_on() -> None:
 
 def test_node_mappings_modes_preview_and_style() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
+        "EZImageDescribe",
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",

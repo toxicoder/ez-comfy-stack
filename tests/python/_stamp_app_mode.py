@@ -267,6 +267,8 @@ WIDGET_ORDER = (
     "sources",
     "prompt",
     "format",
+    "upscale",
+    "enable",
     "category",
     "duration",
     "fetch_links",
@@ -366,6 +368,8 @@ GENERIC_LABELS = {
     "quality": "Quality",
     "sample": "Sample prompt",
     "prompt": "Prompt",
+    "upscale": "Upscale",
+    "enable": "Describe image",
     "template": "Template",
     "as_app": "As app",
     "overwrite": "Overwrite",
@@ -487,6 +491,14 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "style": "Optional look. Hidden on I2V — the start image owns look.",
     "enhance": (
         "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is."
+    ),
+    "upscale": (
+        "none passes the still through. 2x and 4x are lanczos. "
+        "4K fits the still in a 3840×2160 box (portrait 2160×3840)."
+    ),
+    "enable": (
+        "On: caption the source still so Rewrite prompt can name inventory. "
+        "Off (default) skips the describe GGUF. Needs download-llm --tier describe."
     ),
     "look": (
         "Optional Cinema Rack starter spliced into Rewrite prompt context. "
@@ -624,6 +636,10 @@ def display_label(
             "height": "Height",
             "batch_size": "Batch",
         }.get(name, generic)
+    if ntype == "EZImageUpscale" and name == "upscale":
+        return "Upscale"
+    if ntype == "EZImageDescribe" and name == "enable":
+        return "Describe image"
     if ntype == "EZImageMode":
         return {
             "category": "Mode category",
@@ -998,6 +1014,7 @@ def _spec(
     hide_images: bool = False,
     ace_instrumental_score: bool = False,
     expose_look: bool = False,
+    hide_style: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -1018,6 +1035,7 @@ def _spec(
         "hide_images": hide_images,
         "ace_instrumental_score": ace_instrumental_score,
         "expose_look": expose_look,
+        "hide_style": hide_style,
     }
 
 
@@ -1155,6 +1173,14 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
         "produce",
         "klein",
         "motion/silent/still-to-video-5s",
+    ),
+    "stills/background-swap": _spec(
+        "produce",
+        "klein",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-12s",
+        "stills/text-swap",
+        hide_style=True,
     ),
     "stills/product-packshot": _spec("produce", "klein", "motion/av/product-hero"),
     "stills/instagram-square": _spec("produce", "klein"),
@@ -1732,7 +1758,9 @@ def _collect_raw_inputs(
                 continue
             saw_primary_enhance = True
             mode = _enhance_mode(node)
-            skip_style = (not spec.get("forge_widgets")) and mode in STYLE_IGNORED_MODES
+            skip_style = (not spec.get("forge_widgets")) and (
+                mode in STYLE_IGNORED_MODES or spec.get("hide_style")
+            )
             if not hide_sample:
                 raw.append((nid, "sample", node))
             raw.append((nid, "prompt", node))
@@ -1741,6 +1769,11 @@ def _collect_raw_inputs(
             raw.append((nid, "enhance", node))
             if ntype in ("EZLTXPromptEnhance", "EZDreamXPromptEnhance"):
                 raw.append((nid, "audio_notes", node))
+        elif ntype == "EZImageUpscale":
+            if not _input_linked(node, "upscale"):
+                raw.append((nid, "upscale", node))
+        elif ntype == "EZImageDescribe":
+            raw.append((nid, "enable", node))
         elif ntype == "EZImageFormat":
             raw.append((nid, "format", node))
             if spec.get("expose_look"):

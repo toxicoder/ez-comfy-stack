@@ -131,6 +131,16 @@ flowchart TB
 | 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
 | 61 | Quality | `EZQuality` | Ungrouped |
 | 62 | Format / platform | `EZImageFormat` | Ungrouped |
+| 63 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
+| 64 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
+| 65 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
+| 66 | Upscale still | `EZImageUpscale` | SHOT 04 kitchen |
+| 67 | Upscale still | `EZImageUpscale` | SHOT 05 dining |
+| 68 | Upscale still | `EZImageUpscale` | SHOT 06 bedroom |
+| 69 | Upscale still | `EZImageUpscale` | SHOT 07 bath |
+| 70 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
+| 71 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
+| 72 | Upscale still | `EZImageUpscale` | SHOT 10 study |
 
 ## Node parameter reference
 
@@ -293,6 +303,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -1170,3 +1181,36 @@ How many stills in one Run.
 **How it affects generation:** Large canvases stay at 1.
 
 **This graph:** `1`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph (all 10 instances):** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |

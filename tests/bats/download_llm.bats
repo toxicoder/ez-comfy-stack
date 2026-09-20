@@ -24,36 +24,40 @@ teardown() {
   [ "${status}" -eq 0 ]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"tiers"* ]]
-  [[ "${output}" == *"Qwen3-4B-Instruct-2507"* ]]
+  [[ ${output} == *"tiers"* ]]
+  [[ ${output} == *"Qwen3-4B-Instruct-2507"* ]]
   run bash "${DL}" status --nope
   [ "${status}" -ne 0 ]
 }
 
 @test "download-llm helpers repo filename dir ready" {
   run llm_repo
-  [[ "${output}" == "unsloth/Qwen3-4B-Instruct-2507-GGUF" ]]
+  [[ ${output} == "unsloth/Qwen3-4B-Instruct-2507-GGUF" ]]
   run llm_filename
-  [[ "${output}" == "Qwen3-4B-Instruct-2507-Q4_K_M.gguf" ]]
+  [[ ${output} == "Qwen3-4B-Instruct-2507-Q4_K_M.gguf" ]]
   run llm_min_gb
   [ "${output}" = "3" ]
   run llm_include_pattern
-  [[ "${output}" == *"Q4_K_M.gguf"* ]]
+  [[ ${output} == *"Q4_K_M.gguf"* ]]
   run llm_dir
-  [[ "${output}" == *"_llm" ]]
+  [[ ${output} == *"_llm" ]]
   run llm_size_gb "${MODELS_DIR}/nope"
   [ "${output}" = "0" ]
   run llm_files_ready
   [ "${status}" -ne 0 ]
   run llm35_repo
-  [[ "${output}" == "unsloth/Qwen3.6-35B-A3B-MTP-GGUF" ]]
+  [[ ${output} == "unsloth/Qwen3.6-35B-A3B-MTP-GGUF" ]]
   run llm35_include_pattern
-  [[ "${output}" == *"UD-Q4_K_XL.gguf"* ]]
+  [[ ${output} == *"UD-Q4_K_XL.gguf"* ]]
   run llm35_files_ready
   [ "${status}" -ne 0 ]
   run type cleanup_one_dir
   [ "${status}" -eq 0 ]
+  run type cleanup_describe_dir
+  [ "${status}" -eq 0 ]
   run type link_llm35_into_comfy
+  [ "${status}" -eq 0 ]
+  run type link_llm_describe_into_comfy
   [ "${status}" -eq 0 ]
   run type run_one_tier
   [ "${status}" -eq 0 ]
@@ -111,8 +115,8 @@ teardown() {
   run cmd_link
   chmod u+w "${lldir}"
   [ "${status}" -eq 0 ]
-  [[ "${output}" != *"failed to link"* ]]
-  [[ "${output}" != *"Permission denied"* ]]
+  [[ ${output} != *"failed to link"* ]]
+  [[ ${output} != *"Permission denied"* ]]
 }
 
 @test "download-llm cleanup keeps gguf" {
@@ -132,26 +136,26 @@ teardown() {
 @test "download-llm --tier enhance or default reports 4B not 35B" {
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Qwen3-4B-Instruct-2507"* ]]
-  [[ "${output}" != *"Qwen3.6-35B-A3B"* ]]
+  [[ ${output} == *"Qwen3-4B-Instruct-2507"* ]]
+  [[ ${output} != *"Qwen3.6-35B-A3B"* ]]
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier enhance --json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Qwen3-4B-Instruct-2507"* ]]
-  [[ "${output}" == *"enhance"* ]]
+  [[ ${output} == *"Qwen3-4B-Instruct-2507"* ]]
+  [[ ${output} == *"enhance"* ]]
 }
 
 @test "download-llm --tier qwen36-35b-a3b status missing ready false" {
   run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier qwen36-35b-a3b --json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"unsloth/Qwen3.6-35B-A3B-MTP-GGUF"* ]]
-  [[ "${output}" == *"Qwen3.6-35B-A3B"* ]]
-  [[ "${output}" == *'"ready":false'* || "${output}" == *'"ready": false'* ]]
+  [[ ${output} == *"unsloth/Qwen3.6-35B-A3B-MTP-GGUF"* ]]
+  [[ ${output} == *"Qwen3.6-35B-A3B"* ]]
+  [[ ${output} == *'"ready":false'* || ${output} == *'"ready": false'* ]]
   run llm35_filename
-  [[ "${output}" == "Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf" ]]
+  [[ ${output} == "Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf" ]]
   run llm35_min_gb
   [ "${output}" = "23" ]
   run llm35_dir
-  [[ "${output}" == *"unsloth__Qwen3.6-35B-A3B-MTP-GGUF_llm-35b" ]]
+  [[ ${output} == *"unsloth__Qwen3.6-35B-A3B-MTP-GGUF_llm-35b" ]]
 }
 
 @test "download-llm unknown and banned tiers exit 1" {
@@ -159,7 +163,7 @@ teardown() {
   [ "${status}" -eq 1 ]
   run bash "${DL}" run --tier h3
   [ "${status}" -eq 1 ]
-  [[ "${output}" == *"Banned"* ]]
+  [[ ${output} == *"Banned"* ]]
   run bash "${DL}" --tier 120b
   [ "${status}" -eq 1 ]
   run bash "${DL}" --tier flash-next
@@ -195,6 +199,50 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ ! -f ${extra} ]]
   [[ -f ${tdir}/$(llm35_filename) ]]
+}
+
+@test "download-llm describe helpers repo filename dir ready" {
+  run llm_describe_repo
+  [[ ${output} == "ggml-org/Qwen2.5-VL-3B-Instruct-GGUF" ]]
+  run llm_describe_filename
+  [[ ${output} == "Qwen2.5-VL-3B-Instruct-Q4_K_M.gguf" ]]
+  run llm_describe_mmproj
+  [[ ${output} == "mmproj-Qwen2.5-VL-3B-Instruct-Q8_0.gguf" ]]
+  run llm_describe_min_gb
+  [ "${output}" = "4" ]
+  run llm_describe_dir
+  [[ ${output} == *"ggml-org__Qwen2.5-VL-3B-Instruct-GGUF_llm-describe" ]]
+  run llm_describe_files_ready
+  [ "${status}" -ne 0 ]
+}
+
+@test "download-llm --tier describe status missing ready false" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" status --tier describe --json"
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"Qwen2.5-VL-3B-Instruct"* ]]
+  [[ ${output} == *'"ready":false'* || ${output} == *'"ready": false'* ]]
+}
+
+@test "download-llm mock run --tier describe links gguf and mmproj" {
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" LAB_MOCK_HF_DOWNLOAD=1 bash \"${DL}\" run --tier describe"
+  [ "${status}" -eq 0 ]
+  [[ -L "${MODELS_DIR}/comfy/llm/$(llm_describe_filename)" ]]
+  [[ -L "${MODELS_DIR}/comfy/llm/$(llm_describe_mmproj)" ]]
+}
+
+@test "download-llm cleanup --tier describe keeps gguf and mmproj" {
+  local tdir extra
+  tdir="$(llm_describe_dir)"
+  mkdir -p "${tdir}"
+  echo keep >"${tdir}/$(llm_describe_filename)"
+  echo keep >"${tdir}/$(llm_describe_mmproj)"
+  extra="${tdir}/junk.gguf"
+  echo waste >"${extra}"
+  run bash -c "MODELS_DIR=\"${MODELS_DIR}\" bash \"${DL}\" cleanup --tier describe --yes"
+  [ "${status}" -eq 0 ]
+  [[ ! -f ${extra} ]]
+  [[ -f ${tdir}/$(llm_describe_filename) ]]
+  [[ -f ${tdir}/$(llm_describe_mmproj) ]]
 }
 
 @test "download-llm run with no tier does not pull 35B" {

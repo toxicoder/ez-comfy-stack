@@ -75,6 +75,10 @@ KLEIN_GENERIC = frozenset(
         "stills/dream-house",
         "stills/style-lock",
         "stills/camera-angles",
+        "stills/lighting-trio",
+        "stills/color-moods",
+        "stills/time-of-day",
+        "stills/before-after",
     }
 )
 VIDEO_GENERIC = frozenset(
@@ -100,6 +104,10 @@ VIDEO_GENERIC = frozenset(
         "motion/av/dialogue-12s",
         "motion/av/multishot-12s",
         "motion/av/product-hero",
+        "motion/av/first-last-12s",
+        "motion/silent/first-last-5s",
+        "motion/av/audio-to-video-12s",
+        "stills/talking-head",
     }
 )
 STILL_REL_FORMAT = {
@@ -643,8 +651,13 @@ def dump_wired_graph(path: Path, graph: dict[str, Any]) -> None:
         graph: Graph dict.
     """
     rel = path.relative_to(LAB_ROOT).with_suffix("").as_posix()
-    wire_lab_graph(graph)
+    from _wire_image_describe import wire_image_describe
+    from _wire_upscale import wire_upscale
+
     apply_lab_identity(graph, rel)
+    wire_lab_graph(graph)
+    wire_upscale(graph, rel)
+    wire_image_describe(graph)
     stamp_suite_graph(graph)
     finalize_layout(graph)
     path.parent.mkdir(parents=True, exist_ok=True)

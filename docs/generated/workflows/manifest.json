@@ -1081,6 +1081,12 @@
       "kind": "graph"
     },
     {
+      "id": "stills/background-swap",
+      "path": "generated/workflows/stills/background-swap.md",
+      "lane": "stills",
+      "kind": "graph"
+    },
+    {
       "id": "stills/banner-wide",
       "path": "generated/workflows/stills/banner-wide.md",
       "lane": "stills",
@@ -1357,6 +1363,6 @@
       "kind": "album"
     }
   ],
-  "graph_count": 459,
-  "page_count": 227
+  "graph_count": 460,
+  "page_count": 228
 }

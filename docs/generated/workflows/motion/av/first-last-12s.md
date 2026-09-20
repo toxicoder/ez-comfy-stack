@@ -29,6 +29,8 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## motion/av/first-last-12s
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -48,67 +50,6 @@ Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
-
-## Graph
-
-```mermaid
-flowchart LR
-  N1["LTX-2.5 distilled INT8-convrot"]
-  N2["LTX-2.5 video VAE"]
-  N3["Gemma4-with-proj (ltxv)"]
-  N4["Positive"]
-  N5["Negative"]
-  N6["Empty LTX latent 1280x704"]
-  N7["LTXVConditioning"]
-  N8["KSampler"]
-  N9["VAEDecode"]
-  N10["Save frames (secondary)"]
-  N11["LTX-2.5 audio VAE"]
-  N12["Empty LTX audio latent"]
-  N13["Concat AV latents"]
-  N14["Separate AV latents"]
-  N15["Operator note — video output"]
-  N16["Save video (MP4) — open node for preview"]
-  N17["LTX Prompt Enhance"]
-  N18["Audio VAE Decode"]
-  N19["Negative Prompt Enhance"]
-  N20["First frame"]
-  N21["Last frame"]
-  N22["Guide first frame"]
-  N23["Guide last frame"]
-  N24["Crop guide frames"]
-  N25["Quality"]
-  N1 --> N8
-  N2 --> N9
-  N2 --> N22
-  N2 --> N23
-  N3 --> N4
-  N3 --> N5
-  N4 --> N22
-  N5 --> N22
-  N6 --> N22
-  N7 --> N8
-  N7 --> N24
-  N8 --> N14
-  N9 --> N10
-  N9 --> N16
-  N11 --> N12
-  N11 --> N18
-  N12 --> N13
-  N13 --> N8
-  N14 --> N24
-  N14 --> N18
-  N17 --> N4
-  N17 --> N19
-  N18 --> N16
-  N19 --> N5
-  N20 --> N22
-  N21 --> N23
-  N22 --> N23
-  N23 --> N7
-  N23 --> N13
-  N24 --> N9
-```
 
 ## Nodes on this graph
 
@@ -139,6 +80,7 @@ flowchart LR
 | 23 | Guide last frame | `LTXVAddGuide` | Ungrouped |
 | 24 | Crop guide frames | `LTXVCropGuides` | Ungrouped |
 | 25 | Quality | `EZQuality` | Ungrouped |
+| 26 | Format / platform | `EZVideoFormat` | Ungrouped |
 
 ## Node parameter reference
 
@@ -649,10 +591,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/first-last-12s LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). After Queue, click **Save video (MP4) — open node for preview** for an inline preview…`
+**This graph:** `## motion/av/first-last-12s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inval…`
 
 ```text
 ## motion/av/first-last-12s
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
@@ -1248,3 +1192,79 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZVideoFormat` — Format / platform (video)
+
+Pick a Wan or LTX clip canvas (aspect or named platform).
+
+!!! warning "Lab notes"
+
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
+| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
+
+#### `family`
+
+Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
+
+Which VAE grid to use.
+
+**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+
+**This graph:** `LTX-2.5`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Wan 5B` | wan VAE grid ÷16. |
+| `LTX-2.5` | ltx VAE grid ÷32. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+
+**This graph:** `LTX · 16:9 YouTube (1280×704)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
+| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
+| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
+| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
+| `Wan · 1:1 square (768×768)` | 768×768. wan. |
+| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
+| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
+| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
+| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+
+#### `width`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+
+**This graph:** `1280`
+
+#### `height`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `704`

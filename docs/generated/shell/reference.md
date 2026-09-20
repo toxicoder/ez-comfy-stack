@@ -1211,13 +1211,14 @@ Purpose:
   Selective Hugging Face pull. Apache 2.0. File-level include — not the
   full Unsloth GGUF tree. Default enhance pack is part of download-models.
   Opt-in qwen36-35b-a3b is occupancy llm-desk only (not download-models).
+  Opt-in describe is Qwen2.5-VL-3B + mmproj for EZImageDescribe.
 
 Audience:
   Operators on the Spark host. Prefer manage.sh download-llm / download-models.
 
 ```bash
 Usage:
-  ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|all] [--json]
+  ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 
 ```
 

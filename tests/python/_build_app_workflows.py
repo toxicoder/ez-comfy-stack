@@ -30,7 +30,9 @@ from _lab_theme import (
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
 from _wire_format import wire_lab_graph
+from _wire_image_describe import wire_image_describe
 from _wire_prompt_enhance import append_note
+from _wire_upscale import wire_upscale
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -173,8 +175,20 @@ Klein 4B **lettering swap**. Load a still that already has type. Type the new le
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
+Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
+
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
+"""
+
+BACKGROUND_SWAP_NOTE = """## stills/background-swap
+
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+
+Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
+
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns look.
 """
 
 PACK_NOTE = """## stills/platform-pack
@@ -249,10 +263,13 @@ def _node(graph: dict, ntype: str, title: str | None = None) -> dict:
 
 
 def _dump(path: Path, graph: dict) -> None:
+    rel = lab_rel_of(path)
+    apply_lab_identity(graph, rel)
     wire_lab_graph(graph)
+    wire_upscale(graph, rel)
+    wire_image_describe(graph)
     stamp_suite_graph(graph)
     append_note(graph)
-    apply_lab_identity(graph, lab_rel_of(path))
     finalize_layout(graph)
     path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
 
@@ -1744,8 +1761,19 @@ def _rewire_text_swap_canvas(graph: dict) -> None:
     graph["last_link_id"] = link_match_save
 
 
+def _strip_cloned_canvas_helpers(graph: dict) -> None:
+    """Drop Format / optional-ref nodes cloned from still-hero."""
+    from _wire_prompt_enhance import remove_node
+
+    for ntype in ("EZImageFormat", "EZOptionalImage", "EZKleinRefCanvas"):
+        for node in list(graph.get("nodes") or []):
+            if node.get("type") == ntype:
+                remove_node(graph, int(node["id"]))
+
+
 def build_text_swap() -> dict:
     graph = build_character_tweak()
+    _strip_cloned_canvas_helpers(graph)
     graph["id"] = "stills/text-swap"
     graph["revision"] = 1
     extra = graph.setdefault("extra", {})
@@ -1760,11 +1788,13 @@ def build_text_swap() -> dict:
         ntype = node.get("type")
         if ntype == "EZKleinPromptEnhance":
             node["widgets_values"] = [
+                "custom",
                 TEXT_SWAP,
                 True,
                 "text_swap",
                 "match the source still",
                 "none",
+                "stills/text-swap",
             ]
             node["title"] = "Klein Prompt Enhance (text swap)"
         elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
@@ -1795,6 +1825,49 @@ def build_text_swap() -> dict:
     return graph
 
 
+def build_background_swap() -> dict:
+    graph = build_text_swap()
+    graph["id"] = "stills/background-swap"
+    graph["revision"] = 1
+    extra = graph.setdefault("extra", {})
+    extra["lab_profile"] = "stills/background-swap"
+    extra["lab_note"] = BACKGROUND_SWAP_NOTE
+    extra["lab_description"] = (
+        "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. "
+        "Output matches source size. Prefix ez_bg_swap."
+    )
+    default_prompt = (
+        "Keep the subject from the reference. Replace only the background with a fog "
+        "harbor pier at blue hour. Match ground contact and wrap light. Original "
+        "characters only. Empty of new lettering."
+    )
+    for node in graph["nodes"]:
+        ntype = node.get("type")
+        if ntype == "EZKleinPromptEnhance":
+            node["widgets_values"] = [
+                "custom",
+                default_prompt,
+                True,
+                "edit",
+                "match the source still",
+                "none",
+                "stills/background-swap",
+            ]
+            node["title"] = "Klein Prompt Enhance (edit)"
+        elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
+            node["widgets_values"] = [default_prompt]
+        elif ntype == "SaveImage":
+            node["widgets_values"] = ["ez_bg_swap"]
+            node["title"] = "Save background swap"
+        elif ntype == "LoadImage":
+            node["widgets_values"] = ["example.png", "image"]
+            node["title"] = "Source still"
+        elif ntype == "Note":
+            node["widgets_values"] = [BACKGROUND_SWAP_NOTE]
+            node["title"] = "Operator note"
+    return graph
+
+
 def main() -> None:
     still = build_still_app()
     studio = build_still_studio()
@@ -1806,6 +1879,7 @@ def main() -> None:
     draft = build_character_draft()
     tweak = build_character_tweak()
     swap = build_text_swap()
+    bg = build_background_swap()
     _dump(lab_json("stills/still-daily.json"), still)
     _dump(lab_dest("stills/still-studio"), studio)
     _dump(lab_dest("stills/image-studio"), image_studio)
@@ -1816,9 +1890,10 @@ def main() -> None:
     _dump(lab_dest("stills/character-draft"), draft)
     _dump(lab_dest("stills/character-tweak"), tweak)
     _dump(lab_dest("stills/text-swap"), swap)
+    _dump(lab_dest("stills/background-swap"), bg)
     print(
         "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
-        "platform-pack, character draft/tweak, text-swap"
+        "platform-pack, character draft/tweak, text-swap, background-swap"
     )
 
 

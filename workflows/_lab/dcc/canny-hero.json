@@ -1,8 +1,8 @@
 {
   "id": "canny-hero",
-  "revision": 7,
-  "last_node_id": 16,
-  "last_link_id": 17,
+  "revision": 8,
+  "last_node_id": 18,
+  "last_link_id": 25,
   "nodes": [
     {
       "id": 1,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        464
+        756
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         940,
-        696
+        988
       ],
       "size": [
         280,
@@ -328,7 +328,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            18
           ],
           "slot_index": 0
         }
@@ -357,7 +357,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 19
         }
       ],
       "outputs": [],
@@ -374,7 +374,7 @@
       "type": "Note",
       "pos": [
         40,
-        874
+        1166
       ],
       "size": [
         960,
@@ -413,14 +413,15 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            11
+            11,
+            25
           ],
           "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -447,7 +448,13 @@
       "flags": {},
       "order": 2,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 21
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -478,7 +485,7 @@
       "type": "VAEEncode",
       "pos": [
         2180,
-        656
+        948
       ],
       "size": [
         240,
@@ -520,7 +527,7 @@
       "type": "ReferenceLatent",
       "pos": [
         948,
-        312
+        604
       ],
       "size": [
         280,
@@ -563,7 +570,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1226
+        1518
       ],
       "size": [
         420,
@@ -618,7 +625,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -629,6 +636,98 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 17,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        540
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 18,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -687,14 +786,6 @@
       8,
       0,
       "LATENT"
-    ],
-    [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
     ],
     [
       10,
@@ -759,6 +850,38 @@
       15,
       0,
       "STRING"
+    ],
+    [
+      18,
+      8,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      17,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      21,
+      18,
+      0,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      11,
+      0,
+      18,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [],
@@ -819,6 +942,22 @@
             "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
+          }
+        ],
+        [
+          17,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          18,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [

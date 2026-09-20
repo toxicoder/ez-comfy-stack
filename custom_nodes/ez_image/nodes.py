@@ -16,6 +16,12 @@ from .formats import (
     look_combo_labels,
     resolve_canvas,
 )
+from .upscale import (
+    DEFAULT_UPSCALE,
+    normalize_upscale,
+    resolve_upscale_hw,
+    upscale_combo_labels,
+)
 from .video_formats import (
     DEFAULT_FAMILY,
     FAMILY_LTX,
@@ -377,11 +383,63 @@ class EZVideoFormat:
         }
 
 
+class EZImageUpscale:
+    """Optional lanczos upscale after a still decode. none is a passthrough."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for the still and upscale combo.
+
+        Returns:
+            Required widget map. ``upscale`` may be linked from another
+            EZImageUpscale so multi-save graphs share one App dropdown.
+        """
+        labels = upscale_combo_labels()
+        return {
+            "required": {
+                "image": ("IMAGE",),
+                "upscale": (labels, {"default": DEFAULT_UPSCALE}),
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("IMAGE", "STRING")
+    RETURN_NAMES = ("image", "upscale")
+    FUNCTION = "run"
+    CATEGORY = CATEGORY
+    DESCRIPTION = (
+        "Optional still upscale after decode. none passes the tensor through. "
+        "2x and 4x are lanczos. 4K fits the still in a 3840×2160 box "
+        "(portrait 2160×3840). No extra weights. Wire upscale into more "
+        "EZImageUpscale nodes so one App dropdown drives every SaveImage."
+    )
+
+    def run(self, image: Any, upscale: object = DEFAULT_UPSCALE) -> tuple[Any, str]:
+        """Resize ``image`` when the combo is not none.
+
+        Args:
+            image: Comfy IMAGE tensor (BHWC).
+            upscale: Combo id (none / 2x / 4x / 4K).
+
+        Returns:
+            Image (possibly unchanged) and the normalized combo id.
+        """
+        kind = normalize_upscale(upscale)
+        height = int(image.shape[1])
+        width = int(image.shape[2])
+        target = resolve_upscale_hw(width, height, kind)
+        if target is None:
+            return (image, kind)
+        out_w, out_h = target
+        return (_resize_bhwc(image, out_h, out_w), kind)
+
+
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZSnapImage": EZSnapImage,
     "EZMatchImageSize": EZMatchImageSize,
     "EZImageFormat": EZImageFormat,
     "EZVideoFormat": EZVideoFormat,
+    "EZImageUpscale": EZImageUpscale,
 }
 """Comfy class-name registry."""
 
@@ -390,5 +448,6 @@ NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZMatchImageSize": "Match image size",
     "EZImageFormat": "Format / platform",
     "EZVideoFormat": "Format / platform (video)",
+    "EZImageUpscale": "Upscale still",
 }
 """Comfy display-name registry."""

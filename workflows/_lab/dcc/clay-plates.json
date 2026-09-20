@@ -1,8 +1,8 @@
 {
   "id": "clay-plates",
-  "revision": 7,
-  "last_node_id": 38,
-  "last_link_id": 55,
+  "revision": 8,
+  "last_node_id": 43,
+  "last_link_id": 72,
   "nodes": [
     {
       "id": 1,
@@ -172,7 +172,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        464
+        756
       ],
       "size": [
         420,
@@ -222,7 +222,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1136,
-        696
+        988
       ],
       "size": [
         280,
@@ -343,7 +343,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            56
           ],
           "slot_index": 0
         }
@@ -372,7 +372,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 57
         }
       ],
       "outputs": [],
@@ -389,7 +389,7 @@
       "type": "Note",
       "pos": [
         40,
-        2240
+        2726
       ],
       "size": [
         960,
@@ -431,14 +431,15 @@
             16,
             18,
             30,
-            42
+            42,
+            72
           ],
           "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -465,7 +466,13 @@
       "flags": {},
       "order": 2,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 68
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -496,7 +503,7 @@
       "type": "VAEEncode",
       "pos": [
         2816,
-        656
+        948
       ],
       "size": [
         240,
@@ -538,7 +545,7 @@
       "type": "ReferenceLatent",
       "pos": [
         948,
-        312
+        604
       ],
       "size": [
         280,
@@ -581,7 +588,7 @@
       "type": "ImageScale",
       "pos": [
         2488,
-        656
+        948
       ],
       "size": [
         280,
@@ -623,7 +630,7 @@
       "type": "ImageScale",
       "pos": [
         520,
-        696
+        988
       ],
       "size": [
         280,
@@ -665,7 +672,7 @@
       "type": "VAEEncode",
       "pos": [
         848,
-        696
+        988
       ],
       "size": [
         240,
@@ -707,7 +714,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1464,
-        696
+        988
       ],
       "size": [
         280,
@@ -750,7 +757,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1792,
-        696
+        988
       ],
       "size": [
         280,
@@ -785,7 +792,7 @@
       "type": "KSampler",
       "pos": [
         2120,
-        696
+        988
       ],
       "size": [
         320,
@@ -845,7 +852,7 @@
       "type": "VAEDecode",
       "pos": [
         2120,
-        1030
+        1322
       ],
       "size": [
         240,
@@ -871,7 +878,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            29
+            58
           ],
           "slot_index": 0
         }
@@ -887,7 +894,7 @@
       "type": "SaveImage",
       "pos": [
         3104,
-        696
+        988
       ],
       "size": [
         280,
@@ -900,7 +907,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 29
+          "link": 59
         }
       ],
       "outputs": [],
@@ -917,7 +924,7 @@
       "type": "ImageScale",
       "pos": [
         520,
-        1176
+        1510
       ],
       "size": [
         280,
@@ -959,7 +966,7 @@
       "type": "VAEEncode",
       "pos": [
         848,
-        1176
+        1510
       ],
       "size": [
         240,
@@ -1001,7 +1008,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1136,
-        1176
+        1510
       ],
       "size": [
         280,
@@ -1044,7 +1051,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1464,
-        1176
+        1510
       ],
       "size": [
         280,
@@ -1079,7 +1086,7 @@
       "type": "KSampler",
       "pos": [
         1792,
-        1176
+        1510
       ],
       "size": [
         320,
@@ -1139,7 +1146,7 @@
       "type": "VAEDecode",
       "pos": [
         2160,
-        1176
+        1510
       ],
       "size": [
         240,
@@ -1165,7 +1172,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            41
+            61
           ],
           "slot_index": 0
         }
@@ -1181,7 +1188,7 @@
       "type": "SaveImage",
       "pos": [
         2448,
-        1176
+        1510
       ],
       "size": [
         280,
@@ -1194,7 +1201,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 41
+          "link": 62
         }
       ],
       "outputs": [],
@@ -1211,7 +1218,7 @@
       "type": "ImageScale",
       "pos": [
         520,
-        1546
+        2032
       ],
       "size": [
         280,
@@ -1253,7 +1260,7 @@
       "type": "VAEEncode",
       "pos": [
         848,
-        1546
+        2032
       ],
       "size": [
         240,
@@ -1295,7 +1302,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1136,
-        1546
+        2032
       ],
       "size": [
         280,
@@ -1338,7 +1345,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         1464,
-        1546
+        2032
       ],
       "size": [
         280,
@@ -1373,7 +1380,7 @@
       "type": "KSampler",
       "pos": [
         1792,
-        1546
+        2032
       ],
       "size": [
         320,
@@ -1433,7 +1440,7 @@
       "type": "VAEDecode",
       "pos": [
         2160,
-        1546
+        2032
       ],
       "size": [
         240,
@@ -1459,7 +1466,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            53
+            64
           ],
           "slot_index": 0
         }
@@ -1475,7 +1482,7 @@
       "type": "SaveImage",
       "pos": [
         2448,
-        1546
+        2032
       ],
       "size": [
         280,
@@ -1488,7 +1495,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 53
+          "link": 65
         }
       ],
       "outputs": [],
@@ -1505,7 +1512,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1748
+        2234
       ],
       "size": [
         420,
@@ -1560,7 +1567,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -1571,6 +1578,261 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 39,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        540
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 56
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            57
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            60,
+            63,
+            66
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 40,
+      "type": "EZImageUpscale",
+      "pos": [
+        3064,
+        1330
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 58
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 60,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            59
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 41,
+      "type": "EZImageUpscale",
+      "pos": [
+        2408,
+        1852
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 61
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 63,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            62
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 42,
+      "type": "EZImageUpscale",
+      "pos": [
+        2408,
+        2374
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 64
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 66,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            65
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 43,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 43,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 72
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            68
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -1629,14 +1891,6 @@
       8,
       0,
       "LATENT"
-    ],
-    [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
     ],
     [
       10,
@@ -1783,14 +2037,6 @@
       "VAE"
     ],
     [
-      29,
-      21,
-      0,
-      22,
-      0,
-      "IMAGE"
-    ],
-    [
       30,
       11,
       0,
@@ -1877,14 +2123,6 @@
       28,
       1,
       "VAE"
-    ],
-    [
-      41,
-      28,
-      0,
-      29,
-      0,
-      "IMAGE"
     ],
     [
       42,
@@ -1975,14 +2213,6 @@
       "VAE"
     ],
     [
-      53,
-      35,
-      0,
-      36,
-      0,
-      "IMAGE"
-    ],
-    [
       54,
       37,
       0,
@@ -1997,6 +2227,110 @@
       37,
       0,
       "STRING"
+    ],
+    [
+      56,
+      8,
+      0,
+      39,
+      0,
+      "IMAGE"
+    ],
+    [
+      57,
+      39,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      58,
+      21,
+      0,
+      40,
+      0,
+      "IMAGE"
+    ],
+    [
+      59,
+      40,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      60,
+      39,
+      1,
+      40,
+      1,
+      "STRING"
+    ],
+    [
+      61,
+      28,
+      0,
+      41,
+      0,
+      "IMAGE"
+    ],
+    [
+      62,
+      41,
+      0,
+      29,
+      0,
+      "IMAGE"
+    ],
+    [
+      63,
+      39,
+      1,
+      41,
+      1,
+      "STRING"
+    ],
+    [
+      64,
+      35,
+      0,
+      42,
+      0,
+      "IMAGE"
+    ],
+    [
+      65,
+      42,
+      0,
+      36,
+      0,
+      "IMAGE"
+    ],
+    [
+      66,
+      39,
+      1,
+      42,
+      1,
+      "STRING"
+    ],
+    [
+      68,
+      43,
+      0,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      72,
+      11,
+      0,
+      43,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -2005,9 +2339,9 @@
       "title": "SHOT packshot",
       "bounding": [
         500,
-        600,
+        892,
         2904,
-        520
+        562
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2018,9 +2352,9 @@
       "title": "SHOT ig",
       "bounding": [
         500,
-        1120,
+        1454,
         2248,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2031,7 +2365,7 @@
       "title": "SHOT shorts",
       "bounding": [
         460,
-        1490,
+        1976,
         2288,
         722
       ],
@@ -2099,6 +2433,22 @@
             "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
+          }
+        ],
+        [
+          39,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          43,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [

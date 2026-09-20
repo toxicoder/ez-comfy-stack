@@ -72,6 +72,8 @@ flowchart LR
   N15["Format / platform"]
   N16["Example / reference (optional)"]
   N17["Optional Klein ref"]
+  N18["Upscale still"]
+  N19["Describe image"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -81,14 +83,17 @@ flowchart LR
   N5 --> N7
   N6 --> N17
   N7 --> N8
-  N8 --> N9
+  N8 --> N18
   N12 --> N4
   N12 --> N13
   N13 --> N5
   N15 --> N6
   N15 --> N12
   N16 --> N17
+  N16 --> N19
   N17 --> N7
+  N18 --> N9
+  N19 --> N12
 ```
 
 ## Nodes on this graph
@@ -112,6 +117,8 @@ flowchart LR
 | 15 | Format / platform | `EZImageFormat` | Ungrouped |
 | 16 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
 | 17 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
+| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 19 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
 
@@ -599,6 +606,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -1161,5 +1169,61 @@ Type `BOOLEAN`. Range / default: false.
 Presence flag when unwired.
 
 **How it affects generation:** Lab graphs wire this from EZOptionalImage. Off = T2I.
+
+**This graph:** `false`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
 **This graph:** `false`

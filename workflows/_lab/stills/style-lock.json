@@ -1,8 +1,8 @@
 {
   "id": "style-lock",
-  "revision": 5,
-  "last_node_id": 35,
-  "last_link_id": 47,
+  "revision": 6,
+  "last_node_id": 39,
+  "last_link_id": 58,
   "nodes": [
     {
       "id": 1,
@@ -46,7 +46,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        436
       ],
       "size": [
         360,
@@ -85,7 +85,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        614
       ],
       "size": [
         360,
@@ -121,7 +121,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        570
+        886
       ],
       "size": [
         420,
@@ -173,7 +173,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        1062
+        1378
       ],
       "size": [
         420,
@@ -223,7 +223,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1294
+        1610
       ],
       "size": [
         280,
@@ -286,7 +286,7 @@
       "type": "Note",
       "pos": [
         40,
-        1764
+        2080
       ],
       "size": [
         420,
@@ -484,7 +484,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            11
+            48
           ],
           "slot_index": 0
         }
@@ -513,7 +513,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 11
+          "link": 49
         }
       ],
       "outputs": [],
@@ -530,7 +530,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        460
+        602
       ],
       "size": [
         420,
@@ -571,7 +571,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        460
+        602
       ],
       "size": [
         360,
@@ -618,7 +618,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        460
+        602
       ],
       "size": [
         320,
@@ -678,7 +678,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        460
+        602
       ],
       "size": [
         240,
@@ -704,7 +704,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            21
+            50
           ],
           "slot_index": 0
         }
@@ -720,7 +720,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        460
+        602
       ],
       "size": [
         280,
@@ -733,7 +733,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 21
+          "link": 51
         }
       ],
       "outputs": [],
@@ -750,7 +750,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        840
+        1124
       ],
       "size": [
         420,
@@ -791,7 +791,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        840
+        1124
       ],
       "size": [
         360,
@@ -838,7 +838,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        840
+        1124
       ],
       "size": [
         320,
@@ -898,7 +898,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        840
+        1124
       ],
       "size": [
         240,
@@ -924,7 +924,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            31
+            53
           ],
           "slot_index": 0
         }
@@ -940,7 +940,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        840
+        1124
       ],
       "size": [
         280,
@@ -953,7 +953,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 31
+          "link": 54
         }
       ],
       "outputs": [],
@@ -970,7 +970,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1220
+        1646
       ],
       "size": [
         420,
@@ -1011,7 +1011,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1220
+        1646
       ],
       "size": [
         360,
@@ -1058,7 +1058,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1220
+        1646
       ],
       "size": [
         320,
@@ -1118,7 +1118,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1220
+        1646
       ],
       "size": [
         240,
@@ -1144,7 +1144,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            41
+            56
           ],
           "slot_index": 0
         }
@@ -1160,7 +1160,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1220
+        1646
       ],
       "size": [
         280,
@@ -1173,7 +1173,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 41
+          "link": 57
         }
       ],
       "outputs": [],
@@ -1190,7 +1190,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         508,
-        1770
+        2086
       ],
       "size": [
         420,
@@ -1245,7 +1245,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -1262,7 +1262,7 @@
       "type": "EZImageFormat",
       "pos": [
         40,
-        1472
+        1788
       ],
       "size": [
         360,
@@ -1329,6 +1329,214 @@
         1
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 36,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        422
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 48
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            49
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            52,
+            55,
+            58
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 37,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        944
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 50
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 52,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            51
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 38,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1466
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 53
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 55,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            54
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 39,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1988
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 56
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 58,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            57
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -1413,14 +1621,6 @@
       "VAE"
     ],
     [
-      11,
-      13,
-      0,
-      14,
-      0,
-      "IMAGE"
-    ],
-    [
       12,
       4,
       0,
@@ -1491,14 +1691,6 @@
       19,
       1,
       "VAE"
-    ],
-    [
-      21,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
     ],
     [
       22,
@@ -1573,14 +1765,6 @@
       "VAE"
     ],
     [
-      31,
-      25,
-      0,
-      26,
-      0,
-      "IMAGE"
-    ],
-    [
       32,
       4,
       0,
@@ -1653,14 +1837,6 @@
       "VAE"
     ],
     [
-      41,
-      31,
-      0,
-      32,
-      0,
-      "IMAGE"
-    ],
-    [
       42,
       33,
       0,
@@ -1707,6 +1883,94 @@
       4,
       0,
       "STRING"
+    ],
+    [
+      48,
+      13,
+      0,
+      36,
+      0,
+      "IMAGE"
+    ],
+    [
+      49,
+      36,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      50,
+      19,
+      0,
+      37,
+      0,
+      "IMAGE"
+    ],
+    [
+      51,
+      37,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      52,
+      36,
+      1,
+      37,
+      1,
+      "STRING"
+    ],
+    [
+      53,
+      25,
+      0,
+      38,
+      0,
+      "IMAGE"
+    ],
+    [
+      54,
+      38,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      55,
+      36,
+      1,
+      38,
+      1,
+      "STRING"
+    ],
+    [
+      56,
+      31,
+      0,
+      39,
+      0,
+      "IMAGE"
+    ],
+    [
+      57,
+      39,
+      0,
+      32,
+      0,
+      "IMAGE"
+    ],
+    [
+      58,
+      36,
+      1,
+      39,
+      1,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1717,7 +1981,7 @@
         20,
         24,
         400,
-        490
+        692
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1728,7 +1992,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        514,
+        830,
         460,
         520
       ],
@@ -1743,7 +2007,7 @@
         500,
         24,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1754,9 +2018,9 @@
       "title": "SHOT LIVING",
       "bounding": [
         500,
-        404,
+        546,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1767,9 +2031,9 @@
       "title": "SHOT TERRACE",
       "bounding": [
         500,
-        784,
+        1068,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1780,9 +2044,9 @@
       "title": "SHOT RAIN",
       "bounding": [
         500,
-        1164,
+        1590,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1810,7 +2074,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -1836,6 +2100,14 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          36,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [

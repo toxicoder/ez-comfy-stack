@@ -51,67 +51,12 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ## Graph
 
 ```mermaid
-flowchart LR
-  N1["Klein 4B distilled FP8"]
-  N2["Qwen3-4B TE"]
-  N3["Flux2 VAE"]
-  N4["IDENTITY"]
-  N5["Negative"]
-  N6["Latent (wired from Format)"]
-  N7["Operator note"]
-  N10["SHOT FRONT"]
-  N11["Positive FRONT"]
-  N12["Sampler FRONT"]
-  N13["Decode FRONT"]
-  N14["Save FRONT"]
-  N16["SHOT THREE-QUARTER"]
-  N17["Positive THREE-QUARTER"]
-  N18["Sampler THREE-QUARTER"]
-  N19["Decode THREE-QUARTER"]
-  N20["Save THREE-QUARTER"]
-  N22["SHOT PROFILE"]
-  N23["Positive PROFILE"]
-  N24["Sampler PROFILE"]
-  N25["Decode PROFILE"]
-  N26["Save PROFILE"]
-  N27["Negative Prompt Enhance"]
-  N28["Quality"]
-  N29["Format / platform"]
-  N1 --> N12
-  N1 --> N18
-  N1 --> N24
-  N2 --> N5
-  N2 --> N11
-  N2 --> N17
-  N2 --> N23
-  N3 --> N13
-  N3 --> N19
-  N3 --> N25
-  N4 --> N10
-  N4 --> N16
-  N4 --> N22
-  N4 --> N27
-  N5 --> N12
-  N5 --> N18
-  N5 --> N24
-  N6 --> N12
-  N6 --> N18
-  N6 --> N24
-  N10 --> N11
-  N11 --> N12
-  N12 --> N13
-  N13 --> N14
-  N16 --> N17
-  N17 --> N18
-  N18 --> N19
-  N19 --> N20
-  N22 --> N23
-  N23 --> N24
-  N24 --> N25
-  N25 --> N26
-  N27 --> N5
-  N29 --> N6
-  N29 --> N4
+flowchart TB
+  GMODEL["MODEL"]
+  GIDENTITY["IDENTITY"]
+  GSHOT_FRONT["SHOT FRONT"]
+  GSHOT_THREE_QUARTER["SHOT THREE-QUARTER"]
+  GSHOT_PROFILE["SHOT PROFILE"]
 ```
 
 ## Nodes on this graph
@@ -143,6 +88,9 @@ flowchart LR
 | 27 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 28 | Quality | `EZQuality` | Ungrouped |
 | 29 | Format / platform | `EZImageFormat` | Ungrouped |
+| 30 | Upscale still | `EZImageUpscale` | SHOT FRONT |
+| 31 | Upscale still | `EZImageUpscale` | SHOT THREE-QUARTER |
+| 32 | Upscale still | `EZImageUpscale` | SHOT PROFILE |
 
 ## Node parameter reference
 
@@ -305,6 +253,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -1160,3 +1109,36 @@ How many stills in one Run.
 **How it affects generation:** Large canvases stay at 1.
 
 **This graph:** `1`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph (all 3 instances):** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |

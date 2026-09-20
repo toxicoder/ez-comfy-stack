@@ -17,7 +17,26 @@ CUSTOM = "custom"
 SAMPLES_DIR = Path(__file__).resolve().parent / "js" / "samples"
 INDEX_NAME = "index.json"
 SAMPLE_COUNT = 20
+"""Default recipe count for family catalogs (plus Custom)."""
+BACKGROUND_SWAP_COUNT = 100
+"""Recipe count for stills/background-swap."""
 
+
+def catalog_expected_count(catalog_id: str) -> int:
+    """Return the required recipe count for a catalog stem.
+
+    Args:
+        catalog_id: Catalog file stem.
+
+    Returns:
+        Integer count excluding Custom.
+    """
+    cid = catalog_id.strip() if isinstance(catalog_id, str) else str(catalog_id or "")
+    if cid == "klein_background_swap":
+        return BACKGROUND_SWAP_COUNT
+    return SAMPLE_COUNT
+
+# Node type + mode widget → default sample catalog stem.
 _FAMILY_FOR_MODE: dict[tuple[str, str], str] = {
     ("EZKleinPromptEnhance", "t2i"): "klein_t2i",
     ("EZKleinPromptEnhance", "edit"): "klein_clay_edit",

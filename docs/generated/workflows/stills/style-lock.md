@@ -90,9 +90,13 @@ flowchart TB
 | 30 | Sampler RAIN | `KSampler` | SHOT RAIN |
 | 31 | Decode RAIN | `VAEDecode` | SHOT RAIN |
 | 32 | Save RAIN | `SaveImage` | SHOT RAIN |
-| 33 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
+| 33 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT RAIN |
 | 34 | Quality | `EZQuality` | Ungrouped |
 | 35 | Format / platform | `EZImageFormat` | Ungrouped |
+| 36 | Upscale still | `EZImageUpscale` | SHOT FACADE |
+| 37 | Upscale still | `EZImageUpscale` | SHOT LIVING |
+| 38 | Upscale still | `EZImageUpscale` | SHOT TERRACE |
+| 39 | Upscale still | `EZImageUpscale` | SHOT RAIN |
 
 ## Node parameter reference
 
@@ -255,6 +259,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -1112,3 +1117,36 @@ How many stills in one Run.
 **How it affects generation:** Large canvases stay at 1.
 
 **This graph:** `1`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph (all 4 instances):** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |

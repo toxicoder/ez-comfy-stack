@@ -17,6 +17,19 @@ def enhance_nodes() -> dict[str, Any]:
     """
     nodes: dict[str, Any] = {}
     # ez_prompt_enhance
+    nodes["EZImageDescribe"] = _n(
+        "Describe image",
+        "Caption a source still so Prompt Enhance can name inventory and lettering.",
+        origin="ez_prompt_enhance",
+        lab="Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).",
+        sockets=[
+            _s("image", "IMAGE", "in", "Source still. Lazy — skipped when enable is off."),
+            _s("caption", "STRING", "out", "Short caption, or empty."),
+        ],
+        widgets=[
+            _w("enable", index=0, typ="BOOLEAN", rng="off", desc="Run the captioner.", gen="Off skips the VLM. On needs download-llm --tier describe."),
+        ],
+    )
     nodes["EZKleinPromptEnhance"] = _n(
         "Klein Prompt Enhance",
         "Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.",
@@ -25,6 +38,7 @@ def enhance_nodes() -> dict[str, Any]:
         sockets=[
             _s("prompt", "STRING", "in", "Optional override of the widget (usually unwired)."),
             _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
+            _s("image_desc", "STRING", "in", "Optional still caption from EZImageDescribe."),
             _s("prompt", "STRING", "out", "String CLIP actually encodes."),
         ],
         widgets=[

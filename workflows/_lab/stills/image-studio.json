@@ -1,8 +1,8 @@
 {
   "id": "image-studio",
-  "revision": 4,
-  "last_node_id": 17,
-  "last_link_id": 25,
+  "revision": 5,
+  "last_node_id": 19,
+  "last_link_id": 33,
   "nodes": [
     {
       "id": 1,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        312
+        604
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         948,
-        630
+        836
       ],
       "size": [
         280,
@@ -353,7 +353,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            26
           ],
           "slot_index": 0
         }
@@ -382,7 +382,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 27
         },
         {
           "name": "filename_prefix",
@@ -407,7 +407,7 @@
       "type": "Note",
       "pos": [
         40,
-        808
+        1014
       ],
       "size": [
         960,
@@ -466,6 +466,11 @@
           "widget": {
             "name": "mode"
           }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 29
         }
       ],
       "outputs": [
@@ -498,7 +503,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1160
+        1366
       ],
       "size": [
         420,
@@ -553,7 +558,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -660,14 +665,15 @@
           "name": "image",
           "type": "IMAGE",
           "links": [
-            21
+            21,
+            33
           ],
           "slot_index": 0
         },
         {
           "name": "count",
           "type": "INT",
-          "links": null,
+          "links": [],
           "slot_index": 1
         },
         {
@@ -692,7 +698,7 @@
       "type": "EZKleinRefCanvas",
       "pos": [
         -400,
-        806
+        1012
       ],
       "size": [
         360.0,
@@ -735,7 +741,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -807,6 +813,98 @@
         "Photoreal still"
       ],
       "title": "Creator mode"
+    },
+    {
+      "id": 18,
+      "type": "EZImageUpscale",
+      "pos": [
+        1848,
+        540
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 26
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            27
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 19,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            29
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -873,14 +971,6 @@
       8,
       0,
       "LATENT"
-    ],
-    [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
     ],
     [
       10,
@@ -1006,6 +1096,38 @@
         "identity",
         "text_swap"
       ]
+    ],
+    [
+      26,
+      8,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      27,
+      18,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      29,
+      19,
+      0,
+      11,
+      3,
+      "STRING"
+    ],
+    [
+      33,
+      15,
+      0,
+      19,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -1029,7 +1151,7 @@
         460,
         24,
         928,
-        756
+        962
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1054,8 +1176,8 @@
       "bounding": [
         1820,
         24,
-        320,
-        488
+        328,
+        640
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1122,6 +1244,22 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          18,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          19,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [

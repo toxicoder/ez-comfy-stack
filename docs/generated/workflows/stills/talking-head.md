@@ -29,6 +29,8 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## stills/talking-head
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
 Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
 Wan S2V-14B is opt-in: ./scripts/utilities/download-wan.sh run --tier s2v
@@ -70,20 +72,24 @@ flowchart LR
   N20["Audio VAE Decode"]
   N21["Negative Prompt Enhance"]
   N22["Quality"]
+  N23["Format / platform"]
+  N24["Upscale still"]
+  N25["Describe image"]
   N1 --> N9
   N2 --> N7
   N2 --> N10
   N3 --> N5
   N3 --> N6
   N4 --> N7
+  N4 --> N25
   N5 --> N7
   N6 --> N7
   N7 --> N8
   N7 --> N15
   N8 --> N9
   N9 --> N16
-  N10 --> N12
   N10 --> N18
+  N10 --> N24
   N13 --> N14
   N13 --> N20
   N14 --> N15
@@ -94,6 +100,10 @@ flowchart LR
   N19 --> N21
   N20 --> N18
   N21 --> N6
+  N23 --> N7
+  N23 --> N19
+  N24 --> N12
+  N25 --> N19
 ```
 
 ## Nodes on this graph
@@ -121,6 +131,9 @@ flowchart LR
 | 20 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
 | 21 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 22 | Quality | `EZQuality` | Ungrouped |
+| 23 | Format / platform | `EZVideoFormat` | Ungrouped |
+| 24 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 25 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
 
@@ -680,10 +693,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## stills/talking-head Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph. Real si…`
+**This graph:** `## stills/talking-head Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) →…`
 
 ```text
 ## stills/talking-head
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Klein still (LoadImage) → optional Qwen3-TTS 0.6B (download-podcast --tier qwen3tts) → LTX-2.5 A2V freeze. Occupancy: ACE-Step 90s bed then stop/unload then this graph.
 Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). Official two-stage A2V lives in Comfy Templates → LTX-2.5. This canvas Queues the lab 5.00s I2V printer so it loads without missing subgraph nodes.
@@ -1181,3 +1196,135 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZVideoFormat` — Format / platform (video)
+
+Pick a Wan or LTX clip canvas (aspect or named platform).
+
+!!! warning "Lab notes"
+
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
+| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
+
+#### `family`
+
+Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
+
+Which VAE grid to use.
+
+**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+
+**This graph:** `LTX-2.5`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Wan 5B` | wan VAE grid ÷16. |
+| `LTX-2.5` | ltx VAE grid ÷32. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+
+**This graph:** `LTX · 16:9 YouTube (1280×704)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
+| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
+| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
+| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
+| `Wan · 1:1 square (768×768)` | 768×768. wan. |
+| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
+| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
+| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
+| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+
+#### `width`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+
+**This graph:** `1280`
+
+#### `height`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `704`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`
