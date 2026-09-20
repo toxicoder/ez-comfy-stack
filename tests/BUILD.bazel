@@ -48,6 +48,24 @@ exports_files(
     visibility = ["//visibility:public"],
 )
 
+filegroup(
+    name = "python_tests",
+    srcs = glob(
+        ["python/**/*.py"],
+        allow_empty = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "fixtures",
+    srcs = glob(
+        ["fixtures/**"],
+        allow_empty = True,
+    ),
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
     name = "pytest",
     size = "large",
@@ -58,7 +76,14 @@ sh_test(
     data = [
         ".coveragerc",
         "repo_root.sh",
+        ":fixtures",
+        ":python_tests",
+        "//custom_nodes:sources",
+        "//docker:sources",
+        "//schemas",
         "//scripts:doc_sources",
+        "//studio-ui:sources",
+        "//tools:blender",
     ],
     tags = [
         "local",

@@ -49,7 +49,7 @@ def bats_file_tests(srcs, common_data):
         sh_test(
             name = name,
             size = size,
-            timeout = "short",
+            timeout = "moderate" if src in _MEDIUM else "short",
             srcs = ["bats_runner.sh"],
             args = [base],
             data = common_data + extra + [src],

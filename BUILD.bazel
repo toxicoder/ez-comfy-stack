@@ -22,6 +22,10 @@ exports_files([
     "fix.sh",
     "CONTRIBUTING.md",
     "README.md",
+    "Makefile",
+    "mkdocs.yml",
+    "LICENSE",
+    "LICENSE-MODELS.md",
     "mypy.ini",
     "pyrightconfig.json",
 ])
@@ -90,8 +94,35 @@ test_suite(
 )
 
 filegroup(
+    name = "first_party_srcs",
+    srcs = [
+        "LICENSE",
+        "LICENSE-MODELS.md",
+        "Makefile",
+        "mkdocs.yml",
+        ":ci_workflows",
+        ":devcontainer",
+        "//config:policy",
+        "//custom_nodes:sources",
+        "//docker:sources",
+        "//docs:content",
+        "//docs-site:sources",
+        "//includes",
+        "//schemas",
+        "//scripts:doc_sources",
+        "//studio-ui:sources",
+        "//tests:fixtures",
+        "//tests:python_tests",
+        "//tools:blender",
+        "//workflows:lab_graphs",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "all",
     srcs = [
+        ":first_party_srcs",
         ":manage",
         "//docs",
     ],

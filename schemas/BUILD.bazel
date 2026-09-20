@@ -1,0 +1,14 @@
+"""Package purpose: House, asset, guide-pack, and shot schema files."""
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "schemas",
+    srcs = glob(
+        [
+            "*.yaml",
+            "*.json",
+        ],
+        allow_empty = True,
+    ),
+)

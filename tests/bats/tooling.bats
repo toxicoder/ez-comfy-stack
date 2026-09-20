@@ -170,6 +170,22 @@ teardown() {
   [ -f "${REPO_ROOT}/tests/bats.bzl" ]
   grep -q 'bats_file_tests' "${REPO_ROOT}/tests/bats.bzl"
   grep -q 'bats_runner.sh' "${REPO_ROOT}/tests/BUILD.bazel"
+  grep -qF 'timeout = "moderate" if src in _MEDIUM else "short"' "${REPO_ROOT}/tests/bats.bzl"
+  grep -qF 'bats/lib_unit.bats' "${REPO_ROOT}/tests/bats.bzl"
+}
+
+@test "first-party packages including schemas are in the Bazel graph" {
+  [ -f "${REPO_ROOT}/schemas/BUILD.bazel" ]
+  grep -qF 'name = "schemas"' "${REPO_ROOT}/schemas/BUILD.bazel"
+  grep -qF 'name = "first_party_srcs"' "${REPO_ROOT}/BUILD.bazel"
+  grep -qF 'name = "python_tests"' "${REPO_ROOT}/tests/BUILD.bazel"
+  grep -qF 'name = "fixtures"' "${REPO_ROOT}/tests/BUILD.bazel"
+  grep -qF '//schemas' "${REPO_ROOT}/tests/BUILD.bazel"
+  grep -qF 'pytest-xdist==' "${REPO_ROOT}/tests/requirements.txt"
+  grep -qF -- '-n auto' "${REPO_ROOT}/tests/run_pytest.sh"
+  grep -qF -- '--dist worksteal' "${REPO_ROOT}/tests/run_pytest.sh"
+  run grep -E 'rules_python|rules_js' "${REPO_ROOT}/MODULE.bazel"
+  [ "$status" -ne 0 ]
 }
 
 @test "install-lint-tools names run_root detect_arch install_release_bins" {

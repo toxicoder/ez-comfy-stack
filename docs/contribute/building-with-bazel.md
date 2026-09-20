@@ -60,7 +60,8 @@ bazelisk run //scripts:run-utility -- download-limit status
 
 | Target | What it runs |
 | --- | --- |
-| `//:test-fast` | Split BATS + pytest 100% (all first-party Python) + Pyright + mypy + shell inventory |
+| `//:test-fast` | Split BATS + pytest 100% (all first-party Python, `pytest-xdist -n auto` when installed) + Pyright + mypy + shell inventory |
+| `//:first_party_srcs` | Graph rollup of first-party sources (including `//schemas`) |
 | `//:test` | test-fast + Fumadocs render contract (`//docs:test_docs_site_render`) |
 | `//:lint` | ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools) |
 | `//:validate` | Git-aware core + docs slices |
@@ -71,7 +72,12 @@ Queries:
 ```bash
 bazelisk query 'kind(".*_test", //...)'
 bazelisk query 'deps(//tests:bats_manage_test)'
+bazelisk build //:first_party_srcs --nobuild
 ```
+
+`tests/python/test_bazel_graph.py` fails if a first-party package loses `BUILD.bazel` or pytest drops xdist / schema filegroups.
+
+The inner pytest loop is `bazelisk test //tests:pytest --test_output=errors`.
 
 ## CI
 
