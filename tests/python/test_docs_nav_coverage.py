@@ -146,6 +146,7 @@ def test_nav_includes_planned_homes() -> None:
         "create/workflows-stills.md",
         "create/workflows-motion.md",
         "create/workflows-creator.md",
+        "create/workflows-services.md",
         "create/workflows-film.md",
         "create/workflows-audio.md",
         "create/workflows-index.md",

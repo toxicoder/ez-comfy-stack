@@ -100,6 +100,7 @@ const WORKFLOW_LANE_ORDER = [
   "stills",
   "motion",
   "creator",
+  "services",
   "films",
   "dcc",
   "optional",

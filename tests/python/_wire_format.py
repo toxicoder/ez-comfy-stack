@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from _creator_pack3 import PACK3
+from _services_pack import SERVICES
 from _lab_layout import GROUP_TITLE_INSET, finalize_layout, node_pos, set_node_pos
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_json
 from _stamp_app_mode import stamp_suite_graph
@@ -119,14 +120,24 @@ STILL_REL_FORMAT = {
 }
 PACK3_STILL_KINDS = frozenset({"klein_single", "klein_pack"})
 PACK3_VIDEO_KINDS = frozenset({"wan_i2v", "wan_loop", "ltx_av"})
+SERVICES_STILL_KINDS = frozenset({"klein_single"})
+SERVICES_VIDEO_KINDS = frozenset({"wan_i2v", "wan_loop", "ltx_av"})
 
 
 def _pack3_rels(kinds: frozenset[str]) -> frozenset[str]:
     return frozenset(spec.rel for spec in PACK3 if spec.kind in kinds)
 
 
-STILL_SCOPE = KLEIN_GENERIC | _pack3_rels(PACK3_STILL_KINDS)
-VIDEO_SCOPE = VIDEO_GENERIC | _pack3_rels(PACK3_VIDEO_KINDS)
+def _services_rels(kinds: frozenset[str]) -> frozenset[str]:
+    return frozenset(spec.rel for spec in SERVICES if spec.kind in kinds)
+
+
+STILL_SCOPE = KLEIN_GENERIC | _pack3_rels(PACK3_STILL_KINDS) | _services_rels(
+    SERVICES_STILL_KINDS
+)
+VIDEO_SCOPE = VIDEO_GENERIC | _pack3_rels(PACK3_VIDEO_KINDS) | _services_rels(
+    SERVICES_VIDEO_KINDS
+)
 FORMAT_SCOPE = STILL_SCOPE | VIDEO_SCOPE
 
 

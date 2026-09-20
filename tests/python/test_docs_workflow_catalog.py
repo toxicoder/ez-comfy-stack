@@ -22,6 +22,7 @@ CATALOG_PAGES = tuple(
         DOCS / "create" / "workflows-stills.md",
         DOCS / "create" / "workflows-motion.md",
         DOCS / "create" / "workflows-creator.md",
+        DOCS / "create" / "workflows-services.md",
         DOCS / "create" / "workflows-film.md",
         DOCS / "create" / "workflows-audio.md",
     )

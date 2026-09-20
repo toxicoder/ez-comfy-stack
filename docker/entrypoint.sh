@@ -521,6 +521,7 @@ lab_workflow_lane() {
     stills/*) printf '%s\n' stills ;;
     motion/*) printf '%s\n' motion ;;
     creator/*) printf '%s\n' creator ;;
+    services/*) printf '%s\n' services ;;
     films/*) printf '%s\n' films ;;
     shorts/*) printf '%s\n' films ;;
     dcc/*) printf '%s\n' dcc ;;
@@ -659,7 +660,7 @@ apply_lab_app_json_names() {
 log_lab_seed_counts() {
   local dest_lab="${1:?}"
   local lane n total=0
-  local -a lanes=(stills motion creator films dcc optional audio inspire)
+  local -a lanes=(stills motion creator services films dcc optional audio inspire)
   for lane in "${lanes[@]}"; do
     n=0
     if [[ -d ${dest_lab}/${lane} ]]; then

@@ -25,6 +25,7 @@ ALLOWED_LANES = (
     "stills",
     "motion",
     "creator",
+    "services",
     "films",
     "dcc",
     "optional",

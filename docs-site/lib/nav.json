@@ -134,6 +134,10 @@
         "path": "create/workflows-creator.md"
       },
       {
+        "title": "Services pack",
+        "path": "create/workflows-services.md"
+      },
+      {
         "title": "Film graphs",
         "path": "create/workflows-film.md"
       },
