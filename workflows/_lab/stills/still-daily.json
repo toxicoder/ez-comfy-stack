@@ -613,7 +613,8 @@
         "none",
         1024,
         576,
-        1
+        1,
+        "Match input"
       ],
       "title": "Format / platform"
     },
@@ -1116,6 +1117,14 @@
           }
         ],
         [
+          14,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
           17,
           "upscale",
           {
@@ -1207,7 +1216,7 @@
           15,
           "filename",
           {
-            "description": "Optional still. Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference.",
+            "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
           }
         ]

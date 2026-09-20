@@ -18,6 +18,9 @@ FORMATS_PATH = Path(__file__).resolve().parent / "js" / "formats.json"
 CUSTOM_ID = "custom"
 CUSTOM_LABEL = "Custom"
 LOOK_NONE = "none"
+SIZE_MODE_MATCH = "Match input"
+SIZE_MODE_FORCE = "Force format"
+SIZE_MODE_CHOICES = (SIZE_MODE_MATCH, SIZE_MODE_FORCE)
 DEFAULT_FORMAT_ID = "aspect_16_9_ltx"
 DEFAULT_PREFIX = "ez_still_studio"
 LTX_FEEDER_16_9_ID = "aspect_16_9_ltx"
@@ -412,6 +415,79 @@ def splice_look(value: object) -> str:
     return _cinema_splice(recipe_id)
 
 
+def is_match_input(value: object) -> bool:
+    """True when Output size is Match input.
+
+    Args:
+        value: Size-mode combo.
+
+    Returns:
+        True for Match input (default).
+    """
+    raw = _as_str(value).casefold().replace("_", " ")
+    if not raw:
+        return True
+    return raw in {"match input", "match"}
+
+
+def image_hw(image: object) -> tuple[int, int] | None:
+    """Return ``(width, height)`` from a Comfy IMAGE tensor, if present.
+
+    Args:
+        image: Optional BHWC tensor or None.
+
+    Returns:
+        Pixel size, or None when missing/tiny.
+    """
+    if image is None:
+        return None
+    shape = getattr(image, "shape", None)
+    if shape is None:
+        return None
+    try:
+        height = int(shape[-3])
+        width = int(shape[-2])
+    except (TypeError, IndexError, ValueError):
+        return None
+    if height < 2 or width < 2:
+        return None
+    return width, height
+
+
+def nearest_aspect_format(src_w: int, src_h: int, current: FormatSpec) -> FormatSpec:
+    """Pick the catalog aspect row closest to ``src_w`` / ``src_h``.
+
+    Prefers ``group=aspect`` rows. Ties break toward the current pixel area
+    so draft graphs stay on draft sizes and LTX feeders stay feeders.
+
+    Args:
+        src_w: Source width.
+        src_h: Source height.
+        current: Format already resolved from the combo (area hint).
+
+    Returns:
+        Nearest non-custom aspect spec.
+    """
+    rows = [
+        row
+        for row in load_formats()
+        if row.group == "aspect" and row.width > 0 and row.height > 0
+    ]
+    if not rows:
+        rows = [row for row in load_formats() if row.width > 0 and row.height > 0]
+    if not rows:
+        return current
+    src_ratio = float(src_w) / float(max(src_h, 1))
+    current_area = max(int(current.width) * int(current.height), 1)
+    ranked: list[tuple[tuple[float, float], FormatSpec]] = []
+    for row in rows:
+        ratio_err = abs(float(row.width) / float(max(row.height, 1)) - src_ratio)
+        area_err = abs(row.width * row.height - current_area) / float(current_area)
+        ranked.append(((ratio_err, area_err), row))
+    ranked.sort(key=lambda item: item[0])
+    return ranked[0][1]
+
+
 def resolve_canvas(
     format_value: object,
     *,
@@ -419,6 +495,8 @@ def resolve_canvas(
     height: object = 0,
     batch: object = DEFAULT_BATCH,
     look: object = LOOK_NONE,
+    size_mode: object = SIZE_MODE_MATCH,
+    image: object = None,
 ) -> FormatResult:
     """Resolve widgets to a Queue canvas.
 
@@ -428,11 +506,16 @@ def resolve_canvas(
         height: Custom height widget.
         batch: Batch widget.
         look: Look recipe combo.
+        size_mode: Match input or Force format.
+        image: Optional IMAGE tensor used when matching input ratio.
 
     Returns:
         Snapped canvas, hint, prefix, and look context.
     """
     spec = get_format(format_value)
+    hw = image_hw(image)
+    if is_match_input(size_mode) and hw is not None:
+        spec = nearest_aspect_format(hw[0], hw[1], spec)
     if spec.id == CUSTOM_ID:
         resolved_w = clamp_dim(_as_int(width, 1280))
         resolved_h = clamp_dim(_as_int(height, 704))

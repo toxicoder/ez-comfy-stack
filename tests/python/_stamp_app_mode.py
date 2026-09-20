@@ -267,6 +267,7 @@ WIDGET_ORDER = (
     "sources",
     "prompt",
     "format",
+    "size_mode",
     "upscale",
     "enable",
     "category",
@@ -368,6 +369,7 @@ GENERIC_LABELS = {
     "quality": "Quality",
     "sample": "Sample prompt",
     "prompt": "Prompt",
+    "size_mode": "Output size",
     "upscale": "Upscale",
     "enable": "Describe image",
     "template": "Template",
@@ -631,6 +633,7 @@ def display_label(
     if ntype == "EZImageFormat":
         return {
             "format": "Format / platform",
+            "size_mode": "Output size",
             "look": "Look recipe",
             "width": "Width",
             "height": "Height",
@@ -650,6 +653,7 @@ def display_label(
     if ntype == "EZVideoFormat":
         return {
             "format": "Format / platform",
+            "size_mode": "Output size",
             "width": "Width",
             "height": "Height",
         }.get(name, generic)
@@ -858,7 +862,8 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         }.get(name)
     if ntype == "EZOptionalImage" and name == "filename":
         return (
-            "Optional still. Empty is valid — Queue without a file. When set, "
+            "Upload a still or pick one already on the drive (input/ or "
+            "Outputs). Empty is valid — Queue without a file. When set, "
             "Klein uses it as a native reference."
         )
     if ntype == "EZImageFormat":
@@ -866,6 +871,11 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             "format": (
                 "Aspect or named platform job. Sets pixels, save prefix, and "
                 "Rewrite prompt framing. Custom uses Width × Height (÷16)."
+            ),
+            "size_mode": (
+                "Match input uses a loaded still's aspect (nearest catalog "
+                "row). Force format keeps Format / platform. No still: authored "
+                "format."
             ),
             "look": (
                 "Optional Cinema Rack starter. none leaves look to Style + Prompt. "
@@ -881,6 +891,11 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
                 "Aspect or named platform job. Sets clip width and height on the "
                 "Wan ÷16 or LTX ÷32 grid. Custom uses Width × Height. Length stays "
                 "on the latent node."
+            ),
+            "size_mode": (
+                "Match input uses a loaded still's aspect (nearest catalog "
+                "row). Force format keeps Format / platform. No still: authored "
+                "format."
             ),
             "width": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
             "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
@@ -1778,6 +1793,7 @@ def _collect_raw_inputs(
             raw.append((nid, "enable", node))
         elif ntype == "EZImageFormat":
             raw.append((nid, "format", node))
+            raw.append((nid, "size_mode", node))
             if spec.get("expose_look"):
                 raw.append((nid, "look", node))
             raw.extend(
@@ -1800,6 +1816,7 @@ def _collect_raw_inputs(
             raw.extend(
                 (
                     (nid, "format", node),
+                    (nid, "size_mode", node),
                     (nid, "width", node),
                     (nid, "height", node),
                 )

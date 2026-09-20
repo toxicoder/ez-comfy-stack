@@ -1100,7 +1100,8 @@
         "none",
         1024,
         1024,
-        1
+        1,
+        "Match input"
       ],
       "title": "Format / platform"
     },
@@ -1713,6 +1714,14 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          29,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
           }
         ],
         [

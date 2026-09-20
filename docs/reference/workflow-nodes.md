@@ -1688,10 +1688,11 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
 | `width` | out | `INT` | Latent width (÷16). |
 | `height` | out | `INT` | Latent height (÷16). |
 | `batch` | out | `INT` | Batch size. |
@@ -1853,6 +1854,14 @@ Type `INT`. Range / default: 1–4.
 How many stills in one Run.
 
 **How it affects generation:** Large canvases stay at 1.
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
 
 ### `EZImageMode` — Creator mode
 
@@ -2923,7 +2932,7 @@ Optional example or reference stills. Empty is valid — Queue without a file.
 
 !!! warning "Lab notes"
 
-    Klein T2I Apps attach a present still via EZKleinRefCanvas. Filename may be empty.
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Upload or pick a file already on the drive; filename may be empty.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2936,11 +2945,11 @@ Optional example or reference stills. Empty is valid — Queue without a file.
 
 #### `filename`
 
-Type `STRING`.
+Type `COMBO`. Range / default: empty / input stills.
 
-Optional path or App upload. Empty is valid.
+Upload or pick a still on the drive. Empty is valid.
 
-**How it affects generation:** Leave empty to Queue a T2I. Presence is the tensor, not this string.
+**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/.
 
 ### `EZPodcastDisclosure` — Podcast Disclosure
 
@@ -3279,10 +3288,11 @@ Pick a Wan or LTX clip canvas (aspect or named platform).
 
 !!! warning "Lab notes"
 
-    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
 | `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
 | `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
@@ -3340,6 +3350,14 @@ Type `INT`. Range / default: 16–1280.
 Custom height.
 
 **How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 ### `EZWanPromptEnhance` — Wan Prompt Enhance
 

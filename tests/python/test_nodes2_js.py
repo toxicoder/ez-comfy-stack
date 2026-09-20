@@ -100,6 +100,26 @@ def test_format_js_uses_vue_safe_widget_writes() -> None:
         assert "setDirtyCanvas" in body, path
 
 
+def test_media_pick_js_is_nodes2_safe() -> None:
+    body = (CUSTOM / "ez_image" / "js" / "ez_media_pick.js").read_text(encoding="utf-8")
+    assert "Upload media" in body
+    assert "Choose from outputs" in body
+    assert "/ez_outputs/to-input" in body
+    assert "EZOptionalImage" in body
+    assert "LoadImage" in body
+    assert "LoadAudio" in body
+    assert "addWidget(\"button\"" in body
+    assert "node_widget" not in body
+    assert "onResize" not in body
+
+
+def test_format_js_matches_input_ratio() -> None:
+    body = (CUSTOM / "ez_image" / "js" / "ez_image_format.js").read_text(encoding="utf-8")
+    assert "Match input" in body
+    assert "size_mode" in body
+    assert "applyMatchInput" in body
+
+
 def test_studio_app_banner_shows_description_and_wraps_help() -> None:
     body = STUDIO_APP_JS.read_text(encoding="utf-8")
     assert "lab_description" in body
