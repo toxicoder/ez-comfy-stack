@@ -124,7 +124,7 @@ build artefacts and can be removed — they are gitignored.
 | Nav ↔ pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
 | Nav transcriber / codemod units | n/a | `//docs-site:nav_test`, `//docs-site:codemod_test` |
 | Python coverage | generators + `hooks.py` | same `docs/*.py` modules (100% gate unchanged) |
-| Public aliases | mike `latest` / `development` | two Next exports to the same URL prefixes |
+| Public aliases | mike `latest` / `development` | Next exports at the same URL prefixes (one alias per deploy) |
 
 No gate was dropped: each MkDocs-era target was retargeted onto the Next app, and the CI
 `docs-and-render` job runs the same checks in the same order (fast gates, then export).

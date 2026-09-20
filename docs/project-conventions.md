@@ -325,7 +325,7 @@ Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How d
 
 - Local / PR: `bazelisk run //docs:docs` (or `make docs`) — generators then Fumadocs static export into `docs-site/out/`
 - Dev server: `bazelisk run //docs:serve` (or `./docs/manage-docs.sh serve`) at http://localhost:3005
-- Public site (per long-lived branch) via two Next exports on GitHub Pages:
+- Public site (per long-lived branch) via one Next export per GitHub Pages deploy:
   - `main` → [latest](https://toxicoder.github.io/ez-comfy-stack/latest/)
   - `development` → [development](https://toxicoder.github.io/ez-comfy-stack/development/)
 - Workflow: `.github/workflows/deploy-docs.yml` (push to `main`/`development` with docs paths, or `workflow_dispatch`)

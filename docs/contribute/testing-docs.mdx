@@ -11,7 +11,7 @@ tags: [testing, coverage, fumadocs, contributing]
 - **Bazel / Make targets** — `//:test-fast` / `coverage` / `lint` / `docs` / `typecheck`
 - **100% Python gate** — all first-party production Python (`custom_nodes`, `docker`, `docs/*.py`, `scripts/lib`, `studio-ui`, `tools`)
 - **Shell function inventory** (invoked by a test, not only named)
-- **`deploy-docs.yml`** — `main` → `latest`, `development` → `development` (two Next exports)
+- **`deploy-docs.yml`** — `main` → `latest`, `development` → `development` (one Next export per run)
 - **`bazelisk run //docs:docs`** — generators then Fumadocs `next build` into `docs-site/out/`
 
 **What this enables**
@@ -103,7 +103,7 @@ Pins: Fumadocs on Next.js 16 (`docs-site/package.json`). Node **22+**. [Docs sty
 | **`main`** | **`latest`** (default site) |
 | **`development`** | **`development`** |
 
-PR validation is `make docs` in CI only (no Pages push). Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
+PR validation is `make docs` in CI only (no Pages push). Each run builds **one** alias and keeps the other from `origin/gh-pages`. Publish uses `scripts/ci/publish-pages-tree.sh` (a separate git worktree) so Next's rewrite of tracked `docs-site/next-env.d.ts` cannot block the `gh-pages` checkout. Deploy sets `EZ_DOCS_PUBLISHED_AT` for the last-published chip. `docs-site/lib/site.ts` stamps `__DOCS_GIT_REF__` and GitHub blob/tree URLs to the long-lived ref.
 
 Public URLs: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) · [development](https://toxicoder.github.io/ez-comfy-stack/development/).
 

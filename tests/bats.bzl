@@ -24,6 +24,10 @@ _EXTRA_DATA = {
         "//:ci_workflows",
         "//scripts:validate",
         "//scripts:ci_install_lint_tools",
+        "//scripts:ci_publish_pages_tree",
+    ],
+    "bats/publish_pages_tree.bats": [
+        "//scripts:ci_publish_pages_tree",
     ],
     "bats/devcontainer.bats": ["//:devcontainer"],
 }
