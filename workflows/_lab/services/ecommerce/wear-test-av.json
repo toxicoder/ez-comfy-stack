@@ -328,7 +328,7 @@
       "widgets_values": [
         768,
         1280,
-        289,
+        193,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -815,7 +815,7 @@
         "Slow try-on from the start still. Cloth rustle. No score. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps, 9:16",
+        "8 seconds, 24 fps, 9:16",
         "cloth rustle, no score",
         "none",
         "services/ecommerce/wear-test-av"

@@ -160,12 +160,12 @@ def _l(
     if catalog is None:
         catalog = "ltx_broll" if mode == "t2v" else "ltx_i2v"
     src = (
-        "motion/av/shorts-still-12s"
+        "motion/av/shorts-still-8s"
         if portrait
         else (
-            "motion/av/text-to-video-12s"
+            "motion/av/text-to-video-8s"
             if mode == "t2v"
-            else "motion/av/still-to-video-12s"
+            else "motion/av/still-to-video-8s"
         )
     )
     return ServiceSpec(

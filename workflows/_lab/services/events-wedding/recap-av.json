@@ -328,7 +328,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        193,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -815,7 +815,7 @@
         "Slow recap take from the start still. World SFX only. No score. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "world SFX, no score",
         "none",
         "services/events-wedding/recap-av"

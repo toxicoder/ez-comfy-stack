@@ -4,13 +4,13 @@ Upstream: [Lightricks/ComfyUI-LTXVideo `example_workflows/2.5/`](https://github.
 
 Those JSON files are **Comfy subgraphs** (UUID node types). Load them from Comfy **Templates → LTX-2.5**, or clone ComfyUI-LTXVideo. This tree does **not** vendor the 150–240 KB subgraph blobs (they will not Queue without the matching subgraph pack).
 
-Lab **standalone LTX Apps default to 12.00 s / 289 frames / 1280×704** (`motion/av/still-to-video-12s.json` and showcase Apps). **90s one-click films stay 5.00 s / 121 frames** (`motion/av/still-to-shot.json`). Showcase Apps (`motion/av/dialogue-12s`, `motion/av/multishot-12s`, `motion/av/product-hero`, `motion/av/first-last-12s`, `motion/av/audio-to-video-12s`) use the 12 s envelope with core nodes only (`LTXVModalityGuidance`, `LTXVAddGuide` / `LTXVCropGuides`, `LTXVAudioVAEEncode`). Duration-head 5 / 8 / 10 / 12 s is allowed behind `ez_film.ltx_timing.preflight_duration_s` (`1+8n` frames; even latents refuse). Do not queue a 30/60/90 s latent on GB10.
+Lab **standalone LTX Apps default to 8.00 s / 193 frames / 1280×704** (`motion/av/still-to-video-8s.json` and showcase Apps). **90s one-click films stay 5.00 s / 121 frames** (`motion/av/still-to-shot.json`). Showcase Apps (`motion/av/dialogue-8s`, `motion/av/multishot-8s`, `motion/av/product-hero`, `motion/av/first-last-8s`, `motion/av/audio-to-video-8s`) use the 8 s envelope with core nodes only (`LTXVModalityGuidance`, `LTXVAddGuide` / `LTXVCropGuides`, `LTXVAudioVAEEncode`). Duration-head 5 / 8 / 10 / 12 s is allowed behind `ez_film.ltx_timing.preflight_duration_s` (`1+8n` frames; even latents refuse). Do not queue a 30/60/90 s latent on GB10.
 
 | Official graph | Lab role |
 | --- | --- |
 | T2V/I2V single-stage distilled | Fast quality preview (same family as lab 5 s I2V) |
 | T2V/I2V two-stage distilled | DFR / 2× spatial + refine. YAML `print: dfr` records stub template `templates/ltx-2.5/t2v-i2v-two-stage-distilled` (not vendored JSON) |
 | A2V two-stage distilled | Audio freeze (talking-head / ACE-Step bed) |
-| IC-LoRA Union Control | Depth / canny / pose v2v. Lab envelope: `workflows/dcc/dcc/depth-control-12s.json`. Official graph stays Templates (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). LoRA: `download-ltx --tier iclora` → `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors`. Distilled-only. Refuse 19B. |
+| IC-LoRA Union Control | Depth / canny / pose v2v. Lab envelope: `workflows/dcc/dcc/depth-control-8s.json`. Official graph stays Templates (`LTX-2.5_ICLoRA_Union_Control_Distilled.json`). LoRA: `download-ltx --tier iclora` → `ltx-2.3-22b-ic-lora-union-control-ref0.5.safetensors`. Distilled-only. Refuse 19B. |
 
 Frame count must be `1 + 8n` (upstream README). Occupancy: do not coreside with Wan A14B / Fun InP / TRELLIS / SeedVR2.

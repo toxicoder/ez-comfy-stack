@@ -328,7 +328,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        193,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -815,7 +815,7 @@
         "Empty unmarked screen, a cursor crawls. Soft clicks. No score. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "soft clicks, no score",
         "none",
         "services/b2b-saas/cursor-demo-av"

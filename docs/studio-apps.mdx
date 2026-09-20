@@ -41,7 +41,7 @@ flowchart LR
 
 | Surface | What you edit | When |
 | --- | --- | --- |
-| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein ÷16, Wan ÷16, LTX ÷32 — pick **LTX · 16:9 YouTube (1280×704)**, never type 720). **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). **motion/av/first-last-12s** exposes **First frame** and **Last frame**. **motion/av/audio-to-video-12s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). **stills/still-studio** also adds **Look recipe**, Image model, and Steps / CFG — prefix follows Format. **stills/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and an optional example/reference still — prefix follows Creator mode. **stills/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
+| **App** | Unique creator widgets. When the graph needs a still, **Start image** (or **First frame** / **Last frame**) is first so Queue cannot hide a missing file. Then **Quality** (Lab / Draft / High), **Sample prompt** (20 lab recipes + **Custom**), **Prompt**, **Format / platform** (on Apps that own a canvas), **Style** (`none` = off), **Rewrite prompt**, then **Seed**, then Width / Height (and Batch on Klein stills). Format sets pixels and Rewrite prompt framing; Custom uses the size widgets (Klein ÷16, Wan ÷16, LTX ÷32 — pick **LTX · 16:9 YouTube (1280×704)**, never type 720). **Start image** only when that LoadImage is wired (I2V, talking-head, character tweak, clay, text-swap). **motion/av/first-last-8s** exposes **First frame** and **Last frame**. **motion/av/audio-to-video-8s** exposes **Audio file**. Style is hidden on I2V (the start frame owns look). **stills/still-studio** also adds **Look recipe**, Image model, and Steps / CFG — prefix follows Format. **stills/image-studio** adds **Mode category**, **Creator mode** (100 presets), Look recipe, Image model, Steps / CFG, and an optional example/reference still — prefix follows Creator mode. **stills/still-daily** keeps Image model + steps/CFG. Music adds duration + vocal/instrumental; podcast adds bed length + Kokoro stock voices; **audio/podcast/learn-episode** adds **Sources**, **Format**, and **Duration** (ACE bed stays 30 s and loops); dub adds source file + upload, optional URL, rights, and target language. Duplicate widgets get distinct labels (Klein prompt / Wan prompt, Beat 1 enter, Bed tags). | Daily Queue |
 | **Graph** | Groups, bypass (Ctrl+B), VHS preview, UNET/CLIP/VAE, hidden shot cards, unwired placeholders (Fun InP end frame, VACE shot B), voice-clone refs | Debug, film one-click, unused plates |
 
 **Quality** is a workflow-global combo (`EZQuality`) near the top of `linearData` (first on graphs with no required still; second when a LoadImage picker leads). Changing Quality updates Steps / CFG / Image model in the open App (Vue-safe widget writes) and does not live-link other open tabs. Newly opened Apps default to the last named Quality you picked in this browser. **custom** freezes the last overlay so you can edit widgets without them being overwritten. **lab** restores authored widgets. Named qualities (draft / standard / high / Free Commercial Use / ultra / max) may swap UNET, CLIP, and VAE when those files are on disk. They never change size or length, and Quality is not `--tier quality`. **Free Commercial Use (\<$10M)** pins Apache Klein 4B (never 9B or FLUX.2-dev) and LTX-2.5 steps; on Klein stills with a generic 16:9 / 9:16 Format it retargets to the LTX feeder size (`1280×704` / `768×1280`). Wan / audio / trellis are no-ops for that choice. ultra/max may select opt-in Non-Commercial weights (gated, not YouTube-ok). Inspire desks (no UNET) still show the combo as a no-op.
@@ -65,7 +65,7 @@ One GB10 job. Cover art ≠ film ≠ podcast. Every App Note includes a one-line
 | `none` / `llm` | Prompt Forge, Research Chat, Beat Sheet | nothing GPU |
 | `klein` | still Apps + Platform Pack | Wan, LTX, podcast, music |
 | `wan` | silent 5 s / GIF / bumper | LTX, podcast, music |
-| `ltx` | any AV 12 s App | Wan, podcast, music, other LTX |
+| `ltx` | any AV 8 s App | Wan, podcast, music, other LTX |
 | `film` | 90 s one-click | everything else on that Spark |
 | `audio` | podcast / dub / rap | Klein / Wan / LTX session |
 
@@ -118,13 +118,13 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily**, **s
 | **stills/shorts-still** | klein | `ez_shorts_still` 432×768 |
 | **motion/silent/still-to-video-5s** | wan | Silent 5 s, 121 frames, MagCache draft-only |
 | **motion/loops/gif-loop** | wan | 49-frame ping-pong GIF |
-| **motion/av/still-to-video-12s** | ltx | AV 12 s, 1280×704 |
+| **motion/av/still-to-video-8s** | ltx | AV 8 s, 1280×704 |
 | **motion/av/hook-av** | ltx | AV cold open |
-| **motion/av/dialogue-12s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
-| **motion/av/multishot-12s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
+| **motion/av/dialogue-8s** | ltx | Quoted speech + world SFX. Prefix `ez_ltx_dialogue` |
+| **motion/av/multishot-8s** | ltx | Native multishot (named cuts). Prefix `ez_ltx_multishot` |
 | **motion/av/product-hero** | ltx | Packshot I2V orbit. Prefix `ez_ltx_product` |
-| **motion/av/first-last-12s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
-| **motion/av/audio-to-video-12s** | ltx | Freeze a ~12 s wav; mux original audio. Prefix `ez_ltx_a2v` |
+| **motion/av/first-last-8s** | ltx | First + last still → one AV take. Prefix `ez_ltx_flf` |
+| **motion/av/audio-to-video-8s** | ltx | Freeze a ~8 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **stills/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 | **stills/text-swap** | klein | `ez_text_swap` — replace lettering, lock type/angle/look, match source size |
 
@@ -143,8 +143,8 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | **dcc/clay-hero** | klein | Klein edit of guide `first.png`, 1280×704, prefix `ez_clay_hero` |
 | **dcc/clay-plates** | klein | One clay still → hero 704 / packshot 1:1 / IG 4:5 / shorts 9:16 (`ez_clay_pack_*`) |
 | **dcc/canny-hero** | klein | Klein edit of `canny.png`, 1280×704, prefix `ez_canny_hero` |
-| **dcc/depth-control-12s** | ltx | Union Control envelope, depth from `depth.mp4` |
-| **dcc/canny-control-12s** | ltx | Same envelope, canny from `canny.mp4` |
+| **dcc/depth-control-8s** | ltx | Union Control envelope, depth from `depth.mp4` |
+| **dcc/canny-control-8s** | ltx | Same envelope, canny from `canny.mp4` |
 | **dcc/depth-control-shorts** | ltx | Depth envelope at **768×1280** |
 | **dcc/first-last-from-guide** | wan | Fun InP `first.png` + `last.png` (opt-in `download-wan --tier fun-inp`) |
 | **dcc/guide-still** | klein | In-canvas loaders + occupancy gate. Prefix `ez_guide_hero` |
@@ -157,9 +157,9 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 
 | From | To |
 | --- | --- |
-| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 12s (`ltx-i2v-5s`) or FLF (`motion/av/first-last-12s`) |
+| Spark Still | Hero Still → Silent 5s (`wan-i2v-5s`) → AV 8s (`ltx-i2v-5s`) or FLF (`motion/av/first-last-8s`) |
 | Product packshot | `motion/av/product-hero` |
-| Talking-head still | `motion/av/audio-to-video-12s` (real freeze; two-stage stays Templates) |
+| Talking-head still | `motion/av/audio-to-video-8s` (real freeze; two-stage stays Templates) |
 | Spark Still | Platform Pack (`klein-platform-pack`) → Silent 5s / Hook AV |
 | Character Draft | Character Tweak → Identity Sheet → Silent 5s |
 | Hook Still | `wan-shorts-i2v` → `ltx-shorts-i2v` |
@@ -174,7 +174,7 @@ Block in host Blender (Comfy **down**), then Queue these Apps. Occupancy XOR wit
 | World bible (dream-house) | Loop kit (GIF / bumper / sticker) |
 | Clay dream-house | `start` (or `house-views` dump) → **stills/dream-house-clay** → same loop kit |
 | IG 4:5 (`creator/stills/instagram-portrait`) | `creator/silent/instagram-story-loop` → `creator/av/instagram-reel-lifestyle` |
-| Shorts thumb (`creator/stills/youtube-shorts-thumb`) | `creator/silent/zoom-punch` → `motion/av/shorts-still-12s` |
+| Shorts thumb (`creator/stills/youtube-shorts-thumb`) | `creator/silent/zoom-punch` → `motion/av/shorts-still-8s` |
 | Canvas still (`creator/stills/spotify-canvas-still`) | `creator/silent/spotify-canvas` (silent rebound) |
 | Twitch starting (`creator/stills/twitch-starting`) | `creator/silent/twitch-starting-loop` → `creator/av/twitch-starting-av` |
 

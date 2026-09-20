@@ -281,7 +281,7 @@ def _wan_loop(spec: ServiceSpec) -> None:
     _dump(lab_dest(spec.rel), graph)
 
 
-def _set_ltx_size(graph: dict, width: int, height: int, length: int = 289) -> None:
+def _set_ltx_size(graph: dict, width: int, height: int, length: int = 193) -> None:
     for node in graph["nodes"]:
         ntype = node.get("type")
         values = node.get("widgets_values")
@@ -311,7 +311,7 @@ def _ltx_av(spec: ServiceSpec) -> None:
     prompt = spec.lock
     if spec.ltx_mode == "i2v" and I2V_LOCK.lower() not in prompt.lower():
         prompt = f"{prompt.rstrip()} {I2V_LOCK}"
-    hint = "12 seconds, 24 fps, 9:16" if spec.portrait else "12 seconds, 24 fps"
+    hint = "8 seconds, 24 fps, 9:16" if spec.portrait else "8 seconds, 24 fps"
     cv._node(graph, "EZLTXPromptEnhance")["widgets_values"] = [
         prompt,
         True,

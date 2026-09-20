@@ -32,7 +32,7 @@ tags: [comfyui, workflows, klein, stills, catalog]
 | **[stills/identity-sheet](../generated/workflows/stills/identity-sheet.md)** | 3-angle sheet (front / three-quarter / profile) of the identity you type. Seed **42**, Enhance **on** (identity mode), **1280×704** |
 | **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still 1024×1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Klein-edit that still (LoadImage + ReferenceLatent), prefix `ez_character_tweak` |
-| **[stills/talking-head](../generated/workflows/stills/talking-head.md)** | Klein still → LTX I2V talking smoke. Real freeze: **[motion/av/audio-to-video-12s](../generated/workflows/motion/av/audio-to-video-12s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
+| **[stills/talking-head](../generated/workflows/stills/talking-head.md)** | Klein still → LTX I2V talking smoke. Real freeze: **[motion/av/audio-to-video-8s](../generated/workflows/motion/av/audio-to-video-8s.md)**. Qwen3-TTS / Wan S2V opt-in. No banned lip-sync OSS |
 
 Lane B Klein stills (same occupancy **klein**):
 

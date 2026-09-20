@@ -2388,7 +2388,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 8 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -2436,11 +2436,11 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 12 seconds, 24 fps.
+Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
 #### `audio_notes`
 
@@ -2448,7 +2448,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 8 s Apps ask for world SFX matching the start image, no score.
 
 #### `style`
 
@@ -3862,7 +3862,7 @@ Allocate a T2V LTX video latent (no start image).
 
 !!! warning "Lab notes"
 
-    Width/height must be ÷32. Length must be 1+8n (289 for ~12 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
+    Width/height must be ÷32. Length must be 1+8n (193 for ~8 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3886,11 +3886,11 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 289 Apps / 121 film = 1+8n.
+Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 289 @ 24 fps ≈ 12.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
 
 ### `EmptyTrellis2LatentStructure` — Empty TRELLIS.2 Latent Structure
 
@@ -4153,7 +4153,7 @@ Pin a still onto a latent frame (first-last-frame).
 
 !!! warning "Lab notes"
 
-    motion/av/first-last-12s uses index 0 then -1 on the video latent before audio concat.
+    motion/av/first-last-8s uses index 0 then -1 on the video latent before audio concat.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4188,7 +4188,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-8s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4267,7 +4267,7 @@ Allocate a silent/world-audio latent matching video length.
 
 #### `frames`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film.
 
 Must match video length.
 
@@ -4295,7 +4295,7 @@ Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. 1280×704×121 is the lab printer. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4325,11 +4325,11 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
 #### `batch_size`
 
@@ -4345,7 +4345,7 @@ Couple audio and video during sampling (dialogue graphs).
 
 !!! warning "Lab notes"
 
-    motion/av/dialogue-12s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
+    motion/av/dialogue-8s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -4394,7 +4394,7 @@ Load a wav/mp3 from input/.
 
 !!! warning "Lab notes"
 
-    motion/av/audio-to-video-12s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+    motion/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

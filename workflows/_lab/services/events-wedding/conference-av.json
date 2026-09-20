@@ -250,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        289
+        193
       ]
     },
     {
@@ -505,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -729,7 +729,7 @@
         "Ambient unmarked hall. Murmur, chair, no score.",
         true,
         "t2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "murmur, chair, no score",
         "none",
         "services/events-wedding/conference-av"

@@ -250,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        289
+        193
       ]
     },
     {
@@ -505,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -618,7 +618,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/av/travel-establishing\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTravel establishing AV ~12 s. Lab size **1280\u00d7704**. Prefix `ez_travel`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/av/travel-establishing\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTravel establishing AV ~8 s. Lab size **1280\u00d7704**. Prefix `ez_travel`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -729,7 +729,7 @@
         "Slow establishing of a coastal city terrace. Wind, distant traffic. No score.",
         true,
         "t2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "wind, distant traffic, no score",
         "none",
         "creator/av/travel-establishing"
@@ -1116,9 +1116,9 @@
   "extra": {
     "lab_profile": "creator/av/travel-establishing",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## creator/av/travel-establishing\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTravel establishing AV ~12 s. Lab size **1280\u00d7704**. Prefix `ez_travel`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/av/travel-establishing\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nTravel establishing AV ~8 s. Lab size **1280\u00d7704**. Prefix `ez_travel`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
-    "lab_description": "Travel establishing AV ~12 s",
+    "lab_description": "Travel establishing AV ~8 s",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",

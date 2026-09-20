@@ -1,21 +1,21 @@
 """LTX latent length: frames must be ``1 + 8n`` and odd.
 
 Hermetic (stdlib). Film / concat printers stay 5.00 s. Standalone LTX
-Apps default to 12.00 s (Spark duration-head max). Never a 30/60/90 s
+Apps default to 8.00 s. Duration-head max is 12.00 s. Never a 30/60/90 s
 denoise.
 """
 
 from __future__ import annotations
 
-# LTX printer timing: 24 fps, 5.00 s film default, 12.00 s App default.
+# LTX printer timing: 24 fps, 5.00 s film default, 8.00 s App default.
 FPS_DEFAULT = 24
 DURATION_DEFAULT_S = 5.00
-DURATION_APP_S = 12.00
+DURATION_APP_S = 8.00
 DURATION_HEAD_S = (5.00, 8.00, 10.00, 12.00)
 FRAME_MODULUS = 8
-# 5.00 s @ 24 fps → 121; 12.00 s @ 24 fps → 289 (both 1+8n).
+# 5.00 s @ 24 fps → 121; 8.00 s @ 24 fps → 193 (both 1+8n).
 FRAMES_DEFAULT = 121
-FRAMES_APP = 289
+FRAMES_APP = 193
 
 
 def snap_ltx_frames(frames: int) -> int:
@@ -94,7 +94,7 @@ def validate_ltx_frames(frames: int) -> int:
 
 
 def preflight_duration_s(duration_s: float) -> float:
-    """Allow the 5.00 s film printer, 12.00 s App default, or duration-head.
+    """Allow the 5.00 s film printer, 8.00 s App default, or duration-head.
 
     Args:
         duration_s: Requested printer duration.

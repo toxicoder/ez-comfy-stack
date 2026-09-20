@@ -48,7 +48,7 @@ user/default/workflows/
   _user/       your graphs (never overwritten; `_rescued/` holds in-place lab edits)
 ```
 
-Reusable printer blocks live in the node library after start (`custom_nodes/ez_studio_blocks/subgraphs/`): **klein-t2i-backbone**, **wan-i2v-5s**, **ltx-av-12s**, **ltx-film-shot**. Drop them from the subgraph menu instead of copy-pasting chains.
+Reusable printer blocks live in the node library after start (`custom_nodes/ez_studio_blocks/subgraphs/`): **klein-t2i-backbone**, **wan-i2v-5s**, **ltx-av-8s**, **ltx-film-shot**. Drop them from the subgraph menu instead of copy-pasting chains.
 
 ```mermaid
 flowchart TB
@@ -60,7 +60,7 @@ flowchart TB
   Need --> Plate["Thumbnail / packshot / cover"]
   Still --> K["stills/still-draft, still-studio, image-studio, daily / hero"]
   Motion --> W["motion/silent/still-to-video-5s or shot"]
-  AV --> L["motion/av/still-to-video-12s or shorts"]
+  AV --> L["motion/av/still-to-video-8s or shorts"]
   Loop --> G["motion/loops/gif-loop or bumper-loop"]
   Film --> F["films/go-see one-click"]
   Plate --> C["stills/thumbnail / packshot / cover"]

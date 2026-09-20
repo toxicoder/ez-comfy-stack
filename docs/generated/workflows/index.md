@@ -157,11 +157,11 @@ tags: [workflows, generated, comfyui]
 
 | Graph | Page |
 | --- | --- |
-| `dcc/canny-control-12s` | [dcc/canny-control-12s.md](dcc/canny-control-12s.md) |
+| `dcc/canny-control-8s` | [dcc/canny-control-8s.md](dcc/canny-control-8s.md) |
 | `dcc/canny-hero` | [dcc/canny-hero.md](dcc/canny-hero.md) |
 | `dcc/clay-hero` | [dcc/clay-hero.md](dcc/clay-hero.md) |
 | `dcc/clay-plates` | [dcc/clay-plates.md](dcc/clay-plates.md) |
-| `dcc/depth-control-12s` | [dcc/depth-control-12s.md](dcc/depth-control-12s.md) |
+| `dcc/depth-control-8s` | [dcc/depth-control-8s.md](dcc/depth-control-8s.md) |
 | `dcc/depth-control-shorts` | [dcc/depth-control-shorts.md](dcc/depth-control-shorts.md) |
 | `dcc/depth-from-loader` | [dcc/depth-from-loader.md](dcc/depth-from-loader.md) |
 | `dcc/first-last-from-guide` | [dcc/first-last-from-guide.md](dcc/first-last-from-guide.md) |
@@ -216,18 +216,18 @@ tags: [workflows, generated, comfyui]
 
 | Graph | Page |
 | --- | --- |
-| `motion/av/audio-to-video-12s` | [motion/av/audio-to-video-12s.md](motion/av/audio-to-video-12s.md) |
+| `motion/av/audio-to-video-8s` | [motion/av/audio-to-video-8s.md](motion/av/audio-to-video-8s.md) |
 | `motion/av/broll-ambient` | [motion/av/broll-ambient.md](motion/av/broll-ambient.md) |
-| `motion/av/dialogue-12s` | [motion/av/dialogue-12s.md](motion/av/dialogue-12s.md) |
-| `motion/av/first-last-12s` | [motion/av/first-last-12s.md](motion/av/first-last-12s.md) |
+| `motion/av/dialogue-8s` | [motion/av/dialogue-8s.md](motion/av/dialogue-8s.md) |
+| `motion/av/first-last-8s` | [motion/av/first-last-8s.md](motion/av/first-last-8s.md) |
 | `motion/av/hook-av` | [motion/av/hook-av.md](motion/av/hook-av.md) |
 | `motion/av/interior-ambience` | [motion/av/interior-ambience.md](motion/av/interior-ambience.md) |
-| `motion/av/multishot-12s` | [motion/av/multishot-12s.md](motion/av/multishot-12s.md) |
+| `motion/av/multishot-8s` | [motion/av/multishot-8s.md](motion/av/multishot-8s.md) |
 | `motion/av/product-hero` | [motion/av/product-hero.md](motion/av/product-hero.md) |
-| `motion/av/shorts-still-12s` | [motion/av/shorts-still-12s.md](motion/av/shorts-still-12s.md) |
+| `motion/av/shorts-still-8s` | [motion/av/shorts-still-8s.md](motion/av/shorts-still-8s.md) |
 | `motion/av/still-to-shot` | [motion/av/still-to-shot.md](motion/av/still-to-shot.md) |
-| `motion/av/still-to-video-12s` | [motion/av/still-to-video-12s.md](motion/av/still-to-video-12s.md) |
-| `motion/av/text-to-video-12s` | [motion/av/text-to-video-12s.md](motion/av/text-to-video-12s.md) |
+| `motion/av/still-to-video-8s` | [motion/av/still-to-video-8s.md](motion/av/still-to-video-8s.md) |
+| `motion/av/text-to-video-8s` | [motion/av/text-to-video-8s.md](motion/av/text-to-video-8s.md) |
 | `motion/av/weather-broll` | [motion/av/weather-broll.md](motion/av/weather-broll.md) |
 | `motion/loops/bumper-loop` | [motion/loops/bumper-loop.md](motion/loops/bumper-loop.md) |
 | `motion/loops/gif-loop` | [motion/loops/gif-loop.md](motion/loops/gif-loop.md) |

@@ -56,7 +56,7 @@ EXEMPT = {
     "films/still-here",
     "films/switchyard",
     "dcc/clay-hero",
-    "dcc/depth-control-12s",
+    "dcc/depth-control-8s",
 }
 
 

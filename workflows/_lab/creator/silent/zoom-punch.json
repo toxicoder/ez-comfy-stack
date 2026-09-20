@@ -573,7 +573,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-12s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
+        "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-8s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n"
       ],
       "title": "Operator note"
     },
@@ -1009,7 +1009,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-12s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## creator/silent/zoom-punch\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSilent 9:16 hook zoom punch. Lab size **480\u00d7832**. Prefix `ez_punch`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: wan \u2014 stop LTX, podcast, music. One GB10 job.\nHandoff: **motion/av/shorts-still-8s**.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_profile": "creator/silent/zoom-punch",
     "lab_description": "Silent 9:16 hook zoom punch\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "ds": {
@@ -1027,7 +1027,7 @@
       "occupancy": "wan",
       "enhance_off_identity": true,
       "handoff": [
-        "motion/av/shorts-still-12s"
+        "motion/av/shorts-still-8s"
       ]
     },
     "lab_magcache": {

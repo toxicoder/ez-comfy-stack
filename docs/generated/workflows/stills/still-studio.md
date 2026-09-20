@@ -38,7 +38,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```
@@ -555,7 +555,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Click Image model to swap distilled / NVFP4 / base. High quality may swap Klein base when download-image --tier base is on disk.
 Save prefix follows Format (Custom keeps ez_still_studio). Empty of lettering — composite titles later.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
-Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-12s, stills/text-swap.
+Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 ```

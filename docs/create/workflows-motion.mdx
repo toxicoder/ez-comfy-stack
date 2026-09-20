@@ -1,6 +1,6 @@
 ---
 title: Motion and AV catalog
-description: Seeded Wan 2.2 silent ~5 s graphs, LTX-2.5 AV ~12 s heroes, GIF/bumper loops, and creator motion plates.
+description: Seeded Wan 2.2 silent ~5 s graphs, LTX-2.5 AV ~8 s heroes, GIF/bumper loops, and creator motion plates.
 tags: [comfyui, workflows, wan, ltx, motion, catalog]
 ---
 
@@ -15,7 +15,7 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 **What this enables**
 
-- **Queuing a silent ~5 s clip** or an AV ~12 s hero from a seeded filename
+- **Queuing a silent ~5 s clip** or an AV ~8 s hero from a seeded filename
 - **Keeping LTX widgets** on the native VAE grid so prints do not snap-and-crop
 
 **Who this is for:** studio users after a Klein still. Index: [Workflow catalog](../studio-workflows.md). Node-by-node widgets: [Workflow details](workflows-index.md). Unload the previous family before Queue. Outputs under `${COMFY_OUTPUT_DIR}`.
@@ -42,22 +42,22 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 
 | Workflow | What it does |
 | --- | --- |
-| **[motion/av/still-to-video-12s](../generated/workflows/motion/av/still-to-video-12s.md)** | ~12 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
-| **[motion/av/text-to-video-12s](../generated/workflows/motion/av/text-to-video-12s.md)** | ~12 s T2V AV. Default **1280×704**; same Format / platform combo |
+| **[motion/av/still-to-video-8s](../generated/workflows/motion/av/still-to-video-8s.md)** | ~8 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
+| **[motion/av/text-to-video-8s](../generated/workflows/motion/av/text-to-video-8s.md)** | ~8 s T2V AV. Default **1280×704**; same Format / platform combo |
 
 ---
 
 ## Showcase (LTX-2.5)
 
-Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 12.00 s / 289 / **1280×704** printer as the heroes. Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
+Authored recipes. Prompt Enhance **off**. Occupancy **ltx**. Same 8.00 s / 193 / **1280×704** printer as the heroes. Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 
 | Workflow | What it does |
 | --- | --- |
-| **[motion/av/dialogue-12s](../generated/workflows/motion/av/dialogue-12s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
-| **[motion/av/multishot-12s](../generated/workflows/motion/av/multishot-12s.md)** | Native multishot T2V: named hard cut + match cut in one 12 s clip. Prefix `ez_ltx_multishot` |
+| **[motion/av/dialogue-8s](../generated/workflows/motion/av/dialogue-8s.md)** | T2V with a quoted spoken line + interleaved foley. `LTXVModalityGuidance` (A/V coupling). Prefix `ez_ltx_dialogue`. Mouths will not match |
+| **[motion/av/multishot-8s](../generated/workflows/motion/av/multishot-8s.md)** | Native multishot T2V: named hard cut + match cut in one 8 s clip. Prefix `ez_ltx_multishot` |
 | **[motion/av/product-hero](../generated/workflows/motion/av/product-hero.md)** | I2V from **[stills/product-packshot](../generated/workflows/stills/product-packshot.md)** (`ez_packshot_*.png`). Slow orbit + table SFX. Prefix `ez_ltx_product` |
-| **[motion/av/first-last-12s](../generated/workflows/motion/av/first-last-12s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
-| **[motion/av/audio-to-video-12s](../generated/workflows/motion/av/audio-to-video-12s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
+| **[motion/av/first-last-8s](../generated/workflows/motion/av/first-last-8s.md)** | First-last-frame AV. Two Klein stills pin start/end via `LTXVAddGuide` on the video latent (before audio concat). Prefix `ez_ltx_flf` |
+| **[motion/av/audio-to-video-8s](../generated/workflows/motion/av/audio-to-video-8s.md)** | Audio freeze: `LoadAudio` → encode into the joint latent; MP4 muxes the **original** wav (no audio VAE decode). Prefix `ez_ltx_a2v`. Drop `ez_a2v_bed.wav` in `${COMFY_OUTPUT_DIR}/input` |
 
 <Callout type="warning" title="LTX width/height must be divisible by 32">
   Broadcast 720p (**1280×720**) and 1080p (**1920×1080**) are **not** native LTX VAE sizes (720/16=45, then the next `/2` patch fails). Lab landscape graphs use **1280×704**. Klein **I2V feeders** (`klein-still-hero`, 90s film identity) are **1280×704**. Thumbnails/end-cards may stay 1280×720. On LTX Apps pick **Format / platform → LTX · 16:9 YouTube (1280×704)** instead of typing 720. Typing 720 or 1080 on LTX widgets is **auto-snapped** (704 / 1056) by `ez_ltx_spatial` — prefer 704 so you skip the extra crop. Portrait shorts I2V is **768×1280**. See [Troubleshooting](../troubleshooting.md).
@@ -71,9 +71,9 @@ Pack 1 motion / AV (stills companions: [Stills catalog](workflows-stills.md)):
 | Workflow | What it does |
 | --- | --- |
 | **[motion/silent/shorts-still-5s](../generated/workflows/motion/silent/shorts-still-5s.md)** | Vertical silent I2V from that still |
-| **[motion/av/shorts-still-12s](../generated/workflows/motion/av/shorts-still-12s.md)** | Vertical AV I2V (~12 s) with world audio |
+| **[motion/av/shorts-still-8s](../generated/workflows/motion/av/shorts-still-8s.md)** | Vertical AV I2V (~8 s) with world audio |
 | **[motion/loops/bumper-loop](../generated/workflows/motion/loops/bumper-loop.md)** | Loopable MP4 bumper (ping-pong) |
-| **[motion/av/broll-ambient](../generated/workflows/motion/av/broll-ambient.md)** | Ambient B-roll AV plate (~12 s) |
+| **[motion/av/broll-ambient](../generated/workflows/motion/av/broll-ambient.md)** | Ambient B-roll AV plate (~8 s) |
 
 Pack 2 — motion / AV:
 
@@ -85,6 +85,6 @@ Pack 2 — motion / AV:
 | **[motion/loops/sticker-loop](../generated/workflows/motion/loops/sticker-loop.md)** | Looping sticker MP4 |
 | **[motion/av/weather-broll](../generated/workflows/motion/av/weather-broll.md)** | Rain / wind B-roll AV |
 | **[motion/av/interior-ambience](../generated/workflows/motion/av/interior-ambience.md)** | Interior room-tone AV |
-| **[motion/av/hook-av](../generated/workflows/motion/av/hook-av.md)** | ~12 s AV cold open |
+| **[motion/av/hook-av](../generated/workflows/motion/av/hook-av.md)** | ~8 s AV cold open |
 
 90s shot printers (**[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)**, **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)**) live with the films: [Film catalog](workflows-film.md).

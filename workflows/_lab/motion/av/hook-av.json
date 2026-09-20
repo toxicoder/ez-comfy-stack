@@ -250,7 +250,7 @@
       "widgets_values": [
         1280,
         704,
-        289
+        193
       ]
     },
     {
@@ -505,7 +505,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -618,7 +618,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/hook-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\n~12 s AV cold-open / hook (LTX-2.5 T2V). Community License \u2014 not Apache.\nPrefix `ez_hook_video`. Pair with **stills/hook-still** if you want I2V instead.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## motion/av/hook-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\n~8 s AV cold-open / hook (LTX-2.5 T2V). Community License \u2014 not Apache.\nPrefix `ez_hook_video`. Pair with **stills/hook-still** if you want I2V instead.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -729,7 +729,7 @@
         "A five-second AV cold open. Camera snaps to the start-image subject with fast present-tense energy. World SFX matching the start image. Unmarked surfaces. No music and no score.",
         true,
         "t2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "world SFX matching the start image, no score",
         "none",
         "motion/av/hook-av"
@@ -1116,7 +1116,7 @@
   "extra": {
     "lab_profile": "motion/av/hook-av",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/hook-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\n~12 s AV cold-open / hook (LTX-2.5 T2V). Community License \u2014 not Apache.\nPrefix `ez_hook_video`. Pair with **stills/hook-still** if you want I2V instead.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## motion/av/hook-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\n~8 s AV cold-open / hook (LTX-2.5 T2V). Community License \u2014 not Apache.\nPrefix `ez_hook_video`. Pair with **stills/hook-still** if you want I2V instead.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 AV hook / cold open ~5s",
     "lab_app_mode": {
