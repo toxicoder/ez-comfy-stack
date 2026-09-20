@@ -57,7 +57,10 @@ def test_format_scope_covers_printers_and_skips_locked() -> None:
     assert format_kind("stills/text-swap") is None
     assert format_kind("stills/platform-pack") is None
     assert format_kind("films/go-see") is None
-    assert format_kind("motion/av/audio-to-video-12s") is None
+    assert format_kind("motion/av/audio-to-video-12s") == "video"
+    assert format_kind("stills/talking-head") == "video"
+    assert format_kind("stills/lighting-trio") == "still"
+    assert format_kind("stills/background-swap") is None
     assert "stills/still-draft" in STILL_SCOPE
     assert "motion/loops/gif-loop" in VIDEO_SCOPE
     assert FORMAT_SCOPE == STILL_SCOPE | VIDEO_SCOPE

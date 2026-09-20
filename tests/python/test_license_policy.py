@@ -92,6 +92,8 @@ REQUIRED_SNIPPETS = (
     "Qwen3-4B-Instruct-2507",
     "Qwen3-4B-Instruct-2507-Q4_K_M.gguf",
     "unsloth/Qwen3-4B-Instruct-2507-GGUF",
+    "Qwen2.5-VL-3B-Instruct Q4_K_M GGUF",
+    "ggml-org/Qwen2.5-VL-3B-Instruct-GGUF",
     "Kokoro-82M",
     "hexgrad/Kokoro-82M",
     "ACE-Step 1.5",
@@ -131,6 +133,7 @@ DEFAULT_YES_MODELS = (
 )
 
 DEFAULT_NO_MODELS = (
+    "Qwen2.5-VL-3B-Instruct Q4_K_M GGUF",
     "Z-Image Turbo",
     "Wan 2.2 A14B T2V/I2V",
     "Wan 2.2 Fun InP A14B",

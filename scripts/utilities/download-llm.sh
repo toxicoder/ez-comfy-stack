@@ -8,12 +8,13 @@
 #   Selective Hugging Face pull. Apache 2.0. File-level include — not the
 #   full Unsloth GGUF tree. Default enhance pack is part of download-models.
 #   Opt-in qwen36-35b-a3b is occupancy llm-desk only (not download-models).
+#   Opt-in describe is Qwen2.5-VL-3B + mmproj for EZImageDescribe.
 #
 # Audience:
 #   Operators on the Spark host. Prefer manage.sh download-llm / download-models.
 #
 # Usage:
-#   ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|all] [--json]
+#   ./scripts/utilities/download-llm.sh status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json]
 #
 # Environment:
 #   MODELS_DIR, HF_TOKEN, LAB_MOCK_HF_DOWNLOAD
@@ -50,6 +51,11 @@ readonly LLM35_REPO="unsloth/Qwen3.6-35B-A3B-MTP-GGUF"
 readonly LLM35_FILE="Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf"
 readonly LLM35_MIN_GB=23
 readonly LLM35_TIER="llm-35b"
+readonly LLM_DESCRIBE_REPO="ggml-org/Qwen2.5-VL-3B-Instruct-GGUF"
+readonly LLM_DESCRIBE_FILE="Qwen2.5-VL-3B-Instruct-Q4_K_M.gguf"
+readonly LLM_DESCRIBE_MMPROJ="mmproj-Qwen2.5-VL-3B-Instruct-Q8_0.gguf"
+readonly LLM_DESCRIBE_MIN_GB=4
+readonly LLM_DESCRIBE_TIER="llm-describe"
 
 #######################################
 # Hugging Face repo id for the prompt-enhance GGUF.
@@ -202,6 +208,136 @@ llm35_include_pattern() {
 }
 
 #######################################
+# Hugging Face repo id for the opt-in describe VLM.
+# Globals:
+#   LLM_DESCRIBE_REPO
+# Arguments:
+#   None
+# Outputs:
+#   Repo id on stdout
+# Returns:
+#   0
+#######################################
+llm_describe_repo() {
+  printf '%s\n' "${LLM_DESCRIBE_REPO}"
+}
+
+#######################################
+# Basename of the describe VLM GGUF.
+# Globals:
+#   LLM_DESCRIBE_FILE
+# Arguments:
+#   None
+# Outputs:
+#   Filename on stdout
+# Returns:
+#   0
+#######################################
+llm_describe_filename() {
+  printf '%s\n' "${LLM_DESCRIBE_FILE}"
+}
+
+#######################################
+# Basename of the describe mmproj GGUF.
+# Globals:
+#   LLM_DESCRIBE_MMPROJ
+# Arguments:
+#   None
+# Outputs:
+#   Filename on stdout
+# Returns:
+#   0
+#######################################
+llm_describe_mmproj() {
+  printf '%s\n' "${LLM_DESCRIBE_MMPROJ}"
+}
+
+#######################################
+# Minimum ready size in GB for the describe pack.
+# Globals:
+#   LLM_DESCRIBE_MIN_GB
+# Arguments:
+#   None
+# Outputs:
+#   Integer GB on stdout
+# Returns:
+#   0
+#######################################
+llm_describe_min_gb() {
+  printf '%s\n' "${LLM_DESCRIBE_MIN_GB}"
+}
+
+#######################################
+# Absolute local-dir for the describe snapshot.
+# Globals:
+#   MODELS_DIR, LLM_DESCRIBE_REPO, LLM_DESCRIBE_TIER
+# Arguments:
+#   None
+# Outputs:
+#   Directory path on stdout
+# Returns:
+#   0
+#######################################
+llm_describe_dir() {
+  echo "${MODELS_DIR}/${LLM_DESCRIBE_REPO//\//__}_${LLM_DESCRIBE_TIER}"
+}
+
+#######################################
+# True if describe GGUF and mmproj are present and non-empty.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   None
+# Returns:
+#   0 ready; 1 not ready
+#######################################
+llm_describe_files_ready() {
+  local dir f
+  dir="$(llm_describe_dir)"
+  f="${dir}/$(llm_describe_filename)"
+  if [[ ! -f ${f} || ! -s ${f} ]]; then
+    return 1
+  fi
+  f="${dir}/$(llm_describe_mmproj)"
+  if [[ -f ${f} && -s ${f} ]]; then
+    return 0
+  fi
+  return 1
+}
+
+#######################################
+# Relative symlink describe GGUF + mmproj into MODELS_DIR/comfy/llm/.
+# Globals:
+#   MODELS_DIR
+# Arguments:
+#   None
+# Outputs:
+#   log/warn
+# Returns:
+#   0
+#######################################
+link_llm_describe_into_comfy() {
+  local src dest dir f name
+  dir="$(llm_describe_dir)"
+  src="${MODELS_DIR}/comfy/llm"
+  if ! prepare_writable_layout_dir "${src}"; then
+    return 0
+  fi
+  for name in "$(llm_describe_filename)" "$(llm_describe_mmproj)"; do
+    f="${dir}/${name}"
+    dest="${src}/${name}"
+    [[ -f ${f} ]] || continue
+    if ln_sfn_relative "${f}" "${dest}"; then
+      log "linked ${name} → comfy/llm/"
+    else
+      warn "failed to link ${name} → comfy/llm/"
+    fi
+  done
+}
+
+#######################################
 # Approximate on-disk size of the GGUF local-dir in GB.
 # Globals:
 #   None
@@ -340,8 +476,8 @@ link_llm35_into_comfy() {
 #######################################
 tiers_to_process() {
   case "${TIER}" in
-    all) echo "enhance qwen36-35b-a3b" ;;
-    enhance | qwen36-35b-a3b) echo "${TIER}" ;;
+    all) echo "enhance qwen36-35b-a3b describe" ;;
+    enhance | qwen36-35b-a3b | describe) echo "${TIER}" ;;
     *) echo "${TIER}" ;;
   esac
 }
@@ -402,13 +538,14 @@ parse_args() {
       --dry-run) CLEANUP_YES=0 ;;
       --yes | -y) CLEANUP_YES=1 ;;
       status | run | cleanup | link) CMD="${1}" ;;
-      enhance | qwen36-35b-a3b | all)
+      enhance | qwen36-35b-a3b | describe | all)
         TIER="${1}"
         ;;
       -h | --help)
-        echo "Usage: $0 status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|all] [--json] [--yes]" >&2
+        echo "Usage: $0 status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json] [--yes]" >&2
         echo "  Default enhance = ${LLM_FILE} from ${LLM_REPO} (Apache 2.0, download-models)" >&2
         echo "  qwen36-35b-a3b = ${LLM35_FILE} (~23 GB, occupancy llm-desk, not download-models)" >&2
+        echo "  describe = ${LLM_DESCRIBE_FILE} + mmproj (~4 GB, opt-in image caption GGUF)" >&2
         echo "  cleanup options: --dry-run (default) | --yes" >&2
         exit 0
         ;;
@@ -423,9 +560,9 @@ parse_args() {
     shift
   done
   case "${TIER}" in
-    enhance | qwen36-35b-a3b | all) ;;
+    enhance | qwen36-35b-a3b | describe | all) ;;
     *)
-      err "Unknown tier: ${TIER} (want: enhance|qwen36-35b-a3b|all)"
+      err "Unknown tier: ${TIER} (want: enhance|qwen36-35b-a3b|describe|all)"
       exit 1
       ;;
   esac
@@ -461,6 +598,15 @@ tier_status_json() {
       min="$(llm35_min_gb)"
       ready="false"
       if llm35_files_ready; then
+        ready="true"
+      fi
+      ;;
+    describe)
+      repo="$(llm_describe_repo)"
+      dir="$(llm_describe_dir)"
+      min="$(llm_describe_min_gb)"
+      ready="false"
+      if llm_describe_files_ready; then
         ready="true"
       fi
       ;;
@@ -538,6 +684,13 @@ run_one_tier() {
       ready_fn=llm35_files_ready
       link_fn=link_llm35_into_comfy
       ;;
+    describe)
+      dir="$(llm_describe_dir)"
+      repo="$(llm_describe_repo)"
+      include="$(llm_describe_filename)"
+      ready_fn=llm_describe_files_ready
+      link_fn=link_llm_describe_into_comfy
+      ;;
     *)
       err "Unknown tier: ${tier}"
       return 1
@@ -550,7 +703,15 @@ run_one_tier() {
   fi
   log "Downloading ${repo} selective subset (tier: ${tier})…"
   log "  include: ${include}"
-  if HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
+  if [[ ${tier} == "describe" ]]; then
+    if HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
+      --include "$(llm_describe_filename)" &&
+      HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
+        --include "$(llm_describe_mmproj)"; then
+      "${link_fn}" || return 1
+      return 0
+    fi
+  elif HF_HOME="${MODELS_DIR}" hf_download "${repo}" --local-dir "${dir}" \
     --include "${include}"; then
     "${link_fn}" || return 1
     return 0
@@ -610,16 +771,56 @@ cmd_link() {
     case "${tier}" in
       enhance) link_llm_into_comfy ;;
       qwen36-35b-a3b) link_llm35_into_comfy ;;
+      describe) link_llm_describe_into_comfy ;;
     esac
   done
 }
 
 #######################################
-# Remove extra files in the selected pack local-dir (keep the pinned GGUF).
+# Remove extra files in the describe pack local-dir (keep GGUF + mmproj).
 # Globals:
 #   CLEANUP_YES, TIER
 # Arguments:
 #   None
+# Outputs:
+#   log
+# Returns:
+#   0
+#######################################
+cleanup_describe_dir() {
+  local dir keep_a keep_b f rel
+  dir="$(llm_describe_dir)"
+  keep_a="$(llm_describe_filename)"
+  keep_b="$(llm_describe_mmproj)"
+  if [[ ! -d ${dir} ]]; then
+    log "cleanup describe: no directory at ${dir} (nothing to do)"
+    return 0
+  fi
+  while IFS= read -r f; do
+    [[ -z ${f} ]] && continue
+    rel="${f#"${dir}"/}"
+    case "${rel}" in
+      "${keep_a}" | "${keep_b}" | .gitattributes | LICENSE | README.md | .cache | .cache/* | *.incomplete | *.lock | *.lock.*)
+        continue
+        ;;
+    esac
+    if [[ ${CLEANUP_YES} -eq 1 ]]; then
+      rm -f "${f}" || warn "Failed to remove ${f}"
+      log "  removed: ${rel}"
+    else
+      log "  would remove: ${rel}"
+    fi
+  done < <(find "${dir}" -type f 2>/dev/null | LC_ALL=C sort)
+}
+
+#######################################
+# Remove extra files in the selected pack local-dir (keep the pinned GGUF).
+# Globals:
+#   CLEANUP_YES
+# Arguments:
+#   $1  Directory
+#   $2  Keep filename
+#   $3  Label
 # Outputs:
 #   log
 # Returns:
@@ -672,6 +873,9 @@ cmd_cleanup() {
       qwen36-35b-a3b)
         cleanup_one_dir "$(llm35_dir)" "$(llm35_filename)" "qwen36-35b-a3b"
         ;;
+      describe)
+        cleanup_describe_dir
+        ;;
     esac
   done
 }
@@ -689,7 +893,7 @@ main() {
     link) cmd_link ;;
     cleanup) cmd_cleanup ;;
     *)
-      err "Usage: $0 status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|all] [--json] [--yes]"
+      err "Usage: $0 status|run|cleanup|link [--tier enhance|qwen36-35b-a3b|describe|all] [--json] [--yes]"
       exit 1
       ;;
   esac

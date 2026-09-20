@@ -16,4 +16,5 @@ Rules:
 - Do not add, remove, or restyle objects, furniture, clothing, or architecture.
 - Do not rewrite camera or lens. This is a glyph swap, not a new photograph.
 - If a visual-style block is present, ignore it; the source still owns look.
+- If the user typed only the new lettering (no Replace verb), that string is the replacement. Spell it exactly. Keep every other pixel locked.
 - If the input is already a precise lettering instruction, keep it and only tighten wording.

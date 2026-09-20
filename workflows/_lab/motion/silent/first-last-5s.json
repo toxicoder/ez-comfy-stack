@@ -1,8 +1,8 @@
 {
   "id": "first-last-5s",
-  "revision": 6,
-  "last_node_id": 18,
-  "last_link_id": 18,
+  "revision": 8,
+  "last_node_id": 20,
+  "last_link_id": 24,
   "nodes": [
     {
       "id": 1,
@@ -131,14 +131,15 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            6
+            6,
+            24
           ],
           "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -205,7 +206,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        512
+        804
       ],
       "size": [
         420,
@@ -273,6 +274,22 @@
           "shape": 7,
           "type": "IMAGE",
           "link": 6
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 19,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 20,
+          "widget": {
+            "name": "height"
+          }
         }
       ],
       "outputs": [
@@ -515,7 +532,7 @@
         {
           "name": "Filenames",
           "type": "VHS_FILENAMES",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -541,7 +558,7 @@
       "type": "Note",
       "pos": [
         40,
-        960
+        1036
       ],
       "size": [
         960,
@@ -556,7 +573,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 Fun InP FLF"
     },
@@ -574,7 +591,21 @@
       "flags": {},
       "order": 4,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 21,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 23
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -605,7 +636,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        1372
+        1448
       ],
       "size": [
         320,
@@ -619,12 +650,12 @@
         {
           "name": "IMAGE",
           "type": "IMAGE",
-          "links": null
+          "links": []
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null
+          "links": []
         }
       ],
       "properties": {
@@ -641,7 +672,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1352
+        1428
       ],
       "size": [
         420,
@@ -696,7 +727,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -707,6 +738,111 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 19,
+      "type": "EZVideoFormat",
+      "pos": [
+        1420,
+        768
+      ],
+      "size": [
+        360,
+        180
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            20
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            21
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZVideoFormat"
+      },
+      "widgets_values": [
+        "Wan 5B",
+        "Wan \u00b7 16:9 YouTube (832\u00d7480)",
+        832,
+        480
+      ],
+      "title": "Format / platform"
+    },
+    {
+      "id": 20,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        772
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -837,6 +973,46 @@
       17,
       0,
       "STRING"
+    ],
+    [
+      19,
+      19,
+      0,
+      8,
+      2,
+      "INT"
+    ],
+    [
+      20,
+      19,
+      1,
+      8,
+      3,
+      "INT"
+    ],
+    [
+      21,
+      19,
+      2,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      23,
+      20,
+      0,
+      15,
+      1,
+      "STRING"
+    ],
+    [
+      24,
+      4,
+      0,
+      20,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -869,7 +1045,7 @@
   ],
   "config": {},
   "extra": {
-    "lab_note": "## Fun InP FLF (opt-in)\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## Fun InP FLF (opt-in)\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\n./scripts/utilities/download-wan.sh run --tier fun-inp\nApache 2.0. Not part of download-models. Occupancy: stop LTX first.\nLoad a start frame and an end frame. 121 frames @ 24 fps. MagCache off.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_profile": "motion/silent/first-last-5s",
     "lab_description": "Wan 2.2 Fun InP first-last-frame 5 s draft. Opt-in pack (~47 GB). MagCache off. Unload LTX first.",
     "ds": {
@@ -924,6 +1100,22 @@
           }
         ],
         [
+          19,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          20,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
+          }
+        ],
+        [
           15,
           "enhance",
           {
@@ -937,6 +1129,22 @@
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          19,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          19,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
           }
         ]
       ],

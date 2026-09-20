@@ -1,8 +1,8 @@
 {
   "id": "instagram-grid-3up",
-  "revision": 5,
-  "last_node_id": 29,
-  "last_link_id": 37,
+  "revision": 6,
+  "last_node_id": 32,
+  "last_link_id": 45,
   "nodes": [
     {
       "id": 1,
@@ -45,7 +45,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        436
       ],
       "size": [
         360,
@@ -83,7 +83,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        614
       ],
       "size": [
         360,
@@ -118,7 +118,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        570
+        886
       ],
       "size": [
         420,
@@ -169,7 +169,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        1062
+        1378
       ],
       "size": [
         420,
@@ -218,7 +218,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1294
+        1610
       ],
       "size": [
         280,
@@ -280,7 +280,7 @@
       "type": "Note",
       "pos": [
         40,
-        1764
+        2080
       ],
       "size": [
         420,
@@ -478,7 +478,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            11
+            38
           ],
           "slot_index": 0
         }
@@ -507,7 +507,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 11
+          "link": 39
         }
       ],
       "outputs": [],
@@ -524,7 +524,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        460
+        602
       ],
       "size": [
         420,
@@ -565,7 +565,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        460
+        602
       ],
       "size": [
         360,
@@ -612,7 +612,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        460
+        602
       ],
       "size": [
         320,
@@ -672,7 +672,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        460
+        602
       ],
       "size": [
         240,
@@ -698,7 +698,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            21
+            40
           ],
           "slot_index": 0
         }
@@ -714,7 +714,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        460
+        602
       ],
       "size": [
         280,
@@ -727,7 +727,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 21
+          "link": 41
         }
       ],
       "outputs": [],
@@ -744,7 +744,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        840
+        1124
       ],
       "size": [
         420,
@@ -785,7 +785,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        840
+        1124
       ],
       "size": [
         360,
@@ -832,7 +832,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        840
+        1124
       ],
       "size": [
         320,
@@ -892,7 +892,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        840
+        1124
       ],
       "size": [
         240,
@@ -918,7 +918,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            31
+            43
           ],
           "slot_index": 0
         }
@@ -934,7 +934,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        840
+        1124
       ],
       "size": [
         280,
@@ -947,7 +947,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 31
+          "link": 44
         }
       ],
       "outputs": [],
@@ -964,7 +964,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         508,
-        1770
+        2086
       ],
       "size": [
         420,
@@ -1019,7 +1019,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -1036,7 +1036,7 @@
       "type": "EZImageFormat",
       "pos": [
         40,
-        1472
+        1788
       ],
       "size": [
         360,
@@ -1103,6 +1103,160 @@
         1
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 30,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        422
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 38
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            39
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            42,
+            45
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 31,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        944
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 40
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 42,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            41
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 32,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1466
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 43
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 45,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            44
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -1187,14 +1341,6 @@
       "VAE"
     ],
     [
-      11,
-      13,
-      0,
-      14,
-      0,
-      "IMAGE"
-    ],
-    [
       12,
       4,
       0,
@@ -1265,14 +1411,6 @@
       19,
       1,
       "VAE"
-    ],
-    [
-      21,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
     ],
     [
       22,
@@ -1347,14 +1485,6 @@
       "VAE"
     ],
     [
-      31,
-      25,
-      0,
-      26,
-      0,
-      "IMAGE"
-    ],
-    [
       32,
       27,
       0,
@@ -1401,6 +1531,70 @@
       4,
       0,
       "STRING"
+    ],
+    [
+      38,
+      13,
+      0,
+      30,
+      0,
+      "IMAGE"
+    ],
+    [
+      39,
+      30,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      40,
+      19,
+      0,
+      31,
+      0,
+      "IMAGE"
+    ],
+    [
+      41,
+      31,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      42,
+      30,
+      1,
+      31,
+      1,
+      "STRING"
+    ],
+    [
+      43,
+      25,
+      0,
+      32,
+      0,
+      "IMAGE"
+    ],
+    [
+      44,
+      32,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      45,
+      30,
+      1,
+      32,
+      1,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1411,7 +1605,7 @@
         20,
         24,
         400,
-        490
+        692
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1422,7 +1616,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        514,
+        830,
         460,
         520
       ],
@@ -1437,7 +1631,7 @@
         500,
         24,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1448,9 +1642,9 @@
       "title": "SHOT CENTER",
       "bounding": [
         500,
-        404,
+        546,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1461,9 +1655,9 @@
       "title": "SHOT RIGHT",
       "bounding": [
         500,
-        784,
+        1068,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1493,7 +1687,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -1519,6 +1713,14 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          30,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [

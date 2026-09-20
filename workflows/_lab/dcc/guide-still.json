@@ -1,8 +1,8 @@
 {
   "id": "guide-still",
-  "revision": 7,
-  "last_node_id": 17,
-  "last_link_id": 18,
+  "revision": 8,
+  "last_node_id": 18,
+  "last_link_id": 20,
   "nodes": [
     {
       "id": 1,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        464
+        666
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         940,
-        696
+        898
       ],
       "size": [
         280,
@@ -328,7 +328,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            19
           ],
           "slot_index": 0
         }
@@ -357,7 +357,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 20
         }
       ],
       "outputs": [],
@@ -374,7 +374,7 @@
       "type": "Note",
       "pos": [
         40,
-        874
+        1076
       ],
       "size": [
         960,
@@ -420,13 +420,13 @@
         {
           "name": "mask",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 1
         },
         {
           "name": "metadata",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 2
         }
       ],
@@ -485,7 +485,7 @@
       "type": "VAEEncode",
       "pos": [
         2180,
-        656
+        858
       ],
       "size": [
         240,
@@ -527,7 +527,7 @@
       "type": "ReferenceLatent",
       "pos": [
         948,
-        312
+        514
       ],
       "size": [
         280,
@@ -609,7 +609,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1226
+        1428
       ],
       "size": [
         420,
@@ -664,7 +664,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -675,6 +675,51 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 18,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        540
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            20
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -733,14 +778,6 @@
       8,
       0,
       "LATENT"
-    ],
-    [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
     ],
     [
       10,
@@ -813,6 +850,22 @@
       16,
       0,
       "STRING"
+    ],
+    [
+      19,
+      8,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      20,
+      18,
+      0,
+      9,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [],
@@ -848,7 +901,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -894,6 +947,14 @@
             "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
+          }
+        ],
+        [
+          18,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [

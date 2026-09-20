@@ -29,6 +29,8 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## stills/dream-house-clay
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
 
 `manage.sh start` seeds ez_house_clay_01.png … 10.png into COMFY_OUTPUT_DIR/input (container /inputs) so LoadImage can Queue. Seed copies an existing house-views pack when present; otherwise it renders the shipped lab-penthouse layout (no Blender). Reload the App if it was open before seed. Prefix ez_dream_house_clay_01 … 10.
@@ -91,7 +93,7 @@ flowchart TB
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | HOUSE IDENTITY | `EZKleinPromptEnhance` | HOUSE IDENTITY |
 | 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Instagram 4:5 1024x1280 | `EmptyFlux2LatentImage` | Ungrouped |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
 | 7 | Operator note | `Note` | Ungrouped |
 | 20 | SHOT 01 tower | `EZPromptJoin` | SHOT 01 tower |
 | 21 | Positive 01 | `CLIPTextEncode` | SHOT 01 tower |
@@ -175,6 +177,16 @@ flowchart TB
 | 117 | Save 10 | `SaveImage` | SHOT 10 study |
 | 118 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
 | 119 | Quality | `EZQuality` | Ungrouped |
+| 121 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
+| 122 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
+| 123 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
+| 124 | Upscale still | `EZImageUpscale` | SHOT 04 kitchen |
+| 125 | Upscale still | `EZImageUpscale` | SHOT 05 dining |
+| 126 | Upscale still | `EZImageUpscale` | SHOT 06 bedroom |
+| 127 | Upscale still | `EZImageUpscale` | SHOT 07 bath |
+| 128 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
+| 129 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
+| 130 | Upscale still | `EZImageUpscale` | SHOT 10 study |
 
 ## Node parameter reference
 
@@ -337,6 +349,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -672,10 +685,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## stills/dream-house-clay Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles. `manage.sh start` seeds ez_house_clay_01.png … 10.…`
+**This graph:** `## stills/dream-house-clay Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence i…`
 
 ```text
 ## stills/dream-house-clay
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Ten Instagram 4:5 Klein **edits** of a greybox (1024x1280, seed 42). Persistence is the 3D cameras — Klein only restyles.
 
@@ -1121,3 +1136,36 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph (all 10 instances):** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |

@@ -43,6 +43,7 @@ from ez_image import video_formats as vfmt  # noqa: E402
 from ez_image.nodes import (  # noqa: E402
     GRID,
     EZImageFormat,
+    EZImageUpscale,
     EZMatchImageSize,
     EZSnapImage,
     EZVideoFormat,
@@ -50,6 +51,15 @@ from ez_image.nodes import (  # noqa: E402
     NODE_DISPLAY_NAME_MAPPINGS,
     _resize_bhwc,
     snap_dim,
+)
+from ez_image.upscale import (  # noqa: E402
+    BOX_LANDSCAPE,
+    DEFAULT_UPSCALE,
+    UPSCALE_4K,
+    UPSCALE_NONE,
+    normalize_upscale,
+    resolve_upscale_hw,
+    upscale_combo_labels,
 )
 from ez_image.video_formats import (  # noqa: E402
     FAMILY_LTX,
@@ -96,6 +106,7 @@ def test_pack_mappings_and_category() -> None:
         "EZMatchImageSize",
         "EZImageFormat",
         "EZVideoFormat",
+        "EZImageUpscale",
     }
     assert set(NODE_CLASS_MAPPINGS).issubset(ez_image.NODE_CLASS_MAPPINGS)
     assert "EZOptionalImage" in ez_image.NODE_CLASS_MAPPINGS
@@ -105,6 +116,7 @@ def test_pack_mappings_and_category() -> None:
     assert NODE_DISPLAY_NAME_MAPPINGS["EZMatchImageSize"] == "Match image size"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZImageFormat"] == "Format / platform"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZVideoFormat"] == "Format / platform (video)"
+    assert NODE_DISPLAY_NAME_MAPPINGS["EZImageUpscale"] == "Upscale still"
     for cls in NODE_CLASS_MAPPINGS.values():
         assert getattr(cls, "CATEGORY") == "ez-comfy/image"
 
@@ -226,6 +238,61 @@ def test_snap_and_match_run_resize_paths(monkeypatch: pytest.MonkeyPatch) -> Non
     edited = _FakeImg(1072, 1920)
     EZMatchImageSize().run(edited, src)
     assert seen[-1] == (1080, 1920)
+
+
+def test_resolve_upscale_hw_none_2x_4k() -> None:
+    assert normalize_upscale(None) == UPSCALE_NONE
+    assert normalize_upscale(0) == UPSCALE_NONE
+    assert normalize_upscale("off") == UPSCALE_NONE
+    assert normalize_upscale("passthrough") == UPSCALE_NONE
+    assert normalize_upscale("nope") == UPSCALE_NONE
+    assert DEFAULT_UPSCALE == UPSCALE_NONE
+    assert upscale_combo_labels()[0] == UPSCALE_NONE
+    assert normalize_upscale("2×") == "2x"
+    assert normalize_upscale("uhd") == UPSCALE_4K
+    assert resolve_upscale_hw(1280, 704, "none") is None
+    assert resolve_upscale_hw(1280, 704, "2x") == (2560, 1408)
+    assert resolve_upscale_hw(1280, 704, "4x") == (5120, 2816)
+    fourk = resolve_upscale_hw(1280, 704, "4K")
+    assert fourk is not None
+    assert fourk[0] == BOX_LANDSCAPE[0]
+    assert fourk[1] <= BOX_LANDSCAPE[1]
+    assert resolve_upscale_hw(3840, 2160, "4K") is None
+    portrait = resolve_upscale_hw(768, 1280, "4K")
+    assert portrait is not None
+    assert portrait[0] <= 2160
+    assert portrait[1] <= 3840
+    assert portrait[0] == 2160
+
+
+def test_image_upscale_passthrough_and_2x(monkeypatch: pytest.MonkeyPatch) -> None:
+    img = _FakeImg(64, 128)
+    out, kind = EZImageUpscale().run(img, "none")
+    assert out is img
+    assert kind == UPSCALE_NONE
+    seen: list[tuple[int, int]] = []
+
+    def upscale(
+        nchw: _FakeImg,
+        width: int,
+        height: int,
+        method: str,
+        crop: str,
+    ) -> _FakeImg:
+        del method, crop
+        seen.append((height, width))
+        return nchw
+
+    utils = types.SimpleNamespace(common_upscale=upscale)
+    monkeypatch.setitem(sys.modules, "comfy", types.SimpleNamespace(utils=utils))
+    monkeypatch.setitem(sys.modules, "comfy.utils", utils)
+    scaled, kind2 = EZImageUpscale().run(img, "2x")
+    assert scaled is img
+    assert kind2 == "2x"
+    assert seen[-1] == (128, 256)
+    spec = EZImageUpscale.INPUT_TYPES()["required"]["upscale"]
+    assert spec[1]["default"] == UPSCALE_NONE
+    assert EZImageUpscale.RETURN_NAMES == ("image", "upscale")
 
 
 _ID_RE = re.compile(r"^[a-z][a-z0-9_]{1,47}$")

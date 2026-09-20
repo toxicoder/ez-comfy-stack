@@ -1,8 +1,8 @@
 {
   "id": "product-hero",
-  "revision": 12,
-  "last_node_id": 23,
-  "last_link_id": 34,
+  "revision": 13,
+  "last_node_id": 24,
+  "last_link_id": 40,
   "nodes": [
     {
       "id": 1,
@@ -128,14 +128,15 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            5
+            5,
+            40
           ],
           "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -200,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        974
+        1266
       ],
       "size": [
         420,
@@ -683,7 +684,7 @@
       "type": "Note",
       "pos": [
         40,
-        1234
+        1396
       ],
       "size": [
         960,
@@ -745,7 +746,7 @@
         {
           "name": "Filenames",
           "type": "VHS_FILENAMES",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -788,6 +789,11 @@
           "widget": {
             "name": "duration_hint"
           }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 36
         }
       ],
       "outputs": [
@@ -863,7 +869,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         620,
-        1666
+        1828
       ],
       "size": [
         420,
@@ -918,7 +924,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -987,6 +993,53 @@
         704
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 24,
+      "type": "EZImageDescribe",
+      "pos": [
+        620,
+        1234
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 40
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -1221,6 +1274,22 @@
       19,
       0,
       "STRING"
+    ],
+    [
+      36,
+      24,
+      0,
+      19,
+      1,
+      "STRING"
+    ],
+    [
+      40,
+      4,
+      0,
+      24,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [],
@@ -1281,6 +1350,14 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          24,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [

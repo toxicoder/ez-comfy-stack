@@ -1,8 +1,8 @@
 {
   "id": "hook-still",
-  "revision": 5,
-  "last_node_id": 14,
-  "last_link_id": 16,
+  "revision": 6,
+  "last_node_id": 15,
+  "last_link_id": 18,
   "nodes": [
     {
       "id": 1,
@@ -159,7 +159,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        312
+        514
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         948,
-        544
+        746
       ],
       "size": [
         280,
@@ -326,7 +326,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        80
+        1062
       ],
       "size": [
         240,
@@ -352,7 +352,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            17
           ],
           "slot_index": 0
         }
@@ -368,7 +368,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        198
+        1180
       ],
       "size": [
         280,
@@ -381,7 +381,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 18
         }
       ],
       "outputs": [],
@@ -398,7 +398,7 @@
       "type": "Note",
       "pos": [
         40,
-        722
+        924
       ],
       "size": [
         960,
@@ -471,7 +471,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1074
+        1276
       ],
       "size": [
         420,
@@ -526,7 +526,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -543,7 +543,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        540
+        742
       ],
       "size": [
         360,
@@ -610,6 +610,51 @@
         1
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 15,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        1522
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -678,14 +723,6 @@
       "LATENT"
     ],
     [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
-    ],
-    [
       10,
       11,
       0,
@@ -740,6 +777,22 @@
       11,
       0,
       "STRING"
+    ],
+    [
+      17,
+      8,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      18,
+      15,
+      0,
+      9,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [
@@ -763,7 +816,7 @@
         460,
         24,
         928,
-        520
+        694
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -776,7 +829,7 @@
         1420,
         24,
         400,
-        780
+        982
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -786,10 +839,10 @@
       "id": 4,
       "title": "OUTPUT",
       "bounding": [
-        1820,
-        24,
-        320,
-        488
+        1780,
+        1006,
+        360,
+        640
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -827,7 +880,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -853,6 +906,14 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          15,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [

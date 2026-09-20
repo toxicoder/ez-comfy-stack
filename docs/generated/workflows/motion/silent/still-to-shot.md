@@ -86,12 +86,14 @@ flowchart LR
   N18["Negative Prompt Enhance"]
   N19["Quality"]
   N20["Format / platform"]
+  N21["Describe image"]
   N1 --> N9
   N2 --> N6
   N2 --> N7
   N3 --> N8
   N3 --> N11
   N4 --> N8
+  N4 --> N21
   N6 --> N10
   N7 --> N10
   N8 --> N10
@@ -106,6 +108,7 @@ flowchart LR
   N18 --> N7
   N20 --> N8
   N20 --> N17
+  N21 --> N17
 ```
 
 ## Nodes on this graph
@@ -131,6 +134,7 @@ flowchart LR
 | 18 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 19 | Quality | `EZQuality` | Ungrouped |
 | 20 | Format / platform | `EZVideoFormat` | DRAFT Wan 5s |
+| 21 | Describe image | `EZImageDescribe` | DRAFT Wan 5s |
 
 ## Node parameter reference
 
@@ -1227,3 +1231,26 @@ Custom height.
 **How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
 
 **This graph:** `480`
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

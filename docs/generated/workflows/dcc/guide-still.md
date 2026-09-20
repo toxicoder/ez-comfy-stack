@@ -71,6 +71,7 @@ flowchart LR
   N15["Occupancy gate (klein)"]
   N16["Negative Prompt Enhance"]
   N17["Quality"]
+  N18["Upscale still"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -80,7 +81,7 @@ flowchart LR
   N5 --> N7
   N6 --> N7
   N7 --> N8
-  N8 --> N9
+  N8 --> N18
   N11 --> N15
   N12 --> N4
   N12 --> N16
@@ -88,6 +89,7 @@ flowchart LR
   N14 --> N7
   N15 --> N13
   N16 --> N5
+  N18 --> N9
 ```
 
 ## Nodes on this graph
@@ -111,6 +113,7 @@ flowchart LR
 | 15 | Occupancy gate (klein) | `EZDCCOccupancyGate` | Ungrouped |
 | 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 17 | Quality | `EZQuality` | Ungrouped |
+| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
 
 ## Node parameter reference
 
@@ -614,6 +617,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -1004,3 +1008,36 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |

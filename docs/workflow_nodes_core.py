@@ -275,6 +275,20 @@ def core_nodes() -> dict[str, Any]:
             ],
             widgets=[],
         ),
+        "EZImageUpscale": _n(
+            "Upscale still",
+            "Optional lanczos upscale after a still decode. none passes the tensor through.",
+            origin="ez_image",
+            lab="Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Decoded still."),
+                _s("IMAGE", "IMAGE", "out", "Possibly upscaled still."),
+                _s("upscale", "STRING", "out", "Combo id for additional EZImageUpscale nodes."),
+            ],
+            widgets=[
+                _w("upscale", index=0, typ="COMBO", rng="none / 2x / 4x / 4K", desc="Upscale mode.", gen="none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.", choices=[("none", "Pass through."), ("2x", "Double pixels."), ("4x", "Quadruple pixels."), ("4K", "Fit in a 4K box.")]),
+            ],
+        ),
         "EZMatchImageSize": _n(
             "Match image size",
             "Resize a still to another image's exact width and height.",

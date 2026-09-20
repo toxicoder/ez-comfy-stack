@@ -33,8 +33,10 @@ Klein 4B **lettering swap**. Load a still that already has type. Type the new le
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
+Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
+
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
 ```
 
 ## How to Queue
@@ -62,29 +64,34 @@ flowchart LR
   N12["Klein Prompt Enhance (text swap)"]
   N13["Negative Prompt Enhance"]
   N14["Quality"]
-  N15["Encode snapped source"]
-  N16["Positive + source plate"]
-  N17["Snap to Klein grid"]
-  N18["Match source size"]
+  N18["Encode snapped source"]
+  N19["Positive + source plate"]
+  N20["Snap to Klein grid"]
+  N21["Match source size"]
+  N22["Upscale still"]
+  N23["Describe image"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
-  N3 --> N15
-  N4 --> N16
+  N3 --> N18
+  N4 --> N19
   N5 --> N7
   N7 --> N8
-  N8 --> N18
-  N11 --> N17
-  N11 --> N18
+  N8 --> N21
+  N11 --> N20
+  N11 --> N21
+  N11 --> N23
   N12 --> N4
   N12 --> N13
   N13 --> N5
-  N15 --> N16
-  N15 --> N7
-  N16 --> N7
-  N17 --> N15
-  N18 --> N9
+  N18 --> N19
+  N18 --> N7
+  N19 --> N7
+  N20 --> N18
+  N21 --> N22
+  N22 --> N9
+  N23 --> N12
 ```
 
 ## Nodes on this graph
@@ -104,10 +111,12 @@ flowchart LR
 | 12 | Klein Prompt Enhance (text swap) | `EZKleinPromptEnhance` | Ungrouped |
 | 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 14 | Quality | `EZQuality` | Ungrouped |
-| 15 | Encode snapped source | `VAEEncode` | Ungrouped |
-| 16 | Positive + source plate | `ReferenceLatent` | Ungrouped |
-| 17 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
-| 18 | Match source size | `EZMatchImageSize` | Ungrouped |
+| 18 | Encode snapped source | `VAEEncode` | Ungrouped |
+| 19 | Positive + source plate | `ReferenceLatent` | Ungrouped |
+| 20 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
+| 21 | Match source size | `EZMatchImageSize` | Ungrouped |
+| 22 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 23 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
 
@@ -282,7 +291,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `Replace the visible lettering with: HELLO. Keep the same typeface, weight, colo…` |
+| Positive | `HELLO` |
 | Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
 
 ### `KSampler` — KSampler
@@ -498,8 +507,10 @@ Klein 4B **lettering swap**. Load a still that already has type. Type the new le
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
+Type only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.
+
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden — the source still owns look.
 ```
 
 ### `LoadImage` — Load Image
@@ -547,6 +558,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | --- | --- | --- | --- |
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
+| `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -567,11 +579,7 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell HELLO exactly.`
-
-```text
-Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell HELLO exactly.
-```
+**This graph:** `HELLO`
 
 #### `enhance`
 
@@ -786,7 +794,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `stills/still-hero`
+**This graph:** `stills/text-swap`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -936,3 +944,59 @@ Resize a still to another image's exact width and height.
 | `IMAGE` | out | `IMAGE` | Edited still at source size. |
 
 No widgets. Sockets only.
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

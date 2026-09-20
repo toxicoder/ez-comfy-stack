@@ -1,8 +1,8 @@
 {
   "id": "still-draft",
-  "revision": 8,
-  "last_node_id": 16,
-  "last_link_id": 21,
+  "revision": 9,
+  "last_node_id": 18,
+  "last_link_id": 29,
   "nodes": [
     {
       "id": 1,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        312
+        604
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         948,
-        544
+        836
       ],
       "size": [
         280,
@@ -353,7 +353,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            9
+            22
           ],
           "slot_index": 0
         }
@@ -382,7 +382,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 9
+          "link": 23
         }
       ],
       "outputs": [],
@@ -399,7 +399,7 @@
       "type": "Note",
       "pos": [
         40,
-        740
+        1032
       ],
       "size": [
         960,
@@ -440,6 +440,11 @@
           "widget": {
             "name": "duration_hint"
           }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 25
         }
       ],
       "outputs": [
@@ -472,7 +477,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1092
+        1384
       ],
       "size": [
         420,
@@ -527,7 +532,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -544,7 +549,7 @@
       "type": "EZImageFormat",
       "pos": [
         1048,
-        722
+        1014
       ],
       "size": [
         360,
@@ -632,14 +637,15 @@
           "name": "image",
           "type": "IMAGE",
           "links": [
-            19
+            19,
+            29
           ],
           "slot_index": 0
         },
         {
           "name": "count",
           "type": "INT",
-          "links": null,
+          "links": [],
           "slot_index": 1
         },
         {
@@ -663,8 +669,8 @@
       "id": 16,
       "type": "EZKleinRefCanvas",
       "pos": [
-        -400.0,
-        720.0
+        -400,
+        1012
       ],
       "size": [
         360.0,
@@ -707,7 +713,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -718,6 +724,98 @@
         false
       ],
       "title": "Optional Klein ref"
+    },
+    {
+      "id": 17,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        540
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 18,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -784,14 +882,6 @@
       8,
       0,
       "LATENT"
-    ],
-    [
-      9,
-      8,
-      0,
-      9,
-      0,
-      "IMAGE"
     ],
     [
       10,
@@ -880,6 +970,38 @@
       7,
       3,
       "LATENT"
+    ],
+    [
+      22,
+      8,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ],
+    [
+      23,
+      17,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      25,
+      18,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      29,
+      15,
+      0,
+      18,
+      1,
+      "IMAGE"
     ]
   ],
   "groups": [],
@@ -916,7 +1038,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -942,6 +1064,22 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          17,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          18,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [
@@ -996,8 +1134,8 @@
           15,
           "filename",
           {
-            "label": "Example / reference (optional)",
-            "description": "Optional still. Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference."
+            "description": "Optional still. Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference.",
+            "label": "Example / reference (optional)"
           }
         ]
       ],

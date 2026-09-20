@@ -2,101 +2,101 @@
   {
     "id": "hello-lock",
     "label": "Replace with HELLO",
-    "prompt": "Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell HELLO exactly."
+    "prompt": "HELLO"
   },
   {
     "id": "neon-closed",
     "label": "Neon CLOSED",
-    "prompt": "Replace the visible lettering with: CLOSED. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "CLOSED"
   },
   {
     "id": "mug-good-morning",
     "label": "Mug GOOD MORNING",
-    "prompt": "Replace the mug lettering with: GOOD MORNING. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "GOOD MORNING"
   },
   {
     "id": "poster-headline",
     "label": "Poster OPEN TONIGHT",
-    "prompt": "Replace the poster headline with: OPEN TONIGHT. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "OPEN TONIGHT"
   },
   {
     "id": "book-spine",
     "label": "Book spine FIELD NOTES",
-    "prompt": "Replace the book-spine lettering with: FIELD NOTES. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "FIELD NOTES"
   },
   {
     "id": "awning-open",
     "label": "Awning OPEN",
-    "prompt": "Replace the awning lettering with: OPEN. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "OPEN"
   },
   {
     "id": "tee-print",
     "label": "Tee KEEP GOING",
-    "prompt": "Replace the shirt print with: KEEP GOING. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "KEEP GOING"
   },
   {
     "id": "thumb-title",
     "label": "Thumb NEW EPISODE",
-    "prompt": "Replace the thumbnail title with: NEW EPISODE. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "NEW EPISODE"
   },
   {
     "id": "street-sign",
     "label": "Street sign HARBOR WAY",
-    "prompt": "Replace the street-sign lettering with: HARBOR WAY. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "HARBOR WAY"
   },
   {
     "id": "bakery-hours",
     "label": "Hours 7AM-2PM",
-    "prompt": "Replace the hours lettering with: 7AM-2PM. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "7AM-2PM"
   },
   {
     "id": "sale-to-open",
     "label": "SALE to OPEN",
-    "prompt": "Replace SALE with OPEN. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "Replace SALE with OPEN"
   },
   {
     "id": "chapter-card",
     "label": "Chapter ONE",
-    "prompt": "Replace the chapter-card lettering with: ONE. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "ONE"
   },
   {
     "id": "enamel-pin",
     "label": "Pin HELLO",
-    "prompt": "Replace the pin lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "HELLO"
   },
   {
     "id": "vinyl-sticker",
     "label": "Sticker WAVE",
-    "prompt": "Replace the sticker lettering with: WAVE. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "WAVE"
   },
   {
     "id": "cafe-chalkboard",
     "label": "Board TODAY'S SOUP",
-    "prompt": "Replace the chalkboard lettering with: TODAY'S SOUP. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "TODAY'S SOUP"
   },
   {
     "id": "shipping-crate",
     "label": "Crate FRAGILE",
-    "prompt": "Replace the crate stencil with: FRAGILE. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "FRAGILE"
   },
   {
     "id": "stadium-banner",
     "label": "Banner GO HOME",
-    "prompt": "Replace the banner lettering with: GO HOME. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "GO HOME"
   },
   {
     "id": "arcade-marquee",
     "label": "Marquee INSERT COIN",
-    "prompt": "Replace the marquee lettering with: INSERT COIN. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "INSERT COIN"
   },
   {
     "id": "luggage-tag",
     "label": "Tag GATE B",
-    "prompt": "Replace the luggage-tag lettering with: GATE B. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "GATE B"
   },
   {
     "id": "window-vinyl",
     "label": "Window YES WE'RE OPEN",
-    "prompt": "Replace the window vinyl with: YES WE'RE OPEN. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell the new lettering exactly."
+    "prompt": "YES WE'RE OPEN"
   }
 ]

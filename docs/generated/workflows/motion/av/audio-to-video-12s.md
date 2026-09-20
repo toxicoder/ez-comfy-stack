@@ -29,6 +29,8 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## motion/av/audio-to-video-12s
 
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
+
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -76,12 +78,15 @@ flowchart LR
   N22["Audio file"]
   N23["Encode + freeze bed"]
   N24["Quality"]
+  N25["Format / platform"]
+  N26["Describe image"]
   N1 --> N9
   N2 --> N7
   N2 --> N10
   N3 --> N5
   N3 --> N6
   N4 --> N7
+  N4 --> N26
   N5 --> N7
   N6 --> N7
   N7 --> N8
@@ -99,6 +104,9 @@ flowchart LR
   N22 --> N23
   N22 --> N18
   N23 --> N15
+  N25 --> N7
+  N25 --> N19
+  N26 --> N19
 ```
 
 ## Nodes on this graph
@@ -126,6 +134,8 @@ flowchart LR
 | 22 | Audio file | `LoadAudio` | Ungrouped |
 | 23 | Encode + freeze bed | `LTXVAudioVAEEncode` | Ungrouped |
 | 24 | Quality | `EZQuality` | Ungrouped |
+| 25 | Format / platform | `EZVideoFormat` | Ungrouped |
+| 26 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
 
@@ -646,10 +656,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/audio-to-video-12s LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). After Queue, click **Save video (MP4) — open node for preview** for an inline pre…`
+**This graph:** `## motion/av/audio-to-video-12s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are i…`
 
 ```text
 ## motion/av/audio-to-video-12s
+
+Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
@@ -1171,3 +1183,102 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZVideoFormat` — Format / platform (video)
+
+Pick a Wan or LTX clip canvas (aspect or named platform).
+
+!!! warning "Lab notes"
+
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
+| `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | Optional filename prefix (often unwired). |
+
+#### `family`
+
+Type `COMBO`. Range / default: Wan 5B / LTX-2.5.
+
+Which VAE grid to use.
+
+**How it affects generation:** Wan snaps ÷16 (max 1024). LTX snaps ÷32 (max 1280). App Mode hides this — occupancy already picks the model.
+
+**This graph:** `LTX-2.5`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Wan 5B` | wan VAE grid ÷16. |
+| `LTX-2.5` | ltx VAE grid ÷32. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 YouTube / 9:16 Shorts / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels and Rewrite prompt framing. Custom uses Width × Height. Does not change Quality, length, CLIP, or VAE.
+
+**This graph:** `LTX · 16:9 YouTube (1280×704)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to the Family VAE grid. |
+| `Wan · 16:9 YouTube (832×480)` | 832×480. wan. |
+| `Wan · 16:9 mid (1024×576)` | 1024×576. wan. |
+| `Wan · 9:16 Shorts (480×832)` | 480×832. wan. |
+| `Wan · 1:1 square (768×768)` | 768×768. wan. |
+| `LTX · 16:9 YouTube (1280×704)` | 1280×704. ltx. |
+| `LTX · 9:16 Shorts (768×1280)` | 768×1280. ltx. |
+| `LTX · 1:1 square (768×768)` | 768×768. ltx. |
+| `LTX · 4:5 portrait (1024×1280)` | 1024×1280. ltx. |
+
+#### `width`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704.
+
+**This graph:** `1280`
+
+#### `height`
+
+Type `INT`. Range / default: 16–1280.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `704`
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

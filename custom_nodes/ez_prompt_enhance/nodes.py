@@ -51,6 +51,8 @@ from .cinema import (
     recipe_combo_ids,
     splice,
 )
+from .describe import describe_image, last_status as describe_last_status
+from .lettering import wrap_text_swap_prompt
 from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
 
 if TYPE_CHECKING:
@@ -106,7 +108,13 @@ def _visual_input_types(
     required["catalog"] = _CATALOG_INPUT
     return {
         "required": required,
-        "optional": {"context": _CONTEXT_INPUT},
+        "optional": {
+            "context": _CONTEXT_INPUT,
+            "image_desc": (
+                "STRING",
+                {"forceInput": True, "dynamicPrompts": False},
+            ),
+        },
     }
 
 
@@ -231,6 +239,7 @@ def _run(
     sample: object = CUSTOM,
     catalog: object = "",
     node_type: str = "",
+    image_desc: str = "",
 ) -> dict[str, Any]:
     """Resolve sample, optionally rewrite, and pack CLIP text.
 
@@ -246,6 +255,7 @@ def _run(
         sample: Sample combo label.
         catalog: Hidden catalog widget.
         node_type: Comfy class name for family catalog fallback.
+        image_desc: Optional still caption from EZImageDescribe.
 
     Returns:
         Packed Enhance payload. LLM miss returns the original prompt.
@@ -257,7 +267,12 @@ def _run(
         node_type=node_type,
         mode=mode,
     )
+    if mode == "text_swap":
+        original = wrap_text_swap_prompt(original)
     ctx = context if isinstance(context, str) else str(context or "")
+    caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
+    if caption.strip():
+        ctx = join_context_fields(("Context", ctx), ("Image", caption))
     do_enhance = _as_bool(enhance)
     style = _style_id(style)
     apply_style = style != STYLE_NONE
@@ -333,6 +348,7 @@ class EZKleinPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite a Klein still/edit/identity prompt.
 
@@ -345,6 +361,7 @@ class EZKleinPromptEnhance:
             context: Optional bible/research STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -368,6 +385,7 @@ class EZKleinPromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZKleinPromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -412,6 +430,7 @@ class EZWanPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite a Wan video prompt.
 
@@ -424,6 +443,7 @@ class EZWanPromptEnhance:
             context: Optional supporting STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -449,6 +469,7 @@ class EZWanPromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZWanPromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -493,6 +514,7 @@ class EZLTXPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite an LTX joint-AV prompt.
 
@@ -506,6 +528,7 @@ class EZLTXPromptEnhance:
             context: Optional identity/logline STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -528,6 +551,7 @@ class EZLTXPromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZLTXPromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -928,6 +952,7 @@ class EZZimagePromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite a Z-Image Turbo still prompt.
 
@@ -939,6 +964,7 @@ class EZZimagePromptEnhance:
             context: Optional supporting STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -954,6 +980,7 @@ class EZZimagePromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZZimagePromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -996,6 +1023,7 @@ class EZLongCatPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite a LongCat-Video prompt.
 
@@ -1008,6 +1036,7 @@ class EZLongCatPromptEnhance:
             context: Optional supporting STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -1029,6 +1058,7 @@ class EZLongCatPromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZLongCatPromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -1071,6 +1101,7 @@ class EZDreamXPromptEnhance:
         context: str = "",
         sample: object = CUSTOM,
         catalog: object = "",
+        image_desc: str = "",
     ) -> dict[str, Any]:
         """Rewrite a DreamX first-frame+text prompt.
 
@@ -1083,6 +1114,7 @@ class EZDreamXPromptEnhance:
             context: Optional supporting STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
+            image_desc: Optional still caption from EZImageDescribe.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -1099,6 +1131,7 @@ class EZDreamXPromptEnhance:
             sample=sample,
             catalog=catalog,
             node_type="EZDreamXPromptEnhance",
+            image_desc=image_desc,
         )
 
 
@@ -1389,8 +1422,79 @@ class EZAudioRack:
         return (result.tags, result.lyrics, audio_format_notes(result))
 
 
+class EZImageDescribe:
+    """Caption a still for Prompt Enhance. Off skips the VLM."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for enable and an optional still.
+
+        Returns:
+            Required enable flag and optional lazy IMAGE.
+        """
+        return {
+            "required": {
+                "enable": (
+                    "BOOLEAN",
+                    {"default": False, "label_on": "On", "label_off": "Off"},
+                ),
+            },
+            "optional": {
+                "image": ("IMAGE", {"lazy": True}),
+            },
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("caption",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    OUTPUT_NODE = True
+    DESCRIPTION = (
+        "Caption a source still so Prompt Enhance can name inventory and "
+        "lettering. Off (default) returns empty and does not load the "
+        "describe GGUF. Opt-in weights: download-llm --tier describe."
+    )
+
+    def check_lazy_status(self, enable: object = False, image: object = None) -> list[str]:
+        """Request the IMAGE only when the toggle is on.
+
+        Args:
+            enable: Comfy BOOLEAN widget.
+            image: Current lazy IMAGE (ignored).
+
+        Returns:
+            ``[\"image\"]`` when enable is on, else empty.
+        """
+        del image
+        if _as_bool(enable):
+            return ["image"]
+        return []
+
+    def run(self, enable: object = False, image: Any = None) -> dict[str, Any]:
+        """Caption ``image`` when enable is on.
+
+        Args:
+            enable: BOOLEAN; off returns an empty caption without a VLM.
+            image: Optional Comfy IMAGE tensor.
+
+        Returns:
+            Packed caption and a status line (describe off / GGUF missing).
+        """
+        caption = describe_image(enable=enable, image=image)
+        status = describe_last_status()
+        return {
+            "ui": {
+                "text": (caption,),
+                "passthrough": (status,),
+            },
+            "result": (caption,),
+        }
+
+
 # Comfy node registries.
 NODE_CLASS_MAPPINGS: dict[str, type] = {
+    "EZImageDescribe": EZImageDescribe,
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
@@ -1407,6 +1511,7 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
+    "EZImageDescribe": "Describe image",
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",

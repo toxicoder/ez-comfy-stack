@@ -482,7 +482,7 @@
     {
       "id": "download-llm",
       "title": "download-llm --tier",
-      "description": "Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. Missing 35B is not a doctor failure.",
+      "description": "Default enhance is the Qwen3-4B prompt-enhance GGUF (already in download-models). qwen36-35b-a3b is the opt-in ~23 GB occupancy llm-desk pack. describe is the opt-in Qwen2.5-VL caption GGUF. Missing 35B or describe is not a doctor failure.",
       "argv": [
         "./scripts/manage.sh",
         "download-llm"
@@ -503,8 +503,12 @@
               "label": "qwen36-35b-a3b \u2014 Qwen3.6-35B-A3B UD-Q4_K_XL (~23 GB, llm-desk)"
             },
             {
+              "value": "describe",
+              "label": "describe \u2014 Qwen2.5-VL-3B caption GGUF + mmproj (~4 GB)"
+            },
+            {
               "value": "all",
-              "label": "all \u2014 enhance + qwen36-35b-a3b"
+              "label": "all \u2014 enhance + qwen36-35b-a3b + describe"
             }
           ]
         },

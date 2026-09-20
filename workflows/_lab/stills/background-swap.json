@@ -1,0 +1,1075 @@
+{
+  "id": "background-swap",
+  "revision": 2,
+  "last_node_id": 23,
+  "last_link_id": 36,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40,
+        80
+      ],
+      "size": [
+        360,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux-2-klein-4b-fp8.safetensors",
+        "default"
+      ],
+      "title": "Klein 4B distilled FP8"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        386
+      ],
+      "size": [
+        360,
+        106
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2,
+            3
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen_3_4b.safetensors",
+        "flux2",
+        "default"
+      ],
+      "title": "Qwen3-4B TE"
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        564
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            7,
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "title": "Flux2 VAE"
+    },
+    {
+      "id": 4,
+      "type": "CLIPTextEncode",
+      "pos": [
+        948,
+        80
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 10,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            24
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering."
+      ],
+      "title": "Positive"
+    },
+    {
+      "id": 5,
+      "type": "CLIPTextEncode",
+      "pos": [
+        948,
+        604
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 3
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 11,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            5
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative"
+    },
+    {
+      "id": 7,
+      "type": "KSampler",
+      "pos": [
+        1440,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 26
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 5
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        8,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "KSampler"
+    },
+    {
+      "id": 8,
+      "type": "VAEDecode",
+      "pos": [
+        1840,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            30
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 9,
+      "type": "SaveImage",
+      "pos": [
+        1840,
+        350
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 34
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_bg_swap"
+      ],
+      "title": "Save background swap"
+    },
+    {
+      "id": 10,
+      "type": "Note",
+      "pos": [
+        40,
+        836
+      ],
+      "size": [
+        960,
+        280
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden \u2014 the source still owns look.\n"
+      ],
+      "title": "Operator note"
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        2180,
+        80
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            27,
+            31,
+            35
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Source still"
+    },
+    {
+      "id": 12,
+      "type": "EZKleinPromptEnhance",
+      "pos": [
+        480,
+        80
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 36
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            10,
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZKleinPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering.",
+        true,
+        "edit",
+        "match the source still",
+        "none",
+        "stills/background-swap"
+      ],
+      "title": "Klein Prompt Enhance (edit)"
+    },
+    {
+      "id": 13,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        480,
+        1188
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative Prompt Enhance"
+    },
+    {
+      "id": 14,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 18,
+      "type": "VAEEncode",
+      "pos": [
+        2180,
+        694
+      ],
+      "size": [
+        240,
+        80
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 28
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            25,
+            29
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode snapped source"
+    },
+    {
+      "id": 19,
+      "type": "ReferenceLatent",
+      "pos": [
+        1440,
+        552
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 24
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 25,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            26
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Positive + source plate"
+    },
+    {
+      "id": 20,
+      "type": "EZSnapImage",
+      "pos": [
+        2180,
+        562
+      ],
+      "size": [
+        240,
+        60
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            28
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZSnapImage"
+      },
+      "widgets_values": [],
+      "title": "Snap to Klein grid"
+    },
+    {
+      "id": 21,
+      "type": "EZMatchImageSize",
+      "pos": [
+        1840,
+        198
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 30
+        },
+        {
+          "name": "size_src",
+          "type": "IMAGE",
+          "link": 31
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            33
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZMatchImageSize"
+      },
+      "widgets_values": [],
+      "title": "Match source size"
+    },
+    {
+      "id": 22,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        692
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 23,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 35
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      7,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      0,
+      "CLIP"
+    ],
+    [
+      3,
+      2,
+      0,
+      5,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      5,
+      0,
+      7,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      3,
+      0,
+      8,
+      1,
+      "VAE"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      0,
+      "LATENT"
+    ],
+    [
+      10,
+      12,
+      0,
+      4,
+      1,
+      "STRING"
+    ],
+    [
+      11,
+      13,
+      0,
+      5,
+      1,
+      "STRING"
+    ],
+    [
+      12,
+      12,
+      0,
+      13,
+      0,
+      "STRING"
+    ],
+    [
+      23,
+      3,
+      0,
+      18,
+      1,
+      "VAE"
+    ],
+    [
+      24,
+      4,
+      0,
+      19,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      25,
+      18,
+      0,
+      19,
+      1,
+      "LATENT"
+    ],
+    [
+      26,
+      19,
+      0,
+      7,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      27,
+      11,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      28,
+      20,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      29,
+      18,
+      0,
+      7,
+      3,
+      "LATENT"
+    ],
+    [
+      30,
+      8,
+      0,
+      21,
+      0,
+      "IMAGE"
+    ],
+    [
+      31,
+      11,
+      0,
+      21,
+      1,
+      "IMAGE"
+    ],
+    [
+      33,
+      21,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      34,
+      22,
+      0,
+      9,
+      0,
+      "IMAGE"
+    ],
+    [
+      35,
+      11,
+      0,
+      23,
+      1,
+      "IMAGE"
+    ],
+    [
+      36,
+      23,
+      0,
+      12,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "lab_profile": "stills/background-swap",
+    "lab_flux_tier": "fast",
+    "ds": {
+      "scale": 1,
+      "offset": [
+        0,
+        0
+      ]
+    },
+    "lab_note": "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden \u2014 the source still owns look.\n",
+    "lab_description": "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_bg_swap.",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "klein",
+      "enhance_off_identity": false,
+      "handoff": [
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-12s",
+        "stills/text-swap"
+      ]
+    },
+    "linearData": {
+      "inputs": [
+        [
+          11,
+          "image",
+          {
+            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
+            "label": "Source still"
+          }
+        ],
+        [
+          14,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+          }
+        ],
+        [
+          12,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          12,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Prompt",
+            "height": 140
+          }
+        ],
+        [
+          22,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          23,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
+          }
+        ],
+        [
+          12,
+          "enhance",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          7,
+          "seed",
+          {
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
+          }
+        ]
+      ],
+      "outputs": [
+        9
+      ]
+    },
+    "linearMode": true,
+    "lab_optional_unwired": [
+      "LoadImage"
+    ],
+    "lab_rel": "stills/background-swap",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
+  },
+  "version": 0.4
+}

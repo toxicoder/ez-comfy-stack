@@ -42,7 +42,8 @@ Lane B Klein stills (same occupancy **klein**):
 | **[stills/still-studio](../generated/workflows/stills/still-studio.md)** | klein | Still desk. Format / platform sets pixels + prefix + framing; Style + Rewrite prompt + Look recipe. Prefix follows Format (`ez_still_studio` when Custom) |
 | **[stills/image-studio](../generated/workflows/stills/image-studio.md)** | klein | Universal still desk. 100 creator modes + Format / platform + optional reference. Prefix follows Creator mode (`ez_gen_photoreal` default) |
 | **[stills/platform-pack](../generated/workflows/stills/platform-pack.md)** | klein | Six plates, one identity (`ez_pack_*`). Independent T2I; Ctrl+B unused groups |
-| **[stills/text-swap](../generated/workflows/stills/text-swap.md)** | klein | Lettering swap. Load a still, type new lettering, output matches source size. Prefix `ez_text_swap` |
+| **[stills/text-swap](../generated/workflows/stills/text-swap.md)** | klein | Lettering swap. Load a still, type only the new lettering, output matches source size. Prefix `ez_text_swap` |
+| **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | klein | Background swap. Load a still, pick a sample place or type a custom background, output matches source size. Prefix `ez_bg_swap` |
 
 ---
 
@@ -60,6 +61,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 | **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
 | **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
+| **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | Keep the subject; replace only the background. 100 sample places + Custom. Prefix `ez_bg_swap` |
 | **[stills/hook-still](../generated/workflows/stills/hook-still.md)** | Vertical 9:16 hook still |
 
 ---

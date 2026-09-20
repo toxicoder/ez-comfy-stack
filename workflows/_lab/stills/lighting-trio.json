@@ -1,8 +1,8 @@
 {
   "id": "lighting-trio",
-  "revision": 4,
-  "last_node_id": 29,
-  "last_link_id": 41,
+  "revision": 5,
+  "last_node_id": 33,
+  "last_link_id": 53,
   "nodes": [
     {
       "id": 1,
@@ -45,7 +45,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        436
       ],
       "size": [
         360,
@@ -83,7 +83,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        614
       ],
       "size": [
         360,
@@ -119,7 +119,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        570
+        886
       ],
       "size": [
         420,
@@ -128,7 +128,16 @@
       "flags": {},
       "order": 3,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 45,
+          "widget": {
+            "name": "duration_hint"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -161,7 +170,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        1062
+        1378
       ],
       "size": [
         420,
@@ -209,7 +218,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1294
+        1610
       ],
       "size": [
         280,
@@ -218,7 +227,32 @@
       "flags": {},
       "order": 5,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 42,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 43,
+          "widget": {
+            "name": "height"
+          }
+        },
+        {
+          "name": "batch_size",
+          "type": "INT",
+          "link": 44,
+          "widget": {
+            "name": "batch_size"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "LATENT",
@@ -239,14 +273,14 @@
         432,
         1
       ],
-      "title": "Size 768x432"
+      "title": "Latent (wired from Format)"
     },
     {
       "id": 7,
       "type": "Note",
       "pos": [
         40,
-        1472
+        2080
       ],
       "size": [
         420,
@@ -261,7 +295,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/lighting-trio\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## stills/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -270,7 +304,7 @@
       "type": "VAEEncode",
       "pos": [
         1764,
-        198
+        400
       ],
       "size": [
         240,
@@ -314,7 +348,7 @@
       "type": "ReferenceLatent",
       "pos": [
         40,
-        1904
+        2512
       ],
       "size": [
         280,
@@ -532,8 +566,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            14,
-            15
+            15,
+            46
           ],
           "slot_index": 0
         }
@@ -562,7 +596,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 14
+          "link": 47
         }
       ],
       "outputs": [],
@@ -579,7 +613,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        460
+        602
       ],
       "size": [
         420,
@@ -620,7 +654,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        460
+        602
       ],
       "size": [
         360,
@@ -667,7 +701,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        460
+        602
       ],
       "size": [
         320,
@@ -727,7 +761,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        460
+        602
       ],
       "size": [
         240,
@@ -753,7 +787,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            27
+            48
           ],
           "slot_index": 0
         }
@@ -769,7 +803,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        460
+        602
       ],
       "size": [
         280,
@@ -782,7 +816,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 27
+          "link": 49
         }
       ],
       "outputs": [],
@@ -799,7 +833,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        692
+        834
       ],
       "size": [
         240,
@@ -842,7 +876,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        872
+        1124
       ],
       "size": [
         420,
@@ -883,7 +917,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        872
+        1124
       ],
       "size": [
         360,
@@ -930,7 +964,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        872
+        1124
       ],
       "size": [
         320,
@@ -990,7 +1024,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        872
+        1124
       ],
       "size": [
         240,
@@ -1016,7 +1050,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            39
+            51
           ],
           "slot_index": 0
         }
@@ -1032,7 +1066,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        872
+        1124
       ],
       "size": [
         280,
@@ -1045,7 +1079,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 39
+          "link": 52
         }
       ],
       "outputs": [],
@@ -1062,7 +1096,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1104
+        1356
       ],
       "size": [
         240,
@@ -1160,7 +1194,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -1171,6 +1205,233 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 30,
+      "type": "EZImageFormat",
+      "pos": [
+        40,
+        1788
+      ],
+      "size": [
+        360,
+        220
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            43
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "batch",
+          "type": "INT",
+          "links": [
+            44
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            45
+          ],
+          "slot_index": 3
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 4
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 5
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageFormat"
+      },
+      "widgets_values": [
+        "16:9 draft (768\u00d7432)",
+        "none",
+        768,
+        432,
+        1
+      ],
+      "title": "Format / platform"
+    },
+    {
+      "id": 31,
+      "type": "EZImageUpscale",
+      "pos": [
+        2052,
+        422
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 46
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            47
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            50,
+            53
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 32,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        944
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 48
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 50,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            49
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 33,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1466
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 51
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 53,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            52
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -1279,14 +1540,6 @@
       "VAE"
     ],
     [
-      14,
-      13,
-      0,
-      14,
-      0,
-      "IMAGE"
-    ],
-    [
       15,
       13,
       0,
@@ -1383,14 +1636,6 @@
       "VAE"
     ],
     [
-      27,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
-    ],
-    [
       28,
       4,
       0,
@@ -1479,14 +1724,6 @@
       "VAE"
     ],
     [
-      39,
-      25,
-      0,
-      26,
-      0,
-      "IMAGE"
-    ],
-    [
       40,
       28,
       0,
@@ -1501,6 +1738,102 @@
       28,
       0,
       "STRING"
+    ],
+    [
+      42,
+      30,
+      0,
+      6,
+      0,
+      "INT"
+    ],
+    [
+      43,
+      30,
+      1,
+      6,
+      1,
+      "INT"
+    ],
+    [
+      44,
+      30,
+      2,
+      6,
+      2,
+      "INT"
+    ],
+    [
+      45,
+      30,
+      3,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      46,
+      13,
+      0,
+      31,
+      0,
+      "IMAGE"
+    ],
+    [
+      47,
+      31,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      48,
+      19,
+      0,
+      32,
+      0,
+      "IMAGE"
+    ],
+    [
+      49,
+      32,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      50,
+      31,
+      1,
+      32,
+      1,
+      "STRING"
+    ],
+    [
+      51,
+      25,
+      0,
+      33,
+      0,
+      "IMAGE"
+    ],
+    [
+      52,
+      33,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      53,
+      31,
+      1,
+      33,
+      1,
+      "STRING"
     ]
   ],
   "groups": [
@@ -1511,7 +1844,7 @@
         20,
         24,
         400,
-        490
+        692
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1522,7 +1855,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        514,
+        830,
         460,
         520
       ],
@@ -1537,7 +1870,7 @@
         500,
         24,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1548,9 +1881,9 @@
       "title": "SHOT WINDOW",
       "bounding": [
         500,
-        404,
+        546,
         1852,
-        412
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1561,9 +1894,9 @@
       "title": "SHOT NIGHT LAMP",
       "bounding": [
         500,
-        816,
+        1068,
         1852,
-        412
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1573,7 +1906,7 @@
   "config": {},
   "extra": {
     "lab_profile": "stills/lighting-trio",
-    "lab_note": "## stills/lighting-trio\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_note": "## stills/lighting-trio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nSame subject under three lights (Klein 4B). Type any subject in IDENTITY. SHOT KEY is the identity plate. Queue the whole graph; 02\u201303 Klein-edit from 01 (VAEEncode + ReferenceLatent). Do not bypass KEY on a cold canvas.\nPrefixes `ez_light_01`\u2026`03` (key / window / night lamp). Change only the light.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used. Turn Enhance off to pin the widget text.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
     "lab_description": "Klein 4B three-light study of one subject",
     "lab_app_mode": {
       "enabled": true,
@@ -1591,7 +1924,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -1609,6 +1942,22 @@
             "description": "What to generate. Rewrite prompt expands this for the model.",
             "label": "Prompt",
             "height": 140
+          }
+        ],
+        [
+          30,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          31,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [
@@ -1633,6 +1982,30 @@
           {
             "description": "Fix to iterate; randomize to explore.",
             "label": "Seed"
+          }
+        ],
+        [
+          30,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          30,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
+        ],
+        [
+          30,
+          "batch_size",
+          {
+            "description": "How many stills in one Run. Large canvases stay at 1.",
+            "label": "Batch"
           }
         ]
       ],

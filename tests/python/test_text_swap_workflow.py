@@ -71,6 +71,8 @@ def test_text_swap_is_size_matched_klein_edit() -> None:
     assert load["type"] == "LoadImage"
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     match = _src(graph, save, "images")
+    if match["type"] == "EZImageUpscale":
+        match = _src(graph, match, "image")
     assert match["type"] == "EZMatchImageSize"
     decoded = _src(graph, match, "image")
     assert decoded["type"] == "VAEDecode"
@@ -88,7 +90,8 @@ def test_text_swap_enhance_mode_and_app_widgets() -> None:
     mode = values[3] if len(values) >= 7 else values[2]
     assert mode == "text_swap"
     prompt = values[1] if len(values) >= 7 else values[0]
-    assert "HELLO" in str(prompt)
+    assert str(prompt).strip() == "HELLO"
+    assert "typeface" not in str(prompt).lower()
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
     assert names[0] == "image"
     assert "sample" in names

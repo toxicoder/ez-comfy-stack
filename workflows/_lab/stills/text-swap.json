@@ -1,8 +1,8 @@
 {
   "id": "text-swap",
   "revision": 2,
-  "last_node_id": 18,
-  "last_link_id": 23,
+  "last_node_id": 23,
+  "last_link_id": 40,
   "nodes": [
     {
       "id": 1,
@@ -95,7 +95,7 @@
           "type": "VAE",
           "links": [
             7,
-            14
+            23
           ],
           "slot_index": 0
         }
@@ -142,7 +142,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            15
+            24
           ],
           "slot_index": 0
         }
@@ -151,7 +151,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell HELLO exactly."
+        "HELLO"
       ],
       "title": "Positive"
     },
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        312
+        604
       ],
       "size": [
         420,
@@ -225,7 +225,7 @@
         {
           "name": "positive",
           "type": "CONDITIONING",
-          "link": 17
+          "link": 26
         },
         {
           "name": "negative",
@@ -235,7 +235,7 @@
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 20
+          "link": 29
         }
       ],
       "outputs": [
@@ -293,7 +293,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            21
+            30
           ],
           "slot_index": 0
         }
@@ -322,7 +322,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 23
+          "link": 34
         }
       ],
       "outputs": [],
@@ -339,7 +339,7 @@
       "type": "Note",
       "pos": [
         40,
-        722
+        836
       ],
       "size": [
         960,
@@ -354,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden \u2014 the source still owns look.\n"
+        "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden \u2014 the source still owns look.\n"
       ],
       "title": "Operator note"
     },
@@ -378,15 +378,16 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            18,
-            22
+            27,
+            31,
+            40
           ],
           "slot_index": 0
         },
         {
           "name": "MASK",
           "type": "MASK",
-          "links": null,
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -413,7 +414,21 @@
       "flags": {},
       "order": 2,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": null,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 36
+        }
+      ],
       "outputs": [
         {
           "name": "prompt",
@@ -430,12 +445,12 @@
       },
       "widgets_values": [
         "custom",
-        "Replace the visible lettering with: HELLO. Keep the same typeface, weight, color, size, tracking, perspective, material, lighting, and every other pixel of the image. Spell HELLO exactly.",
+        "HELLO",
         true,
         "text_swap",
         "match the source still",
         "none",
-        "stills/still-hero"
+        "stills/text-swap"
       ],
       "title": "Klein Prompt Enhance (text swap)"
     },
@@ -444,7 +459,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1074
+        1188
       ],
       "size": [
         420,
@@ -499,7 +514,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -512,7 +527,7 @@
       "title": "Quality"
     },
     {
-      "id": 15,
+      "id": 18,
       "type": "VAEEncode",
       "pos": [
         2180,
@@ -529,12 +544,12 @@
         {
           "name": "pixels",
           "type": "IMAGE",
-          "link": 19
+          "link": 28
         },
         {
           "name": "vae",
           "type": "VAE",
-          "link": 14
+          "link": 23
         }
       ],
       "outputs": [
@@ -542,8 +557,8 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            16,
-            20
+            25,
+            29
           ],
           "slot_index": 0
         }
@@ -555,7 +570,7 @@
       "title": "Encode snapped source"
     },
     {
-      "id": 16,
+      "id": 19,
       "type": "ReferenceLatent",
       "pos": [
         1440,
@@ -572,12 +587,12 @@
         {
           "name": "conditioning",
           "type": "CONDITIONING",
-          "link": 15
+          "link": 24
         },
         {
           "name": "latent",
           "type": "LATENT",
-          "link": 16,
+          "link": 25,
           "shape": 7
         }
       ],
@@ -586,7 +601,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            17
+            26
           ],
           "slot_index": 0
         }
@@ -598,7 +613,7 @@
       "title": "Positive + source plate"
     },
     {
-      "id": 17,
+      "id": 20,
       "type": "EZSnapImage",
       "pos": [
         2180,
@@ -615,7 +630,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 18
+          "link": 27
         }
       ],
       "outputs": [
@@ -623,7 +638,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            19
+            28
           ],
           "slot_index": 0
         }
@@ -635,7 +650,7 @@
       "title": "Snap to Klein grid"
     },
     {
-      "id": 18,
+      "id": 21,
       "type": "EZMatchImageSize",
       "pos": [
         1840,
@@ -652,12 +667,12 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 21
+          "link": 30
         },
         {
           "name": "size_src",
           "type": "IMAGE",
-          "link": 22
+          "link": 31
         }
       ],
       "outputs": [
@@ -665,7 +680,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            23
+            33
           ],
           "slot_index": 0
         }
@@ -675,6 +690,98 @@
       },
       "widgets_values": [],
       "title": "Match source size"
+    },
+    {
+      "id": 22,
+      "type": "EZImageUpscale",
+      "pos": [
+        1800,
+        692
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 23,
+      "type": "EZImageDescribe",
+      "pos": [
+        480,
+        572
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 40
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            36
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
     }
   ],
   "links": [
@@ -751,83 +858,107 @@
       "STRING"
     ],
     [
-      14,
+      23,
       3,
       0,
-      15,
+      18,
       1,
       "VAE"
     ],
     [
-      15,
+      24,
       4,
       0,
-      16,
+      19,
       0,
       "CONDITIONING"
     ],
     [
-      16,
-      15,
+      25,
+      18,
       0,
-      16,
+      19,
       1,
       "LATENT"
     ],
     [
-      17,
-      16,
+      26,
+      19,
       0,
       7,
       1,
       "CONDITIONING"
     ],
     [
-      18,
+      27,
       11,
       0,
-      17,
-      0,
-      "IMAGE"
-    ],
-    [
-      19,
-      17,
-      0,
-      15,
-      0,
-      "IMAGE"
-    ],
-    [
       20,
-      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      28,
+      20,
+      0,
+      18,
+      0,
+      "IMAGE"
+    ],
+    [
+      29,
+      18,
       0,
       7,
       3,
       "LATENT"
     ],
     [
-      21,
+      30,
       8,
       0,
-      18,
+      21,
       0,
       "IMAGE"
     ],
     [
-      22,
+      31,
       11,
       0,
-      18,
+      21,
       1,
       "IMAGE"
     ],
     [
-      23,
-      18,
+      33,
+      21,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      34,
+      22,
       0,
       9,
       0,
+      "IMAGE"
+    ],
+    [
+      36,
+      23,
+      0,
+      12,
+      1,
+      "STRING"
+    ],
+    [
+      40,
+      11,
+      0,
+      23,
+      1,
       "IMAGE"
     ]
   ],
@@ -843,7 +974,7 @@
         0
       ]
     },
-    "lab_note": "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Style is hidden \u2014 the source still owns look.\n",
+    "lab_note": "## stills/text-swap\n\nKlein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or \"Replace SALE with OPEN\"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 \u00f716 grid for denoise, then scaled back). Prefix `ez_text_swap`.\n\nDo not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.\n\nType only the new lettering (HELLO) or a targeting line (Replace SALE with OPEN). The graph always wraps that into a glyph-lock instruction, even when Rewrite prompt is off.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Style is hidden \u2014 the source still owns look.\n",
     "lab_description": "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_text_swap.",
     "lab_app_mode": {
       "enabled": true,
@@ -889,6 +1020,22 @@
             "description": "Replacement lettering, or Replace SALE with OPEN. Rewrite prompt expands this into a glyph-lock instruction.",
             "label": "New lettering",
             "height": 140
+          }
+        ],
+        [
+          22,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
+          }
+        ],
+        [
+          23,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
           }
         ],
         [

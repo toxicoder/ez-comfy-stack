@@ -1,8 +1,8 @@
 {
   "id": "brand-kit-4",
-  "revision": 5,
-  "last_node_id": 36,
-  "last_link_id": 57,
+  "revision": 6,
+  "last_node_id": 40,
+  "last_link_id": 68,
   "nodes": [
     {
       "id": 1,
@@ -46,7 +46,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        436
       ],
       "size": [
         360,
@@ -85,7 +85,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        614
       ],
       "size": [
         360,
@@ -122,7 +122,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        570
+        886
       ],
       "size": [
         420,
@@ -174,7 +174,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         40,
-        1062
+        1378
       ],
       "size": [
         420,
@@ -222,7 +222,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         40,
-        1294
+        1610
       ],
       "size": [
         280,
@@ -285,7 +285,7 @@
       "type": "Note",
       "pos": [
         40,
-        1764
+        2282
       ],
       "size": [
         420,
@@ -309,7 +309,7 @@
       "type": "VAEEncode",
       "pos": [
         1764,
-        198
+        400
       ],
       "size": [
         240,
@@ -354,7 +354,7 @@
       "type": "ReferenceLatent",
       "pos": [
         40,
-        2196
+        2714
       ],
       "size": [
         280,
@@ -573,8 +573,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            14,
-            15
+            15,
+            58
           ],
           "slot_index": 0
         }
@@ -603,7 +603,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 14
+          "link": 59
         }
       ],
       "outputs": [],
@@ -620,7 +620,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        460
+        602
       ],
       "size": [
         420,
@@ -661,7 +661,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        460
+        602
       ],
       "size": [
         360,
@@ -708,7 +708,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        460
+        602
       ],
       "size": [
         320,
@@ -768,7 +768,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        460
+        602
       ],
       "size": [
         240,
@@ -794,7 +794,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            27
+            60
           ],
           "slot_index": 0
         }
@@ -810,7 +810,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        460
+        602
       ],
       "size": [
         280,
@@ -823,7 +823,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 27
+          "link": 61
         }
       ],
       "outputs": [],
@@ -840,7 +840,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        692
+        834
       ],
       "size": [
         240,
@@ -883,7 +883,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        872
+        1124
       ],
       "size": [
         420,
@@ -924,7 +924,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        872
+        1124
       ],
       "size": [
         360,
@@ -971,7 +971,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        872
+        1124
       ],
       "size": [
         320,
@@ -1031,7 +1031,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        872
+        1124
       ],
       "size": [
         240,
@@ -1057,7 +1057,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            39
+            63
           ],
           "slot_index": 0
         }
@@ -1073,7 +1073,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        872
+        1124
       ],
       "size": [
         280,
@@ -1086,7 +1086,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 39
+          "link": 64
         }
       ],
       "outputs": [],
@@ -1103,7 +1103,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1104
+        1356
       ],
       "size": [
         240,
@@ -1146,7 +1146,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1312
+        1646
       ],
       "size": [
         420,
@@ -1187,7 +1187,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1312
+        1646
       ],
       "size": [
         360,
@@ -1234,7 +1234,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1312
+        1646
       ],
       "size": [
         320,
@@ -1294,7 +1294,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1312
+        1646
       ],
       "size": [
         240,
@@ -1320,7 +1320,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            51
+            66
           ],
           "slot_index": 0
         }
@@ -1336,7 +1336,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1312
+        1646
       ],
       "size": [
         280,
@@ -1349,7 +1349,7 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 51
+          "link": 67
         }
       ],
       "outputs": [],
@@ -1366,7 +1366,7 @@
       "type": "ReferenceLatent",
       "pos": [
         988,
-        1544
+        1878
       ],
       "size": [
         240,
@@ -1409,7 +1409,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         508,
-        1770
+        2288
       ],
       "size": [
         420,
@@ -1464,7 +1464,7 @@
         {
           "name": "quality",
           "type": "STRING",
-          "links": null,
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -1481,7 +1481,7 @@
       "type": "EZImageFormat",
       "pos": [
         40,
-        1472
+        1990
       ],
       "size": [
         360,
@@ -1548,6 +1548,214 @@
         1
       ],
       "title": "Format / platform"
+    },
+    {
+      "id": 37,
+      "type": "EZImageUpscale",
+      "pos": [
+        2052,
+        422
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 58
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            59
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [
+            62,
+            65,
+            68
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 38,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        944
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 60
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 62,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            61
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 39,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1466
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 63
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 65,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            64
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
+    },
+    {
+      "id": 40,
+      "type": "EZImageUpscale",
+      "pos": [
+        2012,
+        1988
+      ],
+      "size": [
+        280,
+        80
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 66
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "link": 68,
+          "widget": {
+            "name": "upscale"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            67
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "upscale",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageUpscale"
+      },
+      "widgets_values": [
+        "none"
+      ],
+      "title": "Upscale still"
     }
   ],
   "links": [
@@ -1656,14 +1864,6 @@
       "VAE"
     ],
     [
-      14,
-      13,
-      0,
-      14,
-      0,
-      "IMAGE"
-    ],
-    [
       15,
       13,
       0,
@@ -1760,14 +1960,6 @@
       "VAE"
     ],
     [
-      27,
-      19,
-      0,
-      20,
-      0,
-      "IMAGE"
-    ],
-    [
       28,
       4,
       0,
@@ -1854,14 +2046,6 @@
       25,
       1,
       "VAE"
-    ],
-    [
-      39,
-      25,
-      0,
-      26,
-      0,
-      "IMAGE"
     ],
     [
       40,
@@ -1952,14 +2136,6 @@
       "VAE"
     ],
     [
-      51,
-      31,
-      0,
-      32,
-      0,
-      "IMAGE"
-    ],
-    [
       52,
       34,
       0,
@@ -2006,6 +2182,94 @@
       4,
       0,
       "STRING"
+    ],
+    [
+      58,
+      13,
+      0,
+      37,
+      0,
+      "IMAGE"
+    ],
+    [
+      59,
+      37,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      60,
+      19,
+      0,
+      38,
+      0,
+      "IMAGE"
+    ],
+    [
+      61,
+      38,
+      0,
+      20,
+      0,
+      "IMAGE"
+    ],
+    [
+      62,
+      37,
+      1,
+      38,
+      1,
+      "STRING"
+    ],
+    [
+      63,
+      25,
+      0,
+      39,
+      0,
+      "IMAGE"
+    ],
+    [
+      64,
+      39,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      65,
+      37,
+      1,
+      39,
+      1,
+      "STRING"
+    ],
+    [
+      66,
+      31,
+      0,
+      40,
+      0,
+      "IMAGE"
+    ],
+    [
+      67,
+      40,
+      0,
+      32,
+      0,
+      "IMAGE"
+    ],
+    [
+      68,
+      37,
+      1,
+      40,
+      1,
+      "STRING"
     ]
   ],
   "groups": [
@@ -2016,7 +2280,7 @@
         20,
         24,
         400,
-        490
+        692
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2027,7 +2291,7 @@
       "title": "IDENTITY",
       "bounding": [
         20,
-        514,
+        830,
         460,
         520
       ],
@@ -2042,7 +2306,7 @@
         500,
         24,
         1852,
-        370
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2053,9 +2317,9 @@
       "title": "SHOT COOL",
       "bounding": [
         500,
-        404,
+        546,
         1852,
-        412
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2066,9 +2330,9 @@
       "title": "SHOT NIGHT",
       "bounding": [
         500,
-        816,
+        1068,
         1852,
-        412
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2079,9 +2343,9 @@
       "title": "SHOT HIGH",
       "bounding": [
         500,
-        1256,
+        1590,
         1852,
-        412
+        522
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2111,7 +2375,7 @@
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -2137,6 +2401,14 @@
           {
             "description": "Aspect or named platform job. Sets pixels, save prefix, and Rewrite prompt framing. Custom uses Width \u00d7 Height (\u00f716).",
             "label": "Format / platform"
+          }
+        ],
+        [
+          37,
+          "upscale",
+          {
+            "description": "none passes the still through. 2x and 4x are lanczos. 4K fits the still in a 3840\u00d72160 box (portrait 2160\u00d73840).",
+            "label": "Upscale"
           }
         ],
         [

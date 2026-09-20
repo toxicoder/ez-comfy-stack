@@ -97,7 +97,7 @@ Basenames on disk: [Download packs](operate/models-packs.md). Mbps throttle: [Do
 | Music | `turbo` + `xl` | — |
 | 3D | `trellis2` + `da3-base` | `da3-large` (refused) |
 | LongCat | `video` + `avatar` | NCCL |
-| LLM | `enhance` + `qwen36-35b-a3b` | putting 35B into `download-models` |
+| LLM | `enhance` + `qwen36-35b-a3b` + `describe` | putting 35B or the describe VLM into `download-models` |
 | DreamX | same as `creator` | DreamX-World (refused) |
 
 Banned names (`quality` as an image `--tier` alias, Nunchaku, DA3-LARGE, DreamX-World, MiniMax H3) stay refused. Klein 9B and FLUX.2-dev are gated **opt-in** packs (`--tier 9b` / `flux2-dev`), not lab defaults — [Model licenses](licenses.md).
@@ -294,7 +294,7 @@ Opt-in Apache. `--tier seedvr2-3b` (~15 GB). Optional polish on a Klein 4B PNG f
 
 ### Prompt-enhance GGUF (already in `download-models`)
 
-Default `--tier enhance` is the 4B Q4_K_M already pulled by `download-models`. `--tier qwen36-35b-a3b` is opt-in (~23 GB) for `occupancy enter llm-desk`. `--tier all` is enhance + 35B. Do not add the 35B pack to `download-models`.
+Default `--tier enhance` is the 4B Q4_K_M already pulled by `download-models`. `--tier qwen36-35b-a3b` is opt-in (~23 GB) for `occupancy enter llm-desk`. `--tier describe` is the opt-in Qwen2.5-VL-3B caption GGUF + mmproj for **Describe image**. `--tier all` is enhance + 35B + describe. Do not add the 35B or describe packs to `download-models`.
 
 <EzCommand id="download-llm" />
 

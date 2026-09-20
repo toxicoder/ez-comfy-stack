@@ -89,11 +89,13 @@ def test_still_studio_enhance_and_app_widgets() -> None:
     assert values[3] == "t2i"
     assert values[6] == "stills/still-studio"
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[:7] == [
+    assert names[:9] == [
         "quality",
         "sample",
         "prompt",
         "format",
+        "upscale",
+        "enable",
         "style",
         "enhance",
         "look",

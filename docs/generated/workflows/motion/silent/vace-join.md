@@ -71,12 +71,14 @@ flowchart LR
   N16["Shot B first frame (join)"]
   N17["Negative Prompt Enhance"]
   N18["Quality"]
+  N19["Describe image"]
   N1 --> N9
   N2 --> N6
   N2 --> N7
   N3 --> N8
   N3 --> N11
   N4 --> N8
+  N4 --> N19
   N6 --> N10
   N7 --> N10
   N8 --> N10
@@ -87,6 +89,7 @@ flowchart LR
   N15 --> N6
   N15 --> N17
   N17 --> N7
+  N19 --> N15
 ```
 
 ## Nodes on this graph
@@ -110,6 +113,7 @@ flowchart LR
 | 16 | Shot B first frame (join) | `LoadImage` | Ungrouped |
 | 17 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 18 | Quality | `EZQuality` | Ungrouped |
+| 19 | Describe image | `EZImageDescribe` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1081,3 +1085,26 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

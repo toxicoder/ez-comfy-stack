@@ -15,6 +15,7 @@ from ez_prompt_enhance.samples import CUSTOM as SAMPLE_CUSTOM  # noqa: E402
 from ez_prompt_enhance.samples import (  # noqa: E402
     SAMPLE_COUNT,
     SAMPLES_DIR,
+    catalog_expected_count,
     album_hides_sample,
     catalog_for_rel,
     is_custom,
@@ -59,16 +60,19 @@ def test_each_catalog_has_twenty_unique_recipes() -> None:
     ids = list_catalog_ids()
     assert ids
     assert "index" not in ids
+    assert catalog_expected_count("klein_t2i") == SAMPLE_COUNT
+    assert catalog_expected_count("klein_background_swap") == 100
     for cid in ids:
         rows = load_catalog(cid)
-        assert len(rows) == SAMPLE_COUNT, cid
+        expected = catalog_expected_count(cid)
+        assert len(rows) == expected, cid
         labels = [item.label for item in rows]
         slugs = [item.id for item in rows]
-        assert len(set(labels)) == SAMPLE_COUNT, cid
-        assert len(set(slugs)) == SAMPLE_COUNT, cid
+        assert len(set(labels)) == expected, cid
+        assert len(set(slugs)) == expected, cid
         assert SAMPLE_CUSTOM not in {item.lower() for item in labels}
         assert sample_labels(cid)[-1] == SAMPLE_CUSTOM
-        assert len(sample_labels(cid)) == SAMPLE_COUNT + 1
+        assert len(sample_labels(cid)) == expected + 1
 
 
 def test_index_maps_in_scope_graphs() -> None:
@@ -236,7 +240,7 @@ def test_index_graphs_visible_labels_match_catalog() -> None:
     for rel, cid in index.items():
         assert catalog_for_rel(rel) == cid, rel
         visible = sample_labels(cid)
-        assert len(visible) == SAMPLE_COUNT + 1, (rel, cid)
+        assert len(visible) == catalog_expected_count(cid) + 1, (rel, cid)
         assert visible[-1] == SAMPLE_CUSTOM
 
 
