@@ -21,8 +21,8 @@ Operator playbook: [Cinema Rack](../../create/cinema-rack.md).
 | Axis | Techniques | Clips | Page |
 | --- | --- | --- | --- |
 | Framing and Shot Size | 131 | 131 | [framing_shot_size](framing_shot_size.md) |
-| Camera Angles | 131 | 0 | [camera_angles](camera_angles.md) |
-| Lenses and Optics | 141 | 0 | [lenses_optics](lenses_optics.md) |
+| Camera Angles | 131 | 131 | [camera_angles](camera_angles.md) |
+| Lenses and Optics | 141 | 141 | [lenses_optics](lenses_optics.md) |
 | Composition | 133 | 0 | [composition](composition.md) |
 | Lighting | 136 | 0 | [lighting](lighting.md) |
 | Color and Film Look | 155 | 0 | [color_film_look](color_film_look.md) |
