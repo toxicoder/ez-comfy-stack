@@ -110,7 +110,7 @@ class NavContractTests(unittest.TestCase):
         tree = json.loads(NAV_JSON.read_text(encoding="utf-8"))
         titles = [tab["title"] for tab in tree]
         self.assertEqual(
-            ["Home", "Learn", "Start", "Create", "Operate", "Contribute"],
+            ["Home", "Learn", "Get started", "Studio", "Operate", "Reference", "Contribute"],
             titles,
         )
 

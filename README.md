@@ -25,14 +25,16 @@ When to use this sample vs [nvidia-dgx-spark-lab](https://github.com/toxicoder/n
 ```mermaid
 flowchart TB
   Home["Home"] --> Learn["Learn"]
-  Home --> Start["Start"]
-  Home --> Create["Create"]
+  Home --> Start["Get started"]
+  Home --> Studio["Studio"]
   Home --> Operate["Operate"]
+  Home --> Ref["Reference"]
   Home --> Contribute["Contribute"]
-  Learn --> L1["architecture · ComfyUI · pipeline · glossary"]
+  Learn --> L1["syllabus · ComfyUI · pipeline · glossary"]
   Start --> S1["Getting Started · licenses · FAQ"]
-  Create --> C1["still → motion → AV · workflows"]
-  Operate --> O1["occupancy · download tiers · doctor · troubleshooting"]
+  Studio --> C1["still → motion → AV · catalogs"]
+  Operate --> O1["daily loop · occupancy · troubleshooting"]
+  Ref --> R1["manage.sh · occupancy matrix · nodes"]
   Contribute --> N1["conventions · docs-style · tests"]
 ```
 

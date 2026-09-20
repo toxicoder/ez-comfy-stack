@@ -16,10 +16,6 @@
         "path": "learn/index.md"
       },
       {
-        "title": "Architecture",
-        "path": "learn/architecture.md"
-      },
-      {
         "title": "ComfyUI basics",
         "path": "learn/comfyui.md"
       },
@@ -30,6 +26,18 @@
       {
         "title": "Klein, Wan, and LTX",
         "path": "learn/pipeline.md"
+      },
+      {
+        "title": "Why one heavy job",
+        "path": "learn/occupancy.md"
+      },
+      {
+        "title": "Hardware, memory, and safety",
+        "path": "learn/hardware.md"
+      },
+      {
+        "title": "Architecture",
+        "path": "learn/architecture.md"
       },
       {
         "title": "Clay to finish",
@@ -48,21 +56,42 @@
         "path": "learn/dream-house.md"
       },
       {
-        "title": "Hardware, memory, and safety",
-        "path": "learn/hardware.md"
-      },
-      {
         "title": "Glossary",
         "path": "glossary.md"
       }
     ]
   },
   {
-    "title": "Start",
+    "title": "Get started",
     "pages": [
       {
         "title": "Getting Started",
         "path": "getting-started.md"
+      },
+      {
+        "title": "Model licenses",
+        "path": "licenses.md"
+      },
+      {
+        "title": "FAQ",
+        "path": "start/faq.md"
+      },
+      {
+        "title": "When to use vs spark-lab",
+        "path": "start/when-to-use-vs-spark-lab.md"
+      }
+    ]
+  },
+  {
+    "title": "Studio",
+    "pages": [
+      {
+        "title": "Still to motion to AV",
+        "path": "visual-generative-ai.md"
+      },
+      {
+        "title": "ComfyUI Apps",
+        "path": "studio-apps.md"
       },
       {
         "title": "Prompting",
@@ -81,41 +110,8 @@
         "path": "create/app-forge.md"
       },
       {
-        "title": "Model licenses",
-        "path": "licenses.md"
-      },
-      {
-        "title": "FAQ",
-        "path": "start/faq.md"
-      },
-      {
-        "title": "When to use vs spark-lab",
-        "path": "start/when-to-use-vs-spark-lab.md"
-      }
-    ]
-  },
-  {
-    "title": "Create",
-    "pages": [
-      {
-        "title": "Still to motion to AV",
-        "path": "visual-generative-ai.md"
-      },
-      {
-        "title": "ComfyUI Apps",
-        "path": "studio-apps.md"
-      },
-      {
         "title": "Workflow catalog",
         "path": "studio-workflows.md"
-      },
-      {
-        "title": "Workflow details",
-        "path": "create/workflows-index.md"
-      },
-      {
-        "title": "Node parameter encyclopedia",
-        "path": "reference/workflow-nodes.md"
       },
       {
         "title": "Stills graphs",
@@ -184,18 +180,6 @@
       {
         "title": "Splat sidecar",
         "path": "splat-sidecar.md"
-      },
-      {
-        "title": "Custom nodes",
-        "path": "reference/custom-nodes.md"
-      },
-      {
-        "title": "Config and schemas",
-        "path": "reference/config-and-schemas.md"
-      },
-      {
-        "title": "studio-ui board",
-        "path": "reference/studio-ui.md"
       }
     ]
   },
@@ -203,24 +187,16 @@
     "title": "Operate",
     "pages": [
       {
+        "title": "Daily loop",
+        "path": "operate/daily.md"
+      },
+      {
         "title": "Occupancy desk",
         "path": "occupancy.md"
       },
       {
-        "title": "Occupancy matrix",
-        "path": "operate/occupancy-matrix.md"
-      },
-      {
         "title": "MCP and SSH tunnels",
         "path": "operate/mcp.md"
-      },
-      {
-        "title": "manage.sh reference",
-        "path": "manage-cli.md"
-      },
-      {
-        "title": "Generated shell reference",
-        "path": "generated/shell/reference.md"
       },
       {
         "title": "Models and cache",
@@ -289,6 +265,43 @@
       {
         "title": "Models and workflows",
         "path": "operate/troubleshooting-models-workflows.md"
+      }
+    ]
+  },
+  {
+    "title": "Reference",
+    "pages": [
+      {
+        "title": "manage.sh reference",
+        "path": "manage-cli.md"
+      },
+      {
+        "title": "Generated shell reference",
+        "path": "generated/shell/reference.md"
+      },
+      {
+        "title": "Occupancy matrix",
+        "path": "operate/occupancy-matrix.md"
+      },
+      {
+        "title": "Workflow details",
+        "path": "create/workflows-index.md"
+      },
+      {
+        "title": "Node parameter encyclopedia",
+        "path": "reference/workflow-nodes.md"
+      },
+      {
+        "title": "Custom nodes",
+        "path": "reference/custom-nodes.md"
+      },
+      {
+        "title": "Config and schemas",
+        "path": "reference/config-and-schemas.md"
+      },
+      {
+        "title": "studio-ui board",
+        "path": "reference/studio-ui.md"
       }
     ]
   },
