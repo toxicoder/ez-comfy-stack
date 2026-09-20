@@ -601,6 +601,48 @@
       "flags": []
     },
     {
+      "id": "setup-client",
+      "title": "setup-client",
+      "description": "Laptop bootstrap: tools, SSH key, Host ez-spark LocalForward. Does not start Comfy.",
+      "argv": [
+        "./scripts/manage.sh",
+        "setup-client",
+        "--host",
+        "${SPARK_HOST}",
+        "--user",
+        "${SPARK_USER}",
+        "--port",
+        "${COMFY_PORT}"
+      ],
+      "flags": []
+    },
+    {
+      "id": "onboard",
+      "title": "onboard",
+      "description": "Spark: setup. Laptop: setup-client then remote doctor. Never auto-start.",
+      "argv": [
+        "./scripts/manage.sh",
+        "onboard",
+        "--host",
+        "${SPARK_HOST}",
+        "--user",
+        "${SPARK_USER}",
+        "--port",
+        "${COMFY_PORT}"
+      ],
+      "flags": []
+    },
+    {
+      "id": "spark-ui",
+      "title": "spark-ui",
+      "description": "Foreground ssh -N -L to Host ez-spark. Start the stack first (type yes).",
+      "argv": [
+        "./scripts/manage.sh",
+        "spark-ui"
+      ],
+      "flags": []
+    },
+    {
       "id": "ssh-forward",
       "title": "SSH port-forward",
       "description": "Laptop tunnel to ComfyUI on the Spark. Then open http://127.0.0.1:${COMFY_PORT}.",

@@ -309,6 +309,11 @@ Commands:
   help              Show this help
   setup [--install-docker] [--yes]
                     Host bootstrap: .env, MODELS_DIR + COMFY_OUTPUT_DIR (sudo), Docker CE install, hf CLI, doctor
+  setup-client [--host H] [--user U] [--port N]
+                    Laptop: git/ssh/python3, SSH key, Host ez-spark LocalForward. Does not start Comfy
+  onboard [--download]
+                    Spark: setup. Laptop: setup-client then remote clone/setup/doctor. Never auto-start
+  spark-ui          ssh -N -L to Host ez-spark; open http://127.0.0.1:COMFY_PORT after start (type yes)
   doctor            Preflight: docker, GPU, free RAM/disk, attention, models, output dir, license policy
   status [--json]   Stack status (attention + host_free_gib when --json)
   start             Start studio stack detached (requires yes; not tied to this shell)
@@ -1779,6 +1784,54 @@ cmd_disk_wizard() {
   bash "${REPO_ROOT}/scripts/utilities/disk-wizard.sh" "$@"
 }
 
+# @command setup-client
+#######################################
+# Operator laptop bootstrap (tools + SSH Host ez-spark). Does not start Comfy.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  setup-client.sh flags
+# Outputs:
+#   Status via log
+# Returns:
+#   setup-client.sh status
+#######################################
+cmd_setup_client() {
+  bash "${REPO_ROOT}/scripts/utilities/setup-client.sh" "$@"
+}
+
+# @command onboard
+#######################################
+# Spark setup locally, or laptop client plus remote doctor. Never auto-start.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  --download and setup-client flags
+# Outputs:
+#   Status via log
+# Returns:
+#   setup-client.sh status
+#######################################
+cmd_onboard() {
+  bash "${REPO_ROOT}/scripts/utilities/setup-client.sh" --onboard "$@"
+}
+
+# @command spark-ui
+#######################################
+# Foreground SSH LocalForward to Host ez-spark. Stack must already be started.
+# Globals:
+#   REPO_ROOT
+# Arguments:
+#   $@  unused
+# Outputs:
+#   Status via log; may exec ssh
+# Returns:
+#   setup-client.sh status
+#######################################
+cmd_spark_ui() {
+  bash "${REPO_ROOT}/scripts/utilities/setup-client.sh" --ui "$@"
+}
+
 # @command cleanup
 #######################################
 # After DELETE confirmation, remove Compose volumes (Comfy install state only).
@@ -1820,6 +1873,9 @@ main() {
   case "${cmd}" in
     help | -h | --help) cmd_help ;;
     setup) cmd_setup "$@" ;;
+    setup-client) cmd_setup_client "$@" ;;
+    onboard) cmd_onboard "$@" ;;
+    spark-ui) cmd_spark_ui "$@" ;;
     doctor) cmd_doctor ;;
     status) cmd_status "$@" ;;
     start) cmd_start ;;

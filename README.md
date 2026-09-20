@@ -49,6 +49,8 @@ export MODELS_DIR="${MODELS_DIR:-/mnt/models}"
 export COMFY_OUTPUT_DIR="${COMFY_OUTPUT_DIR:-/mnt/comfy-output}"
 export COMFY_PORT="${COMFY_PORT:-8188}"
 
+# laptop (macOS/Linux/WSL): ./scripts/manage.sh setup-client
+# one-shot from the laptop (never auto-starts): ./scripts/manage.sh onboard
 ./scripts/manage.sh setup --install-docker
 ./scripts/manage.sh doctor
 ./scripts/manage.sh download-models   # Klein 4B + Wan 2.2 5B + LTX-2.5

@@ -1,0 +1,49 @@
+---
+title: Onboard
+description: One command from the laptop or the Spark to install tools, clone, setup, and doctor — never auto-start.
+tags: [getting-started, setup, onboard, ssh]
+---
+
+# Onboard
+
+**What's on this page**
+
+- `manage.sh onboard` on a Spark vs on a laptop
+- What it will not do (no `start`, no yes-skip)
+- Optional remote `download-models`
+
+**What this enables**
+
+- **Skipping** the copy-paste clone → setup → doctor sequence
+- **Keeping** SSH-safe defaults: type **yes** on start, headroom, `restart: "no"`
+
+**Who this is for:** first-time operators. Laptop-only tools: [Set up this computer](this-computer.md). Manual steps: [Getting Started](../getting-started.md).
+
+---
+
+## What runs
+
+On a **Spark** (GB10 / `/mnt/models`): `onboard` is `setup --install-docker` then doctor.
+
+On a **laptop**: `setup-client` (SSH Host ez-spark) then remote clone + `setup --install-docker` + `doctor`. The stack is **not** started.
+
+<EzCommand id="onboard" />
+
+Pass `--download` only when you have accepted the LTX license and set `HF_TOKEN`. That pull is multi-GB and throttled.
+
+---
+
+## Then type yes
+
+```bash
+ssh ez-spark
+./scripts/manage.sh start    # type yes
+```
+
+From the laptop, keep a tunnel open:
+
+<EzCommand id="spark-ui" />
+
+Open `http://127.0.0.1:${COMFY_PORT}`. Queue `_lab/stills/still-draft`. Stop before reboot: [Daily loop](../operate/daily.md).
+
+Safety impact: **none**. Onboard never sets Compose `restart` and never types `yes` for you.

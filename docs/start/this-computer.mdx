@@ -1,0 +1,73 @@
+---
+title: Set up this computer
+description: macOS, Linux, and Windows laptop bootstrap so SSH, port-forward, and manage.sh work against the Spark.
+tags: [getting-started, macos, windows, linux, ssh]
+---
+
+# Set up this computer
+
+**What's on this page**
+
+- What the operator laptop needs (git, OpenSSH, python3)
+- One command: `manage.sh setup-client`
+- macOS (Homebrew), Linux (apt/dnf), Windows (WSL2)
+- SSH `Host ez-spark` with LocalForward
+
+**What this enables**
+
+- **Reaching** ComfyUI at `http://127.0.0.1:${COMFY_PORT}` after the Spark is started
+- **Skipping** copy-paste `ssh -L` once the Host block exists
+- **Not** running Comfy on the laptop — the GPU job stays on the Spark
+
+**Who this is for:** you, on a Mac, Linux laptop, or Windows PC. The Spark itself uses [Getting Started](../getting-started.md). One-command path: [Onboard](onboard.md).
+
+This does **not** start the stack. Compose `restart: "no"`. Type **yes** on `start` on the Spark.
+
+---
+
+## You will end here
+
+| Goal | Detail |
+| --- | --- |
+| **SSH** | `ssh ez-spark` works |
+| **Forward** | `LocalForward ${COMFY_PORT} 127.0.0.1:${COMFY_PORT}` in `~/.ssh/config` |
+| **Next** | On the Spark, `./scripts/manage.sh start` (type **yes**), then open `http://127.0.0.1:${COMFY_PORT}` |
+
+Fill Spark IP / user / port in **Your Spark** (docs) or:
+
+```bash
+export SPARK_HOST="${SPARK_HOST:-127.0.0.1}"
+export SPARK_USER="${SPARK_USER:-$USER}"
+export COMFY_PORT="${COMFY_PORT:-8188}"
+```
+
+---
+
+## One command
+
+<EzCommand id="setup-client" />
+
+`setup-client` will:
+
+1. Detect macOS, Linux, WSL, or Windows
+2. Install git / OpenSSH / python3 when missing (Homebrew, apt, or dnf)
+3. Create `~/.ssh/id_ed25519` when missing
+4. Write a replaceable `Host ez-spark` block (does not wipe the rest of `~/.ssh/config`)
+
+Then:
+
+```bash
+ssh ez-spark
+```
+
+Windows: run `scripts/utilities/setup-client.ps1`. The supported path is **WSL2 Ubuntu** (bash `manage.sh`). Without WSL, install Git for Windows + OpenSSH and use the printed `ssh -L` line.
+
+---
+
+## After the Spark is up
+
+<EzCommand id="spark-ui" />
+
+That is a foreground tunnel. Leave it open while you use the UI. Opt-in always-on tunnel services (`launchd` / systemd) are not the default — an always-on LocalForward is easy to forget.
+
+**Fail:** [Host and Docker](../operate/troubleshooting-host-docker.md) · [MCP and SSH tunnels](../operate/mcp.md).
