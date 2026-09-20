@@ -1,0 +1,36 @@
+---
+title: "Dual-Color Split"
+description: "Cinema Rack illustration — Dual-Color Split."
+tags: [cinema, prompting, catalog, clip]
+---
+
+# Dual-Color Split
+
+**What's on this page**
+
+- A muted 5s illustration of **Dual-Color Split** (`lit_dual_color_split`)
+- Catalog clause and still/motion/AV flags on **Lighting**
+
+**What this enables**
+
+- Seeing the pick before splicing it on Cinema Rack
+- Copying the clause next to a concrete camera example
+
+Do not hand-edit this file. Re-run `python3 docs/generate_cinema_docs.py`.
+Axis: [Lighting](../lighting.md). Playbook: [Cinema Rack](../../../create/cinema-rack.md).
+
+<div class="ez-cinema-clip">
+<video controls preload="none" playsinline poster="../../../assets/cinema/lighting/lit_dual_color_split.jpg"><source src="../../../assets/cinema/lighting/lit_dual_color_split.mp4" type="video/mp4"></video>
+</div>
+
+## Clause
+
+Split the face not only in brightness but in color, one cheek amber, the other cyan, the nose the border.
+
+## Use on
+
+still, motion, av
+
+## Conflicts
+
+—
