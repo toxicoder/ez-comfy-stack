@@ -1203,10 +1203,11 @@ Pick a Wan or LTX clip canvas (aspect or named platform).
 
 !!! warning "Lab notes"
 
-    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size.
+    Wan and LTX printers wire width/height into Wan22ImageToVideoLatent, LTXVImgToVideo, or EmptyLTXVLatentVideo. Hint feeds Enhance duration_hint on non-loop graphs. Length stays on the latent node. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
 | `width` | out | `INT` | Latent width (Wan ÷16, LTX ÷32). |
 | `height` | out | `INT` | Latent height (Wan ÷16, LTX ÷32). |
 | `hint` | out | `STRING` | Enhance duration / framing line. |
@@ -1272,6 +1273,16 @@ Custom height.
 **How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
 
 **This graph:** `704`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
+
+**This graph:** `Match input`
 
 ### `EZImageUpscale` — Upscale still
 

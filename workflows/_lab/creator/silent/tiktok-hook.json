@@ -757,7 +757,8 @@
         "Wan 5B",
         "Wan \u00b7 9:16 Shorts (480\u00d7832)",
         480,
-        832
+        832,
+        "Match input"
       ],
       "title": "Format / platform"
     },
@@ -1081,6 +1082,14 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          18,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
           }
         ],
         [

@@ -153,11 +153,12 @@ def _widget_names(graph: dict) -> list[str]:
 
 def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
     names = _widget_names(_load("stills/still-draft.json"))
-    assert names[:8] == [
+    assert names[:9] == [
         "quality",
         "sample",
         "prompt",
         "format",
+        "size_mode",
         "upscale",
         "enable",
         "style",
@@ -174,11 +175,12 @@ def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
 
 def test_image_studio_exposes_mode_look_size_and_unet() -> None:
     names = _widget_names(_load("stills/image-studio.json"))
-    assert names[:8] == [
+    assert names[:9] == [
         "quality",
         "sample",
         "prompt",
         "format",
+        "size_mode",
         "upscale",
         "enable",
         "category",
@@ -193,11 +195,12 @@ def test_image_studio_exposes_mode_look_size_and_unet() -> None:
 
 def test_still_studio_exposes_format_look_size_and_unet() -> None:
     names = _widget_names(_load("stills/still-studio.json"))
-    assert names[:9] == [
+    assert names[:10] == [
         "quality",
         "sample",
         "prompt",
         "format",
+        "size_mode",
         "upscale",
         "enable",
         "style",

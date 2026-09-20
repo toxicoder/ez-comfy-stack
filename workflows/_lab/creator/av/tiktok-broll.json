@@ -990,7 +990,8 @@
         "LTX-2.5",
         "LTX \u00b7 9:16 Shorts (768\u00d71280)",
         768,
-        1280
+        1280,
+        "Match input"
       ],
       "title": "Format / platform"
     },
@@ -1350,6 +1351,14 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          23,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
           }
         ],
         [

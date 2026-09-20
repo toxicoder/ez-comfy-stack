@@ -916,10 +916,11 @@ Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack
 
 !!! warning "Lab notes"
 
-    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size.
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
 | `width` | out | `INT` | Latent width (÷16). |
 | `height` | out | `INT` | Latent height (÷16). |
 | `batch` | out | `INT` | Batch size. |
@@ -1092,13 +1093,23 @@ How many stills in one Run.
 
 **This graph:** `1`
 
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
 ### `EZOptionalImage` — Optional reference stills
 
 Optional example or reference stills. Empty is valid — Queue without a file.
 
 !!! warning "Lab notes"
 
-    Klein T2I Apps attach a present still via EZKleinRefCanvas. Filename may be empty.
+    Klein T2I Apps attach a present still via EZKleinRefCanvas. Upload or pick a file already on the drive; filename may be empty.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1111,11 +1122,11 @@ Optional example or reference stills. Empty is valid — Queue without a file.
 
 #### `filename`
 
-Type `STRING`.
+Type `COMBO`. Range / default: empty / input stills.
 
-Optional path or App upload. Empty is valid.
+Upload or pick a still on the drive. Empty is valid.
 
-**How it affects generation:** Leave empty to Queue a T2I. Presence is the tensor, not this string.
+**How it affects generation:** Empty Queues a T2I. A pick loads from input/. Choose from outputs copies a durable file into input/.
 
 ### `EZKleinRefCanvas` — Klein canvas (optional ref)
 
