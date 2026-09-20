@@ -132,6 +132,31 @@ def _quality_node(node_id: int, pos: list[float]) -> dict[str, Any]:
     }
 
 
+def _quality_insert_index(inputs: list[Any]) -> int:
+    """Return the index after any leading LoadImage App widgets.
+
+    Required still pickers stay first so Queue cannot hide a missing file.
+    Quality follows those pickers (or index 0 when the graph has none).
+
+    Args:
+        inputs: ``linearData.inputs`` rows.
+
+    Returns:
+        Insertion index for the Quality widget.
+    """
+    idx = 0
+    for entry in inputs:
+        if (
+            isinstance(entry, (list, tuple))
+            and len(entry) >= 2
+            and entry[1] == "image"
+        ):
+            idx += 1
+            continue
+        break
+    return idx
+
+
 def _prepend_linear(graph: dict[str, Any], node_id: int) -> None:
     extra = graph.get("extra")
     if not isinstance(extra, dict):
@@ -149,7 +174,10 @@ def _prepend_linear(graph: dict[str, Any], node_id: int) -> None:
         ):
             continue
         kept.append(entry)
-    kept.insert(0, [int(node_id), QUALITY_WIDGET, dict(QUALITY_LABEL)])
+    kept.insert(
+        _quality_insert_index(kept),
+        [int(node_id), QUALITY_WIDGET, dict(QUALITY_LABEL)],
+    )
     linear["inputs"] = kept
 
 
@@ -172,7 +200,8 @@ def ensure_quality_node(graph: dict[str, Any]) -> dict[str, Any]:
     """Add EZQuality when missing and stamp extra.lab_quality + linearData.
 
     Idempotent. Does not move an existing Quality node. Does not apply
-    Draft/High overlays (shipped JSON stays Lab).
+    Draft/High overlays (shipped JSON stays Lab). ``linearData`` keeps
+    required still pickers first, then Quality.
 
     Args:
         graph: Serialized Comfy graph (mutated).

@@ -252,9 +252,10 @@ def test_character_tweak_wires_reference_latent() -> None:
     save = next(n for n in graph["nodes"] if n.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_character_tweak"
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "quality"
-    assert names[1] == "sample"
-    assert names[2] == "prompt"
+    assert names[0] == "image"
+    assert names[1] == "quality"
+    assert names[2] == "sample"
+    assert "prompt" in names
     assert "image" in names
     sampler = next(n for n in graph["nodes"] if n.get("type") == "KSampler")
     by_id = {int(n["id"]): n for n in graph["nodes"]}

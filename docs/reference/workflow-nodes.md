@@ -1845,7 +1845,7 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 | --- | --- | --- | --- |
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
 | `context` | out | `STRING` | Mode instruction plus incoming look splice. |
-| `enhance_mode` | out | `STRING` | t2i, edit, identity, or text_swap. |
+| `enhance_mode` | out | `COMBO` | t2i, edit, identity, or text_swap — same combo as EZKleinPromptEnhance.mode. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
 
 #### `category`

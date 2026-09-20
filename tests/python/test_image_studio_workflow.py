@@ -17,7 +17,12 @@ if str(CUSTOM) not in sys.path:
 
 from _lab_paths import lab_json, load_lab_graph  # noqa: E402
 from _stamp_app_mode import STAMP_SPECS, infer_suite_inputs  # noqa: E402
-from ez_image.modes import EZImageMode, default_mode_label, load_modes  # noqa: E402
+from ez_image.modes import (  # noqa: E402
+    ENHANCE_MODE_COMBO,
+    EZImageMode,
+    default_mode_label,
+    load_modes,
+)
 
 
 def _load() -> dict[str, Any]:
@@ -70,6 +75,14 @@ def test_image_studio_mode_wires_context_enhance_prefix() -> None:
     assert _src(graph, enh, "context")["id"] == mode["id"]
     assert _src(graph, enh, "mode")["id"] == mode["id"]
     assert _src(graph, save, "filename_prefix")["id"] == mode["id"]
+    mode_in = next(item for item in enh.get("inputs") or [] if item.get("name") == "mode")
+    mode_out = next(
+        item for item in mode.get("outputs") or [] if item.get("name") == "enhance_mode"
+    )
+    assert mode_in["type"] == ENHANCE_MODE_COMBO
+    assert mode_out["type"] == ENHANCE_MODE_COMBO
+    link = _link_map(graph)[int(mode_in["link"])]
+    assert link[5] == ENHANCE_MODE_COMBO
     values = list(mode.get("widgets_values") or [])
     assert values[0] == "Generate"
     assert values[1] == default_mode_label()

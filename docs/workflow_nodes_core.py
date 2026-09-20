@@ -316,7 +316,7 @@ def core_nodes() -> dict[str, Any]:
             sockets=[
                 _s("context", "STRING", "in", "Optional look-recipe splice from EZImageFormat."),
                 _s("context", "STRING", "out", "Mode instruction plus incoming look splice."),
-                _s("enhance_mode", "STRING", "out", "t2i, edit, identity, or text_swap."),
+                _s("enhance_mode", "COMBO", "out", "t2i, edit, identity, or text_swap — same combo as EZKleinPromptEnhance.mode."),
                 _s("prefix", "STRING", "out", "SaveImage filename prefix."),
             ],
             widgets=[

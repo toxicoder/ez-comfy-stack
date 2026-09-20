@@ -36,7 +36,11 @@ ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
 if str(CUSTOM) not in sys.path:
     sys.path.insert(0, str(CUSTOM))
-from ez_image.modes import default_category_label, default_mode_label  # noqa: E402
+from ez_image.modes import (  # noqa: E402
+    ENHANCE_MODE_COMBO,
+    default_category_label,
+    default_mode_label,
+)
 from ez_prompt_enhance.client import join_prompt, load_view_pack  # noqa: E402
 
 WF = ROOT / "workflows"
@@ -312,7 +316,7 @@ def _append_link(
     src_slot: int,
     dst: int,
     dst_slot: int,
-    ltype: str,
+    ltype: str | list[str],
 ) -> int:
     last = int(graph.get("last_link_id") or 0) + 1
     graph["last_link_id"] = last
@@ -484,7 +488,12 @@ def build_image_studio() -> dict:
         "inputs": mode_inputs,
         "outputs": [
             {"name": "context", "type": "STRING", "links": [], "slot_index": 0},
-            {"name": "enhance_mode", "type": "STRING", "links": [], "slot_index": 1},
+            {
+                "name": "enhance_mode",
+                "type": ENHANCE_MODE_COMBO,
+                "links": [],
+                "slot_index": 1,
+            },
             {"name": "prefix", "type": "STRING", "links": [], "slot_index": 2},
         ],
         "properties": {"Node name for S&R": "EZImageMode"},
@@ -504,12 +513,12 @@ def build_image_studio() -> dict:
     mode_ctx = _append_link(graph, nid, 0, enh_id, 1, "STRING")
     ctx_in["link"] = mode_ctx
     _push_output_link(mode, 0, mode_ctx)
-    mode_enh = _append_link(graph, nid, 1, enh_id, 2, "STRING")
+    mode_enh = _append_link(graph, nid, 1, enh_id, 2, ENHANCE_MODE_COMBO)
     enh_inputs = list(enh.get("inputs") or [])
     enh_inputs.append(
         {
             "name": "mode",
-            "type": "STRING",
+            "type": ENHANCE_MODE_COMBO,
             "link": mode_enh,
             "widget": {"name": "mode"},
         }

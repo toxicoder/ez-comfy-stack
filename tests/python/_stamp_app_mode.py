@@ -246,10 +246,12 @@ def _graph_hides_sample(graph: Mapping[str, Any]) -> bool:
     return album_hides_sample(rel)
 
 
-# App Mode widget order: the thing the user types first, then look, then Run knobs.
+# App Mode widget order: required still first when the graph needs a
+# LoadImage, then Quality, then the thing the user types, then look / Run knobs.
 # EZDubIngest: ``upload`` is an App button label only. Serialized node
 # widgets_values stay source, have_rights, job_slug, source_url (4-wide).
 WIDGET_ORDER = (
+    "image",
     "quality",
     "source",
     "upload",
@@ -336,7 +338,6 @@ WIDGET_ORDER = (
     "cfg_weight",
     "exaggeration",
     "audio",
-    "image",
     "seed",
     "width",
     "height",
