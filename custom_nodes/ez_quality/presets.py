@@ -1,8 +1,11 @@
-"""Family-specific Quality overlays (custom / draft / lab / standard / high / ultra / max).
+"""Family-specific Quality overlays (custom / draft / lab / standard / high /
+Free Commercial Use / ultra / max).
 
 Python is the source of truth. The frontend JS mirrors these constants.
 Overlays never change width, height, frames, or length. Named qualities may
 swap UNET, CLIP, and VAE when the files are present. ``custom`` is a freeze.
+``Free Commercial Use (<$10M)`` is Apache Klein 4B + LTX-2.5 only — never
+Klein 9B or FLUX.2-dev. Wan / audio / trellis are no-ops for that choice.
 """
 
 from __future__ import annotations
@@ -16,6 +19,8 @@ QUALITY_DRAFT = "draft"
 QUALITY_LAB = "lab"
 QUALITY_STANDARD = "standard"
 QUALITY_HIGH = "high"
+QUALITY_FREE_COMMERCIAL = "Free Commercial Use (<$10M)"
+QUALITY_FREE_COMMERCIAL_ALIAS = "free_commercial"
 QUALITY_ULTRA = "ultra"
 QUALITY_MAX = "max"
 QUALITY_CHOICES: tuple[str, ...] = (
@@ -24,10 +29,17 @@ QUALITY_CHOICES: tuple[str, ...] = (
     QUALITY_LAB,
     QUALITY_STANDARD,
     QUALITY_HIGH,
+    QUALITY_FREE_COMMERCIAL,
     QUALITY_ULTRA,
     QUALITY_MAX,
 )
+# casefold(widget value) → canonical QUALITY_CHOICES entry (incl. alias).
+_QUALITY_NORMALIZE: dict[str, str] = {
+    choice.casefold(): choice for choice in QUALITY_CHOICES
+}
+_QUALITY_NORMALIZE[QUALITY_FREE_COMMERCIAL_ALIAS] = QUALITY_FREE_COMMERCIAL
 
+# Klein filenames, family step/CFG overlays, widget indexes.
 KLEIN_DISTILLED = "flux-2-klein-4b-fp8.safetensors"
 KLEIN_NVFP4 = "flux-2-klein-4b-nvfp4.safetensors"
 KLEIN_BASE = "flux-2-klein-base-4b-fp8.safetensors"
@@ -115,10 +127,8 @@ def normalize_quality(value: object) -> str:
     Returns:
         One of QUALITY_CHOICES.
     """
-    raw = str(value or QUALITY_LAB).strip().lower()
-    if raw in QUALITY_CHOICES:
-        return raw
-    return QUALITY_LAB
+    raw = str(value or QUALITY_LAB).strip().casefold()
+    return _QUALITY_NORMALIZE.get(raw, QUALITY_LAB)
 
 
 def is_banned_unet(name: str) -> bool:
@@ -316,6 +326,18 @@ def resolve_overlay(
     clips = _available(available_clips)
     vaes = _available(available_vaes)
 
+    if choice == QUALITY_FREE_COMMERCIAL:
+        return _free_commercial_overlay(
+            occ,
+            authored_steps,
+            unet_name,
+            clip_name,
+            vae_name,
+            available,
+            clips,
+            vaes,
+        )
+
     if occ == "klein" or is_klein_4b_unet(unet_name) or is_klein_9b_unet(unet_name):
         return _klein_overlay(
             choice,
@@ -408,6 +430,47 @@ def _trellis_steps(choice: str) -> int:
     if choice == QUALITY_MAX:
         return TRELLIS_MAX_STEPS
     return TRELLIS_HIGH_STEPS
+
+
+def _free_commercial_overlay(
+    occupancy: str,
+    authored_steps: int,
+    unet_name: str,
+    clip_name: str,
+    vae_name: str,
+    available: set[str],
+    clips: set[str],
+    vaes: set[str],
+) -> QualityOverlay:
+    """Apache Klein 4B stills + LTX-2.5 steps. Never 9B / FLUX.2-dev.
+
+    Wan, audio, trellis, and inspire are no-ops. Python never writes size.
+
+    Args:
+        occupancy: Graph occupancy id.
+        authored_steps: Current KSampler steps.
+        unet_name: Current UNET filename.
+        clip_name: Current CLIP filename.
+        vae_name: Current VAE filename.
+        available: UNET combo options.
+        clips: CLIP combo options.
+        vaes: VAE combo options.
+
+    Returns:
+        Overlay for the commercial path, or empty.
+    """
+    if (
+        occupancy == "klein"
+        or is_klein_4b_unet(unet_name)
+        or is_klein_9b_unet(unet_name)
+        or is_flux2_dev_unet(unet_name)
+    ):
+        return _klein_high(
+            authored_steps, unet_name, clip_name, vae_name, available, clips, vaes
+        )
+    if occupancy in _LTX_OCCUPANCY:
+        return QualityOverlay(steps=LTX_HIGH_STEPS)
+    return QualityOverlay()
 
 
 def _klein_overlay(

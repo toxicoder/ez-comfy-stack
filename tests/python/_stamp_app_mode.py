@@ -454,7 +454,8 @@ GENERIC_LABELS = {
 }
 DEFAULT_WIDGET_DESCRIPTIONS = {
     "quality": (
-        "Lab default, Draft (faster), or High (slower). "
+        "Lab default, Draft (faster), High (slower), or Free Commercial Use "
+        "(<$10M: Klein 4B + LTX-2.5, never Non-Commercial stills). "
         "Family-specific — not --tier."
     ),
     "sample": "Pick a lab recipe, or Custom to type your own.",

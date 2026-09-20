@@ -313,9 +313,9 @@ Apache Creator only. DreamX-World is refused. Unload LTX first. Selective payloa
 id: download-dreamx
 ```
 
-### SeedVR2 restore (after concat)
+### SeedVR2 restore (still polish or after concat)
 
-Post-concat only. `--tier seedvr2-3b` (~15 GB Apache). Occupancy: stop Comfy first if you restore on GPU.
+Opt-in Apache. `--tier seedvr2-3b` (~15 GB). Optional polish on a Klein 4B PNG for **Free Commercial Use (<$10M)** quality (add detail, do not jump to 4K) or post-concat restore on a film master (conservative 1.3–1.5×). Occupancy: stop Comfy first if you restore on GPU. Not part of `download-models`.
 
 ```ezcmd
 id: download-restore

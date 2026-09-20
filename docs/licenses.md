@@ -13,6 +13,7 @@ tags: [license, apache, ltx, wan, klein, youtube, us]
 - What we download by default vs omit
 - LTX $10M company-revenue cap vs Wan Apache silent video
 - How 90s shorts split Klein still / optional silent Wan / LTX AV print
+- Free Commercial Use (<$10M) quality: Klein 4B → optional SeedVR2 → LTX-2.5
 - What is banned (MiniMax H3, MiniMax Music 3, Suno/Udio, API-only) vs opt-in NC (Klein 9B, FLUX.2-dev)
 
 **What this enables**
@@ -131,6 +132,8 @@ A token in `.env` is **not** the same as accepting the Lightricks license. First
 **Audio + video (not Apache):** LTX-2.5 distilled INT8-convrot is the AV hero. **LTX Community License**: free commercial under **$10M COMPANY annual revenue (affiliates count)**; **no US geo-ban**; disclose AI-generated media; do not strip provenance; do not distill into a competing model. Hugging Face repo is **gated** — accept the license and set `HF_TOKEN` before `download-models`. Lab download is the **small distilled set**, not the 400 GB monorepo.
 
 **LTX-2.3:** optional fallback (`download-ltx --tier 2.3`) if 2.5 access or INT8-convrot fails. Not advertised as 30 s / 60 s films.
+
+**Free Commercial Use (<$10M) quality:** Klein **4B** still at LTX feeder size (`1280×704` / `768×1280`) → optional Apache SeedVR2 polish on that PNG (not 4K) → LTX-2.5 I2V (motion + sound; LTX 2× / DFR for resolution). Unload Klein before LTX. The Quality combo of that name never selects Klein 9B or FLUX.2-dev. Wan silent 5 s remains the Apache rehearsal (no company-revenue cap, no native audio).
 
 **90s films:** Klein identity still + 18 × LTX 5.00s print (world audio, no score), stitch with a 90s cap. Do not Queue a 90s latent. See [90s shorts](shorts.md).
 

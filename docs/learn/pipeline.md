@@ -9,6 +9,7 @@ tags: [learn, klein, wan, ltx, pipeline, us-safe]
 **What's on this page**
 
 - Role split (still / silent motion / joint AV)
+- Free Commercial Use (<$10M) quality (Klein 4B + LTX-2.5)
 - Licenses in one traffic-light
 - What you type vs what each encoder hears
 - Occupancy: do not stack ACE-Step on LTX
@@ -42,7 +43,9 @@ flowchart LR
   LTX --> AV["MP4 + audio"]
 ```
 
-**Handoff:** Queue a Klein still → set Wan **LoadImage** to that PNG → optional LTX I2V from the **same** first frame at **1280×704**.
+**Handoff:** Queue a Klein still → set Wan **LoadImage** to that PNG → optional LTX I2V from the **same** first frame at **1280×704** (portrait **768×1280**).
+
+**Free Commercial Use (<$10M):** Klein 4B at that clip size (Draft to pick a seed, then the commercial quality for the hero) → optional SeedVR2 polish on the PNG (not 4K) → LTX-2.5 I2V, motion + sound only. Unload Klein before LTX. Quality combo never selects Klein 9B or FLUX.2-dev on this path. Wan is the Apache silent rehearsal, not this LTX cap path.
 
 ---
 
