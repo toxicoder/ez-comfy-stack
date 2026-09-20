@@ -20,7 +20,12 @@ def _portrait_stems() -> frozenset[str]:
 
     extra = {
         spec.rel.rsplit("/", 1)[-1]
-        for spec in (*PACK3, *SERVICES)
+        for spec in PACK3
+        if spec.occupancy == "ltx" and spec.portrait
+    }
+    extra |= {
+        spec.rel.rsplit("/", 1)[-1]
+        for spec in SERVICES
         if spec.occupancy == "ltx" and spec.portrait
     }
     return frozenset({"shorts-still-12s", "depth-control-shorts"}) | extra

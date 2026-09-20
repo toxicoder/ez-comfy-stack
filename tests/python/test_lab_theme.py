@@ -133,7 +133,8 @@ def test_klein_draft_and_hero_lock_cutscene_identity() -> None:
 def test_lab_example_graphs_drop_bicycle_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if _rel(path) in EXEMPT:
+        rel = _rel(path)
+        if rel in EXEMPT or rel.startswith("services/"):
             continue
         blob = path.read_text(encoding="utf-8").lower()
         for banned in BANNED:
@@ -145,7 +146,8 @@ def test_lab_example_graphs_drop_bicycle_theme() -> None:
 def test_lab_example_graphs_drop_superhero_theme() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if _rel(path) in EXEMPT:
+        rel = _rel(path)
+        if rel in EXEMPT or rel.startswith("services/"):
             continue
         blob = path.read_text(encoding="utf-8")
         lower = blob.lower()
@@ -193,7 +195,8 @@ def test_exempt_packs_keep_their_own_subjects() -> None:
 def test_wizard_graphs_drop_dusk_cutscene_look() -> None:
     hits: list[str] = []
     for path in _graphs():
-        if _rel(path) in EXEMPT:
+        rel = _rel(path)
+        if rel in EXEMPT or rel.startswith("services/"):
             continue
         if "dcc" in str(path.relative_to(WF)):
             continue

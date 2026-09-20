@@ -5,8 +5,9 @@ name: Deploy Documentation
 # - development → /development/
 #
 # Each run builds ONE alias (the branch that triggered it) and keeps the other
-# alias from the current gh-pages tree. Two full Next exports of ~650 pages
+# alias from the current gh-pages tree. Two full Next exports of ~850 pages
 # OOM the 7 GB GitHub-hosted runner (shutdown signal during the second compile).
+# One webpack export (no Bazel JVM) with --max-old-space-size=5120 is the cap that fits.
 #
 # URL compatibility: the MkDocs site published under those aliases via mike.
 # A root index.html forwards bare /ez-comfy-stack/ traffic to /latest/.
@@ -36,10 +37,10 @@ concurrency:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       NEXT_TELEMETRY_DISABLED: "1"
-      NODE_OPTIONS: "--max-old-space-size=6144"
+      NODE_OPTIONS: "--max-old-space-size=5120"
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -102,7 +103,7 @@ jobs:
 
           rm -rf "_site/${alias}"
           mkdir -p "_site/${alias}"
-          bazelisk run "//docs-site:build-${alias}"
+          (cd docs-site && npm run "build:${alias}")
           cp -r docs-site/out/. "_site/${alias}/"
 
           touch _site/.nojekyll

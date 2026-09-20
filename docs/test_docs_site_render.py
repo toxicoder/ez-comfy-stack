@@ -193,6 +193,25 @@ class FenceTests(unittest.TestCase):
         self.assertEqual([], bad)
 
 
+class NextExportMemoryTests(unittest.TestCase):
+    """Production export uses webpack and one static-generation worker."""
+
+    def test_package_json_build_scripts_use_webpack(self) -> None:
+        """Turbopack static generation OOMs GitHub's 7 GB runner (~850 pages)."""
+        manifest = json.loads((SITE_DIR / "package.json").read_text(encoding="utf-8"))
+        for name in ("build", "build:latest", "build:development"):
+            script = manifest["scripts"][name]
+            self.assertIn("next build --webpack", script, name)
+
+    def test_next_config_limits_static_generation_workers(self) -> None:
+        """One worker plus webpack memory opts keep the export under 7 GB."""
+        text = (SITE_DIR / "next.config.ts").read_text(encoding="utf-8")
+        self.assertIn("cpus: 1", text)
+        self.assertIn("staticGenerationMaxConcurrency: 1", text)
+        self.assertIn("webpackBuildWorker: false", text)
+        self.assertIn("webpackMemoryOptimizations: true", text)
+
+
 class ThemeTests(unittest.TestCase):
     """Voltage tokens, no Material indigo."""
 
