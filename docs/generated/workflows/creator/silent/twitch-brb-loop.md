@@ -1,6 +1,6 @@
 ---
-title: creator/silent/twitch-brb-loop
-description: Silent BRB loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only i
+title: "creator/silent/twitch-brb-loop"
+description: "Silent BRB loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only i"
 tags: [workflows, generated, comfyui, creator]
 ---
 

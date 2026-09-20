@@ -54,7 +54,7 @@ flowchart LR
 - [ ] Tests updated in the same commits as the code they exercise
 - [ ] `bazelisk test //:test-fast` (or `make coverage`) passes (100% first-party Python + Pyright + mypy)
 - [ ] `bazelisk test //:lint --test_tag_filters=manual` clean
-- [ ] `bazelisk run //docs:docs` (mkdocs strict)
+- [ ] `bazelisk run //docs:docs` (Fumadocs static export)
 - [ ] Safety impact called out if Docker/resources/download-limit changed
 - [ ] Docs updated for operator-facing changes
 - [ ] AI-drafted docs still received a human pass
@@ -63,10 +63,10 @@ flowchart LR
 
 Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
 
-- PRs validate with `make docs` only (strict MkDocs).
-- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes via **mike** → `gh-pages` (versioned aliases). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
+- PRs validate with `make docs` / `bazelisk run //docs:docs` (generators + Fumadocs export into `docs-site/out/`).
+- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes two Next exports → `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
 - Prefer **relative** in-repo doc links (`docs/…`, same-folder page links) so they work on the branch you are viewing and under each published version path.
-- Install the pinned stack: `pip install -r docs/requirements.txt`.
+- Docs app: Node 22+ and `./docs/setup-docs.sh` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.
 
 ## Style
 

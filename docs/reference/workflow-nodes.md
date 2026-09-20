@@ -1,6 +1,6 @@
 ---
-title: Workflow node parameters
-description: Every Comfy node type used in workflows/_lab, with widgets, choices, and generation effects.
+title: "Workflow node parameters"
+description: "Every Comfy node type used in workflows/_lab, with widgets, choices, and generation effects."
 tags: [workflows, generated, comfyui, reference]
 ---
 

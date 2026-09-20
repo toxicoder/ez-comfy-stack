@@ -1,6 +1,6 @@
 ---
-title: creator/silent/product-spin
-description: Silent product orbit ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on o
+title: "creator/silent/product-spin"
+description: "Silent product orbit ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on o"
 tags: [workflows, generated, comfyui, creator]
 ---
 

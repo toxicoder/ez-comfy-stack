@@ -1,6 +1,6 @@
 ---
-title: dcc/still-to-mesh
-description: EZDCCLoadStillPack mug plate to native TRELLIS.2 INT8. Occupancy trellis.
+title: "dcc/still-to-mesh"
+description: "EZDCCLoadStillPack mug plate to native TRELLIS.2 INT8. Occupancy trellis."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

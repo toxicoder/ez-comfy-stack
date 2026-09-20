@@ -1,6 +1,6 @@
 ---
-title: stills/podcast-cover
-description: Klein 4B podcast cover 1:1
+title: "stills/podcast-cover"
+description: "Klein 4B podcast cover 1:1"
 tags: [workflows, generated, comfyui, stills]
 ---
 

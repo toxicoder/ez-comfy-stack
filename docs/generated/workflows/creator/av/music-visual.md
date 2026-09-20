@@ -1,6 +1,6 @@
 ---
-title: creator/av/music-visual
-description: Light / particle visualizer bed AV ~5 s
+title: "creator/av/music-visual"
+description: "Light / particle visualizer bed AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/album-cover
-description: Release / album cover 1:1
+title: "creator/stills/album-cover"
+description: "Release / album cover 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

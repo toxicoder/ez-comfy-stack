@@ -1,6 +1,6 @@
 ---
-title: creator/av/asmr-macro
-description: Quiet macro foley AV ~5 s
+title: "creator/av/asmr-macro"
+description: "Quiet macro foley AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

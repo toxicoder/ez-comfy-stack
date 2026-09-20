@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-grid-3up
-description: Instagram 1:1 three-tile grid row
+title: "creator/stills/instagram-grid-3up"
+description: "Instagram 1:1 three-tile grid row"
 tags: [workflows, generated, comfyui, creator]
 ---
 

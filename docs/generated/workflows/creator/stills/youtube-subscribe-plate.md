@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-subscribe-plate
-description: Subscribe-safe end plate 16:9
+title: "creator/stills/youtube-subscribe-plate"
+description: "Subscribe-safe end plate 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-profile
-description: Instagram profile photo, circle-safe
+title: "creator/stills/instagram-profile"
+description: "Instagram profile photo, circle-safe"
 tags: [workflows, generated, comfyui, creator]
 ---
 

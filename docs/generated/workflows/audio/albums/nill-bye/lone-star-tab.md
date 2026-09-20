@@ -1,6 +1,6 @@
 ---
-title: audio/albums/nill-bye/lone-star-tab
-description: Album graphs under audio/albums/nill-bye/lone-star-tab (tracks, cover, album pack).
+title: "audio/albums/nill-bye/lone-star-tab"
+description: "Album graphs under audio/albums/nill-bye/lone-star-tab (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

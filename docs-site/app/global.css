@@ -1,0 +1,505 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/*
+ * Overeazy Voltage palette for the documentation site chrome.
+ *
+ * Replaces the Material-for-MkDocs default primary.  Light values come from the brand
+ * sheet; `@theme` registers the tokens with Tailwind so `bg-fd-background` and friends
+ * resolve, and `.dark` overrides them for the dark scheme that `next-themes` toggles.
+ */
+@theme {
+  --color-fd-background: #f7f3eb;
+  --color-fd-foreground: #161311;
+  --color-fd-muted: #ebe4d6;
+  --color-fd-muted-foreground: #6b6157;
+  --color-fd-popover: #fffbf4;
+  --color-fd-popover-foreground: #161311;
+  --color-fd-card: #fffbf4;
+  --color-fd-card-foreground: #161311;
+  --color-fd-border: #d6cdbb;
+  --color-fd-primary: #c67a0a;
+  --color-fd-primary-foreground: #fffbf4;
+  --color-fd-secondary: #ebe4d6;
+  --color-fd-secondary-foreground: #161311;
+  --color-fd-accent: #e85d28;
+  --color-fd-accent-foreground: #fffbf4;
+  --color-fd-ring: #c67a0a;
+  --color-fd-overlay: rgb(22, 19, 17 / 0.35);
+
+  /* Secondary voice: teal for chips and informational emphasis. */
+  --color-fd-teal: #1b8a84;
+  --color-fd-teal-foreground: #fffbf4;
+}
+
+.dark {
+  --color-fd-background: #12100e;
+  --color-fd-foreground: #f3ede3;
+  --color-fd-muted: #221e1a;
+  --color-fd-muted-foreground: #a89d90;
+  --color-fd-popover: #1a1714;
+  --color-fd-popover-foreground: #f3ede3;
+  --color-fd-card: #1a1714;
+  --color-fd-card-foreground: #f3ede3;
+  --color-fd-border: #3a342c;
+  --color-fd-primary: #e8a317;
+  --color-fd-primary-foreground: #12100e;
+  --color-fd-secondary: #221e1a;
+  --color-fd-secondary-foreground: #f3ede3;
+  --color-fd-accent: #ff7a3d;
+  --color-fd-accent-foreground: #12100e;
+  --color-fd-ring: #e8a317;
+  --color-fd-overlay: rgb(0, 0, 0 / 0.6);
+
+  --color-fd-teal: #3ec4bb;
+  --color-fd-teal-foreground: #12100e;
+}
+
+@theme static {
+  --color-fd-info: #1b8a84;
+  --color-fd-warning: #c67a0a;
+  --color-fd-error: #e85d28;
+  --color-fd-success: #2f8f4f;
+  --color-fd-idea: #c67a0a;
+}
+
+.dark {
+  --color-fd-info: #3ec4bb;
+  --color-fd-warning: #e8a317;
+  --color-fd-error: #ff7a3d;
+  --color-fd-success: #58b878;
+  --color-fd-idea: #e8a317;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/*
+ * Do not hide chrome with a display-none rule (theme tests). Collapse uses
+ * details / the hidden attribute.
+ */
+article {
+  font-size: 0.875rem;
+}
+
+article pre > code {
+  padding: 0.9em 1.05em;
+  border-radius: 0.25rem;
+  line-height: 1.55;
+}
+
+article :not(pre) > code {
+  border-radius: 0.2rem;
+  padding: 0.05em 0.35em;
+}
+
+article p code,
+article li code,
+article td code,
+article :not(pre) > code {
+  color: rgb(134, 183, 55);
+}
+
+article table:not([class]) {
+  display: table;
+  overflow: visible;
+  width: 100%;
+}
+
+.ez-table-pin {
+  position: fixed;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--color-fd-background);
+  box-shadow: 0 1px 0 var(--color-fd-border);
+}
+
+.ez-table-hscroll {
+  position: fixed;
+  z-index: 3;
+  height: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: var(--color-fd-background);
+  pointer-events: auto;
+  touch-action: pan-x;
+}
+
+.ez-table-hscroll__inner {
+  height: 1px;
+}
+
+.ez-table-pin table,
+.ez-table-pin th {
+  background-color: var(--color-fd-background);
+}
+
+.ez-term {
+  position: relative;
+  border-bottom: 1px dotted var(--color-fd-teal);
+  cursor: help;
+}
+
+.ez-term:focus {
+  outline: 2px solid var(--color-fd-teal);
+  outline-offset: 2px;
+}
+
+.ez-term[data-short]::after {
+  content: attr(data-category) " — " attr(data-short);
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 0.35rem);
+  z-index: 3;
+  width: max-content;
+  max-width: min(22rem, 70vw);
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.25rem;
+  background: var(--color-fd-card);
+  color: var(--color-fd-foreground);
+  font-size: 0.8em;
+  line-height: 1.35;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0.15rem);
+}
+
+.ez-term[data-short]:hover::after,
+.ez-term[data-short]:focus-visible::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ez-glossary-dialog {
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.5rem;
+  padding: 0;
+  max-width: min(32rem, calc(100vw - 2rem));
+  color: var(--color-fd-foreground);
+  background: var(--color-fd-card);
+}
+
+.ez-glossary-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.ez-glossary-dialog__panel {
+  padding: 1rem 1.15rem 1.15rem;
+}
+
+.ez-glossary-dialog__close {
+  float: right;
+  margin: 0 0 0.5rem 0.75rem;
+  border: 0;
+  background: transparent;
+  color: var(--color-fd-teal);
+  cursor: pointer;
+  font: inherit;
+}
+
+.ez-glossary-dialog__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.ez-glossary-dialog__category {
+  margin: 0 0 0.5rem;
+  color: var(--color-fd-muted-foreground);
+  font-size: 0.85em;
+}
+
+.ez-glossary-dialog__body,
+.ez-glossary-dialog__see,
+.ez-glossary-dialog__more {
+  margin: 0 0 0.65rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ez-term[data-short]::after,
+  .ez-table-hscroll {
+    transform: none;
+    transition: none;
+  }
+}
+
+.ez-spark-panel {
+  margin: 0.75rem 0 1.25rem;
+  padding: 0.65rem 0.9rem 0.85rem;
+  border: 1px solid var(--color-fd-border);
+  border-left: 4px solid var(--color-fd-teal);
+  border-radius: 4px;
+  background: var(--color-fd-muted);
+  font-size: 0.85em;
+}
+
+.ez-spark-panel__summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ez-spark-panel__hint {
+  margin: 0.5rem 0 0.65rem;
+  color: var(--color-fd-muted-foreground);
+}
+
+.ez-spark-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.5rem 0.75rem;
+}
+
+.ez-spark-panel__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.ez-spark-panel__label {
+  font-size: 0.75rem;
+  color: var(--color-fd-muted-foreground);
+}
+
+.ez-spark-panel__field input {
+  font: inherit;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 3px;
+  background: var(--color-fd-background);
+  color: var(--color-fd-foreground);
+}
+
+.ez-spark-panel__actions {
+  margin: 0.65rem 0 0;
+}
+
+.ez-spark-panel__reset {
+  font: inherit;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-fd-teal);
+  cursor: pointer;
+}
+
+.ez-cmd-builder {
+  margin: 0.9rem 0 1.2rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 4px;
+  background: var(--color-fd-card);
+}
+
+.ez-cmd-builder__title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+}
+
+.ez-cmd-builder__desc {
+  margin: 0 0 0.65rem;
+  color: var(--color-fd-muted-foreground);
+  font-size: 0.9em;
+}
+
+.ez-cmd-builder__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 0 0 0.65rem;
+}
+
+.ez-cmd-builder__flag {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.9em;
+}
+
+.ez-cmd-builder__copy {
+  cursor: pointer;
+  margin-top: 0.35rem;
+  font: inherit;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 3px;
+  background: var(--color-fd-primary);
+  color: var(--color-fd-primary-foreground);
+}
+
+.ez-var {
+  border-bottom: 1px dotted var(--color-fd-teal);
+  background: color-mix(in srgb, var(--color-fd-teal) 14%, transparent);
+  border-radius: 0.2em;
+  padding: 0 0.2em;
+  cursor: text;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.ez-var:focus {
+  outline: 2px solid var(--color-fd-teal);
+  outline-offset: 1px;
+}
+
+.ez-published-chip {
+  position: relative;
+  float: right;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.15rem 0 0.85rem 1rem;
+  padding: 0.22rem 0.7rem 0.22rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-fd-primary) 38%, var(--color-fd-border));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-fd-primary) 12%, var(--color-fd-background));
+  color: var(--color-fd-foreground);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ez-published-chip__icon {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: 0 0 auto;
+  fill: var(--color-fd-primary);
+}
+
+.ez-published-chip__label {
+  color: var(--color-fd-muted-foreground);
+  font-weight: 600;
+}
+
+.ez-published-chip__sep {
+  color: var(--color-fd-muted-foreground);
+}
+
+.ez-published-chip time {
+  color: var(--color-fd-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 44.99em) {
+  .ez-published-chip {
+    float: none;
+    margin: 0 0 0.65rem;
+  }
+
+  .ez-published-chip__label,
+  .ez-published-chip__sep {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.ez-page-brief {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  clear: both;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-fd-primary) 6%, var(--color-fd-background));
+}
+
+.ez-page-brief__col {
+  min-width: 0;
+  padding: 0.85rem 1rem 1rem;
+}
+
+.ez-page-brief__on-page {
+  border-top: 3px solid var(--color-fd-primary);
+  border-right: 1px solid var(--color-fd-border);
+}
+
+.ez-page-brief__enables {
+  border-top: 3px solid var(--color-fd-accent);
+}
+
+.ez-page-brief__title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+}
+
+.ez-page-brief__on-page .ez-page-brief__title {
+  color: var(--color-fd-primary);
+}
+
+.ez-page-brief__enables .ez-page-brief__title {
+  color: var(--color-fd-accent);
+}
+
+.ez-page-brief__icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  fill: currentColor;
+}
+
+.ez-page-brief ul {
+  margin: 0;
+  padding-left: 1.15em;
+}
+
+.ez-page-brief li {
+  margin: 0 0 0.3em;
+}
+
+@media (max-width: 44.99em) {
+  .ez-page-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .ez-page-brief__on-page {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-fd-border);
+  }
+}
+
+.ez-cinema-clip {
+  display: block;
+  max-width: 42rem;
+  margin: 0.8rem 0 1.2rem;
+}
+
+.ez-cinema-clip video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #111;
+  border-radius: 0.25rem;
+}
+
+.ez-cinema-thumb {
+  display: block;
+  width: 10rem;
+  max-width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 0.2rem;
+}

@@ -17,6 +17,9 @@
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.12",
       "installTools": true
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
     }
   },
   "hostRequirements": {
@@ -40,9 +43,9 @@
       }
     }
   },
-  "forwardPorts": [8000, 8188],
+  "forwardPorts": [3005, 8188],
   "portsAttributes": {
-    "8000": { "label": "MkDocs", "onAutoForward": "notify" },
+    "3005": { "label": "Fumadocs", "onAutoForward": "notify" },
     "8188": { "label": "ComfyUI", "onAutoForward": "notify" }
   },
   "postCreateCommand": "bash .devcontainer/post-create.sh",

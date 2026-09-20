@@ -1,6 +1,6 @@
 ---
-title: creator/stills/linkedin-banner
-description: LinkedIn personal banner 4:1
+title: "creator/stills/linkedin-banner"
+description: "LinkedIn personal banner 4:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

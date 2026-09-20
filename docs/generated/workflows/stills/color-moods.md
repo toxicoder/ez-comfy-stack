@@ -1,6 +1,6 @@
 ---
-title: stills/color-moods
-description: Klein 4B four-mood color pack
+title: "stills/color-moods"
+description: "Klein 4B four-mood color pack"
 tags: [workflows, generated, comfyui, stills]
 ---
 

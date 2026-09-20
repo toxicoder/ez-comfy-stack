@@ -1,6 +1,6 @@
 ---
-title: motion/av/interior-ambience
-description: LTX-2.5 interior ambience AV ~5s
+title: "motion/av/interior-ambience"
+description: "LTX-2.5 interior ambience AV ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

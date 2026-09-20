@@ -1,6 +1,6 @@
 ---
-title: creator/stills/audiogram-wide
-description: Audiogram background 16:9
+title: "creator/stills/audiogram-wide"
+description: "Audiogram background 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/coming-soon
-description: Launch / coming-soon plate 16:9
+title: "creator/stills/coming-soon"
+description: "Launch / coming-soon plate 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

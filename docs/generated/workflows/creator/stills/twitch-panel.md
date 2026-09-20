@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-panel
-description: Twitch about-panel art
+title: "creator/stills/twitch-panel"
+description: "Twitch about-panel art"
 tags: [workflows, generated, comfyui, creator]
 ---
 

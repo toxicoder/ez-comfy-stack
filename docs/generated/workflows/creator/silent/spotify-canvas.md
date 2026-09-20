@@ -1,6 +1,6 @@
 ---
-title: creator/silent/spotify-canvas
-description: Silent Spotify Canvas rebound 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enh
+title: "creator/silent/spotify-canvas"
+description: "Silent Spotify Canvas rebound 9:16 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enh"
 tags: [workflows, generated, comfyui, creator]
 ---
 

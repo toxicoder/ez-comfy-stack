@@ -1,6 +1,6 @@
 ---
-title: creator/av/interior-walk
-description: Interior walk-through AV ~5 s
+title: "creator/av/interior-walk"
+description: "Interior walk-through AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/linkedin-carousel-5
-description: LinkedIn document carousel, five squares
+title: "creator/stills/linkedin-carousel-5"
+description: "LinkedIn document carousel, five squares"
 tags: [workflows, generated, comfyui, creator]
 ---
 

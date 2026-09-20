@@ -1,6 +1,6 @@
 ---
-title: creator/silent/logo-sting
-description: Silent logo sting ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only
+title: "creator/silent/logo-sting"
+description: "Silent logo sting ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only"
 tags: [workflows, generated, comfyui, creator]
 ---
 

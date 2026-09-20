@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-reel-cover
-description: Instagram Reel cover, center-weighted for the grid crop
+title: "creator/stills/instagram-reel-cover"
+description: "Instagram Reel cover, center-weighted for the grid crop"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/silent/shorts-still-5s
-description: Wan 5B vertical 9:16 silent I2V ~5s
+title: "motion/silent/shorts-still-5s"
+description: "Wan 5B vertical 9:16 silent I2V ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

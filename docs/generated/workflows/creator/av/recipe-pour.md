@@ -1,6 +1,6 @@
 ---
-title: creator/av/recipe-pour
-description: Recipe pour AV 9:16
+title: "creator/av/recipe-pour"
+description: "Recipe pour AV 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

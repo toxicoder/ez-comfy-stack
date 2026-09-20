@@ -1,6 +1,6 @@
 ---
-title: stills/lower-third-bg
-description: Klein 4B lower-third-safe 16:9 plate
+title: "stills/lower-third-bg"
+description: "Klein 4B lower-third-safe 16:9 plate"
 tags: [workflows, generated, comfyui, stills]
 ---
 

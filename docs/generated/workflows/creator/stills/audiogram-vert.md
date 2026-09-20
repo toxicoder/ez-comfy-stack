@@ -1,6 +1,6 @@
 ---
-title: creator/stills/audiogram-vert
-description: Audiogram background 9:16
+title: "creator/stills/audiogram-vert"
+description: "Audiogram background 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

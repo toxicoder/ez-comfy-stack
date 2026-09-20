@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-ending
-description: Twitch stream-ending screen 16:9
+title: "creator/stills/twitch-ending"
+description: "Twitch stream-ending screen 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/av/broll-ambient
-description: LTX-2.5 ambient B-roll AV ~5s
+title: "motion/av/broll-ambient"
+description: "LTX-2.5 ambient B-roll AV ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

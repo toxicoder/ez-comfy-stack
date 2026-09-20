@@ -7,6 +7,7 @@ US-safe studio cutover.
 
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -58,12 +59,16 @@ REQUIRED_DEFAULT_SNIPPETS = (
 
 
 def _operator_doc_paths() -> list[Path]:
-    paths = sorted(DOCS.rglob("*.md"))
+    paths = sorted(list(DOCS.rglob("*.md")) + list(DOCS.rglob("*.mdx")))
     paths.append(README)
     return paths
 
 
 def _read(path: Path) -> str:
+    if not path.is_file():
+        alt = path.with_suffix(".mdx") if path.suffix == ".md" else path.with_suffix(".md")
+        if alt.is_file():
+            path = alt
     assert path.is_file(), path
     return path.read_text(encoding="utf-8")
 
@@ -126,26 +131,22 @@ def test_getting_started_session_vars_and_port_forward() -> None:
 
 
 def test_mkdocs_nav_is_grouped_journey() -> None:
-    nav = (ROOT / "mkdocs.yml").read_text(encoding="utf-8")
-    for heading in ("Learn:", "Start:", "Create:", "Operate:", "Contribute:"):
-        assert heading in nav, f"mkdocs.yml missing grouped nav {heading!r}"
-    # Concepts before first-run; first-run pages under Start, not 90s shorts before licenses.
-    learn_at = nav.index("Learn:")
-    start_at = nav.index("Start:")
-    create_at = nav.index("Create:")
-    operate_at = nav.index("Operate:")
-    assert learn_at < start_at < create_at < operate_at
-    assert nav.index("getting-started.md") < nav.index("shorts.md")
-    assert nav.index("licenses.md") < nav.index("shorts.md")
-    assert nav.index("prompting.md") < nav.index("visual-generative-ai.md")
-    assert nav.index("visual-generative-ai.md") < nav.index("studio-workflows.md")
-    assert nav.index("Operate:") < nav.index("manage-cli.md")
-    assert nav.index("glossary.md") < nav.index("getting-started.md")
-    # Download story: cache → tiers → limit → packs → tokens.
-    assert nav.index("models-and-cache.md") < nav.index("download-tiers.md")
-    assert nav.index("download-tiers.md") < nav.index("download-limit.md")
-    assert nav.index("download-limit.md") < nav.index("operate/models-packs.md")
-    assert nav.index("operate/models-packs.md") < nav.index("operate/models-tokens.md")
+    nav = json.loads((ROOT / "docs-site" / "lib" / "nav.json").read_text(encoding="utf-8"))
+    titles = [tab["title"] for tab in nav]
+    for heading in ("Learn", "Start", "Create", "Operate", "Contribute"):
+        assert heading in titles, f"nav.json missing grouped tab {heading!r}"
+    assert titles.index("Learn") < titles.index("Start") < titles.index("Create") < titles.index("Operate")
+    blob = json.dumps(nav)
+    assert blob.index("getting-started.md") < blob.index("shorts.md")
+    assert blob.index("licenses.md") < blob.index("shorts.md")
+    assert blob.index("prompting.md") < blob.index("visual-generative-ai.md")
+    assert blob.index("visual-generative-ai.md") < blob.index("studio-workflows.md")
+    assert titles.index("Operate") < titles.index("Contribute")
+    assert blob.index("glossary.md") < blob.index("getting-started.md")
+    assert blob.index("models-and-cache.md") < blob.index("download-tiers.md")
+    assert blob.index("download-tiers.md") < blob.index("download-limit.md")
+    assert blob.index("download-limit.md") < blob.index("operate/models-packs.md")
+    assert blob.index("operate/models-packs.md") < blob.index("operate/models-tokens.md")
 
 
 def test_fun_inp_pages_do_not_advertise_40gb_alone() -> None:

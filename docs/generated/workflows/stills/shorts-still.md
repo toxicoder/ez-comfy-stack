@@ -1,6 +1,6 @@
 ---
-title: stills/shorts-still
-description: Klein 4B vertical 9:16 Shorts still
+title: "stills/shorts-still"
+description: "Klein 4B vertical 9:16 Shorts still"
 tags: [workflows, generated, comfyui, stills]
 ---
 

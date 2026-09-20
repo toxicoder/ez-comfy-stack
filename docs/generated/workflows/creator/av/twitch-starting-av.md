@@ -1,6 +1,6 @@
 ---
-title: creator/av/twitch-starting-av
-description: Twitch starting-soon AV ~5 s
+title: "creator/av/twitch-starting-av"
+description: "Twitch starting-soon AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

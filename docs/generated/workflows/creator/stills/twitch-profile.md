@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-profile
-description: Twitch profile photo, circle-safe
+title: "creator/stills/twitch-profile"
+description: "Twitch profile photo, circle-safe"
 tags: [workflows, generated, comfyui, creator]
 ---
 

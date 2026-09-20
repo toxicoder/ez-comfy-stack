@@ -1,6 +1,6 @@
 ---
-title: motion/av/first-last-5s
-description: LTX-2.5 first-last-frame AV using core AddGuide nodes Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded a
+title: "motion/av/first-last-5s"
+description: "LTX-2.5 first-last-frame AV using core AddGuide nodes Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded a"
 tags: [workflows, generated, comfyui, motion]
 ---
 

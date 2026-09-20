@@ -1,6 +1,6 @@
 ---
-title: stills/dream-house
-description: Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)
+title: "stills/dream-house"
+description: "Ten Instagram 4:5 Klein stills: virtual tour of one place (outside, rooms, terrace, drone)"
 tags: [workflows, generated, comfyui, stills]
 ---
 

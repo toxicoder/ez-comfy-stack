@@ -1,6 +1,6 @@
 ---
 title: Dream-house tours
-description: Two Instagram 4:5 virtual tours of one place — language-locked T2I, or a Blender greybox that Klein restyles.
+description: "Two Instagram 4:5 virtual tours of one place — language-locked T2I, or a Blender greybox that Klein restyles."
 tags: [learn, klein, dream-house, blender, clay, instagram]
 ---
 

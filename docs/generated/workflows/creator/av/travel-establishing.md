@@ -1,6 +1,6 @@
 ---
-title: creator/av/travel-establishing
-description: Travel establishing AV ~5 s
+title: "creator/av/travel-establishing"
+description: "Travel establishing AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

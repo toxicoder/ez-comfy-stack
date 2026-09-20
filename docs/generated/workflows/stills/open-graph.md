@@ -1,6 +1,6 @@
 ---
-title: stills/open-graph
-description: Klein 4B blog / OG hero ~1.9:1
+title: "stills/open-graph"
+description: "Klein 4B blog / OG hero ~1.9:1"
 tags: [workflows, generated, comfyui, stills]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: stills/text-swap
-description: Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_text_swap.
+title: "stills/text-swap"
+description: "Klein 4B lettering swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_text_swap."
 tags: [workflows, generated, comfyui, stills]
 ---
 

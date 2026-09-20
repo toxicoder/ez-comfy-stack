@@ -1,6 +1,6 @@
 ---
-title: films/night-oven/act-01
-description: One-click overnight bakery · Tie the apron: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil
+title: "films/night-oven/act-01"
+description: "One-click overnight bakery · Tie the apron: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil"
 tags: [workflows, generated, comfyui, films]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/x-post
-description: X in-stream still 16:9
+title: "creator/stills/x-post"
+description: "X in-stream still 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

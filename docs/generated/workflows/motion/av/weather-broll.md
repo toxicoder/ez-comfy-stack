@@ -1,6 +1,6 @@
 ---
-title: motion/av/weather-broll
-description: LTX-2.5 weather B-roll AV ~5s
+title: "motion/av/weather-broll"
+description: "LTX-2.5 weather B-roll AV ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 

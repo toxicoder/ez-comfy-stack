@@ -1,6 +1,6 @@
 ---
-title: creator/stills/poster-portrait
-description: Print poster 2:3
+title: "creator/stills/poster-portrait"
+description: "Print poster 2:3"
 tags: [workflows, generated, comfyui, creator]
 ---
 

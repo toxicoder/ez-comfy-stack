@@ -1,22 +1,22 @@
 name: Deploy Documentation
 
-# Publish MkDocs Material via mike to gh-pages (versioned aliases).
-# - main       → alias "latest" (default site)
-# - development → alias "development"
+# Publish Fumadocs static exports to gh-pages.
+# - main       → /latest/
+# - development → /development/
 #
-# GitHub Pages must publish from branch gh-pages with path "/" (repo root),
-# not "/docs", or /latest/ and /development/ will 404.
+# URL compatibility: the MkDocs site published under those aliases via mike.
+# Each alias is its own Next export with matching basePath.
 #
-# PR docs validation stays in ci.yml (make docs). This workflow runs only on
-# push to long-lived branches (or workflow_dispatch).
+# PR docs validation stays in ci.yml. This workflow runs only on push to
+# long-lived branches (or workflow_dispatch).
 on:
   push:
     branches: [main, development]
     paths:
       - "docs/**"
-      - "mkdocs.yml"
-      - "docs/requirements.txt"
+      - "docs-site/**"
       - "includes/**"
+      - "docs/requirements.txt"
       - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
@@ -24,7 +24,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: docs-deploy
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
@@ -36,92 +36,100 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-          # Required so subsequent git push (mike) authenticates as GITHUB_TOKEN.
           persist-credentials: true
+
+      - uses: ./.github/actions/setup-bazel
+        with:
+          install-lint-tools: "false"
 
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-          cache: pip
-          cache-dependency-path: docs/requirements.txt
 
-      - name: Install docs dependencies
-        run: pip install -r docs/requirements.txt
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: docs-site/package-lock.json
 
-      - name: Configure git identity for mike
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Ensure origin uses the Actions token for push to gh-pages.
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Prepare gh-pages for mike
-        run: |
-          set -euo pipefail
-          # Existing gh-pages may be a full source mirror (pre-mike). Replace it
-          # once with an empty branch so version dirs are not mixed with tree.
-          # Do not checkout --orphan / checkout - : orphan leaves no @{-1} in
-          # Actions and fails with "pathspec '-' did not match".
-          if git fetch origin gh-pages 2>/dev/null; then
-            if git cat-file -e "origin/gh-pages:versions.json" 2>/dev/null; then
-              echo "gh-pages already has mike versions.json"
-            else
-              echo "gh-pages exists but is not a mike site; reinitializing empty branch"
-              empty_tree="$(git mktree </dev/null)"
-              empty_commit="$(
-                git commit-tree "${empty_tree}" -m "chore: initialize empty gh-pages for mike"
-              )"
-              git push -f origin "${empty_commit}:refs/heads/gh-pages"
-              git fetch origin gh-pages
-            fi
-          else
-            echo "No remote gh-pages yet; mike will create it on first deploy"
-          fi
+      - name: Install docs site dependencies
+        run: (cd docs-site && npm ci --legacy-peer-deps)
 
       - name: Stamp docs publish time
         run: echo "EZ_DOCS_PUBLISHED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_ENV"
 
-      - name: Build documentation (strict)
+      - name: Build and assemble the Pages tree
         env:
           EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
-          MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
-          # Suppress Material MkDocs 2.0 advisory; pins stay on mkdocs 1.x.
-          NO_MKDOCS_2_WARNING: "1"
-        run: |
-          python3 docs/generate_shell_docs.py
-          python3 docs/generate_workflow_docs.py
-          python -m mkdocs build --strict
-          # mike copies from site/; ensure no Jekyll processing on Pages.
-          touch site/.nojekyll
-
-      - name: Deploy with mike (versioned)
-        env:
-          EZ_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
-          MIKE_DOCS_VERSION: ${{ github.ref_name == 'development' && 'development' || 'latest' }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          if [[ "${{ github.ref_name }}" == "development" ]]; then
-            mike deploy --push --update-aliases development -F mkdocs.yml
-          else
-            mike deploy --push --update-aliases latest -F mkdocs.yml
-            mike set-default --push latest -F mkdocs.yml
-          fi
+          root="$(pwd)"
+          rm -rf _site
+          mkdir -p _site/latest _site/development
 
-      - name: Verify gh-pages layout
+          bazelisk run //docs-site:build-latest
+          cp -r docs-site/out/. _site/latest/
+
+          bazelisk run //docs-site:build-development
+          cp -r docs-site/out/. _site/development/
+
+          touch _site/.nojekyll
+
+          cat >_site/index.html <<'HOR'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="robots" content="index, follow" />
+              <link rel="canonical" href="https://toxicoder.github.io/ez-comfy-stack/latest/" />
+              <meta http-equiv="refresh" content="0; url=https://toxicoder.github.io/ez-comfy-stack/latest/" />
+              <title>ez-comfy-stack documentation</title>
+            </head>
+            <body>
+              <p>
+                The documentation moved. <a href="https://toxicoder.github.io/ez-comfy-stack/latest/">Continue to the latest docs</a>
+                &mdash; or read the <a href="https://toxicoder.github.io/ez-comfy-stack/development/">development branch docs</a>.
+              </p>
+            </body>
+          </html>
+          HOR
+
+      - name: Publish to the gh-pages branch
         run: |
           set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          SRC_SHA=$(git rev-parse HEAD)
           git fetch origin gh-pages
-          # versions.json must exist at branch root for multi-version mike sites.
-          git show origin/gh-pages:versions.json >/tmp/versions.json
-          echo "versions.json:"
-          cat /tmp/versions.json
-          git ls-tree --name-only origin/gh-pages | head -30
-          # Expect version dirs and/or aliases at root.
-          if ! git ls-tree --name-only origin/gh-pages | grep -E '^(latest|development|versions\.json)$' >/dev/null; then
-            echo "ERROR: gh-pages root missing mike version artifacts" >&2
-            exit 1
+          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+            git checkout -B gh-pages origin/gh-pages
+          else
+            git checkout --orphan gh-pages
           fi
+          git rm -rf --quiet . 2>/dev/null || true
+          cp -r _site/. ./
+          rm -rf _site
+          cat >.gitignore <<'GITIGNORE'
+          /*
+          !/latest
+          !/development
+          !/index.html
+          !/.nojekyll
+          GITIGNORE
+          git add -A
+          git commit -m "docs: publish $GITHUB_REF_NAME from $GITHUB_SHA" --allow-empty
+          git push origin gh-pages
+          git checkout -f "$SRC_SHA"
+
+      - name: Report the published URLs
+        run: |
+          {
+            echo "## Documentation published"
+            echo ""
+            echo "| Version | URL |"
+            echo "| --- | --- |"
+            echo "| latest | https://toxicoder.github.io/ez-comfy-stack/latest/ |"
+            echo "| development | https://toxicoder.github.io/ez-comfy-stack/development/ |"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,6 +1,6 @@
 ---
-title: creator/stills/threads-portrait
-description: Threads 4:5 still
+title: "creator/stills/threads-portrait"
+description: "Threads 4:5 still"
 tags: [workflows, generated, comfyui, creator]
 ---
 

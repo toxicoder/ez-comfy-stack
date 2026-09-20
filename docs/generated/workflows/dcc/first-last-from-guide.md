@@ -1,6 +1,6 @@
 ---
-title: dcc/first-last-from-guide
-description: Wan Fun InP first-last-frame from guide first.png + last.png. MagCache off.
+title: "dcc/first-last-from-guide"
+description: "Wan Fun InP first-last-frame from guide first.png + last.png. MagCache off."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

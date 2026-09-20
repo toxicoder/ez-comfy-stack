@@ -1,6 +1,6 @@
 ---
-title: creator/stills/product-lifestyle
-description: In-use product lifestyle 4:5
+title: "creator/stills/product-lifestyle"
+description: "In-use product lifestyle 4:5"
 tags: [workflows, generated, comfyui, creator]
 ---
 

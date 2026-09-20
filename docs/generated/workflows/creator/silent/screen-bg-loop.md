@@ -1,6 +1,6 @@
 ---
-title: creator/silent/screen-bg-loop
-description: Silent desk/screen loop Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on onl
+title: "creator/silent/screen-bg-loop"
+description: "Silent desk/screen loop Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on onl"
 tags: [workflows, generated, comfyui, creator]
 ---
 

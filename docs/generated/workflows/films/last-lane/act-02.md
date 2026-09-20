@@ -1,6 +1,6 @@
 ---
-title: films/last-lane/act-02
-description: One-click night two-lane · Fork and wash: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film
+title: "films/last-lane/act-02"
+description: "One-click night two-lane · Fork and wash: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film"
 tags: [workflows, generated, comfyui, films]
 ---
 

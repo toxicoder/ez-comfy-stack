@@ -1,6 +1,6 @@
 ---
-title: creator/stills/pinterest-pin
-description: Pinterest standard pin 2:3
+title: "creator/stills/pinterest-pin"
+description: "Pinterest standard pin 2:3"
 tags: [workflows, generated, comfyui, creator]
 ---
 

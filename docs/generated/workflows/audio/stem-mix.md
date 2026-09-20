@@ -1,6 +1,6 @@
 ---
-title: audio/stem-mix
-description: Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh.
+title: "audio/stem-mix"
+description: "Picture-lock stem mix desk. Occupancy audio. Mix via stem-mix.sh."
 tags: [workflows, generated, comfyui, audio]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/silent/first-last-5s
-description: Wan 2.2 Fun InP first-last-frame 5 s draft. Opt-in pack (~47 GB). MagCache off. Unload LTX first.
+title: "motion/silent/first-last-5s"
+description: "Wan 2.2 Fun InP first-last-frame 5 s draft. Opt-in pack (~47 GB). MagCache off. Unload LTX first."
 tags: [workflows, generated, comfyui, motion]
 ---
 

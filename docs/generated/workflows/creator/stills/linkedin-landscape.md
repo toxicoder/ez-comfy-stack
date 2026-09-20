@@ -1,6 +1,6 @@
 ---
-title: creator/stills/linkedin-landscape
-description: LinkedIn landscape post ~1.91:1
+title: "creator/stills/linkedin-landscape"
+description: "LinkedIn landscape post ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

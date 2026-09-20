@@ -1,6 +1,6 @@
 ---
-title: stills/banner-wide
-description: Klein 4B wide banner ~3:1
+title: "stills/banner-wide"
+description: "Klein 4B wide banner ~3:1"
 tags: [workflows, generated, comfyui, stills]
 ---
 

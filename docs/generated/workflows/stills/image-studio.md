@@ -1,6 +1,6 @@
 ---
-title: stills/image-studio
-description: Klein 4B universal still desk: 100 creator modes, format/platform, optional ref
+title: "stills/image-studio"
+description: "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref"
 tags: [workflows, generated, comfyui, stills]
 ---
 

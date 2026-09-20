@@ -1,6 +1,6 @@
 ---
-title: dcc/canny-control-5s
-description: LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)
+title: "dcc/canny-control-5s"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, canny default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
 tags: [workflows, generated, comfyui, dcc]
 ---
 

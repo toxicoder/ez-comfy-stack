@@ -1,6 +1,6 @@
 ---
-title: films/breakwater/act-01
-description: One-click storm-wall walk · Wall walk: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film sho
+title: "films/breakwater/act-01"
+description: "One-click storm-wall walk · Wall walk: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film sho"
 tags: [workflows, generated, comfyui, films]
 ---
 

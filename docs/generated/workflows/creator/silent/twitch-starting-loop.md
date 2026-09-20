@@ -1,6 +1,6 @@
 ---
-title: creator/silent/twitch-starting-loop
-description: Silent starting-soon loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance
+title: "creator/silent/twitch-starting-loop"
+description: "Silent starting-soon loop 16:9 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: stills/still-daily
-description: Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base
+title: "stills/still-daily"
+description: "Daily Klein 4B still; click UNET to swap distilled / NVFP4 / base"
 tags: [workflows, generated, comfyui, stills]
 ---
 

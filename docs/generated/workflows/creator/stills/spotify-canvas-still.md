@@ -1,6 +1,6 @@
 ---
-title: creator/stills/spotify-canvas-still
-description: Spotify Canvas still 9:16 (silent JPG stand-in)
+title: "creator/stills/spotify-canvas-still"
+description: "Spotify Canvas still 9:16 (silent JPG stand-in)"
 tags: [workflows, generated, comfyui, creator]
 ---
 

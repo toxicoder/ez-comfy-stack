@@ -19,9 +19,10 @@ GLOSSARY_PY = ROOT / "docs" / "glossary.py"
 GLOSSARY_JSON = ROOT / "includes" / "glossary.json"
 GLOSSARY_MD = ROOT / "docs" / "glossary.md"
 GLOSSARY_JS = ROOT / "docs" / "javascripts" / "glossary.js"
-EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
-MKDOCS_YML = ROOT / "mkdocs.yml"
+EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
+NAV_JSON = ROOT / "docs-site" / "lib" / "nav.json"
 HOOKS_PY = ROOT / "docs" / "hooks.py"
+REMARK_GLOSSARY = ROOT / "docs-site" / "lib" / "remark-glossary.ts"
 DOCS = ROOT / "docs"
 
 
@@ -320,29 +321,34 @@ def test_rendered_glossary_lists_every_title() -> None:
     """glossary.md placeholder expands to every shipped title."""
     gloss = _load_glossary_mod()
     terms = gloss.load_glossary(GLOSSARY_JSON)
-    text = GLOSSARY_MD.read_text(encoding="utf-8")
-    assert gloss.PLACEHOLDER in text
-    rendered = gloss.render_placeholder(text, terms=terms)
+    path = GLOSSARY_MD if GLOSSARY_MD.is_file() else GLOSSARY_MD.with_suffix(".mdx")
+    text = path.read_text(encoding="utf-8")
+    if gloss.PLACEHOLDER in text:
+        rendered = gloss.render_placeholder(text, terms=terms)
+    else:
+        assert "<GlossaryBody" in text
+        rendered = gloss.render_placeholder(
+            text.replace("<GlossaryBody />", gloss.PLACEHOLDER).replace(
+                "<GlossaryBody/>", gloss.PLACEHOLDER
+            ),
+            terms=terms,
+        )
     for term in terms:
         assert f"{{#{term.id}}}" in rendered
         assert term.title in rendered
 
 
 def test_mkdocs_wires_glossary_assets() -> None:
-    """Theme features, JS, CSS, emoji, and watch path are registered."""
-    text = MKDOCS_YML.read_text(encoding="utf-8")
-    assert "content.tooltips" in text
-    assert "search.highlight" in text
-    assert "javascripts/glossary.js" in text
-    assert "stylesheets/extra.css" in text
-    assert "material.extensions.emoji.twemoji" in text
-    assert "def_list" in text
-    assert "watch:" in text
-    assert "includes" in text
-    assert "Learn:" in text
-    assert "glossary.md" in text
-    # Material abbr auto-append would double-wrap terms.
-    assert "auto_append" not in text
+    """Fumadocs remark plugin + Voltage CSS carry the glossary, not Material abbr."""
+    remark = REMARK_GLOSSARY.read_text(encoding="utf-8")
+    assert "glossary.json" in remark
+    assert "EzTerm" in remark
+    css = EXTRA_CSS.read_text(encoding="utf-8")
+    assert ".ez-term" in css
+    assert "auto_append" not in remark
+    nav = NAV_JSON.read_text(encoding="utf-8")
+    assert "glossary.md" in nav
+    assert "Learn" in nav
 
 
 def test_glossary_js_uses_native_dialog() -> None:
@@ -424,7 +430,7 @@ def test_hooks_source_calls_glossary() -> None:
 
 def test_docs_pages_have_required_chrome() -> None:
     """Every docs markdown page keeps frontmatter and the two scan headings."""
-    pages = sorted(DOCS.rglob("*.md"))
+    pages = sorted(list(DOCS.rglob("*.md")) + list(DOCS.rglob("*.mdx")))
     assert pages
     missing: list[str] = []
     for path in pages:

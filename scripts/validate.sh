@@ -145,6 +145,7 @@ path_matches_docs() {
   local path="$1"
   [[ ${path} == docs/* ]] && return 0
   [[ ${path} == mkdocs.yml ]] && return 0
+  [[ ${path} == docs-site/* ]] && return 0
   [[ ${path} == includes/* ]] && return 0
   [[ ${path} == scripts/manage.sh ]] && return 0
   [[ ${path} == scripts/lib/* ]] && return 0
@@ -350,7 +351,7 @@ run_core_slice() {
 }
 
 #######################################
-# Run docs generation and strict MkDocs.
+# Run docs generation and the Fumadocs export.
 # Globals:
 #   BAZEL
 # Arguments:
@@ -362,9 +363,15 @@ run_core_slice() {
 #######################################
 run_docs_slice() {
   need_bazel
-  echo "==> validate: docs (generate + strict MkDocs)"
+  echo "==> validate: docs (Fumadocs gates + generate + export + render-check)"
+  "${BAZEL}" test \
+    //docs:test_docs_site_render \
+    //docs-site:unit \
+    //docs-site:typecheck \
+    //docs-site:nav_test \
+    //docs-site:codemod_test
   "${BAZEL}" run //docs:docs
-  "${BAZEL}" test //docs:test_mkdocs_build
+  "${BAZEL}" run //docs:render-check
 }
 
 #######################################

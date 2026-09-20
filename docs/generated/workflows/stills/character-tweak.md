@@ -1,6 +1,6 @@
 ---
-title: stills/character-tweak
-description: Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak.
+title: "stills/character-tweak"
+description: "Klein 4B character edit. LoadImage ez_character_*.png. ReferenceLatent. Prefix ez_character_tweak."
 tags: [workflows, generated, comfyui, stills]
 ---
 

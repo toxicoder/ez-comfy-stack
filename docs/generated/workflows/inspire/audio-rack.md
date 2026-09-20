@@ -1,6 +1,6 @@
 ---
-title: inspire/audio-rack
-description: No-UNET Audio Rack: splice music axes into ACE-Step tags / lyrics
+title: "inspire/audio-rack"
+description: "No-UNET Audio Rack: splice music axes into ACE-Step tags / lyrics"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

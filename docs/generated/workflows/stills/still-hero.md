@@ -1,6 +1,6 @@
 ---
-title: stills/still-hero
-description: Klein 4B hero still, 1280x720, 8 steps
+title: "stills/still-hero"
+description: "Klein 4B hero still, 1280x720, 8 steps"
 tags: [workflows, generated, comfyui, stills]
 ---
 

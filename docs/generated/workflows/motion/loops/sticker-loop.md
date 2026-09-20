@@ -1,6 +1,6 @@
 ---
-title: motion/loops/sticker-loop
-description: Wan 5B looping sticker MP4 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on
+title: "motion/loops/sticker-loop"
+description: "Wan 5B looping sticker MP4 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on"
 tags: [workflows, generated, comfyui, motion]
 ---
 

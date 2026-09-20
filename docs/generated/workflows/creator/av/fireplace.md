@@ -1,6 +1,6 @@
 ---
-title: creator/av/fireplace
-description: Fireplace AV ~5 s
+title: "creator/av/fireplace"
+description: "Fireplace AV ~5 s"
 tags: [workflows, generated, comfyui, creator]
 ---
 

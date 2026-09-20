@@ -1,6 +1,6 @@
 ---
-title: Generated workflow pages
-description: Index of generated per-workflow node and parameter pages for every _lab graph.
+title: "Generated workflow pages"
+description: "Index of generated per-workflow node and parameter pages for every _lab graph."
 tags: [workflows, generated, comfyui]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/av/dialogue-5s
-description: LTX-2.5 dialogue AV T2V, quoted speech, modality guidance Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encod
+title: "motion/av/dialogue-5s"
+description: "LTX-2.5 dialogue AV T2V, quoted speech, modality guidance Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encod"
 tags: [workflows, generated, comfyui, motion]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: creator/silent/city-night
-description: Silent night-drive / city-lights ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn
+title: "creator/silent/city-night"
+description: "Silent night-drive / city-lights ~5 s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn"
 tags: [workflows, generated, comfyui, creator]
 ---
 

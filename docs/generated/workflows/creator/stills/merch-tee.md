@@ -1,6 +1,6 @@
 ---
-title: creator/stills/merch-tee
-description: Unmarked tee mock 1:1
+title: "creator/stills/merch-tee"
+description: "Unmarked tee mock 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

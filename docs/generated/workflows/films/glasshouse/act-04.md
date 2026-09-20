@@ -1,6 +1,6 @@
 ---
-title: films/glasshouse/act-04
-description: One-click storm glasshouse · Storm passing: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil
+title: "films/glasshouse/act-04"
+description: "One-click storm glasshouse · Storm passing: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or fil"
 tags: [workflows, generated, comfyui, films]
 ---
 

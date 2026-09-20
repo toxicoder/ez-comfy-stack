@@ -1,6 +1,6 @@
 ---
-title: audio/albums/nill-bye/citation-needed
-description: Album graphs under audio/albums/nill-bye/citation-needed (tracks, cover, album pack).
+title: "audio/albums/nill-bye/citation-needed"
+description: "Album graphs under audio/albums/nill-bye/citation-needed (tracks, cover, album pack)."
 tags: [workflows, generated, comfyui, audio, album]
 ---
 

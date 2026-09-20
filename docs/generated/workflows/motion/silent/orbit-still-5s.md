@@ -1,6 +1,6 @@
 ---
-title: motion/silent/orbit-still-5s
-description: Wan 5B silent orbit I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on
+title: "motion/silent/orbit-still-5s"
+description: "Wan 5B silent orbit I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on"
 tags: [workflows, generated, comfyui, motion]
 ---
 

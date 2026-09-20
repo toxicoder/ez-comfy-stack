@@ -1,6 +1,6 @@
 ---
-title: stills/platform-pack
-description: Six Klein platform plates from one identity; independent T2I per aspect
+title: "stills/platform-pack"
+description: "Six Klein platform plates from one identity; independent T2I per aspect"
 tags: [workflows, generated, comfyui, stills]
 ---
 

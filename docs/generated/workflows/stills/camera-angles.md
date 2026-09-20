@@ -1,6 +1,6 @@
 ---
-title: stills/camera-angles
-description: Klein 4B wide/medium/close angle pack, new cameras
+title: "stills/camera-angles"
+description: "Klein 4B wide/medium/close angle pack, new cameras"
 tags: [workflows, generated, comfyui, stills]
 ---
 

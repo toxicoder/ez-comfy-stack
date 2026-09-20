@@ -1,6 +1,6 @@
 ---
-title: creator/stills/tiktok-shop
-description: TikTok Shop packshot 1:1
+title: "creator/stills/tiktok-shop"
+description: "TikTok Shop packshot 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

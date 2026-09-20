@@ -28,9 +28,9 @@ ez-comfy-stack is a **sample US-safe local studio**: ComfyUI in Docker on **one*
 
 It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). How the pieces fit: [Architecture](architecture.md). When to graduate: [When to use vs spark-lab](../start/when-to-use-vs-spark-lab.md).
 
-<div class="grid cards" markdown>
+\<div class="grid cards" markdown>
 
--   :material-account-cog:{ .lg .middle } **Operator**
+-   :material-account-cog:\{ .lg .middle \} **Operator**
 
     ---
 
@@ -38,7 +38,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). H
 
     [:octicons-arrow-right-24: Getting Started](../getting-started.md)
 
--   :material-palette:{ .lg .middle } **Studio user**
+-   :material-palette:\{ .lg .middle \} **Studio user**
 
     ---
 
@@ -46,7 +46,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). H
 
     [:octicons-arrow-right-24: ComfyUI basics](comfyui.md)
 
--   :material-shield-check:{ .lg .middle } **US-safe defaults**
+-   :material-shield-check:\{ .lg .middle \} **US-safe defaults**
 
     ---
 
@@ -54,7 +54,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). H
 
     [:octicons-arrow-right-24: Model licenses](../licenses.md)
 
--   :material-book-alphabet:{ .lg .middle } **Glossary**
+-   :material-book-alphabet:\{ .lg .middle \} **Glossary**
 
     ---
 
@@ -62,7 +62,7 @@ It is **not** nvidia-dgx-spark-lab (no K3s, no dashboard, no multi-node NCCL). H
 
     [:octicons-arrow-right-24: Glossary](../glossary.md)
 
-</div>
+\</div>
 
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: dcc/guide-still
-description: Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42.
+title: "dcc/guide-still"
+description: "Klein 4B edit of EZDCCLoadGuideStill first.png. Enhance on. 1280x704. Seed 42."
 tags: [workflows, generated, comfyui, dcc]
 ---
 

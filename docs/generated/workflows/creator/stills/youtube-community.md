@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-community
-description: YouTube Community post 1:1
+title: "creator/stills/youtube-community"
+description: "YouTube Community post 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

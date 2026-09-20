@@ -1,6 +1,6 @@
 ---
-title: creator/stills/tiktok-cover
-description: TikTok cover 9:16
+title: "creator/stills/tiktok-cover"
+description: "TikTok cover 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

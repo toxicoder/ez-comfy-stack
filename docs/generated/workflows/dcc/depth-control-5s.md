@@ -1,6 +1,6 @@
 ---
-title: dcc/depth-control-5s
-description: LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)
+title: "dcc/depth-control-5s"
+description: "LTX-2.5 IC-LoRA Union Control envelope, 120 frames, depth default Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots)"
 tags: [workflows, generated, comfyui, dcc]
 ---
 

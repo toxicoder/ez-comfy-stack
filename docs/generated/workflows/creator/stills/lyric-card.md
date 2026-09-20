@@ -1,6 +1,6 @@
 ---
-title: creator/stills/lyric-card
-description: Lyric-card background 1:1
+title: "creator/stills/lyric-card"
+description: "Lyric-card background 1:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

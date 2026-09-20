@@ -1,6 +1,6 @@
 ---
-title: creator/stills/zoom-bg
-description: Webcam-safe Zoom / Meet background 16:9
+title: "creator/stills/zoom-bg"
+description: "Webcam-safe Zoom / Meet background 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: films/still-here
-description: One-click household morning: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is enc
+title: "films/still-here"
+description: "One-click household morning: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is enc"
 tags: [workflows, generated, comfyui, films]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/silent/still-to-video-5s
-description: Wan 2.2 5B silent I2V smoke, 121 frames @ 24 fps
+title: "motion/silent/still-to-video-5s"
+description: "Wan 2.2 5B silent I2V smoke, 121 frames @ 24 fps"
 tags: [workflows, generated, comfyui, motion]
 ---
 

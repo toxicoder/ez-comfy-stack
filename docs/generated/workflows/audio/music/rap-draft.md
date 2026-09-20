@@ -1,6 +1,6 @@
 ---
-title: audio/music/rap-draft
-description: US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film s
+title: "audio/music/rap-draft"
+description: "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film s"
 tags: [workflows, generated, comfyui, audio]
 ---
 

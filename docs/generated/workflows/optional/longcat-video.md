@@ -1,6 +1,6 @@
 ---
-title: optional/longcat-video
-description: LongCat-Video MIT opt-in prompt preview. No NCCL. Not a 90s default.
+title: "optional/longcat-video"
+description: "LongCat-Video MIT opt-in prompt preview. No NCCL. Not a 90s default."
 tags: [workflows, generated, comfyui, optional]
 ---
 

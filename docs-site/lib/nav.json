@@ -1,0 +1,324 @@
+[
+  {
+    "title": "Home",
+    "pages": [
+      {
+        "title": "Home",
+        "path": "index.md"
+      }
+    ]
+  },
+  {
+    "title": "Learn",
+    "pages": [
+      {
+        "title": "How the studio works",
+        "path": "learn/index.md"
+      },
+      {
+        "title": "Architecture",
+        "path": "learn/architecture.md"
+      },
+      {
+        "title": "ComfyUI basics",
+        "path": "learn/comfyui.md"
+      },
+      {
+        "title": "Image and video generation",
+        "path": "learn/generation.md"
+      },
+      {
+        "title": "Klein, Wan, and LTX",
+        "path": "learn/pipeline.md"
+      },
+      {
+        "title": "Clay to finish",
+        "path": "learn/clay-to-finish.md"
+      },
+      {
+        "title": "Blender creator suite",
+        "path": "learn/blender-creator.md"
+      },
+      {
+        "title": "Stay in Comfy after a Blender dump",
+        "path": "learn/comfy-first-blender.md"
+      },
+      {
+        "title": "Dream-house tours",
+        "path": "learn/dream-house.md"
+      },
+      {
+        "title": "Hardware, memory, and safety",
+        "path": "learn/hardware.md"
+      },
+      {
+        "title": "Glossary",
+        "path": "glossary.md"
+      }
+    ]
+  },
+  {
+    "title": "Start",
+    "pages": [
+      {
+        "title": "Getting Started",
+        "path": "getting-started.md"
+      },
+      {
+        "title": "Prompting",
+        "path": "prompting.md"
+      },
+      {
+        "title": "Cinema Rack",
+        "path": "create/cinema-rack.md"
+      },
+      {
+        "title": "Audio Rack",
+        "path": "create/audio-rack.md"
+      },
+      {
+        "title": "App Forge",
+        "path": "create/app-forge.md"
+      },
+      {
+        "title": "Model licenses",
+        "path": "licenses.md"
+      },
+      {
+        "title": "FAQ",
+        "path": "start/faq.md"
+      },
+      {
+        "title": "When to use vs spark-lab",
+        "path": "start/when-to-use-vs-spark-lab.md"
+      }
+    ]
+  },
+  {
+    "title": "Create",
+    "pages": [
+      {
+        "title": "Still to motion to AV",
+        "path": "visual-generative-ai.md"
+      },
+      {
+        "title": "ComfyUI Apps",
+        "path": "studio-apps.md"
+      },
+      {
+        "title": "Workflow catalog",
+        "path": "studio-workflows.md"
+      },
+      {
+        "title": "Workflow details",
+        "path": "create/workflows-index.md"
+      },
+      {
+        "title": "Node parameter encyclopedia",
+        "path": "reference/workflow-nodes.md"
+      },
+      {
+        "title": "Stills graphs",
+        "path": "create/workflows-stills.md"
+      },
+      {
+        "title": "Motion graphs",
+        "path": "create/workflows-motion.md"
+      },
+      {
+        "title": "Creator pack",
+        "path": "create/workflows-creator.md"
+      },
+      {
+        "title": "Film graphs",
+        "path": "create/workflows-film.md"
+      },
+      {
+        "title": "Audio graphs",
+        "path": "create/workflows-audio.md"
+      },
+      {
+        "title": "Short films",
+        "path": "shorts.md"
+      },
+      {
+        "title": "Local podcast",
+        "path": "podcast.md"
+      },
+      {
+        "title": "Local dub",
+        "path": "dub.md"
+      },
+      {
+        "title": "Local music",
+        "path": "music.md"
+      },
+      {
+        "title": "RAP-FIRST",
+        "path": "create/music-rap.md"
+      },
+      {
+        "title": "Drive-through EDM",
+        "path": "create/music-edm.md"
+      },
+      {
+        "title": "Music disclosure and QC",
+        "path": "create/music-disclosure.md"
+      },
+      {
+        "title": "Studio sidecars",
+        "path": "studio-sidecars.md"
+      },
+      {
+        "title": "Asset Bible",
+        "path": "asset-bible.md"
+      },
+      {
+        "title": "Blender GB10 sidecar",
+        "path": "blender-gb10-sidecar.md"
+      },
+      {
+        "title": "DCC guide pack",
+        "path": "dcc-workflows.md"
+      },
+      {
+        "title": "Splat sidecar",
+        "path": "splat-sidecar.md"
+      },
+      {
+        "title": "Custom nodes",
+        "path": "reference/custom-nodes.md"
+      },
+      {
+        "title": "Config and schemas",
+        "path": "reference/config-and-schemas.md"
+      },
+      {
+        "title": "studio-ui board",
+        "path": "reference/studio-ui.md"
+      }
+    ]
+  },
+  {
+    "title": "Operate",
+    "pages": [
+      {
+        "title": "Occupancy desk",
+        "path": "occupancy.md"
+      },
+      {
+        "title": "Occupancy matrix",
+        "path": "operate/occupancy-matrix.md"
+      },
+      {
+        "title": "MCP and SSH tunnels",
+        "path": "operate/mcp.md"
+      },
+      {
+        "title": "manage.sh reference",
+        "path": "manage-cli.md"
+      },
+      {
+        "title": "Generated shell reference",
+        "path": "generated/shell/reference.md"
+      },
+      {
+        "title": "Models and cache",
+        "path": "models-and-cache.md"
+      },
+      {
+        "title": "Download tiers",
+        "path": "download-tiers.md"
+      },
+      {
+        "title": "Download limit",
+        "path": "download-limit.md"
+      },
+      {
+        "title": "Per-family packs",
+        "path": "operate/models-packs.md"
+      },
+      {
+        "title": "Hugging Face tokens",
+        "path": "operate/models-tokens.md"
+      },
+      {
+        "title": "Sharing MODELS_DIR",
+        "path": "operate/models-sharing.md"
+      },
+      {
+        "title": "Disk wizard",
+        "path": "disk-wizard.md"
+      },
+      {
+        "title": "Backup and restore",
+        "path": "operate/backup-restore.md"
+      },
+      {
+        "title": "Reboot safety",
+        "path": "reboot-safety.md"
+      },
+      {
+        "title": "Spark farm",
+        "path": "spark-farm.md"
+      },
+      {
+        "title": "Troubleshooting",
+        "path": "troubleshooting.md"
+      },
+      {
+        "title": "Docs site",
+        "path": "operate/troubleshooting-docs-site.md"
+      },
+      {
+        "title": "Canvas",
+        "path": "operate/troubleshooting-canvas.md"
+      },
+      {
+        "title": "Host and Docker",
+        "path": "operate/troubleshooting-host-docker.md"
+      },
+      {
+        "title": "Downloads",
+        "path": "operate/troubleshooting-downloads.md"
+      },
+      {
+        "title": "Start and runtime",
+        "path": "operate/troubleshooting-start-runtime.md"
+      },
+      {
+        "title": "Models and workflows",
+        "path": "operate/troubleshooting-models-workflows.md"
+      }
+    ]
+  },
+  {
+    "title": "Contribute",
+    "pages": [
+      {
+        "title": "Conventions",
+        "path": "project-conventions.md"
+      },
+      {
+        "title": "Building with Bazel",
+        "path": "contribute/building-with-bazel.md"
+      },
+      {
+        "title": "Docs style",
+        "path": "contribute/docs-style.md"
+      },
+      {
+        "title": "Testing docs",
+        "path": "contribute/testing-docs.md"
+      },
+      {
+        "title": "Contributing",
+        "path": "contribute/contributing.md"
+      },
+      {
+        "title": "Security",
+        "path": "contribute/security.md"
+      }
+    ]
+  }
+]

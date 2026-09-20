@@ -1,6 +1,6 @@
 ---
-title: creator/av/workout-rep
-description: One exercise-rep AV 9:16
+title: "creator/av/workout-rep"
+description: "One exercise-rep AV 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

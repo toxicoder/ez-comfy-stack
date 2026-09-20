@@ -1,6 +1,6 @@
 ---
-title: optional/still-to-video-a14b
-description: Wan 2.2 A14B FP8 high+low UNET; Queue on high-noise 8-step. MagCache off. Unload 5B first.
+title: "optional/still-to-video-a14b"
+description: "Wan 2.2 A14B FP8 high+low UNET; Queue on high-noise 8-step. MagCache off. Unload 5B first."
 tags: [workflows, generated, comfyui, optional]
 ---
 

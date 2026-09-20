@@ -1,6 +1,6 @@
 ---
-title: inspire/app-forge
-description: No-UNET App Forge: clone a lab graph into live _user/
+title: "inspire/app-forge"
+description: "No-UNET App Forge: clone a lab graph into live _user/"
 tags: [workflows, generated, comfyui, inspire]
 ---
 

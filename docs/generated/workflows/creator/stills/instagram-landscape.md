@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-landscape
-description: Instagram landscape feed ~1.91:1
+title: "creator/stills/instagram-landscape"
+description: "Instagram landscape feed ~1.91:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 

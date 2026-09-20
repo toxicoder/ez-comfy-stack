@@ -1,6 +1,6 @@
 ---
-title: creator/stills/youtube-channel-art
-description: YouTube channel art 16:9 with a mobile-safe center band
+title: "creator/stills/youtube-channel-art"
+description: "YouTube channel art 16:9 with a mobile-safe center band"
 tags: [workflows, generated, comfyui, creator]
 ---
 

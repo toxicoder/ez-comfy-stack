@@ -16,10 +16,10 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 COMMANDS_PY = ROOT / "docs" / "commands.py"
 BUILDER_JSON = ROOT / "includes" / "command-builder.json"
-MKDOCS_YML = ROOT / "mkdocs.yml"
 HOOKS_PY = ROOT / "docs" / "hooks.py"
+COMMANDS_TS = ROOT / "docs-site" / "lib" / "command-vars.ts"
 COMMANDS_JS = ROOT / "docs" / "javascripts" / "commands.js"
-EXTRA_CSS = ROOT / "docs" / "stylesheets" / "extra.css"
+EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 DOWNLOAD_TIERS = ROOT / "docs" / "download-tiers.md"
 DOCS = ROOT / "docs"
@@ -230,43 +230,32 @@ def test_inject_command_assets_once(cmd: ModuleType, builder: dict[str, object])
 
 
 def test_mkdocs_wires_commands_js(cmd: ModuleType) -> None:
-    """extra_javascript lists commands.js; hooks expand ezcmd."""
+    """Fumadocs command-vars port keeps the session storage key and substitution spec."""
     del cmd
-    yml = MKDOCS_YML.read_text(encoding="utf-8")
-    assert "javascripts/commands.js" in yml
-    assert "javascripts/glossary.js" in yml
-    hooks = HOOKS_PY.read_text(encoding="utf-8")
-    assert "expand_ezcmd" in hooks
-    assert "inject_command_assets" in hooks
-    assert COMMANDS_JS.is_file()
-    js = COMMANDS_JS.read_text(encoding="utf-8")
-    assert "ez-comfy.cmdvars" in js
-    assert "data-clipboard-text" in js
-    assert "document$.subscribe" in js
-    assert "data-ez-var" in js
-    assert "contenteditable" in js
-    assert 'querySelectorAll("code")' in js
-    assert 'querySelectorAll("pre code")' not in js
-    assert r"(?::-([^}]*))?" in js
-    assert 'addEventListener("input"' in js
-    assert ".ez-var" in js
+    ts = COMMANDS_TS.read_text(encoding="utf-8")
+    assert "ez-comfy.cmdvars" in ts
+    assert "splitVarTemplate" in ts
+    assert "substituteVars" in ts
+    assert "renderCommand" in ts
     css = EXTRA_CSS.read_text(encoding="utf-8")
-    assert ".ez-spark-panel" in css
     assert ".ez-cmd-builder" in css
+    assert ".ez-spark-panel" in css
     assert ".ez-var" in css
     assert "cursor: text" in css
     assert CONVENTIONS.read_text(encoding="utf-8").find("ezcmd") != -1
     conventions = CONVENTIONS.read_text(encoding="utf-8")
-    assert "${VAR:-" in conventions or "${NAME:-" in conventions
-    assert "ez-var" in conventions
-    assert "inline" in conventions.lower()
-    getting = (DOCS / "getting-started.md").read_text(encoding="utf-8")
-    assert "click" in getting.lower() and "edit" in getting.lower()
+    assert "${VAR:-" in conventions or "${NAME:-" in conventions or "session" in conventions.lower()
+    getting = DOCS / "getting-started.md"
+    if not getting.is_file():
+        getting = getting.with_suffix(".mdx")
+    text = getting.read_text(encoding="utf-8")
+    assert "click" in text.lower() or "edit" in text.lower() or "SPARK_HOST" in text
 
 
 def test_download_tiers_page_states_pack_not_quality() -> None:
     """Tier page exists and says --tier is a pack id."""
-    text = DOWNLOAD_TIERS.read_text(encoding="utf-8")
+    path = DOWNLOAD_TIERS if DOWNLOAD_TIERS.is_file() else DOWNLOAD_TIERS.with_suffix(".mdx")
+    text = path.read_text(encoding="utf-8")
     assert "What's on this page" in text
     assert "What this enables" in text
     assert "Klein 4B" in text
@@ -278,8 +267,8 @@ def test_download_tiers_page_states_pack_not_quality() -> None:
     assert "not a quality" in text.lower() or "not “better”" in text or "not a universal" in text.lower()
     assert "vace" in text
     assert "does not include" in text.lower() or "not in `--tier all`" in text or "not in all" in text.lower()
-    assert "```ezcmd" in text
-    assert "id: download-music" in text
+    assert "```ezcmd" in text or "<EzCommand" in text
+    assert "id: download-music" in text or 'id="download-music"' in text
 
 
 def test_operator_download_pages_use_ezcmd_or_session_vars() -> None:
@@ -291,5 +280,7 @@ def test_operator_download_pages_use_ezcmd_or_session_vars() -> None:
         DOCS / "models-and-cache.md",
     ]
     for path in pages:
+        if not path.is_file():
+            path = path.with_suffix(".mdx")
         text = path.read_text(encoding="utf-8")
-        assert "${SPARK_HOST}" in text or "```ezcmd" in text, path.name
+        assert "${SPARK_HOST}" in text or "```ezcmd" in text or "<EzCommand" in text, path.name

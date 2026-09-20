@@ -1,6 +1,6 @@
 ---
-title: creator/stills/slide-title
-description: Course / webinar title plate 16:9
+title: "creator/stills/slide-title"
+description: "Course / webinar title plate 16:9"
 tags: [workflows, generated, comfyui, creator]
 ---
 

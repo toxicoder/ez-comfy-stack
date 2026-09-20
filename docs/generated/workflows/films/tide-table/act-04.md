@@ -1,6 +1,6 @@
 ---
-title: films/tide-table/act-04
-description: One-click dawn skiff · Home the cut: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots
+title: "films/tide-table/act-04"
+description: "One-click dawn skiff · Home the cut: 18 LTX 5.00s AV shots + stitch Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots"
 tags: [workflows, generated, comfyui, films]
 ---
 

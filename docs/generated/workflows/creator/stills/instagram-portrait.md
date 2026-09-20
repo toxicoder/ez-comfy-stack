@@ -1,6 +1,6 @@
 ---
-title: creator/stills/instagram-portrait
-description: Instagram 4:5 feed still
+title: "creator/stills/instagram-portrait"
+description: "Instagram 4:5 feed still"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: stills/product-packshot
-description: Klein 4B product packshot 1:1
+title: "stills/product-packshot"
+description: "Klein 4B product packshot 1:1"
 tags: [workflows, generated, comfyui, stills]
 ---
 

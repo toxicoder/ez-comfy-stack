@@ -1,6 +1,6 @@
 ---
-title: creator/stills/patreon-post
-description: Membership post still 4:5
+title: "creator/stills/patreon-post"
+description: "Membership post still 4:5"
 tags: [workflows, generated, comfyui, creator]
 ---
 

@@ -1,6 +1,6 @@
 ---
-title: motion/silent/vace-join
-description: Wan 2.1 VACE 1.3B 17-frame join smoke (1+8n). MagCache off. Opt-in.
+title: "motion/silent/vace-join"
+description: "Wan 2.1 VACE 1.3B 17-frame join smoke (1+8n). MagCache off. Opt-in."
 tags: [workflows, generated, comfyui, motion]
 ---
 

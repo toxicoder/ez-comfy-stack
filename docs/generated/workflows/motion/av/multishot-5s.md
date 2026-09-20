@@ -1,6 +1,6 @@
 ---
-title: motion/av/multishot-5s
-description: LTX-2.5 native multishot AV T2V with named cuts Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as writ
+title: "motion/av/multishot-5s"
+description: "LTX-2.5 native multishot AV T2V with named cuts Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as writ"
 tags: [workflows, generated, comfyui, motion]
 ---
 

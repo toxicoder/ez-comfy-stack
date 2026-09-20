@@ -1,6 +1,6 @@
 ---
-title: creator/av/fashion-turn
-description: Fashion turn AV 9:16
+title: "creator/av/fashion-turn"
+description: "Fashion turn AV 9:16"
 tags: [workflows, generated, comfyui, creator]
 ---
 

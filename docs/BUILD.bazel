@@ -1,9 +1,34 @@
-"""Package purpose: MkDocs site serve/build binaries and a strict-build test."""
+"""Package purpose: Documentation content package — markdown/MDX pages, generators, and the Bazel entry points that drive the Fumadocs site in docs-site/.
+
+The site itself is the Next.js app in `docs-site/` (see that package for the npm runners).
+This package owns the *content*: the pages under `docs/`, the generators that fill
+`docs/generated/`, and the Python gates around them.
+
+Usage:
+  bazelisk run //docs:serve
+  bazelisk run //docs:docs
+  bazelisk run //docs:preview
+  bazelisk run //docs:status
+"""
 
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 package(default_visibility = ["//visibility:private"])
+
+filegroup(
+    name = "content",
+    srcs = glob(
+        [
+            "**/*.md",
+            "**/*.mdx",
+            "assets/**",
+            "generated/**",
+        ],
+        allow_empty = True,
+    ),
+    visibility = ["//visibility:public"],
+)
 
 _DOCS_COMMON_DATA = [
     "generate_shell_docs.py",
@@ -12,24 +37,15 @@ _DOCS_COMMON_DATA = [
     "cinema_clip_prompts.py",
     "generate_audio_docs.py",
     "glossary.py",
-    "hooks.py",
     "page_brief.py",
     "commands.py",
     "requirements.txt",
-    "//:mkdocs.yml",
+    "setup-docs.sh",
+    ":content",
     "//includes",
     "//scripts:doc_sources",
 ] + glob(
     ["workflow_nodes*.py"],
-    allow_empty = True,
-) + glob(
-    ["**/*.md"],
-    allow_empty = True,
-) + glob(
-    ["javascripts/*"],
-    allow_empty = True,
-) + glob(
-    ["stylesheets/*"],
     allow_empty = True,
 )
 
@@ -71,16 +87,29 @@ sh_binary(
     visibility = ["//visibility:public"],
 )
 
+sh_binary(
+    name = "render-check",
+    srcs = ["test_docs_site_render.sh"],
+    data = [
+        "test_docs_site_render.py",
+        "test_docs_site_render.sh",
+        ":content",
+    ],
+    visibility = ["//visibility:public"],
+)
+
 sh_test(
-    name = "test_mkdocs_build",
-    size = "large",
+    name = "test_docs_site_render",
+    size = "medium",
     timeout = "moderate",
-    srcs = ["manage-docs.sh"],
-    args = ["build"],
-    data = _DOCS_COMMON_DATA,
-    tags = [
-        "local",
-        "no-sandbox",
+    srcs = ["test_docs_site_render.sh"],
+    data = [
+        "test_docs_site_render.py",
+        "test_docs_site_render.sh",
+        ":content",
+        "//:CONTRIBUTING.md",
+        "//:README.md",
+        "//docs-site:sources",
     ],
     visibility = ["//visibility:public"],
 )

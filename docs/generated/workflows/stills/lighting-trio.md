@@ -1,6 +1,6 @@
 ---
-title: stills/lighting-trio
-description: Klein 4B three-light study of one subject
+title: "stills/lighting-trio"
+description: "Klein 4B three-light study of one subject"
 tags: [workflows, generated, comfyui, stills]
 ---
 

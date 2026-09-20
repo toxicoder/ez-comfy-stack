@@ -1,6 +1,6 @@
 ---
-title: motion/silent/parallax-still-5s
-description: Wan 5B silent parallax I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance
+title: "motion/silent/parallax-still-5s"
+description: "Wan 5B silent parallax I2V ~5s Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance"
 tags: [workflows, generated, comfyui, motion]
 ---
 

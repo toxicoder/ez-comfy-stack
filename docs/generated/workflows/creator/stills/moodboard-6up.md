@@ -1,6 +1,6 @@
 ---
-title: creator/stills/moodboard-6up
-description: Six-still moodboard of one identity
+title: "creator/stills/moodboard-6up"
+description: "Six-still moodboard of one identity"
 tags: [workflows, generated, comfyui, creator]
 ---
 

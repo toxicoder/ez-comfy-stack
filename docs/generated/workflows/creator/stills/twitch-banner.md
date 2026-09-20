@@ -1,6 +1,6 @@
 ---
-title: creator/stills/twitch-banner
-description: Twitch channel banner ~3:1
+title: "creator/stills/twitch-banner"
+description: "Twitch channel banner ~3:1"
 tags: [workflows, generated, comfyui, creator]
 ---
 
