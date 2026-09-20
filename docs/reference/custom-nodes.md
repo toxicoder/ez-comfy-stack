@@ -8,9 +8,9 @@ tags: [custom-nodes, comfyui, occupancy, qc]
 
 **What's on this page**
 
-- **Every pack** under `custom_nodes/` (`ez_common` … `ez_quality` … `ez_studio_blocks`)
+- **Every pack** under `custom_nodes/` (`ez_common` … `ez_quality` … `ez_outputs` … `ez_studio_blocks`)
 - **Mapped nodes** from `NODE_CLASS_MAPPINGS` / `INPUT_TYPES` / `RETURN_TYPES`
-- **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, subgraphs
+- **Empty mappings** — helpers, LTX spatial patch, App occupancy chip, Outputs sidebar, subgraphs
 - **Frontend JS** under Nodes 2.0 (preview `widget.value`, no LiteGraph `inputEl` / `node_widget`)
 - **QC / rights** notes that ship on the node `DESCRIPTION` (nothing invented)
 
@@ -54,6 +54,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
+| `ez_outputs` | empty | Outputs sidebar: browse/delete/send-to-LoadImage files on `${COMFY_OUTPUT_DIR}` |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
 
 ---
@@ -231,6 +232,14 @@ Category `ez-comfy`. One combo on every `_lab` graph. Python does not walk sibli
 | `audio` | Klein / Wan / LTX session |
 
 This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
+
+---
+
+## ez_outputs (Outputs sidebar)
+
+**No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
+
+`ez_outputs.js` registers a Comfy **Outputs** sidebar tab. It lists media on `${COMFY_OUTPUT_DIR}` (container `/outputs`) newest first, skips `comfy-user` / `custom-nodes-user` / `input` / `temp`, and can **Delete** or **Use as start image** (copy into `/inputs` and set `LoadImage` when that node is on the open graph). Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list`, `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Path traversal and non-media files are refused.
 
 ---
 
