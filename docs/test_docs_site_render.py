@@ -210,6 +210,21 @@ class NextExportMemoryTests(unittest.TestCase):
         self.assertIn("staticGenerationMaxConcurrency: 1", text)
         self.assertIn("webpackBuildWorker: false", text)
         self.assertIn("webpackMemoryOptimizations: true", text)
+        self.assertIn("enablePrerenderSourceMaps: false", text)
+        self.assertIn('serverExternalPackages: ["fumadocs-mdx", "shiki"]', text)
+
+    def test_mdx_collection_compiles_on_demand(self) -> None:
+        """Webpack must not bundle ~850 MDX files; the Config API compiles per page."""
+        config = (SITE_DIR / "source.config.ts").read_text(encoding="utf-8")
+        self.assertIn("defineDocs", config)
+        self.assertIn("dynamic: true", config)
+        self.assertNotRegex(config, r'''from ["']fumadocs-mdx/macro["']''')
+        content = (SITE_DIR / "lib" / "content.ts").read_text(encoding="utf-8")
+        self.assertNotRegex(content, r'''from ["']fumadocs-mdx/macro["']''')
+        source = (SITE_DIR / "lib" / "source.ts").read_text(encoding="utf-8")
+        self.assertIn(".source/dynamic", source)
+        page = (SITE_DIR / "app" / "[[...slug]]" / "page.tsx").read_text(encoding="utf-8")
+        self.assertRegex(page, r"await[\s\S]*\.load\(")
 
 
 class ThemeTests(unittest.TestCase):

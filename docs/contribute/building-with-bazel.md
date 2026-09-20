@@ -64,7 +64,7 @@ bazelisk run //scripts:run-utility -- download-limit status
 | `//:test` | test-fast + Fumadocs render contract (`//docs:test_docs_site_render`) |
 | `//:lint` | ShellCheck, shfmt, buildifier, Pyright, mypy (manual / host tools) |
 | `//:validate` | Git-aware core + docs slices |
-| `//docs:docs` | generators + Fumadocs static export (`docs-site/out/`) |
+| `//docs:docs` | generators + Fumadocs static export (`docs-site/out/`). MDX compiles on demand (`dynamic: true`) |
 
 Queries:
 
@@ -80,7 +80,7 @@ Path-filtered jobs in `.github/workflows/ci.yml`:
 | Job | When | What |
 | --- | --- | --- |
 | **bazel-core** | scripts/tests/docker/docs generators/typecheck pins or CI graph | `//:test-fast` then `//:lint` (shellcheck/shfmt/buildifier) |
-| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test` then `bazelisk shutdown` and `./docs/manage-docs.sh build` (no Bazel JVM during Next). Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner |
+| **docs-and-render** | docs/**, docs-site/**, or CI graph | Node 22 + `//docs:test_docs_site_render` + `//docs-site:unit|typecheck|nav_test|codemod_test` then `bazelisk shutdown` and `./docs/manage-docs.sh build` (no Bazel JVM during Next). Export is `next build --webpack` in-process, one static-generation worker, `NODE_OPTIONS=--max-old-space-size=5120` (same as deploy-docs). MDX is compiled on demand (`dynamic: true` in `docs-site/source.config.ts`) so webpack does not ingest ~850 pages. Turbopack or a 6 GB heap plus Bazel SIGKILL the 7 GB runner. `docs-site/.next/cache` is cached between runs |
 | **validate-gate** | always | `scripts/ci_check_only.sh` |
 
 Topic-branch CI runs on **pull_request** only (push is `development`/`main`). Disk cache keys include `github.job` plus `MODULE.bazel.lock` + `.bazelversion`.

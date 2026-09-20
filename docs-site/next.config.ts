@@ -48,11 +48,23 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   reactStrictMode: true,
   /**
+   * Prerender source maps inflate the static-generation heap. The collection is
+   * compiled on demand (`dynamic: true`); keep maps off so ~850 pages fit a 7 GB runner.
+   */
+  enablePrerenderSourceMaps: false,
+  /**
+   * On-demand MDX (`fumadocs-mdx/runtime/dynamic`) must stay in Node: webpack
+   * otherwise follows optional `@fumadocs/satteri` imports and fails the compile.
+   * Shiki is used at compile time for highlighters.
+   */
+  serverExternalPackages: ["fumadocs-mdx", "shiki"],
+  /**
    * GitHub-hosted runners are 7 GB. Next 16.3 Turbopack static generation
    * retains per-page memory across ~850 MDX pages and the runner is SIGKILL'd
    * (shutdown signal / exit 143). Webpack in-process (no build worker) plus
    * one export worker leave headroom when NODE_OPTIONS is 5120 and Bazel is
-   * not resident during the compile.
+   * not resident during the compile. MDX is compiled on demand (see
+   * `source.config.ts` `dynamic: true`) so webpack does not ingest the corpus.
    */
   experimental: {
     cpus: 1,

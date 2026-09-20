@@ -56,11 +56,13 @@ export default async function DocsRoute({ params }: PageProps) {
     title?: string;
     description?: string;
     full?: boolean;
-    body: (props: { components: Record<string, unknown> }) => ReactNode;
-    toc: TOCItemType[];
+    load: () => Promise<{
+      body: (props: { components: Record<string, unknown> }) => ReactNode;
+      toc: TOCItemType[];
+    }>;
   };
 
-  const Body = data.body;
+  const { body: Body, toc } = await data.load();
   const title = data.title ?? page.path;
   const stamp = publishedAt();
 
@@ -89,7 +91,7 @@ export default async function DocsRoute({ params }: PageProps) {
         </Banner>
       )}
       <DocsPage
-        toc={data.toc}
+        toc={toc}
         full={data.full}
         footer={{
           items: neighborsOf(source, page.path),

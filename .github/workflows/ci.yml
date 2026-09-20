@@ -115,6 +115,14 @@ jobs:
       - name: Install docs site dependencies
         run: (cd docs-site && npm ci --legacy-peer-deps)
 
+      - name: Cache Next compile
+        uses: actions/cache@v5
+        with:
+          path: docs-site/.next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('docs-site/package-lock.json', 'docs-site/next.config.ts', 'docs-site/source.config.ts') }}
+          restore-keys: |
+            next-${{ runner.os }}-
+
       - name: Docs gates (no browser)
         run: |
           bazelisk test \
@@ -127,7 +135,7 @@ jobs:
 
       - name: Docs export
         env:
-          # webpack compile of ~850 pages needs >4 GB. bazelisk run keeps a
+          # MDX compiles on demand (dynamic: true). bazelisk run keeps a
           # JVM next to Node and 6144 then SIGKILL'd the 7 GB runner. Shut
           # Bazel down and call manage-docs.sh so Next is the only heap.
           NODE_OPTIONS: "--max-old-space-size=5120"

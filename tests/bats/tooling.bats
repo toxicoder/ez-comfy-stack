@@ -83,6 +83,15 @@ teardown() {
   grep -qF 'bazelisk shutdown' "${gh}"
   grep -qF './docs/manage-docs.sh build' "${gh}"
   grep -qF 'next build --webpack' "${REPO_ROOT}/docs-site/package.json"
+  grep -qF 'dynamic: true' "${REPO_ROOT}/docs-site/source.config.ts"
+  grep -qF 'enablePrerenderSourceMaps: false' "${REPO_ROOT}/docs-site/next.config.ts"
+  grep -qF '.source/dynamic' "${REPO_ROOT}/docs-site/lib/source.ts"
+  grep -qF '.load(' "${REPO_ROOT}/docs-site/app/[[...slug]]/page.tsx"
+  run grep -E 'from ["'"'"']fumadocs-mdx/macro["'"'"']' "${REPO_ROOT}/docs-site/lib/content.ts"
+  [ "$status" -ne 0 ]
+  run grep -E 'from ["'"'"']fumadocs-mdx/macro["'"'"']' "${REPO_ROOT}/docs-site/source.config.ts"
+  [ "$status" -ne 0 ]
+  grep -qF 'docs-site/.next/cache' "${gh}"
   run grep -F 'bazelisk run //docs:docs' "${gh}"
   [ "$status" -ne 0 ]
   run grep -F 'max-old-space-size=6144' "${gh}"
@@ -127,6 +136,7 @@ teardown() {
   [ "$status" -ne 0 ]
   run grep -F 'docs-site:build-' "${deploy}"
   [ "$status" -ne 0 ]
+  grep -qF 'docs-site/.next/cache' "${deploy}"
   grep -qF 'scripts/ci/publish-pages-tree.sh' "${deploy}"
   run grep -E 'bazelisk run //docs-site:build-latest' "${deploy}"
   [ "$status" -ne 0 ]
