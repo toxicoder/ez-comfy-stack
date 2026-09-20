@@ -112,12 +112,12 @@ def core_nodes() -> dict[str, Any]:
         "EmptyLTXVLatentVideo": _n(
             "Empty LTX Latent Video",
             "Allocate a T2V LTX video latent (no start image).",
-            lab="Width/height must be ÷32. Length must be 1+8n (289 for ~12 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.",
+            lab="Width/height must be ÷32. Length must be 1+8n (193 for ~8 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.",
             sockets=[_s("LATENT", "LATENT", "out", "Video latent (then concat with audio latent).")],
             widgets=[
                 _w("width", index=0, typ="INT", rng="1280 (landscape) / 768 (shorts)", desc="Frame width.", gen="÷32. 1280×720 will snap to 704."),
                 _w("height", index=1, typ="INT", rng="704 / 1280", desc="Frame height.", gen="704 is the lab landscape printer."),
-                _w("length", index=2, typ="INT", rng="289 Apps / 121 film = 1+8n", desc="Frame count.", gen="Standalone Apps default 289 @ 24 fps ≈ 12.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent."),
+                _w("length", index=2, typ="INT", rng="193 Apps / 121 film = 1+8n", desc="Frame count.", gen="Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent."),
             ],
         ),
         "Wan22ImageToVideoLatent": _n(
@@ -238,7 +238,7 @@ def core_nodes() -> dict[str, Any]:
         "LoadAudio": _n(
             "Load Audio",
             "Load a wav/mp3 from input/.",
-            lab="motion/av/audio-to-video-12s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
+            lab="motion/av/audio-to-video-8s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
             sockets=[_s("AUDIO", "AUDIO", "out", "Waveform for LTXVAudioVAEEncode.")],
             widgets=[_w("audio", index=0, desc="Filename in input/.", gen="The original wav is muxed into the MP4 (no audio VAE decode on a2v).")],
         ),

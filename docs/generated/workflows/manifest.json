@@ -649,8 +649,8 @@
       "kind": "graph"
     },
     {
-      "id": "dcc/canny-control-12s",
-      "path": "generated/workflows/dcc/canny-control-12s.md",
+      "id": "dcc/canny-control-8s",
+      "path": "generated/workflows/dcc/canny-control-8s.md",
       "lane": "dcc",
       "kind": "graph"
     },
@@ -673,8 +673,8 @@
       "kind": "graph"
     },
     {
-      "id": "dcc/depth-control-12s",
-      "path": "generated/workflows/dcc/depth-control-12s.md",
+      "id": "dcc/depth-control-8s",
+      "path": "generated/workflows/dcc/depth-control-8s.md",
       "lane": "dcc",
       "kind": "graph"
     },
@@ -913,8 +913,8 @@
       "kind": "graph"
     },
     {
-      "id": "motion/av/audio-to-video-12s",
-      "path": "generated/workflows/motion/av/audio-to-video-12s.md",
+      "id": "motion/av/audio-to-video-8s",
+      "path": "generated/workflows/motion/av/audio-to-video-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
@@ -925,14 +925,14 @@
       "kind": "graph"
     },
     {
-      "id": "motion/av/dialogue-12s",
-      "path": "generated/workflows/motion/av/dialogue-12s.md",
+      "id": "motion/av/dialogue-8s",
+      "path": "generated/workflows/motion/av/dialogue-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
     {
-      "id": "motion/av/first-last-12s",
-      "path": "generated/workflows/motion/av/first-last-12s.md",
+      "id": "motion/av/first-last-8s",
+      "path": "generated/workflows/motion/av/first-last-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
@@ -949,8 +949,8 @@
       "kind": "graph"
     },
     {
-      "id": "motion/av/multishot-12s",
-      "path": "generated/workflows/motion/av/multishot-12s.md",
+      "id": "motion/av/multishot-8s",
+      "path": "generated/workflows/motion/av/multishot-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
@@ -961,8 +961,8 @@
       "kind": "graph"
     },
     {
-      "id": "motion/av/shorts-still-12s",
-      "path": "generated/workflows/motion/av/shorts-still-12s.md",
+      "id": "motion/av/shorts-still-8s",
+      "path": "generated/workflows/motion/av/shorts-still-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
@@ -973,14 +973,14 @@
       "kind": "graph"
     },
     {
-      "id": "motion/av/still-to-video-12s",
-      "path": "generated/workflows/motion/av/still-to-video-12s.md",
+      "id": "motion/av/still-to-video-8s",
+      "path": "generated/workflows/motion/av/still-to-video-8s.md",
       "lane": "motion",
       "kind": "graph"
     },
     {
-      "id": "motion/av/text-to-video-12s",
-      "path": "generated/workflows/motion/av/text-to-video-12s.md",
+      "id": "motion/av/text-to-video-8s",
+      "path": "generated/workflows/motion/av/text-to-video-8s.md",
       "lane": "motion",
       "kind": "graph"
     },

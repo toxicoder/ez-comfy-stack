@@ -318,7 +318,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        193,
         1
       ]
     },
@@ -577,7 +577,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -690,7 +690,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## dcc/depth-from-loader\n\nLab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n"
+        "## dcc/depth-from-loader\n\nLab envelope for Path B depth-guided 8.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n"
       ],
       "title": "Operator note"
     },
@@ -863,7 +863,7 @@
         "The start image holds as the first frame. The first-person body-cam surges into a high-speed parkour sprint across a sunlit tropical terrace, sun-washed teal sleeves and matching gloves pumping hard at the lower edges while warm gold-cyan holographic glyph motes streak from the wrists. The camera leaps a gap between unmarked rooftops; boots flash through the bottom of the frame as they land and the run never stops. Warm wind shoves the coat, each footfall ticks warm grit, and breath sits close to the lens. Continuous body-cam tracking, no cut. No music and no score.",
         true,
         "i2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "world SFX matching the start image, no score",
         "none",
         "dcc/depth-from-loader"
@@ -1333,7 +1333,7 @@
   "extra": {
     "lab_profile": "dcc/depth-from-loader",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## dcc/depth-from-loader\n\nLab envelope for Path B depth-guided 12.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n",
+    "lab_note": "## dcc/depth-from-loader\n\nLab envelope for Path B depth-guided 8.00s print from in-canvas loaders. LTX canvas **1280x704** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only. Prefix ``ez_iclora_guide``.\n\nOccupancy: **ltx**. EZDCCLoadGuideStill ``first`` \u2192 OccupancyGate. EZDCCLoadGuideVideo returns the ``depth.mp4`` path (do not decode 120 frames). This tree does **not** vendor Lightricks UUID subgraphs.\n\n  Templates \u2192 LTX-2.5 \u2192 LTX-2.5_ICLoRA_Union_Control_Distilled.json\n\nOpt-in: ``./scripts/manage.sh download-ltx --tier iclora``. Refuse 19B Union. No 1280x720. Stop Klein first.\n\nLTX Community License: $10M COMPANY cap, disclose AI-generated media, do not strip provenance, do not distill.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 IC-LoRA envelope from EZDCCLoadGuideStill + depth video path.",
     "lab_app_mode": {

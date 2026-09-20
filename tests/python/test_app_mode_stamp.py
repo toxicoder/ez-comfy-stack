@@ -377,7 +377,7 @@ def test_required_loadimage_is_first_app_widget() -> None:
     assert _widget_names(_load("stills/text-swap.json"))[0] == "image"
     assert _widget_names(_load("motion/silent/still-to-video-5s.json"))[0] == "image"
     assert _widget_names(_load("dcc/clay-hero.json"))[0] == "image"
-    flf = _widget_names(_load("motion/av/first-last-12s.json"))
+    flf = _widget_names(_load("motion/av/first-last-8s.json"))
     assert flf[0] == "image"
     assert flf[1] == "image"
     still = _widget_names(_load("stills/still-draft.json"))
@@ -415,13 +415,13 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
 
 
 def test_ltx_showcase_app_widgets() -> None:
-    flf = _load("motion/av/first-last-12s.json")
+    flf = _load("motion/av/first-last-8s.json")
     names = _widget_names(flf)
     labels = _labels(flf)
     assert names.count("image") == 2
     assert "First frame" in labels
     assert "Last frame" in labels
-    a2v = _load("motion/av/audio-to-video-12s.json")
+    a2v = _load("motion/av/audio-to-video-8s.json")
     assert "audio" in _widget_names(a2v)
     assert any("audio" in label.lower() for label in _labels(a2v))
 
@@ -429,11 +429,11 @@ def test_ltx_showcase_app_widgets() -> None:
 def test_i2v_hides_style_t2v_keeps_it() -> None:
     i2v = _widget_names(_load("motion/silent/still-to-video-5s.json"))
     assert "style" not in i2v
-    ltx_i2v = _widget_names(_load("motion/av/still-to-video-12s.json"))
+    ltx_i2v = _widget_names(_load("motion/av/still-to-video-8s.json"))
     assert "style" not in ltx_i2v
     t2v = _widget_names(_load("motion/silent/text-to-video-5s.json"))
     assert "style" in t2v
-    ltx_t2v = _widget_names(_load("motion/av/text-to-video-12s.json"))
+    ltx_t2v = _widget_names(_load("motion/av/text-to-video-8s.json"))
     assert "style" in ltx_t2v
     still = _widget_names(_load("stills/still-draft.json"))
     assert "style" in still

@@ -19,7 +19,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVImgToVideo": _n(
             "LTX Image to Video",
             "Condition LTX on a start image and allocate the video latent.",
-            lab="÷32 spatial, length 1+8n. 1280×704×121 is the lab printer. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.",
+            lab="÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "LTX prompt cond."),
@@ -33,7 +33,7 @@ def ltx_nodes() -> dict[str, Any]:
             widgets=[
                 _w("width", index=0, typ="INT", rng="1280 / 768", desc="Frame width.", gen="Must be ÷32. 720p width is fine; height 720 is not."),
                 _w("height", index=1, typ="INT", rng="704 / 1280", desc="Frame height.", gen="704 not 720. Shorts 1280."),
-                _w("length", index=2, typ="INT", rng="121", desc="Frame count.", gen="1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length."),
+                _w("length", index=2, typ="INT", rng="193 Apps / 121 film = 1+8n", desc="Frame count.", gen="Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length."),
                 _w("batch_size", index=3, typ="INT", rng="1", desc="Clips per Queue.", gen="Stay 1."),
             ],
         ),
@@ -72,7 +72,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVAudioVAEDecode": _n(
             "LTX Audio VAE Decode",
             "Decode LTX audio latent to AUDIO for the MP4 mux.",
-            lab="Skipped on motion/av/audio-to-video-12s (original wav is muxed).",
+            lab="Skipped on motion/av/audio-to-video-8s (original wav is muxed).",
             origin="comfy-extras",
             sockets=[
                 _s("samples", "LATENT", "in", "Audio latent."),
@@ -99,7 +99,7 @@ def ltx_nodes() -> dict[str, Any]:
                 _s("Latent", "LATENT", "out", "Empty audio latent."),
             ],
             widgets=[
-                _w("frames", index=0, typ="INT", rng="121", desc="Must match video length.", gen="Mismatch with LTXVImgToVideo length breaks concat."),
+                _w("frames", index=0, typ="INT", rng="193 Apps / 121 film", desc="Must match video length.", gen="Mismatch with LTXVImgToVideo length breaks concat."),
                 _w("frame_rate", index=1, typ="FLOAT", rng="24.0", desc="Audio timeline fps.", gen="Keep 24 with the rest of the printer."),
                 _w("batch_size", index=2, typ="INT", rng="1", desc="Clips per Queue.", gen="Stay 1."),
             ],
@@ -107,7 +107,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVAddGuide": _n(
             "LTX Add Guide",
             "Pin a still onto a latent frame (first-last-frame).",
-            lab="motion/av/first-last-12s uses index 0 then -1 on the video latent before audio concat.",
+            lab="motion/av/first-last-8s uses index 0 then -1 on the video latent before audio concat.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "Cond in."),
@@ -127,7 +127,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVModalityGuidance": _n(
             "LTX Modality Guidance",
             "Couple audio and video during sampling (dialogue graphs).",
-            lab="motion/av/dialogue-12s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.",
+            lab="motion/av/dialogue-8s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.",
             origin="comfy-extras",
             sockets=[
                 _s("model", "MODEL", "in", "LTX UNET."),

@@ -1,10 +1,10 @@
 ---
-title: "motion/av/shorts-still-12s"
+title: "motion/av/shorts-still-8s"
 description: "LTX-2.5 vertical 9:16 AV I2V ~5s"
 tags: [workflows, generated, comfyui, motion]
 ---
 
-# motion/av/shorts-still-12s
+# motion/av/shorts-still-8s
 
 **What's on this page**
 
@@ -18,22 +18,22 @@ tags: [workflows, generated, comfyui, motion]
 - **Queuing this filename** with known widgets
 - **Changing a parameter** with a documented generation effect
 
-**Who this is for:** studio users who loaded `motion/av/shorts-still-12s` from Apps or Workflows.
+**Who this is for:** studio users who loaded `motion/av/shorts-still-8s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/motion/av/shorts-still-12s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/motion/av/shorts-still-8s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
 
 ## Purpose
 
 Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
-## motion/av/shorts-still-12s
+## motion/av/shorts-still-8s
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-Vertical AV Shorts I2V (~12 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
+Vertical AV Shorts I2V (~8 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -46,7 +46,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 ## How to Queue
 
 1. `./scripts/manage.sh start` so `_lab` is seeded
-2. Load **motion/av/shorts-still-12s** from **Apps** or **Workflows**
+2. Load **motion/av/shorts-still-8s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
@@ -354,7 +354,7 @@ Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. 1280×704×121 is the lab printer. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -388,13 +388,13 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `193`
 
 #### `batch_size`
 
@@ -626,13 +626,13 @@ Allocate a silent/world-audio latent matching video length.
 
 #### `frames`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film.
 
 Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `193`
 
 #### `frame_rate`
 
@@ -694,16 +694,16 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/shorts-still-12s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are inv…`
+**This graph:** `## motion/av/shorts-still-8s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are inva…`
 
 ```text
-## motion/av/shorts-still-12s
+## motion/av/shorts-still-8s
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 LTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).
 
-Vertical AV Shorts I2V (~12 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
+Vertical AV Shorts I2V (~8 s). LTX-2.5 distilled. Community License — not Apache. $10M cap.
 LoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
@@ -842,7 +842,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 8 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -902,13 +902,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 12 seconds, 24 fps.
+Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps, 9:16`
+**This graph:** `8 seconds, 24 fps, 9:16`
 
 #### `audio_notes`
 
@@ -916,7 +916,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 8 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `world SFX matching the start image, no score`
 
@@ -1094,7 +1094,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-**This graph:** `motion/av/shorts-still-12s`
+**This graph:** `motion/av/shorts-still-8s`
 
 ### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
 
@@ -1102,7 +1102,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-8s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

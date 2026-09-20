@@ -1,8 +1,8 @@
 {
-  "id": "shorts-still-12s",
-  "revision": 6,
-  "last_node_id": 24,
-  "last_link_id": 40,
+  "id": "audio-to-video-8s",
+  "revision": 12,
+  "last_node_id": 26,
+  "last_link_id": 44,
   "nodes": [
     {
       "id": 1,
@@ -129,7 +129,7 @@
           "type": "IMAGE",
           "links": [
             5,
-            40
+            44
           ],
           "slot_index": 0
         },
@@ -147,14 +147,14 @@
         "example.png",
         "image"
       ],
-      "title": "Start frame"
+      "title": "Start image"
     },
     {
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        742
+        466
       ],
       "size": [
         420,
@@ -192,7 +192,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The start image holds as the first frame in vertical Shorts framing. World SFX matching the start image sit under a slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score."
+        "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Eight seconds."
       ],
       "title": "Motion / prompt"
     },
@@ -201,7 +201,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         1088,
-        1266
+        710
       ],
       "size": [
         420,
@@ -281,7 +281,7 @@
         {
           "name": "width",
           "type": "INT",
-          "link": 32,
+          "link": 36,
           "widget": {
             "name": "width"
           }
@@ -289,7 +289,7 @@
         {
           "name": "height",
           "type": "INT",
-          "link": 33,
+          "link": 37,
           "widget": {
             "name": "height"
           }
@@ -321,14 +321,14 @@
           "slot_index": 2
         }
       ],
-      "title": "Vertical I2V (9:16)",
+      "title": "LTX Img\u2192Video condition",
       "properties": {
         "Node name for S&R": "LTXVImgToVideo"
       },
       "widgets_values": [
-        768,
         1280,
-        289,
+        704,
+        193,
         1
       ]
     },
@@ -492,7 +492,7 @@
       "type": "SaveImage",
       "pos": [
         2668,
-        572
+        802
       ],
       "size": [
         280,
@@ -513,7 +513,7 @@
         "Node name for S&R": "SaveImage"
       },
       "widgets_values": [
-        "ez_ltx_hero_frames"
+        "ez_ltx_a2v_frames"
       ],
       "title": "Save frames (secondary)"
     },
@@ -537,8 +537,7 @@
           "name": "VAE",
           "type": "VAE",
           "links": [
-            19,
-            28
+            33
           ],
           "slot_index": 0
         }
@@ -550,47 +549,6 @@
         "ltx-2.5-audio-vae-bf16.safetensors"
       ],
       "title": "LTX-2.5 audio VAE"
-    },
-    {
-      "id": 14,
-      "type": "LTXVEmptyLatentAudio",
-      "pos": [
-        1580,
-        820
-      ],
-      "size": [
-        300,
-        130
-      ],
-      "flags": {},
-      "order": 9,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 19
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Latent",
-          "type": "LATENT",
-          "links": [
-            21
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVEmptyLatentAudio"
-      },
-      "widgets_values": [
-        289,
-        24.0,
-        1
-      ],
-      "title": "Empty LTX audio latent"
     },
     {
       "id": 15,
@@ -615,7 +573,7 @@
         {
           "name": "audio_latent",
           "type": "LATENT",
-          "link": 21
+          "link": 34
         }
       ],
       "outputs": [
@@ -667,9 +625,7 @@
         {
           "name": "audio_latent",
           "type": "LATENT",
-          "links": [
-            27
-          ],
+          "links": [],
           "slot_index": 1
         }
       ],
@@ -684,7 +640,7 @@
       "type": "Note",
       "pos": [
         40,
-        1396
+        1260
       ],
       "size": [
         960,
@@ -699,7 +655,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/shorts-still-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nVertical AV Shorts I2V (~12 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## motion/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates \u2192 LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -726,7 +682,7 @@
         {
           "name": "audio",
           "type": "AUDIO",
-          "link": 29,
+          "link": 35,
           "shape": 7
         },
         {
@@ -756,7 +712,7 @@
       "widgets_values": {
         "frame_rate": 24,
         "loop_count": 0,
-        "filename_prefix": "ez_shorts_ltx_video",
+        "filename_prefix": "ez_ltx_a2v",
         "format": "video/h264-mp4",
         "pix_fmt": "yuv420p",
         "crf": 18,
@@ -772,7 +728,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         620,
-        742
+        466
       ],
       "size": [
         420,
@@ -785,7 +741,7 @@
         {
           "name": "duration_hint",
           "type": "STRING",
-          "link": 34,
+          "link": 38,
           "widget": {
             "name": "duration_hint"
           }
@@ -793,7 +749,7 @@
         {
           "name": "image_desc",
           "type": "STRING",
-          "link": 36
+          "link": 40
         }
       ],
       "outputs": [
@@ -812,64 +768,22 @@
       },
       "widgets_values": [
         "custom",
-        "The start image holds as the first frame in vertical Shorts framing. World SFX matching the start image sit under a slow push-in. Keep every object and surface from the start image; do not redesign. No music and no score.",
-        true,
+        "The start image holds as the first frame. The subject listens and moves with the loaded soundtrack: modest head motion, fabric hush, locked wardrobe and set. Picture follows the audio. Keep every object and surface from the start image; do not redesign. Mouths will not match. No extra music. Eight seconds.",
+        false,
         "i2v",
-        "12 seconds, 24 fps, 9:16",
-        "world SFX matching the start image, no score",
+        "8 seconds, 24 fps",
+        "use the loaded clip; do not invent a score",
         "none",
-        "motion/av/shorts-still-12s"
+        "motion/av/audio-to-video-8s"
       ],
       "title": "LTX Prompt Enhance"
-    },
-    {
-      "id": 20,
-      "type": "LTXVAudioVAEDecode",
-      "pos": [
-        2996,
-        572
-      ],
-      "size": [
-        320,
-        66
-      ],
-      "flags": {},
-      "order": 19,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 27
-        },
-        {
-          "name": "audio_vae",
-          "type": "VAE",
-          "link": 28
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Audio",
-          "type": "AUDIO",
-          "links": [
-            29
-          ],
-          "slot_index": 0
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LTXVAudioVAEDecode"
-      },
-      "widgets_values": [],
-      "title": "Audio VAE Decode"
     },
     {
       "id": 21,
       "type": "EZNegativePromptEnhance",
       "pos": [
         620,
-        1828
+        1692
       ],
       "size": [
         420,
@@ -900,13 +814,89 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        true,
+        false,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
     },
     {
+      "type": "LoadAudio",
+      "pos": [
+        40,
+        968
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            32,
+            35
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "ez_a2v_bed.wav"
+      ],
+      "title": "Audio file",
       "id": 22,
+      "order": 20
+    },
+    {
+      "type": "LTXVAudioVAEEncode",
+      "pos": [
+        40,
+        1122
+      ],
+      "size": [
+        300,
+        66
+      ],
+      "flags": {},
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 32
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEEncode"
+      },
+      "widgets_values": [],
+      "title": "Encode + freeze bed",
+      "id": 23,
+      "order": 21
+    },
+    {
+      "id": 24,
       "type": "EZQuality",
       "pos": [
         40.0,
@@ -937,7 +927,7 @@
       "title": "Quality"
     },
     {
-      "id": 23,
+      "id": 25,
       "type": "EZVideoFormat",
       "pos": [
         1580,
@@ -948,7 +938,7 @@
         180
       ],
       "flags": {},
-      "order": 23,
+      "order": 25,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -956,7 +946,7 @@
           "name": "width",
           "type": "INT",
           "links": [
-            32
+            36
           ],
           "slot_index": 0
         },
@@ -964,7 +954,7 @@
           "name": "height",
           "type": "INT",
           "links": [
-            33
+            37
           ],
           "slot_index": 1
         },
@@ -972,7 +962,7 @@
           "name": "hint",
           "type": "STRING",
           "links": [
-            34
+            38
           ],
           "slot_index": 2
         },
@@ -988,25 +978,25 @@
       },
       "widgets_values": [
         "LTX-2.5",
-        "LTX \u00b7 9:16 Shorts (768\u00d71280)",
-        768,
-        1280
+        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        1280,
+        704
       ],
       "title": "Format / platform"
     },
     {
-      "id": 24,
+      "id": 26,
       "type": "EZImageDescribe",
       "pos": [
         620,
-        1234
+        958
       ],
       "size": [
         280,
         90
       ],
       "flags": {},
-      "order": 24,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -1020,7 +1010,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 40
+          "link": 44
         }
       ],
       "outputs": [
@@ -1028,7 +1018,7 @@
           "name": "caption",
           "type": "STRING",
           "links": [
-            36
+            40
           ],
           "slot_index": 0
         }
@@ -1148,27 +1138,11 @@
       "IMAGE"
     ],
     [
-      19,
-      13,
-      0,
-      14,
-      0,
-      "VAE"
-    ],
-    [
       20,
       7,
       2,
       15,
       0,
-      "LATENT"
-    ],
-    [
-      21,
-      14,
-      0,
-      15,
-      1,
       "LATENT"
     ],
     [
@@ -1212,30 +1186,6 @@
       "STRING"
     ],
     [
-      27,
-      16,
-      1,
-      20,
-      0,
-      "LATENT"
-    ],
-    [
-      28,
-      13,
-      0,
-      20,
-      1,
-      "VAE"
-    ],
-    [
-      29,
-      20,
-      0,
-      18,
-      1,
-      "AUDIO"
-    ],
-    [
       30,
       21,
       0,
@@ -1253,41 +1203,73 @@
     ],
     [
       32,
+      22,
+      0,
       23,
+      0,
+      "AUDIO"
+    ],
+    [
+      33,
+      13,
+      0,
+      23,
+      1,
+      "VAE"
+    ],
+    [
+      34,
+      23,
+      0,
+      15,
+      1,
+      "LATENT"
+    ],
+    [
+      35,
+      22,
+      0,
+      18,
+      1,
+      "AUDIO"
+    ],
+    [
+      36,
+      25,
       0,
       7,
       4,
       "INT"
     ],
     [
-      33,
-      23,
+      37,
+      25,
       1,
       7,
       5,
       "INT"
     ],
     [
-      34,
-      23,
+      38,
+      25,
       2,
       19,
       0,
       "STRING"
     ],
     [
-      36,
-      24,
+      40,
+      26,
       0,
       19,
       1,
       "STRING"
     ],
     [
-      40,
+      44,
       4,
       0,
-      24,
+      26,
       1,
       "IMAGE"
     ]
@@ -1295,11 +1277,11 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "motion/av/shorts-still-12s",
+    "lab_profile": "motion/av/audio-to-video-8s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/shorts-still-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 768x1280 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nVertical AV Shorts I2V (~12 s). LTX-2.5 distilled. Community License \u2014 not Apache. $10M cap.\nLoadImage: `ez_shorts_still_*.png`. Prefix `ez_shorts_ltx_video`. World audio muxed into MP4.\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\nDisclose AI-generated media; do not strip provenance; do not distill. No score.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## motion/av/audio-to-video-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${COMFY_OUTPUT_DIR}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nAudio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.\nTwo-stage A2V with frozen tokens in both stages lives in Comfy **Templates \u2192 LTX-2.5**. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n\nHandoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unload music occupancy first.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
-    "lab_description": "LTX-2.5 vertical 9:16 AV I2V ~5s",
+    "lab_description": "LTX-2.5 A2V freeze: encode bed, mux original waveform\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1316,11 +1298,11 @@
           "image",
           {
             "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Start frame"
+            "label": "Start image"
           }
         ],
         [
-          22,
+          24,
           "quality",
           {
             "label": "Quality",
@@ -1345,7 +1327,7 @@
           }
         ],
         [
-          23,
+          25,
           "format",
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
@@ -1353,7 +1335,7 @@
           }
         ],
         [
-          24,
+          26,
           "enable",
           {
             "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
@@ -1378,6 +1360,14 @@
           }
         ],
         [
+          22,
+          "audio",
+          {
+            "description": "Wav/mp3 already in COMFY_OUTPUT_DIR/input (container /inputs). ~5 s. Original waveform is muxed into the MP4.",
+            "label": "Audio file"
+          }
+        ],
+        [
           9,
           "seed",
           {
@@ -1386,7 +1376,7 @@
           }
         ],
         [
-          23,
+          25,
           "width",
           {
             "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
@@ -1394,7 +1384,7 @@
           }
         ],
         [
-          23,
+          25,
           "height",
           {
             "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
@@ -1408,7 +1398,7 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "motion/av/shorts-still-12s",
+    "lab_rel": "motion/av/audio-to-video-8s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

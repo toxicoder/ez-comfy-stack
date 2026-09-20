@@ -54,19 +54,19 @@ PIN_ENHANCE_OFF = frozenset(
         "films/still-here",
         "films/switchyard",
         "stills/talking-head",
-        "motion/av/dialogue-12s",
-        "motion/av/multishot-12s",
+        "motion/av/dialogue-8s",
+        "motion/av/multishot-8s",
         "motion/av/product-hero",
-        "motion/av/first-last-12s",
-        "motion/av/audio-to-video-12s",
+        "motion/av/first-last-8s",
+        "motion/av/audio-to-video-8s",
         "motion/loops/gif-loop",
         "motion/loops/bumper-loop",
         "motion/loops/sticker-loop",
         "motion/silent/orbit-still-5s",
         "motion/silent/push-in-still-5s",
         "motion/silent/parallax-still-5s",
-        "dcc/depth-control-12s",
-        "dcc/canny-control-12s",
+        "dcc/depth-control-8s",
+        "dcc/canny-control-8s",
         "dcc/depth-control-shorts",
         "audio/podcast/two-host-episode",
         "audio/podcast/radio-drama",
@@ -1303,12 +1303,12 @@ def main() -> None:
     wan_i2v(lab_json("motion/silent/vace-join.json"), WAN_VACE)
     wan_i2v(lab_json("optional/still-to-video-a14b.json"), WAN_I2V)
     ltx_i2v(
-        lab_json("motion/av/still-to-video-12s.json"),
+        lab_json("motion/av/still-to-video-8s.json"),
         LTX_I2V,
         LTX_AUDIO_HINT,
         "Motion / prompt",
     )
-    ltx_t2v(lab_json("motion/av/text-to-video-12s.json"))
+    ltx_t2v(lab_json("motion/av/text-to-video-8s.json"))
     ltx_i2v(
         lab_json("motion/av/still-to-shot.json"),
         GOSEE_LTX_I2V_01,

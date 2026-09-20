@@ -192,7 +192,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Macro of an unmarked surface. Soft taps, close mic. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign."
+        "Macro of an unmarked surface. Soft taps, close mic. No score. Eight seconds. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Motion / prompt"
     },
@@ -328,7 +328,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        193,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -699,7 +699,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/av/asmr-macro\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nQuiet macro foley AV ~12 s. Lab size **1280\u00d7704**. Prefix `ez_asmr`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/av/asmr-macro\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nQuiet macro foley AV ~8 s. Lab size **1280\u00d7704**. Prefix `ez_asmr`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -812,10 +812,10 @@
       },
       "widgets_values": [
         "custom",
-        "Macro of an unmarked surface. Soft taps, close mic. No score. Twelve seconds. Keep every object and surface from the start image; do not redesign.",
+        "Macro of an unmarked surface. Soft taps, close mic. No score. Eight seconds. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "soft taps, close mic, no score",
         "none",
         "creator/av/asmr-macro"
@@ -1297,9 +1297,9 @@
   "extra": {
     "lab_profile": "creator/av/asmr-macro",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## creator/av/asmr-macro\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nQuiet macro foley AV ~12 s. Lab size **1280\u00d7704**. Prefix `ez_asmr`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/av/asmr-macro\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nQuiet macro foley AV ~8 s. Lab size **1280\u00d7704**. Prefix `ez_asmr`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
-    "lab_description": "Quiet macro foley AV ~12 s",
+    "lab_description": "Quiet macro foley AV ~8 s",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",

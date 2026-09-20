@@ -191,7 +191,7 @@ def _set_prompt(
     values[0] = prompt
     values[1] = enhance
     values[2] = "i2v" if mode in {"i2v", "flf", "a2v"} else "t2v"
-    values[3] = "12 seconds, 24 fps"
+    values[3] = "8 seconds, 24 fps"
     values[4] = audio_hint
     values[5] = "none"
     enh["widgets_values"] = values
@@ -269,17 +269,17 @@ def _polish_t2v(graph: dict, stem: str, prefix: str, prompt: str, audio: str, no
 
 
 def build_dialogue() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/dialogue-12s")
+    graph = _clone("motion/av/text-to-video-8s", "motion/av/dialogue-8s")
     _insert_modality(graph)
-    note = f"""## motion/av/dialogue-12s
+    note = f"""## motion/av/dialogue-8s
 
 {LTX_CANVAS}
 
 {PREVIEW}
 
-LTX-2.5 distilled **dialogue** T2V (~12 s). Joint AV speech Wan cannot mux. {LICENSE}
+LTX-2.5 distilled **dialogue** T2V (~8 s). Joint AV speech Wan cannot mux. {LICENSE}
 {MODELS}
-289 frames @ 24 fps. Authored quoted line; mouths will not match. {PIN_OFF}
+193 frames @ 24 fps. Authored quoted line; mouths will not match. {PIN_OFF}
 Modality guidance (A/V coupling, scale 3.0) is on — one extra forward pass per step.
 Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 
@@ -287,7 +287,7 @@ Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 """
     _polish_t2v(
         graph,
-        "motion/av/dialogue-12s",
+        "motion/av/dialogue-8s",
         "ez_ltx_dialogue",
         LTX_DIALOGUE,
         LTX_DIALOGUE_AUDIO,
@@ -297,22 +297,22 @@ Two-stage DFR stays in Comfy **Templates → LTX-2.5**.
 
 
 def build_multishot() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/multishot-12s")
-    note = f"""## motion/av/multishot-12s
+    graph = _clone("motion/av/text-to-video-8s", "motion/av/multishot-8s")
+    note = f"""## motion/av/multishot-8s
 
 {LTX_CANVAS}
 
 {PREVIEW}
 
-LTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation. {LICENSE}
+LTX-2.5 distilled **native multishot** T2V (~8 s). Named cuts in one generation. {LICENSE}
 {MODELS}
-289 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. {PIN_OFF}
+193 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. {PIN_OFF}
 
 {OCCUPANCY}
 """
     _polish_t2v(
         graph,
-        "motion/av/multishot-12s",
+        "motion/av/multishot-8s",
         "ez_ltx_multishot",
         LTX_MULTISHOT,
         LTX_MULTISHOT_AUDIO,
@@ -322,7 +322,7 @@ LTX-2.5 distilled **native multishot** T2V (~12 s). Named cuts in one generation
 
 
 def build_product() -> None:
-    graph = _clone("motion/av/still-to-video-12s", "motion/av/product-hero")
+    graph = _clone("motion/av/still-to-video-8s", "motion/av/product-hero")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     loader["widgets_values"] = ["example.png", "image"]
@@ -340,7 +340,7 @@ def build_product() -> None:
 
 {PREVIEW}
 
-LTX-2.5 distilled **product hero** I2V (~12 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). {LICENSE}
+LTX-2.5 distilled **product hero** I2V (~8 s). LoadImage: `ez_packshot_*.png` from **stills/product-packshot** (or any tabletop still). {LICENSE}
 {MODELS}
 Slow orbit + table/glass SFX. Start image owns look. {PIN_OFF}
 
@@ -394,7 +394,7 @@ def _add_guide(title: str, pos: list[float], frame_idx: int) -> dict:
 
 
 def build_flf() -> None:
-    graph = _clone("motion/av/text-to-video-12s", "motion/av/first-last-12s")
+    graph = _clone("motion/av/text-to-video-8s", "motion/av/first-last-8s")
     empty = _node(graph, "EmptyLTXVLatentVideo")
     pos_enc = _node(graph, "CLIPTextEncode", "Positive")
     neg_enc = _node(graph, "CLIPTextEncode", "Negative")
@@ -461,13 +461,13 @@ def build_flf() -> None:
 
     _set_prefix(graph, "ez_ltx_flf")
     _set_prompt(graph, LTX_FLF, mode="i2v", audio_hint=LTX_FLF_AUDIO, enhance=False)
-    note = f"""## motion/av/first-last-12s
+    note = f"""## motion/av/first-last-8s
 
 {LTX_CANVAS}
 
 {PREVIEW}
 
-LTX-2.5 distilled **first-last-frame** AV (~12 s). Two Klein stills (hero 1280×704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. {LICENSE}
+LTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280×704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. {LICENSE}
 {MODELS}
 Guides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. {PIN_OFF}
 Official FLF2V subgraph stays in Comfy **Templates → LTX-2.5**.
@@ -475,11 +475,11 @@ Official FLF2V subgraph stays in Comfy **Templates → LTX-2.5**.
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 first-last-frame AV using core AddGuide nodes")
-    _dump("motion/av/first-last-12s", graph)
+    _dump("motion/av/first-last-8s", graph)
 
 
 def build_a2v() -> None:
-    graph = _clone("motion/av/still-to-video-12s", "motion/av/audio-to-video-12s")
+    graph = _clone("motion/av/still-to-video-8s", "motion/av/audio-to-video-8s")
     loader = _node(graph, "LoadImage")
     loader["title"] = "Start image"
     concat = _node(graph, "LTXVConcatAVLatent")
@@ -542,13 +542,13 @@ def build_a2v() -> None:
 
     _set_prefix(graph, "ez_ltx_a2v")
     _set_prompt(graph, LTX_A2V, mode="i2v", audio_hint=LTX_A2V_AUDIO, enhance=False)
-    note = f"""## motion/av/audio-to-video-12s
+    note = f"""## motion/av/audio-to-video-8s
 
 {LTX_CANVAS}
 
 {PREVIEW}
 
-LTX-2.5 distilled **audio-to-video freeze** (~12 s). Drop a ~12 s wav/mp3 in `${{COMFY_OUTPUT_DIR}}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. {LICENSE}
+LTX-2.5 distilled **audio-to-video freeze** (~8 s). Drop a ~8 s wav/mp3 in `${{COMFY_OUTPUT_DIR}}/input` as `ez_a2v_bed.wav` (or pick it on **Audio file**). Optional start still locks look. {LICENSE}
 {MODELS}
 Audio VAE **encodes** the clip into the joint latent. The MP4 muxes the **original** waveform (no `LTXVAudioVAEDecode`). Residual denoise on the audio latent is possible; picture still follows the bed. Mouths will not match. Banned lip-sync OSS stays out.
 Two-stage A2V with frozen tokens in both stages lives in Comfy **Templates → LTX-2.5**. {PIN_OFF}
@@ -558,7 +558,7 @@ Handoff from **stills/talking-head** or any Klein still. ACE-Step bed: stop/unlo
 {OCCUPANCY}
 """
     _set_note(graph, note, "LTX-2.5 A2V freeze: encode bed, mux original waveform")
-    _dump("motion/av/audio-to-video-12s", graph)
+    _dump("motion/av/audio-to-video-8s", graph)
 
 
 def patch_talking_head() -> None:
@@ -566,9 +566,9 @@ def patch_talking_head() -> None:
     graph = _load(path)
     extra = graph.setdefault("extra", {})
     note = str(extra.get("lab_note") or "")
-    if "motion/av/audio-to-video-12s" not in note:
+    if "motion/av/audio-to-video-8s" not in note:
         insert = (
-            "Real single-stage freeze is **motion/av/audio-to-video-12s** (LoadAudio + encode, mux original wav). "
+            "Real single-stage freeze is **motion/av/audio-to-video-8s** (LoadAudio + encode, mux original wav). "
         )
         note = note.replace(
             "Official two-stage A2V lives in Comfy Templates → LTX-2.5.",

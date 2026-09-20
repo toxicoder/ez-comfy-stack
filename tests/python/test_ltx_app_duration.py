@@ -1,4 +1,4 @@
-"""Standalone LTX Apps default to 12.00 s / 289 frames; films stay 5.00 s."""
+"""Standalone LTX Apps default to 8.00 s / 193 frames; films stay 5.00 s."""
 
 from __future__ import annotations
 
@@ -33,27 +33,27 @@ SUBS = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs"
 
 
 def test_app_and_film_frame_constants_match_duration_math() -> None:
-    assert DURATION_APP_S == 12.00
+    assert DURATION_APP_S == 8.00
     assert DURATION_DEFAULT_S == 5.00
-    assert FRAMES_APP == ltx_frames_for_duration(DURATION_APP_S) == 289
+    assert FRAMES_APP == ltx_frames_for_duration(DURATION_APP_S) == 193
     assert FRAMES_DEFAULT == ltx_frames_for_duration(DURATION_DEFAULT_S) == 121
 
 
-def test_ltx_enhance_defaults_to_twelve_seconds() -> None:
+def test_ltx_enhance_defaults_to_eight_seconds() -> None:
     hint = EZLTXPromptEnhance.INPUT_TYPES()["required"]["duration_hint"][1]["default"]
-    assert hint == "12 seconds, 24 fps"
+    assert hint == "8 seconds, 24 fps"
 
 
 def test_film_print_template_stays_concat_safe_five_seconds() -> None:
     assert LTX_PRINT_TEMPLATE == "motion/av/still-to-shot.json"
-    assert ICLORA_TEMPLATE == "dcc/depth-control-12s.json"
+    assert ICLORA_TEMPLATE == "dcc/depth-control-8s.json"
     shot = json.loads(lab_json("motion/av/still-to-shot.json").read_text(encoding="utf-8"))
     lengths = [ltx_length(n) for n in iter_nodes(shot)]
     assert FRAMES_DEFAULT in lengths
     assert FRAMES_APP not in {v for v in lengths if v is not None}
 
 
-def test_standalone_ltx_apps_are_twelve_seconds() -> None:
+def test_standalone_ltx_apps_are_eight_seconds() -> None:
     apps: list[str] = []
     for path in lab_graph_paths():
         rel = lab_rel_of(path)
@@ -67,11 +67,11 @@ def test_standalone_ltx_apps_are_twelve_seconds() -> None:
                 continue
             assert length == FRAMES_APP, (rel, node.get("type"), length)
         blob = json.dumps(graph)
-        assert "12 seconds, 24 fps" in blob or "Twelve seconds." in blob or rel.endswith(
-            "-12s"
+        assert "8 seconds, 24 fps" in blob or "Eight seconds." in blob or rel.endswith(
+            "-8s"
         )
     assert "stills/talking-head" in apps
-    assert "motion/av/still-to-video-12s" in apps
+    assert "motion/av/still-to-video-8s" in apps
     assert "motion/av/still-to-shot" not in apps
     assert not any(rel.startswith("films/") for rel in apps)
     assert len(apps) >= 30
@@ -102,9 +102,10 @@ def test_renamed_ltx_app_files_exist_and_old_stems_are_gone() -> None:
         assert extra.get("lab_rel") == new
 
 
-def test_ltx_av_subgraph_is_twelve_seconds() -> None:
-    path = SUBS / "ltx-av-12s.json"
+def test_ltx_av_subgraph_is_eight_seconds() -> None:
+    path = SUBS / "ltx-av-8s.json"
     assert path.is_file()
+    assert not (SUBS / "ltx-av-12s.json").is_file()
     assert not (SUBS / "ltx-av-5s.json").is_file()
     graph = json.loads(path.read_text(encoding="utf-8"))
     lengths = [ltx_length(n) for n in iter_nodes(graph)]

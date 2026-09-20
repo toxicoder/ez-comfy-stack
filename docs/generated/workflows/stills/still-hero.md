@@ -36,7 +36,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Widgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.
 SaveImage prefix: ez_still_hero.
 
-Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-12s.
+Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-8s.
 Distilled is 4-step-optimized; extra steps are optional.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 
@@ -554,7 +554,7 @@ Models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2
 Widgets: seed 42 fixed · CFG 1.0 · 8 steps · 1280x720 · batch 1.
 SaveImage prefix: ez_still_hero.
 
-Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-12s.
+Feed ez_still_hero_*.png into motion/silent/still-to-video-5s or motion/av/still-to-video-8s.
 Distilled is 4-step-optimized; extra steps are optional.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
 

@@ -1,4 +1,4 @@
-"""Standalone LTX App duration: 12.00 s / 289 frames.
+"""Standalone LTX App duration: 8.00 s / 193 frames.
 
 Not collected by pytest (leading underscore). Tests and the one-shot
 patcher import this. Film / concat printers stay 5.00 s / 121 frames.
@@ -29,24 +29,34 @@ LTX_LENGTH_TYPES = frozenset(
     {"LTXVImgToVideo", "EmptyLTXVLatentVideo", "LTXVEmptyLatentAudio"}
 )
 FILM_KEEP_RELS = frozenset({"motion/av/still-to-shot"})
-SUBGRAPH_APP = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-12s.json"
-SUBGRAPH_APP_OLD = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-5s.json"
+SUBGRAPH_APP = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-8s.json"
+SUBGRAPH_APP_OLD = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-12s.json"
+SUBGRAPH_APP_LEGACY = ROOT / "custom_nodes" / "ez_studio_blocks" / "subgraphs" / "ltx-av-5s.json"
 
-# Old lab-rel → 12s lab-rel (full paths only; do not stem-rewrite Wan twins).
+# Old lab-rel → 8s lab-rel (full paths only; do not stem-rewrite Wan twins).
 APP_REL_RENAMES: dict[str, str] = {
-    "motion/av/still-to-video-5s": "motion/av/still-to-video-12s",
-    "motion/av/text-to-video-5s": "motion/av/text-to-video-12s",
-    "motion/av/shorts-still-5s": "motion/av/shorts-still-12s",
-    "motion/av/dialogue-5s": "motion/av/dialogue-12s",
-    "motion/av/multishot-5s": "motion/av/multishot-12s",
-    "motion/av/first-last-5s": "motion/av/first-last-12s",
-    "motion/av/audio-to-video-5s": "motion/av/audio-to-video-12s",
-    "dcc/canny-control-5s": "dcc/canny-control-12s",
-    "dcc/depth-control-5s": "dcc/depth-control-12s",
+    "motion/av/still-to-video-12s": "motion/av/still-to-video-8s",
+    "motion/av/text-to-video-12s": "motion/av/text-to-video-8s",
+    "motion/av/shorts-still-12s": "motion/av/shorts-still-8s",
+    "motion/av/dialogue-12s": "motion/av/dialogue-8s",
+    "motion/av/multishot-12s": "motion/av/multishot-8s",
+    "motion/av/first-last-12s": "motion/av/first-last-8s",
+    "motion/av/audio-to-video-12s": "motion/av/audio-to-video-8s",
+    "dcc/canny-control-12s": "dcc/canny-control-8s",
+    "dcc/depth-control-12s": "dcc/depth-control-8s",
+    "motion/av/still-to-video-5s": "motion/av/still-to-video-8s",
+    "motion/av/text-to-video-5s": "motion/av/text-to-video-8s",
+    "motion/av/shorts-still-5s": "motion/av/shorts-still-8s",
+    "motion/av/dialogue-5s": "motion/av/dialogue-8s",
+    "motion/av/multishot-5s": "motion/av/multishot-8s",
+    "motion/av/first-last-5s": "motion/av/first-last-8s",
+    "motion/av/audio-to-video-5s": "motion/av/audio-to-video-8s",
+    "dcc/canny-control-5s": "dcc/canny-control-8s",
+    "dcc/depth-control-5s": "dcc/depth-control-8s",
 }
 
-_HINT_RE = re.compile(r"\b5 seconds, 24 fps")
-_FIVE_CLOSE_RE = re.compile(r"Five seconds\.")
+_HINT_RE = re.compile(r"\b(?:5|12) seconds, 24 fps")
+_CLOSE_RE = re.compile(r"(?:Five|Twelve) seconds\.")
 
 
 def iter_nodes(graph: MappingLike) -> list[dict[str, Any]]:
@@ -127,11 +137,11 @@ def ltx_length(node: MappingLike) -> int | None:
 
 
 def apply_ltx_app_length(graph: MappingLike, frames: int = FRAMES_APP) -> None:
-    """Stamp ``frames`` onto LTX video/audio latents and 12 s duration copy.
+    """Stamp ``frames`` onto LTX video/audio latents and 8 s duration copy.
 
     Args:
         graph: Parsed workflow or subgraph wrapper (mutated in place).
-        frames: Legal ``1+8n`` length (lab App default 289).
+        frames: Legal ``1+8n`` length (lab App default 193).
     """
     for node in iter_nodes(graph):
         ntype = str(node.get("type") or "")
@@ -143,8 +153,11 @@ def apply_ltx_app_length(graph: MappingLike, frames: int = FRAMES_APP) -> None:
                 values[0] = frames
             _rewrite_widget_strings(values)
         title = node.get("title")
-        if isinstance(title, str) and "121" in title:
-            node["title"] = title.replace("121", str(frames))
+        if isinstance(title, str):
+            for old in ("289", "121"):
+                if old in title:
+                    node["title"] = title.replace(old, str(frames))
+                    break
     extra = graph.get("extra")
     if isinstance(extra, dict):
         for key in ("lab_note", "lab_description"):
@@ -165,16 +178,17 @@ def _rewrite_widget_strings(values: list[Any]) -> None:
         if not isinstance(val, str):
             continue
         updated = rewrite_operator_copy(val)
-        updated = _HINT_RE.sub("12 seconds, 24 fps", updated)
-        updated = _FIVE_CLOSE_RE.sub("Twelve seconds.", updated)
+        updated = _HINT_RE.sub("8 seconds, 24 fps", updated)
+        updated = _CLOSE_RE.sub("Eight seconds.", updated)
         values[i] = updated
 
 
 def rewrite_operator_copy(text: str) -> str:
-    """Rewrite 5 s / 121-frame operator copy to the 12 s App default.
+    """Rewrite 12 s / 289-frame operator copy to the 8 s App default.
 
-    Leaves 90s-film warnings and Wan 5 s smoke sentences that name silent
-    graphs. Does not rewrite numeric coordinates.
+    Also rewrites leftover 5 s App copy. Leaves 90s-film warnings and Wan
+    5 s smoke sentences that name silent graphs. Does not rewrite numeric
+    coordinates or Gemma4-12b filenames.
 
     Args:
         text: Note, description, or prompt.
@@ -183,24 +197,29 @@ def rewrite_operator_copy(text: str) -> str:
         Updated copy.
     """
     out = text
-    out = out.replace("121 frames", f"{FRAMES_APP} frames")
-    out = out.replace("**120 frames", f"**{FRAMES_APP} frames")
-    out = out.replace("120 frames @ 24 fps", f"{FRAMES_APP} frames @ 24 fps")
-    out = out.replace("~5 s", "~12 s")
-    out = out.replace("(~5 s)", "(~12 s)")
-    out = out.replace("5.00s print", "12.00s print")
-    out = out.replace("5.00 s print", "12.00 s print")
-    out = out.replace("depth-guided 5.00s", "depth-guided 12.00s")
-    out = out.replace("**portrait** 5.00s print", "**portrait** 12.00s print")
-    out = out.replace("canny**-guided 5.00s print", "canny**-guided 12.00s print")
-    out = out.replace("I2V smoke (~5 s)", "I2V smoke (~12 s)")
-    out = out.replace("T2V AV smoke (~5 s)", "T2V AV smoke (~12 s)")
-    out = out.replace("Vertical AV Shorts I2V (~5 s)", "Vertical AV Shorts I2V (~12 s)")
-    out = out.replace("US-safe 5.00s AV I2V print", "US-safe 12.00s AV I2V print")
-    out = out.replace("One LTX print is 5.00 s", "Standalone LTX Apps default to 12.00 s")
-    out = out.replace("(121 frames = 1+8n @ 24 fps)", f"({FRAMES_APP} frames = 1+8n @ 24 fps)")
-    out = out.replace("smoke/demo (121 frames)", f"smoke/demo ({FRAMES_APP} frames)")
-    out = out.replace("Widgets: seed 42 fixed · 121 frames", f"Widgets: seed 42 fixed · {FRAMES_APP} frames")
+    out = out.replace("289 frames", f"{FRAMES_APP} frames")
+    out = out.replace("**289 frames", f"**{FRAMES_APP} frames")
+    out = out.replace("~12 s", "~8 s")
+    out = out.replace("(~12 s)", "(~8 s)")
+    out = out.replace("12.00s print", "8.00s print")
+    out = out.replace("12.00 s print", "8.00 s print")
+    out = out.replace("depth-guided 12.00s", "depth-guided 8.00s")
+    out = out.replace("**portrait** 12.00s print", "**portrait** 8.00s print")
+    out = out.replace("canny**-guided 12.00s print", "canny**-guided 8.00s print")
+    out = out.replace("I2V smoke (~12 s)", "I2V smoke (~8 s)")
+    out = out.replace("T2V AV smoke (~12 s)", "T2V AV smoke (~8 s)")
+    out = out.replace("Vertical AV Shorts I2V (~12 s)", "Vertical AV Shorts I2V (~8 s)")
+    out = out.replace("US-safe 12.00s AV I2V print", "US-safe 8.00s AV I2V print")
+    out = out.replace("Standalone LTX Apps default to 12.00 s", "Standalone LTX Apps default to 8.00 s")
+    out = out.replace("default to 12.00 s", "default to 8.00 s")
+    out = out.replace("lab 12.00s", "lab 8.00s")
+    out = out.replace("AV ~12 s", "AV ~8 s")
+    out = out.replace("SFX ~12 s", "SFX ~8 s")
+    out = out.replace("(289 frames = 1+8n @ 24 fps)", f"({FRAMES_APP} frames = 1+8n @ 24 fps)")
+    out = out.replace("smoke/demo (289 frames)", f"smoke/demo ({FRAMES_APP} frames)")
+    out = out.replace("Widgets: seed 42 fixed · 289 frames", f"Widgets: seed 42 fixed · {FRAMES_APP} frames")
+    out = out.replace("Twelve seconds.", "Eight seconds.")
+    out = out.replace("12 seconds, 24 fps", "8 seconds, 24 fps")
     return out
 
 
@@ -249,7 +268,7 @@ def _replace_in_obj(obj: Any, old: str, new: str) -> None:
 def assert_frames_contract() -> None:
     """Raise if App/film frame constants drift from duration math."""
     if ltx_frames_for_duration(DURATION_APP_S) != FRAMES_APP:
-        raise AssertionError("FRAMES_APP must match ltx_frames_for_duration(12.00)")
+        raise AssertionError("FRAMES_APP must match ltx_frames_for_duration(8.00)")
     if ltx_frames_for_duration(5.00) != FRAMES_DEFAULT:
         raise AssertionError("FRAMES_DEFAULT must match ltx_frames_for_duration(5.00)")
 
@@ -278,7 +297,7 @@ def lab_apps() -> list[tuple[str, Path, dict[str, Any]]]:
 
 
 def apply_repo() -> list[str]:
-    """Patch standalone LTX Apps to 12 s and rename ``*-5s`` stems.
+    """Patch standalone LTX Apps to 8 s and rename ``*-12s`` stems.
 
     Returns:
         Human-readable actions taken.
@@ -300,20 +319,24 @@ def apply_repo() -> list[str]:
             dump_graph(path, graph)
             log.append(f"patched {rel}")
 
-    old_sub = SUBGRAPH_APP_OLD
     new_sub = SUBGRAPH_APP
-    sub_path = new_sub if new_sub.is_file() else old_sub
-    if sub_path.is_file():
+    sub_path = next(
+        (p for p in (new_sub, SUBGRAPH_APP_OLD, SUBGRAPH_APP_LEGACY) if p.is_file()),
+        None,
+    )
+    if sub_path is not None:
         graph = json.loads(sub_path.read_text(encoding="utf-8"))
         apply_ltx_app_length(graph)
         blob = json.dumps(graph)
-        blob = blob.replace("ltx-av-12s", "ltx-av-12s")
-        blob = blob.replace("still-to-video-5s", "still-to-video-12s")
+        blob = blob.replace("ltx-av-12s", "ltx-av-8s")
+        blob = blob.replace("ltx-av-5s", "ltx-av-8s")
+        blob = blob.replace("still-to-video-12s", "still-to-video-8s")
+        blob = blob.replace("still-to-video-5s", "still-to-video-8s")
         graph = json.loads(blob)
         dump_graph(new_sub, graph)
         if sub_path.resolve() != new_sub.resolve():
             sub_path.unlink()
-        log.append("patched subgraph ltx-av-12s")
+        log.append("patched subgraph ltx-av-8s")
     return log
 
 

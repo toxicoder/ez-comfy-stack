@@ -1,5 +1,5 @@
 {
-  "id": "first-last-12s",
+  "id": "first-last-8s",
   "revision": 11,
   "last_node_id": 26,
   "last_link_id": 44,
@@ -152,7 +152,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Twelve seconds. Keep every object and surface from the start image; do not redesign."
+        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Eight seconds. Keep every object and surface from the start image; do not redesign."
       ],
       "title": "Positive"
     },
@@ -252,7 +252,7 @@
       "widgets_values": [
         1280,
         704,
-        289
+        193
       ]
     },
     {
@@ -509,7 +509,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        193,
         24.0,
         1
       ],
@@ -622,7 +622,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## motion/av/first-last-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~12 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
+        "## motion/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -730,13 +730,13 @@
       },
       "widgets_values": [
         "custom",
-        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Twelve seconds. Keep every object and surface from the start image; do not redesign.",
+        "The first frame holds, then the wizard steps through the terrace toward the last-frame pose as glyph rings bloom and settle. Camera eases with the motion; no cut. A warm breeze and palm rustle sit under distant bay traffic, then a glyph chime as the last frame lands. Keep wardrobe and set locked to both stills. Unmarked surfaces. No music and no score. Eight seconds. Keep every object and surface from the start image; do not redesign.",
         false,
         "i2v",
-        "12 seconds, 24 fps",
+        "8 seconds, 24 fps",
         "terrace breeze, palm rustle, distant bay traffic, glyph chime at the last frame, no score",
         "none",
-        "motion/av/first-last-12s"
+        "motion/av/first-last-8s"
       ],
       "title": "LTX Prompt Enhance"
     },
@@ -1513,9 +1513,9 @@
   "groups": [],
   "config": {},
   "extra": {
-    "lab_profile": "motion/av/first-last-12s",
+    "lab_profile": "motion/av/first-last-8s",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## motion/av/first-last-12s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~12 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
+    "lab_note": "## motion/av/first-last-8s\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nAfter Queue, click **Save video (MP4) \u2014 open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.\n\nLTX-2.5 distilled **first-last-frame** AV (~8 s). Two Klein stills (hero 1280\u00d7704) pin start and end via `LTXVAddGuide` on the **video** latent, then audio concat. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\nModels: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.\nGuides are cropped after sample. Load **First frame** / **Last frame** (`ez_still_hero_*.png`). Same aspect. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.\nOfficial FLF2V subgraph stays in Comfy **Templates \u2192 LTX-2.5**.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\n",
     "lab_ltx_av": true,
     "lab_description": "LTX-2.5 first-last-frame AV using core AddGuide nodes\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_app_mode": {
@@ -1626,7 +1626,7 @@
       ]
     },
     "linearMode": true,
-    "lab_rel": "motion/av/first-last-12s",
+    "lab_rel": "motion/av/first-last-8s",
     "workflowRendererVersion": "Vue-corrected",
     "lab_quality": {
       "default": "lab"

@@ -85,7 +85,7 @@ flowchart TB
 
 ## Combined pipeline (Klein → Wan → LTX)
 
-Text → still → **silent 5 s** → **AV 12 s** in one ComfyUI stack.
+Text → still → **silent 5 s** → **AV 8 s** in one ComfyUI stack.
 
 ```mermaid
 flowchart LR
@@ -93,11 +93,11 @@ flowchart LR
   Klein --> Image["Still PNG"]
   Image --> Wan["Wan 2.2 I2V<br/>5B · 5 s silent"]
   Wan --> Silent["MP4 silent"]
-  Image --> LTX["LTX-2.5 I2V<br/>distilled · 5 s AV"]
+  Image --> LTX["LTX-2.5 I2V<br/>distilled · 8 s AV"]
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **stills/still-draft** → enter App Mode → Queue Spark Still → open **stills/still-hero** (same seed) → set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **motion/av/still-to-video-12s** for native audio. Showcase: **motion/av/dialogue-12s** (quoted speech), **motion/av/multishot-12s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-12s** (two stills), **motion/av/audio-to-video-12s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** → **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **stills/still-draft** → enter App Mode → Queue Spark Still → open **stills/still-hero** (same seed) → set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **motion/av/still-to-video-8s** for native audio. Showcase: **motion/av/dialogue-8s** (quoted speech), **motion/av/multishot-8s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-8s** (two stills), **motion/av/audio-to-video-8s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** → **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -107,7 +107,7 @@ License-clean AV path for a company under the LTX Community License revenue cap.
 
 1. **Still** — Klein **4B** at clip size. Landscape **1280×704**. Portrait **768×1280**. Pick a seed on **Draft** (4-step), then Queue this quality at the **same** pixels. Generic 16:9 / 9:16 Format rows retarget to those feeders; named platform jobs stay put.
 2. **Optional polish** — SeedVR2 on that PNG (`download-restore --tier seedvr2-3b`). Add detail at ~1.3–1.5×. Do not jump to 4K. Stop Comfy first.
-3. **Motion** — same PNG into **motion/av/still-to-video-12s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX’s own 2× upscaler / DFR Templates handle resolution.
+3. **Motion** — same PNG into **motion/av/still-to-video-8s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX’s own 2× upscaler / DFR Templates handle resolution.
 4. **Unload Klein before LTX.** Occupancy chip; one GB10 job. 90s films already pass the identity still through **Unload models**.
 
 Wan silent 5 s stays the Apache rehearsal path (no $10M cap, no native audio). This quality is a no-op on Wan / audio / trellis Apps.
@@ -130,7 +130,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 1. Load **stills/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
 3. Load **motion/silent/still-to-video-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **motion/av/still-to-video-12s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
+4. Optional audio: **motion/av/still-to-video-8s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
 5. Short six-shot demo: Queue **motion/silent/still-to-shot** six times (`ez_shot_01` … `06`) then:
 
     ```bash
@@ -160,13 +160,13 @@ ls "${COMFY_OUTPUT_DIR}"/ez_ltx_*_video_*.mp4
 | Graph | Frames | FPS | ≈ duration |
 | --- | --- | --- | --- |
 | `wan-i2v-5s` / `wan-t2v-5s` | 121 | 24 | ~5.04 s (Wan 5B official max) |
-| `ltx-*-12s` standalone Apps | 289 | 24 | **~12.04 s** (Spark duration-head max) |
+| `ltx-*-8s` standalone Apps | 193 | 24 | **~8.04 s** (duration-head allows 5/8/10/12 s) |
 | `wan-i2v-shot` | 120 | 24 | **5.00 s** |
 | `ltx-i2v-shot` / 90s film printers | 121 | 24 | **~5.04 s** (LTX `1+8n`; concat 5.00±0.05) |
 | 90s film (18 LTX prints + concat) | — | 24 | **90.00 s** cap |
 
 <Callout type="warning" title="Do not Queue a 30 s / 60 s / 90 s latent">
-  Long latents melt Spark. Standalone LTX Apps default to **289 frames (~12 s)**. Film graphs still use **121-frame** LTX printers (`1+8n`, 18 shots + stitch, cap 90 s). **120 is illegal** and decodes as 113 frames / 4.71 s. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
+  Long latents melt Spark. Standalone LTX Apps default to **193 frames (~8 s)**. Film graphs still use **121-frame** LTX printers (`1+8n`, 18 shots + stitch, cap 90 s). **120 is illegal** and decodes as 113 frames / 4.71 s. Keep headroom preflight green. A one-click film Queue is **long wall-clock**, not a 90s denoise.
 </Callout>
 If **`VHS_VideoCombine` is missing**, pull/rebuild the image and restart so install refresh can clone VideoHelperSuite — see [Troubleshooting — studio canvas](operate/troubleshooting-canvas.md) and [Troubleshooting — models and workflows](operate/troubleshooting-models-workflows.md).
 

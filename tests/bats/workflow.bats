@@ -288,9 +288,9 @@ assert 'score' not in tt.lower()
   [ "${status}" -eq 0 ]
 }
 
-@test "ltx hero graphs use 2.5 distilled pack, 289 frames, VHS, CLIP ltxv" {
+@test "ltx hero graphs use 2.5 distilled pack, 193 frames, VHS, CLIP ltxv" {
   local wf path i2v t2v
-  for wf in motion/av/still-to-video-12s.json motion/av/text-to-video-12s.json; do
+  for wf in motion/av/still-to-video-8s.json motion/av/text-to-video-8s.json; do
     path="$(lab_wf "${wf}")"
     [[ -f ${path} ]]
     run grep -F 'ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors' "${path}"
@@ -312,9 +312,9 @@ vlen=None
 for n in d['nodes']:
     if n.get('type') in ('EmptyLTXVLatentVideo','LTXVImgToVideo'):
         vlen=int(n['widgets_values'][2]); break
-assert vlen==289, vlen
+assert vlen==193, vlen
 ea=next(n for n in d['nodes'] if n.get('type')=='LTXVEmptyLatentAudio')
-assert int(ea['widgets_values'][0])==289
+assert int(ea['widgets_values'][0])==193
 vhs=[n for n in d['nodes'] if n.get('type')=='VHS_VideoCombine']
 assert len(vhs)==1
 assert vhs[0]['widgets_values']['format']=='video/h264-mp4'
@@ -326,8 +326,8 @@ assert 'preview' in (vhs[0].get('title') or '').lower()
 "
     [ "${status}" -eq 0 ]
   done
-  i2v="$(lab_wf motion/av/still-to-video-12s.json)"
-  t2v="$(lab_wf motion/av/text-to-video-12s.json)"
+  i2v="$(lab_wf motion/av/still-to-video-8s.json)"
+  t2v="$(lab_wf motion/av/text-to-video-8s.json)"
   run python3 -c "
 import json
 d=json.load(open('${i2v}'))
@@ -431,7 +431,7 @@ assert video >= 7, video
   for wf in \
     stills/shorts-still.json \
     motion/silent/shorts-still-5s.json \
-    motion/av/shorts-still-12s.json \
+    motion/av/shorts-still-8s.json \
     stills/thumbnail.json \
     stills/product-packshot.json \
     stills/before-after.json \
@@ -459,11 +459,11 @@ assert video >= 7, video
     motion/av/weather-broll.json \
     motion/av/interior-ambience.json \
     motion/av/hook-av.json \
-    motion/av/dialogue-12s.json \
-    motion/av/multishot-12s.json \
+    motion/av/dialogue-8s.json \
+    motion/av/multishot-8s.json \
     motion/av/product-hero.json \
-    motion/av/first-last-12s.json \
-    motion/av/audio-to-video-12s.json; do
+    motion/av/first-last-8s.json \
+    motion/av/audio-to-video-8s.json; do
     [[ -f $(lab_wf "${wf}") ]]
   done
 }

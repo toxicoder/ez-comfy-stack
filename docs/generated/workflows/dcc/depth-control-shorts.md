@@ -29,7 +29,7 @@ Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fami
 ```text
 ## dcc/depth-control-shorts
 
-Lab envelope for Path B depth-guided **portrait** 12.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 Dump the pack with:
 
@@ -358,7 +358,7 @@ Condition LTX on a start image and allocate the video latent.
 
 !!! warning "Lab notes"
 
-    ÷32 spatial, length 1+8n. 1280×704×121 is the lab printer. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
+    ÷32 spatial, length 1+8n. Standalone Apps 1280×704×193. Film printers 1280×704×121. Shorts 768×1280. Some shot graphs still store 120 and rely on ez_ltx_spatial to snap.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -392,13 +392,13 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** 1+8n. 121 @ 24 fps ≈ 5.04 s. Do not type a 90 s length.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). Do not type a 90 s length.
 
-**This graph:** `289`
+**This graph:** `193`
 
 #### `batch_size`
 
@@ -633,13 +633,13 @@ Allocate a silent/world-audio latent matching video length.
 
 #### `frames`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film.
 
 Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `193`
 
 #### `frame_rate`
 
@@ -701,12 +701,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## dcc/depth-control-shorts Lab envelope for Path B depth-guided **portrait** 12.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24…`
+**This graph:** `## dcc/depth-control-shorts Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 …`
 
 ```text
 ## dcc/depth-control-shorts
 
-Lab envelope for Path B depth-guided **portrait** 12.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
+Lab envelope for Path B depth-guided **portrait** 8.00s print. LTX canvas **768x1280** (width/height must be divisible by 32; 720 and 1080 are invalid). **193 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
 Dump the pack with:
 
@@ -882,7 +882,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 8 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -942,13 +942,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 12 seconds, 24 fps.
+Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `8 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -956,7 +956,7 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 8 s Apps ask for world SFX matching the start image, no score.
 
 **This graph:** `world SFX matching the start image, no score`
 
@@ -1142,7 +1142,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-8s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

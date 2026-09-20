@@ -53,10 +53,10 @@ SPECS = (
         (("IMAGE", "IMAGE"),),
     ),
     (
-        "ltx-av-12s",
+        "ltx-av-8s",
         LTX_AV_UUID,
         "ltx",
-        "motion/av/still-to-video-12s.json",
+        "motion/av/still-to-video-8s.json",
         (
             ("image", "IMAGE"),
             ("prompt", "STRING"),

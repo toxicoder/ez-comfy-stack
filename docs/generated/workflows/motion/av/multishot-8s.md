@@ -1,10 +1,10 @@
 ---
-title: "motion/av/text-to-video-12s"
-description: "LTX-2.5 AV T2V smoke, 289 frames @ 24 fps"
+title: "motion/av/multishot-8s"
+description: "LTX-2.5 native multishot AV T2V with named cuts Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as writ"
 tags: [workflows, generated, comfyui, motion]
 ---
 
-# motion/av/text-to-video-12s
+# motion/av/multishot-8s
 
 **What's on this page**
 
@@ -18,16 +18,16 @@ tags: [workflows, generated, comfyui, motion]
 - **Queuing this filename** with known widgets
 - **Changing a parameter** with a documented generation effect
 
-**Who this is for:** studio users who loaded `motion/av/text-to-video-12s` from Apps or Workflows.
+**Who this is for:** studio users who loaded `motion/av/multishot-8s` from Apps or Workflows.
 
-> Generated from `workflows/_lab/motion/av/text-to-video-12s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
+> Generated from `workflows/_lab/motion/av/multishot-8s.json`. Do not hand-edit this file. Re-run `python3 docs/generate_workflow_docs.py` (or `make docs`).
 
 ## Purpose
 
 Occupancy **ltx**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous family before Queue.
 
 ```text
-## motion/av/text-to-video-12s
+## motion/av/multishot-8s
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
@@ -35,13 +35,9 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
 
-LTX-2.5 distilled AV T2V smoke (~12 s). LTX Community License — not Apache. $10M company-revenue cap.
+LTX-2.5 distilled **native multishot** T2V (~8 s). Named cuts in one generation. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
-289 frames @ 24 fps. No LoadImage — text to AV.
-PRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.
-For I2V from a still, use motion/av/still-to-video-12s.
-Gated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+193 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 ```
@@ -49,7 +45,7 @@ Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 ## How to Queue
 
 1. `./scripts/manage.sh start` so `_lab` is seeded
-2. Load **motion/av/text-to-video-12s** from **Apps** or **Workflows**
+2. Load **motion/av/multishot-8s** from **Apps** or **Workflows**
 3. Read the on-canvas Note, change widgets, Queue
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
@@ -306,7 +302,7 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour…` |
+| Positive | `A wide photoreal shot frames a tropical coastal city rooftop terrace at golden …` |
 | Negative | `morphing, identity drift, warping objects, face melting, flicker, jitter, frame…` |
 
 ### `EmptyLTXVLatentVideo` — Empty LTX Latent Video
@@ -315,7 +311,7 @@ Allocate a T2V LTX video latent (no start image).
 
 !!! warning "Lab notes"
 
-    Width/height must be ÷32. Length must be 1+8n (289 for ~12 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
+    Width/height must be ÷32. Length must be 1+8n (193 for ~8 s Apps; 121 for 5 s film printers). ez_ltx_spatial snaps illegal values.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -343,13 +339,13 @@ Frame height.
 
 #### `length`
 
-Type `INT`. Range / default: 289 Apps / 121 film = 1+8n.
+Type `INT`. Range / default: 193 Apps / 121 film = 1+8n.
 
 Frame count.
 
-**How it affects generation:** Standalone Apps default 289 @ 24 fps ≈ 12.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
+**How it affects generation:** Standalone Apps default 193 @ 24 fps ≈ 8.04 s. Film printers stay 121 (~5.04 s). 120 is illegal (VAE floors to 113). Do not type a 30/60/90 s latent.
 
-**This graph:** `289`
+**This graph:** `193`
 
 ### `LTXVConditioning` — LTX Conditioning
 
@@ -558,7 +554,7 @@ Save prefix.
 
 **How it affects generation:** Lab prefixes start with ez_. Last-frame savers on shot graphs feed concat-shots.
 
-**This graph:** `ez_ltx_t2v_frames`
+**This graph:** `ez_ltx_multishot_frames`
 
 ### `LTXVEmptyLatentAudio` — Empty LTX Audio Latent
 
@@ -571,13 +567,13 @@ Allocate a silent/world-audio latent matching video length.
 
 #### `frames`
 
-Type `INT`. Range / default: 121.
+Type `INT`. Range / default: 193 Apps / 121 film.
 
 Must match video length.
 
 **How it affects generation:** Mismatch with LTXVImgToVideo length breaks concat.
 
-**This graph:** `289`
+**This graph:** `193`
 
 #### `frame_rate`
 
@@ -639,10 +635,10 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## motion/av/text-to-video-12s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are in…`
+**This graph:** `## motion/av/multishot-8s Format / platform sets pixels (Custom uses Width × Height). Quality does not change size. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid…`
 
 ```text
-## motion/av/text-to-video-12s
+## motion/av/multishot-8s
 
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
@@ -650,13 +646,9 @@ LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are inva
 
 After Queue, click **Save video (MP4) — open node for preview** for an inline preview. File lands on the host at `${COMFY_OUTPUT_DIR}/ez_*_*.mp4` (container `/outputs`). Save frames PNG is secondary.
 
-LTX-2.5 distilled AV T2V smoke (~12 s). LTX Community License — not Apache. $10M company-revenue cap.
+LTX-2.5 distilled **native multishot** T2V (~8 s). Named cuts in one generation. LTX Community License — not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.
 Models: ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors + gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors (CLIP type ltxv) + ltx-2.5-video-vae-bf16.safetensors + ltx-2.5-audio-vae-bf16.safetensors.
-289 frames @ 24 fps. No LoadImage — text to AV.
-PRIMARY OUTPUT: MP4 via VHS_VideoCombine (video/h264-mp4, 24 fps). SaveImage frames secondary.
-For I2V from a still, use motion/av/still-to-video-12s.
-Gated HF: accept Lightricks/LTX-2.5. Disclose AI-generated media; do not strip provenance; do not distill.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.
+193 frames @ 24 fps. Prompt names a hard cut and a match cut; audio continuity is in the paragraph. Prompt enhance is **off** so authored text is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 ```
@@ -705,7 +697,7 @@ Save prefix under the output folder.
 
 **How it affects generation:** Lab prefixes start with ez_. The host file is ${COMFY_OUTPUT_DIR}/<prefix>_*.mp4 (or .gif).
 
-**This graph:** `ez_ltx_t2v_video`
+**This graph:** `ez_ltx_multishot`
 
 #### `format`
 
@@ -790,7 +782,7 @@ Rewrite a lazy prompt for LTX-2.5 (present-tense paragraph, audio interleaved).
 
 !!! warning "Lab notes"
 
-    Off on 90s films, talking-head, authored showcase. On for generic 12 s printers.
+    Off on 90s films, talking-head, authored showcase. On for generic 8 s printers.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -814,10 +806,10 @@ Lazy sentence or authored LTX paragraph.
 
 **How it affects generation:** I2V: start image holds look; prompt is motion + world SFX. Dialogue belongs in "quotes" only if you asked for speech.
 
-**This graph:** `A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-th…`
+**This graph:** `A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circui…`
 
 ```text
-A wide photoreal shot of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff as if the code were a spell. Coat hem and glyph motes drift in a warm bay breeze while palms and unmarked glass towers hold a bright waterfront. Match a standing eyeline. 24mm-equivalent wide. The camera dollies in on a locked wheeled support, tightening without zooming. A warm terrace breeze and palm rustle sit under distant bay traffic, then a glyph chime. Clean unmarked surfaces sit empty of lettering. No music and no score.
+A wide photoreal shot frames a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride as warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff; palms and unmarked glass towers hold a bright bay, and a warm terrace breeze sits under distant traffic. A hard cut transitions to a medium close-up of the glyph rings over the staff, motes drifting across the dark indigo-violet suede coat, the breeze continuing across the cut while traffic muffles. The wizard's mouth stays closed. A match cut connects to a low wide of the same terrace looking out at the bay, the wizard small at the glass, a single glyph chime as the wind holds. Unmarked surfaces, empty of lettering. No music and no score. Eight seconds.
 ```
 
 #### `enhance`
@@ -828,7 +820,7 @@ Run the rewriter.
 
 **How it affects generation:** Off keeps authored film/shot text pinned.
 
-**This graph:** `true`
+**This graph:** `false`
 
 #### `mode`
 
@@ -850,13 +842,13 @@ t2v vs i2v vs iclora system prompt.
 
 #### `duration_hint`
 
-Type `STRING`. Range / default: 12 seconds, 24 fps.
+Type `STRING`. Range / default: 8 seconds, 24 fps.
 
 Duration hint.
 
-**How it affects generation:** Does not set 289 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
+**How it affects generation:** Does not set 193 frames — LTXVImgToVideo does. Film printers stay 5 seconds / 121.
 
-**This graph:** `12 seconds, 24 fps`
+**This graph:** `8 seconds, 24 fps`
 
 #### `audio_notes`
 
@@ -864,9 +856,13 @@ Type `STRING`.
 
 World SFX / no-score policy.
 
-**How it affects generation:** Lab 12 s Apps ask for world SFX matching the start image, no score.
+**How it affects generation:** Lab 8 s Apps ask for world SFX matching the start image, no score.
 
-**This graph:** `world SFX matching the start image, no score`
+**This graph:** `terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score`
+
+```text
+terrace breeze continues across cuts, traffic muffled on the close-up, glyph chime on the bay, no score
+```
 
 #### `style`
 
@@ -1042,7 +1038,7 @@ Sample-catalog id.
 
 **How it affects generation:** Leave as stamped.
 
-**This graph:** `motion/av/text-to-video-12s`
+**This graph:** `motion/av/multishot-8s`
 
 ### `LTXVAudioVAEDecode` — LTX Audio VAE Decode
 
@@ -1050,7 +1046,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-8s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1091,7 +1087,7 @@ Rewrite using the positive as context.
 
 **How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
 
-**This graph:** `true`
+**This graph:** `false`
 
 #### `family`
 
