@@ -419,6 +419,17 @@ def test_ensure_quality_node_is_idempotent() -> None:
     assert linear[0][0] == node_id
 
 
+def test_ensure_quality_keeps_required_still_first() -> None:
+    graph = copy.deepcopy(_load("stills/talking-head.json"))
+    ensure_quality_node(graph)
+    names = [row[1] for row in graph["extra"]["linearData"]["inputs"]]
+    assert names[0] == "image"
+    assert names[1] == QUALITY_WIDGET
+    quality = find_quality_node(graph)
+    assert quality is not None
+    assert graph["extra"]["linearData"]["inputs"][1][0] == quality["id"]
+
+
 def test_ensure_quality_places_without_overlap() -> None:
     graph = copy.deepcopy(_load("films/go-see.json"))
     ensure_quality_node(graph)
@@ -459,8 +470,12 @@ def test_every_lab_graph_has_one_quality_node(path: Path) -> None:
         linear = extra.get("linearData") or {}
         inputs = linear.get("inputs") or []
         assert inputs, path
-        assert inputs[0][1] == QUALITY_WIDGET, path
-        assert int(inputs[0][0]) == int(hits[0]["id"])
+        names = [entry[1] for entry in inputs]
+        idx = 0
+        while idx < len(names) and names[idx] == "image":
+            idx += 1
+        assert names[idx] == QUALITY_WIDGET, path
+        assert int(inputs[idx][0]) == int(hits[0]["id"])
 
 
 def test_klein_9b_is_not_klein_4b() -> None:

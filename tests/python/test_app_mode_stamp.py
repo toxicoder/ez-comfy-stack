@@ -349,6 +349,38 @@ def test_wired_edit_and_i2v_keep_image() -> None:
     assert "image" in clay
 
 
+def test_required_loadimage_is_first_app_widget() -> None:
+    talking = _load("stills/talking-head.json")
+    assert _widget_names(talking)[0] == "image"
+    assert _labels(talking)[0] == "Klein identity still"
+    assert _widget_names(_load("stills/character-tweak.json"))[0] == "image"
+    assert _widget_names(_load("stills/text-swap.json"))[0] == "image"
+    assert _widget_names(_load("motion/silent/still-to-video-5s.json"))[0] == "image"
+    assert _widget_names(_load("dcc/clay-hero.json"))[0] == "image"
+    flf = _widget_names(_load("motion/av/first-last-12s.json"))
+    assert flf[0] == "image"
+    assert flf[1] == "image"
+    still = _widget_names(_load("stills/still-draft.json"))
+    assert still[0] == "quality"
+    studio = _widget_names(_load("stills/image-studio.json"))
+    assert studio[0] == "quality"
+    assert "image" not in studio
+
+
+def test_shipped_required_image_is_first_linear_input() -> None:
+    for path in suite_json_paths(ROOT / "workflows"):
+        graph = json.loads(path.read_text(encoding="utf-8"))
+        names = [
+            entry[1]
+            for entry in (graph.get("extra") or {})
+            .get("linearData", {})
+            .get("inputs")
+            or []
+        ]
+        if "image" in names:
+            assert names[0] == "image", path
+
+
 def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert widget_description("prompt") == DEFAULT_WIDGET_DESCRIPTIONS["prompt"]
     assert display_label(None, "prompt") == "Prompt"

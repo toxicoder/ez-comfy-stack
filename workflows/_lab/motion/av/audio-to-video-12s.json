@@ -1118,11 +1118,19 @@
     "linearData": {
       "inputs": [
         [
+          4,
+          "image",
+          {
+            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
+            "label": "Start image"
+          }
+        ],
+        [
           24,
           "quality",
           {
             "label": "Quality",
-            "description": "Lab default, Draft (faster), or High (slower). Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
           }
         ],
         [
@@ -1165,14 +1173,6 @@
           {
             "description": "Wav/mp3 already in COMFY_OUTPUT_DIR/input (container /inputs). ~5 s. Original waveform is muxed into the MP4.",
             "label": "Audio file"
-          }
-        ],
-        [
-          4,
-          "image",
-          {
-            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
-            "label": "Start image"
           }
         ],
         [

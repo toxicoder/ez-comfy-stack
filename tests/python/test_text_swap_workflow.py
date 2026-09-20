@@ -90,7 +90,7 @@ def test_text_swap_enhance_mode_and_app_widgets() -> None:
     prompt = values[1] if len(values) >= 7 else values[0]
     assert "HELLO" in str(prompt)
     names = [entry[1] for entry in graph["extra"]["linearData"]["inputs"]]
-    assert names[0] == "quality"
+    assert names[0] == "image"
     assert "sample" in names
     assert "prompt" in names
     assert "image" in names

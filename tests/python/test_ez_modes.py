@@ -18,6 +18,7 @@ import ez_image  # noqa: E402
 from ez_image import modes as md  # noqa: E402
 from ez_image.modes import (  # noqa: E402
     DEFAULT_MODE_ID,
+    ENHANCE_MODE_COMBO,
     ENHANCE_MODES,
     EZImageMode,
     catalog_payload,
@@ -50,6 +51,15 @@ def test_pack_exports_image_mode() -> None:
     assert ez_image.NODE_DISPLAY_NAME_MAPPINGS["EZImageMode"] == "Creator mode"
     assert EZImageMode.CATEGORY == "ez-comfy/image"
     assert EZImageMode.RETURN_NAMES == ("context", "enhance_mode", "prefix")
+    assert EZImageMode.RETURN_TYPES[1] == ENHANCE_MODE_COMBO
+
+
+def test_enhance_mode_output_matches_klein_combo() -> None:
+    from ez_prompt_enhance.nodes import EZKleinPromptEnhance
+
+    klein_modes = EZKleinPromptEnhance.INPUT_TYPES()["required"]["mode"][0]
+    assert EZImageMode.RETURN_TYPES[1] == klein_modes
+    assert klein_modes == ["t2i", "edit", "identity", "text_swap"]
 
 
 def test_mode_catalog_is_one_hundred_unique_creator_modes() -> None:
