@@ -2,7 +2,7 @@
   "id": "still-studio",
   "revision": 3,
   "last_node_id": 18,
-  "last_link_id": 31,
+  "last_link_id": 32,
   "nodes": [
     {
       "id": 1,
@@ -630,7 +630,8 @@
         "none",
         1280,
         704,
-        1
+        1,
+        "Match input"
       ],
       "title": "Format / platform"
     },
@@ -655,7 +656,7 @@
           "type": "IMAGE",
           "links": [
             21,
-            31
+            32
           ],
           "slot_index": 0
         },
@@ -813,7 +814,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 31
+          "link": 32
         }
       ],
       "outputs": [
@@ -1029,7 +1030,7 @@
       "STRING"
     ],
     [
-      31,
+      32,
       15,
       0,
       18,
@@ -1153,6 +1154,14 @@
           }
         ],
         [
+          14,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
           17,
           "upscale",
           {
@@ -1252,7 +1261,7 @@
           15,
           "filename",
           {
-            "description": "Optional still. Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference.",
+            "description": "Upload a still or pick one already on the drive (input/ or Outputs). Empty is valid \u2014 Queue without a file. When set, Klein uses it as a native reference.",
             "label": "Example / reference (optional)"
           }
         ]

@@ -22,6 +22,8 @@ from ez_image.refs import (  # noqa: E402
     _encode_ref,
     _image_present,
     _reference_latent,
+    input_still_choices,
+    load_input_still,
 )
 
 
@@ -36,6 +38,135 @@ def test_pack_exports_ref_nodes() -> None:
     assert ez_image.NODE_CLASS_MAPPINGS["EZOptionalImage"] is EZOptionalImage
     assert ez_image.NODE_CLASS_MAPPINGS["EZKleinRefCanvas"] is EZKleinRefCanvas
     assert ez_image.NODE_CLASS_MAPPINGS["EZDescribeImage"] is EZDescribeImage
+
+
+def test_filename_str_and_input_choices(monkeypatch: pytest.MonkeyPatch) -> None:
+    from ez_image.refs import _filename_str
+
+    assert _filename_str(None) == ""
+    assert _filename_str(12) == "12"
+    assert _filename_str("  hero.png  ") == "hero.png"
+
+    class _Folder:
+        @staticmethod
+        def get_filename_list(_kind: str) -> list[str]:
+            return ["a.png", " ", "b.png"]
+
+    monkeypatch.setitem(__import__("sys").modules, "folder_paths", _Folder)
+    names = input_still_choices()
+    assert names[0] == ""
+    assert "a.png" in names
+    assert "b.png" in names
+
+
+def test_load_input_still_success_and_failures(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    import sys
+    import types
+
+    class _Arr:
+        ndim = 3
+
+        def astype(self, _kind: object) -> "_Arr":
+            return self
+
+        def __truediv__(self, _n: object) -> "_Arr":
+            return self
+
+        def __getitem__(self, _idx: object) -> "_Arr":
+            return self
+
+    class _Img:
+        def convert(self, _mode: str) -> "_Img":
+            return self
+
+        def __enter__(self) -> "_Img":
+            return self
+
+        def __exit__(self, *_exc: object) -> None:
+            return None
+
+    class _Folder:
+        @staticmethod
+        def get_annotated_filepath(_name: str) -> str:
+            return str(tmp_path / "ok.png")
+
+    fake_np = types.SimpleNamespace(asarray=lambda _img: _Arr(), float32="f32")
+    fake_pil = types.ModuleType("PIL")
+    fake_image = types.ModuleType("PIL.Image")
+    fake_image.open = lambda _path: _Img()  # type: ignore[attr-defined]
+    fake_pil.Image = fake_image  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "folder_paths", _Folder)
+    monkeypatch.setitem(sys.modules, "numpy", fake_np)
+    monkeypatch.setitem(sys.modules, "PIL", fake_pil)
+    monkeypatch.setitem(sys.modules, "PIL.Image", fake_image)
+    if "numpy" in sys.modules:
+        monkeypatch.setattr(sys.modules["numpy"], "asarray", lambda _img: _Arr(), raising=False)
+    loaded = load_input_still("ok.png")
+    assert loaded is not None
+
+    class _Flat:
+        ndim = 2
+
+        def astype(self, _kind: object) -> "_Flat":
+            return self
+
+        def __truediv__(self, _n: object) -> "_Flat":
+            return self
+
+    monkeypatch.setattr(sys.modules["numpy"], "asarray", lambda _img: _Flat(), raising=False)
+    fake_np.asarray = lambda _img: _Flat()
+    assert load_input_still("ok.png") is None
+
+    class _BoomFolder:
+        @staticmethod
+        def get_annotated_filepath(_name: str) -> str:
+            raise RuntimeError("nope")
+
+    monkeypatch.setitem(sys.modules, "folder_paths", _BoomFolder)
+    assert load_input_still("ok.png") is None
+
+    class _EmptyPath:
+        @staticmethod
+        def get_annotated_filepath(_name: str) -> str:
+            return ""
+
+    monkeypatch.setitem(sys.modules, "folder_paths", _EmptyPath)
+    assert load_input_still("ok.png") is None
+
+    class _Unreadable:
+        @staticmethod
+        def get_annotated_filepath(_name: str) -> str:
+            return str(tmp_path / "missing.png")
+
+    def _open_fail(_path: object) -> _Img:
+        raise OSError("bad")
+
+    monkeypatch.setitem(sys.modules, "folder_paths", _Unreadable)
+    fake_image.open = _open_fail  # type: ignore[attr-defined]
+    assert load_input_still("ok.png") is None
+
+
+def test_optional_image_combo_allows_empty_upload() -> None:
+    spec = EZOptionalImage.INPUT_TYPES()["required"]["filename"]
+    assert spec[0][0] == ""
+    assert spec[1]["image_upload"] is True
+    assert spec[1]["default"] == ""
+    assert input_still_choices()[0] == ""
+    assert load_input_still("") is None
+    assert load_input_still("missing.png") is None
+
+
+def test_optional_image_loads_filename_when_no_tensor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    fake = _FakeImg(64, 80)
+    monkeypatch.setattr("ez_image.refs.load_input_still", lambda _name: fake)
+    out = EZOptionalImage().run(filename="hero.png")
+    assert out["result"][0] is fake
+    assert out["result"][1] == 1
+    assert out["result"][2] is True
 
 
 def test_optional_image_empty_is_ok() -> None:

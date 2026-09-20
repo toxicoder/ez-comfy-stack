@@ -16,7 +16,7 @@ from pathlib import Path
 CUSTOM = "custom"
 SAMPLES_DIR = Path(__file__).resolve().parent / "js" / "samples"
 INDEX_NAME = "index.json"
-SAMPLE_COUNT = 20
+SAMPLE_COUNT = 30
 """Default recipe count for family catalogs (plus Custom)."""
 BACKGROUND_SWAP_COUNT = 100
 """Recipe count for stills/background-swap."""

@@ -276,12 +276,12 @@ _FIRST_FIFTY_STYLE_IDS = (
 
 def test_style_catalog_is_unique() -> None:
     styles = client.load_styles()
-    assert len(styles) == 150
-    assert len(set(styles)) == 150
+    assert len(styles) == 300
+    assert len(set(styles)) == 300
     assert "none" not in styles
     ids = client.style_ids()
     assert ids[0] == "none"
-    assert len(ids) == 151
+    assert len(ids) == 301
     assert tuple(list(styles)[:50]) == _FIRST_FIFTY_STYLE_IDS
     labels: list[str] = []
     medium_heads: list[str] = []
@@ -1583,7 +1583,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert modes == ["t2i", "edit", "identity", "text_swap"]
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
-    assert len(styles) == 151
+    assert len(styles) == 301
     off = klein.run("A techno wizard.", False, "t2i", "YouTube 16:9 still")
     assert off["result"] == ("A techno wizard.",)
     assert off["ui"]["text"][0] == "A techno wizard."

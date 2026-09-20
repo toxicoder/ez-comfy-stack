@@ -98,5 +98,55 @@
     "id": "weights-on-disk",
     "label": "Weights on disk",
     "prompt": "download-podcast --tier analog pulls Kokoro ONNX plus voices. --tier acestep pulls the ACE-Step turbo AIO. doctor still exits 0 when the pack is absent. Analog graphs load; Queue fail-softs until the wheels and weights exist. Own the weights or skip the show."
+  },
+  {
+    "id": "extra-occupancy",
+    "label": "One job reminder",
+    "prompt": "One GB10 job. Stop the other family before you Queue. Original characters only. Disclosure stays in metadata."
+  },
+  {
+    "id": "extra-voices",
+    "label": "Stock voices only",
+    "prompt": "Use stock Kokoro identities. No celebrity refs. Empty clone refs fall back to Kokoro."
+  },
+  {
+    "id": "extra-beds",
+    "label": "Instrumental beds",
+    "prompt": "ACE beds stay instrumental: no vocals tags, empty lyrics. Do not pull the turbo AIO twice."
+  },
+  {
+    "id": "extra-rights",
+    "label": "Rights on Queue",
+    "prompt": "Queue only with rights. No living-artist style tags. No existing song titles."
+  },
+  {
+    "id": "extra-length",
+    "label": "Keep the length",
+    "prompt": "Respect the duration widget. Do not type a 30-minute latent. CPU TTS is slow at 25 min."
+  },
+  {
+    "id": "extra-handoff",
+    "label": "Handoff next",
+    "prompt": "After this Queue, hand off to the next lab App in the occupancy chip. Do not stack families."
+  },
+  {
+    "id": "extra-unmarked",
+    "label": "Unmarked surfaces",
+    "prompt": "Keep surfaces unmarked. Empty of lettering unless the App is text-swap."
+  },
+  {
+    "id": "extra-originals",
+    "label": "Original characters",
+    "prompt": "Hosts and subjects are original. No real-person names. No clone of a living voice."
+  },
+  {
+    "id": "extra-local",
+    "label": "On-box only",
+    "prompt": "Stay on-box. No cloud APIs. GGUF rewrite is optional; Custom uses the widget text."
+  },
+  {
+    "id": "extra-spark",
+    "label": "Spark still first",
+    "prompt": "If you need a still, Queue a Klein App first, then this graph. One family on the GPU."
   }
 ]

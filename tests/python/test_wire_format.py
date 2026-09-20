@@ -19,6 +19,7 @@ from _wire_format import (  # noqa: E402
     FORMAT_SCOPE,
     STILL_SCOPE,
     VIDEO_SCOPE,
+    ensure_format_widgets,
     format_kind,
     pick_still_format,
     pick_video_format,
@@ -123,6 +124,7 @@ def test_wire_still_draft_links_latent_and_hint() -> None:
     assert not any(item.get("name") == "filename_prefix" for item in save.get("inputs") or [])
     assert FORMAT_BLURB in str((graph.get("extra") or {}).get("lab_note") or "")
     assert fmt["widgets_values"][0] == "16:9 draft (768×432)"
+    assert "Match input" in fmt["widgets_values"]
     _strip_format(graph, "EZImageFormat")
     assert wire_still_format(graph) is True
 
@@ -142,8 +144,30 @@ def test_wire_video_links_wan_latent() -> None:
     assert _src(graph, enh, "duration_hint")["id"] == fmt["id"]
     assert fmt["widgets_values"][0] == "Wan 5B"
     assert fmt["widgets_values"][1] == "Wan · 16:9 YouTube (832×480)"
+    assert "Match input" in fmt["widgets_values"]
+    assert "8 seconds" in fmt["widgets_values"]
     _strip_format(graph, "EZVideoFormat")
     assert wire_video_format(graph) is True
+
+
+def test_ensure_format_widgets_is_idempotent() -> None:
+    graph = copy.deepcopy(_load("stills/still-draft"))
+    assert ensure_format_widgets(graph) is True or "Match input" in next(
+        node["widgets_values"]
+        for node in graph["nodes"]
+        if node.get("type") == "EZImageFormat"
+    )
+    assert ensure_format_widgets(graph) is False
+    video = copy.deepcopy(_load("motion/av/text-to-video-8s"))
+    ensure_format_widgets(video)
+    values = next(
+        node["widgets_values"]
+        for node in video["nodes"]
+        if node.get("type") == "EZVideoFormat"
+    )
+    assert values.count("Match input") == 1
+    assert values.count("8 seconds") == 1
+    assert ensure_format_widgets(video) is False
 
 
 def test_wire_skips_out_of_scope_and_mixed_pack() -> None:

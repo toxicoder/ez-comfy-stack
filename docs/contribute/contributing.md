@@ -42,6 +42,8 @@ Session vars are for operator fences. Contributors still branch from **`developm
 4. Run `bazelisk test //:lint --test_tag_filters=manual` and `bazelisk run //docs:docs`
 5. Open a PR into `development`
 
+How merge commits, squash, rebase, and stacked PRs work in this repo: [How we land changes](../learn/merges.md). Land each PR **into `development`**. A GitHub Merged badge on a PR whose base is another topic branch does not update `development`.
+
 Install Python test tools once: `pip install -r tests/requirements.txt`.
 
 ```mermaid

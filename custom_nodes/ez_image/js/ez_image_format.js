@@ -85,6 +85,130 @@ function isCustom(row) {
   return !row || String(row.id) === CUSTOM_ID;
 }
 
+const SIZE_MATCH = "Match input";
+
+/**
+ * True when Output size is Match input (default).
+ * @param {*} value
+ * @returns {boolean}
+ */
+function isMatchInput(value) {
+  const folded = String(value || SIZE_MATCH)
+    .trim()
+    .toLowerCase()
+    .replaceAll("_", " ");
+  return !folded || folded === "match input" || folded === "match";
+}
+
+/**
+ * Nearest aspect catalog row for a source size, preferring current area.
+ * @param {number} srcW
+ * @param {number} srcH
+ * @param {object|null} current
+ * @returns {object|null}
+ */
+function nearestAspectRow(srcW, srcH, current) {
+  const rows = formatRows().filter(
+    (row) => String(row.group) === "aspect" && Number(row.width) > 0 && Number(row.height) > 0,
+  );
+  if (!rows.length) {
+    return current;
+  }
+  const srcRatio = srcW / Math.max(srcH, 1);
+  const currentArea = Math.max(
+    Number(current?.width || 0) * Number(current?.height || 0),
+    1,
+  );
+  let best = rows[0];
+  let bestScore = [Infinity, Infinity];
+  for (const row of rows) {
+    const ratioErr = Math.abs(Number(row.width) / Math.max(Number(row.height), 1) - srcRatio);
+    const areaErr = Math.abs(Number(row.width) * Number(row.height) - currentArea) / currentArea;
+    if (ratioErr < bestScore[0] || (ratioErr === bestScore[0] && areaErr < bestScore[1])) {
+      best = row;
+      bestScore = [ratioErr, areaErr];
+    }
+  }
+  return best;
+}
+
+/**
+ * First LoadImage / EZOptionalImage filename on the graph.
+ * @param {object|undefined} graph
+ * @returns {string}
+ */
+function firstImageName(graph) {
+  for (const node of graph?.nodes || []) {
+    const ntype = node?.comfyClass || node?.type || "";
+    if (ntype === "LoadImage") {
+      const widget = widgetByName(node, "image");
+      const name = String(widget?.value || "").trim();
+      if (name) {
+        return name;
+      }
+    }
+    if (ntype === "EZOptionalImage") {
+      const widget = widgetByName(node, "filename");
+      const name = String(widget?.value || "").trim();
+      if (name) {
+        return name;
+      }
+    }
+  }
+  return "";
+}
+
+/**
+ * Probe natural size of an input-folder still.
+ * @param {string} name
+ * @param {function(number, number): void} onSize
+ * @returns {void}
+ */
+function probeInputSize(name, onSize) {
+  if (!name || typeof Image === "undefined") {
+    return;
+  }
+  const img = new Image();
+  img.onload = () => {
+    if (img.naturalWidth > 1 && img.naturalHeight > 1) {
+      onSize(img.naturalWidth, img.naturalHeight);
+    }
+  };
+  img.src =
+    "/view?filename=" + encodeURIComponent(name) + "&type=input";
+}
+
+/**
+ * When Output size is Match input, snap Format to the loaded still's aspect.
+ * @param {object} node
+ * @returns {void}
+ */
+function applyMatchInput(node) {
+  const modeWidget = widgetByName(node, "size_mode");
+  if (!isMatchInput(modeWidget?.value)) {
+    applyFormat(node);
+    return;
+  }
+  const name = firstImageName(node.graph || app.graph);
+  if (!name) {
+    applyFormat(node);
+    return;
+  }
+  probeInputSize(name, (width, height) => {
+    const formatWidget = widgetByName(node, "format");
+    const current = findFormat(formatWidget?.value);
+    const row = nearestAspectRow(width, height, current);
+    if (!row || isCustom(row)) {
+      return;
+    }
+    applying = true;
+    setWidgetValue(node, formatWidget, String(row.label));
+    setWidgetValue(node, widgetByName(node, "width"), Number(row.width));
+    setWidgetValue(node, widgetByName(node, "height"), Number(row.height));
+    applying = false;
+  });
+}
+
 /**
  * Write width/height from a non-custom format row.
  * @param {object} node
@@ -151,9 +275,11 @@ function bindFormatNode(node) {
   }
   node._ezFormatBound = true;
   const formatWidget = widgetByName(node, "format");
+  const modeWidget = widgetByName(node, "size_mode");
   const widthWidget = widgetByName(node, "width");
   const heightWidget = widgetByName(node, "height");
   const formatCb = formatWidget?.callback;
+  const modeCb = modeWidget?.callback;
   const widthCb = widthWidget?.callback;
   const heightCb = heightWidget?.callback;
   if (formatWidget) {
@@ -164,8 +290,22 @@ function bindFormatNode(node) {
      */
     formatWidget.callback = function (value) {
       formatCb?.apply(this, arguments);
-      if (!applying) {
+      if (!applying && !isMatchInput(modeWidget?.value)) {
         applyFormat(node);
+      }
+      return value;
+    };
+  }
+  if (modeWidget) {
+    /**
+     * Re-apply Match input or Force format.
+     * @param {*} value
+     * @returns {void}
+     */
+    modeWidget.callback = function (value) {
+      modeCb?.apply(this, arguments);
+      if (!applying) {
+        applyMatchInput(node);
       }
       return value;
     };
@@ -194,7 +334,7 @@ function bindFormatNode(node) {
       return value;
     };
   }
-  applyFormat(node);
+  applyMatchInput(node);
 }
 
 /**

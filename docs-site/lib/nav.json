@@ -40,6 +40,10 @@
         "path": "learn/architecture.md"
       },
       {
+        "title": "How we land changes",
+        "path": "learn/merges.md"
+      },
+      {
         "title": "Clay to finish",
         "path": "learn/clay-to-finish.md"
       },

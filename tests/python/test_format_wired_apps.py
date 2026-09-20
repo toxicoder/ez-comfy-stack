@@ -51,8 +51,11 @@ def test_in_scope_apps_wire_format_and_app_widgets() -> None:
         assert FORMAT_BLURB in str((graph.get("extra") or {}).get("lab_note") or ""), rel
         names = _widget_names(graph)
         assert "format" in names, rel
+        assert "size_mode" in names, rel
         assert "width" in names, rel
         assert "height" in names, rel
+        if kind == "video":
+            assert "duration_s" in names, rel
         if rel in {"stills/still-studio", "stills/image-studio"}:
             assert "look" in names
         else:

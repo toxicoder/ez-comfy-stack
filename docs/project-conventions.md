@@ -312,6 +312,7 @@ flowchart TB
 - Feature work from `development`: `feature/<short-description>`
 - Conventional commit titles
 - PR into `development` first
+- Land with a **merge commit** whose base is `development`. Stacked PRs: retarget each PR to `development` after the PR below it lands. Details: [How we land changes](learn/merges.md)
 
 ```mermaid
 flowchart LR

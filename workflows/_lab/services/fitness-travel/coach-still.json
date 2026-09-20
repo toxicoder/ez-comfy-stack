@@ -2,7 +2,7 @@
   "id": "coach-still",
   "revision": 1,
   "last_node_id": 19,
-  "last_link_id": 27,
+  "last_link_id": 28,
   "nodes": [
     {
       "id": 1,
@@ -132,7 +132,7 @@
           "type": "IMAGE",
           "links": [
             6,
-            27
+            28
           ],
           "slot_index": 0
         },
@@ -757,7 +757,9 @@
         "Wan 5B",
         "Wan \u00b7 9:16 Shorts (480\u00d7832)",
         480,
-        832
+        832,
+        "Match input",
+        "8 seconds"
       ],
       "title": "Format / platform"
     },
@@ -787,7 +789,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 27
+          "link": 28
         }
       ],
       "outputs": [
@@ -971,7 +973,7 @@
       "STRING"
     ],
     [
-      27,
+      28,
       4,
       0,
       19,
@@ -1079,6 +1081,22 @@
           {
             "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
             "label": "Format / platform"
+          }
+        ],
+        [
+          18,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          18,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [
