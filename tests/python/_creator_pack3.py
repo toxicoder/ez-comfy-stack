@@ -173,7 +173,7 @@ def _l(
     portrait = h > w
     if catalog is None:
         catalog = "ltx_broll" if mode == "t2v" else "ltx_i2v"
-    src = "motion/av/shorts-still-12s" if portrait else ("motion/av/text-to-video-12s" if mode == "t2v" else "motion/av/still-to-video-12s")
+    src = "motion/av/shorts-still-10s" if portrait else ("motion/av/text-to-video-10s" if mode == "t2v" else "motion/av/still-to-video-10s")
     return Pack3Spec(
         rel=f"creator/av/{stem}",
         kind="ltx_av",
@@ -1045,7 +1045,7 @@ PACK3: tuple[Pack3Spec, ...] = (
         "wan",
         "Silent 9:16 hook zoom punch",
         "Punch-in toward the start-image subject in the first second, then hold.",
-        handoff=("motion/av/shorts-still-12s",),
+        handoff=("motion/av/shorts-still-10s",),
     ),
     _w(
         "screen-bg-loop",

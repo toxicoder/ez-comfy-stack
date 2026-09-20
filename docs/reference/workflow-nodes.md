@@ -3959,6 +3959,14 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
 ### `EZWanPromptEnhance` — Wan Prompt Enhance
 
 Rewrite a lazy prompt for Wan 2.2 TI2V-5B (silent).
@@ -5071,7 +5079,7 @@ Pin a still onto a latent frame (first-last-frame).
 
 !!! warning "Lab notes"
 
-    motion/av/first-last-12s uses index 0 then -1 on the video latent before audio concat.
+    motion/av/first-last-10s uses index 0 then -1 on the video latent before audio concat.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5106,7 +5114,7 @@ Decode LTX audio latent to AUDIO for the MP4 mux.
 
 !!! warning "Lab notes"
 
-    Skipped on motion/av/audio-to-video-12s (original wav is muxed).
+    Skipped on motion/av/audio-to-video-10s (original wav is muxed).
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5263,7 +5271,7 @@ Couple audio and video during sampling (dialogue graphs).
 
 !!! warning "Lab notes"
 
-    motion/av/dialogue-12s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
+    motion/av/dialogue-10s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -5312,7 +5320,7 @@ Load a wav/mp3 from input/.
 
 !!! warning "Lab notes"
 
-    motion/av/audio-to-video-12s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
+    motion/av/audio-to-video-10s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

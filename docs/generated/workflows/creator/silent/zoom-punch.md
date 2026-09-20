@@ -34,7 +34,7 @@ Format / platform sets pixels (Custom uses Width × Height). Quality does not ch
 Silent 9:16 hook zoom punch. Lab size **480×832**. Prefix `ez_punch`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: wan — stop LTX, podcast, music. One GB10 job.
-Handoff: **motion/av/shorts-still-12s**.
+Handoff: **motion/av/shorts-still-10s**.
 After Queue, click **Save video (MP4) — open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.
 LoadImage defaults to example.png so Queue smokes.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -738,7 +738,7 @@ Format / platform sets pixels (Custom uses Width × Height). Quality does not ch
 Silent 9:16 hook zoom punch. Lab size **480×832**. Prefix `ez_punch`.
 Empty of lettering. Add titles in your editor, not in the prompt.
 Occupancy: wan — stop LTX, podcast, music. One GB10 job.
-Handoff: **motion/av/shorts-still-12s**.
+Handoff: **motion/av/shorts-still-10s**.
 After Queue, click **Save video (MP4) — open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.
 LoadImage defaults to example.png so Queue smokes.
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
@@ -1320,6 +1320,16 @@ Match a loaded still's aspect, or keep Format / platform.
 **How it affects generation:** Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size.
 
 **This graph:** `Match input`
+
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `5 seconds`
 
 ### `EZImageDescribe` — Describe image
 

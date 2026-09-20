@@ -238,7 +238,7 @@ def core_nodes() -> dict[str, Any]:
         "LoadAudio": _n(
             "Load Audio",
             "Load a wav/mp3 from input/.",
-            lab="motion/av/audio-to-video-12s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
+            lab="motion/av/audio-to-video-10s defaults ez_a2v_bed.wav. Drop the file in ${COMFY_OUTPUT_DIR}/input.",
             sockets=[_s("AUDIO", "AUDIO", "out", "Waveform for LTXVAudioVAEEncode.")],
             widgets=[_w("audio", index=0, desc="Filename in input/.", gen="The original wav is muxed into the MP4 (no audio VAE decode on a2v).")],
         ),
@@ -405,6 +405,7 @@ def core_nodes() -> dict[str, Any]:
                 _w("width", index=2, typ="INT", rng="16–1280", desc="Custom width.", gen="Used when Format is Custom. Presets ignore this widget at Queue. LTX Custom snaps 720→704."),
                 _w("height", index=3, typ="INT", rng="16–1280", desc="Custom height.", gen="Used when Format is Custom. Presets ignore this widget at Queue."),
                 _w("size_mode", index=4, typ="COMBO", rng="Match input / Force format", desc="Match a loaded still's aspect, or keep Format / platform.", gen="Match input (default) picks the nearest family aspect row when a still is loaded. Force format keeps the Format pick. Length stays on the latent. Quality does not change size."),
+                _w("duration_s", index=5, typ="COMBO", rng="5 / 8 / 10 / 12 seconds", desc="LTX clip length at 24 fps.", gen="Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length."),
             ],
         ),
         "ImageScale": _n(

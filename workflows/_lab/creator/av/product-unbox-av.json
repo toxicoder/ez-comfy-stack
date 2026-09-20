@@ -328,7 +328,7 @@
       "widgets_values": [
         1280,
         704,
-        289,
+        241,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        241,
         24.0,
         1
       ],
@@ -699,7 +699,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## creator/av/product-unbox-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUnbox AV with paper SFX ~12 s. Lab size **1280\u00d7704**. Prefix `ez_unbox_av`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
+        "## creator/av/product-unbox-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUnbox AV with paper SFX ~10 s. Lab size **1280\u00d7704**. Prefix `ez_unbox_av`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n"
       ],
       "title": "Operator note \u2014 video output"
     },
@@ -815,7 +815,7 @@
         "Hands ease a box. Paper rustle, cardboard. No score. Keep the start image. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps",
+        "10 seconds, 24 fps",
         "paper rustle, cardboard, no score",
         "none",
         "creator/av/product-unbox-av"
@@ -991,7 +991,8 @@
         "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
         1280,
         704,
-        "Match input"
+        "Match input",
+        "10 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1298,9 +1299,9 @@
   "extra": {
     "lab_profile": "creator/av/product-unbox-av",
     "lab_ltx_tier": "balanced",
-    "lab_note": "## creator/av/product-unbox-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUnbox AV with paper SFX ~12 s. Lab size **1280\u00d7704**. Prefix `ez_unbox_av`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
+    "lab_note": "## creator/av/product-unbox-av\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUnbox AV with paper SFX ~10 s. Lab size **1280\u00d7704**. Prefix `ez_unbox_av`.\nEmpty of lettering. Add titles in your editor, not in the prompt.\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job.\nHandoff: none.\nAfter Queue, click **Save video (MP4) \u2014 open node for preview**. File lands on `${COMFY_OUTPUT_DIR}`.\nLoadImage defaults to example.png so Queue smokes.\nLTX canvas 1280\u00d7704 (width/height must be divisible by 32; 720 and 1080 are invalid). Disclose AI-generated media. No score. Mouths will not match.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown.\n",
     "lab_ltx_av": true,
-    "lab_description": "Unbox AV with paper SFX ~12 s",
+    "lab_description": "Unbox AV with paper SFX ~10 s",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1359,6 +1360,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          23,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

@@ -62,7 +62,7 @@ Dest: `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/<slug>.app.json`. 
 
 ## How auto picks
 
-When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square → `stills/instagram-square`, silent / i2v → `motion/silent/still-to-video-5s`, ltx / foley → `motion/av/still-to-video-12s`, default `stills/still-draft`. It never invents node types.
+When Template is **auto**, App Forge asks the on-box GGUF (or the 35B sidecar when `llm-desk` is up) for `{template, slug, slots}`. If the GGUF is missing it uses a keyword heuristic: `1:1` / square → `stills/instagram-square`, silent / i2v → `motion/silent/still-to-video-5s`, ltx / foley → `motion/av/still-to-video-10s`, default `stills/still-draft`. It never invents node types.
 
 Official Comfy Cloud MCP / PyPI `comfy-mcp` stay out of the image. This is the in-tree analog: templates first, typed tools, no `execute_code`.
 

@@ -45,7 +45,7 @@ def test_still_studio_identity_and_app_mode() -> None:
     assert mode["occupancy"] == "klein"
     assert mode["default_view"] == "app"
     assert "motion/silent/still-to-video-5s" in mode["handoff"]
-    assert "motion/av/still-to-video-12s" in mode["handoff"]
+    assert "motion/av/still-to-video-10s" in mode["handoff"]
     assert "stills/text-swap" in mode["handoff"]
     save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
     assert save["widgets_values"][0] == "ez_still_studio"

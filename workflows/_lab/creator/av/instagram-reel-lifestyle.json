@@ -328,7 +328,7 @@
       "widgets_values": [
         768,
         1280,
-        289,
+        241,
         1
       ]
     },
@@ -586,7 +586,7 @@
         "Node name for S&R": "LTXVEmptyLatentAudio"
       },
       "widgets_values": [
-        289,
+        241,
         24.0,
         1
       ],
@@ -815,7 +815,7 @@
         "Slow lifestyle take from the start still. Fabric breeze, distant city. No score. Keep every object and surface from the start image; do not redesign.",
         true,
         "i2v",
-        "12 seconds, 24 fps, 9:16",
+        "10 seconds, 24 fps, 9:16",
         "breeze, distant city, no score",
         "none",
         "creator/av/instagram-reel-lifestyle"
@@ -991,7 +991,8 @@
         "LTX \u00b7 9:16 Shorts (768\u00d71280)",
         768,
         1280,
-        "Match input"
+        "Match input",
+        "10 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1359,6 +1360,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          23,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [

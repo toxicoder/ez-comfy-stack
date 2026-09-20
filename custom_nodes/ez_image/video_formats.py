@@ -30,6 +30,14 @@ FAMILY_LTX = "ltx"
 FAMILY_WAN_LABEL = "Wan 5B"
 FAMILY_LTX_LABEL = "LTX-2.5"
 DEFAULT_FAMILY = FAMILY_WAN
+DURATION_CHOICES = ("5 seconds", "8 seconds", "10 seconds", "12 seconds")
+DURATION_DEFAULT = "10 seconds"
+DURATION_SECONDS = {
+    "5 seconds": 5.00,
+    "8 seconds": 8.00,
+    "10 seconds": 10.00,
+    "12 seconds": 12.00,
+}
 
 
 @dataclass(frozen=True)

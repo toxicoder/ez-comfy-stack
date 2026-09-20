@@ -1321,6 +1321,16 @@ Match a loaded still's aspect, or keep Format / platform.
 
 **This graph:** `Match input`
 
+#### `duration_s`
+
+Type `COMBO`. Range / default: 5 / 8 / 10 / 12 seconds.
+
+LTX clip length at 24 fps.
+
+**How it affects generation:** Default 10 seconds (241 frames, 1+8n). Wan ignores this. Quality does not write length.
+
+**This graph:** `5 seconds`
+
 ### `EZImageDescribe` — Describe image
 
 Caption a source still so Prompt Enhance can name inventory and lettering.

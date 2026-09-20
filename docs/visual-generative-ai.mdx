@@ -66,7 +66,7 @@ flowchart LR
   LTX --> Mp4["MP4 + world audio<br/>VHS_VideoCombine"]
 ```
 
-**Handoff (start in App Mode):** load **stills/still-draft** → enter App Mode → Queue Spark Still → open **stills/still-hero** (same seed) → set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **motion/av/still-to-video-12s** for native audio. Showcase: **motion/av/dialogue-12s** (quoted speech), **motion/av/multishot-12s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-12s** (two stills), **motion/av/audio-to-video-12s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** → **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
+**Handoff (start in App Mode):** load **stills/still-draft** → enter App Mode → Queue Spark Still → open **stills/still-hero** (same seed) → set **motion/silent/still-to-video-5s** LoadImage to `ez_still_draft_*.png` or `ez_still_hero_*.png` → Queue ~5 s silent → optional **motion/av/still-to-video-10s** for native audio. Showcase: **motion/av/dialogue-10s** (quoted speech), **motion/av/multishot-10s** (named cuts), **motion/av/product-hero** (packshot), **motion/av/first-last-10s** (two stills), **motion/av/audio-to-video-10s** (freeze a wav). Platform jobs (channel art, 4:5 feed, Canvas, BRB): [Creator pack](create/workflows-creator.md) — same occupancy XOR, e.g. **creator/stills/youtube-shorts-thumb** → **creator/silent/zoom-punch**. Stop Wan before LTX (occupancy). I2V graphs also Queue on Comfy’s default **example.png**. Apps catalog: [ComfyUI Apps](studio-apps.md).
 
 LTX-2.5 is a **joint audio/video** transformer. Seeded LTX graphs load the **audio VAE**, create matching empty audio latents, concat them with video latents before `KSampler`, then decode audio with **`LTXVAudioVAEDecode`** into **`VHS_VideoCombine`** so the MP4 includes world audio. Text conditioning is a single **CLIPLoader** (`gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot`, type **`ltxv`**).
 
@@ -76,7 +76,7 @@ License-clean AV path for a company under the LTX Community License revenue cap.
 
 1. **Still** — Klein **4B** at clip size. Landscape **1280×704**. Portrait **768×1280**. Pick a seed on **Draft** (4-step), then Queue this quality at the **same** pixels. Generic 16:9 / 9:16 Format rows retarget to those feeders; named platform jobs stay put.
 2. **Optional polish** — SeedVR2 on that PNG (`download-restore --tier seedvr2-3b`). Add detail at ~1.3–1.5×. Do not jump to 4K. Stop Comfy first.
-3. **Motion** — same PNG into **motion/av/still-to-video-12s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX’s own 2× upscaler / DFR Templates handle resolution.
+3. **Motion** — same PNG into **motion/av/still-to-video-10s** (LTX-2.5 I2V). Prompt only the motion and sound. Let LTX’s own 2× upscaler / DFR Templates handle resolution.
 4. **Unload Klein before LTX.** Occupancy chip; one GB10 job. 90s films already pass the identity still through **Unload models**.
 
 Wan silent 5 s stays the Apache rehearsal path (no $10M cap, no native audio). This quality is a no-op on Wan / audio / trellis Apps.
@@ -99,7 +99,7 @@ Do **not** edit raw JSON. Change widgets on the canvas.
 1. Load **stills/still-draft** → set Positive prompt + seed (fixed) → Queue (minutes, 4-step).
 2. Pick a frame under `${COMFY_OUTPUT_DIR}` (`ez_still_draft_*.png`).
 3. Load **motion/silent/still-to-video-5s** → set LoadImage to that PNG (or leave `example.png` to smoke-test) → edit **Motion / prompt** only → Queue ~5 s silent.
-4. Optional audio: **motion/av/still-to-video-12s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
+4. Optional audio: **motion/av/still-to-video-10s**, same first frame, same seed note, Queue ~5 s AV at **1280×704**.
 5. Short six-shot demo: Queue **motion/silent/still-to-shot** six times (`ez_shot_01` … `06`) then:
 
     ```bash

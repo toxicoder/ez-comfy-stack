@@ -31,7 +31,7 @@ Unload before LTX. Do not Queue this graph and a DCC dump in one session (occupa
 Prompt: inventory + look. Motion comes later from the pack. Official clay is Workbench / unshaded, not Cycles beauty.
 """
 
-LTX_NOTE = """## dcc/depth-control-12s
+LTX_NOTE = """## dcc/depth-control-10s
 
 Lab envelope for Path B depth-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
@@ -79,7 +79,7 @@ LoadImage: clay ``first.png``. Each plate scales the clay to its latent. Occupan
 Handoff: wan-i2v-5s / wan-shorts-i2v / ltx-iclora-depth-shorts.
 """
 
-LTX_CANNY_NOTE = """## dcc/canny-control-12s
+LTX_CANNY_NOTE = """## dcc/canny-control-10s
 
 Lab envelope for Path B **canny**-guided 12.00s print. LTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid). **289 frames @ 24 fps**. MagCache **off**. Distilled transformer only.
 
@@ -485,9 +485,9 @@ def build_klein_from_clay() -> dict:
 
 def build_ltx_iclora() -> dict:
     graph = copy.deepcopy(_load("motion/av/still-to-shot.json"))
-    graph["id"] = "dcc/depth-control-12s"
+    graph["id"] = "dcc/depth-control-10s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/depth-control-12s"
+    extra["lab_profile"] = "dcc/depth-control-10s"
     extra["lab_note"] = LTX_NOTE
     extra["lab_description"] = "LTX-2.5 IC-LoRA Union Control envelope, 289 frames, depth default"
     extra["lab_iclora"] = {
@@ -920,9 +920,9 @@ def _set_vhs_prefix(graph: dict, prefix: str) -> None:
 
 def build_ltx_iclora_canny() -> dict:
     graph = build_ltx_iclora()
-    graph["id"] = "dcc/canny-control-12s"
+    graph["id"] = "dcc/canny-control-10s"
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "dcc/canny-control-12s"
+    extra["lab_profile"] = "dcc/canny-control-10s"
     extra["lab_description"] = (
         "LTX-2.5 IC-LoRA Union Control envelope, 289 frames, canny default"
     )
@@ -1161,8 +1161,8 @@ def main() -> int:
         ("dcc/clay-hero.json", klein),
         ("dcc/canny-hero.json", canny),
         ("dcc/clay-plates.json", plates),
-        ("dcc/depth-control-12s.json", ltx),
-        ("dcc/canny-control-12s.json", ltx_canny),
+        ("dcc/depth-control-10s.json", ltx),
+        ("dcc/canny-control-10s.json", ltx_canny),
         ("dcc/depth-control-shorts.json", ltx_shorts),
         ("dcc/first-last-from-guide.json", flf),
         ("dcc/guide-still.json", klein_loader),

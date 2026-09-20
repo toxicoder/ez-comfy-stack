@@ -32,7 +32,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-12s**.
+Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-10s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
@@ -532,7 +532,7 @@ Markdown-ish operator note.
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Vertical Shorts/Reels still (Klein 4B distilled FP8). Default **432×768** (9:16).
-Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-12s**.
+Save prefix: `ez_shorts_still`. Feed into **motion/silent/shorts-still-5s** or **motion/av/shorts-still-10s**.
 Widgets: seed / steps / CFG / size on canvas. Prompt enhance is on by default; read the rewrite on the node after Queue.
 
 Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.

@@ -311,7 +311,7 @@
     "aliases": ["audio-to-video", "A2V"],
     "category": "Modalities",
     "short": "Audio-to-video: picture follows a soundtrack (audio freeze, not lip-sync OSS).",
-    "long": "`motion/av/audio-to-video-12s` encodes a ~5 s wav and muxes the original waveform. `stills/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates → LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
+    "long": "`motion/av/audio-to-video-10s` encodes a ~5 s wav and muxes the original waveform. `stills/talking-head` is I2V smoke. Banned lip-sync OSS (Wav2Lip) stays out. Two-stage freeze lives in Comfy Templates → LTX-2.5. See [Motion catalog](create/workflows-motion.md).",
     "see_also": ["s2v", "ltx"]
   },
   {

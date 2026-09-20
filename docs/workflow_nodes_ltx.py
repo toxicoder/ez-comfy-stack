@@ -72,7 +72,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVAudioVAEDecode": _n(
             "LTX Audio VAE Decode",
             "Decode LTX audio latent to AUDIO for the MP4 mux.",
-            lab="Skipped on motion/av/audio-to-video-12s (original wav is muxed).",
+            lab="Skipped on motion/av/audio-to-video-10s (original wav is muxed).",
             origin="comfy-extras",
             sockets=[
                 _s("samples", "LATENT", "in", "Audio latent."),
@@ -107,7 +107,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVAddGuide": _n(
             "LTX Add Guide",
             "Pin a still onto a latent frame (first-last-frame).",
-            lab="motion/av/first-last-12s uses index 0 then -1 on the video latent before audio concat.",
+            lab="motion/av/first-last-10s uses index 0 then -1 on the video latent before audio concat.",
             origin="comfy-extras",
             sockets=[
                 _s("positive", "CONDITIONING", "in", "Cond in."),
@@ -127,7 +127,7 @@ def ltx_nodes() -> dict[str, Any]:
         "LTXVModalityGuidance": _n(
             "LTX Modality Guidance",
             "Couple audio and video during sampling (dialogue graphs).",
-            lab="motion/av/dialogue-12s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.",
+            lab="motion/av/dialogue-10s uses 3.0 / 0 / 1. Mouths still will not lip-sync; this only tightens A/V coupling.",
             origin="comfy-extras",
             sockets=[
                 _s("model", "MODEL", "in", "LTX UNET."),

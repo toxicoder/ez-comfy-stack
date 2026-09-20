@@ -758,7 +758,8 @@
         "Wan \u00b7 9:16 Shorts (480\u00d7832)",
         480,
         832,
-        "Match input"
+        "Match input",
+        "5 seconds"
       ],
       "title": "Format / platform"
     },
@@ -1028,7 +1029,7 @@
       "occupancy": "wan",
       "enhance_off_identity": false,
       "handoff": [
-        "motion/av/shorts-still-12s"
+        "motion/av/shorts-still-10s"
       ]
     },
     "lab_magcache": {
@@ -1090,6 +1091,14 @@
           {
             "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
             "label": "Output size"
+          }
+        ],
+        [
+          18,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8, 10 (default), or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
           }
         ],
         [
