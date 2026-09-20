@@ -119,3 +119,9 @@ filegroup(
     srcs = ["ci/install-lint-tools.sh"],
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "ci_publish_pages_tree",
+    srcs = ["ci/publish-pages-tree.sh"],
+    visibility = ["//visibility:public"],
+)

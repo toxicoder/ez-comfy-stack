@@ -110,9 +110,12 @@ teardown() {
   grep -qF 'build-${alias}' "${deploy}"
   grep -qF 'pages-root-index.html' "${deploy}"
   grep -qF 'max-old-space-size' "${deploy}"
+  grep -qF 'scripts/ci/publish-pages-tree.sh' "${deploy}"
   run grep -E 'bazelisk run //docs-site:build-latest' "${deploy}"
   [ "$status" -ne 0 ]
   run grep -E 'bazelisk run //docs-site:build-development' "${deploy}"
+  [ "$status" -ne 0 ]
+  run grep -E 'git checkout -B gh-pages' "${deploy}"
   [ "$status" -ne 0 ]
 }
 

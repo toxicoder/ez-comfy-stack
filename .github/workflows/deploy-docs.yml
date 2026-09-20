@@ -10,6 +10,8 @@ name: Deploy Documentation
 #
 # URL compatibility: the MkDocs site published under those aliases via mike.
 # A root index.html forwards bare /ez-comfy-stack/ traffic to /latest/.
+# Publish uses scripts/ci/publish-pages-tree.sh (a git worktree) so Next's
+# rewrite of tracked docs-site/next-env.d.ts cannot block the gh-pages push.
 #
 # PR docs validation stays in ci.yml. This workflow runs only on push to
 # long-lived branches (or workflow_dispatch).
@@ -107,31 +109,7 @@ jobs:
           cp docs-site/pages-root-index.html _site/index.html
 
       - name: Publish to the gh-pages branch
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          SRC_SHA=$(git rev-parse HEAD)
-          git fetch origin gh-pages
-          if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
-            git checkout -B gh-pages origin/gh-pages
-          else
-            git checkout --orphan gh-pages
-          fi
-          git rm -rf --quiet . 2>/dev/null || true
-          cp -r _site/. ./
-          rm -rf _site
-          cat >.gitignore <<'GITIGNORE'
-          /*
-          !/latest
-          !/development
-          !/index.html
-          !/.nojekyll
-          GITIGNORE
-          git add -A
-          git commit -m "docs: publish $GITHUB_REF_NAME from $GITHUB_SHA" --allow-empty
-          git push origin gh-pages
-          git checkout -f "$SRC_SHA"
+        run: ./scripts/ci/publish-pages-tree.sh _site
 
       - name: Report the published URLs
         run: |

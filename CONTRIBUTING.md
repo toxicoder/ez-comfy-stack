@@ -64,7 +64,7 @@ flowchart LR
 Public site: [latest](https://toxicoder.github.io/ez-comfy-stack/latest/) (`main`) · [development](https://toxicoder.github.io/ez-comfy-stack/development/) (`development`).
 
 - PRs validate with `make docs` / `bazelisk run //docs:docs` (generators + Fumadocs export into `docs-site/out/`).
-- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes two Next exports → `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
+- After merge to `main` or `development`, `.github/workflows/deploy-docs.yml` publishes one Next export per run → `gh-pages` (`/latest/` from `main`, `/development/` from `development`). Each alias shows a **Last published** chip stamped at that deploy (`EZ_DOCS_PUBLISHED_AT`).
 - Prefer **relative** in-repo doc links (`docs/…`, same-folder page links) so they work on the branch you are viewing and under each published version path.
 - Docs app: Node 22+ and `./docs/setup-docs.sh` (npm inside `docs-site/`). Python `docs/requirements.txt` is generators only.
 
