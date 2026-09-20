@@ -16,10 +16,11 @@ LTX_SPATIAL_TYPES = ("LTXVImgToVideo", "EmptyLTXVLatentVideo")
 BROADCAST_ILLEGAL = {720, 1080}
 def _portrait_stems() -> frozenset[str]:
     from _creator_pack3 import PACK3
+    from _services_pack import SERVICES
 
     extra = {
         spec.rel.rsplit("/", 1)[-1]
-        for spec in PACK3
+        for spec in (*PACK3, *SERVICES)
         if spec.occupancy == "ltx" and spec.portrait
     }
     return frozenset({"shorts-still-12s", "depth-control-shorts"}) | extra

@@ -1460,6 +1460,21 @@ def _register_pack3_stamps() -> None:
 _register_pack3_stamps()
 
 
+def _register_services_stamps() -> None:
+    from _services_pack import services_stamp_rows
+
+    for rel, occupancy, handoff, pin in services_stamp_rows():
+        STAMP_SPECS[rel] = _spec(
+            "produce",
+            occupancy,
+            *handoff,
+            enhance_off_identity=pin,
+        )
+
+
+_register_services_stamps()
+
+
 def occupancy_stanza(occupancy: str) -> str:
     stop = OCCUPANCY_STOP[occupancy]
     return f"Occupancy: {occupancy} — stop {stop}. One GB10 job."
