@@ -103,6 +103,19 @@ teardown() {
   grep -qF 'workflow_dispatch' "${deploy}"
 }
 
+@test "deploy-docs.yml builds one Pages alias per run" {
+  local deploy="${REPO_ROOT}/.github/workflows/deploy-docs.yml"
+  [ -f "${deploy}" ]
+  grep -qF 'DOCS_ALIAS' "${deploy}"
+  grep -qF 'build-${alias}' "${deploy}"
+  grep -qF 'pages-root-index.html' "${deploy}"
+  grep -qF 'max-old-space-size' "${deploy}"
+  run grep -E 'bazelisk run //docs-site:build-latest' "${deploy}"
+  [ "$status" -ne 0 ]
+  run grep -E 'bazelisk run //docs-site:build-development' "${deploy}"
+  [ "$status" -ne 0 ]
+}
+
 @test "AGENTS.md is Bazel-first and still forbids K3s dashboard NCCL" {
   local agents="${REPO_ROOT}/AGENTS.md"
   grep -qF 'bazelisk run //:validate' "${agents}"

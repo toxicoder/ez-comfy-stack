@@ -41,6 +41,7 @@ filegroup(
             "next.config.ts",
             "package.json",
             "package-lock.json",
+            "pages-root-index.html",
             "playwright.config.mjs",
             "postcss.config.mjs",
             "source.config.ts",
