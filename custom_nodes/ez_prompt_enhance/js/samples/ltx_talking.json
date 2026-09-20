@@ -98,5 +98,55 @@
     "id": "no-score-talk",
     "label": "No score talk",
     "prompt": "The start image holds as the first frame. The subject holds still and speaks one short line. Wardrobe and set stay locked. Mouth motion is modest. Fixed camera. Room tone matching the start image, modest speech. No music and no score. Keep the start-image identity locked. Keep every object and surface from the start image; do not redesign. No music and no score."
+  },
+  {
+    "id": "slow-look",
+    "label": "Slow look",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams turns to look off-frame as wind moves coat nap. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "step-forward",
+    "label": "Step forward",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams takes two slow steps toward camera on wet stone. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "coat-wind",
+    "label": "Coat in wind",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams holds still while wind lifts the coat lining. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "staff-glow",
+    "label": "Staff glow",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams raises a compact unmarked data-staff as glyph rings bloom. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "head-turn",
+    "label": "Head turn",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams turns from profile to camera, city lights in the glass. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "rain-pause",
+    "label": "Rain pause",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams pauses under an overhang while rain ticks the stone. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "rail-lean",
+    "label": "Rail lean",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams leans on a rail as boats pass below. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "door-enter",
+    "label": "Door enter",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams steps through an unmarked doorway into warmer light. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "stair-down",
+    "label": "Stair down",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams descends three unmarked stairs toward camera. Slow locked camera. Empty of lettering."
+  },
+  {
+    "id": "window-look",
+    "label": "Window look",
+    "prompt": "An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams looks out an unmarked window as weather moves. Slow locked camera. Empty of lettering."
   }
 ]

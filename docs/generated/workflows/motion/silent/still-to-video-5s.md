@@ -995,6 +995,156 @@ Look reference. Ignored on I2V.
 | `post_apocalyptic` | Post-apocalyptic still, rust, dust, broken concrete, sickly sun. |
 | `afrofuturism` | Afrofuturist still, diasporic ornament, cosmic metals, sunlit future. |
 | `psychedelic_1960s` | 1960s psychedelic still, molten contour, vibrating complementary color. |
+| `webtoon_color_hold` | Webtoon color hold, hard flats. |
+| `ova_paint_nineties` | 1990s OVA paint, acetate cel. |
+| `late_night_cel_city` | Late-night cel city, neon planes. |
+| `watercolor_layout_bg` | Watercolor layout background, paper tooth. |
+| `thick_ink_action_still` | Thick-ink action still, speedlines. |
+| `soft_pastel_romance_still` | Soft pastel romance still, airbrush blush. |
+| `analog_acetate_cel` | Analog acetate cel, pegbar. |
+| `digital_paint_anime_still` | Digital-paint anime still, soft blends. |
+| `limited_tv_color_hold` | Limited TV color hold, small palette. |
+| `sparkle_highlight_anime` | Sparkle-highlight anime, catchlights. |
+| `heavy_screentone_color` | Heavy screentone color, tone sheets. |
+| `school_rooftop_cel` | School-rooftop cel, chain-link sky. |
+| `train_window_anime_bg` | Train-window anime background, BG streaks. |
+| `festival_lantern_cel` | Festival-lantern cel, paper glow. |
+| `rain_reflection_anime` | Rain-reflection anime, wet cel. |
+| `winter_breath_cel` | Winter-breath cel, vapor clouds. |
+| `summer_heat_cel` | Summer-heat cel, heat haze. |
+| `mecha_cockpit_cel` | Mecha-cockpit cel, instrument glow. |
+| `magic_circle_cel` | Magic-circle cel, glyph glow. |
+| `food_steam_anime` | Food-steam anime, steam curls. |
+| `sports_speedline_cel` | Sports-speedline cel, radial lines. |
+| `horror_shadow_cel` | Horror-shadow cel, graphic bands. |
+| `slice_of_life_flat` | Slice-of-life flat cel, household props. |
+| `historical_ink_anime` | Historical ink anime, ink-wash architecture. |
+| `stage_spotlight_cel` | Stage-spotlight cel, cone key. |
+| `beach_sparkle_cel` | Beach-sparkle cel, water glitter. |
+| `shrine_steps_cel` | Shrine-steps cel, dawn mist. |
+| `subway_rush_cel` | Subway-rush cel, packed car. |
+| `library_dust_cel` | Library-dust cel, sunshaft motes. |
+| `rooftop_laundry_cel` | Rooftop-laundry cel, sheet lines. |
+| `convenience_night_cel` | Convenience-night cel, interior glow. |
+| `petal_fall_cel` | Petal-fall cel, blossom ticks. |
+| `maple_path_cel` | Maple-path cel, fallen leaves. |
+| `snow_footprint_cel` | Snow-footprint cel, trail of prints. |
+| `cat_alley_cel` | Cat-alley cel, watching cat. |
+| `bicycle_slope_cel` | Bicycle-slope cel, sky rim. |
+| `river_firefly_cel` | River-firefly cel, firefly ticks. |
+| `clock_tower_cel` | Clock-tower cel, unmarked face. |
+| `greenhouse_cel_still` | Greenhouse cel still, glass dapples. |
+| `bakery_dawn_cel` | Bakery-dawn cel, oven glow. |
+| `radio_booth_cel` | Radio-booth cel, foam wedges. |
+| `observatory_cel_still` | Observatory cel still, dome and stars. |
+| `fishing_pier_cel` | Fishing-pier cel, wet planks. |
+| `desert_bus_cel` | Desert-bus cel, heat haze. |
+| `island_ferry_cel` | Island-ferry cel, wake water. |
+| `attic_window_cel` | Attic-window cel, dust shaft. |
+| `rooftop_pool_cel` | Rooftop-pool cel, water caustics. |
+| `night_market_cel` | Night-market cel, stall glow. |
+| `dawn_switchback_cel` | Dawn-switchback cel, raking dawn. |
+| `clockwork_festival_cel` | Clockwork-festival cel, decorative gears. |
+| `rubber_hose_ink` | Rubber-hose ink, looping limbs. |
+| `sunday_funnies_halftone` | Sunday-funnies halftone, newsprint primaries. |
+| `editorial_gag_panel` | Editorial gag panel, brush contour. |
+| `limited_tv_paint` | Limited TV paint, tiny paint set. |
+| `crayon_saturday_still` | Crayon Saturday still, wax stroke. |
+| `marker_comp_toon` | Marker-comp toon, felt-tip bleed. |
+| `flat_shape_toon` | Flat-shape toon, simple geometry. |
+| `clay_outline_toon` | Clay-outline toon, rounded contour. |
+| `newsprint_comic_color` | Newsprint comic color, off-register primaries. |
+| `brush_pen_toon` | Brush-pen toon, dry-brush contour. |
+| `chalkboard_toon` | Chalkboard toon, chalk dust. |
+| `felt_board_toon` | Felt-board toon, cut-cloth shapes. |
+| `sticker_sheet_toon` | Sticker-sheet toon, die-cut gloss. |
+| `balloon_animal_toon` | Balloon-animal toon, inflated gloss. |
+| `woodcut_toon` | Woodcut toon, gouge marks. |
+| `linocut_toon` | Linocut toon, rolled-ink flats. |
+| `collage_cutout_toon` | Collage-cutout toon, scissor edges. |
+| `puppet_show_toon` | Puppet-show toon, cloth and rods. |
+| `matchstick_toon` | Matchstick toon, stick limbs. |
+| `doodle_margin_toon` | Doodle-margin toon, ruled paper. |
+| `cereal_box_toon` | Cereal-box toon, loud pack art. |
+| `birthday_card_toon` | Birthday-card toon, foil balloons. |
+| `sidewalk_chalk_toon` | Sidewalk-chalk toon, pavement tooth. |
+| `window_paint_toon` | Window-paint toon, tempera on glass. |
+| `yarn_outline_toon` | Yarn-outline toon, stitched contour. |
+| `button_eye_toon` | Button-eye toon, felt and buttons. |
+| `paper_bag_toon` | Paper-bag toon, kraft crayon. |
+| `sock_puppet_toon` | Sock-puppet toon, googly craft eyes. |
+| `party_banner_toon` | Party-banner toon, bunting shapes. |
+| `ice_cream_toon` | Ice-cream toon, drip scoops. |
+| `circus_poster_toon` | Circus-poster toon, big-top shapes. |
+| `toy_block_toon` | Toy-block toon, wooden cubes. |
+| `marble_run_toon` | Marble-run toon, glass orbs. |
+| `kaleidoscope_toon` | Kaleidoscope toon, mirrored shards. |
+| `snow_globe_toon` | Snow-globe toon, glitter in glass. |
+| `cookie_cutter_toon` | Cookie-cutter toon, cut dough. |
+| `shadow_puppet_toon` | Shadow-puppet toon, backlit silhouettes. |
+| `flipbook_toon` | Flipbook toon, page corners. |
+| `stencil_spray_toon` | Stencil-spray toon, crisp masks. |
+| `gag_balloon_toon` | Gag-balloon toon, empty speech shapes. |
+| `pie_gag_toon` | Pie-gag toon, flying cream. |
+| `anvil_gag_toon` | Anvil-gag toon, scale gag. |
+| `spring_shoes_toon` | Spring-shoes toon, coiled bounce. |
+| `cannon_gag_toon` | Cannon-gag toon, smoke puffs. |
+| `trampoline_toon` | Trampoline toon, stretch bounce. |
+| `whoopee_cushion_toon` | Whoopee-cushion toon, rubber disc. |
+| `banana_peel_toon` | Banana-peel toon, slip setup. |
+| `magnet_gag_toon` | Magnet-gag toon, flying metal. |
+| `invisible_ink_toon` | Invisible-ink toon, UV glow doodle. |
+| `jack_in_box_toon` | Jack-in-box toon, sprung lid. |
+| `stop_motion_felt` | Stop-motion felt, felt nap. |
+| `paper_cutout_two_five` | Paper cutout 2.5D, stacked card planes. |
+| `paint_on_glass` | Paint-on-glass, wet pigment smears. |
+| `toon_shaded_cgi` | Toon-shaded CGI, banded shadow. |
+| `claymation_armature` | Claymation armature, thumbprints. |
+| `sand_animation_still` | Sand animation still, poured grains. |
+| `pinboard_animation` | Pinboard animation, raised pins. |
+| `hinged_silhouette_sheet` | Hinged silhouette sheet, hinged black figures. |
+| `pixilation_live` | Pixilation live, stepped pose. |
+| `rotoscope_paint` | Rotoscope paint, traced contour. |
+| `replacement_animation` | Replacement animation, swapped mouth card. |
+| `cutout_multiplane` | Cutout multiplane, glass layers. |
+| `object_animation_still` | Object animation still, posed household items. |
+| `stratacut_clay` | Stratacut clay, sliced color loaf. |
+| `time_lapse_animation` | Time-lapse animation still, stepped daylight. |
+| `go_motion_still` | Go-motion still, smear tails. |
+| `clay_morph_still` | Clay-morph still, mid-reshape. |
+| `wire_puppet_still` | Wire-puppet still, visible armature. |
+| `foam_latex_puppet` | Foam-latex puppet, painted foam skin. |
+| `ball_and_socket_puppet` | Ball-and-socket puppet, machined joints. |
+| `pixel_stop_motion` | Pixel stop-motion, physical beads. |
+| `lego_brick_still` | Brick-built animation still, interlocking studs. |
+| `wool_needle_felt` | Wool needle-felt, stab texture. |
+| `origami_animation` | Origami animation still, fold creases. |
+| `kirigami_still` | Kirigami still, cut-and-fold architecture. |
+| `zoetrope_still` | Zoetrope still, sequential strip. |
+| `phenakistoscope_still` | Phenakistoscope still, radial sequence. |
+| `thaumatrope_still` | Thaumatrope still, two-sided hold. |
+| `flipbook_stack_3d` | Flipbook stack 3D, page thickness. |
+| `cymatics_animation` | Cymatics animation still, standing-wave powder. |
+| `ferrofluid_still` | Ferrofluid still, spiked magnetic liquid. |
+| `ink_in_water_still` | Ink-in-water still, blooming plumes. |
+| `oil_on_water_still` | Oil-on-water still, swirling film. |
+| `smoke_tank_still` | Smoke-tank still, volume wisps. |
+| `sparkler_trails_still` | Sparkler-trails still, held light paths. |
+| `light_painting_anim` | Light-painting animation still, drawn light path. |
+| `diorama_tilt_band` | Diorama tilt-band still, diorama world. |
+| `forced_perspective_set` | Forced-perspective set still, giant prop. |
+| `rear_projection_still` | Rear-projection still, screen world. |
+| `front_projection_still` | Front-projection still, reflected plate. |
+| `motion_control_miniature` | Motion-control miniature still, repeatable rig. |
+| `animatronic_still` | Animatronic still, mechanical brows. |
+| `suitmation_still` | Suitmation still, built creature suit. |
+| `prosthetic_creature_still` | Prosthetic creature still, foam appliances. |
+| `stop_frame_city` | Stop-frame city still, block metropolis. |
+| `garden_stop_motion` | Garden stop-motion still, posed plants. |
+| `kitchen_stop_motion` | Kitchen stop-motion still, walking utensils. |
+| `office_stop_motion` | Office stop-motion still, marching stationery. |
+| `workshop_stop_motion` | Workshop stop-motion still, posed tools. |
+| `harbor_stop_motion` | Harbor stop-motion still, tactile toy quay. |
 
 #### `catalog`
 

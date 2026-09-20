@@ -98,5 +98,55 @@
     "id": "window-vinyl",
     "label": "Window YES WE'RE OPEN",
     "prompt": "YES WE'RE OPEN"
+  },
+  {
+    "id": "now-open",
+    "label": "NOW OPEN",
+    "prompt": "NOW OPEN"
+  },
+  {
+    "id": "lab-hours",
+    "label": "LAB HOURS",
+    "prompt": "LAB HOURS"
+  },
+  {
+    "id": "stage-door",
+    "label": "STAGE DOOR",
+    "prompt": "STAGE DOOR"
+  },
+  {
+    "id": "night-owl",
+    "label": "NIGHT OWL",
+    "prompt": "NIGHT OWL"
+  },
+  {
+    "id": "quiet-please",
+    "label": "QUIET PLEASE",
+    "prompt": "QUIET PLEASE"
+  },
+  {
+    "id": "on-air",
+    "label": "ON AIR",
+    "prompt": "ON AIR"
+  },
+  {
+    "id": "shift-change",
+    "label": "SHIFT CHANGE",
+    "prompt": "SHIFT CHANGE"
+  },
+  {
+    "id": "dock-c",
+    "label": "DOCK C",
+    "prompt": "DOCK C"
+  },
+  {
+    "id": "gate-four",
+    "label": "GATE FOUR",
+    "prompt": "GATE FOUR"
+  },
+  {
+    "id": "last-call",
+    "label": "LAST CALL",
+    "prompt": "LAST CALL"
   }
 ]

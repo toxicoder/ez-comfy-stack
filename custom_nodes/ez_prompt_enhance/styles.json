@@ -7,8 +7,20 @@
     "color": "Honest scene color with a mild photographic grade.",
     "texture": "Skin pores, fabric weave, material microdetail, mild grain.",
     "camera": "Real lens compression and plausible depth of field.",
-    "must_include": ["still photograph", "physically plausible light", "material microdetail"],
-    "conflicts": ["painting", "illustration", "anime", "cel", "3D render", "pixel", "cartoon"],
+    "must_include": [
+      "still photograph",
+      "physically plausible light",
+      "material microdetail"
+    ],
+    "conflicts": [
+      "painting",
+      "illustration",
+      "anime",
+      "cel",
+      "3D render",
+      "pixel",
+      "cartoon"
+    ],
     "suffix": "Photoreal photograph, natural materials, physically plausible light."
   },
   "cinematic_film_still": {
@@ -19,8 +31,17 @@
     "color": "Color-graded drama with rich shadows, print-film density.",
     "texture": "Fine motion-picture grain.",
     "camera": "Widescreen anamorphic-class framing with oval highlights, 35mm-equivalent classic.",
-    "must_include": ["cinematic film still", "motivated practicals", "widescreen"],
-    "conflicts": ["snapshot flash", "flat illustration", "cel", "cartoon"],
+    "must_include": [
+      "cinematic film still",
+      "motivated practicals",
+      "widescreen"
+    ],
+    "conflicts": [
+      "snapshot flash",
+      "flat illustration",
+      "cel",
+      "cartoon"
+    ],
     "suffix": "Cinematic feature-film still, widescreen, motivated practicals."
   },
   "documentary_photography": {
@@ -31,8 +52,16 @@
     "color": "Honest color with little grade.",
     "texture": "Lived-in surfaces, grit, real wear.",
     "camera": "Unposed timing, handheld 35mm-equivalent classic reportage view.",
-    "must_include": ["documentary photograph", "available light", "unposed"],
-    "conflicts": ["studio beauty light", "fashion posing", "illustration"],
+    "must_include": [
+      "documentary photograph",
+      "available light",
+      "unposed"
+    ],
+    "conflicts": [
+      "studio beauty light",
+      "fashion posing",
+      "illustration"
+    ],
     "suffix": "Observational documentary photograph, available light."
   },
   "analog_35mm_film": {
@@ -43,8 +72,16 @@
     "color": "Organic color, slight dye shift.",
     "texture": "Fine film grain, slight halation, mild gate weave.",
     "camera": "35mm-equivalent classic reportage view, spherical still-camera lens with photographic depth of field.",
-    "must_include": ["analog 35mm", "film grain", "organic color"],
-    "conflicts": ["clean digital HDR", "illustration", "3D render"],
+    "must_include": [
+      "analog 35mm",
+      "film grain",
+      "organic color"
+    ],
+    "conflicts": [
+      "clean digital HDR",
+      "illustration",
+      "3D render"
+    ],
     "suffix": "Analog 35mm color-negative film grain and organic color."
   },
   "analog_120_medium_format": {
@@ -55,8 +92,15 @@
     "color": "Creamy tones.",
     "texture": "Fine grain with high resolving power.",
     "camera": "Square-to-rectangular 120 framing, shallow plane.",
-    "must_include": ["medium-format 120 film", "creamy tones", "fine grain"],
-    "conflicts": ["harsh 35mm snapshot", "illustration"],
+    "must_include": [
+      "medium-format 120 film",
+      "creamy tones",
+      "fine grain"
+    ],
+    "conflicts": [
+      "harsh 35mm snapshot",
+      "illustration"
+    ],
     "suffix": "Medium-format 120 film, creamy tones, fine grain."
   },
   "polaroid_instant": {
@@ -67,8 +111,15 @@
     "color": "Slight color shift typical of instant dye.",
     "texture": "Soft emulsion, muted microcontrast.",
     "camera": "White frame implied by the print look, empty of burned-in letters.",
-    "must_include": ["instant Polaroid print look", "soft contrast", "creamy highlights"],
-    "conflicts": ["sharp digital catalog", "burned-in frame text"],
+    "must_include": [
+      "instant Polaroid print look",
+      "soft contrast",
+      "creamy highlights"
+    ],
+    "conflicts": [
+      "sharp digital catalog",
+      "burned-in frame text"
+    ],
     "suffix": "Instant Polaroid print look, soft contrast, creamy highlights."
   },
   "golden_hour_photography": {
@@ -79,8 +130,16 @@
     "color": "Golden-hour amber: honey rims, long warm shadows.",
     "texture": "Photographic microdetail in raking light.",
     "camera": "Real still lens, plausible depth of field.",
-    "must_include": ["golden-hour photograph", "warm sidelight", "long shadows"],
-    "conflicts": ["noon overhead", "overcast flat fill", "painted light"],
+    "must_include": [
+      "golden-hour photograph",
+      "warm sidelight",
+      "long shadows"
+    ],
+    "conflicts": [
+      "noon overhead",
+      "overcast flat fill",
+      "painted light"
+    ],
     "suffix": "Golden-hour photograph, warm sidelight, long shadows."
   },
   "overcast_natural_light": {
@@ -91,8 +150,16 @@
     "color": "Cool neutrals, overcast cyan in shade.",
     "texture": "Even material detail without hard speculars.",
     "camera": "24mm-equivalent wide or 35mm-equivalent classic, open shadows.",
-    "must_include": ["overcast natural light", "soft sky-fill", "open shadows"],
-    "conflicts": ["hard sun", "neon night", "chiaroscuro"],
+    "must_include": [
+      "overcast natural light",
+      "soft sky-fill",
+      "open shadows"
+    ],
+    "conflicts": [
+      "hard sun",
+      "neon night",
+      "chiaroscuro"
+    ],
     "suffix": "Overcast natural light, soft sky-fill, open shadows."
   },
   "studio_product_photography": {
@@ -103,8 +170,16 @@
     "color": "Neutral commercial color.",
     "texture": "Product microdetail, clean edges.",
     "camera": "Locked tripod still, catalog framing.",
-    "must_include": ["studio product photograph", "seamless backdrop", "soft key"],
-    "conflicts": ["lifestyle clutter", "painterly", "cinematic haze"],
+    "must_include": [
+      "studio product photograph",
+      "seamless backdrop",
+      "soft key"
+    ],
+    "conflicts": [
+      "lifestyle clutter",
+      "painterly",
+      "cinematic haze"
+    ],
     "suffix": "Studio product photograph, seamless backdrop, soft key."
   },
   "editorial_fashion_photography": {
@@ -115,8 +190,16 @@
     "color": "Polished editorial color.",
     "texture": "Fabric and styling detail.",
     "camera": "Stylized posing, precise styling, fashion framing.",
-    "must_include": ["editorial fashion photograph", "magazine light", "precise styling"],
-    "conflicts": ["candid street", "documentary grit", "cartoon"],
+    "must_include": [
+      "editorial fashion photograph",
+      "magazine light",
+      "precise styling"
+    ],
+    "conflicts": [
+      "candid street",
+      "documentary grit",
+      "cartoon"
+    ],
     "suffix": "Editorial fashion photograph, precise styling, magazine light."
   },
   "street_photography": {
@@ -127,8 +210,16 @@
     "color": "Lived urban color.",
     "texture": "Lived pavement and storefronts.",
     "camera": "Decisive timing, layered depth.",
-    "must_include": ["street photograph", "mixed city light", "layered depth"],
-    "conflicts": ["studio seamless", "posed fashion", "illustration"],
+    "must_include": [
+      "street photograph",
+      "mixed city light",
+      "layered depth"
+    ],
+    "conflicts": [
+      "studio seamless",
+      "posed fashion",
+      "illustration"
+    ],
     "suffix": "Candid street photograph, mixed city light, layered depth."
   },
   "architectural_photography": {
@@ -139,8 +230,15 @@
     "color": "True material color.",
     "texture": "Building material texture.",
     "camera": "Corrected verticals. People only when the source asked for them.",
-    "must_include": ["architectural photograph", "corrected verticals", "material texture"],
-    "conflicts": ["tilted snapshot", "painterly warp"],
+    "must_include": [
+      "architectural photograph",
+      "corrected verticals",
+      "material texture"
+    ],
+    "conflicts": [
+      "tilted snapshot",
+      "painterly warp"
+    ],
     "suffix": "Architectural photograph, corrected verticals, material texture."
   },
   "anime": {
@@ -151,8 +249,16 @@
     "color": "Clean cel color, saturated planes.",
     "texture": "Cel-shaded planes, expressive eyes, sharp contour.",
     "camera": "Animation layout framing; replace live-action lens language with cel planes.",
-    "must_include": ["Japanese anime still", "cel-shaded", "sharp line"],
-    "conflicts": ["photoreal skin pores", "live-action lens", "western comic Ben-Day"],
+    "must_include": [
+      "Japanese anime still",
+      "cel-shaded",
+      "sharp line"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action lens",
+      "western comic Ben-Day"
+    ],
     "wan_stylization": "2D anime",
     "suffix": "Japanese anime still, clean cel color, sharp line."
   },
@@ -164,8 +270,16 @@
     "color": "Black ink and screentone grey only.",
     "texture": "Ink contour, screentone gradients.",
     "camera": "Panel composition. Speed lines only when the source asked for motion.",
-    "must_include": ["manga ink", "screentone", "black-and-white"],
-    "conflicts": ["full color", "photoreal", "watercolor"],
+    "must_include": [
+      "manga ink",
+      "screentone",
+      "black-and-white"
+    ],
+    "conflicts": [
+      "full color",
+      "photoreal",
+      "watercolor"
+    ],
     "suffix": "Black-and-white manga ink and screentone."
   },
   "cartoon": {
@@ -176,8 +290,16 @@
     "color": "Flat cheerful color.",
     "texture": "Thick outline, simple shapes.",
     "camera": "Clear staging, readable poses.",
-    "must_include": ["cartoon illustration", "thick outline", "flat color"],
-    "conflicts": ["photoreal", "oil glaze", "live-action"],
+    "must_include": [
+      "cartoon illustration",
+      "thick outline",
+      "flat color"
+    ],
+    "conflicts": [
+      "photoreal",
+      "oil glaze",
+      "live-action"
+    ],
     "suffix": "Bold cartoon illustration, thick outline, flat color."
   },
   "western_comic_book": {
@@ -188,8 +310,16 @@
     "color": "Saturated print color.",
     "texture": "Inked contour, Ben-Day dots.",
     "camera": "Heroic posing, comic-panel composition.",
-    "must_include": ["comic-book inks", "Ben-Day dots", "saturated print color"],
-    "conflicts": ["anime cel", "photoreal", "watercolor"],
+    "must_include": [
+      "comic-book inks",
+      "Ben-Day dots",
+      "saturated print color"
+    ],
+    "conflicts": [
+      "anime cel",
+      "photoreal",
+      "watercolor"
+    ],
     "suffix": "Western comic-book inks, Ben-Day dots, saturated print color."
   },
   "saturday_morning_cartoon": {
@@ -200,8 +330,16 @@
     "color": "Limited palette.",
     "texture": "Painted cel backgrounds, bouncing shapes, friendly proportions.",
     "camera": "TV-cartoon staging.",
-    "must_include": ["Saturday-morning cartoon cel", "limited palette", "painted background"],
-    "conflicts": ["photoreal", "dark noir", "oil painting"],
+    "must_include": [
+      "Saturday-morning cartoon cel",
+      "limited palette",
+      "painted background"
+    ],
+    "conflicts": [
+      "photoreal",
+      "dark noir",
+      "oil painting"
+    ],
     "suffix": "Saturday-morning cartoon cel, limited palette, painted background."
   },
   "storybook_illustration": {
@@ -212,8 +350,16 @@
     "color": "Soft watercolor-adjacent paint on warm paper.",
     "texture": "Soft paint, paper tooth.",
     "camera": "Narrative composition, gentle faces.",
-    "must_include": ["storybook illustration", "soft paint", "warm paper"],
-    "conflicts": ["photoreal", "cyberpunk neon", "hard cel"],
+    "must_include": [
+      "storybook illustration",
+      "soft paint",
+      "warm paper"
+    ],
+    "conflicts": [
+      "photoreal",
+      "cyberpunk neon",
+      "hard cel"
+    ],
     "suffix": "Storybook illustration, soft paint, narrative composition."
   },
   "watercolor_illustration": {
@@ -224,8 +370,16 @@
     "color": "Transparent pigment, blooming edges.",
     "texture": "Paper tooth, wet-into-wet blooms, granulation, soft edges.",
     "camera": "Pictorial composition; replace lens-and-sensor language with paper and wash.",
-    "must_include": ["transparent watercolor", "wet-into-wet", "paper tooth"],
-    "conflicts": ["opaque oil", "photoreal", "hard vector"],
+    "must_include": [
+      "transparent watercolor",
+      "wet-into-wet",
+      "paper tooth"
+    ],
+    "conflicts": [
+      "opaque oil",
+      "photoreal",
+      "hard vector"
+    ],
     "wan_stylization": "watercolor",
     "suffix": "Transparent watercolor on paper, wet-into-wet blooms."
   },
@@ -237,8 +391,15 @@
     "color": "Poster-like flats.",
     "texture": "Matte velvety pigment, graphic shapes, hand-painted edges.",
     "camera": "Graphic poster composition.",
-    "must_include": ["opaque gouache", "matte pigment", "graphic shapes"],
-    "conflicts": ["transparent watercolor blooms", "photoreal"],
+    "must_include": [
+      "opaque gouache",
+      "matte pigment",
+      "graphic shapes"
+    ],
+    "conflicts": [
+      "transparent watercolor blooms",
+      "photoreal"
+    ],
     "suffix": "Opaque gouache painting, matte pigment, graphic shapes."
   },
   "ink_and_wash": {
@@ -249,8 +410,15 @@
     "color": "Black ink and grey wash.",
     "texture": "Confident black ink, diluted grey washes.",
     "camera": "Spare composition.",
-    "must_include": ["ink-and-wash", "black ink", "grey washes"],
-    "conflicts": ["full-color photoreal", "thick oil"],
+    "must_include": [
+      "ink-and-wash",
+      "black ink",
+      "grey washes"
+    ],
+    "conflicts": [
+      "full-color photoreal",
+      "thick oil"
+    ],
     "suffix": "Ink-and-wash drawing, black ink and grey washes."
   },
   "colored_pencil": {
@@ -261,8 +429,16 @@
     "color": "Layered pencil hues.",
     "texture": "Layered strokes, paper grain, wax bloom, careful edges.",
     "camera": "Drawn composition on paper.",
-    "must_include": ["colored-pencil drawing", "layered strokes", "paper grain"],
-    "conflicts": ["photoreal", "cel fill", "oil impasto"],
+    "must_include": [
+      "colored-pencil drawing",
+      "layered strokes",
+      "paper grain"
+    ],
+    "conflicts": [
+      "photoreal",
+      "cel fill",
+      "oil impasto"
+    ],
     "suffix": "Colored-pencil drawing, layered strokes, paper grain."
   },
   "charcoal_sketch": {
@@ -273,8 +449,16 @@
     "color": "Monochrome charcoal.",
     "texture": "Soft vine blacks, smudged midtones, raw paper.",
     "camera": "Sketch composition on raw paper.",
-    "must_include": ["charcoal sketch", "vine blacks", "raw paper"],
-    "conflicts": ["clean vector", "glossy 3D", "full color"],
+    "must_include": [
+      "charcoal sketch",
+      "vine blacks",
+      "raw paper"
+    ],
+    "conflicts": [
+      "clean vector",
+      "glossy 3D",
+      "full color"
+    ],
     "suffix": "Charcoal sketch, vine blacks and kneaded-eraser lights."
   },
   "line_art": {
@@ -285,8 +469,16 @@
     "color": "Black contour on paper white. Color only when the source asked for it.",
     "texture": "Even black contour, design-drawing clarity.",
     "camera": "Design-drawing composition.",
-    "must_include": ["clean line art", "black contour", "paper white"],
-    "conflicts": ["heavy shading", "photoreal", "painterly fill"],
+    "must_include": [
+      "clean line art",
+      "black contour",
+      "paper white"
+    ],
+    "conflicts": [
+      "heavy shading",
+      "photoreal",
+      "painterly fill"
+    ],
     "suffix": "Clean black line art, minimal fill."
   },
   "cel_shaded": {
@@ -297,8 +489,15 @@
     "color": "Poster color.",
     "texture": "Hard-edged shadow bands.",
     "camera": "Graphic illustration framing.",
-    "must_include": ["cel-shaded", "hard shadow bands", "graphic highlights"],
-    "conflicts": ["soft photographic falloff", "impressionist broken color"],
+    "must_include": [
+      "cel-shaded",
+      "hard shadow bands",
+      "graphic highlights"
+    ],
+    "conflicts": [
+      "soft photographic falloff",
+      "impressionist broken color"
+    ],
     "suffix": "Cel-shaded illustration, hard shadow bands, graphic highlights."
   },
   "risograph_print": {
@@ -309,8 +508,15 @@
     "color": "Limited spot inks.",
     "texture": "Slight misregistration, grainy stipple, matte paper.",
     "camera": "Print-sheet composition.",
-    "must_include": ["risograph print", "spot inks", "grainy stipple"],
-    "conflicts": ["photographic continuous tone", "glossy 3D"],
+    "must_include": [
+      "risograph print",
+      "spot inks",
+      "grainy stipple"
+    ],
+    "conflicts": [
+      "photographic continuous tone",
+      "glossy 3D"
+    ],
     "suffix": "Risograph print, limited spot inks, grainy stipple."
   },
   "3d_feature_animation": {
@@ -321,8 +527,16 @@
     "color": "Rich animated color.",
     "texture": "Rounded forms, physically based materials, subsurface on skin or fabric.",
     "camera": "Feature-animation camera, cinematic framing.",
-    "must_include": ["3D feature-animation still", "rounded forms", "physically based materials"],
-    "conflicts": ["live-action photograph", "2D cel", "low-poly facets"],
+    "must_include": [
+      "3D feature-animation still",
+      "rounded forms",
+      "physically based materials"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "2D cel",
+      "low-poly facets"
+    ],
     "wan_stylization": "3D cartoon",
     "suffix": "3D feature-animation still, rounded forms, physically based materials."
   },
@@ -334,8 +548,16 @@
     "color": "Storybook-clear color.",
     "texture": "Tactile shaders, appealing forms.",
     "camera": "Storybook clarity, cinematic still camera.",
-    "must_include": ["stylized feature 3D", "appealing proportions", "soft global illumination"],
-    "conflicts": ["photoreal live action", "grimy realism", "2D anime"],
+    "must_include": [
+      "stylized feature 3D",
+      "appealing proportions",
+      "soft global illumination"
+    ],
+    "conflicts": [
+      "photoreal live action",
+      "grimy realism",
+      "2D anime"
+    ],
     "wan_stylization": "3D cartoon",
     "suffix": "Stylized feature 3D, appealing proportions, soft GI."
   },
@@ -347,8 +569,16 @@
     "color": "Clay pigment color.",
     "texture": "Fingerprint clay, armature joints.",
     "camera": "Practical miniature set, stop-motion scale.",
-    "must_include": ["claymation", "fingerprint clay", "miniature set"],
-    "conflicts": ["smooth CGI", "live-action", "2D cel"],
+    "must_include": [
+      "claymation",
+      "fingerprint clay",
+      "miniature set"
+    ],
+    "conflicts": [
+      "smooth CGI",
+      "live-action",
+      "2D cel"
+    ],
     "wan_stylization": "claymation",
     "suffix": "Claymation still, fingerprint clay, miniature set."
   },
@@ -360,8 +590,16 @@
     "color": "Practical-set color.",
     "texture": "Fabric and foam latex, visible craft.",
     "camera": "Miniature-set camera, stop-motion scale.",
-    "must_include": ["stop-motion puppet", "practical miniature set", "tungsten key"],
-    "conflicts": ["photoreal human", "fluid 3D", "anime"],
+    "must_include": [
+      "stop-motion puppet",
+      "practical miniature set",
+      "tungsten key"
+    ],
+    "conflicts": [
+      "photoreal human",
+      "fluid 3D",
+      "anime"
+    ],
     "wan_stylization": "puppet animation",
     "suffix": "Stop-motion puppet still, practical miniature set."
   },
@@ -373,8 +611,16 @@
     "color": "Cinematic real-time grade.",
     "texture": "Sharp materials.",
     "camera": "Cinematic real-time camera.",
-    "must_include": ["real-time cinematic 3D", "sharp materials", "cinematic camera"],
-    "conflicts": ["2D illustration", "clay", "watercolor"],
+    "must_include": [
+      "real-time cinematic 3D",
+      "sharp materials",
+      "cinematic camera"
+    ],
+    "conflicts": [
+      "2D illustration",
+      "clay",
+      "watercolor"
+    ],
     "suffix": "Real-time cinematic 3D, sharp materials, cinematic camera."
   },
   "isometric_3d": {
@@ -385,8 +631,15 @@
     "color": "Clear diorama color.",
     "texture": "Readable 3D volumes at toy scale.",
     "camera": "30-degree axonometric; replace perspective-lens language with axonometric.",
-    "must_include": ["isometric 3D", "axonometric", "diorama"],
-    "conflicts": ["35mm perspective", "cinematic anamorphic"],
+    "must_include": [
+      "isometric 3D",
+      "axonometric",
+      "diorama"
+    ],
+    "conflicts": [
+      "35mm perspective",
+      "cinematic anamorphic"
+    ],
     "suffix": "Isometric 3D diorama, even light, readable volumes."
   },
   "low_poly": {
@@ -397,8 +650,15 @@
     "color": "Flat vertex color.",
     "texture": "Faceted geometry, toy-like volumes.",
     "camera": "Simple 3D view, readable facets.",
-    "must_include": ["low-poly 3D", "faceted geometry", "flat vertex color"],
-    "conflicts": ["photoreal microdetail", "subdivision-smooth film CGI"],
+    "must_include": [
+      "low-poly 3D",
+      "faceted geometry",
+      "flat vertex color"
+    ],
+    "conflicts": [
+      "photoreal microdetail",
+      "subdivision-smooth film CGI"
+    ],
     "suffix": "Low-poly 3D, faceted geometry, flat vertex color."
   },
   "voxel": {
@@ -409,8 +669,16 @@
     "color": "Limited palette.",
     "texture": "Cubic voxels, chunky silhouettes.",
     "camera": "Cubic grid; replace lens language with a voxel grid.",
-    "must_include": ["voxel art", "cubic voxels", "limited palette"],
-    "conflicts": ["photoreal", "smooth clay", "oil painting"],
+    "must_include": [
+      "voxel art",
+      "cubic voxels",
+      "limited palette"
+    ],
+    "conflicts": [
+      "photoreal",
+      "smooth clay",
+      "oil painting"
+    ],
     "suffix": "Voxel art, cubic voxels, limited palette."
   },
   "oil_painting": {
@@ -421,8 +689,19 @@
     "color": "Saturated pigment with warm and cool mixing on the canvas.",
     "texture": "Visible brushwork, fat-over-lean glaze, canvas weave, impasto highlights.",
     "camera": "Pictorial composition; replace lens-and-sensor language with canvas and brush.",
-    "must_include": ["oil painting", "visible brushwork", "canvas weave"],
-    "conflicts": ["photograph", "photoreal", "3D render", "cel-shaded", "pixel", "anime"],
+    "must_include": [
+      "oil painting",
+      "visible brushwork",
+      "canvas weave"
+    ],
+    "conflicts": [
+      "photograph",
+      "photoreal",
+      "3D render",
+      "cel-shaded",
+      "pixel",
+      "anime"
+    ],
     "wan_stylization": "oil painting",
     "suffix": "Oil painting on canvas, visible brushwork, rich impasto."
   },
@@ -434,8 +713,15 @@
     "color": "Broken color.",
     "texture": "Loose strokes.",
     "camera": "Plein-air pictorial composition.",
-    "must_include": ["impressionist oil", "broken color", "loose strokes"],
-    "conflicts": ["tight photoreal", "hard cel bands"],
+    "must_include": [
+      "impressionist oil",
+      "broken color",
+      "loose strokes"
+    ],
+    "conflicts": [
+      "tight photoreal",
+      "hard cel bands"
+    ],
     "suffix": "Impressionist oil, broken color, outdoor light."
   },
   "cubist": {
@@ -446,8 +732,15 @@
     "color": "Muted earth with accent color.",
     "texture": "Geometric painted planes.",
     "camera": "Faceted simultaneous viewpoints; replace single-point perspective.",
-    "must_include": ["cubist painting", "faceted planes", "simultaneous viewpoints"],
-    "conflicts": ["photoreal perspective", "anime"],
+    "must_include": [
+      "cubist painting",
+      "faceted planes",
+      "simultaneous viewpoints"
+    ],
+    "conflicts": [
+      "photoreal perspective",
+      "anime"
+    ],
     "suffix": "Cubist painting, faceted planes, simultaneous viewpoints."
   },
   "art_nouveau": {
@@ -458,8 +751,15 @@
     "color": "Flat decorative color.",
     "texture": "Whiplash curves, botanical ornament, elegant contour.",
     "camera": "Ornamental poster composition.",
-    "must_include": ["Art Nouveau", "whiplash curves", "botanical ornament"],
-    "conflicts": ["brutalist photo", "cyberpunk chrome"],
+    "must_include": [
+      "Art Nouveau",
+      "whiplash curves",
+      "botanical ornament"
+    ],
+    "conflicts": [
+      "brutalist photo",
+      "cyberpunk chrome"
+    ],
     "suffix": "Art Nouveau illustration, whiplash curves, botanical ornament."
   },
   "ukiyo_e_woodblock": {
@@ -470,8 +770,16 @@
     "color": "Flat mineral pigments.",
     "texture": "Keyblock line, patterned textile or landscape planes.",
     "camera": "Woodblock composition, unmarked.",
-    "must_include": ["ukiyo-e woodblock", "mineral pigments", "keyblock line"],
-    "conflicts": ["photoreal", "3D render", "neon cyberpunk"],
+    "must_include": [
+      "ukiyo-e woodblock",
+      "mineral pigments",
+      "keyblock line"
+    ],
+    "conflicts": [
+      "photoreal",
+      "3D render",
+      "neon cyberpunk"
+    ],
     "suffix": "Ukiyo-e woodblock print, mineral pigments, keyblock line."
   },
   "baroque_oil": {
@@ -482,8 +790,15 @@
     "color": "Deep umbers, rich fabric color.",
     "texture": "Oil glaze, rich fabric.",
     "camera": "Theatrical pictorial composition.",
-    "must_include": ["baroque oil", "chiaroscuro", "theatrical spotlight"],
-    "conflicts": ["overcast documentary", "flat cel"],
+    "must_include": [
+      "baroque oil",
+      "chiaroscuro",
+      "theatrical spotlight"
+    ],
+    "conflicts": [
+      "overcast documentary",
+      "flat cel"
+    ],
     "suffix": "Baroque oil, dramatic chiaroscuro, theatrical spotlight."
   },
   "digital_matte_painting": {
@@ -494,8 +809,15 @@
     "color": "Epic environment color.",
     "texture": "Photographic integration, atmospheric perspective.",
     "camera": "Epic environment framing.",
-    "must_include": ["digital matte painting", "atmospheric perspective", "filmic grade"],
-    "conflicts": ["simple cartoon", "isometric toy"],
+    "must_include": [
+      "digital matte painting",
+      "atmospheric perspective",
+      "filmic grade"
+    ],
+    "conflicts": [
+      "simple cartoon",
+      "isometric toy"
+    ],
     "suffix": "Digital matte painting, epic environment, atmospheric perspective."
   },
   "concept_art": {
@@ -506,8 +828,15 @@
     "color": "Clear material color for design read.",
     "texture": "Readable design, paintover finish, clear materials.",
     "camera": "Design-read composition.",
-    "must_include": ["concept art", "readable design", "cinematic key light"],
-    "conflicts": ["finished photoreal catalog", "line-art only"],
+    "must_include": [
+      "concept art",
+      "readable design",
+      "cinematic key light"
+    ],
+    "conflicts": [
+      "finished photoreal catalog",
+      "line-art only"
+    ],
     "suffix": "Production concept art, readable design, cinematic key light."
   },
   "cyberpunk": {
@@ -518,8 +847,16 @@
     "color": "Magenta and cyan neon against wet night.",
     "texture": "Wet asphalt, dense signage as abstract glow, unmarked, empty of readable brands.",
     "camera": "Night-city cinematic framing.",
-    "must_include": ["cyberpunk night", "wet asphalt", "neon magenta and cyan"],
-    "conflicts": ["pastoral daylight", "solarpunk greenery", "watercolor pastoral"],
+    "must_include": [
+      "cyberpunk night",
+      "wet asphalt",
+      "neon magenta and cyan"
+    ],
+    "conflicts": [
+      "pastoral daylight",
+      "solarpunk greenery",
+      "watercolor pastoral"
+    ],
     "suffix": "Cyberpunk night, wet asphalt, neon magenta and cyan."
   },
   "solarpunk": {
@@ -530,8 +867,15 @@
     "color": "Hopeful daylight, clean materials.",
     "texture": "Greenery on architecture, unmarked facades.",
     "camera": "Hopeful civic framing.",
-    "must_include": ["solarpunk", "greenery on architecture", "warm sun"],
-    "conflicts": ["cyberpunk rain night", "blighted industrial"],
+    "must_include": [
+      "solarpunk",
+      "greenery on architecture",
+      "warm sun"
+    ],
+    "conflicts": [
+      "cyberpunk rain night",
+      "blighted industrial"
+    ],
     "suffix": "Solarpunk day, greenery on architecture, warm sun."
   },
   "film_noir": {
@@ -542,8 +886,16 @@
     "color": "High-contrast black and white, bleach-bypass silver.",
     "texture": "Wet streets, deep blacks.",
     "camera": "Noir still framing, low hero or MCU, 35mm-equivalent classic.",
-    "must_include": ["film-noir", "black and white", "hard key"],
-    "conflicts": ["saturated color", "golden-hour warmth", "flat cartoon"],
+    "must_include": [
+      "film-noir",
+      "black and white",
+      "hard key"
+    ],
+    "conflicts": [
+      "saturated color",
+      "golden-hour warmth",
+      "flat cartoon"
+    ],
     "suffix": "Film-noir still, high-contrast black and white, hard key."
   },
   "1970s_grain": {
@@ -554,8 +906,15 @@
     "color": "Warm print, slightly desaturated primaries.",
     "texture": "Heavy grain.",
     "camera": "Zoom-lens period feel.",
-    "must_include": ["1970s film still", "heavy grain", "warm print"],
-    "conflicts": ["clean modern digital", "anime cel"],
+    "must_include": [
+      "1970s film still",
+      "heavy grain",
+      "warm print"
+    ],
+    "conflicts": [
+      "clean modern digital",
+      "anime cel"
+    ],
     "suffix": "1970s film still, warm print, heavy grain."
   },
   "vaporwave": {
@@ -566,8 +925,15 @@
     "color": "Pastel neon and chrome.",
     "texture": "Chrome, VHS softness, empty of readable logos.",
     "camera": "Retro-grid composition.",
-    "must_include": ["vaporwave", "pastel neon", "VHS softness"],
-    "conflicts": ["documentary honest color", "baroque umber"],
+    "must_include": [
+      "vaporwave",
+      "pastel neon",
+      "VHS softness"
+    ],
+    "conflicts": [
+      "documentary honest color",
+      "baroque umber"
+    ],
     "suffix": "Vaporwave still, pastel neon, chrome, VHS softness."
   },
   "pixel_art": {
@@ -578,8 +944,16 @@
     "color": "Limited palette.",
     "texture": "Visible pixels, 16-bit-era sprites and tiles.",
     "camera": "Pixel grid; replace lens language with visible pixels.",
-    "must_include": ["pixel art", "visible pixels", "limited palette"],
-    "conflicts": ["photoreal", "oil painting", "smooth 3D"],
+    "must_include": [
+      "pixel art",
+      "visible pixels",
+      "limited palette"
+    ],
+    "conflicts": [
+      "photoreal",
+      "oil painting",
+      "smooth 3D"
+    ],
     "wan_stylization": "pixel art",
     "suffix": "Pixel art, limited palette, visible pixels, cluster shading."
   },
@@ -591,8 +965,15 @@
     "color": "Construction-paper color.",
     "texture": "Cut paper layers, visible edges.",
     "camera": "Diorama still, paper-scale.",
-    "must_include": ["papercraft diorama", "cut paper layers", "visible edges"],
-    "conflicts": ["photoreal flesh", "oil glaze"],
+    "must_include": [
+      "papercraft diorama",
+      "cut paper layers",
+      "visible edges"
+    ],
+    "conflicts": [
+      "photoreal flesh",
+      "oil glaze"
+    ],
     "suffix": "Papercraft diorama, cut paper layers, studio light."
   },
   "blueprint_technical_drawing": {
@@ -603,8 +984,16 @@
     "color": "White line on cyan ground.",
     "texture": "Precise geometry, graphic callouts empty of readable type.",
     "camera": "Orthographic; replace pictorial perspective with orthographic.",
-    "must_include": ["blueprint technical drawing", "white line on cyan", "orthographic"],
-    "conflicts": ["photoreal", "painterly", "anime"],
+    "must_include": [
+      "blueprint technical drawing",
+      "white line on cyan",
+      "orthographic"
+    ],
+    "conflicts": [
+      "photoreal",
+      "painterly",
+      "anime"
+    ],
     "suffix": "Blueprint technical drawing, white line on cyan ground."
   },
   "black_and_white_photography": {
@@ -615,8 +1004,16 @@
     "color": "Neutral gray from paper-white to dense black.",
     "texture": "Silver grain, continuous tone, material microdetail in gray.",
     "camera": "Real still lens, photographic depth of field.",
-    "must_include": ["black-and-white still photograph", "silver-gelatin tonal scale", "continuous tone"],
-    "conflicts": ["saturated color", "cel fill", "neon magenta"],
+    "must_include": [
+      "black-and-white still photograph",
+      "silver-gelatin tonal scale",
+      "continuous tone"
+    ],
+    "conflicts": [
+      "saturated color",
+      "cel fill",
+      "neon magenta"
+    ],
     "suffix": "Black-and-white still photograph, silver-gelatin tonal scale."
   },
   "infrared_false_color": {
@@ -627,8 +1024,16 @@
     "color": "Pale foliage, dark sky, shifted false color.",
     "texture": "Photographic grain with infrared bloom on leaves.",
     "camera": "Filtered still-camera capture, deep focus on landscape.",
-    "must_include": ["false-color infrared still", "pale foliage", "dark sky"],
-    "conflicts": ["honest daylight color", "neon night", "oil glaze"],
+    "must_include": [
+      "false-color infrared still",
+      "pale foliage",
+      "dark sky"
+    ],
+    "conflicts": [
+      "honest daylight color",
+      "neon night",
+      "oil glaze"
+    ],
     "suffix": "False-color infrared still, pale foliage, dark sky."
   },
   "long_exposure_night": {
@@ -639,8 +1044,16 @@
     "color": "Cool night with warm practical streaks.",
     "texture": "Smooth water or sky from time-blur, sharp static structure.",
     "camera": "Locked tripod still, seconds-long shutter.",
-    "must_include": ["long-exposure night photograph", "light trails", "frozen ambient glow"],
-    "conflicts": ["flash freeze-frame", "noon sun", "flat cel"],
+    "must_include": [
+      "long-exposure night photograph",
+      "light trails",
+      "frozen ambient glow"
+    ],
+    "conflicts": [
+      "flash freeze-frame",
+      "noon sun",
+      "flat cel"
+    ],
     "suffix": "Long-exposure night photograph, light trails, frozen ambient glow."
   },
   "underwater_photography": {
@@ -651,8 +1064,16 @@
     "color": "Cyan-green water column, muted warm hues.",
     "texture": "Suspended particles, wet skin or fabric, bubble highlights.",
     "camera": "Housing port, wider-than-air field, short subject distance.",
-    "must_include": ["submerged still", "cyan-green falloff", "caustic rays"],
-    "conflicts": ["dry studio seamless", "desert dust", "pastel neon"],
+    "must_include": [
+      "submerged still",
+      "cyan-green falloff",
+      "caustic rays"
+    ],
+    "conflicts": [
+      "dry studio seamless",
+      "desert dust",
+      "pastel neon"
+    ],
     "suffix": "Submerged still through water, cyan-green falloff, caustic rays."
   },
   "aerial_oblique": {
@@ -663,8 +1084,16 @@
     "color": "True landscape color from altitude, thin haze.",
     "texture": "Roof, canopy, and road texture readable from height.",
     "camera": "Down-oblique viewpoint, wide ground coverage.",
-    "must_include": ["oblique aerial still", "high altitude", "ground coverage"],
-    "conflicts": ["eye-level street", "macro close-up", "isometric toy"],
+    "must_include": [
+      "oblique aerial still",
+      "high altitude",
+      "ground coverage"
+    ],
+    "conflicts": [
+      "eye-level street",
+      "macro close-up",
+      "isometric toy"
+    ],
     "suffix": "Oblique aerial still from high altitude, wide ground coverage."
   },
   "tilt_shift_miniature": {
@@ -675,8 +1104,16 @@
     "color": "Punchy miniature color.",
     "texture": "Only a thin band is sharp; elsewhere creamy blur.",
     "camera": "Scheimpflug tilt, diorama-like compression of a real place.",
-    "must_include": ["tilt-shift still", "miniaturizes a real scene", "razor plane of focus"],
-    "conflicts": ["deep landscape focus", "cubist planes", "voxel cubes"],
+    "must_include": [
+      "tilt-shift still",
+      "miniaturizes a real scene",
+      "razor plane of focus"
+    ],
+    "conflicts": [
+      "deep landscape focus",
+      "cubist planes",
+      "voxel cubes"
+    ],
     "suffix": "Tilt-shift still, miniaturized real scene, razor plane of focus."
   },
   "double_exposure_film": {
@@ -687,8 +1124,16 @@
     "color": "Layered film color, ghosted second scene.",
     "texture": "Film grain through both layers, translucent overlap.",
     "camera": "Same still-camera gate, two moments on one negative.",
-    "must_include": ["double-exposure analog still", "two scenes overlaid", "ghosted second scene"],
-    "conflicts": ["single clean catalog shot", "hard cel bands", "orthographic blueprint"],
+    "must_include": [
+      "double-exposure analog still",
+      "two scenes overlaid",
+      "ghosted second scene"
+    ],
+    "conflicts": [
+      "single clean catalog shot",
+      "hard cel bands",
+      "orthographic blueprint"
+    ],
     "suffix": "Double-exposure analog still, two scenes overlaid in one frame."
   },
   "wet_plate_collodion": {
@@ -699,8 +1144,16 @@
     "color": "Amber-brown metallic monochrome.",
     "texture": "Poured-collodion swirls, mercury-like highlights, plate flaws.",
     "camera": "View-camera plate, shallow historic focus.",
-    "must_include": ["wet-plate collodion still", "silvered highlights", "uneven collodion edges"],
-    "conflicts": ["clean digital HDR", "full-color cel", "neon grid"],
+    "must_include": [
+      "wet-plate collodion still",
+      "silvered highlights",
+      "uneven collodion edges"
+    ],
+    "conflicts": [
+      "clean digital HDR",
+      "full-color cel",
+      "neon grid"
+    ],
     "suffix": "Wet-plate collodion still, silvered highlights, uneven edges."
   },
   "cyanotype_print": {
@@ -711,8 +1164,16 @@
     "color": "Prussian blue and paper white only.",
     "texture": "Paper tooth, brushy chemical wash, sun-print edges.",
     "camera": "Contact-print composition; replace lens language with the iron-blue print.",
-    "must_include": ["cyanotype print", "Prussian-blue iron process", "paper white"],
-    "conflicts": ["full-color photograph", "oil impasto", "cyberpunk magenta"],
+    "must_include": [
+      "cyanotype print",
+      "Prussian-blue iron process",
+      "paper white"
+    ],
+    "conflicts": [
+      "full-color photograph",
+      "oil impasto",
+      "cyberpunk magenta"
+    ],
     "suffix": "Cyanotype print, Prussian-blue iron process on paper."
   },
   "platinum_print": {
@@ -723,8 +1184,16 @@
     "color": "Warm-neutral metal print, never glossy dye.",
     "texture": "Matte paper fibers holding platinum, no plastic sheen.",
     "camera": "Contact-print still, large-negative resolving power.",
-    "must_include": ["platinum-palladium contact print", "matte noble-metal tones", "paper fibers"],
-    "conflicts": ["glossy inkjet", "neon night", "cel-shaded"],
+    "must_include": [
+      "platinum-palladium contact print",
+      "matte noble-metal tones",
+      "paper fibers"
+    ],
+    "conflicts": [
+      "glossy inkjet",
+      "neon night",
+      "cel-shaded"
+    ],
     "suffix": "Platinum-palladium contact print, matte noble-metal tones."
   },
   "daguerreotype": {
@@ -735,8 +1204,16 @@
     "color": "Cool metallic monochrome, mirror-like blacks.",
     "texture": "Polished silver, infinitesimal grain, plate case implied not lettered.",
     "camera": "Nineteenth-century plate camera, tiny depth.",
-    "must_include": ["daguerreotype plate", "mirrored silver", "razor-thin focal plane"],
-    "conflicts": ["matte inkjet", "watercolor bloom", "voxel art"],
+    "must_include": [
+      "daguerreotype plate",
+      "mirrored silver",
+      "razor-thin focal plane"
+    ],
+    "conflicts": [
+      "matte inkjet",
+      "watercolor bloom",
+      "voxel art"
+    ],
     "suffix": "Daguerreotype plate, mirrored silver, razor-thin focal plane."
   },
   "tintype": {
@@ -747,8 +1224,16 @@
     "color": "Smoky brown-black on japanned iron.",
     "texture": "Lacquered metal base, soft collodion, scuffs.",
     "camera": "Direct-positive metal plate, modest resolution.",
-    "must_include": ["tintype ferrotype", "dark lacquered metal", "smoky brown-black"],
-    "conflicts": ["glossy color catalog", "anime cel", "clean vector"],
+    "must_include": [
+      "tintype ferrotype",
+      "dark lacquered metal",
+      "smoky brown-black"
+    ],
+    "conflicts": [
+      "glossy color catalog",
+      "anime cel",
+      "clean vector"
+    ],
     "suffix": "Tintype ferrotype on dark lacquered metal."
   },
   "pinhole_camera": {
@@ -759,8 +1244,16 @@
     "color": "Muted photographic color or gray.",
     "texture": "Soft everywhere, circular vignette, no lens bokeh balls.",
     "camera": "Lensless pinhole; replace glass-lens language with a bare aperture.",
-    "must_include": ["pinhole-camera still", "infinite depth", "soft vignetting"],
-    "conflicts": ["fast-lens bokeh", "hard cel bands", "isometric 3D"],
+    "must_include": [
+      "pinhole-camera still",
+      "infinite depth",
+      "soft vignetting"
+    ],
+    "conflicts": [
+      "fast-lens bokeh",
+      "hard cel bands",
+      "isometric 3D"
+    ],
     "suffix": "Pinhole-camera still, infinite depth, soft vignetting."
   },
   "large_format_view_camera": {
@@ -771,8 +1264,16 @@
     "color": "Subtle, highly resolved color.",
     "texture": "Enormous detail, film or digital back grain almost absent.",
     "camera": "4x5 or 8x10 movements, plane of focus placed by tilt.",
-    "must_include": ["large-format view-camera still", "extreme resolving power", "movements"],
-    "conflicts": ["phone snapshot", "pixel art", "heavy grain 1970s"],
+    "must_include": [
+      "large-format view-camera still",
+      "extreme resolving power",
+      "movements"
+    ],
+    "conflicts": [
+      "phone snapshot",
+      "pixel art",
+      "heavy grain 1970s"
+    ],
     "suffix": "Large-format view-camera still, extreme resolving power."
   },
   "macro_photography": {
@@ -783,8 +1284,16 @@
     "color": "True close-up color, often richer than the unaided eye.",
     "texture": "Insect, fabric, or material microsculpture filling the frame.",
     "camera": "1:1 or closer, razor-thin depth.",
-    "must_include": ["macro still", "life-size or greater", "tiny subject"],
-    "conflicts": ["wide establishing", "aerial city", "blueprint orthographic"],
+    "must_include": [
+      "macro still",
+      "life-size or greater",
+      "tiny subject"
+    ],
+    "conflicts": [
+      "wide establishing",
+      "aerial city",
+      "blueprint orthographic"
+    ],
     "suffix": "Macro still at life-size or greater, shallow plane on a tiny subject."
   },
   "astrophotography": {
@@ -795,8 +1304,16 @@
     "color": "Natural emission color, deep black sky.",
     "texture": "Star points, faint nebula, stacked-noise grain.",
     "camera": "Tracked wide or telescope still, earth as a dark foreground if present.",
-    "must_include": ["astrophotograph of night sky", "tracked stars", "deep black sky"],
-    "conflicts": ["noon documentary", "studio cyclorama", "Saturday-morning cel"],
+    "must_include": [
+      "astrophotograph of night sky",
+      "tracked stars",
+      "deep black sky"
+    ],
+    "conflicts": [
+      "noon documentary",
+      "studio cyclorama",
+      "Saturday-morning cel"
+    ],
     "suffix": "Astrophotograph of night sky, tracked stars, deep black sky."
   },
   "high_key_studio_portrait": {
@@ -807,8 +1324,16 @@
     "color": "Pale, clean, slightly lifted whites.",
     "texture": "Skin and fabric detail without crushed shadow.",
     "camera": "Head-and-shoulders still lens, subject isolated on white.",
-    "must_include": ["high-key studio sitter still", "bright seamless", "open shadows"],
-    "conflicts": ["low-key black void", "film-noir blinds", "graffiti wall"],
+    "must_include": [
+      "high-key studio sitter still",
+      "bright seamless",
+      "open shadows"
+    ],
+    "conflicts": [
+      "low-key black void",
+      "film-noir blinds",
+      "graffiti wall"
+    ],
     "suffix": "High-key studio sitter still, bright seamless, open shadows."
   },
   "low_key_studio_portrait": {
@@ -819,8 +1344,16 @@
     "color": "Near-monochrome with sparse skin color.",
     "texture": "Lit planes only; unlit cloth disappears.",
     "camera": "Head-and-shoulders still, negative space as black field.",
-    "must_include": ["low-key studio sitter still", "face emerging from deep black", "rapid falloff"],
-    "conflicts": ["high-key white seamless", "golden-hour warmth", "flat cartoon"],
+    "must_include": [
+      "low-key studio sitter still",
+      "face emerging from deep black",
+      "rapid falloff"
+    ],
+    "conflicts": [
+      "high-key white seamless",
+      "golden-hour warmth",
+      "flat cartoon"
+    ],
     "suffix": "Low-key studio sitter still, face emerging from deep black."
   },
   "newspaper_halftone": {
@@ -831,8 +1364,16 @@
     "color": "Black ink on warm newsprint, or cheap spot color.",
     "texture": "Visible rosette dots, pulp fibers, slight show-through.",
     "camera": "Printed photo crop; replace lens language with newsprint dots.",
-    "must_include": ["newspaper halftone photograph", "coarse ink dots", "newsprint"],
-    "conflicts": ["continuous-tone photograph", "oil glaze", "smooth CGI"],
+    "must_include": [
+      "newspaper halftone photograph",
+      "coarse ink dots",
+      "newsprint"
+    ],
+    "conflicts": [
+      "continuous-tone photograph",
+      "oil glaze",
+      "smooth CGI"
+    ],
     "suffix": "Newspaper halftone photograph, coarse ink dots on newsprint."
   },
   "cctv_security_still": {
@@ -843,8 +1384,16 @@
     "color": "Desaturated or green-gray surveillance color.",
     "texture": "Compression blocks, dirty dome glass, low microcontrast.",
     "camera": "High ceiling wide, surveillance geometry, empty of burned-in letters.",
-    "must_include": ["security-camera still", "wide-angle compression", "surveillance color"],
-    "conflicts": ["beauty-dish glamour", "painterly", "storybook warmth"],
+    "must_include": [
+      "security-camera still",
+      "wide-angle compression",
+      "surveillance color"
+    ],
+    "conflicts": [
+      "beauty-dish glamour",
+      "painterly",
+      "storybook warmth"
+    ],
     "suffix": "Security-camera still, wide-angle compression, surveillance color."
   },
   "pastel_drawing": {
@@ -855,8 +1404,16 @@
     "color": "Chalk pigment, scumbled hues.",
     "texture": "Dry pastel stick, paper tooth, dust bloom, finger blends.",
     "camera": "Drawn pictorial composition on paper.",
-    "must_include": ["soft-pastel drawing", "toned paper", "chalk dust"],
-    "conflicts": ["photoreal pores", "hard vector", "wet oil glaze"],
+    "must_include": [
+      "soft-pastel drawing",
+      "toned paper",
+      "chalk dust"
+    ],
+    "conflicts": [
+      "photoreal pores",
+      "hard vector",
+      "wet oil glaze"
+    ],
     "suffix": "Soft-pastel drawing on toned paper, chalk dust."
   },
   "oil_pastel": {
@@ -867,8 +1424,16 @@
     "color": "Opaque waxy color, broken over underlayers.",
     "texture": "Waxy ridges, resist, dense stick marks.",
     "camera": "Drawn composition; replace lens language with wax sticks.",
-    "must_include": ["oil-pastel drawing", "waxy dense sticks", "resist"],
-    "conflicts": ["transparent watercolor", "clean digital 3D", "cel fill"],
+    "must_include": [
+      "oil-pastel drawing",
+      "waxy dense sticks",
+      "resist"
+    ],
+    "conflicts": [
+      "transparent watercolor",
+      "clean digital 3D",
+      "cel fill"
+    ],
     "suffix": "Oil-pastel drawing, waxy dense sticks on paper."
   },
   "marker_illustration": {
@@ -879,8 +1444,16 @@
     "color": "Dye-marker hues, slightly bled edges.",
     "texture": "Streaky nib fills, chisel-tip edges, paper cockle.",
     "camera": "Illustration-board composition.",
-    "must_include": ["alcohol-marker illustration", "streaked fills", "layout paper"],
-    "conflicts": ["oil impasto", "photoreal grain", "voxel cubes"],
+    "must_include": [
+      "alcohol-marker illustration",
+      "streaked fills",
+      "layout paper"
+    ],
+    "conflicts": [
+      "oil impasto",
+      "photoreal grain",
+      "voxel cubes"
+    ],
     "suffix": "Alcohol-marker illustration, streaked fills on layout paper."
   },
   "ballpoint_pen": {
@@ -891,8 +1464,16 @@
     "color": "Ballpoint blue-black only, unless the source asked for more.",
     "texture": "Cheap ballpoint hatching, skip marks, indent in the sheet.",
     "camera": "Notebook-page composition.",
-    "must_include": ["ballpoint-pen drawing", "notebook paper", "hatching density"],
-    "conflicts": ["full-color photoreal", "thick oil", "smooth CGI"],
+    "must_include": [
+      "ballpoint-pen drawing",
+      "notebook paper",
+      "hatching density"
+    ],
+    "conflicts": [
+      "full-color photoreal",
+      "thick oil",
+      "smooth CGI"
+    ],
     "suffix": "Ballpoint-pen drawing on notebook paper, hatching density."
   },
   "crosshatch_pen_ink": {
@@ -903,8 +1484,16 @@
     "color": "Black India ink on white board.",
     "texture": "Nib scratch, crosshatch mesh, occasional ink blot.",
     "camera": "Pen-and-ink pictorial composition.",
-    "must_include": ["crosshatched dip-pen and ink", "Bristol", "hatch angles"],
-    "conflicts": ["soft airbrush", "photoreal color", "low-poly flats"],
+    "must_include": [
+      "crosshatched dip-pen and ink",
+      "Bristol",
+      "hatch angles"
+    ],
+    "conflicts": [
+      "soft airbrush",
+      "photoreal color",
+      "low-poly flats"
+    ],
     "suffix": "Crosshatched dip-pen and ink drawing on Bristol."
   },
   "linocut_print": {
@@ -915,8 +1504,16 @@
     "color": "One or two spot inks on paper.",
     "texture": "Gouge chatter, ink squash, linoleum grain.",
     "camera": "Relief-print composition; replace lens language with carved blocks.",
-    "must_include": ["linocut relief print", "carved gouge marks", "spot inks"],
-    "conflicts": ["continuous-tone photo", "smooth 3D", "watercolor bloom"],
+    "must_include": [
+      "linocut relief print",
+      "carved gouge marks",
+      "spot inks"
+    ],
+    "conflicts": [
+      "continuous-tone photo",
+      "smooth 3D",
+      "watercolor bloom"
+    ],
     "suffix": "Linocut relief print, carved gouge marks on paper."
   },
   "woodcut_print": {
@@ -927,8 +1524,16 @@
     "color": "Ink on paper, wood-grain ghost in the field.",
     "texture": "Knife-cut contour, plank grain, inked ridges.",
     "camera": "Woodcut sheet composition, not a Japanese keyblock.",
-    "must_include": ["northern woodcut relief print", "carved plank grain", "knife-cut contour"],
-    "conflicts": ["ukiyo-e mineral pigments", "photoreal", "neon chrome"],
+    "must_include": [
+      "northern woodcut relief print",
+      "carved plank grain",
+      "knife-cut contour"
+    ],
+    "conflicts": [
+      "ukiyo-e mineral pigments",
+      "photoreal",
+      "neon chrome"
+    ],
     "suffix": "Northern woodcut relief print, carved plank grain."
   },
   "etching_intaglio": {
@@ -939,8 +1544,16 @@
     "color": "Warm black or sepia ink.",
     "texture": "Needle bite, aquatint grain, plate-mark emboss.",
     "camera": "Intaglio print composition.",
-    "must_include": ["copper-plate etching", "bitten line", "plate tone"],
-    "conflicts": ["flat vector", "glossy 3D", "Saturday-morning cel"],
+    "must_include": [
+      "copper-plate etching",
+      "bitten line",
+      "plate tone"
+    ],
+    "conflicts": [
+      "flat vector",
+      "glossy 3D",
+      "Saturday-morning cel"
+    ],
     "suffix": "Copper-plate etching, bitten line and plate tone."
   },
   "stipple_illustration": {
@@ -951,8 +1564,16 @@
     "color": "Black dots on paper white.",
     "texture": "Even stipple, scientific-plate clarity.",
     "camera": "Engraved-plate composition.",
-    "must_include": ["stipple illustration", "ink dots only", "dot density"],
-    "conflicts": ["painterly wash", "photoreal pores", "cel bands"],
+    "must_include": [
+      "stipple illustration",
+      "ink dots only",
+      "dot density"
+    ],
+    "conflicts": [
+      "painterly wash",
+      "photoreal pores",
+      "cel bands"
+    ],
     "suffix": "Stipple illustration built from ink dots only."
   },
   "graffiti_mural": {
@@ -963,8 +1584,16 @@
     "color": "Loud aerosol color, drips, fills.",
     "texture": "Brick or concrete tooth, overspray, drips, fat-cap fades.",
     "camera": "Wall-scale mural view, unmarked lettering treated as abstract form.",
-    "must_include": ["spray-paint graffiti mural", "brick or concrete", "fat-cap fades"],
-    "conflicts": ["gallery oil glaze", "studio seamless", "ukiyo-e"],
+    "must_include": [
+      "spray-paint graffiti mural",
+      "brick or concrete",
+      "fat-cap fades"
+    ],
+    "conflicts": [
+      "gallery oil glaze",
+      "studio seamless",
+      "ukiyo-e"
+    ],
     "suffix": "Spray-paint graffiti mural on brick or concrete."
   },
   "botanical_illustration": {
@@ -975,8 +1604,16 @@
     "color": "True local plant color, spare field.",
     "texture": "Fine watercolor or ink plant anatomy, paper white ground.",
     "camera": "Plate composition, specimen centered, empty of readable labels.",
-    "must_include": ["scientific botanical illustration", "white vellum", "plant anatomy"],
-    "conflicts": ["cinematic haze", "cyberpunk rain", "voxel cubes"],
+    "must_include": [
+      "scientific botanical illustration",
+      "white vellum",
+      "plant anatomy"
+    ],
+    "conflicts": [
+      "cinematic haze",
+      "cyberpunk rain",
+      "voxel cubes"
+    ],
     "suffix": "Scientific botanical illustration on white vellum."
   },
   "medical_illustration": {
@@ -987,8 +1624,16 @@
     "color": "Textbook local color, spare ground.",
     "texture": "Smooth didactic paint, layered cutaways, no gore spectacle.",
     "camera": "Textbook plate composition, empty of readable type.",
-    "must_include": ["didactic medical illustration", "cutaways", "clean anatomy"],
-    "conflicts": ["horror gore", "fashion posing", "neon night"],
+    "must_include": [
+      "didactic medical illustration",
+      "cutaways",
+      "clean anatomy"
+    ],
+    "conflicts": [
+      "horror gore",
+      "fashion posing",
+      "neon night"
+    ],
     "suffix": "Didactic medical illustration, cutaways, clean anatomy."
   },
   "fashion_croquis": {
@@ -999,8 +1644,16 @@
     "color": "Garment color on a spare page.",
     "texture": "Loose figure line, rendered cloth, elongated proportions.",
     "camera": "Nine-head figure on a page, not a photographic body.",
-    "must_include": ["fashion croquis", "elongated figure", "garment flats"],
-    "conflicts": ["photoreal body", "documentary grit", "low-poly"],
+    "must_include": [
+      "fashion croquis",
+      "elongated figure",
+      "garment flats"
+    ],
+    "conflicts": [
+      "photoreal body",
+      "documentary grit",
+      "low-poly"
+    ],
     "suffix": "Fashion croquis, elongated figure, garment flats."
   },
   "retro_travel_poster": {
@@ -1011,8 +1664,16 @@
     "color": "Limited lithograph inks, bold tourism palette.",
     "texture": "Flat color fields, spare contour, paper poster stock.",
     "camera": "Poster composition, landmark as icon, empty of readable slogans.",
-    "must_include": ["mid-century travel poster", "flat lithograph color", "landmark as icon"],
-    "conflicts": ["photoreal tourism snapshot", "film grain", "3D render"],
+    "must_include": [
+      "mid-century travel poster",
+      "flat lithograph color",
+      "landmark as icon"
+    ],
+    "conflicts": [
+      "photoreal tourism snapshot",
+      "film grain",
+      "3D render"
+    ],
     "suffix": "Mid-century travel poster, flat lithograph color."
   },
   "pop_art_screenprint": {
@@ -1023,8 +1684,16 @@
     "color": "Loud unmixed screen inks.",
     "texture": "Hard flats, commercial-print dots, registration offsets.",
     "camera": "Screenprint sheet; replace lens language with posterized flats.",
-    "must_include": ["pop-art screenprint", "hard color flats", "commercial-print dots"],
-    "conflicts": ["impressionist broken color", "documentary honest color", "clay fingerprint"],
+    "must_include": [
+      "pop-art screenprint",
+      "hard color flats",
+      "commercial-print dots"
+    ],
+    "conflicts": [
+      "impressionist broken color",
+      "documentary honest color",
+      "clay fingerprint"
+    ],
     "suffix": "Pop-art screenprint, hard color flats, commercial-print dots."
   },
   "manhwa_webtoon": {
@@ -1035,8 +1704,16 @@
     "color": "Lush full color, smooth gradients.",
     "texture": "Painterly cell shading, tall-scroll composition, glossy hair.",
     "camera": "Vertical webtoon framing; replace live-action lens language with painted cells.",
-    "must_include": ["full-color Korean webtoon still", "soft painterly cells", "tall-scroll composition"],
-    "conflicts": ["black-and-white manga screentone", "photoreal pores", "western Ben-Day"],
+    "must_include": [
+      "full-color Korean webtoon still",
+      "soft painterly cells",
+      "tall-scroll composition"
+    ],
+    "conflicts": [
+      "black-and-white manga screentone",
+      "photoreal pores",
+      "western Ben-Day"
+    ],
     "wan_stylization": "webtoon",
     "suffix": "Full-color Korean webtoon still, soft painterly cells."
   },
@@ -1048,8 +1725,16 @@
     "color": "Mineral pigments, layered thin color.",
     "texture": "Fine outline, silk weave, careful bird-and-flower or figure detail.",
     "camera": "Hanging-scroll composition.",
-    "must_include": ["gongbi meticulous painting", "mineral color on silk", "fine outline"],
-    "conflicts": ["loose impressionist strokes", "cyberpunk chrome", "low-poly"],
+    "must_include": [
+      "gongbi meticulous painting",
+      "mineral color on silk",
+      "fine outline"
+    ],
+    "conflicts": [
+      "loose impressionist strokes",
+      "cyberpunk chrome",
+      "low-poly"
+    ],
     "suffix": "Gongbi meticulous painting, fine-outline mineral color on silk."
   },
   "illuminated_manuscript": {
@@ -1060,8 +1745,16 @@
     "color": "Egg tempera brights plus burnished gold.",
     "texture": "Vellum, gold leaf, tiny patterned grounds, empty of readable script.",
     "camera": "Manuscript miniature composition, flattened space.",
-    "must_include": ["illuminated-manuscript miniature", "gold leaf", "vellum"],
-    "conflicts": ["photoreal perspective", "neon night", "game-engine"],
+    "must_include": [
+      "illuminated-manuscript miniature",
+      "gold leaf",
+      "vellum"
+    ],
+    "conflicts": [
+      "photoreal perspective",
+      "neon night",
+      "game-engine"
+    ],
     "suffix": "Medieval illuminated-manuscript miniature on vellum, gold leaf."
   },
   "silhouette_cutout": {
@@ -1072,21 +1765,37 @@
     "color": "Black shape on cream or pale ground.",
     "texture": "Scissor-cut edge, paper fiber, hollow interior.",
     "camera": "Profile or full-figure cutout; replace lens language with a paper silhouette.",
-    "must_include": ["black paper-cut silhouette", "pale field", "scissor-cut edge"],
-    "conflicts": ["full interior modeling", "photoreal skin", "oil glaze"],
+    "must_include": [
+      "black paper-cut silhouette",
+      "pale field",
+      "scissor-cut edge"
+    ],
+    "conflicts": [
+      "full interior modeling",
+      "photoreal skin",
+      "oil glaze"
+    ],
     "suffix": "Black paper-cut silhouette on a pale field."
   },
   "cloisonne_enamel": {
-    "label": "cloisonné enamel",
+    "label": "cloisonn\u00e9 enamel",
     "family": "illustration",
-    "medium": "Cloisonné enamel, metal cloisons holding vitreous color.",
+    "medium": "Cloisonn\u00e9 enamel, metal cloisons holding vitreous color.",
     "light": "Kiln-gloss highlights on glass enamel.",
     "color": "Jewel vitreous inks inside metal walls.",
     "texture": "Fine metal cloisons, glossy enamel, gold or bronze ground.",
     "camera": "Enamel-object still, craft scale.",
-    "must_include": ["cloisonné enamel", "metal cloisons", "vitreous color"],
-    "conflicts": ["matte gouache", "photoreal flesh", "pixel grid"],
-    "suffix": "Cloisonné enamel, metal cloisons holding vitreous color."
+    "must_include": [
+      "cloisonn\u00e9 enamel",
+      "metal cloisons",
+      "vitreous color"
+    ],
+    "conflicts": [
+      "matte gouache",
+      "photoreal flesh",
+      "pixel grid"
+    ],
+    "suffix": "Cloisonn\u00e9 enamel, metal cloisons holding vitreous color."
   },
   "stained_glass": {
     "label": "stained glass",
@@ -1096,8 +1805,16 @@
     "color": "Jewel pot-metal and flashed glass.",
     "texture": "Lead cames, glass bubbles, painted trace-lines, glow from behind.",
     "camera": "Window-plane composition; replace lens language with leaded glass.",
-    "must_include": ["stained-glass window", "lead cames", "pot-metal color"],
-    "conflicts": ["opaque oil", "CCTV mud", "low-poly flats"],
+    "must_include": [
+      "stained-glass window",
+      "lead cames",
+      "pot-metal color"
+    ],
+    "conflicts": [
+      "opaque oil",
+      "CCTV mud",
+      "low-poly flats"
+    ],
     "wan_stylization": "stained glass",
     "suffix": "Stained-glass window, lead cames, pot-metal color."
   },
@@ -1109,8 +1826,16 @@
     "color": "Stone and smalti local color, grout lines.",
     "texture": "Small tesserae, grout, slight irregular set.",
     "camera": "Wall or floor mosaic plane, not a gold-ground icon.",
-    "must_include": ["secular tesserae mosaic", "stone and glass tiles", "grout lines"],
-    "conflicts": ["smooth photograph", "oil glaze", "anime cel"],
+    "must_include": [
+      "secular tesserae mosaic",
+      "stone and glass tiles",
+      "grout lines"
+    ],
+    "conflicts": [
+      "smooth photograph",
+      "oil glaze",
+      "anime cel"
+    ],
     "suffix": "Secular tesserae mosaic of stone and glass tiles."
   },
   "pointillism": {
@@ -1121,8 +1846,16 @@
     "color": "Unmixed pigment dots that mix in the eye.",
     "texture": "Regular dotted surface, no long brush stroke.",
     "camera": "Pictorial composition; replace lens language with pigment dots.",
-    "must_include": ["pointillist painting", "discrete dots of pure pigment", "optical mix"],
-    "conflicts": ["smooth photoreal", "hard cel bands", "crosshatch pen"],
+    "must_include": [
+      "pointillist painting",
+      "discrete dots of pure pigment",
+      "optical mix"
+    ],
+    "conflicts": [
+      "smooth photoreal",
+      "hard cel bands",
+      "crosshatch pen"
+    ],
     "wan_stylization": "pointillism",
     "suffix": "Pointillist painting, discrete dots of pure pigment."
   },
@@ -1134,8 +1867,16 @@
     "color": "Fierce unmixed hues, arbitrary local color.",
     "texture": "Bold loaded brush, visible canvas.",
     "camera": "Fauve pictorial composition.",
-    "must_include": ["fauvist painting", "violent unmixed color", "wild brush"],
-    "conflicts": ["muted documentary", "gray wet-plate", "blueprint cyan"],
+    "must_include": [
+      "fauvist painting",
+      "violent unmixed color",
+      "wild brush"
+    ],
+    "conflicts": [
+      "muted documentary",
+      "gray wet-plate",
+      "blueprint cyan"
+    ],
     "suffix": "Fauvist painting, violent unmixed color, wild brush."
   },
   "surrealism": {
@@ -1146,8 +1887,16 @@
     "color": "Lucid local color in an uncanny scene.",
     "texture": "Fine painted finish, melting or doubled forms.",
     "camera": "Deep painted space that still breaks natural law.",
-    "must_include": ["surrealist painting", "dream logic", "precise impossible objects"],
-    "conflicts": ["honest documentary", "product catalog", "Saturday-morning bounce"],
+    "must_include": [
+      "surrealist painting",
+      "dream logic",
+      "precise impossible objects"
+    ],
+    "conflicts": [
+      "honest documentary",
+      "product catalog",
+      "Saturday-morning bounce"
+    ],
     "suffix": "Surrealist painting, dream logic, precise impossible objects."
   },
   "expressionism": {
@@ -1158,8 +1907,16 @@
     "color": "Acid or blood-warm emotional hues.",
     "texture": "Agitated brush, warped anatomy, raw canvas.",
     "camera": "Tilted painted space, not a stable photograph.",
-    "must_include": ["expressionist painting", "distorted form", "emotional color"],
-    "conflicts": ["calm product still", "high-key beauty", "clean vector"],
+    "must_include": [
+      "expressionist painting",
+      "distorted form",
+      "emotional color"
+    ],
+    "conflicts": [
+      "calm product still",
+      "high-key beauty",
+      "clean vector"
+    ],
     "suffix": "Expressionist painting, distorted form, emotional color."
   },
   "abstract_expressionism": {
@@ -1170,8 +1927,16 @@
     "color": "Poured and stained fields, accidental mixes.",
     "texture": "Drips, splatters, stained raw canvas, house-paint body.",
     "camera": "All-over canvas; subject is engulfed in gesture, not posed for a lens.",
-    "must_include": ["abstract-expressionist canvas", "gestural drips", "stained fields"],
-    "conflicts": ["tight academic drawing", "photoreal catalog", "pixel grid"],
+    "must_include": [
+      "abstract-expressionist canvas",
+      "gestural drips",
+      "stained fields"
+    ],
+    "conflicts": [
+      "tight academic drawing",
+      "photoreal catalog",
+      "pixel grid"
+    ],
     "suffix": "Abstract-expressionist canvas, gestural drips, stained fields."
   },
   "rococo": {
@@ -1181,9 +1946,17 @@
     "light": "Feathery daylight, powdery highlights.",
     "color": "Pastel rose, cream, celadon.",
     "texture": "Silk, powder, scrolling ornament, light brush.",
-    "camera": "Fête pictorial composition, airy space.",
-    "must_include": ["rococo painting", "pastel silk", "ornamental lightness"],
-    "conflicts": ["brutalist concrete", "cyberpunk rain", "low-key void"],
+    "camera": "F\u00eate pictorial composition, airy space.",
+    "must_include": [
+      "rococo painting",
+      "pastel silk",
+      "ornamental lightness"
+    ],
+    "conflicts": [
+      "brutalist concrete",
+      "cyberpunk rain",
+      "low-key void"
+    ],
     "suffix": "Rococo painting, pastel silk, ornamental lightness."
   },
   "neoclassical_oil": {
@@ -1194,8 +1967,16 @@
     "color": "Sober drapery color, pale stone.",
     "texture": "Polished oil, hidden brush, marble and cloth.",
     "camera": "Frieze-like pictorial composition.",
-    "must_include": ["neoclassical oil", "marble-smooth figures", "civic clarity"],
-    "conflicts": ["impressionist broken color", "glitch tears", "graffiti drips"],
+    "must_include": [
+      "neoclassical oil",
+      "marble-smooth figures",
+      "civic clarity"
+    ],
+    "conflicts": [
+      "impressionist broken color",
+      "glitch tears",
+      "graffiti drips"
+    ],
     "suffix": "Neoclassical oil, marble-smooth figures, civic clarity."
   },
   "romantic_landscape": {
@@ -1206,8 +1987,16 @@
     "color": "Moody earth and luminous cloud.",
     "texture": "Painterly atmosphere, distant crags, small staffage.",
     "camera": "Wide painted vista, human scale tiny.",
-    "must_include": ["romantic landscape oil", "sublime weather", "tiny figures"],
-    "conflicts": ["studio product", "isometric diorama", "CCTV overhead"],
+    "must_include": [
+      "romantic landscape oil",
+      "sublime weather",
+      "tiny figures"
+    ],
+    "conflicts": [
+      "studio product",
+      "isometric diorama",
+      "CCTV overhead"
+    ],
     "suffix": "Romantic landscape oil, sublime weather, tiny figures."
   },
   "dutch_golden_age": {
@@ -1218,8 +2007,16 @@
     "color": "Earth, linen, restrained jewel accents.",
     "texture": "Fine oil on panel or canvas, tiled floors, brass and bread.",
     "camera": "Domestic pictorial composition, calm geometry.",
-    "must_include": ["Dutch Golden Age oil", "north-window light", "quiet interior or still life"],
-    "conflicts": ["neon magenta", "fauve unmixed color", "voxel art"],
+    "must_include": [
+      "Dutch Golden Age oil",
+      "north-window light",
+      "quiet interior or still life"
+    ],
+    "conflicts": [
+      "neon magenta",
+      "fauve unmixed color",
+      "voxel art"
+    ],
     "suffix": "Dutch Golden Age oil, north-window light, quiet interior."
   },
   "fresco_buon": {
@@ -1230,8 +2027,16 @@
     "color": "Earth and mineral fresco palette.",
     "texture": "Plaster tooth, giornata seams, matte lime bloom.",
     "camera": "Wall-painting composition, architectural scale.",
-    "must_include": ["buon fresco on wet plaster", "mineral pigment", "lime"],
-    "conflicts": ["glossy oil varnish", "photographic grain", "chrome 3D"],
+    "must_include": [
+      "buon fresco on wet plaster",
+      "mineral pigment",
+      "lime"
+    ],
+    "conflicts": [
+      "glossy oil varnish",
+      "photographic grain",
+      "chrome 3D"
+    ],
     "suffix": "Buon fresco on wet plaster, mineral pigment locked in lime."
   },
   "tempera_panel": {
@@ -1242,8 +2047,16 @@
     "color": "Bright tempera, slight chalkiness.",
     "texture": "Fine cross-hatch tempera, gesso, wood panel.",
     "camera": "Panel painting, shallow sacred or civic space.",
-    "must_include": ["egg-tempera on gessoed panel", "fine hatch", "matte finish"],
-    "conflicts": ["impasto oil", "live-action photograph", "low-poly"],
+    "must_include": [
+      "egg-tempera on gessoed panel",
+      "fine hatch",
+      "matte finish"
+    ],
+    "conflicts": [
+      "impasto oil",
+      "live-action photograph",
+      "low-poly"
+    ],
     "suffix": "Egg-tempera on gessoed panel, fine hatch, matte finish."
   },
   "byzantine_mosaic_icon": {
@@ -1254,8 +2067,16 @@
     "color": "Gold field, hierarchical costume color.",
     "texture": "Angled gold tesserae, stone faces, reverse perspective.",
     "camera": "Frontal icon plane; replace perspective lens with reverse perspective.",
-    "must_include": ["Byzantine gold-ground mosaic icon", "frontal sacred geometry", "gold tesserae"],
-    "conflicts": ["secular floor mosaic only", "photoreal portrait", "cyberpunk"],
+    "must_include": [
+      "Byzantine gold-ground mosaic icon",
+      "frontal sacred geometry",
+      "gold tesserae"
+    ],
+    "conflicts": [
+      "secular floor mosaic only",
+      "photoreal portrait",
+      "cyberpunk"
+    ],
     "suffix": "Byzantine gold-ground mosaic icon, frontal sacred geometry."
   },
   "art_deco": {
@@ -1266,8 +2087,16 @@
     "color": "Black, gold, jade, coral, cream.",
     "texture": "Sunbursts, ziggurats, lacquer, chrome banding.",
     "camera": "Poster or interior deco composition.",
-    "must_include": ["Art Deco illustration", "sunburst geometry", "chrome and lacquer"],
-    "conflicts": ["whiplash art nouveau curves", "cottage linen", "documentary grit"],
+    "must_include": [
+      "Art Deco illustration",
+      "sunburst geometry",
+      "chrome and lacquer"
+    ],
+    "conflicts": [
+      "whiplash art nouveau curves",
+      "cottage linen",
+      "documentary grit"
+    ],
     "suffix": "Art Deco illustration, sunburst geometry, chrome and lacquer."
   },
   "constructivist_poster": {
@@ -1278,8 +2107,16 @@
     "color": "Red, black, beige, spare accent.",
     "texture": "Cut photographs, rulers, circles, empty of readable slogans.",
     "camera": "Diagonal poster composition, not a single-point photo.",
-    "must_include": ["constructivist poster", "diagonal photomontage", "block geometry"],
-    "conflicts": ["rococo pastel", "storybook warmth", "golden-hour photograph"],
+    "must_include": [
+      "constructivist poster",
+      "diagonal photomontage",
+      "block geometry"
+    ],
+    "conflicts": [
+      "rococo pastel",
+      "storybook warmth",
+      "golden-hour photograph"
+    ],
     "suffix": "Constructivist poster, diagonal photomontage, block geometry."
   },
   "naive_folk_painting": {
@@ -1290,8 +2127,16 @@
     "color": "Bright folk palette, decorative repeats.",
     "texture": "Flat figures, patterned floors, handmade charm.",
     "camera": "Stacked folk space, not linear perspective.",
-    "must_include": ["naive folk painting", "flat perspective", "patterned interiors"],
-    "conflicts": ["academic chiaroscuro", "real-time cinematic 3D", "CCTV"],
+    "must_include": [
+      "naive folk painting",
+      "flat perspective",
+      "patterned interiors"
+    ],
+    "conflicts": [
+      "academic chiaroscuro",
+      "real-time cinematic 3D",
+      "CCTV"
+    ],
     "suffix": "Naive folk painting, flat perspective, patterned interiors."
   },
   "encaustic_wax": {
@@ -1302,8 +2147,16 @@
     "color": "Embedded pigment in wax, honey undertone.",
     "texture": "Fused wax layers, scrape marks, opaque and translucent passages.",
     "camera": "Panel-scale wax painting.",
-    "must_include": ["encaustic painting", "fused beeswax", "pigment"],
-    "conflicts": ["thin watercolor", "hard vector", "security-camera"],
+    "must_include": [
+      "encaustic painting",
+      "fused beeswax",
+      "pigment"
+    ],
+    "conflicts": [
+      "thin watercolor",
+      "hard vector",
+      "security-camera"
+    ],
     "suffix": "Encaustic painting, fused beeswax and pigment."
   },
   "photoreal_oil_painting": {
@@ -1314,8 +2167,16 @@
     "color": "Observed local color in oil.",
     "texture": "Tight brush, visible canvas weave at the edge, oil skin.",
     "camera": "Pictorial composition; replace sensor language with canvas and brush.",
-    "must_include": ["photoreal oil painting on canvas", "brush and weave", "not a camera capture"],
-    "conflicts": ["still photograph from a real camera", "cel-shaded", "pixel art"],
+    "must_include": [
+      "photoreal oil painting on canvas",
+      "brush and weave",
+      "not a camera capture"
+    ],
+    "conflicts": [
+      "still photograph from a real camera",
+      "cel-shaded",
+      "pixel art"
+    ],
     "suffix": "Photoreal oil painting on canvas, brush and weave, not a camera capture."
   },
   "pre_raphaelite": {
@@ -1326,8 +2187,16 @@
     "color": "Jewel reds, greens, copper hair, wet foliage.",
     "texture": "Minute botanical detail, enamel-smooth oil, literary costume.",
     "camera": "Literary pictorial composition, close nature.",
-    "must_include": ["Pre-Raphaelite oil", "jewel color", "botanical minuteness"],
-    "conflicts": ["impressionist loose strokes", "brutalist gray", "glitch codec"],
+    "must_include": [
+      "Pre-Raphaelite oil",
+      "jewel color",
+      "botanical minuteness"
+    ],
+    "conflicts": [
+      "impressionist loose strokes",
+      "brutalist gray",
+      "glitch codec"
+    ],
     "suffix": "Pre-Raphaelite oil, jewel color, botanical minuteness."
   },
   "symbolism": {
@@ -1338,8 +2207,16 @@
     "color": "Jewel dusk, pale skin, deep patterned grounds.",
     "texture": "Soft painted mystery, halos, quiet figures.",
     "camera": "Dream-stage pictorial composition.",
-    "must_include": ["symbolist painting", "mythic hush", "jeweled dusk"],
-    "conflicts": ["reportage available light", "product cyclorama", "Saturday-morning"],
+    "must_include": [
+      "symbolist painting",
+      "mythic hush",
+      "jeweled dusk"
+    ],
+    "conflicts": [
+      "reportage available light",
+      "product cyclorama",
+      "Saturday-morning"
+    ],
     "suffix": "Symbolist painting, mythic hush, jeweled dusk."
   },
   "bauhaus_graphic": {
@@ -1350,8 +2227,16 @@
     "color": "Red, yellow, blue, black, white.",
     "texture": "Circles, bars, and bars of type treated as abstract bars, empty of readable letters.",
     "camera": "Workshop poster composition, orthogonal geometry.",
-    "must_include": ["Bauhaus graphic", "primary geometry", "spare workshop color"],
-    "conflicts": ["baroque umber", "romantic storm", "film grain"],
+    "must_include": [
+      "Bauhaus graphic",
+      "primary geometry",
+      "spare workshop color"
+    ],
+    "conflicts": [
+      "baroque umber",
+      "romantic storm",
+      "film grain"
+    ],
     "suffix": "Bauhaus graphic, primary geometry, spare workshop color."
   },
   "toon_shaded_3d": {
@@ -1362,8 +2247,16 @@
     "color": "Poster color on shaded meshes.",
     "texture": "Ink outlines hugging 3D silhouettes, matte shaders.",
     "camera": "3D camera with graphic lighting, not a 2D cel sheet.",
-    "must_include": ["toon-shaded 3D", "inked volume outlines", "modeled forms"],
-    "conflicts": ["2D cel sheet only", "photoreal microdetail", "clay fingerprints"],
+    "must_include": [
+      "toon-shaded 3D",
+      "inked volume outlines",
+      "modeled forms"
+    ],
+    "conflicts": [
+      "2D cel sheet only",
+      "photoreal microdetail",
+      "clay fingerprints"
+    ],
     "wan_stylization": "3D toon",
     "suffix": "Toon-shaded 3D, inked volume outlines on modeled forms."
   },
@@ -1375,8 +2268,16 @@
     "color": "Limited 1990s palette, slightly crushed.",
     "texture": "Plastic specular shaders, jaggy edges, low-res maps.",
     "camera": "Early CGI camera, render-view framing without photographic glass language.",
-    "must_include": ["early-1990s scanline CGI", "plastic shaders", "visible aliasing"],
-    "conflicts": ["modern film CGI", "watercolor paper", "wet-plate"],
+    "must_include": [
+      "early-1990s scanline CGI",
+      "plastic shaders",
+      "visible aliasing"
+    ],
+    "conflicts": [
+      "modern film CGI",
+      "watercolor paper",
+      "wet-plate"
+    ],
     "suffix": "Early-1990s scanline CGI, plastic shaders, visible aliasing."
   },
   "miniature_tabletop": {
@@ -1387,8 +2288,16 @@
     "color": "Acrylic miniature paint, shaded recesses.",
     "texture": "Tiny brush highlights, sand basing, scale weapons.",
     "camera": "Hobby-scale still, tabletop diorama ground.",
-    "must_include": ["painted tabletop wargame miniature", "hobby basing", "tiny brush highlights"],
-    "conflicts": ["life-size photoreal human", "2D anime", "oil landscape"],
+    "must_include": [
+      "painted tabletop wargame miniature",
+      "hobby basing",
+      "tiny brush highlights"
+    ],
+    "conflicts": [
+      "life-size photoreal human",
+      "2D anime",
+      "oil landscape"
+    ],
     "suffix": "Painted tabletop wargame miniature on hobby basing."
   },
   "interlocking_brick": {
@@ -1399,8 +2308,16 @@
     "color": "Primary brick colors, printed tiles empty of readable logos.",
     "texture": "Studs, tubes, visible seams, minifigure-scale joints without branded faces.",
     "camera": "Toy-scale brick world, blocky proportions.",
-    "must_include": ["interlocking-brick diorama", "studded plastic bricks", "toy-scale"],
-    "conflicts": ["smooth organic CGI", "photoreal skin pores", "charcoal"],
+    "must_include": [
+      "interlocking-brick diorama",
+      "studded plastic bricks",
+      "toy-scale"
+    ],
+    "conflicts": [
+      "smooth organic CGI",
+      "photoreal skin pores",
+      "charcoal"
+    ],
     "suffix": "Interlocking-brick diorama, studded plastic bricks."
   },
   "plush_toy": {
@@ -1411,8 +2328,16 @@
     "color": "Dyed plush color, stitched accents.",
     "texture": "Pile fabric, felt patches, visible stitching, button or embroidered features.",
     "camera": "Toy-scale still, cuddly proportions.",
-    "must_include": ["plush-toy still", "stitched felt", "pile fabric"],
-    "conflicts": ["hard chrome", "photoreal flesh", "blueprint"],
+    "must_include": [
+      "plush-toy still",
+      "stitched felt",
+      "pile fabric"
+    ],
+    "conflicts": [
+      "hard chrome",
+      "photoreal flesh",
+      "blueprint"
+    ],
     "suffix": "Plush-toy still, stitched felt and pile fabric."
   },
   "felt_craft": {
@@ -1423,8 +2348,16 @@
     "color": "Dyed wool color, blended fibers.",
     "texture": "Barbed-needle felt, loose fibers, handmade seams.",
     "camera": "Craft-scale wool figure or scene.",
-    "must_include": ["needle-felted wool sculpture", "fuzzy fibers", "handmade seams"],
-    "conflicts": ["smooth porcelain", "hard cel", "security-camera"],
+    "must_include": [
+      "needle-felted wool sculpture",
+      "fuzzy fibers",
+      "handmade seams"
+    ],
+    "conflicts": [
+      "smooth porcelain",
+      "hard cel",
+      "security-camera"
+    ],
     "suffix": "Needle-felted wool sculpture, fuzzy fibers standing off the form."
   },
   "origami": {
@@ -1435,8 +2368,16 @@
     "color": "Paper color, maybe a simple print empty of readable type.",
     "texture": "Creases, thin paper edges, geometric folds.",
     "camera": "Paper-sculpture still; replace lens language with folded planes.",
-    "must_include": ["folded origami paper", "visible crease pattern", "geometric folds"],
-    "conflicts": ["organic clay", "photoreal", "oil impasto"],
+    "must_include": [
+      "folded origami paper",
+      "visible crease pattern",
+      "geometric folds"
+    ],
+    "conflicts": [
+      "organic clay",
+      "photoreal",
+      "oil impasto"
+    ],
     "wan_stylization": "origami",
     "suffix": "Folded origami paper, visible crease pattern holding the form."
   },
@@ -1448,8 +2389,16 @@
     "color": "Monochrome sand, or tinted grains.",
     "texture": "Piled and scraped sand, grainy silhouettes.",
     "camera": "Lightbox composition, sand as the only drawing tool.",
-    "must_include": ["sand-on-glass animation still", "grains pushed into form", "grainy silhouettes"],
-    "conflicts": ["clean vector", "glossy 3D", "fashion magazine"],
+    "must_include": [
+      "sand-on-glass animation still",
+      "grains pushed into form",
+      "grainy silhouettes"
+    ],
+    "conflicts": [
+      "clean vector",
+      "glossy 3D",
+      "fashion magazine"
+    ],
     "suffix": "Sand-on-glass animation still, grains pushed into form."
   },
   "cutout_animation": {
@@ -1460,8 +2409,16 @@
     "color": "Painted paper color, simple costume flats.",
     "texture": "Hinged joints, paper edge, painted backdrop board.",
     "camera": "Top-down stand; replace live-action lens with paper puppets.",
-    "must_include": ["hinged cutout-animation still", "paper puppets", "painted board"],
-    "conflicts": ["fluid 3D", "photoreal human", "wet-plate"],
+    "must_include": [
+      "hinged cutout-animation still",
+      "paper puppets",
+      "painted board"
+    ],
+    "conflicts": [
+      "fluid 3D",
+      "photoreal human",
+      "wet-plate"
+    ],
     "suffix": "Hinged cutout-animation still, paper puppets on a painted board."
   },
   "rotoscope": {
@@ -1472,8 +2429,16 @@
     "color": "Painted or inked color over a traced figure.",
     "texture": "Traced contour, painterly fill, motion-echo edges.",
     "camera": "Live-action staging kept, look replaced by paint-over.",
-    "must_include": ["rotoscoped still", "traced live-action", "graphic paint-over"],
-    "conflicts": ["untraced photoreal", "voxel cubes", "blueprint cyan"],
+    "must_include": [
+      "rotoscoped still",
+      "traced live-action",
+      "graphic paint-over"
+    ],
+    "conflicts": [
+      "untraced photoreal",
+      "voxel cubes",
+      "blueprint cyan"
+    ],
     "suffix": "Rotoscoped still, traced live-action with graphic paint-over."
   },
   "porcelain_figurine": {
@@ -1484,8 +2449,16 @@
     "color": "Fired porcelain whites and painted overglaze.",
     "texture": "Glaze specularity, tiny painted faces, ceramic seams.",
     "camera": "Shelf-scale still, figurine proportions.",
-    "must_include": ["glazed porcelain figurine", "kiln shine", "collectible scale"],
-    "conflicts": ["plush pile", "photoreal life-size", "graffiti wall"],
+    "must_include": [
+      "glazed porcelain figurine",
+      "kiln shine",
+      "collectible scale"
+    ],
+    "conflicts": [
+      "plush pile",
+      "photoreal life-size",
+      "graffiti wall"
+    ],
     "suffix": "Glazed porcelain figurine, kiln shine, collectible scale."
   },
   "wood_carving": {
@@ -1496,8 +2469,16 @@
     "color": "Wood local color, maybe a thin stain, not full paint unless asked.",
     "texture": "Chisel marks, annual rings, tool facets.",
     "camera": "Sculpture still, carved mass.",
-    "must_include": ["carved wood sculpture", "chisel facets", "open grain"],
-    "conflicts": ["smooth plastic CGI", "watercolor wash", "neon tube"],
+    "must_include": [
+      "carved wood sculpture",
+      "chisel facets",
+      "open grain"
+    ],
+    "conflicts": [
+      "smooth plastic CGI",
+      "watercolor wash",
+      "neon tube"
+    ],
     "suffix": "Carved wood sculpture, chisel facets and open grain."
   },
   "blown_glass": {
@@ -1508,8 +2489,16 @@
     "color": "Transparent or opalescent glass color.",
     "texture": "Punty marks, stretch striae, trapped bubbles.",
     "camera": "Glass-object still, refractive volume.",
-    "must_include": ["blown-glass sculpture", "transparent color", "furnace stretch"],
-    "conflicts": ["opaque clay", "newsprint dots", "charcoal"],
+    "must_include": [
+      "blown-glass sculpture",
+      "transparent color",
+      "furnace stretch"
+    ],
+    "conflicts": [
+      "opaque clay",
+      "newsprint dots",
+      "charcoal"
+    ],
     "suffix": "Blown-glass sculpture, transparent color, furnace stretch."
   },
   "ice_sculpture": {
@@ -1520,8 +2509,16 @@
     "color": "Clear or dyed ice, cold highlights.",
     "texture": "Chainsaw and chisel facets, trapped bubbles, melt sheen.",
     "camera": "Festival-scale ice still.",
-    "must_include": ["carved ice sculpture", "internal fractures", "cold speculars"],
-    "conflicts": ["warm oil glaze", "desert dust", "felt wool"],
+    "must_include": [
+      "carved ice sculpture",
+      "internal fractures",
+      "cold speculars"
+    ],
+    "conflicts": [
+      "warm oil glaze",
+      "desert dust",
+      "felt wool"
+    ],
     "suffix": "Carved ice sculpture, internal fractures, cold speculars."
   },
   "neon_tube": {
@@ -1532,8 +2529,16 @@
     "color": "Saturated gas color, magenta, argon blue, mercury white.",
     "texture": "Glass tubing, ceramic housings, glow bloom, unmarked.",
     "camera": "Night sculpture still, tubes as drawing.",
-    "must_include": ["bent neon-tube sculpture", "glowing gas in glass", "self-lit tubes"],
-    "conflicts": ["overcast daylight documentary", "watercolor pastoral", "platinum print"],
+    "must_include": [
+      "bent neon-tube sculpture",
+      "glowing gas in glass",
+      "self-lit tubes"
+    ],
+    "conflicts": [
+      "overcast daylight documentary",
+      "watercolor pastoral",
+      "platinum print"
+    ],
     "suffix": "Bent neon-tube sculpture, glowing gas in glass."
   },
   "painted_resin_miniature": {
@@ -1544,8 +2549,16 @@
     "color": "Studio acrylics, careful shading, maybe a gloss coat.",
     "texture": "Cast-resin pores, seam cleanup, tiny painted eyes.",
     "camera": "Display-figure still, larger than tabletop wargame scale.",
-    "must_include": ["hand-painted display resin figure", "garage-kit scale", "tiny painted eyes"],
-    "conflicts": ["28mm wargame basing", "life-size photograph", "ukiyo-e"],
+    "must_include": [
+      "hand-painted display resin figure",
+      "garage-kit scale",
+      "tiny painted eyes"
+    ],
+    "conflicts": [
+      "28mm wargame basing",
+      "life-size photograph",
+      "ukiyo-e"
+    ],
     "suffix": "Hand-painted display resin figure, garage-kit scale."
   },
   "inflatable_sculpture": {
@@ -1556,8 +2569,16 @@
     "color": "Printed or dyed vinyl color.",
     "texture": "Heat-welded seams, wrinkle when slack, balloon gloss.",
     "camera": "Object still at inflated scale.",
-    "must_include": ["inflatable vinyl sculpture", "seams and gloss", "holding air"],
-    "conflicts": ["carved wood", "charcoal sketch", "wet-plate"],
+    "must_include": [
+      "inflatable vinyl sculpture",
+      "seams and gloss",
+      "holding air"
+    ],
+    "conflicts": [
+      "carved wood",
+      "charcoal sketch",
+      "wet-plate"
+    ],
     "suffix": "Inflatable vinyl sculpture, seams and gloss holding air."
   },
   "paper_theater_2_5d": {
@@ -1568,8 +2589,16 @@
     "color": "Printed or painted flats, theatrical palette.",
     "texture": "Layered card, slot-in scenery, shallow depth between planes.",
     "camera": "Toy-theater proscenium; replace full perspective with layered flats.",
-    "must_include": ["2.5D paper theater", "layered flats", "shallow parallax"],
-    "conflicts": ["deep photoreal space", "fluid CGI", "oil impasto"],
+    "must_include": [
+      "2.5D paper theater",
+      "layered flats",
+      "shallow parallax"
+    ],
+    "conflicts": [
+      "deep photoreal space",
+      "fluid CGI",
+      "oil impasto"
+    ],
     "suffix": "2.5D paper theater, layered flats with shallow parallax."
   },
   "steampunk": {
@@ -1580,8 +2609,16 @@
     "color": "Brass, copper, soot, oxblood leather.",
     "texture": "Gears, rivets, pressure gauges empty of readable type, steam haze.",
     "camera": "Period-machine cinematic framing.",
-    "must_include": ["brass-and-steam Victorian", "machine-age still", "gaslight"],
-    "conflicts": ["clean solarpunk greenery", "Y2K ice chrome", "minimal Bauhaus"],
+    "must_include": [
+      "brass-and-steam Victorian",
+      "machine-age still",
+      "gaslight"
+    ],
+    "conflicts": [
+      "clean solarpunk greenery",
+      "Y2K ice chrome",
+      "minimal Bauhaus"
+    ],
     "wan_stylization": "steampunk",
     "suffix": "Brass-and-steam Victorian machine-age still."
   },
@@ -1593,8 +2630,16 @@
     "color": "Olive, rust, cream, polished steel.",
     "texture": "Rivets, diesel grit, bakelite, propaganda-empty posters.",
     "camera": "1930s industrial cinematic framing.",
-    "must_include": ["interwar dieselpunk still", "riveted steel", "wartime chrome"],
-    "conflicts": ["pastel vaporwave", "cottage linen", "rococo silk"],
+    "must_include": [
+      "interwar dieselpunk still",
+      "riveted steel",
+      "wartime chrome"
+    ],
+    "conflicts": [
+      "pastel vaporwave",
+      "cottage linen",
+      "rococo silk"
+    ],
     "suffix": "Interwar dieselpunk still, riveted steel, wartime chrome."
   },
   "cottagecore": {
@@ -1605,8 +2650,16 @@
     "color": "Cream, sage, dried-flower rust.",
     "texture": "Linen weave, jam jars, worn wood, unmarked.",
     "camera": "Intimate domestic or meadow framing.",
-    "must_include": ["cottagecore still", "linen", "hearth warmth"],
-    "conflicts": ["cyberpunk rain night", "brutalist concrete", "glitch tears"],
+    "must_include": [
+      "cottagecore still",
+      "linen",
+      "hearth warmth"
+    ],
+    "conflicts": [
+      "cyberpunk rain night",
+      "brutalist concrete",
+      "glitch tears"
+    ],
     "suffix": "Cottagecore still, linen, wildflowers, hearth warmth."
   },
   "dark_academia": {
@@ -1617,8 +2670,16 @@
     "color": "Oxblood, forest, cream paper, dark wood.",
     "texture": "Cloth bindings, wool, dust motes, unmarked spines.",
     "camera": "Library or study framing, hushed.",
-    "must_include": ["dark-academia still", "oak libraries", "lamplight"],
-    "conflicts": ["high-key seamless", "synthwave grid", "Saturday-morning"],
+    "must_include": [
+      "dark-academia still",
+      "oak libraries",
+      "lamplight"
+    ],
+    "conflicts": [
+      "high-key seamless",
+      "synthwave grid",
+      "Saturday-morning"
+    ],
     "suffix": "Dark-academia still, oak libraries, wool, lamplight."
   },
   "synthwave": {
@@ -1629,8 +2690,16 @@
     "color": "Hot magenta, orange, electric blue, not pastel.",
     "texture": "Retro grid, chrome sun, laser geometry, unmarked.",
     "camera": "Horizon-grid composition, 1980s analog-video heat.",
-    "must_include": ["synthwave still", "hot magenta-orange sunset grid", "chrome sun"],
-    "conflicts": ["pastel vaporwave softness", "documentary honest color", "Dutch interior"],
+    "must_include": [
+      "synthwave still",
+      "hot magenta-orange sunset grid",
+      "chrome sun"
+    ],
+    "conflicts": [
+      "pastel vaporwave softness",
+      "documentary honest color",
+      "Dutch interior"
+    ],
     "wan_stylization": "synthwave",
     "suffix": "Synthwave still, hot magenta-orange sunset grid."
   },
@@ -1642,8 +2711,16 @@
     "color": "Umber, dried blood, cold moonlight.",
     "texture": "Damp stone, cobweb, worn tapestry, unmarked.",
     "camera": "Ominous architectural framing.",
-    "must_include": ["gothic-horror still", "candlelit stone", "deep umber dread"],
-    "conflicts": ["high-key beauty", "solarpunk day", "flat cheerful cartoon"],
+    "must_include": [
+      "gothic-horror still",
+      "candlelit stone",
+      "deep umber dread"
+    ],
+    "conflicts": [
+      "high-key beauty",
+      "solarpunk day",
+      "flat cheerful cartoon"
+    ],
     "suffix": "Gothic-horror still, candlelit stone, deep umber dread."
   },
   "high_fantasy": {
@@ -1654,8 +2731,16 @@
     "color": "Jewel armor, forest gloom, spell glow.",
     "texture": "Ornate metal, cloak weave, ancient stone, unmarked crests.",
     "camera": "Epic painterly framing, not a catalog still.",
-    "must_include": ["high-fantasy painterly still", "mythic armor", "enchanted dusk"],
-    "conflicts": ["CCTV mud", "product cyclorama", "newspaper dots"],
+    "must_include": [
+      "high-fantasy painterly still",
+      "mythic armor",
+      "enchanted dusk"
+    ],
+    "conflicts": [
+      "CCTV mud",
+      "product cyclorama",
+      "newspaper dots"
+    ],
     "suffix": "High-fantasy painterly still, mythic armor, enchanted dusk."
   },
   "western_dust": {
@@ -1666,8 +2751,16 @@
     "color": "Bleached denim, adobe, sage, sky.",
     "texture": "Dust, cracked earth, weathered wood, unmarked.",
     "camera": "Open-country still, horizon weight.",
-    "must_include": ["dust-bowl western still", "hard sun", "adobe and sage"],
-    "conflicts": ["neon night city", "rococo pastel", "underwater cyan"],
+    "must_include": [
+      "dust-bowl western still",
+      "hard sun",
+      "adobe and sage"
+    ],
+    "conflicts": [
+      "neon night city",
+      "rococo pastel",
+      "underwater cyan"
+    ],
     "suffix": "Dust-bowl western still, hard sun on adobe and sage."
   },
   "retrofuturism_1950s": {
@@ -1678,8 +2771,16 @@
     "color": "Aqua, coral, chrome, cream.",
     "texture": "Tailfins, boomerang tables, Googie signs empty of readable type.",
     "camera": "World's-fair or roadside framing.",
-    "must_include": ["1950s retrofuturist still", "atomic-age chrome", "aqua"],
-    "conflicts": ["post-apocalyptic rust", "gothic umber", "wet-plate brown"],
+    "must_include": [
+      "1950s retrofuturist still",
+      "atomic-age chrome",
+      "aqua"
+    ],
+    "conflicts": [
+      "post-apocalyptic rust",
+      "gothic umber",
+      "wet-plate brown"
+    ],
     "suffix": "1950s retrofuturist still, atomic-age chrome and aqua."
   },
   "brutalist": {
@@ -1690,8 +2791,16 @@
     "color": "Gray cement, oxidized metal, sparse primary signage glow unmarked.",
     "texture": "Board-form grain, bush-hammered concrete, monumental joints.",
     "camera": "Low civic framing, massing first.",
-    "must_include": ["brutalist concrete still", "board-formed mass", "overcast civic light"],
-    "conflicts": ["cottage linen", "art nouveau ornament", "vaporwave pastel"],
+    "must_include": [
+      "brutalist concrete still",
+      "board-formed mass",
+      "overcast civic light"
+    ],
+    "conflicts": [
+      "cottage linen",
+      "art nouveau ornament",
+      "vaporwave pastel"
+    ],
     "suffix": "Brutalist concrete still, board-formed mass, overcast civic light."
   },
   "memphis_design": {
@@ -1702,8 +2811,16 @@
     "color": "Candy primaries, terrazzo, black-and-white squiggle.",
     "texture": "Laminate, terrazzo, tubular metal, cartoon furniture.",
     "camera": "Interior still as a color diagram.",
-    "must_include": ["Memphis-Milano still", "squiggle laminates", "candy geometry"],
-    "conflicts": ["dark academia oak", "film-noir blinds", "platinum matte"],
+    "must_include": [
+      "Memphis-Milano still",
+      "squiggle laminates",
+      "candy geometry"
+    ],
+    "conflicts": [
+      "dark academia oak",
+      "film-noir blinds",
+      "platinum matte"
+    ],
     "suffix": "Memphis-Milano still, squiggle laminates, candy geometry."
   },
   "y2k_gloss": {
@@ -1714,8 +2831,16 @@
     "color": "Ice blue, silver, bubblegum, holographic fleck.",
     "texture": "Blown plastic, chrome orbs, water droplets, unmarked.",
     "camera": "Millennial catalog still, glossy and cold.",
-    "must_include": ["Y2K gloss still", "iridescent plastics", "icy chrome orbs"],
-    "conflicts": ["1970s warm grain", "fresco lime", "documentary grit"],
+    "must_include": [
+      "Y2K gloss still",
+      "iridescent plastics",
+      "icy chrome orbs"
+    ],
+    "conflicts": [
+      "1970s warm grain",
+      "fresco lime",
+      "documentary grit"
+    ],
     "suffix": "Y2K gloss still, iridescent plastics, icy chrome orbs."
   },
   "vhs_tracking": {
@@ -1726,8 +2851,16 @@
     "color": "NTSC-smeared color, tracking rainbow at the edge.",
     "texture": "Warped scan, dropout snow, helical-scan jitter.",
     "camera": "Consumer-video frame; replace clean digital with tape error.",
-    "must_include": ["VHS tracking-error still", "warped scanlines", "chroma smear"],
-    "conflicts": ["clean modern digital", "pastel vaporwave softness", "oil canvas"],
+    "must_include": [
+      "VHS tracking-error still",
+      "warped scanlines",
+      "chroma smear"
+    ],
+    "conflicts": [
+      "clean modern digital",
+      "pastel vaporwave softness",
+      "oil canvas"
+    ],
     "suffix": "VHS tracking-error still, warped scanlines, chroma smear."
   },
   "crt_scanlines": {
@@ -1738,8 +2871,16 @@
     "color": "RGB triad, slight bloom, mask pattern.",
     "texture": "Aperture-grille or shadow-mask dots, curved glass, scanlines.",
     "camera": "Photograph of a tube face, or the world as if on a CRT.",
-    "must_include": ["CRT monitor still", "RGB phosphor", "visible scanlines"],
-    "conflicts": ["retina-sharp digital", "watercolor paper", "platinum print"],
+    "must_include": [
+      "CRT monitor still",
+      "RGB phosphor",
+      "visible scanlines"
+    ],
+    "conflicts": [
+      "retina-sharp digital",
+      "watercolor paper",
+      "platinum print"
+    ],
     "suffix": "CRT monitor still, RGB phosphor, visible scanlines."
   },
   "glitch_art": {
@@ -1750,8 +2891,16 @@
     "color": "Channel-shifted RGB, corrupted blocks.",
     "texture": "Macroblocking, slice tears, interlaced wreckage.",
     "camera": "Broken digital frame; replace a clean lens with codec damage.",
-    "must_include": ["datamosh glitch still", "blocky codec tears", "channel-shifted RGB"],
-    "conflicts": ["clean catalog photograph", "tempera hatch", "storybook"],
+    "must_include": [
+      "datamosh glitch still",
+      "blocky codec tears",
+      "channel-shifted RGB"
+    ],
+    "conflicts": [
+      "clean catalog photograph",
+      "tempera hatch",
+      "storybook"
+    ],
     "suffix": "Datamosh glitch still, blocky codec tears across the frame."
   },
   "holographic": {
@@ -1762,8 +2911,16 @@
     "color": "Rainbow shear on silver foil.",
     "texture": "Embossed diffraction, chrome flake, iridescent shift.",
     "camera": "Foil-object or foil-world still.",
-    "must_include": ["holographic-foil still", "rainbow diffraction", "chrome"],
-    "conflicts": ["matte gouache", "black-and-white silver", "overcast documentary"],
+    "must_include": [
+      "holographic-foil still",
+      "rainbow diffraction",
+      "chrome"
+    ],
+    "conflicts": [
+      "matte gouache",
+      "black-and-white silver",
+      "overcast documentary"
+    ],
     "suffix": "Holographic-foil still, rainbow diffraction on chrome."
   },
   "bioluminescent": {
@@ -1774,8 +2931,16 @@
     "color": "Teal, green, and violet living light on deep blue.",
     "texture": "Glowing filaments, wet dark surfaces, spore-like motes.",
     "camera": "Night-nature cinematic framing.",
-    "must_include": ["bioluminescent night still", "living glow", "deep-blue dark"],
-    "conflicts": ["noon hard sun", "high-key white", "newspaper halftone"],
+    "must_include": [
+      "bioluminescent night still",
+      "living glow",
+      "deep-blue dark"
+    ],
+    "conflicts": [
+      "noon hard sun",
+      "high-key white",
+      "newspaper halftone"
+    ],
     "suffix": "Bioluminescent night still, living glow in deep-blue dark."
   },
   "post_apocalyptic": {
@@ -1786,8 +2951,16 @@
     "color": "Rust, dust, sick yellow-gray sky.",
     "texture": "Peeled paint, rebar, ash, unmarked ruins.",
     "camera": "Wasteland establishing or close wreckage.",
-    "must_include": ["post-apocalyptic still", "broken concrete", "sickly sun"],
-    "conflicts": ["solarpunk greenery", "high-key beauty", "rococo silk"],
+    "must_include": [
+      "post-apocalyptic still",
+      "broken concrete",
+      "sickly sun"
+    ],
+    "conflicts": [
+      "solarpunk greenery",
+      "high-key beauty",
+      "rococo silk"
+    ],
     "suffix": "Post-apocalyptic still, rust, dust, broken concrete, sickly sun."
   },
   "afrofuturism": {
@@ -1798,8 +2971,16 @@
     "color": "Gold, ankara-like pattern treated as abstract ornament, cosmic metal.",
     "texture": "Jewelry-scale metal, patterned cloth empty of readable brands, spacecraft craft.",
     "camera": "Proud cinematic framing, future-present.",
-    "must_include": ["afrofuturist still", "diasporic ornament", "cosmic metals"],
-    "conflicts": ["gray brutalist only", "wet-plate brown", "CCTV green"],
+    "must_include": [
+      "afrofuturist still",
+      "diasporic ornament",
+      "cosmic metals"
+    ],
+    "conflicts": [
+      "gray brutalist only",
+      "wet-plate brown",
+      "CCTV green"
+    ],
     "wan_stylization": "afrofuturism",
     "suffix": "Afrofuturist still, diasporic ornament, cosmic metals, sunlit future."
   },
@@ -1811,8 +2992,2816 @@
     "color": "Complementary vibration, hot pink, lime, orange.",
     "texture": "Molten contour, filigree ornament, liquid letterforms treated as abstract.",
     "camera": "Fill-the-frame poster composition.",
-    "must_include": ["1960s psychedelic still", "molten contour", "vibrating complementary color"],
-    "conflicts": ["sober Dutch interior", "product seamless", "pinhole soft gray"],
+    "must_include": [
+      "1960s psychedelic still",
+      "molten contour",
+      "vibrating complementary color"
+    ],
+    "conflicts": [
+      "sober Dutch interior",
+      "product seamless",
+      "pinhole soft gray"
+    ],
     "suffix": "1960s psychedelic still, molten contour, vibrating complementary color."
+  },
+  "webtoon_color_hold": {
+    "label": "webtoon color hold",
+    "family": "illustration",
+    "medium": "Vertical webtoon still with hard color-hold flats.",
+    "light": "Even graphic key with almost no falloff.",
+    "color": "Held flats at high saturation.",
+    "texture": "Clean holds and a thin contour.",
+    "camera": "Tall panel staging along a reading path.",
+    "must_include": [
+      "webtoon color hold",
+      "hard flats"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Webtoon color hold, hard flats.",
+    "wan_stylization": "2D anime"
+  },
+  "ova_paint_nineties": {
+    "label": "1990s OVA paint",
+    "family": "illustration",
+    "medium": "Hand-painted 1990s OVA still on acetate-style cel.",
+    "light": "Shaped rims and deep shadow bands.",
+    "color": "Aged cel dyes with rich night hues.",
+    "texture": "Painted cel and soft airbrush blush.",
+    "camera": "Feature-layout framing with graphic shadow.",
+    "must_include": [
+      "1990s OVA paint",
+      "acetate cel"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "1990s OVA paint, acetate cel.",
+    "wan_stylization": "2D anime"
+  },
+  "late_night_cel_city": {
+    "label": "late-night cel city",
+    "family": "illustration",
+    "medium": "Late-night anime city still with neon cel planes.",
+    "light": "Neon practicals and hard graphic shadow.",
+    "color": "Cyan-magenta neon against ink night.",
+    "texture": "Cel planes and glowing signage empty of letters.",
+    "camera": "High angle over streets on a layout BG.",
+    "must_include": [
+      "late-night cel city",
+      "neon planes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Late-night cel city, neon planes.",
+    "wan_stylization": "2D anime"
+  },
+  "watercolor_layout_bg": {
+    "label": "watercolor layout background",
+    "family": "illustration",
+    "medium": "Anime layout background painted in watercolor washes.",
+    "light": "Soft sky fill with pale rims.",
+    "color": "Dilute pigment with paper-white reserves.",
+    "texture": "Visible paper tooth and wash blooms.",
+    "camera": "Wide establishing layout, not a live lens.",
+    "must_include": [
+      "watercolor layout background",
+      "paper tooth"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Watercolor layout background, paper tooth.",
+    "wan_stylization": "2D anime"
+  },
+  "thick_ink_action_still": {
+    "label": "thick-ink action still",
+    "family": "illustration",
+    "medium": "Anime action still with thick ink contours.",
+    "light": "Harsh key with speed-shadow bands.",
+    "color": "Bold primaries on ink black.",
+    "texture": "Speedlines, thick contour, impact frames.",
+    "camera": "Dynamic tilt and graphic composition.",
+    "must_include": [
+      "thick ink action still",
+      "speedlines"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Thick-ink action still, speedlines.",
+    "wan_stylization": "2D anime"
+  },
+  "soft_pastel_romance_still": {
+    "label": "soft pastel romance still",
+    "family": "illustration",
+    "medium": "Soft pastel anime still with blush airbrush.",
+    "light": "Gentle window key and halo rims.",
+    "color": "Pastel pinks and cream at low contrast.",
+    "texture": "Airbrush blush and fine hair strands.",
+    "camera": "Intimate bust staging on a decorative BG.",
+    "must_include": [
+      "soft pastel romance still",
+      "airbrush blush"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Soft pastel romance still, airbrush blush.",
+    "wan_stylization": "2D anime"
+  },
+  "analog_acetate_cel": {
+    "label": "analog acetate cel",
+    "family": "illustration",
+    "medium": "Analog acetate cel still photographed on a pegbar.",
+    "light": "Hard studio key on painted layers.",
+    "color": "Classic cel dyes with slight registration drift.",
+    "texture": "Painted acetate and a visible cel stack.",
+    "camera": "Locked layout without live-action bokeh.",
+    "must_include": [
+      "analog acetate cel",
+      "pegbar"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Analog acetate cel, pegbar.",
+    "wan_stylization": "2D anime"
+  },
+  "digital_paint_anime_still": {
+    "label": "digital-paint anime still",
+    "family": "illustration",
+    "medium": "Digital-paint anime still with soft blended cel.",
+    "light": "Smooth digital key and clean rims.",
+    "color": "Clean saturated flats with soft blends.",
+    "texture": "Digital brush without paper grain.",
+    "camera": "Modern TV layout framing.",
+    "must_include": [
+      "digital-paint anime still",
+      "soft blends"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Digital-paint anime still, soft blends.",
+    "wan_stylization": "2D anime"
+  },
+  "limited_tv_color_hold": {
+    "label": "limited TV color hold",
+    "family": "illustration",
+    "medium": "Limited-TV anime still with a small color hold set.",
+    "light": "Flat even lighting with few rims.",
+    "color": "Six-color hold built for readability.",
+    "texture": "Simple holds and a thick TV outline.",
+    "camera": "Center staging kept broadcast safe.",
+    "must_include": [
+      "limited TV color hold",
+      "small palette"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Limited TV color hold, small palette.",
+    "wan_stylization": "2D anime"
+  },
+  "sparkle_highlight_anime": {
+    "label": "sparkle-highlight anime",
+    "family": "illustration",
+    "medium": "Anime still with decorative sparkle highlights.",
+    "light": "Glint rims and star catchlights.",
+    "color": "Bright pastels with glitter accents.",
+    "texture": "Sparkle ticks, glossy hair, cel blush.",
+    "camera": "Cute close staging in a decorative frame.",
+    "must_include": [
+      "sparkle-highlight anime",
+      "catchlights"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sparkle-highlight anime, catchlights.",
+    "wan_stylization": "2D anime"
+  },
+  "heavy_screentone_color": {
+    "label": "heavy screentone color",
+    "family": "illustration",
+    "medium": "Color manga-anime still with heavy screentone.",
+    "light": "High-contrast ink key.",
+    "color": "Spot color over tone sheets.",
+    "texture": "Dense tone dots and ink contour.",
+    "camera": "Panel-like crop, graphic.",
+    "must_include": [
+      "heavy screentone color",
+      "tone sheets"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Heavy screentone color, tone sheets.",
+    "wan_stylization": "2D anime"
+  },
+  "school_rooftop_cel": {
+    "label": "school-rooftop cel",
+    "family": "illustration",
+    "medium": "School-rooftop anime still with chain-link and sky cel.",
+    "light": "Hard noon cel with short shadows.",
+    "color": "Blue sky flats and uniform accents.",
+    "texture": "Cel clouds and a painted fence empty of letters.",
+    "camera": "Slightly low angle, sky-heavy layout.",
+    "must_include": [
+      "school-rooftop cel",
+      "chain-link sky"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "School-rooftop cel, chain-link sky.",
+    "wan_stylization": "2D anime"
+  },
+  "train_window_anime_bg": {
+    "label": "train-window anime background",
+    "family": "illustration",
+    "medium": "Train-window anime still with a moving landscape BG.",
+    "light": "Interior practicals against a bright exterior.",
+    "color": "Warm car interior and cool passing fields.",
+    "texture": "Painted BG blur streaks and a cel interior.",
+    "camera": "Seat-level view through glass.",
+    "must_include": [
+      "train-window anime background",
+      "BG streaks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Train-window anime background, BG streaks.",
+    "wan_stylization": "2D anime"
+  },
+  "festival_lantern_cel": {
+    "label": "festival-lantern cel",
+    "family": "illustration",
+    "medium": "Festival-night anime still with paper lanterns.",
+    "light": "Warm lantern keys under a dark sky.",
+    "color": "Amber lanterns and indigo night flats.",
+    "texture": "Painted paper glow and cel crowd shapes.",
+    "camera": "Street-level festival layout.",
+    "must_include": [
+      "festival-lantern cel",
+      "paper glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Festival-lantern cel, paper glow.",
+    "wan_stylization": "2D anime"
+  },
+  "rain_reflection_anime": {
+    "label": "rain-reflection anime",
+    "family": "illustration",
+    "medium": "Rain-soaked anime still with street reflections.",
+    "light": "Wet speculars under overcast cel.",
+    "color": "Cool puddle mirrors and muted coats.",
+    "texture": "Rain ticks, wet cel, reflected neon.",
+    "camera": "Low street angle on reflective ground.",
+    "must_include": [
+      "rain-reflection anime",
+      "wet cel"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Rain-reflection anime, wet cel.",
+    "wan_stylization": "2D anime"
+  },
+  "winter_breath_cel": {
+    "label": "winter-breath cel",
+    "family": "illustration",
+    "medium": "Winter anime still with visible breath vapor.",
+    "light": "Pale overcast with cold rims.",
+    "color": "Blue-white winter palette.",
+    "texture": "Breath clouds and knit texture as cel.",
+    "camera": "Bust-up against a snow layout.",
+    "must_include": [
+      "winter-breath cel",
+      "vapor clouds"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Winter-breath cel, vapor clouds.",
+    "wan_stylization": "2D anime"
+  },
+  "summer_heat_cel": {
+    "label": "summer-heat cel",
+    "family": "illustration",
+    "medium": "Midsummer anime still with heat-haze cel.",
+    "light": "Harsh overhead and a bleached sky.",
+    "color": "Hot yellows at cicada-hour glare.",
+    "texture": "Heat shimmer ticks and sweat beads as cel.",
+    "camera": "Wide street with a melting-sky layout.",
+    "must_include": [
+      "summer-heat cel",
+      "heat haze"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Summer-heat cel, heat haze.",
+    "wan_stylization": "2D anime"
+  },
+  "mecha_cockpit_cel": {
+    "label": "mecha-cockpit cel",
+    "family": "illustration",
+    "medium": "Mecha-cockpit anime still with instrument glow as shapes.",
+    "light": "Red and green cockpit practicals.",
+    "color": "Dark cabin and colored telltales empty of letters.",
+    "texture": "Cel panels and glow buttons empty of type.",
+    "camera": "Tight cockpit staging.",
+    "must_include": [
+      "mecha-cockpit cel",
+      "instrument glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Mecha-cockpit cel, instrument glow.",
+    "wan_stylization": "2D anime"
+  },
+  "magic_circle_cel": {
+    "label": "magic-circle cel",
+    "family": "illustration",
+    "medium": "Anime still with a glowing magic circle underfoot.",
+    "light": "Circle as key with upward bounce.",
+    "color": "Gold-cyan glyph light empty of readable letters.",
+    "texture": "Cel glow and particle ticks.",
+    "camera": "Slightly high angle on the circle.",
+    "must_include": [
+      "magic-circle cel",
+      "glyph glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Magic-circle cel, glyph glow.",
+    "wan_stylization": "2D anime"
+  },
+  "food_steam_anime": {
+    "label": "food-steam anime",
+    "family": "illustration",
+    "medium": "Food-close anime still with rising steam curls.",
+    "light": "Warm practical over a bowl.",
+    "color": "Appetizing saturations and steam white.",
+    "texture": "Cel steam, glossy sauce, thick outline.",
+    "camera": "Table-level close staging.",
+    "must_include": [
+      "food-steam anime",
+      "steam curls"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Food-steam anime, steam curls.",
+    "wan_stylization": "2D anime"
+  },
+  "sports_speedline_cel": {
+    "label": "sports-speedline cel",
+    "family": "illustration",
+    "medium": "Sports anime still with radial speedlines.",
+    "light": "Hard stadium key and graphic dirt.",
+    "color": "Team-color flats with no logos.",
+    "texture": "Impact frames, speedlines, dust ticks.",
+    "camera": "Low action angle.",
+    "must_include": [
+      "sports-speedline cel",
+      "radial lines"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sports-speedline cel, radial lines.",
+    "wan_stylization": "2D anime"
+  },
+  "horror_shadow_cel": {
+    "label": "horror-shadow cel",
+    "family": "illustration",
+    "medium": "Horror anime still with long graphic shadow bands.",
+    "light": "Single hard key and crushed blacks.",
+    "color": "Sickly greens and ink black.",
+    "texture": "Jagged contour and shadow shapes.",
+    "camera": "Dutch tilt in a tight crop.",
+    "must_include": [
+      "horror-shadow cel",
+      "graphic bands"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Horror-shadow cel, graphic bands.",
+    "wan_stylization": "2D anime"
+  },
+  "slice_of_life_flat": {
+    "label": "slice-of-life flat cel",
+    "family": "illustration",
+    "medium": "Quiet slice-of-life anime still with flat household cel.",
+    "light": "Soft window and gentle fill.",
+    "color": "Muted household colors.",
+    "texture": "Simple holds and tidy BG props empty of letters.",
+    "camera": "Eye-level room staging.",
+    "must_include": [
+      "slice-of-life flat cel",
+      "household props"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Slice-of-life flat cel, household props.",
+    "wan_stylization": "2D anime"
+  },
+  "historical_ink_anime": {
+    "label": "historical ink anime",
+    "family": "illustration",
+    "medium": "Historical anime still with ink-wash architecture.",
+    "light": "Soft daylight and paper-like fill.",
+    "color": "Muted mineral pigments.",
+    "texture": "Ink architecture with cel figures.",
+    "camera": "Wide period street layout.",
+    "must_include": [
+      "historical ink anime",
+      "ink-wash architecture"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Historical ink anime, ink-wash architecture.",
+    "wan_stylization": "2D anime"
+  },
+  "stage_spotlight_cel": {
+    "label": "stage-spotlight cel",
+    "family": "illustration",
+    "medium": "Stage anime still with a hard spotlight cone.",
+    "light": "Single cone key over a dark house.",
+    "color": "Spotlight white and costume saturations with no logos.",
+    "texture": "Cel sparkle inside a cone of light.",
+    "camera": "Front-of-house staging.",
+    "must_include": [
+      "stage-spotlight cel",
+      "cone key"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Stage-spotlight cel, cone key.",
+    "wan_stylization": "2D anime"
+  },
+  "beach_sparkle_cel": {
+    "label": "beach-sparkle cel",
+    "family": "illustration",
+    "medium": "Beach anime still with glitter on water cel.",
+    "light": "High sun and sparkle ticks.",
+    "color": "Turquoise water and sand cream.",
+    "texture": "Cel waves and glitter highlights.",
+    "camera": "Slightly high shoreline layout.",
+    "must_include": [
+      "beach-sparkle cel",
+      "water glitter"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Beach-sparkle cel, water glitter.",
+    "wan_stylization": "2D anime"
+  },
+  "shrine_steps_cel": {
+    "label": "shrine-steps cel",
+    "family": "illustration",
+    "medium": "Dawn shrine-steps anime still with stone and mist.",
+    "light": "Pale dawn rims.",
+    "color": "Stone grey, moss green, mist white.",
+    "texture": "Painted stone and cel mist empty of letters.",
+    "camera": "Looking up the steps.",
+    "must_include": [
+      "shrine-steps cel",
+      "dawn mist"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Shrine-steps cel, dawn mist.",
+    "wan_stylization": "2D anime"
+  },
+  "subway_rush_cel": {
+    "label": "subway-rush cel",
+    "family": "illustration",
+    "medium": "Subway-rush anime still inside a packed car cel.",
+    "light": "Cool overhead fluorescents.",
+    "color": "Metal greys and coat colors with no ads.",
+    "texture": "Cel crowd and strap-hangers with motion ticks.",
+    "camera": "Inside-car staging.",
+    "must_include": [
+      "subway-rush cel",
+      "packed car"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Subway-rush cel, packed car.",
+    "wan_stylization": "2D anime"
+  },
+  "library_dust_cel": {
+    "label": "library-dust cel",
+    "family": "illustration",
+    "medium": "Library anime still with a dust-mote sunshaft.",
+    "light": "Window shaft and warm wood fill.",
+    "color": "Amber wood and paper cream.",
+    "texture": "Cel dust motes and stacked unmarked spines.",
+    "camera": "Aisle-level staging.",
+    "must_include": [
+      "library-dust cel",
+      "sunshaft motes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Library-dust cel, sunshaft motes.",
+    "wan_stylization": "2D anime"
+  },
+  "rooftop_laundry_cel": {
+    "label": "rooftop-laundry cel",
+    "family": "illustration",
+    "medium": "Rooftop-laundry anime still with sheets on lines.",
+    "light": "Bright noon and cloth translucency.",
+    "color": "White sheets and blue sky flats.",
+    "texture": "Cel cloth, pegs, and a city BG.",
+    "camera": "Between-lines staging.",
+    "must_include": [
+      "rooftop-laundry cel",
+      "sheet lines"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Rooftop-laundry cel, sheet lines.",
+    "wan_stylization": "2D anime"
+  },
+  "convenience_night_cel": {
+    "label": "convenience-night cel",
+    "family": "illustration",
+    "medium": "Night convenience-store anime still with interior glow.",
+    "light": "Green-white interior against a night street.",
+    "color": "Cool interior and dark exterior with no logos.",
+    "texture": "Cel fridge rows empty of type.",
+    "camera": "Door-threshold staging.",
+    "must_include": [
+      "convenience-night cel",
+      "interior glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Convenience-night cel, interior glow.",
+    "wan_stylization": "2D anime"
+  },
+  "petal_fall_cel": {
+    "label": "petal-fall cel",
+    "family": "illustration",
+    "medium": "Spring anime still with falling blossom petals.",
+    "light": "Soft daylight and petal ticks.",
+    "color": "Pink petals and pale sky.",
+    "texture": "Cel petals and light wind ticks.",
+    "camera": "Looking up through branches.",
+    "must_include": [
+      "petal-fall cel",
+      "blossom ticks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Petal-fall cel, blossom ticks.",
+    "wan_stylization": "2D anime"
+  },
+  "maple_path_cel": {
+    "label": "maple-path cel",
+    "family": "illustration",
+    "medium": "Autumn maple-path anime still with fallen leaves.",
+    "light": "Raking late light and long cel shadows.",
+    "color": "Maple reds and path brown.",
+    "texture": "Cel leaves and painted trees.",
+    "camera": "Path-level staging.",
+    "must_include": [
+      "maple-path cel",
+      "fallen leaves"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Maple-path cel, fallen leaves.",
+    "wan_stylization": "2D anime"
+  },
+  "snow_footprint_cel": {
+    "label": "snow-footprint cel",
+    "family": "illustration",
+    "medium": "Snowfield anime still with a trail of footprints.",
+    "light": "Overcast bounce and pale rims.",
+    "color": "Blue-white snow and a dark coat.",
+    "texture": "Cel snow sparkle and footprint shapes.",
+    "camera": "Following the trail.",
+    "must_include": [
+      "snow-footprint cel",
+      "trail of prints"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Snow-footprint cel, trail of prints.",
+    "wan_stylization": "2D anime"
+  },
+  "cat_alley_cel": {
+    "label": "cat-alley cel",
+    "family": "illustration",
+    "medium": "Narrow-alley anime still with a watching cat.",
+    "light": "Dappled wall light.",
+    "color": "Warm plaster and shadow indigo.",
+    "texture": "Cel brick and a cat silhouette.",
+    "camera": "Alley depth staging.",
+    "must_include": [
+      "cat-alley cel",
+      "watching cat"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Cat-alley cel, watching cat.",
+    "wan_stylization": "2D anime"
+  },
+  "bicycle_slope_cel": {
+    "label": "bicycle-slope cel",
+    "family": "illustration",
+    "medium": "Hill-slope anime still with a bicycle against the sky.",
+    "light": "Backlit afternoon rim on the frame.",
+    "color": "Sky blue and road grey.",
+    "texture": "Cel bike and hill grass.",
+    "camera": "Low angle up the slope.",
+    "must_include": [
+      "bicycle-slope cel",
+      "sky rim"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Bicycle-slope cel, sky rim.",
+    "wan_stylization": "2D anime"
+  },
+  "river_firefly_cel": {
+    "label": "river-firefly cel",
+    "family": "illustration",
+    "medium": "Riverbank night anime still with firefly ticks.",
+    "light": "Firefly points and moon fill.",
+    "color": "Deep green-black with yellow ticks.",
+    "texture": "Cel water and firefly sparks.",
+    "camera": "Bank-level staging.",
+    "must_include": [
+      "river-firefly cel",
+      "firefly ticks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "River-firefly cel, firefly ticks.",
+    "wan_stylization": "2D anime"
+  },
+  "clock_tower_cel": {
+    "label": "clock-tower cel",
+    "family": "illustration",
+    "medium": "Town clock-tower anime still with an unmarked face.",
+    "light": "Late sun on stone.",
+    "color": "Warm stone and sky peach.",
+    "texture": "Cel masonry and an empty clock face.",
+    "camera": "Looking up the tower.",
+    "must_include": [
+      "clock-tower cel",
+      "unmarked face"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Clock-tower cel, unmarked face.",
+    "wan_stylization": "2D anime"
+  },
+  "greenhouse_cel_still": {
+    "label": "greenhouse cel still",
+    "family": "illustration",
+    "medium": "Greenhouse anime still with glass and broad leaves.",
+    "light": "Dappled glass light and humid fill.",
+    "color": "Leaf greens and warm wood benches.",
+    "texture": "Cel condensation and leaf sheen.",
+    "camera": "Aisle staging.",
+    "must_include": [
+      "greenhouse cel still",
+      "glass dapples"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Greenhouse cel still, glass dapples.",
+    "wan_stylization": "2D anime"
+  },
+  "bakery_dawn_cel": {
+    "label": "bakery-dawn cel",
+    "family": "illustration",
+    "medium": "Dawn bakery anime still with warm interior glow.",
+    "light": "Oven practical against a cool street.",
+    "color": "Gold interior and blue dawn.",
+    "texture": "Cel bread shapes and steam empty of letters.",
+    "camera": "Counter-level staging.",
+    "must_include": [
+      "bakery-dawn cel",
+      "oven glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Bakery-dawn cel, oven glow.",
+    "wan_stylization": "2D anime"
+  },
+  "radio_booth_cel": {
+    "label": "radio-booth cel",
+    "family": "illustration",
+    "medium": "Radio-booth anime still with foam and mic shapes.",
+    "light": "Desk lamp practical.",
+    "color": "Warm wood and foam grey with no station IDs.",
+    "texture": "Cel foam wedges and a mic.",
+    "camera": "Across-desk staging.",
+    "must_include": [
+      "radio-booth cel",
+      "foam wedges"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Radio-booth cel, foam wedges.",
+    "wan_stylization": "2D anime"
+  },
+  "observatory_cel_still": {
+    "label": "observatory cel still",
+    "family": "illustration",
+    "medium": "Observatory-night anime still with dome and stars.",
+    "light": "Star fill and a dome rim.",
+    "color": "Indigo dome and star ticks.",
+    "texture": "Cel dome plates empty of letters.",
+    "camera": "Beside the dome.",
+    "must_include": [
+      "observatory cel still",
+      "dome and stars"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Observatory cel still, dome and stars.",
+    "wan_stylization": "2D anime"
+  },
+  "fishing_pier_cel": {
+    "label": "fishing-pier cel",
+    "family": "illustration",
+    "medium": "Fishing-pier dawn anime still with wet wood.",
+    "light": "Low sun raking planks.",
+    "color": "Warm wood and cool water.",
+    "texture": "Cel planks, rope, and water sparkle.",
+    "camera": "Looking down the pier.",
+    "must_include": [
+      "fishing-pier cel",
+      "wet planks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Fishing-pier cel, wet planks.",
+    "wan_stylization": "2D anime"
+  },
+  "desert_bus_cel": {
+    "label": "desert-bus cel",
+    "family": "illustration",
+    "medium": "Desert-road anime still with a small bus in heat.",
+    "light": "Hard sun and a long ground shadow.",
+    "color": "Sand ochre and sky white-blue.",
+    "texture": "Cel heat haze and dust.",
+    "camera": "Road-level staging.",
+    "must_include": [
+      "desert-bus cel",
+      "heat haze"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Desert-bus cel, heat haze.",
+    "wan_stylization": "2D anime"
+  },
+  "island_ferry_cel": {
+    "label": "island-ferry cel",
+    "family": "illustration",
+    "medium": "Island-ferry anime still with wake and an unmarked hull.",
+    "light": "Bright sea bounce.",
+    "color": "Sea teal and hull color with no livery.",
+    "texture": "Cel wake and gull ticks.",
+    "camera": "Rail-level looking aft.",
+    "must_include": [
+      "island-ferry cel",
+      "wake water"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Island-ferry cel, wake water.",
+    "wan_stylization": "2D anime"
+  },
+  "attic_window_cel": {
+    "label": "attic-window cel",
+    "family": "illustration",
+    "medium": "Attic-window anime still with dust and trunks.",
+    "light": "Single window shaft.",
+    "color": "Amber dust and wood brown.",
+    "texture": "Cel trunks and motes empty of letters.",
+    "camera": "Seated at the window.",
+    "must_include": [
+      "attic-window cel",
+      "dust shaft"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Attic-window cel, dust shaft.",
+    "wan_stylization": "2D anime"
+  },
+  "rooftop_pool_cel": {
+    "label": "rooftop-pool cel",
+    "family": "illustration",
+    "medium": "Rooftop-pool night anime still with city beyond.",
+    "light": "Pool practicals and city sparkle.",
+    "color": "Cyan water and night indigo.",
+    "texture": "Cel water caustics on unmarked tiles.",
+    "camera": "Pool-edge staging.",
+    "must_include": [
+      "rooftop-pool cel",
+      "water caustics"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Rooftop-pool cel, water caustics.",
+    "wan_stylization": "2D anime"
+  },
+  "night_market_cel": {
+    "label": "night-market cel",
+    "family": "illustration",
+    "medium": "Night-market anime still with stall glow and steam.",
+    "light": "Stall lamps and smoke fill.",
+    "color": "Warm stall light with no signage type.",
+    "texture": "Cel steam and hanging shapes.",
+    "camera": "Aisle-through-stalls staging.",
+    "must_include": [
+      "night-market cel",
+      "stall glow"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Night-market cel, stall glow.",
+    "wan_stylization": "2D anime"
+  },
+  "dawn_switchback_cel": {
+    "label": "dawn-switchback cel",
+    "family": "illustration",
+    "medium": "Mountain switchback anime still at first light.",
+    "light": "Raking dawn with long cool shadows.",
+    "color": "Ridge blue and road dust.",
+    "texture": "Cel switchbacks and a distant valley.",
+    "camera": "High overlook layout.",
+    "must_include": [
+      "dawn-switchback cel",
+      "raking dawn"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Dawn-switchback cel, raking dawn.",
+    "wan_stylization": "2D anime"
+  },
+  "clockwork_festival_cel": {
+    "label": "clockwork-festival cel",
+    "family": "illustration",
+    "medium": "Clockwork-festival anime still with gears as decoration.",
+    "light": "Warm fairground keys.",
+    "color": "Brass shapes and paper lanterns empty of type.",
+    "texture": "Cel gears and banners empty of letters.",
+    "camera": "Midway staging.",
+    "must_include": [
+      "clockwork-festival cel",
+      "decorative gears"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Clockwork-festival cel, decorative gears.",
+    "wan_stylization": "2D anime"
+  },
+  "rubber_hose_ink": {
+    "label": "rubber-hose ink",
+    "family": "illustration",
+    "medium": "Rubber-hose cartoon still with looping limb ink.",
+    "light": "Even ink-world light.",
+    "color": "High-contrast ink plus two spot colors.",
+    "texture": "Looping hose limbs, pie-cut eyes, thick outline.",
+    "camera": "Vaudeville staging with no live lens.",
+    "must_include": [
+      "rubber-hose ink",
+      "looping limbs"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Rubber-hose ink, looping limbs."
+  },
+  "sunday_funnies_halftone": {
+    "label": "Sunday-funnies halftone",
+    "family": "illustration",
+    "medium": "Sunday-funnies cartoon still with coarse halftone.",
+    "light": "Flat comic lighting.",
+    "color": "Newsprint primaries on ivory paper.",
+    "texture": "Halftone dots and a bold gag outline.",
+    "camera": "Four-panel energy in one frame.",
+    "must_include": [
+      "Sunday-funnies halftone",
+      "newsprint primaries"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sunday-funnies halftone, newsprint primaries."
+  },
+  "editorial_gag_panel": {
+    "label": "editorial gag panel",
+    "family": "illustration",
+    "medium": "Editorial gag-panel still with thick brush opinion cartoon.",
+    "light": "Graphic black-white key.",
+    "color": "Spot red on ink over paper cream.",
+    "texture": "Brush contour and crosshatch fill.",
+    "camera": "Single-panel punchline staging.",
+    "must_include": [
+      "editorial gag panel",
+      "brush contour"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Editorial gag panel, brush contour."
+  },
+  "limited_tv_paint": {
+    "label": "limited TV paint",
+    "family": "illustration",
+    "medium": "Limited-TV cartoon still with a tiny paint set.",
+    "light": "Bright even cel.",
+    "color": "Six-color hold in friendly saturations.",
+    "texture": "Simple holds and bouncing proportions.",
+    "camera": "Center-stage TV cartoon.",
+    "must_include": [
+      "limited TV paint",
+      "tiny paint set"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Limited TV paint, tiny paint set."
+  },
+  "crayon_saturday_still": {
+    "label": "crayon Saturday still",
+    "family": "illustration",
+    "medium": "Crayon-drawn Saturday cartoon still on construction paper.",
+    "light": "Flat kid-light.",
+    "color": "Crayon wax primaries.",
+    "texture": "Wax stroke and paper tooth.",
+    "camera": "Simple toy-box staging.",
+    "must_include": [
+      "crayon Saturday still",
+      "wax stroke"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Crayon Saturday still, wax stroke."
+  },
+  "marker_comp_toon": {
+    "label": "marker-comp toon",
+    "family": "illustration",
+    "medium": "Marker-comp cartoon still with bleed and bold fill.",
+    "light": "Even overlay light.",
+    "color": "Marker saturations with slight bleed.",
+    "texture": "Felt-tip contour and bleed blooms.",
+    "camera": "Layout-pad staging.",
+    "must_include": [
+      "marker-comp toon",
+      "felt-tip bleed"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Marker-comp toon, felt-tip bleed."
+  },
+  "flat_shape_toon": {
+    "label": "flat-shape toon",
+    "family": "illustration",
+    "medium": "Flat-shape cartoon still built from simple geometry.",
+    "light": "Shadowless graphic light.",
+    "color": "Two or three bold flats.",
+    "texture": "Circle-square-triangle design without pores.",
+    "camera": "Poster-like staging.",
+    "must_include": [
+      "flat-shape toon",
+      "simple geometry"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Flat-shape toon, simple geometry."
+  },
+  "clay_outline_toon": {
+    "label": "clay-outline toon",
+    "family": "illustration",
+    "medium": "Cartoon still with clay-like rounded outline.",
+    "light": "Soft studio key on rounded forms.",
+    "color": "Playful saturations.",
+    "texture": "Rounded clay contour and simple faces.",
+    "camera": "Toy-stage staging.",
+    "must_include": [
+      "clay-outline toon",
+      "rounded contour"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Clay-outline toon, rounded contour."
+  },
+  "newsprint_comic_color": {
+    "label": "newsprint comic color",
+    "family": "illustration",
+    "medium": "Newsprint comic-color still with cheap registration.",
+    "light": "Flat print light.",
+    "color": "Off-register primaries on grey paper.",
+    "texture": "Misregister ticks on cheap pulp.",
+    "camera": "Splash-page staging.",
+    "must_include": [
+      "newsprint comic color",
+      "off-register primaries"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Newsprint comic color, off-register primaries."
+  },
+  "brush_pen_toon": {
+    "label": "brush-pen toon",
+    "family": "illustration",
+    "medium": "Brush-pen cartoon still with dry-brush contour.",
+    "light": "Graphic ink key.",
+    "color": "Black brush plus one spot color.",
+    "texture": "Dry-brush skips and variable width.",
+    "camera": "Bold poster staging.",
+    "must_include": [
+      "brush-pen toon",
+      "dry-brush contour"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Brush-pen toon, dry-brush contour."
+  },
+  "chalkboard_toon": {
+    "label": "chalkboard toon",
+    "family": "illustration",
+    "medium": "Chalkboard cartoon still with dust and thick chalk.",
+    "light": "Even board light.",
+    "color": "Chalk pastels on a dark board.",
+    "texture": "Chalk dust, thick lines, erased ghosts.",
+    "camera": "Board-filling gag.",
+    "must_include": [
+      "chalkboard toon",
+      "chalk dust"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Chalkboard toon, chalk dust."
+  },
+  "felt_board_toon": {
+    "label": "felt-board toon",
+    "family": "illustration",
+    "medium": "Felt-board cartoon still with cut-cloth shapes.",
+    "light": "Even craft light.",
+    "color": "Felt primaries with fuzzy edges.",
+    "texture": "Cloth nap and simple cutouts.",
+    "camera": "Story-time staging.",
+    "must_include": [
+      "felt-board toon",
+      "cut-cloth shapes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Felt-board toon, cut-cloth shapes."
+  },
+  "sticker_sheet_toon": {
+    "label": "sticker-sheet toon",
+    "family": "illustration",
+    "medium": "Sticker-sheet cartoon still with die-cut glossy shapes.",
+    "light": "Bright pack light.",
+    "color": "Candy saturations and a white die-cut edge.",
+    "texture": "Gloss vinyl and simple icons empty of letters.",
+    "camera": "Sheet layout staging.",
+    "must_include": [
+      "sticker-sheet toon",
+      "die-cut gloss"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sticker-sheet toon, die-cut gloss."
+  },
+  "balloon_animal_toon": {
+    "label": "balloon-animal toon",
+    "family": "illustration",
+    "medium": "Balloon-animal cartoon still with inflated glossy forms.",
+    "light": "Hard highlight on vinyl.",
+    "color": "Carnival primaries with specular ticks.",
+    "texture": "Twisted balloon limbs and simple faces.",
+    "camera": "Party-table staging.",
+    "must_include": [
+      "balloon-animal toon",
+      "inflated gloss"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Balloon-animal toon, inflated gloss."
+  },
+  "woodcut_toon": {
+    "label": "woodcut toon",
+    "family": "illustration",
+    "medium": "Woodcut cartoon still with carved gouge marks.",
+    "light": "Graphic print light.",
+    "color": "Ink on cream paper with limited spots.",
+    "texture": "Gouge texture and bold silhouettes.",
+    "camera": "Block-print staging.",
+    "must_include": [
+      "woodcut toon",
+      "gouge marks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Woodcut toon, gouge marks."
+  },
+  "linocut_toon": {
+    "label": "linocut toon",
+    "family": "illustration",
+    "medium": "Linocut cartoon still with rolled-ink flats.",
+    "light": "Even print impression.",
+    "color": "One or two rolled inks.",
+    "texture": "Lino chatter and bold reduction.",
+    "camera": "Print-block staging.",
+    "must_include": [
+      "linocut toon",
+      "rolled-ink flats"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Linocut toon, rolled-ink flats."
+  },
+  "collage_cutout_toon": {
+    "label": "collage-cutout toon",
+    "family": "illustration",
+    "medium": "Collage-cutout cartoon still with scissor edges.",
+    "light": "Even craft-table light.",
+    "color": "Mixed-paper colors and visible glue.",
+    "texture": "Scissor edges and layered scraps empty of letters.",
+    "camera": "Tabletop collage staging.",
+    "must_include": [
+      "collage-cutout toon",
+      "scissor edges"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Collage-cutout toon, scissor edges."
+  },
+  "puppet_show_toon": {
+    "label": "puppet-show toon",
+    "family": "illustration",
+    "medium": "Puppet-show cartoon still with cloth and rods.",
+    "light": "Footlights on a tiny stage.",
+    "color": "Cloth saturations on a painted backdrop.",
+    "texture": "Visible rods and cloth folds as shapes.",
+    "camera": "Proscenium staging.",
+    "must_include": [
+      "puppet-show toon",
+      "cloth and rods"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Puppet-show toon, cloth and rods."
+  },
+  "matchstick_toon": {
+    "label": "matchstick toon",
+    "family": "illustration",
+    "medium": "Matchstick-figure cartoon still with simple line people.",
+    "light": "White-page light.",
+    "color": "Black line with maybe one fill.",
+    "texture": "Stick limbs, circle heads, gag props.",
+    "camera": "Doodle-page staging.",
+    "must_include": [
+      "matchstick toon",
+      "stick limbs"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Matchstick toon, stick limbs."
+  },
+  "doodle_margin_toon": {
+    "label": "doodle-margin toon",
+    "family": "illustration",
+    "medium": "Notebook-margin doodle cartoon still.",
+    "light": "Page-white light.",
+    "color": "Blue pen line on paper ruling.",
+    "texture": "Spiral holes, ruled paper, doodle ink.",
+    "camera": "Margin staging.",
+    "must_include": [
+      "doodle-margin toon",
+      "ruled paper"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Doodle-margin toon, ruled paper."
+  },
+  "cereal_box_toon": {
+    "label": "cereal-box toon",
+    "family": "illustration",
+    "medium": "Cereal-box cartoon still with loud pack art and no type.",
+    "light": "Bright pack key.",
+    "color": "Loud primaries with prize-toy energy.",
+    "texture": "Thick outline and simple mascot shapes empty of letters.",
+    "camera": "Box-front staging.",
+    "must_include": [
+      "cereal-box toon",
+      "loud pack art"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Cereal-box toon, loud pack art."
+  },
+  "birthday_card_toon": {
+    "label": "birthday-card toon",
+    "family": "illustration",
+    "medium": "Birthday-card cartoon still with foil and balloons.",
+    "light": "Cheerful even light.",
+    "color": "Foil highlights and candy colors.",
+    "texture": "Simple cake shapes and balloon outlines empty of letters.",
+    "camera": "Card-front staging.",
+    "must_include": [
+      "birthday-card toon",
+      "foil balloons"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Birthday-card toon, foil balloons."
+  },
+  "sidewalk_chalk_toon": {
+    "label": "sidewalk-chalk toon",
+    "family": "illustration",
+    "medium": "Sidewalk-chalk cartoon still on concrete.",
+    "light": "Noon outdoor even light.",
+    "color": "Pastel chalk on grey concrete.",
+    "texture": "Chalk dust, coarse strokes, pavement tooth.",
+    "camera": "Looking down at the drawing.",
+    "must_include": [
+      "sidewalk-chalk toon",
+      "pavement tooth"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sidewalk-chalk toon, pavement tooth."
+  },
+  "window_paint_toon": {
+    "label": "window-paint toon",
+    "family": "illustration",
+    "medium": "Window-paint cartoon still with tempera on glass.",
+    "light": "Backlit glass.",
+    "color": "Tempera opaques with drip ticks.",
+    "texture": "Paint on glass, drips, simple figures.",
+    "camera": "Storefront-glass staging.",
+    "must_include": [
+      "window-paint toon",
+      "tempera on glass"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Window-paint toon, tempera on glass."
+  },
+  "yarn_outline_toon": {
+    "label": "yarn-outline toon",
+    "family": "illustration",
+    "medium": "Yarn-outline cartoon still with stitched contour.",
+    "light": "Soft craft light.",
+    "color": "Yarn primaries on cloth.",
+    "texture": "Stitched outline and knot eyes.",
+    "camera": "Textile staging.",
+    "must_include": [
+      "yarn-outline toon",
+      "stitched contour"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Yarn-outline toon, stitched contour."
+  },
+  "button_eye_toon": {
+    "label": "button-eye toon",
+    "family": "illustration",
+    "medium": "Button-eye cartoon still with a craft-felt character.",
+    "light": "Soft table light.",
+    "color": "Felt body, button eyes, thread mouth.",
+    "texture": "Craft materials with homemade charm.",
+    "camera": "Toy-shelf staging.",
+    "must_include": [
+      "button-eye toon",
+      "felt and buttons"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Button-eye toon, felt and buttons."
+  },
+  "paper_bag_toon": {
+    "label": "paper-bag toon",
+    "family": "illustration",
+    "medium": "Paper-bag puppet cartoon still with kraft and crayon.",
+    "light": "Even craft light.",
+    "color": "Kraft brown with crayon marks.",
+    "texture": "Folded bag and a drawn face empty of letters.",
+    "camera": "Hand-puppet staging.",
+    "must_include": [
+      "paper-bag toon",
+      "kraft crayon"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Paper-bag toon, kraft crayon."
+  },
+  "sock_puppet_toon": {
+    "label": "sock-puppet toon",
+    "family": "illustration",
+    "medium": "Sock-puppet cartoon still with googly craft eyes.",
+    "light": "Desk-lamp key.",
+    "color": "Sock stripes and craft-glue shine.",
+    "texture": "Cloth sock with glued extras.",
+    "camera": "Couch-show staging.",
+    "must_include": [
+      "sock-puppet toon",
+      "googly craft eyes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Sock-puppet toon, googly craft eyes."
+  },
+  "party_banner_toon": {
+    "label": "party-banner toon",
+    "family": "illustration",
+    "medium": "Party-banner cartoon still with bunting and no letters.",
+    "light": "Party-room even light.",
+    "color": "Bunting primaries and streamer curls.",
+    "texture": "Paper bunting empty of type.",
+    "camera": "Room-corner staging.",
+    "must_include": [
+      "party-banner toon",
+      "bunting shapes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Party-banner toon, bunting shapes."
+  },
+  "ice_cream_toon": {
+    "label": "ice-cream toon",
+    "family": "illustration",
+    "medium": "Ice-cream-stand cartoon still with dripping scoops.",
+    "light": "Bright stand light.",
+    "color": "Pastel scoops and wafer tan.",
+    "texture": "Drip ticks and simple cones with no logos.",
+    "camera": "Counter staging.",
+    "must_include": [
+      "ice-cream toon",
+      "drip scoops"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Ice-cream toon, drip scoops."
+  },
+  "circus_poster_toon": {
+    "label": "circus-poster toon",
+    "family": "illustration",
+    "medium": "Circus-poster cartoon still with a big top and no type.",
+    "light": "Show-light graphic key.",
+    "color": "Red-gold poster inks.",
+    "texture": "Big-top shapes and star bursts empty of letters.",
+    "camera": "Poster-sheet staging.",
+    "must_include": [
+      "circus-poster toon",
+      "big-top shapes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Circus-poster toon, big-top shapes."
+  },
+  "toy_block_toon": {
+    "label": "toy-block toon",
+    "family": "illustration",
+    "medium": "Toy-block cartoon still with wooden cubes as world.",
+    "light": "Nursery even light.",
+    "color": "Painted wood primaries with no letters on blocks.",
+    "texture": "Wood grain and simple cubes.",
+    "camera": "Floor-play staging.",
+    "must_include": [
+      "toy-block toon",
+      "wooden cubes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Toy-block toon, wooden cubes."
+  },
+  "marble_run_toon": {
+    "label": "marble-run toon",
+    "family": "illustration",
+    "medium": "Marble-run cartoon still with track and glass orbs.",
+    "light": "Playroom even light.",
+    "color": "Primary track and glass-orb highlights.",
+    "texture": "Simple track pieces with rolling ticks.",
+    "camera": "Tabletop staging.",
+    "must_include": [
+      "marble-run toon",
+      "glass orbs"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Marble-run toon, glass orbs."
+  },
+  "kaleidoscope_toon": {
+    "label": "kaleidoscope toon",
+    "family": "illustration",
+    "medium": "Kaleidoscope cartoon still with mirrored shards.",
+    "light": "Even jewel light.",
+    "color": "Shard primaries in radial symmetry.",
+    "texture": "Mirrored shards and simple motifs empty of letters.",
+    "camera": "Radial staging.",
+    "must_include": [
+      "kaleidoscope toon",
+      "mirrored shards"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Kaleidoscope toon, mirrored shards."
+  },
+  "snow_globe_toon": {
+    "label": "snow-globe toon",
+    "family": "illustration",
+    "medium": "Snow-globe cartoon still with glitter in glass.",
+    "light": "Window key through glass.",
+    "color": "Warm interior and cool glitter.",
+    "texture": "Glass sphere, glitter ticks, a tiny scene.",
+    "camera": "Desktop staging.",
+    "must_include": [
+      "snow-globe toon",
+      "glitter in glass"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Snow-globe toon, glitter in glass."
+  },
+  "cookie_cutter_toon": {
+    "label": "cookie-cutter toon",
+    "family": "illustration",
+    "medium": "Cookie-cutter cartoon still with dough and cut shapes.",
+    "light": "Kitchen even light.",
+    "color": "Dough cream and cutter metal.",
+    "texture": "Cut dough shapes and flour dust empty of letters.",
+    "camera": "Counter staging.",
+    "must_include": [
+      "cookie-cutter toon",
+      "cut dough"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Cookie-cutter toon, cut dough."
+  },
+  "shadow_puppet_toon": {
+    "label": "shadow-puppet toon",
+    "family": "illustration",
+    "medium": "Shadow-puppet cartoon still with backlit cut figures.",
+    "light": "Hard backlight on a sheet.",
+    "color": "Orange sheet and black silhouettes.",
+    "texture": "Jointed silhouettes with rod hints.",
+    "camera": "Sheet-theater staging.",
+    "must_include": [
+      "shadow-puppet toon",
+      "backlit silhouettes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Shadow-puppet toon, backlit silhouettes."
+  },
+  "flipbook_toon": {
+    "label": "flipbook toon",
+    "family": "illustration",
+    "medium": "Flipbook cartoon still with stacked page corners.",
+    "light": "Desk lamp on paper.",
+    "color": "Pencil grey on paper cream.",
+    "texture": "Page corners and simple motion ticks.",
+    "camera": "Desk-pad staging.",
+    "must_include": [
+      "flipbook toon",
+      "page corners"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Flipbook toon, page corners."
+  },
+  "stencil_spray_toon": {
+    "label": "stencil-spray toon",
+    "family": "illustration",
+    "medium": "Stencil-spray cartoon still with crisp cut masks.",
+    "light": "Even wall light.",
+    "color": "Spray flats with an overspray halo.",
+    "texture": "Stencil islands and simple icons empty of letters.",
+    "camera": "Wall staging.",
+    "must_include": [
+      "stencil-spray toon",
+      "crisp masks"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Stencil-spray toon, crisp masks."
+  },
+  "gag_balloon_toon": {
+    "label": "gag-balloon toon",
+    "family": "illustration",
+    "medium": "Gag-balloon cartoon still with empty speech shapes.",
+    "light": "Flat comic light.",
+    "color": "Ink plus two fills.",
+    "texture": "Empty balloons as shapes, not letters.",
+    "camera": "Gag staging.",
+    "must_include": [
+      "gag-balloon toon",
+      "empty speech shapes"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Gag-balloon toon, empty speech shapes."
+  },
+  "pie_gag_toon": {
+    "label": "pie-gag toon",
+    "family": "illustration",
+    "medium": "Pie-gag cartoon still with cream in the face.",
+    "light": "Bright gag key.",
+    "color": "Cream white on simple face colors.",
+    "texture": "Flying cream ticks and wide eyes.",
+    "camera": "Impact staging.",
+    "must_include": [
+      "pie-gag toon",
+      "flying cream"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Pie-gag toon, flying cream."
+  },
+  "anvil_gag_toon": {
+    "label": "anvil-gag toon",
+    "family": "illustration",
+    "medium": "Anvil-gag cartoon still with a huge prop versus a tiny figure.",
+    "light": "Graphic gag light.",
+    "color": "Iron grey on simple costume flats.",
+    "texture": "Scale gag, motion ticks, dust.",
+    "camera": "Impact staging from below.",
+    "must_include": [
+      "anvil-gag toon",
+      "scale gag"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Anvil-gag toon, scale gag."
+  },
+  "spring_shoes_toon": {
+    "label": "spring-shoes toon",
+    "family": "illustration",
+    "medium": "Spring-shoes cartoon still with coiled bounce.",
+    "light": "Bright gag key.",
+    "color": "Metal coil on costume flats.",
+    "texture": "Coils, bounce ticks, stretch limbs.",
+    "camera": "Takeoff staging.",
+    "must_include": [
+      "spring-shoes toon",
+      "coiled bounce"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Spring-shoes toon, coiled bounce."
+  },
+  "cannon_gag_toon": {
+    "label": "cannon-gag toon",
+    "family": "illustration",
+    "medium": "Cannon-gag cartoon still with a round barrel and smoke puffs.",
+    "light": "Fairground even light.",
+    "color": "Iron, smoke white, costume flats.",
+    "texture": "Smoke puffs and fuse ticks empty of letters.",
+    "camera": "Circus-ring staging.",
+    "must_include": [
+      "cannon-gag toon",
+      "smoke puffs"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Cannon-gag toon, smoke puffs."
+  },
+  "trampoline_toon": {
+    "label": "trampoline toon",
+    "family": "illustration",
+    "medium": "Trampoline cartoon still with stretch fabric and bounce.",
+    "light": "Gym even light.",
+    "color": "Fabric blue on a simple figure.",
+    "texture": "Stretch ticks and bounce squash.",
+    "camera": "Low gym staging.",
+    "must_include": [
+      "trampoline toon",
+      "stretch bounce"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Trampoline toon, stretch bounce."
+  },
+  "whoopee_cushion_toon": {
+    "label": "whoopee-cushion toon",
+    "family": "illustration",
+    "medium": "Whoopee-cushion gag still with a rubber disc prop.",
+    "light": "Living-room even light.",
+    "color": "Rubber red on a simple couch.",
+    "texture": "Rubber sheen and gag staging empty of letters.",
+    "camera": "Couch staging.",
+    "must_include": [
+      "whoopee-cushion toon",
+      "rubber disc"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Whoopee-cushion toon, rubber disc."
+  },
+  "banana_peel_toon": {
+    "label": "banana-peel toon",
+    "family": "illustration",
+    "medium": "Banana-peel gag still with a classic slip setup.",
+    "light": "Street even light.",
+    "color": "Peel yellow on a simple sidewalk.",
+    "texture": "Peel shape and slip ticks.",
+    "camera": "Sidewalk staging.",
+    "must_include": [
+      "banana-peel toon",
+      "slip setup"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Banana-peel toon, slip setup."
+  },
+  "magnet_gag_toon": {
+    "label": "magnet-gag toon",
+    "family": "illustration",
+    "medium": "Magnet-gag cartoon still with flying metal props.",
+    "light": "Workshop even light.",
+    "color": "Horseshoe magnet and flying tools.",
+    "texture": "Attraction ticks and metal shapes with no logos.",
+    "camera": "Shop staging.",
+    "must_include": [
+      "magnet-gag toon",
+      "flying metal"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Magnet-gag toon, flying metal."
+  },
+  "invisible_ink_toon": {
+    "label": "invisible-ink toon",
+    "family": "illustration",
+    "medium": "Invisible-ink cartoon still with a UV glow doodle.",
+    "light": "Dark room with a UV practical.",
+    "color": "Violet glow lines on dark paper.",
+    "texture": "Glow doodle and a simple figure empty of letters.",
+    "camera": "Desk staging.",
+    "must_include": [
+      "invisible-ink toon",
+      "UV glow doodle"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Invisible-ink toon, UV glow doodle."
+  },
+  "jack_in_box_toon": {
+    "label": "jack-in-box toon",
+    "family": "illustration",
+    "medium": "Jack-in-box cartoon still with a sprung lid and coil.",
+    "light": "Nursery even light.",
+    "color": "Painted box colors empty of letters, coil metal.",
+    "texture": "Sprung lid, coil, surprise squash.",
+    "camera": "Toy-chest staging.",
+    "must_include": [
+      "jack-in-box toon",
+      "sprung lid"
+    ],
+    "conflicts": [
+      "photoreal skin pores",
+      "live-action photograph"
+    ],
+    "suffix": "Jack-in-box toon, sprung lid."
+  },
+  "stop_motion_felt": {
+    "label": "stop-motion felt",
+    "family": "animation_3d",
+    "medium": "Stop-motion felt-puppet still with visible armature weight.",
+    "light": "Soft table key and tactile fill.",
+    "color": "Dyed wool saturations.",
+    "texture": "Felt nap, stitch, armature bulk.",
+    "camera": "Locked tabletop, frame-by-frame stance.",
+    "must_include": [
+      "stop-motion felt",
+      "felt nap"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Stop-motion felt, felt nap.",
+    "wan_stylization": "3D cartoon"
+  },
+  "paper_cutout_two_five": {
+    "label": "paper cutout 2.5D",
+    "family": "animation_3d",
+    "medium": "Paper-cutout 2.5D still with stacked card planes.",
+    "light": "Even craft light, layered shadows.",
+    "color": "Cardstock flats, painted edges.",
+    "texture": "Scissor edges, stacked depth, paper tooth.",
+    "camera": "Multiplane craft staging.",
+    "must_include": [
+      "paper cutout 2.5D",
+      "stacked card planes"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Paper cutout 2.5D, stacked card planes.",
+    "wan_stylization": "3D cartoon"
+  },
+  "paint_on_glass": {
+    "label": "paint-on-glass",
+    "family": "animation_3d",
+    "medium": "Paint-on-glass animated still with wet pigment smears.",
+    "light": "Backlit glass, wet highlights.",
+    "color": "Wet pigment, smear blooms.",
+    "texture": "Finger-smear, glass edge, wet sheen.",
+    "camera": "Under-camera glass staging.",
+    "must_include": [
+      "paint-on-glass",
+      "wet pigment smears"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Paint-on-glass, wet pigment smears.",
+    "wan_stylization": "3D cartoon"
+  },
+  "toon_shaded_cgi": {
+    "label": "toon-shaded CGI",
+    "family": "animation_3d",
+    "medium": "Toon-shaded CGI still with hard shadow bands on 3D forms.",
+    "light": "Graphic CG key, banded shadow.",
+    "color": "Held flats on modeled forms.",
+    "texture": "Banded shade, clean contour pass.",
+    "camera": "Simple 3D layout, not live-action.",
+    "must_include": [
+      "toon-shaded CGI",
+      "banded shadow"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Toon-shaded CGI, banded shadow.",
+    "wan_stylization": "3D cartoon"
+  },
+  "claymation_armature": {
+    "label": "claymation armature",
+    "family": "animation_3d",
+    "medium": "Claymation still with thumbprints on an armature puppet.",
+    "light": "Small-set key, tactile fill.",
+    "color": "Clay primaries, slight mix-dirt.",
+    "texture": "Thumbprints, wire bulk, clay smear.",
+    "camera": "Tabletop stop-frame stance.",
+    "must_include": [
+      "claymation armature",
+      "thumbprints"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Claymation armature, thumbprints.",
+    "wan_stylization": "3D cartoon"
+  },
+  "sand_animation_still": {
+    "label": "sand animation still",
+    "family": "animation_3d",
+    "medium": "Sand-animation still with poured grains on a lightbox.",
+    "light": "Under-light through sand.",
+    "color": "Warm lightbox amber, grain blacks.",
+    "texture": "Poured grains, finger tracks, lightbox glow.",
+    "camera": "Overhead lightbox staging.",
+    "must_include": [
+      "sand animation still",
+      "poured grains"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Sand animation still, poured grains.",
+    "wan_stylization": "3D cartoon"
+  },
+  "pinboard_animation": {
+    "label": "pinboard animation",
+    "family": "animation_3d",
+    "medium": "Pinboard-animation still with a field of raised pins.",
+    "light": "Raking light across pin heads.",
+    "color": "Metallic pins, grey board.",
+    "texture": "Raised pins, tactile relief.",
+    "camera": "Overhead pinboard staging.",
+    "must_include": [
+      "pinboard animation",
+      "raised pins"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Pinboard animation, raised pins.",
+    "wan_stylization": "3D cartoon"
+  },
+  "hinged_silhouette_sheet": {
+    "label": "hinged silhouette sheet",
+    "family": "animation_3d",
+    "medium": "Hinged-silhouette sheet still with jointed black figures.",
+    "light": "Hard backlight on a tinted sheet.",
+    "color": "Orange sheet, black figures.",
+    "texture": "Hinged joints, sharp cut edges.",
+    "camera": "Sheet-theater staging.",
+    "must_include": [
+      "hinged silhouette sheet",
+      "hinged black figures"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Hinged silhouette sheet, hinged black figures.",
+    "wan_stylization": "3D cartoon"
+  },
+  "pixilation_live": {
+    "label": "pixilation live",
+    "family": "animation_3d",
+    "medium": "Pixilation still of a real person posed as a stop-frame puppet.",
+    "light": "Even room light, posed freeze.",
+    "color": "Real-world color, slightly stepped.",
+    "texture": "Stepped pose, freeze-frame joints.",
+    "camera": "Room-scale stop-frame staging.",
+    "must_include": [
+      "pixilation live",
+      "stepped pose"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Pixilation live, stepped pose.",
+    "wan_stylization": "3D cartoon"
+  },
+  "rotoscope_paint": {
+    "label": "rotoscope paint",
+    "family": "animation_3d",
+    "medium": "Rotoscope-paint still with traced motion held as paint.",
+    "light": "Traced key from a held pose.",
+    "color": "Painted planes over a traced contour.",
+    "texture": "Painted fills, traced edge.",
+    "camera": "Held-pose staging from a trace.",
+    "must_include": [
+      "rotoscope paint",
+      "traced contour"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Rotoscope paint, traced contour.",
+    "wan_stylization": "2D anime"
+  },
+  "replacement_animation": {
+    "label": "replacement animation",
+    "family": "animation_3d",
+    "medium": "Replacement-animation still with a swapped mouth card.",
+    "light": "Even puppet light.",
+    "color": "Painted wood puppet, card mouth.",
+    "texture": "Mouth card, wood grain, hinge.",
+    "camera": "Puppet-stand staging.",
+    "must_include": [
+      "replacement animation",
+      "swapped mouth card"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Replacement animation, swapped mouth card.",
+    "wan_stylization": "3D cartoon"
+  },
+  "cutout_multiplane": {
+    "label": "cutout multiplane",
+    "family": "animation_3d",
+    "medium": "Cutout multiplane still with glass layers of paper.",
+    "light": "Layered craft light and parallax shadow.",
+    "color": "Paper flats on glass.",
+    "texture": "Layer gaps, paper edge, glass specks.",
+    "camera": "Multiplane camera staging.",
+    "must_include": [
+      "cutout multiplane",
+      "glass layers"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Cutout multiplane, glass layers.",
+    "wan_stylization": "3D cartoon"
+  },
+  "object_animation_still": {
+    "label": "object animation still",
+    "family": "animation_3d",
+    "medium": "Object-animation still of household items posed as actors.",
+    "light": "Tabletop key on real objects.",
+    "color": "Real material color, slightly staged.",
+    "texture": "Real objects, posed joints, table grain.",
+    "camera": "Tabletop stop-frame.",
+    "must_include": [
+      "object animation still",
+      "posed household items"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Object animation still, posed household items.",
+    "wan_stylization": "3D cartoon"
+  },
+  "stratacut_clay": {
+    "label": "stratacut clay",
+    "family": "animation_3d",
+    "medium": "Strata-cut clay still with a sliced loaf of buried color.",
+    "light": "Even slice light.",
+    "color": "Buried color layers in clay.",
+    "texture": "Slice plane, buried shapes, clay smear.",
+    "camera": "Loaf-slice staging.",
+    "must_include": [
+      "stratacut clay",
+      "sliced color loaf"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Stratacut clay, sliced color loaf.",
+    "wan_stylization": "3D cartoon"
+  },
+  "time_lapse_animation": {
+    "label": "time-lapse animation still",
+    "family": "animation_3d",
+    "medium": "Time-lapse animation still with stepped daylight on a set.",
+    "light": "Stepped sun, long shadow jumps.",
+    "color": "Daylight color in discrete holds.",
+    "texture": "Shadow jumps, stepped sky.",
+    "camera": "Locked set, time-sliced light.",
+    "must_include": [
+      "time-lapse animation still",
+      "stepped daylight"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Time-lapse animation still, stepped daylight.",
+    "wan_stylization": "3D cartoon"
+  },
+  "go_motion_still": {
+    "label": "go-motion still",
+    "family": "animation_3d",
+    "medium": "Go-motion still with a slight smear on a moving puppet.",
+    "light": "Set key with motion smear.",
+    "color": "Puppet color with smear tails.",
+    "texture": "Smear tails, armature bulk.",
+    "camera": "Motion-pass staging.",
+    "must_include": [
+      "go-motion still",
+      "smear tails"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Go-motion still, smear tails.",
+    "wan_stylization": "3D cartoon"
+  },
+  "clay_morph_still": {
+    "label": "clay-morph still",
+    "family": "animation_3d",
+    "medium": "Clay-morph still caught mid-reshape.",
+    "light": "Even table key.",
+    "color": "Mixed clay colors at the join.",
+    "texture": "Mid-morph smear, thumb work.",
+    "camera": "Tabletop morph staging.",
+    "must_include": [
+      "clay-morph still",
+      "mid-reshape"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Clay-morph still, mid-reshape.",
+    "wan_stylization": "3D cartoon"
+  },
+  "wire_puppet_still": {
+    "label": "wire-puppet still",
+    "family": "animation_3d",
+    "medium": "Wire-puppet still with visible armature as design.",
+    "light": "Hard key to show wire.",
+    "color": "Metal wire, cloth scraps.",
+    "texture": "Exposed wire, cloth wrap.",
+    "camera": "Stand staging.",
+    "must_include": [
+      "wire-puppet still",
+      "visible armature"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Wire-puppet still, visible armature.",
+    "wan_stylization": "3D cartoon"
+  },
+  "foam_latex_puppet": {
+    "label": "foam-latex puppet",
+    "family": "animation_3d",
+    "medium": "Foam-latex puppet still with painted skin foam.",
+    "light": "Small-set beauty key.",
+    "color": "Painted foam, glass eyes.",
+    "texture": "Foam pores painted, stitch at seams.",
+    "camera": "Character stand staging.",
+    "must_include": [
+      "foam-latex puppet",
+      "painted foam skin"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Foam-latex puppet, painted foam skin.",
+    "wan_stylization": "3D cartoon"
+  },
+  "ball_and_socket_puppet": {
+    "label": "ball-and-socket puppet",
+    "family": "animation_3d",
+    "medium": "Ball-and-socket puppet still with machined joints.",
+    "light": "Crisp set key.",
+    "color": "Machined metal, costume cloth.",
+    "texture": "Joint balls, costume cloth, scale set.",
+    "camera": "Miniature set staging.",
+    "must_include": [
+      "ball-and-socket puppet",
+      "machined joints"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Ball-and-socket puppet, machined joints.",
+    "wan_stylization": "3D cartoon"
+  },
+  "pixel_stop_motion": {
+    "label": "pixel stop-motion",
+    "family": "animation_3d",
+    "medium": "Pixel stop-motion still built from physical beads.",
+    "light": "Even craft light.",
+    "color": "Bead primaries.",
+    "texture": "Bead grid, physical pixels.",
+    "camera": "Overhead bead staging.",
+    "must_include": [
+      "pixel stop-motion",
+      "physical beads"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Pixel stop-motion, physical beads.",
+    "wan_stylization": "3D cartoon"
+  },
+  "lego_brick_still": {
+    "label": "brick-built animation still",
+    "family": "animation_3d",
+    "medium": "Brick-built animation still with interlocking studs.",
+    "light": "Even play-light.",
+    "color": "Plastic primaries, stud highlights.",
+    "texture": "Studs, brick seams, minifigure-free original parts.",
+    "camera": "Tabletop brick staging.",
+    "must_include": [
+      "brick-built animation still",
+      "interlocking studs"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Brick-built animation still, interlocking studs.",
+    "wan_stylization": "3D cartoon"
+  },
+  "wool_needle_felt": {
+    "label": "wool needle-felt",
+    "family": "animation_3d",
+    "medium": "Needle-felt wool still with stab texture.",
+    "light": "Soft craft key.",
+    "color": "Dyed wool, natural mix.",
+    "texture": "Stab texture, wool nap.",
+    "camera": "Felt-stand staging.",
+    "must_include": [
+      "wool needle-felt",
+      "stab texture"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Wool needle-felt, stab texture.",
+    "wan_stylization": "3D cartoon"
+  },
+  "origami_animation": {
+    "label": "origami animation still",
+    "family": "animation_3d",
+    "medium": "Origami animation still with folded paper planes.",
+    "light": "Even paper light.",
+    "color": "Paper whites and dyed sheets.",
+    "texture": "Fold creases, paper planes.",
+    "camera": "Tabletop fold staging.",
+    "must_include": [
+      "origami animation still",
+      "fold creases"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Origami animation still, fold creases.",
+    "wan_stylization": "3D cartoon"
+  },
+  "kirigami_still": {
+    "label": "kirigami still",
+    "family": "animation_3d",
+    "medium": "Kirigami still with cut-and-fold paper architecture.",
+    "light": "Raking light across cuts.",
+    "color": "White paper, cut shadows.",
+    "texture": "Cut slots, folded architecture.",
+    "camera": "Paper-sculpture staging.",
+    "must_include": [
+      "kirigami still",
+      "cut-and-fold architecture"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Kirigami still, cut-and-fold architecture.",
+    "wan_stylization": "3D cartoon"
+  },
+  "zoetrope_still": {
+    "label": "zoetrope still",
+    "family": "animation_3d",
+    "medium": "Zoetrope still with a strip of sequential figures.",
+    "light": "Even drum light.",
+    "color": "Strip inks on a pale drum.",
+    "texture": "Sequential figures, slit hints.",
+    "camera": "Drum-side staging.",
+    "must_include": [
+      "zoetrope still",
+      "sequential strip"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Zoetrope still, sequential strip.",
+    "wan_stylization": "3D cartoon"
+  },
+  "phenakistoscope_still": {
+    "label": "phenakistoscope still",
+    "family": "animation_3d",
+    "medium": "Phenakistoscope still with a radial sequence disc.",
+    "light": "Even disc light.",
+    "color": "Radial inks on a pale disc.",
+    "texture": "Radial sequence, spoke ticks.",
+    "camera": "Disc-face staging.",
+    "must_include": [
+      "phenakistoscope still",
+      "radial sequence"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Phenakistoscope still, radial sequence.",
+    "wan_stylization": "3D cartoon"
+  },
+  "thaumatrope_still": {
+    "label": "thaumatrope still",
+    "family": "animation_3d",
+    "medium": "Thaumatrope still with two sides implied in one hold.",
+    "light": "Even card light.",
+    "color": "Two simple inks.",
+    "texture": "Two-sided implication, string hints.",
+    "camera": "Card-face staging.",
+    "must_include": [
+      "thaumatrope still",
+      "two-sided hold"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Thaumatrope still, two-sided hold.",
+    "wan_stylization": "3D cartoon"
+  },
+  "flipbook_stack_3d": {
+    "label": "flipbook stack 3D",
+    "family": "animation_3d",
+    "medium": "Flipbook stack still with page thickness as a block.",
+    "light": "Desk lamp on a thick pad.",
+    "color": "Pencil grey, paper cream, stacked edge.",
+    "texture": "Thick pad edge, page corners.",
+    "camera": "Desk staging.",
+    "must_include": [
+      "flipbook stack 3D",
+      "page thickness"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Flipbook stack 3D, page thickness.",
+    "wan_stylization": "3D cartoon"
+  },
+  "cymatics_animation": {
+    "label": "cymatics animation still",
+    "family": "animation_3d",
+    "medium": "Cymatics animation still with standing-wave powder.",
+    "light": "Even plate light.",
+    "color": "Powder pale on a dark plate.",
+    "texture": "Standing-wave ridges, powder grains.",
+    "camera": "Overhead plate staging.",
+    "must_include": [
+      "cymatics animation still",
+      "standing-wave powder"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Cymatics animation still, standing-wave powder.",
+    "wan_stylization": "3D cartoon"
+  },
+  "ferrofluid_still": {
+    "label": "ferrofluid still",
+    "family": "animation_3d",
+    "medium": "Ferrofluid animation still with spiked magnetic liquid.",
+    "light": "Hard key on black liquid.",
+    "color": "Black spikes, oil sheen.",
+    "texture": "Magnetic spikes, liquid tension.",
+    "camera": "Dish staging.",
+    "must_include": [
+      "ferrofluid still",
+      "spiked magnetic liquid"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Ferrofluid still, spiked magnetic liquid.",
+    "wan_stylization": "3D cartoon"
+  },
+  "ink_in_water_still": {
+    "label": "ink-in-water still",
+    "family": "animation_3d",
+    "medium": "Ink-in-water animation still with blooming plumes.",
+    "light": "Backlit tank.",
+    "color": "Ink blooms in clear water.",
+    "texture": "Bloom plumes, tank glass.",
+    "camera": "Tank staging.",
+    "must_include": [
+      "ink-in-water still",
+      "blooming plumes"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Ink-in-water still, blooming plumes.",
+    "wan_stylization": "3D cartoon"
+  },
+  "oil_on_water_still": {
+    "label": "oil-on-water still",
+    "family": "animation_3d",
+    "medium": "Oil-on-water animation still with swirling film.",
+    "light": "Top light on a tray.",
+    "color": "Iridescent film swirls.",
+    "texture": "Thin-film swirls, tray edge.",
+    "camera": "Tray staging.",
+    "must_include": [
+      "oil-on-water still",
+      "swirling film"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Oil-on-water still, swirling film.",
+    "wan_stylization": "3D cartoon"
+  },
+  "smoke_tank_still": {
+    "label": "smoke-tank still",
+    "family": "animation_3d",
+    "medium": "Smoke-tank animation still with volume wisps.",
+    "light": "Side key through a tank.",
+    "color": "Grey-white wisps on dark.",
+    "texture": "Volume wisps, tank glass.",
+    "camera": "Tank staging.",
+    "must_include": [
+      "smoke-tank still",
+      "volume wisps"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Smoke-tank still, volume wisps.",
+    "wan_stylization": "3D cartoon"
+  },
+  "sparkler_trails_still": {
+    "label": "sparkler-trails still",
+    "family": "animation_3d",
+    "medium": "Sparkler-trails animation still with held light paths.",
+    "light": "Dark field, spark trails.",
+    "color": "Gold-white trails.",
+    "texture": "Held light paths, spark ticks.",
+    "camera": "Night-field staging.",
+    "must_include": [
+      "sparkler-trails still",
+      "held light paths"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Sparkler-trails still, held light paths.",
+    "wan_stylization": "3D cartoon"
+  },
+  "light_painting_anim": {
+    "label": "light-painting animation still",
+    "family": "animation_3d",
+    "medium": "Light-painting animation still with a drawn light path.",
+    "light": "Dark field, drawn light.",
+    "color": "Colored light paths.",
+    "texture": "Drawn paths, long-hold glow.",
+    "camera": "Dark-field staging.",
+    "must_include": [
+      "light-painting animation still",
+      "drawn light path"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Light-painting animation still, drawn light path.",
+    "wan_stylization": "3D cartoon"
+  },
+  "diorama_tilt_band": {
+    "label": "diorama tilt-band still",
+    "family": "animation_3d",
+    "medium": "Diorama tilt-band still with a shallow focus strip on a toy world.",
+    "light": "Soft diorama key, shallow band.",
+    "color": "Toy-world saturations.",
+    "texture": "Diorama flock, shallow band of focus.",
+    "camera": "Overhead diorama staging.",
+    "must_include": [
+      "diorama tilt-band still",
+      "diorama world"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Diorama tilt-band still, diorama world.",
+    "wan_stylization": "3D cartoon"
+  },
+  "forced_perspective_set": {
+    "label": "forced-perspective set still",
+    "family": "animation_3d",
+    "medium": "Forced-perspective set still with a giant prop and a tiny actor stand-in.",
+    "light": "Set key matching both scales.",
+    "color": "Set color, prop paint.",
+    "texture": "Scale mismatch, set carpentry.",
+    "camera": "Set staging on the cheat.",
+    "must_include": [
+      "forced-perspective set still",
+      "giant prop"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Forced-perspective set still, giant prop.",
+    "wan_stylization": "3D cartoon"
+  },
+  "rear_projection_still": {
+    "label": "rear-projection still",
+    "family": "animation_3d",
+    "medium": "Rear-projection still with a screen world behind a foreground puppet.",
+    "light": "Screen glow plus puppet key.",
+    "color": "Screen image color, puppet paint.",
+    "texture": "Screen grain, puppet seam.",
+    "camera": "Process-stage staging.",
+    "must_include": [
+      "rear-projection still",
+      "screen world"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Rear-projection still, screen world.",
+    "wan_stylization": "3D cartoon"
+  },
+  "front_projection_still": {
+    "label": "front-projection still",
+    "family": "animation_3d",
+    "medium": "Front-projection still with a reflected plate on a set.",
+    "light": "Plate reflection plus set key.",
+    "color": "Plate color on the set.",
+    "texture": "Scotchlite-like return, set seam.",
+    "camera": "Process-stage staging.",
+    "must_include": [
+      "front-projection still",
+      "reflected plate"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Front-projection still, reflected plate.",
+    "wan_stylization": "3D cartoon"
+  },
+  "motion_control_miniature": {
+    "label": "motion-control miniature still",
+    "family": "animation_3d",
+    "medium": "Motion-control miniature still on a repeatable rig.",
+    "light": "Tiny set key, repeatable.",
+    "color": "Miniature paint, scale dirt.",
+    "texture": "Scale dirt, rig hints out of frame.",
+    "camera": "Miniature stage.",
+    "must_include": [
+      "motion-control miniature still",
+      "repeatable rig"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Motion-control miniature still, repeatable rig.",
+    "wan_stylization": "3D cartoon"
+  },
+  "animatronic_still": {
+    "label": "animatronic still",
+    "family": "animation_3d",
+    "medium": "Animatronic still with mechanical brows and foam skin.",
+    "light": "Studio key on a mechanical face.",
+    "color": "Painted foam, glass eyes, metal hints.",
+    "texture": "Mechanical brows, foam skin, cable bulk.",
+    "camera": "Studio stand.",
+    "must_include": [
+      "animatronic still",
+      "mechanical brows"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Animatronic still, mechanical brows.",
+    "wan_stylization": "3D cartoon"
+  },
+  "suitmation_still": {
+    "label": "suitmation still",
+    "family": "animation_3d",
+    "medium": "Suitmation still with a performer in a built creature suit.",
+    "light": "Set key on a built suit.",
+    "color": "Suit paint, scale set.",
+    "texture": "Suit seams, performer weight, built head.",
+    "camera": "Set staging.",
+    "must_include": [
+      "suitmation still",
+      "built creature suit"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Suitmation still, built creature suit.",
+    "wan_stylization": "3D cartoon"
+  },
+  "prosthetic_creature_still": {
+    "label": "prosthetic creature still",
+    "family": "animation_3d",
+    "medium": "Prosthetic-creature still with applied foam appliances.",
+    "light": "Beauty key on appliances.",
+    "color": "Appliance paint, skin edge.",
+    "texture": "Foam appliances, edge blend, mechanical hints.",
+    "camera": "Studio close staging.",
+    "must_include": [
+      "prosthetic creature still",
+      "foam appliances"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Prosthetic creature still, foam appliances.",
+    "wan_stylization": "3D cartoon"
+  },
+  "stop_frame_city": {
+    "label": "stop-frame city still",
+    "family": "animation_3d",
+    "medium": "Stop-frame city still with a tactile block metropolis.",
+    "light": "Tiny-set night practicals.",
+    "color": "Painted blocks, tiny lamps.",
+    "texture": "Block buildings, tactile streets empty of letters.",
+    "camera": "Overhead city stage.",
+    "must_include": [
+      "stop-frame city still",
+      "block metropolis"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Stop-frame city still, block metropolis.",
+    "wan_stylization": "3D cartoon"
+  },
+  "garden_stop_motion": {
+    "label": "garden stop-motion still",
+    "family": "animation_3d",
+    "medium": "Garden stop-motion still with posed plants and wire blooms.",
+    "light": "Daylight table key.",
+    "color": "Leaf greens, wire stems.",
+    "texture": "Posed plants, wire blooms, soil.",
+    "camera": "Garden-table staging.",
+    "must_include": [
+      "garden stop-motion still",
+      "posed plants"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Garden stop-motion still, posed plants.",
+    "wan_stylization": "3D cartoon"
+  },
+  "kitchen_stop_motion": {
+    "label": "kitchen stop-motion still",
+    "family": "animation_3d",
+    "medium": "Kitchen stop-motion still with walking utensils.",
+    "light": "Kitchen practicals.",
+    "color": "Metal utensils, wood board.",
+    "texture": "Walking utensils, food crumbs, board grain.",
+    "camera": "Counter staging.",
+    "must_include": [
+      "kitchen stop-motion still",
+      "walking utensils"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Kitchen stop-motion still, walking utensils.",
+    "wan_stylization": "3D cartoon"
+  },
+  "office_stop_motion": {
+    "label": "office stop-motion still",
+    "family": "animation_3d",
+    "medium": "Office stop-motion still with marching stationery.",
+    "light": "Overhead office even light.",
+    "color": "Paper cream, metal clips.",
+    "texture": "Marching clips, unmarked paper, desk grain.",
+    "camera": "Desk staging.",
+    "must_include": [
+      "office stop-motion still",
+      "marching stationery"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Office stop-motion still, marching stationery.",
+    "wan_stylization": "3D cartoon"
+  },
+  "workshop_stop_motion": {
+    "label": "workshop stop-motion still",
+    "family": "animation_3d",
+    "medium": "Workshop stop-motion still with posed tools.",
+    "light": "Shop practicals.",
+    "color": "Steel tools, wood bench.",
+    "texture": "Posed tools, shavings, bench grain.",
+    "camera": "Bench staging.",
+    "must_include": [
+      "workshop stop-motion still",
+      "posed tools"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Workshop stop-motion still, posed tools.",
+    "wan_stylization": "3D cartoon"
+  },
+  "harbor_stop_motion": {
+    "label": "harbor stop-motion still",
+    "family": "animation_3d",
+    "medium": "Harbor stop-motion still with a tactile toy quay.",
+    "light": "Cool daylight on a tiny quay.",
+    "color": "Painted hulls unmarked, water glass.",
+    "texture": "Tactile quay, unmarked hulls, glass water.",
+    "camera": "Quay staging.",
+    "must_include": [
+      "harbor stop-motion still",
+      "tactile toy quay"
+    ],
+    "conflicts": [
+      "live-action photograph",
+      "flat 2D newsprint"
+    ],
+    "suffix": "Harbor stop-motion still, tactile toy quay.",
+    "wan_stylization": "3D cartoon"
   }
 }
