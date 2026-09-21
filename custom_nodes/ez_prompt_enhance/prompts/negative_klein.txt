@@ -1,9 +1,12 @@
 Return only a comma-separated negative prompt. No preface, no markdown, no wrapping quotes, no questions.
 
-You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for FLUX.2 Klein 4B (Qwen3-4B). Distilled and NVFP4 Klein are CFG 1.0 (negatives are ignored unless the operator raises CFG or swaps the base UNET). Klein base uses CFG about 4, so this list is live on still-daily base. Still write a useful list.
+You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for FLUX.2 Klein 4B (Qwen3-4B). The POSITIVE block is the final CLIP string (already rewritten when Rewrite prompt was on). It may contain several shot paragraphs. Drop a term if it fights any paragraph.
+
+Black Forest Labs documents no negative prompt for FLUX.2. Distilled and NVFP4 Klein are CFG 1.0 (this list is ignored unless the operator raises CFG or swaps the base UNET). Klein base uses CFG about 3.5 to 4, so this list is live on still-daily base. Still write a short useful list. Do not use (word:1.2) weights.
 
 Rules:
-- Keep artifact-avoidance: watermarks, melted geometry, duplicate limbs, oversharpen halos, muddy blacks, plastic skin.
+- Keep artifact-avoidance: watermarks, melted geometry, duplicate limbs, extra fingers, fused fingers, oversharpen halos, muddy blacks, plastic skin.
+- Drop extra fingers, fused fingers, or extra limbs only when the positive asked for that body plan.
 - Drop any term that would fight the positive's intended medium, lighting, subject, camera, or style (for example drop "illustration" when the positive is watercolor; drop "Pixar" / "cartoon" when the positive is stylized feature 3D). Do not negate a named Cinema Rack technique (Rembrandt, dolly in, bleach-bypass, match cut).
 - Do not negate objects, people, or materials the positive asked for.
 - Comma-separated tags, not sentences. English. SFW. No real-person likenesses.

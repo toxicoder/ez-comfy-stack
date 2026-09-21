@@ -1,8 +1,8 @@
 {
   "id": "platform-pack",
-  "revision": 4,
-  "last_node_id": 54,
-  "last_link_id": 80,
+  "revision": 5,
+  "last_node_id": 64,
+  "last_link_id": 101,
   "nodes": [
     {
       "id": 1,
@@ -69,7 +69,12 @@
             24,
             34,
             44,
-            54
+            54,
+            83,
+            87,
+            91,
+            95,
+            99
           ],
           "slot_index": 0
         }
@@ -147,8 +152,7 @@
             22,
             32,
             42,
-            52,
-            63
+            52
           ],
           "slot_index": 0
         }
@@ -201,12 +205,7 @@
           "name": "CONDITIONING",
           "type": "CONDITIONING",
           "links": [
-            7,
-            17,
-            27,
-            37,
-            47,
-            57
+            7
           ],
           "slot_index": 0
         }
@@ -269,7 +268,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            3
+            3,
+            81
           ],
           "slot_index": 0
         }
@@ -524,7 +524,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            13
+            13,
+            82
           ],
           "slot_index": 0
         }
@@ -649,7 +650,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 17
+          "link": 85
         },
         {
           "name": "latent_image",
@@ -779,7 +780,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            23
+            23,
+            86
           ],
           "slot_index": 0
         }
@@ -904,7 +906,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 27
+          "link": 89
         },
         {
           "name": "latent_image",
@@ -1034,7 +1036,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            33
+            33,
+            90
           ],
           "slot_index": 0
         }
@@ -1159,7 +1162,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 37
+          "link": 93
         },
         {
           "name": "latent_image",
@@ -1289,7 +1292,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            43
+            43,
+            94
           ],
           "slot_index": 0
         }
@@ -1414,7 +1418,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 47
+          "link": 97
         },
         {
           "name": "latent_image",
@@ -1544,7 +1548,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            53
+            53,
+            98
           ],
           "slot_index": 0
         }
@@ -1669,7 +1674,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 57
+          "link": 101
         },
         {
           "name": "latent_image",
@@ -1791,7 +1796,7 @@
         {
           "name": "positive",
           "type": "STRING",
-          "link": 63
+          "link": 81
         }
       ],
       "outputs": [
@@ -2184,6 +2189,446 @@
         "Click Check models. Queue does not run this node."
       ],
       "title": "Check models"
+    },
+    {
+      "id": 55,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3196.0,
+        80.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 82
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            84
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT ig"
+    },
+    {
+      "id": 56,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3196.0,
+        572.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 83
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 84,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            85
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT ig"
+    },
+    {
+      "id": 57,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3196.0,
+        804.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            88
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT portrait"
+    },
+    {
+      "id": 58,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3196.0,
+        1296.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 87
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 88,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            89
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT portrait"
+    },
+    {
+      "id": 59,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3196.0,
+        1528.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 90
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            92
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT shorts"
+    },
+    {
+      "id": 60,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3196.0,
+        2020.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 91
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 92,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            93
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT shorts"
+    },
+    {
+      "id": 61,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3196.0,
+        2252.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 94
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            96
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT og"
+    },
+    {
+      "id": 62,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3196.0,
+        2744.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 95
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 96,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            97
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT og"
+    },
+    {
+      "id": 63,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3196.0,
+        2976.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 98
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            100
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT banner"
+    },
+    {
+      "id": 64,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3196.0,
+        3468.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 99
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 100,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            101
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT banner"
     }
   ],
   "links": [
@@ -2308,14 +2753,6 @@
       "CONDITIONING"
     ],
     [
-      17,
-      5,
-      0,
-      19,
-      2,
-      "CONDITIONING"
-    ],
-    [
       18,
       18,
       0,
@@ -2377,14 +2814,6 @@
       0,
       25,
       1,
-      "CONDITIONING"
-    ],
-    [
-      27,
-      5,
-      0,
-      25,
-      2,
       "CONDITIONING"
     ],
     [
@@ -2452,14 +2881,6 @@
       "CONDITIONING"
     ],
     [
-      37,
-      5,
-      0,
-      31,
-      2,
-      "CONDITIONING"
-    ],
-    [
       38,
       30,
       0,
@@ -2521,14 +2942,6 @@
       0,
       37,
       1,
-      "CONDITIONING"
-    ],
-    [
-      47,
-      5,
-      0,
-      37,
-      2,
       "CONDITIONING"
     ],
     [
@@ -2596,14 +3009,6 @@
       "CONDITIONING"
     ],
     [
-      57,
-      5,
-      0,
-      43,
-      2,
-      "CONDITIONING"
-    ],
-    [
       58,
       42,
       0,
@@ -2633,14 +3038,6 @@
       0,
       5,
       1,
-      "STRING"
-    ],
-    [
-      63,
-      4,
-      0,
-      46,
-      0,
       "STRING"
     ],
     [
@@ -2778,6 +3175,174 @@
       53,
       1,
       "STRING"
+    ],
+    [
+      81,
+      10,
+      0,
+      46,
+      0,
+      "STRING"
+    ],
+    [
+      82,
+      16,
+      0,
+      55,
+      0,
+      "STRING"
+    ],
+    [
+      83,
+      2,
+      0,
+      56,
+      0,
+      "CLIP"
+    ],
+    [
+      84,
+      55,
+      0,
+      56,
+      1,
+      "STRING"
+    ],
+    [
+      85,
+      56,
+      0,
+      19,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      86,
+      22,
+      0,
+      57,
+      0,
+      "STRING"
+    ],
+    [
+      87,
+      2,
+      0,
+      58,
+      0,
+      "CLIP"
+    ],
+    [
+      88,
+      57,
+      0,
+      58,
+      1,
+      "STRING"
+    ],
+    [
+      89,
+      58,
+      0,
+      25,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      90,
+      28,
+      0,
+      59,
+      0,
+      "STRING"
+    ],
+    [
+      91,
+      2,
+      0,
+      60,
+      0,
+      "CLIP"
+    ],
+    [
+      92,
+      59,
+      0,
+      60,
+      1,
+      "STRING"
+    ],
+    [
+      93,
+      60,
+      0,
+      31,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      94,
+      34,
+      0,
+      61,
+      0,
+      "STRING"
+    ],
+    [
+      95,
+      2,
+      0,
+      62,
+      0,
+      "CLIP"
+    ],
+    [
+      96,
+      61,
+      0,
+      62,
+      1,
+      "STRING"
+    ],
+    [
+      97,
+      62,
+      0,
+      37,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      98,
+      40,
+      0,
+      63,
+      0,
+      "STRING"
+    ],
+    [
+      99,
+      2,
+      0,
+      64,
+      0,
+      "CLIP"
+    ],
+    [
+      100,
+      63,
+      0,
+      64,
+      1,
+      "STRING"
+    ],
+    [
+      101,
+      64,
+      0,
+      43,
+      2,
+      "CONDITIONING"
     ]
   ],
   "groups": [
@@ -2999,6 +3564,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          46,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

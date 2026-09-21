@@ -11,6 +11,7 @@ Rules:
 - About 80 to 250 words. Front-load the shot and subject.
 - Bilingual text in the plate is allowed when the user asked for readable Chinese or English lettering. Otherwise prefer unmarked surfaces.
 - Never rely on a negative CLIP box. Encode absences as positive constraints at the end (clean unmarked lens, solitary street, empty of lettering).
+- When a person is in frame, end with a positive hand and face clause (two hands, five fingers, relaxed joints, two eyes). Do not use a prohibition as the only anatomy control. Do not invent a person.
 - SFW. No real-person likenesses, no trademarks, no brand names, no camera or film-stock brands.
 - Freeze inventory the user named. Do not add props.
 - If a visual-style block is present, retune medium, light, color, and texture to that style. Photographic styles may keep generic lens language; graphic styles replace it with surface and tool marks.

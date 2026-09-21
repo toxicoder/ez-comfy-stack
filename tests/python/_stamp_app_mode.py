@@ -643,6 +643,21 @@ def display_label(
     ntype = str(node.get("type") or "")
     title = str(node.get("title") or "").strip()
     title_l = title.lower()
+    if ntype == "EZNegativePromptEnhance" and name == "enhance":
+        if not collide:
+            return "Rewrite negative"
+        values = node.get("widgets_values") or []
+        neg_family = str(values[2] if len(values) > 2 else "")
+        labels = {
+            "klein": "Rewrite Klein negative",
+            "wan": "Rewrite Wan negative",
+            "ltx": "Rewrite LTX negative",
+            "zimage": "Rewrite Z-Image negative",
+            "longcat": "Rewrite LongCat negative",
+            "dreamx": "Rewrite DreamX negative",
+            "s2v": "Rewrite S2V negative",
+        }
+        return labels.get(neg_family, "Rewrite negative")
     if ntype == "EZKleinPromptEnhance" and name == "prompt":
         mode = _enhance_mode(node)
         if mode == "text_swap":
@@ -1000,6 +1015,12 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
         }.get(name)
     if name == "prompt" and ntype == "EZDubScript":
         return "Editable turns JSON. Rewrite translation fills text_target."
+    if name == "enhance" and ntype == "EZNegativePromptEnhance":
+        return (
+            "On: rewrite this negative so it cannot fight the final positive. "
+            "Stays on when Rewrite prompt is off. Off skips the LLM; a conflict "
+            "filter still runs."
+        )
     if name == "enhance" and ntype == "EZDubScript":
         return "On: diarize + ASR + GGUF translate. Off: pin this JSON."
     if ntype == "PrimitiveNode" and name == "value":
@@ -2170,15 +2191,54 @@ def _clip_chain_output_ids(graph: dict) -> list[int]:
     )
 
 
+def negative_enhance_reps(graph: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """One negative-enhance node per family (lowest id).
+
+    Args:
+        graph: Serialized lab graph.
+
+    Returns:
+        Representative ``EZNegativePromptEnhance`` nodes.
+    """
+    reps: dict[str, dict[str, Any]] = {}
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZNegativePromptEnhance":
+            continue
+        values = node.get("widgets_values") or []
+        family = str(values[2] if len(values) > 2 else "klein")
+        current = reps.get(family)
+        if current is None or int(node["id"]) < int(current["id"]):
+            reps[family] = node
+    return [reps[key] for key in sorted(reps, key=lambda fam: int(reps[fam]["id"]))]
+
+
 def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
     if spec.get("clip_chain_widgets"):
-        return _clip_chain_input_specs(graph, spec)
-    raw = _collect_raw_inputs(graph, spec)
-    counts = Counter(name for _nid, name, _node in raw)
+        specs = _clip_chain_input_specs(graph, spec)
+        reps = negative_enhance_reps(graph)
+        multi = len(reps) > 1
+        for node in reps:
+            specs.append(
+                _input_spec(node["id"], "enhance", spec, node=node, collide=multi)
+            )
+        return specs
+    raw = list(_collect_raw_inputs(graph, spec))
+    for node in negative_enhance_reps(graph):
+        raw.append((node["id"], "enhance", node))
+    counts: Counter[str] = Counter()
+    negative_families = 0
+    for _nid, name, node in raw:
+        if name == "enhance" and str(node.get("type") or "") == "EZNegativePromptEnhance":
+            negative_families += 1
+            continue
+        counts[name] += 1
     inputs: list[InputSpec] = []
     for nid, name, node in raw:
-        collide = counts[name] > 1
+        if name == "enhance" and str(node.get("type") or "") == "EZNegativePromptEnhance":
+            collide = negative_families > 1
+        else:
+            collide = counts[name] > 1
         inputs.append(
             _input_spec(nid, name, spec, node=node, collide=collide)
         )
@@ -2188,6 +2248,63 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     if spec.get("research_widgets") or spec.get("app_forge_widgets"):
         return inputs
     return order_app_inputs(inputs, graph)
+
+
+def stamp_rewrite_negative(graph: dict[str, Any]) -> bool:
+    """Insert one Rewrite negative App widget per negative family.
+
+    Args:
+        graph: Serialized lab graph with ``extra.linearData``.
+
+    Returns:
+        True when ``linearData.inputs`` changed.
+    """
+    extra = graph.get("extra") or {}
+    linear = extra.get("linearData")
+    if not isinstance(linear, dict):
+        return False
+    inputs = linear.get("inputs")
+    if not isinstance(inputs, list):
+        return False
+    reps = negative_enhance_reps(graph)
+    if not reps:
+        return False
+    neg_ids = {
+        int(node["id"])
+        for node in graph.get("nodes") or []
+        if node.get("type") == "EZNegativePromptEnhance"
+    }
+    kept: list[Any] = []
+    for entry in inputs:
+        if (
+            isinstance(entry, list)
+            and len(entry) >= 2
+            and str(entry[1]) == "enhance"
+            and int(entry[0]) in neg_ids
+        ):
+            continue
+        kept.append(entry)
+    multi = len(reps) > 1
+    fresh: list[list[Any]] = []
+    for node in reps:
+        label = display_label(node, "enhance", collide=multi)
+        description = widget_description("enhance", node)
+        fresh.append(
+            [
+                int(node["id"]),
+                "enhance",
+                {"label": label, "description": description},
+            ]
+        )
+    insert_at = len(kept)
+    for index, entry in enumerate(kept):
+        if isinstance(entry, list) and len(entry) >= 2 and entry[1] == "enhance":
+            insert_at = index + 1
+    kept[insert_at:insert_at] = fresh
+    if kept == inputs:
+        return False
+    linear["inputs"] = kept
+    return True
 
 
 def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:

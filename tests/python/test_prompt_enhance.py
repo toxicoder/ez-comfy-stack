@@ -28,6 +28,7 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZLongCatPromptEnhance,
     EZLTXPromptEnhance,
     EZNegativePromptEnhance,
+    EZPromptBundle,
     EZPromptJoin,
     EZSamplePrompt,
     EZWanPromptEnhance,
@@ -184,6 +185,13 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "audio" in ltx_neg.lower() or "foley" in ltx_neg.lower()
     klein_neg = client.load_system_prompt("negative_klein")
     assert "base" in klein_neg.lower()
+    assert "five fingers" in klein.lower()
+    assert "extra fingers" in client.load_system_prompt("negative_wan").lower()
+    assert "fused fingers" in client.load_system_prompt("negative_wan").lower()
+    assert "do not write the duration" in ltx_t2v.lower()
+    ltx_neg_l = ltx_neg.lower()
+    assert "ethnicity" not in ltx_neg_l
+    assert "wrong hand count" in ltx_neg_l
     wan_t2v_l = wan_t2v.lower()
     assert "a14b" in wan_t2v_l
     s2v = client.load_system_prompt("wan_s2v")
@@ -193,6 +201,7 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "depth" in iclora.lower() or "canny" in iclora.lower()
     assert "control type" in iclora.lower() or "pose" in iclora.lower()
     zimage = client.load_system_prompt("zimage_t2i")
+    assert "five fingers" in zimage.lower()
     assert "Qwen3-4B" in zimage
     assert "<|im_start|>" in zimage
     assert "80" in zimage and "250" in zimage
@@ -419,6 +428,24 @@ def test_complement_negative_drops_look_fights_keeps_artifacts() -> None:
     pix = client.complement_negative(_KLEIN_NEG_SEED, pixar).lower()
     assert "pixar" not in pix
     assert "watermark" in pix
+    hands = client.complement_negative(
+        "extra fingers, watermark",
+        "She closes her fingers around the cup.",
+    )
+    assert "extra fingers" in hands.lower()
+    assert "watermark" in hands.lower()
+    six = client.complement_negative(
+        "extra fingers, watermark",
+        "A six-fingered hand rests on the table.",
+    )
+    assert "extra fingers" not in six.lower()
+    assert "watermark" in six.lower()
+    held = client.complement_negative(
+        "static, watermark",
+        "The subject is completely still, no motion.",
+    )
+    assert "static" not in held.lower()
+    assert "watermark" in held.lower()
     user = client.compose_negative_user("illustration, watermarks", watercolor)
     assert user.startswith("POSITIVE:")
     assert "NEGATIVE SEED:" in user
@@ -1574,6 +1601,7 @@ def test_node_mappings_modes_preview_and_style() -> None:
         "EZLongCatPromptEnhance",
         "EZDreamXPromptEnhance",
         "EZNegativePromptEnhance",
+        "EZPromptBundle",
         "EZPromptJoin",
         "EZAceStepPromptEnhance",
         "EZContextJoin",
@@ -1862,6 +1890,11 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                 values = node.get("widgets_values") or []
                 if ntype == "EZNegativePromptEnhance":
                     flag = values[1] if len(values) > 1 else True
+                    if flag is not True:
+                        missing.append(
+                            f"{path.name}: {ntype}#{node['id']} enhance={flag!r}"
+                        )
+                    continue
                 elif ntype == "EZAceStepPromptEnhance":
                     flag = (
                         values[3]
@@ -1925,7 +1958,11 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                         )
                     else:
                         pos_src = by_id.get(int(links[int(pos_inp["link"])][1]))
-                        if pos_src is None or pos_src.get("type") not in pos_enhance_types:
+                        allowed = pos_enhance_types | {
+                            "EZPromptJoin",
+                            "EZPromptBundle",
+                        }
+                        if pos_src is None or pos_src.get("type") not in allowed:
                             missing.append(
                                 f"{path.name}: negative enhance #{src['id']} "
                                 f"positive from {None if pos_src is None else pos_src.get('type')}"
@@ -1978,3 +2015,126 @@ def test_lab_graphs_wire_enhance_on_every_positive_prompt() -> None:
                 if not linked:
                     missing.append(f"{path.name}: ACE encoder {title!r} not fed by enhance")
     assert not missing, "\n".join(missing[:40])
+
+
+def test_negative_enhance_reads_final_positive_and_stays_on() -> None:
+    """Negative rewrite stays on and reads the CLIP string, including services."""
+    from _lab_paths import lab_graph_paths, load_lab_graph
+    from _wire_prompt_enhance import _linked_node, _sampler_pairs
+
+    missing: list[str] = []
+    for path in lab_graph_paths():
+        graph = load_lab_graph(path)
+        extra = graph.get("extra") or {}
+        gid = str(extra.get("lab_rel") or path.stem)
+        families: set[str] = set()
+        neg_nodes = [
+            node
+            for node in graph["nodes"]
+            if node.get("type") == "EZNegativePromptEnhance"
+        ]
+        for node in neg_nodes:
+            values = node.get("widgets_values") or []
+            if len(values) < 2 or values[1] is not True:
+                missing.append(f"{gid}: enhance flag {values!r}")
+            if len(values) > 2:
+                families.add(str(values[2]))
+        linear = (extra.get("linearData") or {}).get("inputs") or []
+        stamped = []
+        by_id = {int(node["id"]): node for node in graph["nodes"]}
+        for entry in linear:
+            if not isinstance(entry, list) or len(entry) < 2 or entry[1] != "enhance":
+                continue
+            node = by_id.get(int(entry[0]))
+            if node is None or node.get("type") != "EZNegativePromptEnhance":
+                continue
+            label = ""
+            if len(entry) > 2 and isinstance(entry[2], dict):
+                label = str(entry[2].get("label") or "")
+            stamped.append(label)
+        if neg_nodes and linear:
+            if len(stamped) != len(families):
+                missing.append(f"{gid}: stamped {stamped} families {families}")
+            if len(families) == 1 and stamped != ["Rewrite negative"]:
+                missing.append(f"{gid}: label {stamped}")
+            if len(families) > 1 and len(stamped) > 2:
+                missing.append(f"{gid}: too many negative toggles {stamped}")
+        if gid.startswith("films/"):
+            bundles = [
+                node for node in graph["nodes"] if node.get("type") == "EZPromptBundle"
+            ]
+            if len(bundles) != 1:
+                missing.append(f"{gid}: bundles {len(bundles)}")
+        for pair in _sampler_pairs(graph):
+            src = pair["pos_src"]
+            neg = pair["neg_src"]
+            if not isinstance(src, dict) or not isinstance(neg, dict):
+                missing.append(f"{gid}: sampler missing text source")
+                continue
+            fed = _linked_node(graph, neg, "positive")
+            if src.get("type") == "EZPromptJoin":
+                if fed is None or int(fed["id"]) != int(src["id"]):
+                    missing.append(f"{gid}: join not fed to its negative")
+            elif gid.startswith("films/") and src.get("type") == "EZLTXPromptEnhance":
+                if fed is None or fed.get("type") != "EZPromptBundle":
+                    missing.append(f"{gid}: LTX negative missing bundle")
+            elif fed is None or int(fed["id"]) != int(src["id"]):
+                missing.append(
+                    f"{gid}: {src.get('type')} fed by "
+                    f"{None if fed is None else fed.get('type')}"
+                )
+    assert not missing, "\n".join(missing[:30])
+
+
+def test_prompt_bundle_joins_nonempty_slots() -> None:
+    bundle = EZPromptBundle()
+    optional = bundle.INPUT_TYPES()["optional"]
+    assert len(optional) == 24
+    assert optional["text_01"][1]["forceInput"] is True
+    assert bundle.run() == ("",)
+    assert bundle.run(text_01="  one  ", text_02=" ", text_03="two") == ("one\n\ntwo",)
+    assert bundle.run(text_02=12) == ("12",)
+
+
+def test_enhance_policy_keeps_negative_on_when_positive_is_off() -> None:
+    from _wire_prompt_enhance import apply_enhance_policy
+
+    graph = {
+        "id": "films/go-see",
+        "extra": {
+            "lab_rel": "films/go-see",
+            "lab_note": "Prompt enhance is on by default.\n",
+        },
+        "nodes": [
+            {
+                "type": "EZLTXPromptEnhance",
+                "widgets_values": [
+                    "custom",
+                    "shot",
+                    True,
+                    "i2v",
+                    "5 seconds, 24 fps",
+                    "",
+                    "none",
+                    "films/go-see",
+                ],
+            },
+            {
+                "type": "EZNegativePromptEnhance",
+                "widgets_values": ["watermark", False, "ltx"],
+            },
+        ],
+    }
+    apply_enhance_policy(graph)
+    nodes = graph["nodes"]
+    assert isinstance(nodes, list)
+    ltx_node = nodes[0]
+    neg_node = nodes[1]
+    assert isinstance(ltx_node, dict)
+    assert isinstance(neg_node, dict)
+    ltx_values = ltx_node["widgets_values"]
+    neg_values = neg_node["widgets_values"]
+    assert isinstance(ltx_values, list)
+    assert isinstance(neg_values, list)
+    assert ltx_values[2] is False
+    assert neg_values[1] is True

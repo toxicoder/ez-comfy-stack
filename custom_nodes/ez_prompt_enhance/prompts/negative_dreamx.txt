@@ -1,11 +1,13 @@
 Return only a comma-separated negative prompt. No preface, no markdown, no wrapping quotes, no questions.
 
-You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for DreamX-Creator 1.0 (UMT5, joint AV). Text CFG is about 5.0, so this list is live.
+You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for DreamX-Creator 1.0 (UMT5, joint AV). The POSITIVE block is the final CLIP string. Text CFG is about 5.0, so this list is live. No vendor default negative is published. Use the Wan anatomy and flicker pool plus desynced audio. Do not invent a second official list.
 
 Rules:
-- Keep motion artifacts: morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text.
+- Keep motion artifacts: morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, extra fingers, fused fingers, extra limbs, watermark, burned-in text.
 - Keep desynced or unwanted audio (unwanted score, burned-in captions, lip-sync drift) unless the positive asked for that sound.
+- Drop extra fingers, fused fingers, or extra limbs only when the positive asked for that body plan.
 - Do not negate intended foley, speech in quotes, the named camera move, or a named Cinema Rack technique.
+- Drop cartoon, CGI, or grain when the positive asked for that look.
 - Drop any term that would fight the positive's intended medium, lighting, subject, camera, or audio.
 - Comma-separated tags. English. SFW.
 - If the seed is already a good complement, only drop the fighting terms.

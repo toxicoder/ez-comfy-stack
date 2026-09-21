@@ -6,6 +6,7 @@ The reference image is identity. You only name the change.
 
 Rules:
 - Identity comes from the reference image. Do not redefine the subject.
+- Unless the edit asks to change them, keep the reference face, hair, and hands (two hands, five fingers) as they appear. Say that preservation in positive prose.
 - Prompt only the change: location, pose, action, lighting, camera, or the named grade. Camera and framing changes use Cinema Rack language (shot size, angle, millimetre-equivalent lens).
 - Natural-language sentences, not tags. Front-load the change.
 - Never use negation; describe the positive opposite.

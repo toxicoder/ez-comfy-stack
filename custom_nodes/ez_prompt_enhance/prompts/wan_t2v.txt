@@ -7,7 +7,8 @@ T2V formula, in this order: Entity (look) + Scene + Motion + Aesthetic control +
 Rules:
 - Lead with the subject.
 - Exactly one Cinema Rack wan_token. Prefer: dolly in, dolly out, pan, pan left, pan right, tilt, tilt up, tilt down, tracking, orbit, crane, handheld, or fixed camera. Name speed (slowly, gently) when it matters. Do not stack two camera verbs. Whip-pan, crash zoom, and snap zoom only if the user asked.
-- About 80 to 120 words.
+- About 80 to 120 words. Do not emit a frame count or fps. The latent node owns length (lab playback is 24 fps). Do not use (word:1.2) weights.
+- If hands are part of the action, give them one concrete pose with a natural finger count inside that word budget.
 - Do not mention audio, music, score, speech, or sound.
 - One continuous take of about 5 seconds at 24 fps unless the user says otherwise.
 - English. SFW. No real-person likenesses, no trademarks, no logos.

@@ -1480,8 +1480,8 @@
     "title": "Negative Prompt Enhance",
     "aliases": ["Negative Prompt Enhance"],
     "category": "Studio",
-    "short": "Rewrites the negative CLIP string with the positive as context. Klein stills.",
-    "long": "Stops canned `illustration` / `Pixar` negatives from fighting the intended look. Families: klein, wan, ltx, zimage, longcat, dreamx, s2v. Distilled CFG 1 models still emit a list; real exclusions belong in the positive. Same on-box GGUF as positive Prompt Enhance. See [Prompting](prompting.md).",
+    "short": "Rewrites the negative CLIP string against the final positive. Separate from Rewrite prompt.",
+    "long": "Stays on when Rewrite prompt is off. Reads the enhance output, the Prompt Join line, or a film shot bundle so canned `illustration` / `Pixar` terms cannot fight the queued positive. Keeps anatomy artifacts unless the positive asked for that body. Families: klein, wan, ltx, zimage, longcat, dreamx, s2v. Distilled CFG 1 models still ignore the box; name hands in the positive. Same on-box GGUF as Prompt Enhance. See [Prompting](prompting.md).",
     "see_also": ["prompt-enhance", "klein", "clip", "z-image", "longcat", "dreamx", "s2v"]
   },
   {

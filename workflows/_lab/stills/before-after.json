@@ -1,8 +1,8 @@
 {
   "id": "before-after",
-  "revision": 5,
-  "last_node_id": 27,
-  "last_link_id": 38,
+  "revision": 6,
+  "last_node_id": 30,
+  "last_link_id": 45,
   "nodes": [
     {
       "id": 1,
@@ -61,7 +61,8 @@
           "links": [
             1,
             7,
-            18
+            18,
+            41
           ],
           "slot_index": 0
         }
@@ -141,8 +142,7 @@
           "type": "STRING",
           "links": [
             5,
-            16,
-            29
+            16
           ],
           "slot_index": 0
         }
@@ -326,7 +326,8 @@
           "type": "LATENT",
           "links": [
             4,
-            21
+            21,
+            44
           ],
           "slot_index": 0
         }
@@ -368,9 +369,7 @@
         {
           "name": "CONDITIONING",
           "type": "CONDITIONING",
-          "links": [
-            23
-          ],
+          "links": [],
           "slot_index": 0
         }
       ],
@@ -406,7 +405,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            6
+            6,
+            39
           ],
           "slot_index": 0
         }
@@ -627,7 +627,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            17
+            17,
+            40
           ],
           "slot_index": 0
         }
@@ -717,7 +718,7 @@
         {
           "name": "negative",
           "type": "CONDITIONING",
-          "link": 23
+          "link": 45
         },
         {
           "name": "latent_image",
@@ -882,7 +883,7 @@
         {
           "name": "positive",
           "type": "STRING",
-          "link": 29
+          "link": 39
         }
       ],
       "outputs": [
@@ -1133,6 +1134,137 @@
         "Click Check models. Queue does not run this node."
       ],
       "title": "Check models"
+    },
+    {
+      "id": 28,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        3276.0,
+        80.0
+      ],
+      "size": [
+        420.0,
+        280.0
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 40
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            42
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        true,
+        "klein"
+      ],
+      "title": "Negative SHOT AFTER"
+    },
+    {
+      "id": 29,
+      "type": "CLIPTextEncode",
+      "pos": [
+        3276.0,
+        572.0
+      ],
+      "size": [
+        420.0,
+        120.0
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 41
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 42,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+      ],
+      "title": "Negative Negative SHOT AFTER"
+    },
+    {
+      "id": 30,
+      "type": "ReferenceLatent",
+      "pos": [
+        3276.0,
+        804.0
+      ],
+      "size": [
+        280.0,
+        80.0
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 43
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 44,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            45
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ReferenceLatent"
+      },
+      "widgets_values": [],
+      "title": "Negative + identity plate"
     }
   ],
   "links": [
@@ -1305,14 +1437,6 @@
       "CONDITIONING"
     ],
     [
-      23,
-      9,
-      0,
-      18,
-      2,
-      "CONDITIONING"
-    ],
-    [
       24,
       6,
       0,
@@ -1342,14 +1466,6 @@
       0,
       5,
       1,
-      "STRING"
-    ],
-    [
-      29,
-      4,
-      0,
-      22,
-      0,
       "STRING"
     ],
     [
@@ -1423,6 +1539,62 @@
       26,
       1,
       "STRING"
+    ],
+    [
+      39,
+      10,
+      0,
+      22,
+      0,
+      "STRING"
+    ],
+    [
+      40,
+      16,
+      0,
+      28,
+      0,
+      "STRING"
+    ],
+    [
+      41,
+      2,
+      0,
+      29,
+      0,
+      "CLIP"
+    ],
+    [
+      42,
+      28,
+      0,
+      29,
+      1,
+      "STRING"
+    ],
+    [
+      43,
+      29,
+      0,
+      30,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      44,
+      8,
+      0,
+      30,
+      1,
+      "LATENT"
+    ],
+    [
+      45,
+      30,
+      0,
+      18,
+      2,
+      "CONDITIONING"
     ]
   ],
   "groups": [
@@ -1610,6 +1782,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          22,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

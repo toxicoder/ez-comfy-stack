@@ -560,6 +560,40 @@ _ARTIFACT_KEEP = (
     "muddy blacks",
     "muddy textures",
     "plastic skin",
+    "extra fingers",
+    "fused fingers",
+    "missing fingers",
+    "poorly drawn hands",
+    "poorly drawn faces",
+    "poorly drawn face",
+    "extra limbs",
+    "disfigured hands",
+    "wrong hand count",
+    "malformed hands",
+    "three legs",
+    "walking backwards",
+    "many people",
+    "deformed facial features",
+    "missing facial features",
+)
+# Positive phrases that mean the operator asked for that defect.
+_DEFECT_REQUESTS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("extra finger", ("six-finger", "six finger", "6 finger", "extra finger")),
+    ("fused finger", ("fused finger",)),
+    ("missing finger", ("missing finger",)),
+    ("three leg", ("three leg", "three-leg")),
+    (
+        "walking backwards",
+        (
+            "walking backwards",
+            "walk backward",
+            "walking backward",
+            "walks backward",
+        ),
+    ),
+    ("many people", ("many people", "crowd")),
+    ("still picture", ("no motion", "motionless", "completely still", "hold still")),
+    ("static", ("no motion", "motionless", "completely still", "hold still")),
 )
 _WORD_RE = re.compile(r"[a-z0-9][a-z0-9'-]{4,}")
 
@@ -675,8 +709,29 @@ def _style_own_look(style_id: str) -> str:
     return " ".join(parts).lower()
 
 
+def _requests_defect(token: str, positive: str) -> bool:
+    """True when the positive asks for the defect this negative token blocks.
+
+    Args:
+        token: One comma-separated negative clause.
+        positive: CLIP-bound positive string.
+
+    Returns:
+        Whether the token should be dropped because the positive requested it.
+    """
+    low = token.lower()
+    pos = positive.lower()
+    for needle, phrases in _DEFECT_REQUESTS:
+        if needle in low and any(phrase in pos for phrase in phrases):
+            return True
+    return False
+
+
 def complement_negative(negative: str, positive: str) -> str:
     """Drop negative tokens that fight the positive look; keep artifacts.
+
+    Anatomy tokens stay even when the positive merely names a hand or a face.
+    They drop only when the positive asks for that defect (six fingers, a crowd).
 
     Args:
         negative: Comma-separated negative seed or rewriter output.
@@ -695,6 +750,8 @@ def complement_negative(negative: str, positive: str) -> str:
         look = f"{look} {_style_own_look(sid)}"
     kept: list[str] = []
     for token in _negative_tokens(seed):
+        if _requests_defect(token, pos):
+            continue
         if _is_artifact_token(token):
             kept.append(token)
             continue

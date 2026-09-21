@@ -801,7 +801,55 @@ function syncLinkedClipFromWidgets(node, fromEnhanceToggle) {
 }
 
 /**
+ * Family id on a Negative Prompt Enhance node.
+ * @param {object} node
+ * @returns {string}
+ */
+function negativeFamily(node) {
+  const widget = widgetByName(node, "family");
+  return String(widget?.value || "klein");
+}
+
+/**
+ * Copy Rewrite negative onto the other nodes of the same family.
+ * One App toggle drives every shot. The guard stops the callback loop.
+ * @param {object} source
+ * @returns {void}
+ */
+function syncNegativeFamily(source) {
+  const ntype = source?.comfyClass || source?.type || "";
+  if (ntype !== "EZNegativePromptEnhance" || source._ezNegSync) {
+    return;
+  }
+  const family = negativeFamily(source);
+  const on = enhanceIsOn(source);
+  const nodes = source.graph?.nodes || app.graph?.nodes || [];
+  for (const other of nodes) {
+    if (other === source) {
+      continue;
+    }
+    if ((other.comfyClass || other.type) !== "EZNegativePromptEnhance") {
+      continue;
+    }
+    if (negativeFamily(other) !== family) {
+      continue;
+    }
+    const widget = widgetByName(other, "enhance");
+    if (!widget || widget.value === on) {
+      continue;
+    }
+    other._ezNegSync = true;
+    widget.value = on;
+    if (typeof widget.callback === "function") {
+      widget.callback();
+    }
+    other._ezNegSync = false;
+  }
+}
+
+/**
  * Chain the Enhance / Rewrite prompt widget onto the CLIP preview.
+ * Rewrite negative also copies across the same family.
  * @param {object} node
  * @returns {void}
  */
@@ -821,6 +869,7 @@ function bindEnhanceWatcher(node) {
       prior.apply(this, arguments);
     }
     syncLinkedClipFromWidgets(node, true);
+    syncNegativeFamily(node);
   };
 }
 

@@ -109,6 +109,14 @@ flowchart TB
 | 45 | Upscale still | `EZImageUpscale` | SHOT SCENE |
 | 46 | Upscale still | `EZImageUpscale` | SHOT CLOSE |
 | 47 | Check models | `EZModelCheck` | QUALITY |
+| 48 | Negative SHOT POINT | `EZNegativePromptEnhance` | Ungrouped |
+| 49 | Negative Negative SHOT POINT | `CLIPTextEncode` | Ungrouped |
+| 50 | Negative SHOT PROOF | `EZNegativePromptEnhance` | Ungrouped |
+| 51 | Negative Negative SHOT PROOF | `CLIPTextEncode` | Ungrouped |
+| 52 | Negative SHOT SCENE | `EZNegativePromptEnhance` | Ungrouped |
+| 53 | Negative Negative SHOT SCENE | `CLIPTextEncode` | Ungrouped |
+| 54 | Negative SHOT CLOSE | `EZNegativePromptEnhance` | Ungrouped |
+| 55 | Negative Negative SHOT CLOSE | `CLIPTextEncode` | Ungrouped |
 
 ## Node parameter reference
 
@@ -696,6 +704,10 @@ Prompt encoded by CLIP.
 | Positive PROOF | `Proof still. Prop or desk detail, 50mm. Same building, rooms, furniture placeme…` |
 | Positive SCENE | `Scene still. Wider 24mm of the same terrace. Same building, rooms, furniture pl…` |
 | Positive CLOSE | `Close still. 85mm, same coat and light. Same building, rooms, furniture placeme…` |
+| Negative Negative SHOT POINT | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT PROOF | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT SCENE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT CLOSE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
 
 ### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
 
@@ -1017,11 +1029,11 @@ Save prefix.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1032,21 +1044,17 @@ Negative seed (artifacts, not style).
 
 **How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
 
-**This graph:** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
-
-```text
-game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
-```
+**This graph (all 5 instances):** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
 
 #### `enhance`
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph:** `true`
+**This graph (all 5 instances):** `true`
 
 #### `family`
 
@@ -1056,7 +1064,7 @@ Which negative family.
 
 **How it affects generation:** Must match the UNET on the canvas.
 
-**This graph:** `klein`
+**This graph (all 5 instances):** `klein`
 
 **Other choices**
 

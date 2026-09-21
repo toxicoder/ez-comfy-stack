@@ -1,6 +1,6 @@
 {
   "id": "ugc-car-av",
-  "revision": 1,
+  "revision": 2,
   "last_node_id": 25,
   "last_link_id": 41,
   "nodes": [
@@ -1500,6 +1500,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          21,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

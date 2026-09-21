@@ -1,6 +1,6 @@
 {
   "id": "dialogue-8s",
-  "revision": 11,
+  "revision": 12,
   "last_node_id": 23,
   "last_link_id": 29,
   "nodes": [
@@ -814,7 +814,7 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        false,
+        true,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
@@ -1347,6 +1347,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          19,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

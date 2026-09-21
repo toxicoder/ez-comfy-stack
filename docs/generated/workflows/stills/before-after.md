@@ -90,6 +90,9 @@ flowchart TB
 | 25 | Upscale still | `EZImageUpscale` | SHOT BEFORE |
 | 26 | Upscale still | `EZImageUpscale` | SHOT AFTER |
 | 27 | Check models | `EZModelCheck` | QUALITY |
+| 28 | Negative SHOT AFTER | `EZNegativePromptEnhance` | Ungrouped |
+| 29 | Negative Negative SHOT AFTER | `CLIPTextEncode` | Ungrouped |
+| 30 | Negative + identity plate | `ReferenceLatent` | Ungrouped |
 
 ## Node parameter reference
 
@@ -674,6 +677,7 @@ Prompt encoded by CLIP.
 | Negative | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, …` |
 | Positive BEFORE | `A photoreal still of a small kitchen table at first light. One cream ceramic mu…` |
 | Positive AFTER | `A photoreal still of a small kitchen table at first light. One cream ceramic mu…` |
+| Negative Negative SHOT AFTER | `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, …` |
 
 ### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
 
@@ -1018,11 +1022,11 @@ Save prefix.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1033,21 +1037,17 @@ Negative seed (artifacts, not style).
 
 **How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
 
-**This graph:** `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
-
-```text
-plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
-```
+**This graph (all 2 instances):** `plastic skin, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
 
 #### `enhance`
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph:** `true`
+**This graph (all 2 instances):** `true`
 
 #### `family`
 
@@ -1057,7 +1057,7 @@ Which negative family.
 
 **How it affects generation:** Must match the UNET on the canvas.
 
-**This graph:** `klein`
+**This graph (all 2 instances):** `klein`
 
 **Other choices**
 

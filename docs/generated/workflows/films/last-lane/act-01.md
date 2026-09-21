@@ -322,6 +322,7 @@ flowchart TB
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
 | 903 | Check models | `EZModelCheck` | QUALITY |
+| 904 | Shot prompt bundle | `EZPromptBundle` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1274,11 +1275,11 @@ Sample-catalog id (graph stem).
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1298,11 +1299,11 @@ Negative seed (artifacts, not style).
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph (all 2 instances):** `false`
+**This graph (all 2 instances):** `true`
 
 #### `family`
 
@@ -2286,3 +2287,18 @@ Last check result.
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
 **This graph:** `Click Check models. Queue does not run this node.`
+
+### `EZPromptBundle` — Prompt Bundle
+
+Join final shot prompts for one shared film negative. No LLM.
+
+!!! warning "Lab notes"
+
+    Films only. One bundle feeds the shared LTX negative.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `text_01` | in | `STRING` | Final prompt for shot 1. Slots through text_24. |
+| `prompt` | out | `STRING` | Paragraphs separated by a blank line. |
+
+No widgets. Sockets only.

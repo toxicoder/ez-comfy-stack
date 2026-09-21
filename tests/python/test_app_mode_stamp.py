@@ -195,7 +195,7 @@ def test_image_studio_exposes_mode_look_size_and_unet() -> None:
 
 def test_still_studio_exposes_format_look_size_and_unet() -> None:
     names = _widget_names(_load("stills/still-studio.json"))
-    assert names[:10] == [
+    assert names[:11] == [
         "quality",
         "sample",
         "prompt",
@@ -204,6 +204,7 @@ def test_still_studio_exposes_format_look_size_and_unet() -> None:
         "upscale",
         "enable",
         "style",
+        "enhance",
         "enhance",
         "look",
     ]

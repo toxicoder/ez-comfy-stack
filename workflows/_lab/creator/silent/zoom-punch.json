@@ -1,6 +1,6 @@
 {
   "id": "zoom-punch",
-  "revision": 5,
+  "revision": 6,
   "last_node_id": 20,
   "last_link_id": 28,
   "nodes": [
@@ -667,7 +667,7 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        false,
+        true,
         "wan"
       ],
       "title": "Negative Prompt Enhance"
@@ -1217,6 +1217,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          16,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [
