@@ -173,7 +173,7 @@ Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 
 TEXT_SWAP_NOTE = """## stills/text-swap
 
-Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). Prefix `ez_text_swap`.
+Klein 4B **lettering swap**. Load a still that already has type. Type the new lettering (or "Replace SALE with OPEN"). Enhance **text_swap** rewrites a glyph-lock instruction: same typeface, weight, tracking, perspective, material, and every other pixel. Output PNG matches the source width and height when Upscale is none (snapped to the Flux.2 ÷16 grid for denoise, then scaled back). 2x, 4x, and 4K lanczos-resize that saved PNG. Prefix `ez_text_swap`.
 
 Do not Queue without a start image. Short high-contrast lettering holds best. For tiny or dense type, set Quality **High** (Klein base if `download-image --tier base` is on disk). Distilled 4B is best-effort, not a typesetter.
 
@@ -185,7 +185,7 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 BACKGROUND_SWAP_NOTE = """## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_swap`.
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
@@ -198,7 +198,7 @@ Cubic block world rebuilds this photographed place as cubes, not a generic cube 
 
 BACKGROUND_EDIT_NOTE = """## stills/background-edit
 
-Klein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height. Prefix `ez_bg_edit`.
+Klein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.
 

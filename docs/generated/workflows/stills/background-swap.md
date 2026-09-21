@@ -29,7 +29,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_swap`.
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
@@ -82,7 +82,6 @@ flowchart LR
   N4 --> N21
   N5 --> N7
   N7 --> N8
-  N8 --> N18
   N8 --> N23
   N11 --> N22
   N11 --> N23
@@ -95,7 +94,8 @@ flowchart LR
   N21 --> N7
   N22 --> N20
   N22 --> N26
-  N23 --> N9
+  N23 --> N18
+  N18 --> N9
   N24 --> N12
   N26 --> N7
 ```
@@ -513,7 +513,7 @@ Markdown-ish operator note.
 ```text
 ## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_swap`.
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 

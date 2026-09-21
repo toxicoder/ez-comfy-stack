@@ -293,7 +293,6 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            22,
             39
           ],
           "slot_index": 0
@@ -355,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n"
+        "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n"
       ],
       "title": "Operator note"
     },
@@ -557,7 +556,9 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "links": [],
+          "links": [
+            41
+          ],
           "slot_index": 0
         },
         {
@@ -776,7 +777,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            41
+            22
           ],
           "slot_index": 0
         }
@@ -975,7 +976,7 @@
     ],
     [
       22,
-      8,
+      23,
       0,
       18,
       0,
@@ -1055,7 +1056,7 @@
     ],
     [
       41,
-      23,
+      18,
       0,
       9,
       0,
@@ -1198,7 +1199,7 @@
         0
       ]
     },
-    "lab_note": "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n",
+    "lab_note": "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n",
     "lab_description": "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap.",
     "lab_app_mode": {
       "enabled": true,

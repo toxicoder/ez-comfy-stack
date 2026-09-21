@@ -293,7 +293,6 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            22,
             39
           ],
           "slot_index": 0
@@ -355,7 +354,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n"
+        "## stills/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n"
       ],
       "title": "Operator note"
     },
@@ -557,7 +556,9 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "links": [],
+          "links": [
+            41
+          ],
           "slot_index": 0
         },
         {
@@ -776,7 +777,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            41
+            22
           ],
           "slot_index": 0
         }
@@ -938,7 +939,7 @@
     ],
     [
       22,
-      8,
+      23,
       0,
       18,
       0,
@@ -1026,7 +1027,7 @@
     ],
     [
       41,
-      23,
+      18,
       0,
       9,
       0,
@@ -1153,7 +1154,7 @@
         0
       ]
     },
-    "lab_note": "## stills/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n",
+    "lab_note": "## stills/background-edit\n\nKlein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height when Upscale is none; 2x, 4x, and 4K lanczos-resize the saved PNG. Prefix `ez_bg_edit`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).\n",
     "lab_description": "Klein 4B background edit. LoadImage source still. Snap + ReferenceLatent. Restyle the environment in place. Prefix ez_bg_edit.",
     "lab_app_mode": {
       "enabled": true,
