@@ -56,6 +56,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GPACK_IDENTITY["PACK IDENTITY"]
   GSHOT_thumb["SHOT thumb"]
@@ -64,6 +66,7 @@ flowchart TB
   GSHOT_shorts["SHOT shorts"]
   GSHOT_og["SHOT og"]
   GSHOT_banner["SHOT banner"]
+  GPROMPT["PROMPT"]
 ```
 
 ## Nodes on this graph
@@ -74,8 +77,8 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | PACK IDENTITY | `EZKleinPromptEnhance` | PACK IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 7 | Operator note | `Note` | NOTE |
 | 10 | SHOT thumb | `EZPromptJoin` | SHOT thumb |
 | 11 | Positive thumb | `CLIPTextEncode` | SHOT thumb |
 | 12 | Size 1280x720 | `EmptyFlux2LatentImage` | SHOT thumb |
@@ -113,14 +116,14 @@ flowchart TB
 | 44 | Decode banner | `VAEDecode` | SHOT banner |
 | 45 | Save banner | `SaveImage` | SHOT banner |
 | 46 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT banner |
-| 47 | Quality | `EZQuality` | Ungrouped |
+| 47 | Quality | `EZQuality` | QUALITY |
 | 48 | Upscale still | `EZImageUpscale` | SHOT thumb |
 | 49 | Upscale still | `EZImageUpscale` | SHOT ig |
 | 50 | Upscale still | `EZImageUpscale` | SHOT portrait |
 | 51 | Upscale still | `EZImageUpscale` | SHOT shorts |
 | 52 | Upscale still | `EZImageUpscale` | SHOT og |
 | 53 | Upscale still | `EZImageUpscale` | SHOT banner |
-| 54 | Check models | `EZModelCheck` | Ungrouped |
+| 54 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

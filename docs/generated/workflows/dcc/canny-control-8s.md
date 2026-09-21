@@ -60,36 +60,49 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
+## Graph
+
+```mermaid
+flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
+  GMODEL["MODEL"]
+  GINPUT["INPUT"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
+  GOUTPUT["OUTPUT"]
+```
+
 ## Nodes on this graph
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | Ungrouped |
-| 2 | LTX-2.5 video VAE | `VAELoader` | Ungrouped |
-| 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | Ungrouped |
-| 4 | Guide first.png | `LoadImage` | Ungrouped |
-| 5 | Motion + audio | `CLIPTextEncode` | Ungrouped |
-| 6 | Negative | `CLIPTextEncode` | Ungrouped |
-| 7 | LTX Img→Video condition | `LTXVImgToVideo` | Ungrouped |
-| 8 | LTX frame rate cond | `LTXVConditioning` | Ungrouped |
-| 9 | KSampler | `KSampler` | Ungrouped |
-| 10 | VAE Decode | `VAEDecode` | Ungrouped |
-| 12 | Save frames (secondary) | `SaveImage` | Ungrouped |
-| 13 | LTX-2.5 audio VAE | `VAELoader` | Ungrouped |
-| 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | Ungrouped |
-| 15 | Concat AV latents | `LTXVConcatAVLatent` | Ungrouped |
-| 16 | Separate AV latents | `LTXVSeparateAVLatent` | Ungrouped |
-| 17 | Operator note | `Note` | Ungrouped |
-| 18 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | Ungrouped |
-| 19 | Last frame | `ImageFromBatch` | Ungrouped |
-| 20 | Save last frame | `SaveImage` | Ungrouped |
-| 21 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
-| 22 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
-| 23 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | Ungrouped |
-| 24 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 25 | Quality | `EZQuality` | Ungrouped |
-| 26 | Describe image | `EZImageDescribe` | Ungrouped |
-| 27 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | MODEL |
+| 2 | LTX-2.5 video VAE | `VAELoader` | MODEL |
+| 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | MODEL |
+| 4 | Guide first.png | `LoadImage` | INPUT |
+| 5 | Motion + audio | `CLIPTextEncode` | PROMPT |
+| 6 | Negative | `CLIPTextEncode` | PROMPT |
+| 7 | LTX Img→Video condition | `LTXVImgToVideo` | SETTINGS |
+| 8 | LTX frame rate cond | `LTXVConditioning` | SETTINGS |
+| 9 | KSampler | `KSampler` | SETTINGS |
+| 10 | VAE Decode | `VAEDecode` | OUTPUT |
+| 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
+| 13 | LTX-2.5 audio VAE | `VAELoader` | MODEL |
+| 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | SETTINGS |
+| 15 | Concat AV latents | `LTXVConcatAVLatent` | SETTINGS |
+| 16 | Separate AV latents | `LTXVSeparateAVLatent` | SETTINGS |
+| 17 | Operator note | `Note` | NOTE |
+| 18 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | OUTPUT |
+| 19 | Last frame | `ImageFromBatch` | OUTPUT |
+| 20 | Save last frame | `SaveImage` | OUTPUT |
+| 21 | LTX Prompt Enhance | `EZLTXPromptEnhance` | PROMPT |
+| 22 | Audio VAE Decode | `LTXVAudioVAEDecode` | OUTPUT |
+| 23 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | OUTPUT |
+| 24 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 25 | Quality | `EZQuality` | QUALITY |
+| 26 | Describe image | `EZImageDescribe` | INPUT |
+| 27 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

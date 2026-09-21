@@ -33,7 +33,7 @@
       "type": "EZSamplePrompt",
       "pos": [
         40,
-        640
+        712
       ],
       "size": [
         420.0,
@@ -68,7 +68,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        640
+        712
       ],
       "size": [
         420.0,
@@ -105,7 +105,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        640
+        712
       ],
       "size": [
         420.0,
@@ -159,8 +159,8 @@
       "id": 5,
       "type": "PrimitiveNode",
       "pos": [
-        1444,
-        616
+        1912,
+        688
       ],
       "size": [
         420.0,
@@ -197,7 +197,7 @@
       "type": "EZContextJoin",
       "pos": [
         40,
-        1132
+        1204
       ],
       "size": [
         420.0,
@@ -271,7 +271,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        1392
+        1464
       ],
       "size": [
         420.0,
@@ -308,7 +308,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        1624
+        1696
       ],
       "size": [
         420.0,
@@ -368,7 +368,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        1392
+        1464
       ],
       "size": [
         420.0,
@@ -405,7 +405,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        1624
+        1696
       ],
       "size": [
         420.0,
@@ -465,7 +465,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        1392
+        1464
       ],
       "size": [
         420.0,
@@ -502,7 +502,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        1624
+        1696
       ],
       "size": [
         420.0,
@@ -562,7 +562,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        2144
+        2216
       ],
       "size": [
         420.0,
@@ -599,7 +599,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        2376
+        2448
       ],
       "size": [
         420.0,
@@ -659,7 +659,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        2144
+        2216
       ],
       "size": [
         420.0,
@@ -696,7 +696,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        2376
+        2448
       ],
       "size": [
         420.0,
@@ -756,7 +756,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        2144
+        2216
       ],
       "size": [
         420.0,
@@ -793,7 +793,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        2376
+        2448
       ],
       "size": [
         420.0,
@@ -853,7 +853,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        2896
+        2968
       ],
       "size": [
         420.0,
@@ -890,7 +890,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        3128
+        3200
       ],
       "size": [
         420.0,
@@ -950,7 +950,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        2896
+        2968
       ],
       "size": [
         420.0,
@@ -987,7 +987,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        3128
+        3200
       ],
       "size": [
         420.0,
@@ -1047,7 +1047,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        2896
+        2968
       ],
       "size": [
         420.0,
@@ -1084,7 +1084,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        3128
+        3200
       ],
       "size": [
         420.0,
@@ -1144,7 +1144,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        3648
+        3720
       ],
       "size": [
         420.0,
@@ -1181,7 +1181,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        3880
+        3952
       ],
       "size": [
         420.0,
@@ -1241,7 +1241,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        3648
+        3720
       ],
       "size": [
         420.0,
@@ -1278,7 +1278,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        3880
+        3952
       ],
       "size": [
         420.0,
@@ -1338,7 +1338,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        3648
+        3720
       ],
       "size": [
         420.0,
@@ -1375,7 +1375,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        3880
+        3952
       ],
       "size": [
         420.0,
@@ -1435,7 +1435,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        4400
+        4472
       ],
       "size": [
         420.0,
@@ -1472,7 +1472,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        4632
+        4704
       ],
       "size": [
         420.0,
@@ -1532,7 +1532,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        4400
+        4472
       ],
       "size": [
         420.0,
@@ -1569,7 +1569,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        4632
+        4704
       ],
       "size": [
         420.0,
@@ -1629,7 +1629,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        4400
+        4472
       ],
       "size": [
         420.0,
@@ -1666,7 +1666,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        4632
+        4704
       ],
       "size": [
         420.0,
@@ -1726,7 +1726,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        5152
+        5224
       ],
       "size": [
         420.0,
@@ -1763,7 +1763,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         40,
-        5384
+        5456
       ],
       "size": [
         420.0,
@@ -1823,7 +1823,7 @@
       "type": "PrimitiveNode",
       "pos": [
         508,
-        5152
+        5224
       ],
       "size": [
         420.0,
@@ -1860,7 +1860,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         508,
-        5384
+        5456
       ],
       "size": [
         420.0,
@@ -1920,7 +1920,7 @@
       "type": "PrimitiveNode",
       "pos": [
         976,
-        5152
+        5224
       ],
       "size": [
         420.0,
@@ -1957,7 +1957,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        5384
+        5456
       ],
       "size": [
         420.0,
@@ -2016,8 +2016,8 @@
       "id": 43,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1796,
+        80
       ],
       "size": [
         320.0,
@@ -2047,8 +2047,8 @@
       "id": 44,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1428,
+        80
       ],
       "size": [
         320.0,
@@ -2550,23 +2550,23 @@
     },
     {
       "id": 2,
-      "title": "DESK",
+      "title": "QUALITY",
       "bounding": [
-        20,
-        584,
-        1396,
-        752
+        1408,
+        24,
+        728,
+        240
       ],
-      "color": "#3f789e",
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     },
     {
       "id": 3,
-      "title": "BEAT 1",
+      "title": "DESK",
       "bounding": [
         20,
-        1336,
+        656,
         1396,
         752
       ],
@@ -2576,10 +2576,10 @@
     },
     {
       "id": 4,
-      "title": "BEAT 2",
+      "title": "BEAT 1",
       "bounding": [
         20,
-        2088,
+        1408,
         1396,
         752
       ],
@@ -2589,10 +2589,10 @@
     },
     {
       "id": 5,
-      "title": "BEAT 3",
+      "title": "BEAT 2",
       "bounding": [
         20,
-        2840,
+        2160,
         1396,
         752
       ],
@@ -2602,10 +2602,10 @@
     },
     {
       "id": 6,
-      "title": "BEAT 4",
+      "title": "BEAT 3",
       "bounding": [
         20,
-        3592,
+        2912,
         1396,
         752
       ],
@@ -2615,10 +2615,10 @@
     },
     {
       "id": 7,
-      "title": "BEAT 5",
+      "title": "BEAT 4",
       "bounding": [
         20,
-        4344,
+        3664,
         1396,
         752
       ],
@@ -2628,12 +2628,38 @@
     },
     {
       "id": 8,
+      "title": "BEAT 5",
+      "bounding": [
+        20,
+        4416,
+        1396,
+        752
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 9,
       "title": "BEAT 6",
       "bounding": [
         20,
-        5096,
+        5168,
         1396,
         752
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SETTINGS",
+      "bounding": [
+        1892,
+        632,
+        460,
+        300
       ],
       "color": "#3f789e",
       "font_size": 24,

@@ -55,29 +55,36 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GSHOT_packshot["SHOT packshot"]
   GSHOT_ig["SHOT ig"]
   GSHOT_shorts["SHOT shorts"]
+  GMODEL["MODEL"]
+  GINPUT["INPUT"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
+  GOUTPUT["OUTPUT"]
 ```
 
 ## Nodes on this graph
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Klein 4B distilled FP8 | `UNETLoader` | Ungrouped |
-| 2 | Qwen3-4B TE | `CLIPLoader` | Ungrouped |
-| 3 | Flux2 VAE | `VAELoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
+| 1 | Klein 4B distilled FP8 | `UNETLoader` | MODEL |
+| 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
+| 3 | Flux2 VAE | `VAELoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
 | 6 | Size 1280x704 | `EmptyFlux2LatentImage` | SHOT packshot |
-| 7 | KSampler | `KSampler` | Ungrouped |
-| 8 | VAE Decode | `VAEDecode` | Ungrouped |
-| 9 | Save hero | `SaveImage` | Ungrouped |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Clay first.png (guide pack) | `LoadImage` | Ungrouped |
-| 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | Ungrouped |
+| 7 | KSampler | `KSampler` | SETTINGS |
+| 8 | VAE Decode | `VAEDecode` | OUTPUT |
+| 9 | Save hero | `SaveImage` | OUTPUT |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Clay first.png (guide pack) | `LoadImage` | INPUT |
+| 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | PROMPT |
 | 13 | Encode clay plate | `VAEEncode` | SHOT packshot |
-| 14 | Positive + clay plate | `ReferenceLatent` | Ungrouped |
+| 14 | Positive + clay plate | `ReferenceLatent` | SETTINGS |
 | 15 | Scale hero | `ImageScale` | SHOT packshot |
 | 16 | Scale packshot | `ImageScale` | SHOT packshot |
 | 17 | Encode packshot | `VAEEncode` | SHOT packshot |
@@ -101,13 +108,13 @@ flowchart TB
 | 35 | Decode shorts | `VAEDecode` | SHOT shorts |
 | 36 | Save shorts | `SaveImage` | SHOT shorts |
 | 37 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT shorts |
-| 38 | Quality | `EZQuality` | Ungrouped |
-| 39 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 38 | Quality | `EZQuality` | QUALITY |
+| 39 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 40 | Upscale still | `EZImageUpscale` | SHOT packshot |
 | 41 | Upscale still | `EZImageUpscale` | SHOT ig |
 | 42 | Upscale still | `EZImageUpscale` | SHOT shorts |
-| 43 | Describe image | `EZImageDescribe` | Ungrouped |
-| 44 | Check models | `EZModelCheck` | Ungrouped |
+| 43 | Describe image | `EZImageDescribe` | INPUT |
+| 44 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -61,7 +61,8 @@ def _assert_shared(
     assert extra["lab_note"].strip()
     assert extra["lab_description"].strip()
     titles = {g["title"] for g in graph["groups"]}
-    assert titles == {"MODEL", "DURATION", "PROMPT", "OUTPUT"}
+    assert {"MODEL", "DURATION", "PROMPT", "OUTPUT"} <= titles
+    assert {"NOTE", "QUALITY"} <= titles
     blob = json.dumps(graph)
     assert prefix in blob
     if ace_mode == "vocal" and edm_vocal_treat:
@@ -207,18 +208,18 @@ def test_nill_bye_stems_are_stamped_audio() -> None:
 
 
 COLUMN_NODE_POS = (
-    (1, 40.0, 80.0),
-    (2, 40.0, 252.0),
-    (3, 40.0, 412.0),
-    (4, 40.0, 600.0),
-    (5, 500.0, 80.0),
-    (6, 500.0, 572.0),
-    (7, 948.0, 80.0),
-    (8, 948.0, 212.0),
-    (9, 1340.0, 80.0),
-    (10, 1340.0, 212.0),
-    (11, 1340.0, 554.0),
-    (12, 1340.0, 896.0),
+    (1, 40.0, 728.0),
+    (2, 40.0, 900.0),
+    (3, 40.0, 1060.0),
+    (4, 2976.0, 728.0),
+    (5, 500.0, 728.0),
+    (6, 500.0, 1220.0),
+    (7, 948.0, 728.0),
+    (8, 948.0, 860.0),
+    (9, 1340.0, 728.0),
+    (10, 1340.0, 860.0),
+    (11, 1340.0, 1202.0),
+    (12, 40.0, 80.0),
 )
 
 

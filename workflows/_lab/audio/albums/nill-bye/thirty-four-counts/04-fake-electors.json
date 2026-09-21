@@ -9,7 +9,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         40,
-        80
+        728
       ],
       "size": [
         360,
@@ -58,7 +58,7 @@
       "type": "ModelSamplingAuraFlow",
       "pos": [
         40,
-        252
+        900
       ],
       "size": [
         330,
@@ -97,7 +97,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        412
+        1060
       ],
       "size": [
         280,
@@ -135,7 +135,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         40,
-        566
+        1214
       ],
       "size": [
         320,
@@ -178,7 +178,7 @@
       "type": "EZRapLyrics",
       "pos": [
         500,
-        80
+        728
       ],
       "size": [
         400,
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        916
+        1564
       ],
       "size": [
         400,
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        1408
+        2056
       ],
       "size": [
         400,
@@ -347,7 +347,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         948,
-        80
+        728
       ],
       "size": [
         240,
@@ -384,7 +384,7 @@
       "type": "KSampler",
       "pos": [
         948,
-        212
+        860
       ],
       "size": [
         330,
@@ -444,7 +444,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1340,
-        80
+        728
       ],
       "size": [
         280,
@@ -488,7 +488,7 @@
       "type": "SaveAudio",
       "pos": [
         1340,
-        212
+        860
       ],
       "size": [
         320,
@@ -518,7 +518,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1340,
-        554
+        1202
       ],
       "size": [
         320,
@@ -548,8 +548,8 @@
       "id": 12,
       "type": "Note",
       "pos": [
-        1340,
-        896
+        40,
+        80
       ],
       "size": [
         440,
@@ -572,8 +572,8 @@
       "id": 13,
       "type": "LoadImage",
       "pos": [
-        2200,
-        80
+        2608,
+        728
       ],
       "size": [
         320,
@@ -610,8 +610,8 @@
       "id": 14,
       "type": "EZAudioMetadata",
       "pos": [
-        2200,
-        534
+        1340,
+        1544
       ],
       "size": [
         360,
@@ -659,8 +659,8 @@
       "id": 16,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        896,
+        80
       ],
       "size": [
         320.0,
@@ -690,8 +690,8 @@
       "id": 17,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        528,
+        80
       ],
       "size": [
         320.0,
@@ -852,10 +852,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        480,
+        600
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        508,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        672,
         400,
         332
       ],
@@ -864,11 +890,11 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "DURATION",
       "bounding": [
         20,
-        356,
+        1004,
         360,
         336
       ],
@@ -877,28 +903,41 @@
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "PROMPT",
       "bounding": [
         480,
-        24,
+        672,
         818,
-        1356
+        1848
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         1320,
-        24,
-        480,
-        1416
+        672,
+        400,
+        1136
       ],
       "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "INPUT",
+      "bounding": [
+        2588,
+        672,
+        360,
+        414
+      ],
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     }

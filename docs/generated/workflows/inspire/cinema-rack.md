@@ -83,8 +83,8 @@ flowchart LR
 | 2 | Klein family | `EZKleinPromptEnhance` | KLEIN |
 | 3 | Wan family | `EZWanPromptEnhance` | WAN |
 | 4 | LTX family | `EZLTXPromptEnhance` | LTX |
-| 6 | Quality | `EZQuality` | Ungrouped |
-| 7 | Check models | `EZModelCheck` | Ungrouped |
+| 6 | Quality | `EZQuality` | QUALITY |
+| 7 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

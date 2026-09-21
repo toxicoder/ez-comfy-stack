@@ -100,25 +100,25 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Klein 4B distilled FP8 | `UNETLoader` | Ungrouped |
-| 2 | Qwen3-4B TE | `CLIPLoader` | Ungrouped |
-| 3 | Flux2 VAE | `VAELoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | KSampler | `KSampler` | Ungrouped |
-| 8 | VAE Decode | `VAEDecode` | Ungrouped |
-| 9 | Save | `SaveImage` | Ungrouped |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | Ungrouped |
-| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 13 | Quality | `EZQuality` | Ungrouped |
-| 14 | Format / platform | `EZImageFormat` | Ungrouped |
-| 15 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
-| 16 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
-| 17 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 18 | Describe image | `EZImageDescribe` | Ungrouped |
-| 19 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Klein 4B distilled FP8 | `UNETLoader` | MODEL |
+| 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
+| 3 | Flux2 VAE | `VAELoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | KSampler | `KSampler` | SETTINGS |
+| 8 | VAE Decode | `VAEDecode` | OUTPUT |
+| 9 | Save | `SaveImage` | OUTPUT |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
+| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 13 | Quality | `EZQuality` | QUALITY |
+| 14 | Format / platform | `EZImageFormat` | SETTINGS |
+| 15 | Example / reference (optional) | `EZOptionalImage` | INPUT |
+| 16 | Optional Klein ref | `EZKleinRefCanvas` | INPUT |
+| 17 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 18 | Describe image | `EZImageDescribe` | INPUT |
+| 19 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

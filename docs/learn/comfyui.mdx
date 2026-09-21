@@ -56,7 +56,7 @@ On `start`, the entrypoint rsyncs shipped JSON into Comfy’s `user/default/work
 
 1. Open `http://${SPARK_HOST}:${COMFY_PORT}` (port-forward from a laptop if needed)
 2. Load **stills/still-draft** from **Apps** or **Workflows**
-3. Read the on-canvas **Note node** — purpose, models, sampler, prompting, run steps
+3. Read the on-canvas **Note node** (top-left) — purpose, models, sampler, prompting, run steps. **Check models** and **Quality** sit on that same row; the rest of the graph reads left-to-right (models → prompt → sample → save) below the note.
 4. Queue
 
 If the graph is missing, restart the container so the copy runs. YAML shot lists stay on the host; they are not copied.

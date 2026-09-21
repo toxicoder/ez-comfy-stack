@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa02",
       "pos": [
-        100,
-        100
+        40,
+        204
       ],
       "size": [
         280,
@@ -60,7 +60,21 @@
     }
   ],
   "links": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        148,
+        320,
+        260
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "definitions": {
     "subgraphs": [
       {
@@ -76,10 +90,23 @@
         "groups": [
           {
             "id": 1,
-            "title": "Load models",
+            "title": "NOTE",
             "bounding": [
               20,
               24,
+              1000,
+              420
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 2,
+            "title": "Load models",
+            "bounding": [
+              20,
+              492,
               400,
               494
             ],
@@ -88,13 +115,52 @@
             "flags": {}
           },
           {
-            "id": 2,
+            "id": 3,
             "title": "For i2v, LoadImage enabled (bypass for t2v)",
             "bounding": [
               20,
-              518,
+              986,
               360,
               414
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 4,
+            "title": "PROMPT",
+            "bounding": [
+              2768,
+              492,
+              460,
+              1476
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 5,
+            "title": "SETTINGS",
+            "bounding": [
+              3236,
+              492,
+              360,
+              714
+            ],
+            "color": "#a1309b",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 6,
+            "title": "OUTPUT",
+            "bounding": [
+              3604,
+              492,
+              360,
+              980
             ],
             "color": "#3f789e",
             "font_size": 24,
@@ -136,7 +202,7 @@
             "type": "UNETLoader",
             "pos": [
               40,
-              80
+              548
             ],
             "size": [
               360,
@@ -171,7 +237,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              234
+              702
             ],
             "size": [
               360,
@@ -208,7 +274,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              416
+              884
             ],
             "size": [
               360,
@@ -243,7 +309,7 @@
             "type": "LoadImage",
             "pos": [
               40,
-              574
+              1042
             ],
             "size": [
               320,
@@ -283,8 +349,8 @@
             "id": 6,
             "type": "CLIPTextEncode",
             "pos": [
-              948,
-              280
+              2788,
+              1040
             ],
             "size": [
               420,
@@ -331,8 +397,8 @@
             "id": 7,
             "type": "CLIPTextEncode",
             "pos": [
-              948,
-              512
+              2788,
+              1764
             ],
             "size": [
               420,
@@ -379,8 +445,8 @@
             "id": 8,
             "type": "Wan22ImageToVideoLatent",
             "pos": [
-              1420,
-              546
+              3256,
+              678
             ],
             "size": [
               280,
@@ -428,8 +494,8 @@
             "id": 9,
             "type": "ModelSamplingSD3",
             "pos": [
-              1420,
-              80
+              3256,
+              548
             ],
             "size": [
               210,
@@ -468,8 +534,8 @@
             "id": 10,
             "type": "KSampler",
             "pos": [
-              1700,
-              80
+              3256,
+              900
             ],
             "size": [
               320,
@@ -529,8 +595,8 @@
             "id": 11,
             "type": "VAEDecode",
             "pos": [
-              2080,
-              80
+              3624,
+              548
             ],
             "size": [
               240,
@@ -573,8 +639,8 @@
             "id": 12,
             "type": "SaveImage",
             "pos": [
-              2080,
-              198
+              3624,
+              1158
             ],
             "size": [
               280,
@@ -603,8 +669,8 @@
             "id": 13,
             "type": "VHS_VideoCombine",
             "pos": [
-              2420,
-              80
+              3624,
+              666
             ],
             "size": [
               320,
@@ -668,7 +734,7 @@
             "type": "Note",
             "pos": [
               40,
-              960
+              80
             ],
             "size": [
               960,
@@ -691,8 +757,8 @@
             "id": 15,
             "type": "EZWanPromptEnhance",
             "pos": [
-              480,
-              280
+              2788,
+              548
             ],
             "size": [
               420,
@@ -729,8 +795,8 @@
             "id": 16,
             "type": "EZNegativePromptEnhance",
             "pos": [
-              480,
-              1352
+              2788,
+              1272
             ],
             "size": [
               420,

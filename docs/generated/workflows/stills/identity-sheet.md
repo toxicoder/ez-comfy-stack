@@ -52,11 +52,15 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_FRONT["SHOT FRONT"]
   GSHOT_THREE_QUARTER["SHOT THREE-QUARTER"]
   GSHOT_PROFILE["SHOT PROFILE"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -67,9 +71,9 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 10 | SHOT FRONT | `EZPromptJoin` | SHOT FRONT |
 | 11 | Positive FRONT | `CLIPTextEncode` | SHOT FRONT |
 | 12 | Sampler FRONT | `KSampler` | SHOT FRONT |
@@ -85,13 +89,13 @@ flowchart TB
 | 24 | Sampler PROFILE | `KSampler` | SHOT PROFILE |
 | 25 | Decode PROFILE | `VAEDecode` | SHOT PROFILE |
 | 26 | Save PROFILE | `SaveImage` | SHOT PROFILE |
-| 27 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 28 | Quality | `EZQuality` | Ungrouped |
-| 29 | Format / platform | `EZImageFormat` | Ungrouped |
+| 27 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 28 | Quality | `EZQuality` | QUALITY |
+| 29 | Format / platform | `EZImageFormat` | SETTINGS |
 | 30 | Upscale still | `EZImageUpscale` | SHOT FRONT |
 | 31 | Upscale still | `EZImageUpscale` | SHOT THREE-QUARTER |
 | 32 | Upscale still | `EZImageUpscale` | SHOT PROFILE |
-| 33 | Check models | `EZModelCheck` | Ungrouped |
+| 33 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

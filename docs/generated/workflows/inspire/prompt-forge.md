@@ -99,8 +99,8 @@ flowchart LR
 | 7 | Z-Image family | `EZZimagePromptEnhance` | Z-IMAGE |
 | 8 | LongCat family | `EZLongCatPromptEnhance` | LONGCAT |
 | 9 | DreamX family | `EZDreamXPromptEnhance` | DREAMX |
-| 10 | Quality | `EZQuality` | Ungrouped |
-| 11 | Check models | `EZModelCheck` | Ungrouped |
+| 10 | Quality | `EZQuality` | QUALITY |
+| 11 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

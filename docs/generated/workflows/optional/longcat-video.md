@@ -66,12 +66,12 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Operator note | `Note` | Ungrouped |
-| 2 | Prompt | `EZSamplePrompt` | Ungrouped |
-| 3 | LongCat Prompt Enhance | `EZLongCatPromptEnhance` | Ungrouped |
-| 4 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 5 | Quality | `EZQuality` | Ungrouped |
-| 6 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Operator note | `Note` | NOTE |
+| 2 | Prompt | `EZSamplePrompt` | PROMPT |
+| 3 | LongCat Prompt Enhance | `EZLongCatPromptEnhance` | PROMPT |
+| 4 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 5 | Quality | `EZQuality` | QUALITY |
+| 6 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

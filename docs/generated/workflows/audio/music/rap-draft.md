@@ -107,17 +107,17 @@ flowchart LR
 | 4 | Latent length (seconds) | `EmptyAceStep1.5LatentAudio` | DURATION |
 | 15 | Rap lyrics | `EZRapLyrics` | PROMPT |
 | 5 | ez_rap_prompt | `EZAceStepPromptEnhance` | PROMPT |
-| 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | Ungrouped |
+| 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | PROMPT |
 | 7 | Negative (zero) | `ConditioningZeroOut` | PROMPT |
 | 8 | ACE sampler | `KSampler` | PROMPT |
 | 9 | ACE decode | `VAEDecodeAudio` | OUTPUT |
 | 10 | FLAC master | `SaveAudio` | OUTPUT |
 | 11 | MP3 320k | `SaveAudioMP3` | OUTPUT |
-| 12 | Operator note | `Note` | OUTPUT |
-| 13 | Cover image | `LoadImage` | Ungrouped |
-| 14 | Album metadata | `EZAudioMetadata` | Ungrouped |
-| 16 | Quality | `EZQuality` | Ungrouped |
-| 17 | Check models | `EZModelCheck` | Ungrouped |
+| 12 | Operator note | `Note` | NOTE |
+| 13 | Cover image | `LoadImage` | INPUT |
+| 14 | Album metadata | `EZAudioMetadata` | OUTPUT |
+| 16 | Quality | `EZQuality` | QUALITY |
+| 17 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

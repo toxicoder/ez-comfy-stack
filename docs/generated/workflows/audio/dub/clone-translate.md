@@ -84,9 +84,9 @@ flowchart LR
 | 3 | ez_dub_voice | `EZDubRender` | PROMPT |
 | 4 | FLAC master | `SaveAudio` | OUTPUT |
 | 5 | YouTube preview MP3 | `SaveAudioMP3` | OUTPUT |
-| 6 | Operator note | `Note` | OUTPUT |
-| 7 | Quality | `EZQuality` | Ungrouped |
-| 8 | Check models | `EZModelCheck` | Ungrouped |
+| 6 | Operator note | `Note` | NOTE |
+| 7 | Quality | `EZQuality` | QUALITY |
+| 8 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

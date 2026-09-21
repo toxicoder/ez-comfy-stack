@@ -101,26 +101,26 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Klein 4B distilled FP8 | `UNETLoader` | Ungrouped |
-| 2 | Qwen3-4B TE | `CLIPLoader` | Ungrouped |
-| 3 | Flux2 VAE | `VAELoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | KSampler | `KSampler` | Ungrouped |
-| 8 | VAE Decode | `VAEDecode` | Ungrouped |
-| 9 | Save | `SaveImage` | Ungrouped |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | Ungrouped |
-| 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | Ungrouped |
-| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 14 | Quality | `EZQuality` | Ungrouped |
-| 15 | Format / platform | `EZImageFormat` | Ungrouped |
-| 16 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
-| 17 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
-| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 19 | Describe image | `EZImageDescribe` | Ungrouped |
-| 20 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Klein 4B distilled FP8 | `UNETLoader` | MODEL |
+| 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
+| 3 | Flux2 VAE | `VAELoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | KSampler | `KSampler` | SETTINGS |
+| 8 | VAE Decode | `VAEDecode` | OUTPUT |
+| 9 | Save | `SaveImage` | OUTPUT |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | INPUT |
+| 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
+| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 14 | Quality | `EZQuality` | QUALITY |
+| 15 | Format / platform | `EZImageFormat` | SETTINGS |
+| 16 | Example / reference (optional) | `EZOptionalImage` | INPUT |
+| 17 | Optional Klein ref | `EZKleinRefCanvas` | INPUT |
+| 18 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 19 | Describe image | `EZImageDescribe` | INPUT |
+| 20 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

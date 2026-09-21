@@ -49,6 +49,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_01["SHOT 01"]
@@ -57,6 +59,8 @@ flowchart TB
   GSHOT_04["SHOT 04"]
   GSHOT_05["SHOT 05"]
   GSHOT_06["SHOT 06"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -67,9 +71,9 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 10 | SHOT 01 | `EZPromptJoin` | SHOT 01 |
 | 11 | Positive 01 | `CLIPTextEncode` | SHOT 01 |
 | 12 | Sampler 01 | `KSampler` | SHOT 01 |
@@ -101,15 +105,15 @@ flowchart TB
 | 43 | Decode 06 | `VAEDecode` | SHOT 06 |
 | 44 | Save 06 | `SaveImage` | SHOT 06 |
 | 45 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 06 |
-| 46 | Quality | `EZQuality` | Ungrouped |
-| 47 | Format / platform | `EZImageFormat` | Ungrouped |
+| 46 | Quality | `EZQuality` | QUALITY |
+| 47 | Format / platform | `EZImageFormat` | SETTINGS |
 | 48 | Upscale still | `EZImageUpscale` | SHOT 01 |
 | 49 | Upscale still | `EZImageUpscale` | SHOT 02 |
 | 50 | Upscale still | `EZImageUpscale` | SHOT 03 |
 | 51 | Upscale still | `EZImageUpscale` | SHOT 04 |
 | 52 | Upscale still | `EZImageUpscale` | SHOT 05 |
 | 53 | Upscale still | `EZImageUpscale` | SHOT 06 |
-| 54 | Check models | `EZModelCheck` | Ungrouped |
+| 54 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

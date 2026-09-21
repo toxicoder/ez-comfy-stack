@@ -51,11 +51,15 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_KEY["SHOT KEY"]
   GSHOT_WINDOW["SHOT WINDOW"]
   GSHOT_NIGHT_LAMP["SHOT NIGHT LAMP"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -66,11 +70,11 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 8 | Encode plate 01 | `VAEEncode` | SHOT KEY |
-| 9 | Negative + identity plate | `ReferenceLatent` | Ungrouped |
+| 9 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 10 | SHOT KEY | `EZPromptJoin` | SHOT KEY |
 | 11 | Positive KEY | `CLIPTextEncode` | SHOT KEY |
 | 12 | Sampler KEY | `KSampler` | SHOT KEY |
@@ -88,13 +92,13 @@ flowchart TB
 | 25 | Decode NIGHT LAMP | `VAEDecode` | SHOT NIGHT LAMP |
 | 26 | Save NIGHT LAMP | `SaveImage` | SHOT NIGHT LAMP |
 | 27 | Ref from 01 (NIGHT LAMP) | `ReferenceLatent` | SHOT NIGHT LAMP |
-| 28 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 29 | Quality | `EZQuality` | Ungrouped |
-| 30 | Format / platform | `EZImageFormat` | Ungrouped |
+| 28 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 29 | Quality | `EZQuality` | QUALITY |
+| 30 | Format / platform | `EZImageFormat` | SETTINGS |
 | 31 | Upscale still | `EZImageUpscale` | SHOT KEY |
 | 32 | Upscale still | `EZImageUpscale` | SHOT WINDOW |
 | 33 | Upscale still | `EZImageUpscale` | SHOT NIGHT LAMP |
-| 34 | Check models | `EZModelCheck` | Ungrouped |
+| 34 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

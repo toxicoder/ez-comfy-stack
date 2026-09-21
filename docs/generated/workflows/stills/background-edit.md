@@ -101,27 +101,27 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Klein 4B distilled FP8 | `UNETLoader` | Ungrouped |
-| 2 | Qwen3-4B TE | `CLIPLoader` | Ungrouped |
-| 3 | Flux2 VAE | `VAELoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 7 | KSampler | `KSampler` | Ungrouped |
-| 8 | VAE Decode | `VAEDecode` | Ungrouped |
-| 9 | Save background edit | `SaveImage` | Ungrouped |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Source still | `LoadImage` | Ungrouped |
-| 12 | Klein Prompt Enhance (background edit) | `EZKleinPromptEnhance` | Ungrouped |
-| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 14 | Quality | `EZQuality` | Ungrouped |
-| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 19 | Describe image | `EZImageDescribe` | Ungrouped |
-| 20 | Encode snapped source | `VAEEncode` | Ungrouped |
-| 21 | Positive + source plate | `ReferenceLatent` | Ungrouped |
-| 22 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
-| 23 | Match source size | `EZMatchImageSize` | Ungrouped |
-| 24 | Background cast | `EZBackgroundCast` | Ungrouped |
-| 25 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Klein 4B distilled FP8 | `UNETLoader` | MODEL |
+| 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
+| 3 | Flux2 VAE | `VAELoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 7 | KSampler | `KSampler` | SETTINGS |
+| 8 | VAE Decode | `VAEDecode` | OUTPUT |
+| 9 | Save background edit | `SaveImage` | OUTPUT |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Source still | `LoadImage` | INPUT |
+| 12 | Klein Prompt Enhance (background edit) | `EZKleinPromptEnhance` | PROMPT |
+| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 14 | Quality | `EZQuality` | QUALITY |
+| 18 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 19 | Describe image | `EZImageDescribe` | INPUT |
+| 20 | Encode snapped source | `VAEEncode` | SETTINGS |
+| 21 | Positive + source plate | `ReferenceLatent` | SETTINGS |
+| 22 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
+| 23 | Match source size | `EZMatchImageSize` | SETTINGS |
+| 24 | Background cast | `EZBackgroundCast` | SETTINGS |
+| 25 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

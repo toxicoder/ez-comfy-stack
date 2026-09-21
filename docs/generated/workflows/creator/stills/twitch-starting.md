@@ -96,19 +96,19 @@ flowchart LR
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | Ungrouped |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | INPUT |
 | 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
-| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 14 | Quality | `EZQuality` | Ungrouped |
+| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 14 | Quality | `EZQuality` | QUALITY |
 | 15 | Format / platform | `EZImageFormat` | SETTINGS |
 | 16 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 17 | Describe image | `EZImageDescribe` | PROMPT |
-| 18 | Check models | `EZModelCheck` | Ungrouped |
+| 18 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        508
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        662
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        840
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        80
+        508
       ],
       "size": [
         420,
@@ -160,7 +160,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        604
+        1032
       ],
       "size": [
         420,
@@ -207,7 +207,7 @@
       "type": "EmptyFlux2LatentImage",
       "pos": [
         948,
-        836
+        1264
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        80
+        508
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        80
+        508
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        198
+        626
       ],
       "size": [
         280,
@@ -407,7 +407,7 @@
       "type": "Note",
       "pos": [
         40,
-        1014
+        80
       ],
       "size": [
         960,
@@ -431,7 +431,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        80
+        508
       ],
       "size": [
         420,
@@ -505,7 +505,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1366
+        1442
       ],
       "size": [
         420,
@@ -545,8 +545,8 @@
       "id": 13,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -577,7 +577,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        752
+        1180
       ],
       "size": [
         360,
@@ -652,8 +652,8 @@
       "id": 15,
       "type": "EZOptionalImage",
       "pos": [
-        -400.0,
-        400.0
+        2176,
+        508
       ],
       "size": [
         360.0,
@@ -700,8 +700,8 @@
       "id": 16,
       "type": "EZKleinRefCanvas",
       "pos": [
-        -400,
-        1012
+        2176,
+        700
       ],
       "size": [
         360.0,
@@ -761,7 +761,7 @@
       "type": "EZImageMode",
       "pos": [
         1440,
-        540
+        968
       ],
       "size": [
         360,
@@ -824,7 +824,7 @@
       "type": "EZImageUpscale",
       "pos": [
         1848,
-        540
+        968
       ],
       "size": [
         280,
@@ -869,7 +869,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        572
+        1000
       ],
       "size": [
         280,
@@ -915,8 +915,8 @@
       "id": 20,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1164,10 +1164,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        1000,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        452,
         400,
         490
       ],
@@ -1176,24 +1202,24 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "PROMPT",
       "bounding": [
         460,
-        24,
+        452,
         928,
-        962
+        1454
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "FORMAT",
       "bounding": [
         1420,
-        24,
+        452,
         400,
         992
       ],
@@ -1202,15 +1228,28 @@
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         1820,
-        24,
+        452,
         328,
         640
       ],
       "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "INPUT",
+      "bounding": [
+        2156,
+        452,
+        400,
+        432
+      ],
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     }

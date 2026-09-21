@@ -77,12 +77,12 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Operator note | `Note` | Ungrouped |
+| 1 | Operator note | `Note` | NOTE |
 | 5 | Audio Rack | `EZAudioRack` | RACK |
 | 2 | Vocal family | `EZAceStepPromptEnhance` | VOCAL |
 | 3 | Instrumental family | `EZAceStepPromptEnhance` | INST |
-| 6 | Quality | `EZQuality` | Ungrouped |
-| 7 | Check models | `EZModelCheck` | Ungrouped |
+| 6 | Quality | `EZQuality` | QUALITY |
+| 7 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

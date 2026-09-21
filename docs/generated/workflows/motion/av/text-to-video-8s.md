@@ -109,28 +109,28 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | Ungrouped |
-| 2 | LTX-2.5 video VAE | `VAELoader` | Ungrouped |
-| 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Empty LTX latent 1280x704 | `EmptyLTXVLatentVideo` | Ungrouped |
-| 7 | LTXVConditioning | `LTXVConditioning` | Ungrouped |
-| 8 | KSampler | `KSampler` | Ungrouped |
-| 9 | VAEDecode | `VAEDecode` | Ungrouped |
-| 10 | Save frames (secondary) | `SaveImage` | Ungrouped |
-| 11 | LTX-2.5 audio VAE | `VAELoader` | Ungrouped |
-| 12 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | Ungrouped |
-| 13 | Concat AV latents | `LTXVConcatAVLatent` | Ungrouped |
-| 14 | Separate AV latents | `LTXVSeparateAVLatent` | Ungrouped |
-| 15 | Operator note — video output | `Note` | Ungrouped |
-| 16 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | Ungrouped |
-| 17 | LTX Prompt Enhance | `EZLTXPromptEnhance` | Ungrouped |
-| 18 | Audio VAE Decode | `LTXVAudioVAEDecode` | Ungrouped |
-| 19 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 20 | Quality | `EZQuality` | Ungrouped |
-| 21 | Format / platform | `EZVideoFormat` | Ungrouped |
-| 22 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | MODEL |
+| 2 | LTX-2.5 video VAE | `VAELoader` | MODEL |
+| 3 | Gemma4-with-proj (ltxv) | `CLIPLoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Empty LTX latent 1280x704 | `EmptyLTXVLatentVideo` | SETTINGS |
+| 7 | LTXVConditioning | `LTXVConditioning` | SETTINGS |
+| 8 | KSampler | `KSampler` | SETTINGS |
+| 9 | VAEDecode | `VAEDecode` | OUTPUT |
+| 10 | Save frames (secondary) | `SaveImage` | OUTPUT |
+| 11 | LTX-2.5 audio VAE | `VAELoader` | MODEL |
+| 12 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | SETTINGS |
+| 13 | Concat AV latents | `LTXVConcatAVLatent` | SETTINGS |
+| 14 | Separate AV latents | `LTXVSeparateAVLatent` | SETTINGS |
+| 15 | Operator note — video output | `Note` | NOTE |
+| 16 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | OUTPUT |
+| 17 | LTX Prompt Enhance | `EZLTXPromptEnhance` | PROMPT |
+| 18 | Audio VAE Decode | `LTXVAudioVAEDecode` | OUTPUT |
+| 19 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 20 | Quality | `EZQuality` | QUALITY |
+| 21 | Format / platform | `EZVideoFormat` | SETTINGS |
+| 22 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

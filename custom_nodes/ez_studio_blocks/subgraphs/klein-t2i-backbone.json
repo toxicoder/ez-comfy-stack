@@ -8,8 +8,8 @@
       "id": 1,
       "type": "7c3e9b10-6a21-4f0a-9c11-00000000aa01",
       "pos": [
-        100,
-        100
+        40,
+        204
       ],
       "size": [
         280,
@@ -70,7 +70,21 @@
     }
   ],
   "links": [],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "SETTINGS",
+      "bounding": [
+        20,
+        148,
+        320,
+        260
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "definitions": {
     "subgraphs": [
       {
@@ -83,7 +97,73 @@
           "lab_occupancy": "klein",
           "workflowRendererVersion": "Vue-corrected"
         },
-        "groups": [],
+        "groups": [
+          {
+            "id": 1,
+            "title": "NOTE",
+            "bounding": [
+              20,
+              24,
+              1000,
+              380
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 2,
+            "title": "MODEL",
+            "bounding": [
+              20,
+              452,
+              400,
+              490
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 3,
+            "title": "PROMPT",
+            "bounding": [
+              428,
+              452,
+              460,
+              1476
+            ],
+            "color": "#a1309b",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 4,
+            "title": "SETTINGS",
+            "bounding": [
+              896,
+              452,
+              360,
+              540
+            ],
+            "color": "#3f789e",
+            "font_size": 24,
+            "flags": {}
+          },
+          {
+            "id": 5,
+            "title": "OUTPUT",
+            "bounding": [
+              1264,
+              452,
+              320,
+              488
+            ],
+            "color": "#a1309b",
+            "font_size": 24,
+            "flags": {}
+          }
+        ],
         "inputs": [
           {
             "name": "prompt",
@@ -127,7 +207,7 @@
             "type": "UNETLoader",
             "pos": [
               40,
-              80
+              508
             ],
             "size": [
               360,
@@ -161,7 +241,7 @@
             "type": "CLIPLoader",
             "pos": [
               40,
-              234
+              662
             ],
             "size": [
               360,
@@ -197,7 +277,7 @@
             "type": "VAELoader",
             "pos": [
               40,
-              412
+              840
             ],
             "size": [
               360,
@@ -229,8 +309,8 @@
             "id": 4,
             "type": "CLIPTextEncode",
             "pos": [
-              948,
-              80
+              448,
+              1000
             ],
             "size": [
               420,
@@ -276,8 +356,8 @@
             "id": 5,
             "type": "CLIPTextEncode",
             "pos": [
-              948,
-              312
+              448,
+              1724
             ],
             "size": [
               420,
@@ -323,8 +403,8 @@
             "id": 6,
             "type": "EmptyFlux2LatentImage",
             "pos": [
-              948,
-              544
+              916,
+              508
             ],
             "size": [
               280,
@@ -358,8 +438,8 @@
             "id": 7,
             "type": "KSampler",
             "pos": [
-              1440,
-              80
+              916,
+              686
             ],
             "size": [
               320,
@@ -418,8 +498,8 @@
             "id": 8,
             "type": "VAEDecode",
             "pos": [
-              1840,
-              80
+              1284,
+              508
             ],
             "size": [
               240,
@@ -460,8 +540,8 @@
             "id": 9,
             "type": "SaveImage",
             "pos": [
-              1840,
-              198
+              1284,
+              626
             ],
             "size": [
               280,
@@ -491,7 +571,7 @@
             "type": "Note",
             "pos": [
               40,
-              722
+              80
             ],
             "size": [
               960,
@@ -514,8 +594,8 @@
             "id": 11,
             "type": "EZKleinPromptEnhance",
             "pos": [
-              480,
-              80
+              448,
+              508
             ],
             "size": [
               420,
@@ -552,8 +632,8 @@
             "id": 12,
             "type": "EZNegativePromptEnhance",
             "pos": [
-              480,
-              1074
+              448,
+              1232
             ],
             "size": [
               420,

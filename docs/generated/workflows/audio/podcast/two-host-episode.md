@@ -109,10 +109,10 @@ flowchart LR
 | 11 | ez_podcast_mix overlay | `AudioMerge` | OUTPUT |
 | 12 | FLAC master | `SaveAudio` | OUTPUT |
 | 13 | MP3 320k | `SaveAudioMP3` | OUTPUT |
-| 14 | Operator note | `Note` | OUTPUT |
-| 15 | ez_podcast_bed enhance | `EZAceStepPromptEnhance` | Ungrouped |
-| 16 | Quality | `EZQuality` | Ungrouped |
-| 17 | Check models | `EZModelCheck` | Ungrouped |
+| 14 | Operator note | `Note` | NOTE |
+| 15 | ez_podcast_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 16 | Quality | `EZQuality` | QUALITY |
+| 17 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

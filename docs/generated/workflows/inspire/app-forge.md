@@ -76,8 +76,8 @@ flowchart LR
 | --- | --- | --- | --- |
 | 1 | Operator note | `Note` | NOTE |
 | 2 | App Forge | `EZAppForge` | FORGE |
-| 3 | Quality | `EZQuality` | Ungrouped |
-| 4 | Check models | `EZModelCheck` | Ungrouped |
+| 3 | Quality | `EZQuality` | QUALITY |
+| 4 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

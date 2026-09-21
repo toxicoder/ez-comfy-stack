@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        648
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        346
+        802
       ],
       "size": [
         360,
@@ -77,7 +77,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        594
+        932
       ],
       "size": [
         400,
@@ -112,8 +112,8 @@
       "id": 4,
       "type": "LoadImage",
       "pos": [
-        1080,
-        80
+        608,
+        648
       ],
       "size": [
         320,
@@ -153,8 +153,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        742
+        976,
+        1140
       ],
       "size": [
         420,
@@ -200,8 +200,8 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        1266
+        976,
+        1864
       ],
       "size": [
         420,
@@ -247,8 +247,8 @@
       "id": 7,
       "type": "LTXVImgToVideo",
       "pos": [
-        1580,
-        80
+        1444,
+        1102
       ],
       "size": [
         320,
@@ -336,8 +336,8 @@
       "id": 8,
       "type": "LTXVConditioning",
       "pos": [
-        1580,
-        666
+        1444,
+        1512
       ],
       "size": [
         280,
@@ -388,8 +388,8 @@
       "id": 9,
       "type": "KSampler",
       "pos": [
-        1948,
-        80
+        1444,
+        1666
       ],
       "size": [
         320,
@@ -448,8 +448,8 @@
       "id": 10,
       "type": "VAEDecode",
       "pos": [
-        2668,
-        80
+        1852,
+        648
       ],
       "size": [
         240,
@@ -492,8 +492,8 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        2668,
-        572
+        1852,
+        1396
       ],
       "size": [
         280,
@@ -523,7 +523,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        776
+        1114
       ],
       "size": [
         360,
@@ -556,8 +556,8 @@
       "id": 14,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1580,
-        820
+        1444,
+        900
       ],
       "size": [
         300,
@@ -597,8 +597,8 @@
       "id": 15,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1988,
-        414
+        1444,
+        1374
       ],
       "size": [
         280,
@@ -639,8 +639,8 @@
       "id": 16,
       "type": "LTXVSeparateAVLatent",
       "pos": [
-        2340,
-        80
+        1444,
+        2000
       ],
       "size": [
         280,
@@ -685,7 +685,7 @@
       "type": "Note",
       "pos": [
         40,
-        1396
+        80
       ],
       "size": [
         960,
@@ -708,8 +708,8 @@
       "id": 18,
       "type": "VHS_VideoCombine",
       "pos": [
-        2980.0,
-        80
+        1852,
+        904
       ],
       "size": [
         320,
@@ -772,8 +772,8 @@
       "id": 19,
       "type": "ImageFromBatch",
       "pos": [
-        2996,
-        572
+        1852,
+        1738
       ],
       "size": [
         240,
@@ -813,8 +813,8 @@
       "id": 20,
       "type": "SaveImage",
       "pos": [
-        2996,
-        1246
+        1852,
+        1890
       ],
       "size": [
         280,
@@ -843,8 +843,8 @@
       "id": 21,
       "type": "EZLTXPromptEnhance",
       "pos": [
-        620,
-        742
+        976,
+        648
       ],
       "size": [
         420,
@@ -898,8 +898,8 @@
       "id": 22,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        3348,
-        80
+        1852,
+        766
       ],
       "size": [
         320,
@@ -940,8 +940,8 @@
       "id": 23,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620,
-        1888
+        976,
+        1372
       ],
       "size": [
         420,
@@ -981,8 +981,8 @@
       "id": 24,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -1012,8 +1012,8 @@
       "id": 25,
       "type": "EZVideoFormat",
       "pos": [
-        1580,
-        414
+        1444,
+        648
       ],
       "size": [
         360,
@@ -1072,8 +1072,8 @@
       "id": 26,
       "type": "EZImageDescribe",
       "pos": [
-        620,
-        1234
+        608,
+        1034
       ],
       "size": [
         280,
@@ -1119,8 +1119,8 @@
       "id": 27,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1406,7 +1406,99 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1000,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        592,
+        560,
+        624
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        588,
+        592,
+        360,
+        576
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        956,
+        592,
+        460,
+        1476
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1424,
+        592,
+        400,
+        1518
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1832,
+        592,
+        360,
+        1612
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_profile": "motion/av/still-to-shot",

@@ -51,12 +51,16 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_WARM["SHOT WARM"]
   GSHOT_COOL["SHOT COOL"]
   GSHOT_MUTED["SHOT MUTED"]
   GSHOT_HIGH_KEY["SHOT HIGH KEY"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -67,11 +71,11 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 8 | Encode plate 01 | `VAEEncode` | SHOT WARM |
-| 9 | Negative + identity plate | `ReferenceLatent` | Ungrouped |
+| 9 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 10 | SHOT WARM | `EZPromptJoin` | SHOT WARM |
 | 11 | Positive WARM | `CLIPTextEncode` | SHOT WARM |
 | 12 | Sampler WARM | `KSampler` | SHOT WARM |
@@ -96,13 +100,13 @@ flowchart TB
 | 32 | Save HIGH KEY | `SaveImage` | SHOT HIGH KEY |
 | 33 | Ref from 01 (HIGH KEY) | `ReferenceLatent` | SHOT HIGH KEY |
 | 34 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT HIGH KEY |
-| 35 | Quality | `EZQuality` | Ungrouped |
-| 36 | Format / platform | `EZImageFormat` | Ungrouped |
+| 35 | Quality | `EZQuality` | QUALITY |
+| 36 | Format / platform | `EZImageFormat` | SETTINGS |
 | 37 | Upscale still | `EZImageUpscale` | SHOT WARM |
 | 38 | Upscale still | `EZImageUpscale` | SHOT COOL |
 | 39 | Upscale still | `EZImageUpscale` | SHOT MUTED |
 | 40 | Upscale still | `EZImageUpscale` | SHOT HIGH KEY |
-| 41 | Check models | `EZModelCheck` | Ungrouped |
+| 41 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

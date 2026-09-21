@@ -63,6 +63,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   G1__Identity__Klein_["1. Identity (Klein)"]
   G2__LTX_models["2. LTX models"]
   G3__Beat_1__3___5_00s_LTX_["3. Beat 1 (3 × 5.00s LTX)"]
@@ -87,10 +89,10 @@ flowchart TB
 | 7 | KSampler | `KSampler` | 1. Identity (Klein) |
 | 8 | VAE Decode | `VAEDecode` | 1. Identity (Klein) |
 | 9 | Save identity PNG | `SaveImage` | 1. Identity (Klein) |
-| 10 | Operator note — one-click film | `Note` | 1. Identity (Klein) |
+| 10 | Operator note — one-click film | `Note` | NOTE |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | 1. Identity (Klein) |
 | 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 1. Identity (Klein) |
-| 13 | Quality | `EZQuality` | Ungrouped |
+| 13 | Quality | `EZQuality` | QUALITY |
 | 52 | breakwater 90s shot map | `MarkdownNote` | 2. LTX models |
 | 50 | Unload models (pass IMAGE) | `EZUnloadModels` | 1. Identity (Klein) |
 | 100 | LTX-2.5 distilled INT8-convrot | `UNETLoader` | 2. LTX models |
@@ -319,7 +321,7 @@ flowchart TB
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 51 | Load previous act last frame | `LoadImage` | 1. Identity (Klein) |
 | 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 2. LTX models |
-| 903 | Check models | `EZModelCheck` | Ungrouped |
+| 903 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

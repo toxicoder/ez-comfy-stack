@@ -51,12 +51,16 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_GOLDEN["SHOT GOLDEN"]
   GSHOT_DAWN["SHOT DAWN"]
   GSHOT_NOON["SHOT NOON"]
   GSHOT_NIGHT["SHOT NIGHT"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -67,11 +71,11 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 8 | Encode plate 01 | `VAEEncode` | SHOT GOLDEN |
-| 9 | Negative + identity plate | `ReferenceLatent` | Ungrouped |
+| 9 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 10 | SHOT GOLDEN | `EZPromptJoin` | SHOT GOLDEN |
 | 11 | Positive GOLDEN | `CLIPTextEncode` | SHOT GOLDEN |
 | 12 | Sampler GOLDEN | `KSampler` | SHOT GOLDEN |
@@ -96,13 +100,13 @@ flowchart TB
 | 32 | Save NIGHT | `SaveImage` | SHOT NIGHT |
 | 33 | Ref from 01 (NIGHT) | `ReferenceLatent` | SHOT NIGHT |
 | 34 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT NIGHT |
-| 35 | Quality | `EZQuality` | Ungrouped |
-| 36 | Format / platform | `EZImageFormat` | Ungrouped |
+| 35 | Quality | `EZQuality` | QUALITY |
+| 36 | Format / platform | `EZImageFormat` | SETTINGS |
 | 37 | Upscale still | `EZImageUpscale` | SHOT GOLDEN |
 | 38 | Upscale still | `EZImageUpscale` | SHOT DAWN |
 | 39 | Upscale still | `EZImageUpscale` | SHOT NOON |
 | 40 | Upscale still | `EZImageUpscale` | SHOT NIGHT |
-| 41 | Check models | `EZModelCheck` | Ungrouped |
+| 41 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -115,10 +115,10 @@ flowchart LR
 | 12 | ez_learn_mix overlay | `AudioMerge` | OUTPUT |
 | 13 | FLAC master | `SaveAudio` | OUTPUT |
 | 14 | MP3 320k | `SaveAudioMP3` | OUTPUT |
-| 15 | Operator note | `Note` | Ungrouped |
-| 16 | ez_learn_bed enhance | `EZAceStepPromptEnhance` | Ungrouped |
-| 17 | Quality | `EZQuality` | Ungrouped |
-| 18 | Check models | `EZModelCheck` | Ungrouped |
+| 15 | Operator note | `Note` | NOTE |
+| 16 | ez_learn_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 17 | Quality | `EZQuality` | QUALITY |
+| 18 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

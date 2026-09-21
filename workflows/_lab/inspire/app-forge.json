@@ -33,7 +33,7 @@
       "type": "EZAppForge",
       "pos": [
         40,
-        560
+        608
       ],
       "size": [
         720,
@@ -69,8 +69,8 @@
       "id": 3,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1176,
+        80
       ],
       "size": [
         320.0,
@@ -100,8 +100,8 @@
       "id": 4,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        808,
+        80
       ],
       "size": [
         320.0,
@@ -138,10 +138,23 @@
     },
     {
       "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
       "title": "FORGE",
       "bounding": [
         20,
-        504,
+        552,
         760,
         560
       ],

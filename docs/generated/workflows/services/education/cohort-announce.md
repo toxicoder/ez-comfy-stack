@@ -100,22 +100,22 @@ flowchart LR
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Size 1216x640 | `EmptyFlux2LatentImage` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Size 1216x640 | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | Ungrouped |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Draft still (set to ez_still_draft_0000… | `LoadImage` | INPUT |
 | 12 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
-| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 14 | Quality | `EZQuality` | Ungrouped |
-| 15 | Format / platform | `EZImageFormat` | Ungrouped |
-| 16 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
-| 17 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
-| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 19 | Describe image | `EZImageDescribe` | Ungrouped |
-| 20 | Check models | `EZModelCheck` | Ungrouped |
+| 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 14 | Quality | `EZQuality` | QUALITY |
+| 15 | Format / platform | `EZImageFormat` | SETTINGS |
+| 16 | Example / reference (optional) | `EZOptionalImage` | INPUT |
+| 17 | Optional Klein ref | `EZKleinRefCanvas` | INPUT |
+| 18 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 19 | Describe image | `EZImageDescribe` | INPUT |
+| 20 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -51,12 +51,16 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_FACADE["SHOT FACADE"]
   GSHOT_LIVING["SHOT LIVING"]
   GSHOT_TERRACE["SHOT TERRACE"]
   GSHOT_RAIN["SHOT RAIN"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -67,9 +71,9 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 10 | SHOT FACADE | `EZPromptJoin` | SHOT FACADE |
 | 11 | Positive FACADE | `CLIPTextEncode` | SHOT FACADE |
 | 12 | Sampler FACADE | `KSampler` | SHOT FACADE |
@@ -90,14 +94,14 @@ flowchart TB
 | 30 | Sampler RAIN | `KSampler` | SHOT RAIN |
 | 31 | Decode RAIN | `VAEDecode` | SHOT RAIN |
 | 32 | Save RAIN | `SaveImage` | SHOT RAIN |
-| 33 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT RAIN |
-| 34 | Quality | `EZQuality` | Ungrouped |
-| 35 | Format / platform | `EZImageFormat` | Ungrouped |
+| 33 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 34 | Quality | `EZQuality` | QUALITY |
+| 35 | Format / platform | `EZImageFormat` | SETTINGS |
 | 36 | Upscale still | `EZImageUpscale` | SHOT FACADE |
 | 37 | Upscale still | `EZImageUpscale` | SHOT LIVING |
 | 38 | Upscale still | `EZImageUpscale` | SHOT TERRACE |
 | 39 | Upscale still | `EZImageUpscale` | SHOT RAIN |
-| 40 | Check models | `EZModelCheck` | Ungrouped |
+| 40 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

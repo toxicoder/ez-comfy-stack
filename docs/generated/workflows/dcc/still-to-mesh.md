@@ -113,30 +113,30 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Operator note | `Note` | Ungrouped |
-| 2 | Load still pack | `EZDCCLoadStillPack` | Ungrouped |
-| 3 | Unload models (pass IMAGE) | `EZUnloadModels` | Ungrouped |
-| 4 | DINOv3 ViT-L | `CLIPVisionLoader` | Ungrouped |
-| 5 | TRELLIS.2 INT8 | `UNETLoader` | Ungrouped |
-| 6 | Shape VAE | `VAELoader` | Ungrouped |
-| 7 | Texture VAE | `VAELoader` | Ungrouped |
-| 8 | Trellis2Conditioning | `Trellis2Conditioning` | Ungrouped |
-| 9 | EmptyTrellis2LatentStructure | `EmptyTrellis2LatentStructure` | Ungrouped |
-| 10 | KSampler (structure) | `KSampler` | Ungrouped |
-| 11 | VaeDecodeStructureTrellis2 | `VaeDecodeStructureTrellis2` | Ungrouped |
-| 12 | Trellis2ShapeStage | `Trellis2ShapeStage` | Ungrouped |
-| 13 | KSampler (shape) | `KSampler` | Ungrouped |
-| 14 | Upsample 512 | `Trellis2UpsampleStage` | Ungrouped |
-| 15 | KSampler (512) | `KSampler` | Ungrouped |
-| 16 | VaeDecodeShapeTrellis | `VaeDecodeShapeTrellis` | Ungrouped |
-| 17 | Trellis2TextureStage | `Trellis2TextureStage` | Ungrouped |
-| 18 | KSampler (texture) | `KSampler` | Ungrouped |
-| 19 | VaeDecodeTextureTrellis | `VaeDecodeTextureTrellis` | Ungrouped |
-| 20 | PaintMesh | `PaintMesh` | Ungrouped |
-| 21 | Save GLB (_lab-mug) | `MeshToFile3D` | Ungrouped |
-| 22 | Occupancy gate (trellis) | `EZDCCOccupancyGate` | Ungrouped |
-| 23 | Quality | `EZQuality` | Ungrouped |
-| 24 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Operator note | `Note` | NOTE |
+| 2 | Load still pack | `EZDCCLoadStillPack` | INPUT |
+| 3 | Unload models (pass IMAGE) | `EZUnloadModels` | SETTINGS |
+| 4 | DINOv3 ViT-L | `CLIPVisionLoader` | MODEL |
+| 5 | TRELLIS.2 INT8 | `UNETLoader` | MODEL |
+| 6 | Shape VAE | `VAELoader` | MODEL |
+| 7 | Texture VAE | `VAELoader` | MODEL |
+| 8 | Trellis2Conditioning | `Trellis2Conditioning` | PROMPT |
+| 9 | EmptyTrellis2LatentStructure | `EmptyTrellis2LatentStructure` | SETTINGS |
+| 10 | KSampler (structure) | `KSampler` | SETTINGS |
+| 11 | VaeDecodeStructureTrellis2 | `VaeDecodeStructureTrellis2` | OUTPUT |
+| 12 | Trellis2ShapeStage | `Trellis2ShapeStage` | OUTPUT |
+| 13 | KSampler (shape) | `KSampler` | SETTINGS |
+| 14 | Upsample 512 | `Trellis2UpsampleStage` | OUTPUT |
+| 15 | KSampler (512) | `KSampler` | SETTINGS |
+| 16 | VaeDecodeShapeTrellis | `VaeDecodeShapeTrellis` | OUTPUT |
+| 17 | Trellis2TextureStage | `Trellis2TextureStage` | OUTPUT |
+| 18 | KSampler (texture) | `KSampler` | SETTINGS |
+| 19 | VaeDecodeTextureTrellis | `VaeDecodeTextureTrellis` | OUTPUT |
+| 20 | PaintMesh | `PaintMesh` | OUTPUT |
+| 21 | Save GLB (_lab-mug) | `MeshToFile3D` | OUTPUT |
+| 22 | Occupancy gate (trellis) | `EZDCCOccupancyGate` | INPUT |
+| 23 | Quality | `EZQuality` | QUALITY |
+| 24 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

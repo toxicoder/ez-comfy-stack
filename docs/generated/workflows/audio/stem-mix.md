@@ -82,9 +82,9 @@ flowchart LR
 | 4 | Include DX | `PrimitiveNode` | STEMS |
 | 5 | Include FX | `PrimitiveNode` | STEMS |
 | 6 | Include MX | `PrimitiveNode` | STEMS |
-| 7 | Save stem mix (host stem-mix.sh) | `SaveAudio` | Ungrouped |
-| 8 | Quality | `EZQuality` | Ungrouped |
-| 9 | Check models | `EZModelCheck` | Ungrouped |
+| 7 | Save stem mix (host stem-mix.sh) | `SaveAudio` | OUTPUT |
+| 8 | Quality | `EZQuality` | QUALITY |
+| 9 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

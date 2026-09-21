@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        588
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        234
+        742
       ],
       "size": [
         360,
@@ -78,7 +78,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        364
+        872
       ],
       "size": [
         400,
@@ -113,8 +113,8 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        80
+        976,
+        1080
       ],
       "size": [
         420,
@@ -160,8 +160,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        334
+        976,
+        1804
       ],
       "size": [
         420,
@@ -207,8 +207,8 @@
       "id": 6,
       "type": "EmptyLTXVLatentVideo",
       "pos": [
-        1080,
-        572
+        1444,
+        840
       ],
       "size": [
         300,
@@ -259,8 +259,8 @@
       "id": 7,
       "type": "LTXVConditioning",
       "pos": [
-        1580,
-        80
+        1444,
+        1748
       ],
       "size": [
         280,
@@ -312,8 +312,8 @@
       "id": 8,
       "type": "KSampler",
       "pos": [
-        1940,
-        80
+        1444,
+        2040
       ],
       "size": [
         320,
@@ -372,8 +372,8 @@
       "id": 9,
       "type": "VAEDecode",
       "pos": [
-        2340,
-        80
+        1852,
+        726
       ],
       "size": [
         240,
@@ -414,8 +414,8 @@
       "id": 10,
       "type": "SaveImage",
       "pos": [
-        2340,
-        572
+        1852,
+        1336
       ],
       "size": [
         280,
@@ -445,7 +445,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        546
+        1054
       ],
       "size": [
         360,
@@ -478,8 +478,8 @@
       "id": 12,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1080,
-        1026
+        1444,
+        1042
       ],
       "size": [
         300,
@@ -519,8 +519,8 @@
       "id": 13,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1580,
-        234
+        1444,
+        1902
       ],
       "size": [
         280,
@@ -561,8 +561,8 @@
       "id": 14,
       "type": "LTXVSeparateAVLatent",
       "pos": [
-        1940,
-        526
+        1444,
+        2374
       ],
       "size": [
         280,
@@ -607,7 +607,7 @@
       "type": "Note",
       "pos": [
         40,
-        1212
+        80
       ],
       "size": [
         960,
@@ -630,8 +630,8 @@
       "id": 16,
       "type": "VHS_VideoCombine",
       "pos": [
-        2660.0,
-        80
+        1852,
+        844
       ],
       "size": [
         320,
@@ -694,8 +694,8 @@
       "id": 17,
       "type": "EZLTXPromptEnhance",
       "pos": [
-        620,
-        80
+        976,
+        588
       ],
       "size": [
         420,
@@ -744,8 +744,8 @@
       "id": 18,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        2668,
-        572
+        1852,
+        588
       ],
       "size": [
         320,
@@ -786,8 +786,8 @@
       "id": 19,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620,
-        1644
+        976,
+        1312
       ],
       "size": [
         420,
@@ -826,8 +826,8 @@
     {
       "type": "LoadImage",
       "pos": [
-        1080,
-        1228
+        608,
+        588
       ],
       "size": [
         320,
@@ -866,8 +866,8 @@
     {
       "type": "LoadImage",
       "pos": [
-        1088,
-        1726
+        608,
+        974
       ],
       "size": [
         320,
@@ -906,8 +906,8 @@
     {
       "type": "LTXVAddGuide",
       "pos": [
-        1448,
-        1222
+        1444,
+        1244
       ],
       "size": [
         320,
@@ -982,8 +982,8 @@
     {
       "type": "LTXVAddGuide",
       "pos": [
-        1448,
-        1474
+        1444,
+        1496
       ],
       "size": [
         320,
@@ -1058,8 +1058,8 @@
     {
       "type": "LTXVCropGuides",
       "pos": [
-        2268,
-        914
+        1444,
+        2512
       ],
       "size": [
         280,
@@ -1118,8 +1118,8 @@
       "id": 25,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -1149,8 +1149,8 @@
       "id": 26,
       "type": "EZVideoFormat",
       "pos": [
-        1080,
-        774
+        1444,
+        588
       ],
       "size": [
         360,
@@ -1209,8 +1209,8 @@
       "id": 27,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1536,7 +1536,99 @@
       "STRING"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1000,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        560,
+        624
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        588,
+        532,
+        360,
+        800
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        956,
+        532,
+        460,
+        1476
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1424,
+        532,
+        400,
+        2110
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1832,
+        532,
+        360,
+        1118
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_profile": "motion/av/first-last-8s",

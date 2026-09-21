@@ -9,7 +9,7 @@
       "type": "Note",
       "pos": [
         40,
-        40
+        80
       ],
       "size": [
         720,
@@ -33,8 +33,8 @@
       "id": 2,
       "type": "LoadImage",
       "pos": [
-        40,
-        472
+        448,
+        588
       ],
       "size": [
         320,
@@ -72,8 +72,8 @@
       "id": 3,
       "type": "EZUnloadModels",
       "pos": [
-        408,
-        472
+        1124,
+        740
       ],
       "size": [
         280,
@@ -110,7 +110,7 @@
       "type": "CLIPVisionLoader",
       "pos": [
         40,
-        858
+        588
       ],
       "size": [
         360,
@@ -143,7 +143,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        1010
+        740
       ],
       "size": [
         360,
@@ -180,7 +180,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1172
+        902
       ],
       "size": [
         360,
@@ -215,7 +215,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1314
+        1044
       ],
       "size": [
         360,
@@ -247,8 +247,8 @@
       "id": 8,
       "type": "Trellis2Conditioning",
       "pos": [
-        736,
-        472
+        816,
+        588
       ],
       "size": [
         260,
@@ -297,8 +297,8 @@
       "id": 9,
       "type": "EmptyTrellis2LatentStructure",
       "pos": [
-        720,
-        634
+        1124,
+        588
       ],
       "size": [
         260,
@@ -329,8 +329,8 @@
       "id": 10,
       "type": "KSampler",
       "pos": [
-        1044,
-        472
+        1124,
+        892
       ],
       "size": [
         280,
@@ -389,8 +389,8 @@
       "id": 11,
       "type": "VaeDecodeStructureTrellis2",
       "pos": [
-        1380,
-        472
+        1452,
+        588
       ],
       "size": [
         280,
@@ -432,8 +432,8 @@
       "id": 12,
       "type": "Trellis2ShapeStage",
       "pos": [
-        1380,
-        634
+        1452,
+        750
       ],
       "size": [
         280,
@@ -494,8 +494,8 @@
       "id": 13,
       "type": "KSampler",
       "pos": [
-        1720,
-        472
+        1124,
+        1234
       ],
       "size": [
         280,
@@ -554,8 +554,8 @@
       "id": 14,
       "type": "Trellis2UpsampleStage",
       "pos": [
-        2060,
-        472
+        1452,
+        902
       ],
       "size": [
         300,
@@ -624,8 +624,8 @@
       "id": 15,
       "type": "KSampler",
       "pos": [
-        2420,
-        472
+        1124,
+        1576
       ],
       "size": [
         280,
@@ -685,8 +685,8 @@
       "id": 16,
       "type": "VaeDecodeShapeTrellis",
       "pos": [
-        2760,
-        472
+        1452,
+        1104
       ],
       "size": [
         280,
@@ -733,8 +733,8 @@
       "id": 17,
       "type": "Trellis2TextureStage",
       "pos": [
-        2760,
-        634
+        1452,
+        1256
       ],
       "size": [
         280,
@@ -793,8 +793,8 @@
       "id": 18,
       "type": "KSampler",
       "pos": [
-        3100,
-        472
+        1124,
+        1918
       ],
       "size": [
         280,
@@ -853,8 +853,8 @@
       "id": 19,
       "type": "VaeDecodeTextureTrellis",
       "pos": [
-        3440,
-        472
+        1452,
+        1428
       ],
       "size": [
         280,
@@ -899,8 +899,8 @@
       "id": 20,
       "type": "PaintMesh",
       "pos": [
-        3780,
-        472
+        1452,
+        1600
       ],
       "size": [
         240,
@@ -940,8 +940,8 @@
       "id": 21,
       "type": "MeshToFile3D",
       "pos": [
-        4080,
-        472
+        1452,
+        1752
       ],
       "size": [
         240,
@@ -975,8 +975,8 @@
       "id": 22,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1176,
+        80
       ],
       "size": [
         320.0,
@@ -1006,8 +1006,8 @@
       "id": 23,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        808,
+        80
       ],
       "size": [
         320.0,
@@ -1341,7 +1341,99 @@
       "MESH"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        760,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        400,
+        626
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        532,
+        360,
+        414
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        796,
+        532,
+        300,
+        180
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1104,
+        532,
+        320,
+        1700
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1432,
+        532,
+        340,
+        1324
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_note": "## optional/trellis2\n\nKlein still \u2192 native TRELLIS.2 INT8 mesh (Comfy core nodes).\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nLoadImage: a Klein still (`ez_still_*.png` or a clay plate). Unload models first (EZUnloadModels).\nUNET: `trellis_2_int8_convrot.safetensors`. CLIP vision: `dino_v3_vit_l.safetensors` (DINOv3 license, opt-in pack).\nLab upsample **512** (not 1536). TRELLIS-only canvas. Occupancy: trellis.\n\nDINOv3 is Meta's custom commercial-friendly license \u2014 not Apache. MIT TRELLIS weights without DINOv3 cannot Queue.\n",

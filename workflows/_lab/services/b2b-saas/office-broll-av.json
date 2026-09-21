@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        588
       ],
       "size": [
         520,
@@ -43,7 +43,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        234
+        742
       ],
       "size": [
         360,
@@ -76,7 +76,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        364
+        872
       ],
       "size": [
         400,
@@ -111,8 +111,8 @@
       "id": 4,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        80
+        608,
+        1080
       ],
       "size": [
         420,
@@ -158,8 +158,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        1088,
-        334
+        608,
+        1804
       ],
       "size": [
         420,
@@ -205,8 +205,8 @@
       "id": 6,
       "type": "EmptyLTXVLatentVideo",
       "pos": [
-        1080,
-        572
+        1076,
+        840
       ],
       "size": [
         300,
@@ -257,8 +257,8 @@
       "id": 7,
       "type": "LTXVConditioning",
       "pos": [
-        1580,
-        80
+        1076,
+        1382
       ],
       "size": [
         280,
@@ -308,8 +308,8 @@
       "id": 8,
       "type": "KSampler",
       "pos": [
-        1940,
-        80
+        1076,
+        1536
       ],
       "size": [
         320,
@@ -368,8 +368,8 @@
       "id": 9,
       "type": "VAEDecode",
       "pos": [
-        2340,
-        80
+        1484,
+        588
       ],
       "size": [
         240,
@@ -410,8 +410,8 @@
       "id": 10,
       "type": "SaveImage",
       "pos": [
-        2340,
-        572
+        1484,
+        1336
       ],
       "size": [
         280,
@@ -441,7 +441,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        546
+        1054
       ],
       "size": [
         360,
@@ -474,8 +474,8 @@
       "id": 12,
       "type": "LTXVEmptyLatentAudio",
       "pos": [
-        1080,
-        1026
+        1076,
+        1042
       ],
       "size": [
         300,
@@ -515,8 +515,8 @@
       "id": 13,
       "type": "LTXVConcatAVLatent",
       "pos": [
-        1580,
-        234
+        1076,
+        1244
       ],
       "size": [
         280,
@@ -557,8 +557,8 @@
       "id": 14,
       "type": "LTXVSeparateAVLatent",
       "pos": [
-        1940,
-        526
+        1076,
+        1870
       ],
       "size": [
         280,
@@ -603,7 +603,7 @@
       "type": "Note",
       "pos": [
         40,
-        1032
+        80
       ],
       "size": [
         960,
@@ -626,8 +626,8 @@
       "id": 16,
       "type": "VHS_VideoCombine",
       "pos": [
-        2660.0,
-        80
+        1484,
+        844
       ],
       "size": [
         320,
@@ -690,8 +690,8 @@
       "id": 17,
       "type": "EZLTXPromptEnhance",
       "pos": [
-        620,
-        80
+        608,
+        588
       ],
       "size": [
         420,
@@ -740,8 +740,8 @@
       "id": 18,
       "type": "LTXVAudioVAEDecode",
       "pos": [
-        2668,
-        572
+        1484,
+        706
       ],
       "size": [
         320,
@@ -782,8 +782,8 @@
       "id": 19,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        620,
-        1464
+        608,
+        1312
       ],
       "size": [
         420,
@@ -823,8 +823,8 @@
       "id": 20,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -854,8 +854,8 @@
       "id": 21,
       "type": "EZVideoFormat",
       "pos": [
-        1080,
-        774
+        1076,
+        588
       ],
       "size": [
         360,
@@ -914,8 +914,8 @@
       "id": 22,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1137,7 +1137,86 @@
       "STRING"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1000,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        560,
+        624
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "PROMPT",
+      "bounding": [
+        588,
+        532,
+        460,
+        1476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "SETTINGS",
+      "bounding": [
+        1056,
+        532,
+        400,
+        1448
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "OUTPUT",
+      "bounding": [
+        1464,
+        532,
+        360,
+        1118
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_profile": "services/b2b-saas/office-broll-av",

@@ -9,7 +9,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         40,
-        80
+        648
       ],
       "size": [
         360,
@@ -59,7 +59,7 @@
       "type": "EZPodcastScript",
       "pos": [
         500,
-        80
+        648
       ],
       "size": [
         420,
@@ -97,7 +97,7 @@
       "type": "EZPodcastDisclosure",
       "pos": [
         500,
-        654
+        1222
       ],
       "size": [
         420,
@@ -134,7 +134,7 @@
       "type": "EZKokoroTTS",
       "pos": [
         500,
-        976
+        1544
       ],
       "size": [
         420,
@@ -180,7 +180,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         48,
-        252
+        820
       ],
       "size": [
         400,
@@ -249,7 +249,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        1108
+        1676
       ],
       "size": [
         400,
@@ -302,7 +302,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         1440,
-        80
+        648
       ],
       "size": [
         320,
@@ -336,7 +336,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        232
+        800
       ],
       "size": [
         320,
@@ -396,7 +396,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1440,
-        966
+        1534
       ],
       "size": [
         280,
@@ -438,7 +438,7 @@
       "type": "AudioAdjustVolume",
       "pos": [
         1440,
-        1098
+        1666
       ],
       "size": [
         280,
@@ -477,7 +477,7 @@
       "type": "AudioMerge",
       "pos": [
         1860,
-        80
+        648
       ],
       "size": [
         320,
@@ -522,7 +522,7 @@
       "type": "SaveAudio",
       "pos": [
         1860,
-        272
+        840
       ],
       "size": [
         320,
@@ -552,7 +552,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1860,
-        614
+        1182
       ],
       "size": [
         320,
@@ -582,8 +582,8 @@
       "id": 14,
       "type": "Note",
       "pos": [
-        1860,
-        956
+        40,
+        80
       ],
       "size": [
         400,
@@ -606,8 +606,8 @@
       "id": 15,
       "type": "EZAceStepPromptEnhance",
       "pos": [
-        -400,
-        252
+        500,
+        1916
       ],
       "size": [
         400,
@@ -658,8 +658,8 @@
       "id": 16,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        856,
+        80
       ],
       "size": [
         320.0,
@@ -689,8 +689,8 @@
       "id": 17,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        488,
+        80
       ],
       "size": [
         320.0,
@@ -859,10 +859,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        440,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        468,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        592,
         448,
         1408
       ],
@@ -871,24 +897,24 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "PROMPT",
       "bounding": [
         480,
-        24,
+        592,
         460,
-        1296
+        1788
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "SETTINGS",
       "bounding": [
         1420,
-        24,
+        592,
         360,
         1198
       ],
@@ -897,13 +923,13 @@
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         1840,
-        24,
-        440,
-        1396
+        592,
+        360,
+        904
       ],
       "color": "#3f789e",
       "font_size": 24,
