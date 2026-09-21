@@ -30,6 +30,7 @@ from _lab_theme import (
 from _lab_paths import apply_lab_identity, lab_dest, lab_json, lab_rel_of
 from _stamp_app_mode import stamp_suite_graph
 from _wire_format import wire_lab_graph
+from _wire_background_cast import wire_background_cast
 from _wire_image_describe import wire_image_describe
 from _wire_prompt_enhance import append_note
 from _wire_upscale import wire_upscale
@@ -74,7 +75,7 @@ Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/te
 IMAGE_STUDIO_NOTE = """## stills/image-studio
 
 Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
-Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity), save prefix, and a locked instruction spliced into Enhance context.
+Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.
 Format / platform still sets pixels and Look recipe. Custom uses Width × Height (snapped to ÷16, max 2048). Quality does not change size.
 Example / reference is optional — Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
@@ -183,12 +184,26 @@ Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, th
 
 BACKGROUND_SWAP_NOTE = """## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+
+Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
 Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
 
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
+"""
+
+BACKGROUND_EDIT_NOTE = """## stills/background-edit
+
+Klein 4B **background edit**. Load a still. Restyle the environment in place: cartoon/cel, add or remove props, weather, grade. Keep the subject. Output PNG matches the source width and height. Prefix `ez_bg_edit`.
+
+Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero. Style applies to the environment only.
+
+Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
+
+VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507).
 """
 
 PACK_NOTE = """## stills/platform-pack
@@ -268,6 +283,7 @@ def _dump(path: Path, graph: dict) -> None:
     wire_lab_graph(graph)
     wire_upscale(graph, rel)
     wire_image_describe(graph)
+    wire_background_cast(graph)
     stamp_suite_graph(graph)
     append_note(graph)
     finalize_layout(graph)
@@ -1825,47 +1841,102 @@ def build_text_swap() -> dict:
     return graph
 
 
-def build_background_swap() -> dict:
-    graph = build_text_swap()
-    graph["id"] = "stills/background-swap"
+def _paint_background_job(
+    graph: dict,
+    *,
+    rel: str,
+    note: str,
+    description: str,
+    prefix: str,
+    mode: str,
+    prompt: str,
+    title: str,
+) -> dict:
+    """Stamp identity widgets on a cloned text-swap canvas.
+
+    Args:
+        graph: Serialized graph (mutated).
+        rel: ``extra.lab_rel`` id.
+        note: Operator note body.
+        description: ``extra.lab_description``.
+        prefix: SaveImage prefix.
+        mode: Klein Enhance mode.
+        prompt: Default Custom prompt.
+        title: SaveImage title.
+
+    Returns:
+        The same graph.
+    """
+    graph["id"] = rel
     graph["revision"] = 1
     extra = graph.setdefault("extra", {})
-    extra["lab_profile"] = "stills/background-swap"
-    extra["lab_note"] = BACKGROUND_SWAP_NOTE
-    extra["lab_description"] = (
-        "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. "
-        "Output matches source size. Prefix ez_bg_swap."
-    )
-    default_prompt = (
-        "Keep the subject from the reference. Replace only the background with a fog "
-        "harbor pier at blue hour. Match ground contact and wrap light. Original "
-        "characters only. Empty of new lettering."
-    )
+    extra["lab_profile"] = rel
+    extra["lab_note"] = note
+    extra["lab_description"] = description
+    extra.pop("lab_dcc", None)
     for node in graph["nodes"]:
         ntype = node.get("type")
         if ntype == "EZKleinPromptEnhance":
             node["widgets_values"] = [
                 "custom",
-                default_prompt,
+                prompt,
                 True,
-                "edit",
+                mode,
                 "match the source still",
                 "none",
-                "stills/background-swap",
+                rel,
             ]
-            node["title"] = "Klein Prompt Enhance (edit)"
+            node["title"] = f"Klein Prompt Enhance ({mode.replace('_', ' ')})"
         elif ntype == "CLIPTextEncode" and node.get("title") != "Negative":
-            node["widgets_values"] = [default_prompt]
+            node["widgets_values"] = [prompt]
         elif ntype == "SaveImage":
-            node["widgets_values"] = ["ez_bg_swap"]
-            node["title"] = "Save background swap"
+            node["widgets_values"] = [prefix]
+            node["title"] = title
         elif ntype == "LoadImage":
             node["widgets_values"] = ["example.png", "image"]
             node["title"] = "Source still"
         elif ntype == "Note":
-            node["widgets_values"] = [BACKGROUND_SWAP_NOTE]
+            node["widgets_values"] = [note]
             node["title"] = "Operator note"
     return graph
+
+
+def build_background_swap() -> dict:
+    graph = build_text_swap()
+    return _paint_background_job(
+        graph,
+        rel="stills/background-swap",
+        note=BACKGROUND_SWAP_NOTE,
+        description=(
+            "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. "
+            "Replace environment including ground. Prefix ez_bg_swap."
+        ),
+        prefix="ez_bg_swap",
+        mode="background_swap",
+        prompt=(
+            "Keep the subject from the reference. Replace only the background with a fog "
+            "harbor pier at blue hour. Match ground contact and wrap light. Original "
+            "characters only. Empty of new lettering."
+        ),
+        title="Save background swap",
+    )
+
+
+def build_background_edit() -> dict:
+    graph = build_text_swap()
+    return _paint_background_job(
+        graph,
+        rel="stills/background-edit",
+        note=BACKGROUND_EDIT_NOTE,
+        description=(
+            "Klein 4B background edit. LoadImage source still. Snap + ReferenceLatent. "
+            "Restyle the environment in place. Prefix ez_bg_edit."
+        ),
+        prefix="ez_bg_edit",
+        mode="background_edit",
+        prompt="cel-shaded ink and flat color",
+        title="Save background edit",
+    )
 
 
 def main() -> None:
@@ -1880,6 +1951,7 @@ def main() -> None:
     tweak = build_character_tweak()
     swap = build_text_swap()
     bg = build_background_swap()
+    bg_edit = build_background_edit()
     _dump(lab_json("stills/still-daily.json"), still)
     _dump(lab_dest("stills/still-studio"), studio)
     _dump(lab_dest("stills/image-studio"), image_studio)
@@ -1891,9 +1963,10 @@ def main() -> None:
     _dump(lab_dest("stills/character-tweak"), tweak)
     _dump(lab_dest("stills/text-swap"), swap)
     _dump(lab_dest("stills/background-swap"), bg)
+    _dump(lab_dest("stills/background-edit"), bg_edit)
     print(
         "wrote still-app, still-studio, image-studio, gif-loop, dream-house, dream-house-clay, "
-        "platform-pack, character draft/tweak, text-swap, background-swap"
+        "platform-pack, character draft/tweak, text-swap, background-swap, background-edit"
     )
 
 

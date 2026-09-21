@@ -266,6 +266,8 @@ WIDGET_ORDER = (
     "sample",
     "sources",
     "prompt",
+    "other_characters",
+    "background_characters",
     "format",
     "size_mode",
     "duration_s",
@@ -352,7 +354,9 @@ WIDGET_ORDER = (
     "filename",
 )
 HIDDEN_APP_WIDGETS = frozenset({"shot", "inventory", "lock", "catalog"})
-STYLE_IGNORED_MODES = frozenset({"i2v", "flf", "vace", "text_swap"})
+STYLE_IGNORED_MODES = frozenset(
+    {"i2v", "flf", "vace", "text_swap", "background_swap"}
+)
 NODE_MODE_ALWAYS = 0
 NODE_MODE_BYPASS = 4
 WIDGET_HEIGHTS = {
@@ -370,6 +374,8 @@ GENERIC_LABELS = {
     "quality": "Quality",
     "sample": "Sample prompt",
     "prompt": "Prompt",
+    "other_characters": "Other characters",
+    "background_characters": "Background characters",
     "size_mode": "Output size",
     "upscale": "Upscale",
     "enable": "Describe image",
@@ -503,6 +509,14 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
         "On: caption the source still so Rewrite prompt can name inventory. "
         "Off (default) skips the describe GGUF. Needs download-llm --tier describe."
     ),
+    "other_characters": (
+        "On: treat companions and group members as part of the background "
+        "(they get swapped or restyled). Off: keep them locked with the hero."
+    ),
+    "background_characters": (
+        "On: treat extras, crowd, and distant figures as part of the background. "
+        "Off: keep them as they appear."
+    ),
     "look": (
         "Optional Cinema Rack starter spliced into Rewrite prompt context. "
         "none leaves look to Style + Prompt."
@@ -629,8 +643,18 @@ def display_label(
     title = str(node.get("title") or "").strip()
     title_l = title.lower()
     if ntype == "EZKleinPromptEnhance" and name == "prompt":
-        if _enhance_mode(node) == "text_swap":
+        mode = _enhance_mode(node)
+        if mode == "text_swap":
             return "New lettering"
+        if mode == "background_swap":
+            return "New background"
+        if mode == "background_edit":
+            return "Background edit"
+    if ntype == "EZBackgroundCast":
+        return {
+            "other_characters": "Other characters",
+            "background_characters": "Background characters",
+        }.get(name, generic)
     if ntype == "EZImageFormat":
         return {
             "format": "Format / platform",
@@ -907,11 +931,33 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             "height": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
         }.get(name)
     if name == "prompt" and ntype == "EZKleinPromptEnhance" and node is not None:
-        if _enhance_mode(node) == "text_swap":
+        mode = _enhance_mode(node)
+        if mode == "text_swap":
             return (
                 "Replacement lettering, or Replace SALE with OPEN. "
                 "Rewrite prompt expands this into a glyph-lock instruction."
             )
+        if mode == "background_swap":
+            return (
+                "New place, or Keep the subject and replace the environment. "
+                "Rewrite prompt expands a place name into a full swap lock."
+            )
+        if mode == "background_edit":
+            return (
+                "How to restyle the environment (cartoonify, add lanterns, strip "
+                "clutter). Rewrite prompt keeps the subject and edits the plate."
+            )
+    if ntype == "EZBackgroundCast":
+        return {
+            "other_characters": (
+                "On: treat companions and group members as part of the background. "
+                "Off: keep them locked with the hero."
+            ),
+            "background_characters": (
+                "On: treat extras, crowd, and distant figures as part of the "
+                "background. Off: keep them as they appear."
+            ),
+        }.get(name)
     if name == "prompt" and ntype == "EZPodcastScript":
         return "Speaker A/B lines. Disclosure prepends the spoken bumper."
     if ntype == "EZPodcastLearn":
@@ -1200,10 +1246,19 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "stills/background-swap": _spec(
         "produce",
         "klein",
+        "stills/background-edit",
         "motion/silent/still-to-video-5s",
         "motion/av/still-to-video-8s",
         "stills/text-swap",
         hide_style=True,
+    ),
+    "stills/background-edit": _spec(
+        "produce",
+        "klein",
+        "stills/background-swap",
+        "motion/silent/still-to-video-5s",
+        "motion/av/still-to-video-8s",
+        "stills/text-swap",
     ),
     "stills/product-packshot": _spec("produce", "klein", "motion/av/product-hero"),
     "stills/instagram-square": _spec("produce", "klein"),
@@ -1812,6 +1867,9 @@ def _collect_raw_inputs(
                 raw.append((nid, "upscale", node))
         elif ntype == "EZImageDescribe":
             raw.append((nid, "enable", node))
+        elif ntype == "EZBackgroundCast":
+            raw.append((nid, "other_characters", node))
+            raw.append((nid, "background_characters", node))
         elif ntype == "EZImageFormat":
             raw.append((nid, "format", node))
             raw.append((nid, "size_mode", node))

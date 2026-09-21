@@ -459,6 +459,7 @@ tags: [workflows, generated, comfyui]
 
 | Graph | Page |
 | --- | --- |
+| `stills/background-edit` | [stills/background-edit.md](stills/background-edit.md) |
 | `stills/background-swap` | [stills/background-swap.md](stills/background-swap.md) |
 | `stills/banner-wide` | [stills/banner-wide.md](stills/banner-wide.md) |
 | `stills/before-after` | [stills/before-after.md](stills/before-after.md) |

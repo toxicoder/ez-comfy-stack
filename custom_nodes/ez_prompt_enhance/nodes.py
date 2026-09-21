@@ -51,9 +51,24 @@ from .cinema import (
     recipe_combo_ids,
     splice,
 )
+from .background import (
+    BACKGROUND_MODES,
+    format_background_cast,
+    wrap_background_prompt,
+)
 from .describe import describe_image, last_status as describe_last_status
 from .lettering import wrap_text_swap_prompt
 from .samples import CUSTOM, resolve_ace_sample, resolve_prompt, sample_combo_labels
+
+KLEIN_MODE_COMBO = [
+    "t2i",
+    "edit",
+    "identity",
+    "text_swap",
+    "background_swap",
+    "background_edit",
+]
+"""Klein Prompt Enhance mode combo; EZImageMode.enhance_mode must match."""
 
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
@@ -240,6 +255,7 @@ def _run(
     catalog: object = "",
     node_type: str = "",
     image_desc: str = "",
+    background_cast: str = "",
 ) -> dict[str, Any]:
     """Resolve sample, optionally rewrite, and pack CLIP text.
 
@@ -256,6 +272,7 @@ def _run(
         catalog: Hidden catalog widget.
         node_type: Comfy class name for family catalog fallback.
         image_desc: Optional still caption from EZImageDescribe.
+        background_cast: Optional compact token from EZBackgroundCast.
 
     Returns:
         Packed Enhance payload. LLM miss returns the original prompt.
@@ -269,6 +286,8 @@ def _run(
     )
     if mode == "text_swap":
         original = wrap_text_swap_prompt(original)
+    elif mode in BACKGROUND_MODES:
+        original = wrap_background_prompt(original, mode, background_cast)
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
     if caption.strip():
@@ -312,16 +331,22 @@ class EZKleinPromptEnhance:
 
     @classmethod
     def INPUT_TYPES(cls) -> ComfyInputTypes:
-        """Return Comfy widget specs for Klein t2i/edit/identity/text_swap.
+        """Return Comfy widget specs for Klein still/edit/lettering/background.
 
         Returns:
             Required and optional widget map.
         """
-        return _visual_input_types(
+        types = _visual_input_types(
             catalog_id="klein_t2i",
             duration_default="YouTube 16:9 still",
-            modes=["t2i", "edit", "identity", "text_swap"],
+            modes=list(KLEIN_MODE_COMBO),
         )
+        optional = dict(types.get("optional") or {})
+        optional["background_cast"] = _CONTEXT_INPUT
+        return {
+            "required": types["required"],
+            "optional": optional,
+        }
 
     # Comfy node registration fields.
     RETURN_TYPES = ("STRING",)
@@ -332,7 +357,9 @@ class EZKleinPromptEnhance:
     DESCRIPTION = (
         "Rewrites a lazy prompt for Klein 4B / Qwen3-4B with the on-box "
         "Qwen3-4B-Instruct-2507 GGUF. Modes: t2i, edit, identity (camera-free "
-        "bible), text_swap (glyph-lock lettering). Optional context is bible/research (ignored when Enhance is "
+        "bible), text_swap (glyph-lock lettering), background_swap (replace "
+        "environment including ground), background_edit (restyle environment). "
+        "Optional context is bible/research (ignored when Enhance is "
         "off). Enhance defaults on. After Queue the CLIP prompt box is the "
         "CLIP string; Enhance status explains passthrough. Fail-soft without "
         "a GGUF (run download-models)."
@@ -349,19 +376,22 @@ class EZKleinPromptEnhance:
         sample: object = CUSTOM,
         catalog: object = "",
         image_desc: str = "",
+        background_cast: str = "",
     ) -> dict[str, Any]:
         """Rewrite a Klein still/edit/identity prompt.
 
         Args:
             prompt: Custom textarea used when sample is Custom.
             enhance: BOOLEAN; off returns the resolved prompt (style may still apply).
-            mode: ``t2i``, ``edit``, ``identity``, or ``text_swap``.
+            mode: ``t2i``, ``edit``, ``identity``, ``text_swap``, ``background_swap``,
+                or ``background_edit``.
             duration_hint: Framing line (e.g. YouTube 16:9 still).
             style: Style catalog id or none.
             context: Optional bible/research STRING.
             sample: Sample combo label.
             catalog: Hidden catalog widget.
             image_desc: Optional still caption from EZImageDescribe.
+            background_cast: Optional compact token from EZBackgroundCast.
 
         Returns:
             Packed CLIP prompt and Enhance status.
@@ -372,6 +402,10 @@ class EZKleinPromptEnhance:
             name = "klein_identity"
         elif mode == "text_swap":
             name = "klein_text_swap"
+        elif mode == "background_swap":
+            name = "klein_background_swap"
+        elif mode == "background_edit":
+            name = "klein_background_edit"
         else:
             name = "klein_t2i"
         return _run(
@@ -386,6 +420,7 @@ class EZKleinPromptEnhance:
             catalog=catalog,
             node_type="EZKleinPromptEnhance",
             image_desc=image_desc,
+            background_cast=background_cast,
         )
 
 
@@ -1422,6 +1457,60 @@ class EZAudioRack:
         return (result.tags, result.lyrics, audio_format_notes(result))
 
 
+class EZBackgroundCast:
+    """BOOLEAN toggles for who counts as background on Klein background Apps."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for the two character-cast flags.
+
+        Returns:
+            Required BOOLEAN widget map.
+        """
+        flag = (
+            "BOOLEAN",
+            {"default": True, "label_on": "On", "label_off": "Off"},
+        )
+        return {
+            "required": {
+                "other_characters": flag,
+                "background_characters": flag,
+            }
+        }
+
+    # Comfy node contract.
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("cast",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    DESCRIPTION = (
+        "Choose whether companions and extras count as background on "
+        "background-swap and background-edit. On treats them as environment; "
+        "off keeps them locked with the main subject."
+    )
+
+    def run(
+        self,
+        other_characters: object = True,
+        background_characters: object = True,
+    ) -> tuple[str]:
+        """Serialize the two flags into a compact cast token.
+
+        Args:
+            other_characters: BOOLEAN; on treats companions as background.
+            background_characters: BOOLEAN; on treats extras as background.
+
+        Returns:
+            One-tuple with ``other=1,crowd=1`` style token.
+        """
+        return (
+            format_background_cast(
+                other_characters=other_characters,
+                background_characters=background_characters,
+            ),
+        )
+
+
 class EZImageDescribe:
     """Caption a still for Prompt Enhance. Off skips the VLM."""
 
@@ -1495,6 +1584,7 @@ class EZImageDescribe:
 # Comfy node registries.
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZImageDescribe": EZImageDescribe,
+    "EZBackgroundCast": EZBackgroundCast,
     "EZKleinPromptEnhance": EZKleinPromptEnhance,
     "EZWanPromptEnhance": EZWanPromptEnhance,
     "EZLTXPromptEnhance": EZLTXPromptEnhance,
@@ -1512,6 +1602,7 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZImageDescribe": "Describe image",
+    "EZBackgroundCast": "Background cast",
     "EZKleinPromptEnhance": "Klein Prompt Enhance",
     "EZWanPromptEnhance": "Wan Prompt Enhance",
     "EZLTXPromptEnhance": "LTX Prompt Enhance",

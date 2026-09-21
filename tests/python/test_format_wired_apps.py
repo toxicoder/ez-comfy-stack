@@ -88,6 +88,7 @@ def test_locked_apps_do_not_gain_a_format_picker() -> None:
         "stills/platform-pack",
         "stills/character-tweak",
         "stills/background-swap",
+        "stills/background-edit",
         "motion/silent/vace-join",
         "films/go-see",
         "inspire/prompt-forge",

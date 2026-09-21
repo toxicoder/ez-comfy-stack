@@ -32,7 +32,7 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
-Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity), save prefix, and a locked instruction spliced into Enhance context.
+Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.
 Format / platform still sets pixels and Look recipe. Custom uses Width × Height (snapped to ÷16, max 2048). Quality does not change size.
 Example / reference is optional — Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
@@ -554,7 +554,7 @@ Markdown-ish operator note.
 Format / platform sets pixels (Custom uses Width × Height). Quality does not change size.
 
 Universal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, …).
-Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity), save prefix, and a locked instruction spliced into Enhance context.
+Pick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.
 Format / platform still sets pixels and Look recipe. Custom uses Width × Height (snapped to ÷16, max 2048). Quality does not change size.
 Example / reference is optional — Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
@@ -579,6 +579,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -617,11 +618,11 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap / background_swap / background_edit.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still. background_swap = replace environment including ground. background_edit = restyle the environment in place.
 
 **This graph:** `t2i`
 
@@ -633,6 +634,8 @@ System prompt flavor.
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
 | `text_swap` | Replace lettering; source still owns look and size. |
+| `background_swap` | Replace backdrop, ground, and nearby set dressing. |
+| `background_edit` | Restyle or rewrite the environment; keep the subject. |
 
 #### `duration_hint`
 
@@ -1307,7 +1310,7 @@ Presence flag when unwired.
 
 ### `EZImageMode` — Creator mode
 
-Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.
+Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity/background_swap/background_edit plus a save prefix.
 
 !!! warning "Lab notes"
 
@@ -1317,7 +1320,7 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 | --- | --- | --- | --- |
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
 | `context` | out | `STRING` | Mode instruction plus incoming look splice. |
-| `enhance_mode` | out | `COMBO` | t2i, edit, identity, or text_swap — same combo as EZKleinPromptEnhance.mode. |
+| `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
 
 #### `category`
@@ -1369,7 +1372,7 @@ Creator preset.
 | `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
 | `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
 | `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
-| `Background swap` | Keep the subject from the reference still. Replace only the background and ground contact. |
+| `Background swap` | Keep the subject from the reference still. Replace the background, ground or floor, and set dressing near the subject. |
 | `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
 | `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
 | `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |

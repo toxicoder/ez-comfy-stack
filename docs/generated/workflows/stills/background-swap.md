@@ -1,6 +1,6 @@
 ---
 title: "stills/background-swap"
-description: "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. Output matches source size. Prefix ez_bg_swap."
+description: "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
 tags: [workflows, generated, comfyui, stills]
 ---
 
@@ -29,12 +29,14 @@ Occupancy **klein**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+
+Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
 Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
 
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
 ```
 
 ## How to Queue
@@ -59,37 +61,39 @@ flowchart LR
   N9["Save background swap"]
   N10["Operator note"]
   N11["Source still"]
-  N12["Klein Prompt Enhance (edit)"]
+  N12["Klein Prompt Enhance (background swap)"]
   N13["Negative Prompt Enhance"]
   N14["Quality"]
-  N18["Encode snapped source"]
-  N19["Positive + source plate"]
-  N20["Snap to Klein grid"]
-  N21["Match source size"]
-  N22["Upscale still"]
-  N23["Describe image"]
+  N18["Upscale still"]
+  N19["Describe image"]
+  N20["Encode snapped source"]
+  N21["Positive + source plate"]
+  N22["Snap to Klein grid"]
+  N23["Match source size"]
+  N24["Background cast"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
-  N3 --> N18
-  N4 --> N19
+  N3 --> N20
+  N4 --> N21
   N5 --> N7
   N7 --> N8
-  N8 --> N21
-  N11 --> N20
-  N11 --> N21
+  N8 --> N18
+  N8 --> N23
+  N11 --> N22
   N11 --> N23
+  N11 --> N19
   N12 --> N4
   N12 --> N13
   N13 --> N5
-  N18 --> N19
-  N18 --> N7
-  N19 --> N7
-  N20 --> N18
-  N21 --> N22
-  N22 --> N9
-  N23 --> N12
+  N19 --> N12
+  N20 --> N21
+  N20 --> N7
+  N21 --> N7
+  N22 --> N20
+  N23 --> N9
+  N24 --> N12
 ```
 
 ## Nodes on this graph
@@ -106,15 +110,16 @@ flowchart LR
 | 9 | Save background swap | `SaveImage` | Ungrouped |
 | 10 | Operator note | `Note` | Ungrouped |
 | 11 | Source still | `LoadImage` | Ungrouped |
-| 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | Ungrouped |
+| 12 | Klein Prompt Enhance (background swap) | `EZKleinPromptEnhance` | Ungrouped |
 | 13 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 14 | Quality | `EZQuality` | Ungrouped |
-| 18 | Encode snapped source | `VAEEncode` | Ungrouped |
-| 19 | Positive + source plate | `ReferenceLatent` | Ungrouped |
-| 20 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
-| 21 | Match source size | `EZMatchImageSize` | Ungrouped |
-| 22 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 23 | Describe image | `EZImageDescribe` | Ungrouped |
+| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 19 | Describe image | `EZImageDescribe` | Ungrouped |
+| 20 | Encode snapped source | `VAEEncode` | Ungrouped |
+| 21 | Positive + source plate | `ReferenceLatent` | Ungrouped |
+| 22 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
+| 23 | Match source size | `EZMatchImageSize` | Ungrouped |
+| 24 | Background cast | `EZBackgroundCast` | Ungrouped |
 
 ## Node parameter reference
 
@@ -496,17 +501,19 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## stills/background-swap Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG mat…`
+**This graph:** `## stills/background-swap Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and se…`
 
 ```text
 ## stills/background-swap
 
-Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace only the background and ground contact. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+Klein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.
+
+Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
 Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
 
 VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns look.
+Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
 ```
 
 ### `LoadImage` — Load Image
@@ -555,6 +562,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -593,13 +601,13 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap / background_swap / background_edit.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still. background_swap = replace environment including ground. background_edit = restyle the environment in place.
 
-**This graph:** `edit`
+**This graph:** `background_swap`
 
 **Other choices**
 
@@ -609,6 +617,8 @@ System prompt flavor.
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
 | `text_swap` | Replace lettering; source still owns look and size. |
+| `background_swap` | Replace backdrop, ground, and nearby set dressing. |
+| `background_edit` | Restyle or rewrite the environment; keep the subject. |
 
 #### `duration_hint`
 
@@ -1036,6 +1046,62 @@ custom freezes last overlay; lab restores graph defaults.
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
 
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`
+
 ### `VAEEncode` — VAE Encode
 
 Encode pixels to a latent (Klein edit / clay).
@@ -1095,58 +1161,34 @@ Resize a still to another image's exact width and height.
 
 No widgets. Sockets only.
 
-### `EZImageUpscale` — Upscale still
+### `EZBackgroundCast` — Background cast
 
-Optional lanczos upscale after a still decode. none passes the tensor through.
-
-!!! warning "Lab notes"
-
-    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Decoded still. |
-| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
-| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
-
-#### `upscale`
-
-Type `COMBO`. Range / default: none / 2x / 4x / 4K.
-
-Upscale mode.
-
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
-
-**This graph:** `none`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `none` | Pass through. |
-| `2x` | Double pixels. |
-| `4x` | Quadruple pixels. |
-| `4K` | Fit in a 4K box. |
-
-### `EZImageDescribe` — Describe image
-
-Caption a source still so Prompt Enhance can name inventory and lettering.
+Choose whether companions and extras count as background on Klein background Apps.
 
 !!! warning "Lab notes"
 
-    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+    stills/background-swap and stills/background-edit. On treats people as environment. Off keeps them locked with the hero. Defaults on.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
-| `caption` | out | `STRING` | Short caption, or empty. |
+| `cast` | out | `STRING` | Compact other=1,crowd=1 token for Klein Enhance. |
 
-#### `enable`
+#### `other_characters`
 
-Type `BOOLEAN`. Range / default: off.
+Type `BOOLEAN`. Range / default: on.
 
-Run the captioner.
+Treat companions as background.
 
-**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+**How it affects generation:** On: companions and group members are swapped or restyled with the environment. Off: keep them locked with the hero.
 
-**This graph:** `false`
+**This graph:** `true`
+
+#### `background_characters`
+
+Type `BOOLEAN`. Range / default: on.
+
+Treat extras as background.
+
+**How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
+
+**This graph:** `true`

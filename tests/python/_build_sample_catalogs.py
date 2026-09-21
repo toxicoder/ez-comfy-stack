@@ -1347,6 +1347,8 @@ def main() -> None:
         "stills/character-draft": "klein_character",
         "stills/character-tweak": "klein_character_edit",
         "stills/text-swap": "klein_text_swap",
+        "stills/background-swap": "klein_background_swap",
+        "stills/background-edit": "klein_background_edit",
         "stills/product-packshot": "klein_product",
         "stills/food-tabletop": "klein_food",
         "stills/talking-head": "ltx_talking",

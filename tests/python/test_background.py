@@ -1,0 +1,171 @@
+"""Klein background-swap / background-edit wrap and Enhance modes."""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+from unittest.mock import patch
+
+ROOT = Path(__file__).resolve().parents[2]
+CUSTOM = ROOT / "custom_nodes"
+if str(CUSTOM) not in sys.path:
+    sys.path.insert(0, str(CUSTOM))
+
+from ez_prompt_enhance.background import (  # noqa: E402
+    CROWD_OFF,
+    CROWD_ON,
+    EDIT_BARE,
+    OTHER_OFF,
+    OTHER_ON,
+    SWAP_BARE,
+    format_background_cast,
+    is_background_instruction,
+    parse_background_cast,
+    wrap_background_prompt,
+)
+from ez_prompt_enhance.cinema import addendum_kind  # noqa: E402
+from ez_prompt_enhance.client import (  # noqa: E402
+    REASON_STYLE_IGNORED_BG_SWAP,
+    STYLE_IGNORED_MODES,
+)
+from ez_prompt_enhance import client  # noqa: E402
+from ez_prompt_enhance.nodes import (  # noqa: E402
+    EZBackgroundCast,
+    EZKleinPromptEnhance,
+    KLEIN_MODE_COMBO,
+)
+
+
+def test_parse_and_format_background_cast() -> None:
+    assert parse_background_cast("") == (True, True)
+    assert parse_background_cast(None) == (True, True)
+    assert parse_background_cast("other=0,crowd=1") == (False, True)
+    assert parse_background_cast("other=false;crowd=no") == (False, False)
+    assert parse_background_cast("other_characters=on,background_characters=off") == (
+        True,
+        False,
+    )
+    assert parse_background_cast("foo=bar,crowd=0") == (True, False)
+    assert parse_background_cast("not-a-token") == (True, True)
+    assert format_background_cast() == "other=1,crowd=1"
+    assert format_background_cast(
+        other_characters=False, background_characters="yes"
+    ) == "other=0,crowd=1"
+    assert format_background_cast(other_characters=0, background_characters=None) == (
+        "other=0,crowd=1"
+    )
+    assert format_background_cast(other_characters="off", background_characters="no") == (
+        "other=0,crowd=0"
+    )
+    assert format_background_cast(other_characters=object()) == "other=0,crowd=1"
+
+
+def test_wrap_bare_place_and_passthrough_instructions() -> None:
+    wrapped = wrap_background_prompt("fog harbor pier", "background_swap")
+    assert wrapped.startswith(
+        SWAP_BARE.format(place="fog harbor pier")
+    )
+    assert OTHER_ON in wrapped
+    assert CROWD_ON in wrapped
+    edit = wrap_background_prompt("cel-shaded ink alley", "background_edit", "other=0,crowd=0")
+    assert edit.startswith(EDIT_BARE.format(place="cel-shaded ink alley"))
+    assert OTHER_OFF in edit
+    assert CROWD_OFF in edit
+    targeted = (
+        "Keep the subject from the reference. Replace only the background with a "
+        "fog harbor pier at blue hour."
+    )
+    spliced = wrap_background_prompt(targeted, "background_swap", "other=1,crowd=0")
+    assert spliced.startswith(targeted)
+    assert CROWD_OFF in spliced
+    already = f"{targeted} {OTHER_ON} {CROWD_ON}"
+    assert wrap_background_prompt(already, "background_swap", "other=0,crowd=0") == already
+    assert wrap_background_prompt("", "background_swap") == ""
+    assert wrap_background_prompt(None, "background_edit") == ""
+    assert wrap_background_prompt(42, "background_swap").startswith(
+        SWAP_BARE.format(place="42")
+    )
+    assert is_background_instruction(targeted)
+    assert is_background_instruction(
+        "Edit only the environment as prompted: add lanterns."
+    )
+    assert is_background_instruction("Replace the entire environment with a meadow.")
+    assert not is_background_instruction("fog harbor pier")
+    assert is_background_instruction("") is False
+
+
+def test_klein_background_modes_wrap_when_enhance_is_off() -> None:
+    klein = EZKleinPromptEnhance()
+    off = klein.run(
+        "fog harbor",
+        False,
+        "background_swap",
+        "match the source still",
+        background_cast="other=0,crowd=1",
+    )
+    text = off["result"][0]
+    assert "Replace the entire environment" in text
+    assert "fog harbor" in text
+    assert OTHER_OFF in text
+    assert CROWD_ON in text
+    styled_swap = klein.run(
+        "fog harbor",
+        False,
+        "background_swap",
+        "match the source still",
+        "photorealistic",
+    )
+    assert "Photoreal photograph" not in styled_swap["result"][0]
+    styled_edit = klein.run(
+        "cel alley",
+        False,
+        "background_edit",
+        "match the source still",
+        "photorealistic",
+    )
+    assert "Photoreal photograph" in styled_edit["result"][0]
+    assert "Edit only the environment" in styled_edit["result"][0]
+
+
+def test_klein_background_modes_wrap_before_enhance() -> None:
+    klein = EZKleinPromptEnhance()
+    with patch.object(client, "complete", return_value=("rewritten-bg", None)) as mock:
+        klein.run(
+            "OPEN TERRACE",
+            True,
+            "background_edit",
+            "match the source still",
+            "none",
+            background_cast="other=1,crowd=0",
+        )
+    user = mock.call_args[0][1]
+    assert "Edit only the environment as prompted: OPEN TERRACE." in user
+    assert CROWD_OFF in user
+    with patch.object(client, "complete", return_value=("rewritten-swap", None)) as mock:
+        klein.run("pier", True, "background_swap", "match the source still", "none")
+    system = mock.call_args[0][0]
+    assert "background-swap" in system.lower() or "new environment" in system.lower()
+
+
+def test_background_cast_node_and_mode_combo() -> None:
+    node = EZBackgroundCast()
+    assert node.run() == ("other=1,crowd=1",)
+    assert node.run(False, True) == ("other=0,crowd=1",)
+    types = EZBackgroundCast.INPUT_TYPES()["required"]
+    assert types["other_characters"][1]["default"] is True
+    assert types["background_characters"][1]["label_off"] == "Off"
+    klein = EZKleinPromptEnhance.INPUT_TYPES()
+    assert klein["required"]["mode"][0] == KLEIN_MODE_COMBO
+    assert "background_cast" in klein["optional"]
+    assert STYLE_IGNORED_MODES["background_swap"] == REASON_STYLE_IGNORED_BG_SWAP
+    assert "background_edit" not in STYLE_IGNORED_MODES
+    swap = client.load_system_prompt("klein_background_swap")
+    assert "ground" in swap.lower()
+    assert "cast" in swap.lower()
+    assert "cinema rack" not in swap.lower()
+    edit = client.load_system_prompt("klein_background_edit")
+    assert "cartoon" in edit.lower()
+    assert "environment" in edit.lower()
+    assert addendum_kind("klein_background_swap") == "skip"
+    assert addendum_kind("klein_t2i", "background_edit") == "skip"
+    assert addendum_kind("klein_background_edit") == "skip"

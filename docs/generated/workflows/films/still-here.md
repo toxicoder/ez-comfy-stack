@@ -869,6 +869,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -907,11 +908,11 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap / background_swap / background_edit.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still. background_swap = replace environment including ground. background_edit = restyle the environment in place.
 
 **This graph:** `identity`
 
@@ -923,6 +924,8 @@ System prompt flavor.
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
 | `text_swap` | Replace lettering; source still owns look and size. |
+| `background_swap` | Replace backdrop, ground, and nearby set dressing. |
+| `background_edit` | Restyle or rewrite the environment; keep the subject. |
 
 #### `duration_hint`
 

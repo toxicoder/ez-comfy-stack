@@ -230,7 +230,18 @@ def normalize_enhance_widgets(graph: dict[str, Any]) -> None:
                     mode = "identity"
                 elif "TEXT SWAP" in title.upper() or mode == "text_swap":
                     mode = "text_swap"
-                elif mode not in ("t2i", "edit", "identity", "text_swap"):
+                elif "BACKGROUND SWAP" in title.upper() or mode == "background_swap":
+                    mode = "background_swap"
+                elif "BACKGROUND EDIT" in title.upper() or mode == "background_edit":
+                    mode = "background_edit"
+                elif mode not in (
+                    "t2i",
+                    "edit",
+                    "identity",
+                    "text_swap",
+                    "background_swap",
+                    "background_edit",
+                ):
                     mode = "t2i"
             else:
                 if "flf" in graph_id or mode == "flf":
