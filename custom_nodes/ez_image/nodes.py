@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib
 from typing import TYPE_CHECKING, Any
 
 from .formats import (
@@ -44,6 +45,13 @@ CATEGORY = "ez-comfy/image"
 
 GRID = 16
 """Flux.2 Klein VAE spatial multiple (EmptyFlux2LatentImage step)."""
+FLUX2_LATENT_CHANNELS = 128
+"""Flux.2 / Klein empty-latent channel count (EmptyFlux2LatentImage)."""
+_EMPTY_FLUX2_MODULES = (
+    "comfy_extras.nodes_flux",
+    "comfy_extras.nodes_flux2",
+)
+"""Import paths that may define EmptyFlux2LatentImage."""
 
 
 def snap_dim(n: int, multiple: int = GRID) -> int:
@@ -98,6 +106,108 @@ def _resize_bhwc(image: Any, height: int, width: int) -> Any:
     return scaled.movedim(1, -1)
 
 
+class _LatentShape:
+    """Hermetic stand-in for a zeros Flux.2 latent tensor (shape only)."""
+
+    def __init__(self, shape: tuple[int, ...]) -> None:
+        """Record the empty-latent NCHW shape.
+
+        Args:
+            shape: ``(batch, 128, height // 16, width // 16)``.
+        """
+        self.shape = shape
+
+
+def _call_empty_flux2(width: int, height: int, batch_size: int) -> Any | None:
+    """Ask Comfy EmptyFlux2LatentImage for a zeros latent when the class exists.
+
+    Args:
+        width: Pixel width (already ÷16).
+        height: Pixel height (already ÷16).
+        batch_size: Latent batch.
+
+    Returns:
+        LATENT dict, or None when Comfy is missing or the call fails.
+    """
+    for mod_name in _EMPTY_FLUX2_MODULES:
+        try:
+            mod = importlib.import_module(mod_name)
+            cls = getattr(mod, "EmptyFlux2LatentImage", None)
+        except Exception:  # noqa: BLE001 — hermetic tests / older Comfy
+            continue
+        if cls is None:
+            continue
+        try:
+            node = cls()
+        except Exception:  # noqa: BLE001 — constructor may need Comfy
+            continue
+        for method in ("execute", "generate", "run"):
+            fn = getattr(node, method, None)
+            if not callable(fn):
+                continue
+            try:
+                result = fn(width, height, batch_size)
+            except TypeError:
+                try:
+                    result = fn(width=width, height=height, batch_size=batch_size)
+                except Exception:  # noqa: BLE001 — signature mismatch
+                    continue
+            except Exception:  # noqa: BLE001 — fail-soft to zeros fallback
+                continue
+            if isinstance(result, tuple):
+                return result[0]
+            return result
+    return None
+
+
+def _zeros_flux2_latent(width: int, height: int, batch_size: int) -> dict[str, Any]:
+    """Build a zeros Flux.2 latent dict without requiring Comfy.
+
+    Args:
+        width: Pixel width (already ÷16).
+        height: Pixel height (already ÷16).
+        batch_size: Latent batch.
+
+    Returns:
+        ``{"samples": tensor_or_shape}`` with NCHW ``(B, 128, H/16, W/16)``.
+    """
+    spatial_h = max(1, int(height) // GRID)
+    spatial_w = max(1, int(width) // GRID)
+    shape = (int(batch_size), FLUX2_LATENT_CHANNELS, spatial_h, spatial_w)
+    try:
+        import torch
+    except Exception:  # noqa: BLE001 — hermetic tests
+        torch = None
+    if torch is not None:
+        zeros = getattr(torch, "zeros", None)
+        if callable(zeros):
+            return {"samples": zeros(shape)}
+    return {"samples": _LatentShape(shape)}
+
+
+def empty_flux2_latent(width: int, height: int, batch_size: int = 1) -> dict[str, Any]:
+    """Return an empty Flux.2 latent for ``width``×``height``.
+
+    Prefers Comfy ``EmptyFlux2LatentImage``. Falls back to zeros (torch when
+    present, shape-only otherwise).
+
+    Args:
+        width: Pixel width.
+        height: Pixel height.
+        batch_size: Latent batch.
+
+    Returns:
+        LATENT dict with a ``samples`` tensor.
+    """
+    snap_w = snap_dim(int(width))
+    snap_h = snap_dim(int(height))
+    batch = max(1, int(batch_size))
+    comfy = _call_empty_flux2(snap_w, snap_h, batch)
+    if isinstance(comfy, dict):
+        return comfy
+    return _zeros_flux2_latent(snap_w, snap_h, batch)
+
+
 class EZSnapImage:
     """Scale a still down to the largest Flux.2 Klein ÷16 canvas that fits."""
 
@@ -138,6 +248,43 @@ class EZSnapImage:
         if snap_h == height and snap_w == width:
             return (image,)
         return (_resize_bhwc(image, snap_h, snap_w),)
+
+
+class EZEmptyFlux2FromImage:
+    """Allocate an empty Flux.2 latent matching a still's snapped W×H."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required IMAGE input.
+        """
+        return {"required": {"image": ("IMAGE",)}}
+
+    # Comfy node contract.
+    RETURN_TYPES = ("LATENT",)
+    RETURN_NAMES = ("latent",)
+    FUNCTION = "run"
+    CATEGORY = CATEGORY
+    DESCRIPTION = (
+        "Empty Flux.2 noise canvas at the still's width and height snapped to "
+        "÷16. stills/background-swap uses this as KSampler.latent_image so "
+        "the encoded source is only a ReferenceLatent, not the denoise start."
+    )
+
+    def run(self, image: Any) -> tuple[Any]:
+        """Build an empty Flux.2 latent for ``image``.
+
+        Args:
+            image: Comfy IMAGE tensor (BHWC).
+
+        Returns:
+            One-tuple with the empty LATENT dict.
+        """
+        height = int(image.shape[1])
+        width = int(image.shape[2])
+        return (empty_flux2_latent(width, height, 1),)
 
 
 class EZMatchImageSize:
@@ -466,6 +613,7 @@ class EZImageUpscale:
 
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZSnapImage": EZSnapImage,
+    "EZEmptyFlux2FromImage": EZEmptyFlux2FromImage,
     "EZMatchImageSize": EZMatchImageSize,
     "EZImageFormat": EZImageFormat,
     "EZVideoFormat": EZVideoFormat,
@@ -475,6 +623,7 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
 
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZSnapImage": "Snap image (div 16)",
+    "EZEmptyFlux2FromImage": "Empty Flux.2 from image",
     "EZMatchImageSize": "Match image size",
     "EZImageFormat": "Format / platform",
     "EZVideoFormat": "Format / platform (video)",

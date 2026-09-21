@@ -1,6 +1,6 @@
 ---
 title: "stills/background-swap"
-description: "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
+description: "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
 tags: [workflows, generated, comfyui, stills]
 ---
 
@@ -33,10 +33,11 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
+Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ## How to Queue
@@ -72,6 +73,7 @@ flowchart LR
   N23["Match source size"]
   N24["Background cast"]
   N25["Check models"]
+  N26["Empty Klein canvas"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -90,11 +92,12 @@ flowchart LR
   N13 --> N5
   N19 --> N12
   N20 --> N21
-  N20 --> N7
   N21 --> N7
   N22 --> N20
+  N22 --> N26
   N23 --> N9
   N24 --> N12
+  N26 --> N7
 ```
 
 ## Nodes on this graph
@@ -122,6 +125,7 @@ flowchart LR
 | 23 | Match source size | `EZMatchImageSize` | SETTINGS |
 | 24 | Background cast | `EZBackgroundCast` | SETTINGS |
 | 25 | Check models | `EZModelCheck` | QUALITY |
+| 26 | Empty Klein canvas | `EZEmptyFlux2FromImage` | SETTINGS |
 
 ## Node parameter reference
 
@@ -296,8 +300,8 @@ Prompt encoded by CLIP.
 
 | Instance | Value |
 | --- | --- |
-| Positive | `Keep the subject from the reference. Replace only the background with a fog har…` |
-| Negative | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Positive | `Keep the subject from the reference. Replace the entire environment — backdrop,…` |
+| Negative | `duplicate limbs, watermarks, oversharpen halos, muddy blacks, melted geometry, …` |
 
 ### `KSampler` — KSampler
 
@@ -513,10 +517,11 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
+Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ### `LoadImage` — Load Image
@@ -586,10 +591,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering.`
+**This graph:** `Keep the subject from the reference. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject — with a fog harbor pier at blue hour. Match grou…`
 
 ```text
-Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering.
+Keep the subject from the reference. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject — with a fog harbor pier at blue hour. Match ground contact, scale, and wrap light. Original characters only. Empty of new lettering.
 ```
 
 #### `enhance`
@@ -976,10 +981,10 @@ Negative seed (artifacts, not style).
 
 **How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
 
-**This graph:** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
+**This graph:** `duplicate limbs, watermarks, oversharpen halos, muddy blacks, melted geometry, muddy textures`
 
 ```text
-game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
+duplicate limbs, watermarks, oversharpen halos, muddy blacks, melted geometry, muddy textures
 ```
 
 #### `enhance`
@@ -1103,7 +1108,7 @@ Run the captioner.
 
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
-**This graph:** `false`
+**This graph:** `true`
 
 ### `VAEEncode` — VAE Encode
 
@@ -1139,7 +1144,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 !!! warning "Lab notes"
 
-    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
+    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -1213,3 +1218,18 @@ Last check result.
 **How it affects generation:** JS overwrites after Check models. Queue ignores this node.
 
 **This graph:** `Click Check models. Queue does not run this node.`
+
+### `EZEmptyFlux2FromImage` — Empty Flux.2 from image
+
+Allocate an empty Flux.2 latent matching a still's snapped width and height.
+
+!!! warning "Lab notes"
+
+    stills/background-swap uses this as KSampler.latent_image so the encoded source is only a ReferenceLatent.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Snapped still. |
+| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
+
+No widgets. Sockets only.

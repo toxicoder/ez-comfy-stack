@@ -188,10 +188,11 @@ Klein 4B **background swap**. Load a still. Pick a sample place or type a custom
 
 Other characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.
 
-Do not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.
+Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-VAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
-Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden — the source still owns the subject's look.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
+Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
 """
 
 BACKGROUND_EDIT_NOTE = """## stills/background-edit
@@ -284,6 +285,8 @@ def _dump(path: Path, graph: dict) -> None:
     wire_upscale(graph, rel)
     wire_image_describe(graph)
     wire_background_cast(graph)
+    if rel == "stills/background-swap":
+        _paint_background_swap_defaults(graph)
     stamp_suite_graph(graph)
     append_note(graph)
     finalize_layout(graph)
@@ -1777,6 +1780,117 @@ def _rewire_text_swap_canvas(graph: dict) -> None:
     graph["last_link_id"] = link_match_save
 
 
+def _rewire_background_swap_canvas(graph: dict) -> None:
+    """Sampler uses empty Flux.2 latent of source size; encode stays on ReferenceLatent.
+
+    Args:
+        graph: Serialized graph (mutated).
+    """
+    from _build_dcc_workflows import _add_link, _append_out_link
+    from _wire_prompt_enhance import next_ids
+
+    if any(node.get("type") == "EZEmptyFlux2FromImage" for node in graph.get("nodes") or []):
+        return
+    snap = next(node for node in graph["nodes"] if node.get("type") == "EZSnapImage")
+    sampler = next(node for node in graph["nodes"] if node.get("type") == "KSampler")
+
+    def _slot(node: dict, name: str) -> int:
+        for index, item in enumerate(node.get("inputs") or []):
+            if item.get("name") == name:
+                return index
+        raise KeyError(name)
+
+    latent_in = next(
+        item for item in sampler["inputs"] if item.get("name") == "latent_image"
+    )
+    old = latent_in.get("link")
+    if old is not None:
+        old_id = int(old)
+        graph["links"] = [
+            link for link in graph.get("links") or [] if int(link[0]) != old_id
+        ]
+        latent_in["link"] = None
+        live = {int(link[0]) for link in graph.get("links") or []}
+        for other in graph["nodes"]:
+            for out in other.get("outputs") or []:
+                links = out.get("links")
+                if isinstance(links, list):
+                    out["links"] = [lid for lid in links if int(lid) in live]
+
+    nid, lid = next_ids(graph)
+    empty_id = nid
+    link_snap_empty = lid
+    link_empty_samp = lid + 1
+    graph["nodes"].append(
+        {
+            "id": empty_id,
+            "type": "EZEmptyFlux2FromImage",
+            "pos": [1284, 740],
+            "size": [280, 60],
+            "flags": {},
+            "order": 20,
+            "mode": 0,
+            "inputs": [{"name": "image", "type": "IMAGE", "link": link_snap_empty}],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [link_empty_samp],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZEmptyFlux2FromImage"},
+            "widgets_values": [],
+            "title": "Empty Klein canvas",
+        }
+    )
+    latent_in["link"] = link_empty_samp
+    _append_out_link(snap, 0, link_snap_empty)
+    _add_link(
+        graph,
+        link_snap_empty,
+        int(snap["id"]),
+        0,
+        empty_id,
+        0,
+        "IMAGE",
+    )
+    _add_link(
+        graph,
+        link_empty_samp,
+        empty_id,
+        0,
+        int(sampler["id"]),
+        _slot(sampler, "latent_image"),
+        "LATENT",
+    )
+    graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), empty_id)
+    graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), link_empty_samp)
+
+
+def _paint_background_swap_defaults(graph: dict) -> None:
+    """Describe on; drop game-engine / illustration negatives on swap.
+
+    Args:
+        graph: Serialized graph (mutated).
+    """
+    neg = (
+        "duplicate limbs, watermarks, oversharpen halos, muddy blacks, "
+        "melted geometry, muddy textures"
+    )
+    for node in graph.get("nodes") or []:
+        ntype = node.get("type")
+        if ntype == "EZImageDescribe":
+            node["widgets_values"] = [True]
+        elif ntype == "EZNegativePromptEnhance":
+            values = list(node.get("widgets_values") or [])
+            if values:
+                values[0] = neg
+                node["widgets_values"] = values
+        elif ntype == "CLIPTextEncode" and node.get("title") == "Negative":
+            node["widgets_values"] = [neg]
+
+
 def _strip_cloned_canvas_helpers(graph: dict) -> None:
     """Drop Format / optional-ref nodes cloned from still-hero."""
     from _wire_prompt_enhance import remove_node
@@ -1903,23 +2017,27 @@ def _paint_background_job(
 
 def build_background_swap() -> dict:
     graph = build_text_swap()
-    return _paint_background_job(
+    graph = _paint_background_job(
         graph,
         rel="stills/background-swap",
         note=BACKGROUND_SWAP_NOTE,
         description=(
-            "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. "
-            "Replace environment including ground. Prefix ez_bg_swap."
+            "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas "
+            "plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
         ),
         prefix="ez_bg_swap",
         mode="background_swap",
         prompt=(
-            "Keep the subject from the reference. Replace only the background with a fog "
-            "harbor pier at blue hour. Match ground contact and wrap light. Original "
-            "characters only. Empty of new lettering."
+            "Keep the subject from the reference. Replace the entire environment — "
+            "backdrop, sky, architecture, ground or floor, and set dressing near the "
+            "subject — with a fog harbor pier at blue hour. Match ground contact, "
+            "scale, and wrap light. Original characters only. Empty of new lettering."
         ),
         title="Save background swap",
     )
+    _rewire_background_swap_canvas(graph)
+    _paint_background_swap_defaults(graph)
+    return graph
 
 
 def build_background_edit() -> dict:

@@ -940,14 +940,24 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             )
         if mode == "background_swap":
             return (
-                "New place, or Keep the subject and replace the environment. "
-                "Rewrite prompt expands a place name into a full swap lock."
+                "New place, or Keep the subject and replace the entire "
+                "environment including ground. Named samples skip the rewriter."
             )
         if mode == "background_edit":
             return (
                 "How to restyle the environment (cartoonify, add lanterns, strip "
                 "clutter). Rewrite prompt keeps the subject and edits the plate."
             )
+    if ntype == "EZImageDescribe" and name == "enable":
+        values = list((node or {}).get("widgets_values") or [])
+        on_default = bool(values[0]) if values else False
+        on_bit = "On (default)" if on_default else "On"
+        off_bit = "Off (default)" if not on_default else "Off"
+        return (
+            f"{on_bit}: caption the source still so Rewrite prompt can name "
+            f"inventory. {off_bit} skips the describe GGUF. Needs "
+            "download-llm --tier describe."
+        )
     if ntype == "EZBackgroundCast":
         return {
             "other_characters": (

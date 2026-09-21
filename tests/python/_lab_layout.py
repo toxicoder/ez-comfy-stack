@@ -141,6 +141,7 @@ _SETTINGS_TYPES = frozenset(
         "EZBackgroundCast",
         "EZMatchImageSize",
         "EZSnapImage",
+        "EZEmptyFlux2FromImage",
     }
 )
 _OUTPUT_TYPES = frozenset(

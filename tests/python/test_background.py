@@ -15,12 +15,19 @@ from ez_prompt_enhance.background import (  # noqa: E402
     CROWD_OFF,
     CROWD_ON,
     EDIT_BARE,
+    ENTIRE_ENV_VERB,
     OTHER_OFF,
     OTHER_ON,
+    REASON_PRECISE_BACKGROUND,
+    RECONSTRUCT_BARE,
     SWAP_BARE,
+    VOXEL_TRAILER,
     format_background_cast,
     is_background_instruction,
+    is_reconstruction,
     parse_background_cast,
+    splice_source_caption,
+    strengthen_swap_instruction,
     wrap_background_prompt,
 )
 from ez_prompt_enhance.cinema import addendum_kind  # noqa: E402
@@ -77,10 +84,15 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
         "fog harbor pier at blue hour."
     )
     spliced = wrap_background_prompt(targeted, "background_swap", "other=1,crowd=0")
-    assert spliced.startswith(targeted)
+    assert ENTIRE_ENV_VERB in spliced
+    assert "fog harbor pier" in spliced
+    assert "replace only the background" not in spliced.casefold()
     assert CROWD_OFF in spliced
     already = f"{targeted} {OTHER_ON} {CROWD_ON}"
-    assert wrap_background_prompt(already, "background_swap", "other=0,crowd=0") == already
+    locked = wrap_background_prompt(already, "background_swap", "other=0,crowd=0")
+    assert ENTIRE_ENV_VERB in locked
+    assert OTHER_ON in locked
+    assert locked.count(OTHER_ON) == 1
     assert wrap_background_prompt("", "background_swap") == ""
     assert wrap_background_prompt(None, "background_edit") == ""
     assert wrap_background_prompt(42, "background_swap").startswith(
@@ -92,11 +104,27 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
         if item.id == "voxel-block-world"
     )
     assert is_background_instruction(cubic.prompt)
+    assert is_reconstruction(cubic.prompt)
     cubic_wrap = wrap_background_prompt(cubic.prompt, "background_swap")
     assert cubic_wrap.startswith(cubic.prompt)
     assert OTHER_ON in cubic_wrap
     assert CROWD_ON in cubic_wrap
     assert "with: Keep the subject" not in cubic_wrap
+    assert SWAP_BARE.format(place=cubic.prompt) not in cubic_wrap
+    cubes = wrap_background_prompt("voxel cubes", "background_swap")
+    assert cubes.startswith(RECONSTRUCT_BARE.format(place="voxel cubes"))
+    assert VOXEL_TRAILER in wrap_background_prompt(
+        "Keep the subject from the reference. Rebuild this place as a block world.",
+        "background_swap",
+    )
+    assert strengthen_swap_instruction("") == ""
+    assert strengthen_swap_instruction("fog harbor") == "fog harbor"
+    assert is_reconstruction("") is False
+    assert splice_source_caption("keep subject", "") == "keep subject"
+    assert splice_source_caption("", "a dock") == ""
+    spliced_cap = splice_source_caption("keep subject", "a red coat on a dock")
+    assert spliced_cap.endswith("Source still: a red coat on a dock")
+    assert splice_source_caption(spliced_cap, "ignored") == spliced_cap
     assert is_background_instruction(targeted)
     assert is_background_instruction(
         "Edit only the environment as prompted: add lanterns."
@@ -157,6 +185,34 @@ def test_klein_background_modes_wrap_before_enhance() -> None:
         klein.run("pier", True, "background_swap", "match the source still", "none")
     system = mock.call_args[0][0]
     assert "background-swap" in system.lower() or "new environment" in system.lower()
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    with patch.object(client, "complete", return_value=("rewritten-cubic", None)) as mock:
+        packed = klein.run(
+            cubic.prompt,
+            True,
+            "background_swap",
+            "match the source still",
+            "none",
+            image_desc="wet dock, red coat, unmarked hull",
+        )
+    mock.assert_not_called()
+    text = packed["result"][0]
+    assert cubic.prompt in text
+    assert "Source still: wet dock, red coat, unmarked hull" in text
+    assert packed["ui"]["passthrough"][0] == REASON_PRECISE_BACKGROUND
+    off = klein.run(
+        cubic.prompt,
+        False,
+        "background_swap",
+        "match the source still",
+        image_desc="a red coat on a dock",
+    )
+    assert off["ui"]["passthrough"][0] == "enhance off"
+    assert "Source still: a red coat on a dock" in off["result"][0]
 
 
 def test_background_cast_node_and_mode_combo() -> None:
@@ -177,8 +233,8 @@ def test_background_cast_node_and_mode_combo() -> None:
     assert "cinema rack" not in swap.lower()
     swap_l = swap.lower()
     assert "photographed place" in swap_l
-    assert "texture-pack" in swap_l
-    assert "cube water" in swap_l
+    assert "texel" in swap_l or "texture-pack" in swap_l
+    assert "generic cube biome" in swap_l
     assert "minecraft" not in swap_l
     edit = client.load_system_prompt("klein_background_edit")
     assert "cartoon" in edit.lower()

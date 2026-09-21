@@ -1,8 +1,8 @@
 {
   "id": "background-swap",
-  "revision": 2,
-  "last_node_id": 25,
-  "last_link_id": 43,
+  "revision": 3,
+  "last_node_id": 26,
+  "last_link_id": 45,
   "nodes": [
     {
       "id": 1,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        840
+        972
       ],
       "size": [
         360,
@@ -151,7 +151,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering."
+        "Keep the subject from the reference. Replace the entire environment \u2014 backdrop, sky, architecture, ground or floor, and set dressing near the subject \u2014 with a fog harbor pier at blue hour. Match ground contact, scale, and wrap light. Original characters only. Empty of new lettering."
       ],
       "title": "Positive"
     },
@@ -198,7 +198,7 @@
         "Node name for S&R": "CLIPTextEncode"
       },
       "widgets_values": [
-        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks"
+        "duplicate limbs, watermarks, oversharpen halos, muddy blacks, melted geometry, muddy textures"
       ],
       "title": "Negative"
     },
@@ -207,7 +207,7 @@
       "type": "KSampler",
       "pos": [
         1284,
-        1106
+        1238
       ],
       "size": [
         320,
@@ -235,7 +235,7 @@
         {
           "name": "latent_image",
           "type": "LATENT",
-          "link": 38
+          "link": 45
         }
       ],
       "outputs": [
@@ -310,7 +310,7 @@
       "type": "SaveImage",
       "pos": [
         1652,
-        778
+        840
       ],
       "size": [
         280,
@@ -355,7 +355,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden \u2014 the source still owns the subject's look.\n"
+        "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n"
       ],
       "title": "Operator note"
     },
@@ -451,7 +451,7 @@
       },
       "widgets_values": [
         "custom",
-        "Keep the subject from the reference. Replace only the background with a fog harbor pier at blue hour. Match ground contact and wrap light. Original characters only. Empty of new lettering.",
+        "Keep the subject from the reference. Replace the entire environment \u2014 backdrop, sky, architecture, ground or floor, and set dressing near the subject \u2014 with a fog harbor pier at blue hour. Match ground contact, scale, and wrap light. Original characters only. Empty of new lettering.",
         true,
         "background_swap",
         "match the source still",
@@ -495,7 +495,7 @@
         "Node name for S&R": "EZNegativePromptEnhance"
       },
       "widgets_values": [
-        "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
+        "duplicate limbs, watermarks, oversharpen halos, muddy blacks, melted geometry, muddy textures",
         true,
         "klein"
       ],
@@ -618,7 +618,7 @@
         "Node name for S&R": "EZImageDescribe"
       },
       "widgets_values": [
-        false
+        true
       ],
       "title": "Describe image"
     },
@@ -627,7 +627,7 @@
       "type": "VAEEncode",
       "pos": [
         1284,
-        802
+        934
       ],
       "size": [
         240,
@@ -653,8 +653,7 @@
           "name": "LATENT",
           "type": "LATENT",
           "links": [
-            34,
-            38
+            34
           ],
           "slot_index": 0
         }
@@ -670,7 +669,7 @@
       "type": "ReferenceLatent",
       "pos": [
         1284,
-        954
+        1086
       ],
       "size": [
         280,
@@ -734,7 +733,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            37
+            37,
+            44
           ],
           "slot_index": 0
         }
@@ -750,7 +750,7 @@
       "type": "EZMatchImageSize",
       "pos": [
         1284,
-        1440
+        1572
       ],
       "size": [
         280,
@@ -861,6 +861,43 @@
         "Click Check models. Queue does not run this node."
       ],
       "title": "Check models"
+    },
+    {
+      "id": 26,
+      "type": "EZEmptyFlux2FromImage",
+      "pos": [
+        1284,
+        802
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 44
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            45
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZEmptyFlux2FromImage"
+      },
+      "widgets_values": [],
+      "title": "Empty Klein canvas"
     }
   ],
   "links": [
@@ -1001,14 +1038,6 @@
       "IMAGE"
     ],
     [
-      38,
-      20,
-      0,
-      7,
-      3,
-      "LATENT"
-    ],
-    [
       39,
       8,
       0,
@@ -1047,6 +1076,22 @@
       12,
       2,
       "STRING"
+    ],
+    [
+      44,
+      22,
+      0,
+      26,
+      0,
+      "IMAGE"
+    ],
+    [
+      45,
+      26,
+      0,
+      7,
+      3,
+      "LATENT"
     ]
   ],
   "groups": [
@@ -1083,7 +1128,7 @@
         20,
         452,
         400,
-        490
+        622
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1122,7 +1167,7 @@
         1264,
         452,
         360,
-        1112
+        1244
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -1135,7 +1180,7 @@
         1632,
         452,
         320,
-        640
+        702
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1153,8 +1198,8 @@
         0
       ]
     },
-    "lab_note": "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default off) captions the source so Rewrite prompt can name wardrobe and props. Upscale (default none) is lanczos after decode.\n\nVAEEncode of the snapped source is the latent canvas and the ReferenceLatent. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Style is hidden \u2014 the source still owns the subject's look.\n",
-    "lab_description": "Klein 4B background swap. LoadImage source still. Snap + ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap.",
+    "lab_note": "## stills/background-swap\n\nKlein 4B **background swap**. Load a still. Pick a sample place or type a custom background. Keep the subject; replace the entire environment including ground, floor, and set dressing near the subject. Output PNG matches the source width and height. Prefix `ez_bg_swap`.\n\nOther characters / Background characters (default on) treat companions and extras as part of the background. Turn a toggle off to keep those people locked with the hero.\n\nDo not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.\n\nThe sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\nPrompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden \u2014 the source still owns the subject's look.\nCubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).\n",
+    "lab_description": "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap.",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1199,7 +1244,7 @@
           12,
           "prompt",
           {
-            "description": "New place, or Keep the subject and replace the environment. Rewrite prompt expands a place name into a full swap lock.",
+            "description": "New place, or Keep the subject and replace the entire environment including ground. Named samples skip the rewriter.",
             "label": "New background",
             "height": 140
           }
@@ -1232,7 +1277,7 @@
           19,
           "enable",
           {
-            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "description": "On (default): caption the source still so Rewrite prompt can name inventory. Off skips the describe GGUF. Needs download-llm --tier describe.",
             "label": "Describe image"
           }
         ],

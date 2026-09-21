@@ -44,7 +44,9 @@ from ez_image.formats import (  # noqa: E402
 )
 from ez_image import video_formats as vfmt  # noqa: E402
 from ez_image.nodes import (  # noqa: E402
+    FLUX2_LATENT_CHANNELS,
     GRID,
+    EZEmptyFlux2FromImage,
     EZImageFormat,
     EZImageUpscale,
     EZMatchImageSize,
@@ -52,7 +54,10 @@ from ez_image.nodes import (  # noqa: E402
     EZVideoFormat,
     NODE_CLASS_MAPPINGS,
     NODE_DISPLAY_NAME_MAPPINGS,
+    _LatentShape,
+    _call_empty_flux2,
     _resize_bhwc,
+    empty_flux2_latent,
     snap_dim,
 )
 from ez_image.upscale import (  # noqa: E402
@@ -107,6 +112,7 @@ class _FakeImg:
 def test_pack_mappings_and_category() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
         "EZSnapImage",
+        "EZEmptyFlux2FromImage",
         "EZMatchImageSize",
         "EZImageFormat",
         "EZVideoFormat",
@@ -117,6 +123,7 @@ def test_pack_mappings_and_category() -> None:
     assert "EZImageMode" in ez_image.NODE_CLASS_MAPPINGS
     assert ez_image.WEB_DIRECTORY == "./js"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZSnapImage"] == "Snap image (div 16)"
+    assert NODE_DISPLAY_NAME_MAPPINGS["EZEmptyFlux2FromImage"] == "Empty Flux.2 from image"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZMatchImageSize"] == "Match image size"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZImageFormat"] == "Format / platform"
     assert NODE_DISPLAY_NAME_MAPPINGS["EZVideoFormat"] == "Format / platform (video)"
@@ -143,6 +150,9 @@ def test_input_types_are_image_only() -> None:
     assert match["required"]["image"][0] == "IMAGE"
     assert match["required"]["size_src"][0] == "IMAGE"
     assert EZSnapImage.RETURN_TYPES == ("IMAGE",)
+    assert EZEmptyFlux2FromImage.RETURN_TYPES == ("LATENT",)
+    assert EZEmptyFlux2FromImage.RETURN_NAMES == ("latent",)
+    assert EZEmptyFlux2FromImage.INPUT_TYPES()["required"]["image"][0] == "IMAGE"
     assert EZMatchImageSize.RETURN_TYPES == ("IMAGE",)
     assert EZMatchImageSize.RETURN_NAMES == ("image",)
 
@@ -297,6 +307,145 @@ def test_image_upscale_passthrough_and_2x(monkeypatch: pytest.MonkeyPatch) -> No
     spec = EZImageUpscale.INPUT_TYPES()["required"]["upscale"]
     assert spec[1]["default"] == UPSCALE_NONE
     assert EZImageUpscale.RETURN_NAMES == ("image", "upscale")
+
+
+def test_empty_flux2_from_image_hermetic_fallback(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux", None)
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux2", None)
+    monkeypatch.setitem(sys.modules, "torch", None)
+    out = EZEmptyFlux2FromImage().run(_FakeImg(1080, 1920))[0]
+    samples = out["samples"]
+    assert isinstance(samples, _LatentShape)
+    assert samples.shape == (1, FLUX2_LATENT_CHANNELS, 1072 // GRID, 1920 // GRID)
+    assert _call_empty_flux2(1280, 704, 1) is None
+
+
+def test_empty_flux2_from_image_uses_comfy_execute(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seen: dict[str, object] = {}
+
+    class Fake:
+        def execute(self, width: int, height: int, batch_size: int = 1) -> tuple[dict]:
+            seen["args"] = (width, height, batch_size)
+            return ({"samples": "comfy"},)
+
+    fake_mod = types.SimpleNamespace(EmptyFlux2LatentImage=Fake)
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux", fake_mod)
+    out = EZEmptyFlux2FromImage().run(_FakeImg(704, 1280))[0]
+    assert seen["args"] == (1280, 704, 1)
+    assert out["samples"] == "comfy"
+
+
+def test_empty_flux2_from_image_comfy_kwargs_and_non_tuple(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class KwargsOnly:
+        def execute(self, *args: object, **kwargs: object) -> dict:
+            if args:
+                raise TypeError("positional")
+            return {"samples": ("kw", kwargs["width"], kwargs["height"], kwargs["batch_size"])}
+
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=KwargsOnly),
+    )
+    out = empty_flux2_latent(1280, 704, 2)
+    assert out["samples"] == ("kw", 1280, 704, 2)
+
+    class Generate:
+        def generate(self, width: int, height: int, batch_size: int = 1) -> dict:
+            return {"samples": ("gen", width, height, batch_size)}
+
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=None),
+    )
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux2",
+        types.SimpleNamespace(EmptyFlux2LatentImage=Generate),
+    )
+    gen = _call_empty_flux2(64, 48, 1)
+    assert gen == {"samples": ("gen", 64, 48, 1)}
+
+    class Weird:
+        def run(self, width: int, height: int, batch_size: int = 1) -> str:
+            del width, height, batch_size
+            return "nope"
+
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=Weird),
+    )
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux2", None)
+    monkeypatch.setitem(sys.modules, "torch", None)
+    weird = empty_flux2_latent(16, 32, 1)
+    assert weird["samples"].shape == (1, FLUX2_LATENT_CHANNELS, 2, 1)
+
+
+def test_empty_flux2_from_image_comfy_failures_fall_back(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class BoomInit:
+        def __init__(self) -> None:
+            raise RuntimeError("nope")
+
+    class BoomCall:
+        def execute(self, width: int, height: int, batch_size: int = 1) -> dict:
+            del width, height, batch_size
+            raise RuntimeError("boom")
+
+    class NoMethod:
+        execute = 1
+
+    class KwargsBoom:
+        def execute(self, *args: object, **kwargs: object) -> dict:
+            if args:
+                raise TypeError("positional")
+            raise RuntimeError("kwargs")
+
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=BoomInit),
+    )
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux2", None)
+    monkeypatch.setitem(sys.modules, "torch", None)
+    missing = empty_flux2_latent(32, 32, 1)
+    assert missing["samples"].shape == (1, FLUX2_LATENT_CHANNELS, 2, 2)
+
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=BoomCall),
+    )
+    assert _call_empty_flux2(32, 32, 1) is None
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=NoMethod),
+    )
+    assert _call_empty_flux2(32, 32, 1) is None
+    monkeypatch.setitem(
+        sys.modules,
+        "comfy_extras.nodes_flux",
+        types.SimpleNamespace(EmptyFlux2LatentImage=KwargsBoom),
+    )
+    assert _call_empty_flux2(32, 32, 1) is None
+
+    class FakeTorch:
+        @staticmethod
+        def zeros(shape: tuple[int, ...]) -> tuple[int, ...]:
+            return shape
+
+    monkeypatch.setitem(sys.modules, "comfy_extras.nodes_flux", None)
+    monkeypatch.setitem(sys.modules, "torch", FakeTorch)
+    torch_out = empty_flux2_latent(16, 16, 3)
+    assert torch_out["samples"] == (3, FLUX2_LATENT_CHANNELS, 1, 1)
 
 
 _ID_RE = re.compile(r"^[a-z][a-z0-9_]{1,47}$")

@@ -1135,7 +1135,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 !!! warning "Lab notes"
 
-    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
+    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

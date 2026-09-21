@@ -1823,6 +1823,21 @@ Analyze vs render vs both.
 | `analyze` | ASR/translate only. |
 | `render` | Skip ASR; clone widget JSON. |
 
+### `EZEmptyFlux2FromImage` — Empty Flux.2 from image
+
+Allocate an empty Flux.2 latent matching a still's snapped width and height.
+
+!!! warning "Lab notes"
+
+    stills/background-swap uses this as KSampler.latent_image so the encoded source is only a ReferenceLatent.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Snapped still. |
+| `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
+
+No widgets. Sockets only.
+
 ### `EZFilmConcat` — Save 90s film (MP4)
 
 Concat 18 LTX 5.00 s MP4s, cap 90 s, H.264 CRF 18 + AAC + loudnorm + faststart.
@@ -2177,7 +2192,7 @@ Creator preset.
 | `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
 | `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
 | `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
-| `Background swap` | Keep the subject from the reference still. Replace the background, ground or floor, and set dressing near the subject. |
+| `Background swap` | Keep the subject from the reference still. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject. |
 | `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
 | `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
 | `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |
@@ -3981,7 +3996,7 @@ Scale a still to the largest width and height that fit inside the source and are
 
 !!! warning "Lab notes"
 
-    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.
+    stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

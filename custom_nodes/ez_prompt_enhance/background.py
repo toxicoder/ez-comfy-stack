@@ -39,6 +39,24 @@ EDIT_BARE = (
     "new lettering unless asked."
 )
 """Wrapper for a bare edit in background_edit."""
+ENTIRE_ENV_VERB = (
+    "Replace the entire environment — backdrop, sky, architecture, "
+    "ground or floor, and set dressing near the subject —"
+)
+"""Swap clause that replaces a weak 'only the background' line."""
+VOXEL_TRAILER = "Voxel art, cubic voxels, limited palette."
+"""Short CLIP trailer for cube / block-world reconstructions."""
+RECONSTRUCT_BARE = (
+    "Keep the main subject from the reference. Rebuild this photographed place "
+    "as voxel art: axis-aligned unit cubes, cubic voxels, limited palette, "
+    "square albedo and a visible texel grid on every backdrop, sky, building, "
+    "tree, water, floor, and prop. Cube floors meet every sole. Match scale "
+    "and wrap light. Do not invent a new hero. Empty of new lettering. "
+    "Place or look: {place}."
+)
+"""Wrapper for a bare cube / voxel phrase in background_swap."""
+REASON_PRECISE_BACKGROUND = "precise background instruction"
+"""Enhance status when a full swap/edit line skips the LLM rewriter."""
 
 _INSTRUCTION_RE = re.compile(
     r"^\s*(keep the (main )?subject|replace (only |the entire )?the background|"
@@ -46,6 +64,18 @@ _INSTRUCTION_RE = re.compile(
     re.IGNORECASE,
 )
 """Regex for prompts that already name a background swap or edit."""
+_ONLY_BG_RE = re.compile(
+    r"replace only the background(?: and ground)?",
+    re.IGNORECASE,
+)
+"""Weak backdrop-only phrasing to upgrade on background_swap."""
+_RECONSTRUCT_RE = re.compile(
+    r"\b(cubes?|cubic|voxels?|block[-\s]?world|texture-pack|texel grid)\b",
+    re.IGNORECASE,
+)
+"""Needles for in-place cube / voxel reconstruction."""
+_SOURCE_STILL_RE = re.compile(r"source still:", re.IGNORECASE)
+"""True when a Describe caption is already spliced onto the CLIP line."""
 
 
 def _as_str(value: object) -> str:
@@ -177,12 +207,97 @@ def _already_has_cast(text: str) -> bool:
     return "companions and group members" in folded or "extras, crowd" in folded
 
 
+def strengthen_swap_instruction(text: object) -> str:
+    """Upgrade backdrop-only wording to an entire-environment clause.
+
+    Args:
+        text: Operator prompt or sample body.
+
+    Returns:
+        Strengthened string, or stripped input when there is no weak clause.
+    """
+    raw = _as_str(text)
+    if not raw:
+        return ""
+    return _ONLY_BG_RE.sub(ENTIRE_ENV_VERB, raw)
+
+
+def is_reconstruction(text: object) -> bool:
+    """True when ``text`` asks to rebuild the plate as cubes or voxels.
+
+    Args:
+        text: Operator prompt or sample body.
+
+    Returns:
+        Whether this is an in-place block-world reconstruction.
+    """
+    raw = _as_str(text)
+    if not raw:
+        return False
+    return bool(_RECONSTRUCT_RE.search(raw))
+
+
+def splice_source_caption(text: object, caption: object = "") -> str:
+    """Append a Describe caption so CLIP sees source inventory.
+
+    No-op when ``caption`` is empty or the line already has ``Source still:``.
+
+    Args:
+        text: Wrapped CLIP instruction.
+        caption: Optional EZImageDescribe STRING.
+
+    Returns:
+        Instruction with ``Source still:`` trailer, or ``text`` unchanged.
+    """
+    body = _as_str(text)
+    cap = _as_str(caption)
+    if not body or not cap:
+        return body
+    if _SOURCE_STILL_RE.search(body):
+        return body
+    return f"{body.rstrip()} Source still: {cap}"
+
+
+def _with_cast(body: str, clauses: str) -> str:
+    """Append cast sentences unless they are already present.
+
+    Args:
+        body: Instruction without a trailing space requirement.
+        clauses: Two-sentence cast block.
+
+    Returns:
+        Body plus cast, or body unchanged.
+    """
+    raw = body.rstrip()
+    if _already_has_cast(raw):
+        return raw
+    return f"{raw} {clauses}"
+
+
+def _with_voxel_trailer(body: str) -> str:
+    """Append the voxel CLIP trailer when cubic-voxel language is missing.
+
+    Args:
+        body: Reconstruction instruction.
+
+    Returns:
+        Body plus :data:`VOXEL_TRAILER` when needed.
+    """
+    raw = body.rstrip()
+    if "cubic voxels" in raw.casefold():
+        return raw
+    return f"{raw} {VOXEL_TRAILER}"
+
+
 def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     """Return a subject-lock instruction for Klein background modes.
 
     Bare place or edit strings become a Keep-the-subject paragraph. Lines that
-    already start with Keep/Replace/Edit pass through. Cast clauses always
-    splice unless they are already present.
+    already start with Keep/Replace/Edit pass through. ``background_swap``
+    upgrades "replace only the background" to the entire environment, and cube
+    / voxel requests stay a reconstruction of the photographed place (never
+    nested inside ``SWAP_BARE``). Cast clauses always splice unless they are
+    already present.
 
     Args:
         text: Place name, edit, or a full targeting sentence.
@@ -198,10 +313,15 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     kind = (mode or "").strip().lower()
     other, crowd = parse_background_cast(cast)
     clauses = _cast_clauses(other, crowd)
+    if kind == "background_swap":
+        raw = strengthen_swap_instruction(raw)
+        if is_reconstruction(raw):
+            if is_background_instruction(raw):
+                body = _with_voxel_trailer(raw)
+            else:
+                body = RECONSTRUCT_BARE.format(place=raw)
+            return _with_cast(body, clauses)
     if is_background_instruction(raw):
-        body = raw.rstrip()
-        if _already_has_cast(body):
-            return body
-        return f"{body} {clauses}"
+        return _with_cast(raw, clauses)
     template = EDIT_BARE if kind == "background_edit" else SWAP_BARE
     return f"{template.format(place=raw)} {clauses}"
