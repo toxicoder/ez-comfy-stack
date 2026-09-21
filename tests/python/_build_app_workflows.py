@@ -81,6 +81,7 @@ Example / reference is optional — Queue without a file. When present, Klein at
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
+Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.
 """
@@ -517,7 +518,7 @@ def build_image_studio() -> dict:
         "id": nid,
         "type": "EZImageMode",
         "pos": [1440, 80],
-        "size": [360, 140],
+        "size": [360, 360],
         "flags": {},
         "order": 12,
         "mode": 0,
@@ -533,7 +534,7 @@ def build_image_studio() -> dict:
             {"name": "prefix", "type": "STRING", "links": [], "slot_index": 2},
         ],
         "properties": {"Node name for S&R": "EZImageMode"},
-        "widgets_values": [default_category_label(), default_mode_label()],
+        "widgets_values": [default_category_label(), default_mode_label(), False, ""],
         "title": "Creator mode",
     }
     graph["nodes"].append(mode)
@@ -568,10 +569,23 @@ def build_image_studio() -> dict:
     prefix_row[1] = nid
     prefix_row[2] = 2
     _push_output_link(mode, 2, prefix_link_id)
+    optional = next(
+        (node for node in graph["nodes"] if node.get("type") == "EZOptionalImage"),
+        None,
+    )
+    if optional is not None:
+        has_link = _append_link(graph, int(optional["id"]), 2, nid, 1, "BOOLEAN")
+        mode_inputs.append({"name": "has_image", "type": "BOOLEAN", "link": has_link})
+        _push_output_link(optional, 2, has_link)
+        image_link = _append_link(graph, int(optional["id"]), 0, int(fmt["id"]), 0, "IMAGE")
+        format_inputs = list(fmt.get("inputs") or [])
+        format_inputs.append({"name": "image", "type": "IMAGE", "link": image_link})
+        fmt["inputs"] = format_inputs
+        _push_output_link(optional, 0, image_link)
     graph["extra"]["lab_profile"] = "stills/image-studio"
     graph["extra"]["lab_note"] = IMAGE_STUDIO_NOTE
     graph["extra"]["lab_description"] = (
-        "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref"
+        "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref, iterate"
     )
     graph["groups"] = [
         _group(1, "MODEL", 20, LAB_GROUP_Y0, 430, 430, "#3f789e"),

@@ -370,6 +370,7 @@ WIDGET_HEIGHTS = {
     "audio_notes": 80,
     "value": 72,
     "history": 80,
+    "run_summary": 160,
 }
 GENERIC_LABELS = {
     "quality": "Quality",
@@ -688,6 +689,8 @@ def display_label(
         return {
             "category": "Mode category",
             "mode": "Creator mode",
+            "iterate": "Iterate",
+            "run_summary": "This run",
         }.get(name, generic)
     if ntype == "EZOptionalImage" and name == "filename":
         return "Example / reference (optional)"
@@ -904,7 +907,18 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             ),
             "mode": (
                 "Creator preset. Sets Enhance mode, save prefix, and a locked "
-                "instruction. Optional reference stills stay optional."
+                "instruction. Optional reference stills stay optional. Ignored "
+                "for mode, instruction, and prefix while Iterate is on."
+            ),
+            "iterate": (
+                "Off: creator mode. On: first Run is text-to-image. After it "
+                "saves, the still is the next Run's reference and that Run is "
+                "an edit. Clear the reference to start from text again."
+            ),
+            "run_summary": (
+                "Values Queue will send: pass, Enhance mode, prompt, style, "
+                "size, prefix, steps, CFG, model, and seed. Rewrite on means "
+                "the prompt is the rewriter source, not the CLIP text."
             ),
         }.get(name)
     if ntype == "EZOptionalImage" and name == "filename":
@@ -1095,6 +1109,10 @@ def _widget_rank(name: str, node: Mapping[str, Any] | None = None) -> int:
         if "duration" in title:
             name = "seconds"
     ntype = str((node or {}).get("type") or "")
+    if ntype == "EZImageMode" and name == "iterate":
+        return -2
+    if ntype == "EZImageMode" and name == "run_summary":
+        return -1
     if ntype == "EZImageMode" and name == "mode":
         name = "category"
     try:
@@ -1946,6 +1964,8 @@ def _collect_raw_inputs(
         elif ntype == "EZImageMode":
             raw.extend(
                 (
+                    (nid, "iterate", node),
+                    (nid, "run_summary", node),
                     (nid, "category", node),
                     (nid, "mode", node),
                 )

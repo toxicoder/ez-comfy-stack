@@ -175,7 +175,9 @@ def test_still_draft_app_inputs_are_prompt_first_with_format() -> None:
 
 def test_image_studio_exposes_mode_look_size_and_unet() -> None:
     names = _widget_names(_load("stills/image-studio.json"))
-    assert names[:9] == [
+    assert names[:11] == [
+        "iterate",
+        "run_summary",
         "quality",
         "sample",
         "prompt",
@@ -387,7 +389,7 @@ def test_required_loadimage_is_first_app_widget() -> None:
     still = _widget_names(_load("stills/still-draft.json"))
     assert still[0] == "quality"
     studio = _widget_names(_load("stills/image-studio.json"))
-    assert studio[0] == "quality"
+    assert studio[:3] == ["iterate", "run_summary", "quality"]
     assert "image" not in studio
 
 

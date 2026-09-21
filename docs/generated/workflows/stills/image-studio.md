@@ -1,6 +1,6 @@
 ---
 title: "stills/image-studio"
-description: "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref"
+description: "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref, iterate"
 tags: [workflows, generated, comfyui, stills]
 ---
 
@@ -38,6 +38,7 @@ Example / reference is optional — Queue without a file. When present, Klein at
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
+Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.
 
@@ -94,6 +95,8 @@ flowchart LR
   N14 --> N17
   N15 --> N16
   N15 --> N19
+  N15 --> N14
+  N15 --> N17
   N16 --> N7
   N17 --> N11
   N17 --> N9
@@ -563,6 +566,7 @@ Example / reference is optional — Queue without a file. When present, Klein at
 Authored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.
 Quality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.
 Save prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.
+Iterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.
 Prompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.
 Handoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.
 
@@ -1317,14 +1321,15 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 
 !!! warning "Lab notes"
 
-    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.
+    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
-| `context` | out | `STRING` | Mode instruction plus incoming look splice. |
+| `has_image` | in | `BOOLEAN` | Presence flag from EZOptionalImage. Force input. Off while Iterate is on means the next Run is text-to-image. |
+| `context` | out | `STRING` | Mode instruction plus incoming look splice, or the Iterate edit line. |
 | `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode. |
-| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. ez_iterate while Iterate is on. |
 
 #### `category`
 
@@ -1332,7 +1337,7 @@ Type `COMBO`. Range / default: Generate / Scene / Subject / ….
 
 Filter Creator mode.
 
-**How it affects generation:** JS hides modes outside this category. Python run() uses Mode even if Category is stale.
+**How it affects generation:** JS hides modes outside this category. Python run() uses Mode even if Category is stale. Ignored for mode and prefix while Iterate is on.
 
 **This graph:** `Generate`
 
@@ -1357,7 +1362,7 @@ Type `COMBO`. Range / default: Photoreal still / Background swap / Change text /
 
 Creator preset.
 
-**How it affects generation:** Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error.
+**How it affects generation:** Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error. Ignored while Iterate is on.
 
 **This graph:** `Photoreal still`
 
@@ -1465,6 +1470,24 @@ Creator preset.
 | `Empty of marks` | Keep the scene. Remove watermarks and stray logos. Empty of marks. |
 | `Straighten` | Keep the scene. Straighten horizon and verticals. |
 | `Match grade` | Grade ref 1 to match ref 2. Keep inventory of ref 1. |
+
+#### `iterate`
+
+Type `BOOLEAN`. Range / default: false.
+
+Text-to-image, then edit the saved still.
+
+**How it affects generation:** Off keeps creator mode. On: no reference is t2i (prefix ez_iterate); a reference is an edit. The App copies the saved still into the reference after Run. Clear the reference to start from text again.
+
+**This graph:** `false`
+
+#### `run_summary`
+
+Type `STRING`. Range / default: multiline.
+
+This run. Values Queue will send.
+
+**How it affects generation:** Display only. Python run() ignores it. The App fills it from POST /ez_image/studio-preview before Run.
 
 ### `EZImageUpscale` — Upscale still
 

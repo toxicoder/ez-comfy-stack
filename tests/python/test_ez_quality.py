@@ -472,7 +472,8 @@ def test_every_lab_graph_has_one_quality_node(path: Path) -> None:
         assert inputs, path
         names = [entry[1] for entry in inputs]
         idx = 0
-        while idx < len(names) and names[idx] == "image":
+        # Required stills, then image-studio Iterate / This run, then Quality.
+        while idx < len(names) and names[idx] in {"image", "iterate", "run_summary"}:
             idx += 1
         assert names[idx] == QUALITY_WIDGET, path
         assert int(inputs[idx][0]) == int(hits[0]["id"])

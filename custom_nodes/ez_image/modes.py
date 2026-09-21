@@ -34,6 +34,12 @@ ENHANCE_MODE_COMBO = [
 """Klein Prompt Enhance combo; also ``EZImageMode.enhance_mode`` output type."""
 ENHANCE_MODES = frozenset(ENHANCE_MODE_COMBO)
 """Klein Prompt Enhance modes this catalog may select."""
+ITERATE_PREFIX = "ez_iterate"
+"""SaveImage prefix while Iterate is on (text-to-image, then edit)."""
+ITERATE_EDIT_LINE = (
+    "Edit the reference still. Apply the prompt as the change and keep everything else."
+)
+"""Context line for an Iterate edit pass. No creator-mode instruction."""
 
 
 @dataclass(frozen=True)
@@ -153,6 +159,24 @@ def _clamp_needs_ref(value: object) -> int:
     if n > 2:
         return 2
     return n
+
+
+def _as_bool(value: object) -> bool:
+    """Parse a Comfy BOOLEAN or yes/no string.
+
+    Args:
+        value: Bool, number, or string.
+
+    Returns:
+        Parsed flag. Unrecognized values are false.
+    """
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return False
 
 
 def _normalize_enhance_mode(value: object) -> str:
@@ -456,6 +480,59 @@ def resolve_mode(
     )
 
 
+def resolve_studio_mode(
+    mode_value: object,
+    *,
+    category: object = None,
+    extra_context: object = "",
+    iterate: object = False,
+    has_image: object = False,
+) -> ModeResult:
+    """Resolve creator mode, or the Iterate text-then-edit override.
+
+    Iterate off is :func:`resolve_mode`. Iterate on ignores the catalog
+    enhance mode, instruction, and prefix. No reference still is text-to-image.
+    A present still is an edit. The look-recipe ``extra_context`` is kept.
+
+    Args:
+        mode_value: Mode combo (id or label).
+        category: Category combo. Used only when mode is unknown.
+        extra_context: Incoming look/context STRING.
+        iterate: Iterate switch.
+        has_image: True when the reference still will be attached.
+
+    Returns:
+        Instruction context, Enhance mode, and SaveImage prefix.
+    """
+    if not _as_bool(iterate):
+        return resolve_mode(
+            mode_value,
+            category=category,
+            extra_context=extra_context,
+        )
+    spec = get_mode(mode_value, category=category)
+    editing = _as_bool(has_image)
+    extra = _as_str(extra_context)
+    if editing:
+        context = splice_mode_context(ITERATE_EDIT_LINE, extra)
+        enhance_mode = "edit"
+        needs_ref = 1
+    else:
+        context = extra
+        enhance_mode = "t2i"
+        needs_ref = 0
+    return ModeResult(
+        mode_id=spec.id,
+        label=spec.label,
+        category_id=spec.category,
+        category_label=category_label(spec.category),
+        enhance_mode=enhance_mode,
+        prefix=ITERATE_PREFIX,
+        context=context,
+        needs_ref=needs_ref,
+    )
+
+
 def reset_mode_cache_for_tests() -> None:
     """Drop loaded catalogs so tests can swap files."""
     _catalog_payload.cache_clear()
@@ -485,9 +562,15 @@ class EZImageMode:
             "required": {
                 "category": (categories, {"default": cat_default}),
                 "mode": (modes, {"default": mode_default}),
+                "iterate": ("BOOLEAN", {"default": False}),
+                "run_summary": (
+                    "STRING",
+                    {"default": "", "multiline": True},
+                ),
             },
             "optional": {
                 "context": ("STRING", {"default": "", "multiline": True}),
+                "has_image": ("BOOLEAN", {"default": False, "forceInput": True}),
             },
         }
 
@@ -503,27 +586,42 @@ class EZImageMode:
         "combo in the App. Queue splices the mode instruction into Enhance "
         "context, selects t2i/edit/text_swap/identity, and sets the save "
         "prefix. Optional reference stills stay optional — modes never error "
-        "when empty."
+        "when empty. Iterate (off by default) forces text-to-image, then edit "
+        "once a reference still is present, and ignores the creator-mode "
+        "instruction. This run is a display of the values Queue will send."
     )
 
     def run(
         self,
         category: object,
         mode: object,
+        iterate: object = False,
+        run_summary: object = "",
         context: object = "",
+        has_image: object = False,
     ) -> dict[str, Any]:
-        """Resolve category/mode widgets.
+        """Resolve category/mode widgets, or the Iterate override.
 
         Args:
             category: Category combo (id or label).
             mode: Mode combo (id or label).
+            iterate: When on, no reference is t2i and a reference is edit.
+            run_summary: Display-only App text. Not used at Queue.
             context: Optional incoming look/context STRING.
+            has_image: Presence flag from EZOptionalImage.
 
         Returns:
             Comfy output-node payload with spliced context, Enhance mode,
             and SaveImage prefix.
         """
-        result = resolve_mode(mode, category=category, extra_context=context)
+        del run_summary
+        result = resolve_studio_mode(
+            mode,
+            category=category,
+            extra_context=context,
+            iterate=iterate,
+            has_image=has_image,
+        )
         summary = f"{result.label} · {result.enhance_mode} · {result.prefix}"
         return {
             "ui": {"text": (summary,)},
