@@ -116,7 +116,7 @@ After code changes, agents must:
 1. Update the relevant `docs/*.md` / `docs/*.mdx` pages (and README if onboarding/commands change)
 2. Keep YAML frontmatter (`title`, `description`, `tags`) + “What's on this page” / “What this enables”
 3. Prefer **relative** in-repo doc links
-4. Update [docs/troubleshooting.md](docs/troubleshooting.md) when new symptoms or fixes appear
+4. Update [docs/troubleshooting.mdx](docs/troubleshooting.mdx) when new symptoms or fixes appear
 
 Public site publishes after merge via `.github/workflows/deploy-docs.yml` (Fumadocs static export): `main` → `/latest/`, `development` → `/development/`. Local: `bazelisk run //docs:serve` or `./docs/manage-docs.sh serve`.
 

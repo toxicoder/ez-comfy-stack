@@ -29,7 +29,7 @@ SESSION_VAR_IDS = (
 FLAG_KINDS = frozenset({"bool", "choice", "choice-or-int"})
 _ID_RE = re.compile(r"^[a-z0-9-]+$")
 _VAR_ID_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
-# Keep in sync with docs/javascripts/commands.js VAR_TOKEN.
+# Keep in sync with docs-site/lib/command-vars.ts VAR_TOKEN.
 # ${NAME} and ${NAME:-default} are the same session-variable slot.
 _VAR_TOKEN_RE = re.compile(r"\$\{([A-Z][A-Z0-9_]*)(?::-([^}]*))?\}")
 _EZCMD_FENCE_RE = re.compile(

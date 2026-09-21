@@ -134,67 +134,28 @@ def test_generate_audio_docs_rejects_bad_payloads(tmp_path: Path) -> None:
         mod.ROOT = original_root
 
 
-def _hooks() -> Any:
-    spec = importlib.util.spec_from_file_location(
-        "ez_docs_hooks_audio", ROOT / "docs" / "hooks.py"
+def test_nav_ts_injects_audio_rack_from_manifest() -> None:
+    """Fumadocs nav.ts nests Playbook + axes under Audio Rack from the manifest."""
+    ts = (ROOT / "docs-site" / "lib" / "nav.ts").read_text(encoding="utf-8")
+    assert "function audioChildren" in ts
+    assert "injectGenerated" in ts
+    assert 'title === "Audio Rack"' in ts
+    assert 'page.kind === "index" || !page.path' in ts
+    payload = json.loads(
+        (ROOT / "docs" / "generated" / "audio" / "manifest.json").read_text(
+            encoding="utf-8"
+        )
     )
-    assert spec is not None and spec.loader is not None
-    module = importlib.util.module_from_spec(spec)
-    sys.modules["ez_docs_hooks_audio"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-def test_inject_audio_nav_nests_under_start(monkeypatch: Any) -> None:
-    hooks = _hooks()
-    nav = [
-        {
-            "Start": [
-                {"Audio Rack": "create/audio-rack.md"},
-                {"Prompting": "prompting.md"},
-            ]
-        }
-    ]
-    out = hooks.inject_audio_nav({"nav": nav})
-    rack = out["nav"][0]["Start"][0]["Audio Rack"]
-    assert isinstance(rack, list)
-    assert rack[0] == {"Playbook": "create/audio-rack.md"}
-    assert any("Genre" in row for row in rack if isinstance(row, dict))
-    assert out["nav"][0]["Start"][1] == {"Prompting": "prompting.md"}
-    assert hooks.inject_audio_nav({"nav": "nope"})["nav"] == "nope"
-
-
-def test_inject_audio_nav_fail_soft(monkeypatch: Any) -> None:
-    hooks = _hooks()
-    monkeypatch.setattr(hooks.Path, "is_file", lambda self: False)
-    cfg = {"nav": [{"Audio Rack": "create/audio-rack.md"}]}
-    assert hooks.inject_audio_nav(cfg) is cfg
-    monkeypatch.setattr(hooks.Path, "is_file", lambda self: True)
-    monkeypatch.setattr(hooks.Path, "read_text", lambda self, encoding="utf-8": "{")
-    assert hooks.inject_audio_nav({"nav": []})["nav"] == []
-    monkeypatch.setattr(
-        hooks.Path, "read_text", lambda self, encoding="utf-8": '{"pages": 1}'
-    )
-    assert hooks.inject_audio_nav({"nav": []})["nav"] == []
-    monkeypatch.setattr(
-        hooks.Path,
-        "read_text",
-        lambda self, encoding="utf-8": json.dumps(
-            {
-                "pages": [
-                    {"kind": "axis", "id": "x", "label": "X", "path": ""},
-                    "skip",
-                    {"kind": "axis", "id": "y", "label": "Y", "path": "generated/audio/y.md"},
-                ]
-            }
-        ),
-    )
-    out = hooks.inject_audio_nav(
-        {"nav": ["keep", {"Audio Rack": "create/audio-rack.md"}]}
-    )
-    rack = out["nav"][1]["Audio Rack"]
-    assert out["nav"][0] == "keep"
-    assert {"Y": "generated/audio/y.md"} in rack
+    labels = ["Playbook", "All axes"]
+    for page in payload.get("pages") or []:
+        if not isinstance(page, dict) or page.get("kind") == "index":
+            continue
+        if str(page.get("path") or ""):
+            labels.append(str(page.get("label") or page.get("id") or "axis"))
+    assert labels[0] == "Playbook"
+    assert "All axes" in labels
+    assert any("Genre" in label for label in labels)
+    assert len(labels) == 15
 
 
 def test_generate_audio_docs_shipped_tree() -> None:

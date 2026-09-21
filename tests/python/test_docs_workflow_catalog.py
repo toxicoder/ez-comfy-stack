@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 
 from _docs_paths import docs_file
+from _lab_paths import lab_graph_paths
 from _lab_paths import load_lab_graph
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -57,9 +58,7 @@ def test_catalog_docs_name_every_lab_graph() -> None:
     """Every _lab graph except album.json / cover.json appears in the catalog."""
     catalog = "\n".join(path.read_text(encoding="utf-8") for path in CATALOG_PAGES)
     graphs = sorted(
-        path
-        for path in LAB.rglob("*.json")
-        if path.is_file() and path.name not in SKIP_NAMES
+        path for path in lab_graph_paths() if path.name not in SKIP_NAMES
     )
     assert graphs, f"no lab graphs under {LAB}"
     missing = [gid for gid in (_graph_id(path) for path in graphs) if gid not in catalog]

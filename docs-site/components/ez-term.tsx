@@ -14,7 +14,7 @@ interface EzTermProps {
 /**
  * First-occurrence glossary trigger. Hover shows the short definition; click opens
  * the definition dialog via ``showModal()`` so the panel is top-layer and viewport-centered
- * (same contract as ``docs/javascripts/glossary.js``).
+ * (native ``<dialog>`` via ``showModal()``).
  */
 export function EzTerm({ termId, category, short, children }: EzTermProps) {
   const [open, setOpen] = useState(false);

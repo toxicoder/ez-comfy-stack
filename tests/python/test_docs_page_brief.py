@@ -1,6 +1,6 @@
 """Page-brief wrap: What's on this page / What this enables card.
 
-Hermetic: stdlib + docs/page_brief.py and docs/hooks.py. No MkDocs.
+Hermetic: stdlib + docs/page_brief.py. No MkDocs.
 """
 
 from __future__ import annotations
@@ -16,7 +16,6 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 PAGE_BRIEF_PY = ROOT / "docs" / "page_brief.py"
-HOOKS_PY = ROOT / "docs" / "hooks.py"
 EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 DOCS = ROOT / "docs"
@@ -61,28 +60,6 @@ def _load(path: Path, name: str) -> ModuleType:
 def brief() -> ModuleType:
     """Loaded page_brief module."""
     return _load(PAGE_BRIEF_PY, "ez_docs_page_brief")
-
-
-@pytest.fixture
-def hooks(monkeypatch: pytest.MonkeyPatch) -> ModuleType:
-    """Loaded hooks module with no publish/version env.
-
-    Args:
-        monkeypatch: Pytest monkeypatch fixture.
-
-    Returns:
-        Loaded hooks module.
-    """
-    monkeypatch.delenv("MIKE_DOCS_VERSION", raising=False)
-    monkeypatch.delenv("EZ_DOCS_VERSION", raising=False)
-    monkeypatch.delenv("EZ_DOCS_GIT_REF", raising=False)
-    monkeypatch.delenv("EZ_DOCS_PUBLISHED_AT", raising=False)
-    monkeypatch.delenv("SOURCE_DATE_EPOCH", raising=False)
-    module = _load(HOOKS_PY, "ez_docs_hooks_page_brief")
-    monkeypatch.setattr(
-        module, "_git_head_committer_date", lambda: None, raising=False
-    )
-    return module
 
 
 def test_wraps_canonical_pair(brief: ModuleType) -> None:
@@ -300,42 +277,6 @@ def test_every_docs_page_chrome_wraps(brief: ModuleType) -> None:
     assert failures == [], "page-brief wrap gaps:\n" + "\n".join(failures)
 
 
-def test_hooks_on_post_page_wraps_brief(hooks: ModuleType) -> None:
-    """on_post_page wraps the pair after h1 and still glossary-wraps list text."""
-    html = (
-        '<html><body><article class="md-content__inner md-typeset">'
-        "<h1>Hi</h1>"
-        "<p><strong>What's on this page</strong></p>"
-        "<ul><li>Queue in ComfyUI</li></ul>"
-        "<p><strong>What this enables</strong></p>"
-        "<ul><li>A first still</li></ul>"
-        "</article></body></html>"
-    )
-    out = hooks.on_post_page(html)
-    assert 'class="ez-page-brief"' in out
-    assert "ez-page-brief__on-page" in out
-    on_page = out[
-        out.index("ez-page-brief__on-page") : out.index("ez-page-brief__enables")
-    ]
-    assert "Queue" in on_page
-    assert "ComfyUI" in on_page
-    assert 'class="ez-term"' in on_page
-    brief_at = out.index('class="ez-page-brief"')
-    term_at = out.index('class="ez-term"')
-    assert brief_at < term_at
-
-
-def test_hooks_source_calls_page_brief() -> None:
-    """hooks.py loads page_brief and wraps after the chip, before glossary."""
-    text = HOOKS_PY.read_text(encoding="utf-8")
-    assert "wrap_page_brief" in text
-    assert "page_brief" in text
-    wrap_at = text.index("wrap_page_brief")
-    gloss_at = text.index("apply_glossary")
-    chip_at = text.index("_inject_published_chip")
-    assert chip_at < wrap_at < gloss_at
-
-
 def test_extra_css_styles_page_brief() -> None:
     """Card is a two-column grid that stacks at the published-chip breakpoint."""
     css = EXTRA_CSS.read_text(encoding="utf-8")
@@ -374,5 +315,5 @@ def test_conventions_document_page_brief() -> None:
     assert "**What's on this page**" in text
     assert "**What this enables**" in text
     assert "ez-page-brief" in text
-    assert "hooks.py" in text
+    assert "remark" in text.lower() or "Fumadocs" in text
     assert "page_brief" in text or "page-brief" in text

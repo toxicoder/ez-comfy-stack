@@ -1,8 +1,7 @@
 """First-party glossary: JSON source, markdown render, HTML wrap, modal inject.
 
-Designed for leftover MkDocs hooks (``docs/hooks.py``), the Fumadocs
-remark plugin, and hermetic pytest (stdlib ``json`` only — CI's test job
-does not install PyYAML).
+Designed for the Fumadocs remark plugin and hermetic pytest (stdlib
+``json`` only — CI's test job does not install PyYAML).
 """
 
 from __future__ import annotations

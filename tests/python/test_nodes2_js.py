@@ -60,10 +60,8 @@ def test_ingest_js_drops_litegraph_node_widget() -> None:
 
 
 def test_every_frontend_js_file_is_nodes2_safe() -> None:
-    files = sorted(CUSTOM.rglob("js/*.js")) + sorted(
-        (ROOT / "docs" / "javascripts").glob("*.js")
-    )
-    assert files, "expected custom-node and docs JS"
+    files = sorted(CUSTOM.rglob("js/*.js"))
+    assert files, "expected custom-node JS"
     for path in files:
         body = path.read_text(encoding="utf-8")
         assert "node_widget" not in body, path

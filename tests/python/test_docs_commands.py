@@ -1,4 +1,4 @@
-"""Command-builder JSON, substitution spec, ezcmd fences, MkDocs wiring.
+"""Command-builder JSON, substitution spec, ezcmd fences, Fumadocs wiring.
 
 Hermetic: stdlib + docs/commands.py. No MkDocs, network, or browser.
 """
@@ -17,10 +17,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[2]
 COMMANDS_PY = ROOT / "docs" / "commands.py"
 BUILDER_JSON = ROOT / "includes" / "command-builder.json"
-HOOKS_PY = ROOT / "docs" / "hooks.py"
 COMMANDS_TS = ROOT / "docs-site" / "lib" / "command-vars.ts"
 COMMANDS_TSX = ROOT / "docs-site" / "components" / "command-vars.tsx"
-COMMANDS_JS = ROOT / "docs" / "javascripts" / "commands.js"
 EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
 DOWNLOAD_TIERS = ROOT / "docs" / "download-tiers.md"
@@ -229,6 +227,9 @@ def test_inject_command_assets_once(cmd: ModuleType, builder: dict[str, object])
     )
     twice = cmd.inject_command_assets(once, builder)
     assert twice.count('id="ez-cmd-data"') == 1
+    no_body = cmd.inject_command_assets("<html><p>hi</p></html>", builder)
+    assert 'id="ez-cmd-data"' in no_body
+    assert no_body.startswith("<html>")
 
 
 def test_mkdocs_wires_commands_js(cmd: ModuleType) -> None:

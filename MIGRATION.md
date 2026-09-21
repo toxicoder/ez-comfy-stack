@@ -9,13 +9,13 @@ The content did not move: pages still live in `docs/`, the generators still writ
 - What changed and what did not
 - How to run the site locally
 - How the published URLs stay stable
-- Leftover MkDocs files that can go after the first green preview
+- MkDocs chrome that was retired after the Fumadocs preview went green
 
 **What this enables**
 
 - Reviewing this change knowing which diffs are mechanical
 - Reproducing the site build without a Python MkDocs toolchain
-- Deleting leftover Material files once the GitHub Pages preview is green
+- Reviewing the Fumadocs site knowing Material chrome is gone
 
 ## What changed
 
@@ -73,7 +73,7 @@ Without Bazel:
 
 Inside `docs-site/` the same steps are npm scripts: `npm run dev`, `npm run build`,
 `npm run unit`, `npm run nav:check`, `npm run verify`. `nav:generate` and `codemod`
-remain for a repository that still has its `mkdocs.yml`.
+remain for a repository that still has a `mkdocs.yml` (this one does not).
 
 Dependencies: Node 22+ (the contributor Dev Container bakes the official Node 22
 tarball; on a host `brew install node@22`). Python is only needed by the
@@ -94,22 +94,13 @@ The development alias renders a banner. The branch used by “Edit on GitHub” 
 links comes from `EZ_DOCS_VERSION` (override locally with `EZ_DOCS_GIT_REF` or
 `DGX_DOCS_GIT_REF`).
 
-## Leftover MkDocs files
+## MkDocs chrome retired
 
-Still on disk so hermetic pytest can keep covering `docs/*.py` (100% gate) and the
-Material-era JS contracts until the first green Pages preview:
-
-| Path | Why it is still here |
-| --- | --- |
-| `mkdocs.yml` | `docs-site/scripts/gen_nav.py` can still transcribe nav while it exists; `nav.json` is the live source of truth |
-| `docs/hooks.py` | Hermetic tests still load branch stamping, page-brief wrap, glossary, ezcmd, published chip |
-| `docs/javascripts/*.js` | Source-string contracts in `test_docs_glossary.py` / leftover Material widgets |
-| `docs/stylesheets/extra.css` | `test_docs_page_brief.py` still reads page-brief CSS comments here |
-
-The live site does **not** load those files. Chrome, widgets, and search live in `docs-site/`.
-After the first green `https://toxicoder.github.io/ez-comfy-stack/development/` preview,
-delete the four rows above, retarget the remaining pytest paths at `docs-site/`, and drop
-`mkdocs.yml` from `scripts/validate.sh` `path_matches_docs`.
+Material files (`mkdocs.yml`, `docs/hooks.py`, `docs/javascripts/*.js`,
+`docs/stylesheets/extra.css`) are gone. Navigation is hand-maintained in
+`docs-site/lib/nav.json`; `docs-site/scripts/gen_nav.py --check` validates it against
+the tree. Hermetic Python specs that remain: `docs/commands.py`, `docs/glossary.py`,
+`docs/page_brief.py`.
 
 If a stale checkout still has `site/`, `.venv-docs/`, or `.mkdocs-serve-*.yml`, they are
 build artefacts and can be removed — they are gitignored.
@@ -123,7 +114,7 @@ build artefacts and can be removed — they are gitignored.
 | Widget behaviour | Material extra JS | `//docs-site:unit` (Vitest), `//docs-site:typecheck` |
 | Nav ↔ pages | `mkdocs.yml` vs disk | `docs-site/lib/nav.json` vs disk (`test_docs_nav_coverage.py`, `//docs-site:nav_test`) |
 | Nav transcriber / codemod units | n/a | `//docs-site:nav_test`, `//docs-site:codemod_test` |
-| Python coverage | generators + `hooks.py` | same `docs/*.py` modules (100% gate unchanged) |
+| Python coverage | generators + `hooks.py` | generators + `commands.py` / `glossary.py` / `page_brief.py` (100% gate unchanged) |
 | Public aliases | mike `latest` / `development` | Next exports at the same URL prefixes (one alias per deploy) |
 
 No gate was dropped: each MkDocs-era target was retargeted onto the Next app, and the CI

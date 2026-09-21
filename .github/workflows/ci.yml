@@ -48,7 +48,6 @@ jobs:
               - 'docs/**'
               - 'docs-site/**'
               - 'includes/**'
-              - 'mkdocs.yml'
               - 'scripts/manage.sh'
               - 'scripts/lib/**'
               - 'scripts/utilities/**'
