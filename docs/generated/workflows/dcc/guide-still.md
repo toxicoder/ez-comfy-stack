@@ -72,6 +72,7 @@ flowchart LR
   N16["Negative Prompt Enhance"]
   N17["Quality"]
   N18["Upscale still"]
+  N19["Check models"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -114,6 +115,7 @@ flowchart LR
 | 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 17 | Quality | `EZQuality` | Ungrouped |
 | 18 | Upscale still | `EZImageUpscale` | Ungrouped |
+| 19 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1195,3 +1197,21 @@ Upscale mode.
 | `2x` | Double pixels. |
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

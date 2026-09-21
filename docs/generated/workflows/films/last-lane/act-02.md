@@ -319,6 +319,7 @@ flowchart TB
 | 901 | LTX AI-media disclosure (end-card) | `EZFilmDisclosure` | 9. Publish 90s MP4 |
 | 51 | Load previous act last frame | `LoadImage` | 1. Identity (Klein) |
 | 902 | Negative Prompt Enhance | `EZNegativePromptEnhance` | 2. LTX models |
+| 903 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -2298,3 +2299,21 @@ Upload widget type.
 **How it affects generation:** Leave image. This is the choose-file control, not a generation knob.
 
 **This graph:** `image`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

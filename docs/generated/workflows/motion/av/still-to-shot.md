@@ -64,67 +64,6 @@ Occupancy: ltx — stop Wan, podcast, music, other LTX. One GB10 job.
 
 Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
-## Graph
-
-```mermaid
-flowchart LR
-  N1["LTX-2.5 distilled INT8-convrot"]
-  N2["LTX-2.5 video VAE"]
-  N3["Gemma4-with-proj (ltxv)"]
-  N4["Start frame"]
-  N5["Motion + audio"]
-  N6["Negative"]
-  N7["LTX Img→Video condition"]
-  N8["LTX frame rate cond"]
-  N9["KSampler"]
-  N10["VAE Decode"]
-  N12["Save frames (secondary)"]
-  N13["LTX-2.5 audio VAE"]
-  N14["Empty LTX audio latent"]
-  N15["Concat AV latents"]
-  N16["Separate AV latents"]
-  N17["Operator note"]
-  N18["Save video (MP4) — open node for preview"]
-  N19["Last frame"]
-  N20["Save last frame"]
-  N21["LTX Prompt Enhance"]
-  N22["Audio VAE Decode"]
-  N23["Negative Prompt Enhance"]
-  N24["Quality"]
-  N25["Format / platform"]
-  N26["Describe image"]
-  N1 --> N9
-  N2 --> N7
-  N2 --> N10
-  N3 --> N5
-  N3 --> N6
-  N4 --> N7
-  N4 --> N26
-  N5 --> N7
-  N6 --> N7
-  N7 --> N8
-  N7 --> N15
-  N8 --> N9
-  N9 --> N16
-  N10 --> N12
-  N10 --> N18
-  N10 --> N19
-  N13 --> N14
-  N13 --> N22
-  N14 --> N15
-  N15 --> N9
-  N16 --> N10
-  N16 --> N22
-  N19 --> N20
-  N21 --> N5
-  N21 --> N23
-  N22 --> N18
-  N23 --> N6
-  N25 --> N7
-  N25 --> N21
-  N26 --> N21
-```
-
 ## Nodes on this graph
 
 | Id | Title | Type | Group |
@@ -154,6 +93,7 @@ flowchart LR
 | 24 | Quality | `EZQuality` | Ungrouped |
 | 25 | Format / platform | `EZVideoFormat` | Ungrouped |
 | 26 | Describe image | `EZImageDescribe` | Ungrouped |
+| 27 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1540,3 +1480,21 @@ Run the captioner.
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
 **This graph:** `false`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

@@ -71,6 +71,7 @@ flowchart LR
   N22["Snap to Klein grid"]
   N23["Match source size"]
   N24["Background cast"]
+  N25["Check models"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -120,6 +121,7 @@ flowchart LR
 | 22 | Snap to Klein grid | `EZSnapImage` | Ungrouped |
 | 23 | Match source size | `EZMatchImageSize` | Ungrouped |
 | 24 | Background cast | `EZBackgroundCast` | Ungrouped |
+| 25 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1189,3 +1191,21 @@ Treat extras as background.
 **How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
 
 **This graph:** `true`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

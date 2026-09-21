@@ -2217,9 +2217,11 @@ def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> l
 
 def apply_lab_completeness_flags(graph: dict) -> dict:
     """Write lab_stub / lab_optional_unwired. Preserve other extra keys."""
+    from _wire_model_check import ensure_model_check_node
     from _wire_quality import ensure_quality_node
 
     ensure_quality_node(graph)
+    ensure_model_check_node(graph)
     extra = graph.setdefault("extra", {})
     gid = str((graph.get("extra") or {}).get("lab_rel") or graph.get("id") or "")
     from _lab_ids import rel_id
@@ -2242,9 +2244,11 @@ def apply_lab_completeness_flags(graph: dict) -> dict:
 def stamp_suite_graph(graph: dict) -> dict:
     """Stamp a known suite graph. No-op when graph id is not in STAMP_SPECS."""
     from _lab_ids import rel_id
+    from _wire_model_check import ensure_model_check_node
     from _wire_quality import ensure_quality_node
 
     ensure_quality_node(graph)
+    ensure_model_check_node(graph)
     extra = graph.get("extra") or {}
     key = rel_id(str(extra.get("lab_rel") or graph.get("id") or ""))
     spec = STAMP_SPECS.get(key)

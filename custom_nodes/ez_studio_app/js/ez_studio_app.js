@@ -81,6 +81,8 @@ const SAVE_TYPES = new Set([
 
 const BANNER_ID = "ez-studio-app-banner";
 const DESC_STYLE_ID = "ez-studio-app-desc-wrap";
+const CHECK_STYLE_ID = "ez-studio-app-check-models";
+let modelCheckText = "";
 const CHIP = [
   "padding:10px 12px",
   "border-radius:10px",
@@ -250,6 +252,66 @@ function ensureDescriptionCss() {
 }
 
 /**
+ * Style the occupancy-chip Check models button.
+ * @returns {void}
+ */
+function ensureCheckCss() {
+  if (document.getElementById(CHECK_STYLE_ID)) {
+    return;
+  }
+  const style = document.createElement("style");
+  style.id = CHECK_STYLE_ID;
+  style.textContent = `
+#${BANNER_ID} [data-ez-check-models] {
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.18));
+  background: var(--comfy-menu-bg, rgba(255,255,255,0.08));
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+#${BANNER_ID} [data-ez-check-result] {
+  margin-top: 6px;
+  white-space: pre-wrap;
+}
+`;
+  document.head.appendChild(style);
+}
+
+/**
+ * Wire the occupancy-chip Check models button after innerHTML.
+ * @param {HTMLElement} el
+ * @returns {void}
+ */
+function bindCheckButton(el) {
+  const btn = el.querySelector("[data-ez-check-models]");
+  if (!btn) {
+    return;
+  }
+  btn.addEventListener("click", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    btn.disabled = true;
+    modelCheckText = "Checking models…";
+    renderBanner("");
+    try {
+      const api = window.ezComfyModelCheck;
+      if (!api || typeof api.postCheck !== "function") {
+        modelCheckText = "Check models is unavailable (reload Comfy).";
+      } else {
+        const payload = await api.postCheck(app.graph);
+        modelCheckText = String(payload.message || (payload.ok ? "Ready." : "Missing models."));
+      }
+    } catch (err) {
+      modelCheckText = `Check failed: ${err && err.message ? err.message : err}`;
+    }
+    renderBanner("");
+  });
+}
+
+/**
  * Show occupancy, run status, and handoff copy when App Mode is enabled.
  * @param {string} status
  * @returns {void}
@@ -262,6 +324,7 @@ function renderBanner(status) {
     return;
   }
   el.style.display = "block";
+  ensureCheckCss();
   mountBanner(el);
   const occupancy = mode.occupancy || "none";
   const stop = OCCUPANCY_STOP[occupancy] || "check the Note";
@@ -291,7 +354,11 @@ function renderBanner(status) {
     );
   }
   el.title = summary || qualityCaption || "";
-  el.innerHTML = lines.join("<br>");
+  const checkResult = modelCheckText
+    ? `<div data-ez-check-result>${escapeHtml(modelCheckText).replaceAll("\n", "<br>")}</div>`
+    : "";
+  el.innerHTML = `${lines.join("<br>")}${checkResult}<div><button type="button" data-ez-check-models>Check models</button></div>`;
+  bindCheckButton(el);
 }
 
 app.registerExtension({
@@ -310,6 +377,7 @@ app.registerExtension({
    */
   async setup() {
     ensureDescriptionCss();
+    ensureCheckCss();
     let done = 0;
     const api = app.api;
     const graph = app.graph;

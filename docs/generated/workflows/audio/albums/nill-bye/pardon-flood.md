@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/pardon-flood/01-pardon-flood` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/03-gold-card` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/06-metro-surge` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/07-due-process` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/09-birthright-order` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/10-cook-firing` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/11-inspector-purge` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/12-law-firm-order` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/13-visa-ticket` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/14-shadow-docket` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` | 16 | audio |
-| `audio/albums/nill-bye/pardon-flood/album` | 3 | none |
-| `audio/albums/nill-bye/pardon-flood/cover` | 14 | klein |
+| `audio/albums/nill-bye/pardon-flood/01-pardon-flood` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/03-gold-card` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/06-metro-surge` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/07-due-process` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/09-birthright-order` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/10-cook-firing` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/11-inspector-purge` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/12-law-firm-order` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/13-visa-ticket` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/14-shadow-docket` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` | 17 | audio |
+| `audio/albums/nill-bye/pardon-flood/album` | 4 | none |
+| `audio/albums/nill-bye/pardon-flood/cover` | 15 | klein |
 
 ## `01-pardon-flood`
 
@@ -562,6 +563,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-ieepa-wreck`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck`.
@@ -990,6 +997,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-gold-card`
 
@@ -1423,6 +1436,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-memecoin-tab`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/04-memecoin-tab`.
@@ -1851,6 +1870,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-east-wing-wreck`
 
@@ -2284,6 +2309,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-metro-surge`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/06-metro-surge`.
@@ -2712,6 +2743,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-due-process`
 
@@ -3145,6 +3182,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-kennedy-plaque`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque`.
@@ -3573,6 +3616,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-birthright-order`
 
@@ -4006,6 +4055,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-cook-firing`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/10-cook-firing`.
@@ -4434,6 +4489,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-inspector-purge`
 
@@ -4867,6 +4928,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-law-firm-order`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/12-law-firm-order`.
@@ -5295,6 +5362,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-visa-ticket`
 
@@ -5728,6 +5801,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-shadow-docket`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/14-shadow-docket`.
@@ -6156,6 +6235,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-immunity-hymn`
 
@@ -6592,6 +6677,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/album`.
@@ -6611,6 +6702,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6725,6 +6822,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7963,6 +8066,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

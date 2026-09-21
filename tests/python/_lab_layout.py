@@ -44,6 +44,7 @@ _TYPE_HEIGHT_FLOOR: dict[str, float] = {
     "SaveImage": 270.0,
     "LoadImage": 314.0,
     "EZQuality": 82.0,
+    "EZModelCheck": 140.0,
     "EZImageFormat": 220.0,
     "EZImageMode": 140.0,
     "EZOptionalImage": 120.0,

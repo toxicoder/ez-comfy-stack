@@ -1,7 +1,7 @@
 {
   "id": "asmr-macro",
   "revision": 5,
-  "last_node_id": 24,
+  "last_node_id": 25,
   "last_link_id": 41,
   "nodes": [
     {
@@ -1042,6 +1042,30 @@
         false
       ],
       "title": "Describe image"
+    },
+    {
+      "id": 25,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [

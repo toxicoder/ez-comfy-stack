@@ -336,6 +336,21 @@ def pack_nodes() -> dict[str, Any]:
             ),
         ],
     )
+    nodes["EZModelCheck"] = _n(
+        "Check models",
+        "Manual disk check for occupancy + Quality weights. Queue does not run this node.",
+        origin="ez_quality",
+        lab="Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.",
+        sockets=[],
+        widgets=[
+            _w(
+                "status",
+                index=0,
+                desc="Last check result.",
+                gen="JS overwrites after Check models. Queue ignores this node.",
+            ),
+        ],
+    )
     nodes["EZAppForge"] = _n(
         "App Forge",
         "Clone a shipped lab graph into live _user/ as a new App. No UNET.",

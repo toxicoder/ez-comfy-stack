@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from .check import STATUS_DEFAULT
 from .presets import QUALITY_CHOICES, QUALITY_LAB, normalize_quality
 
 if TYPE_CHECKING:
@@ -62,10 +63,59 @@ class EZQuality:
         }
 
 
+class EZModelCheck:
+    """Manual disk check for occupancy + Quality weights. Queue skips it."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return Comfy widget specs for this node.
+
+        Returns:
+            Required status STRING (JS overwrites after Check models).
+        """
+        return {
+            "required": {
+                "status": (
+                    "STRING",
+                    {
+                        "default": STATUS_DEFAULT,
+                        "multiline": True,
+                        "dynamicPrompts": False,
+                    },
+                ),
+            }
+        }
+
+    # Comfy node contract. Not an output node so Queue Prompt never runs it.
+    RETURN_TYPES = ()
+    FUNCTION = "idle"
+    CATEGORY = CATEGORY
+    OUTPUT_NODE = False
+    DESCRIPTION = (
+        "Click Check models to see whether occupancy + Quality weights are "
+        "on disk. Queue does not run this node. Missing files print the host "
+        "download command (download-models or an opt-in --tier)."
+    )
+
+    def idle(self, status: str = "") -> tuple[()]:
+        """No-op. The JS button POSTs /ez_quality/check instead.
+
+        Args:
+            status: Unused status widget.
+
+        Returns:
+            Empty Comfy tuple.
+        """
+        del status
+        return ()
+
+
 # Comfy custom-node registries.
 NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZQuality": EZQuality,
+    "EZModelCheck": EZModelCheck,
 }
 NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZQuality": "Quality",
+    "EZModelCheck": "Check models",
 }

@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/duty-switch/01-duty-switch` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/02-article-one` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/03-for-cause-lock` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/04-ig-notice` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/05-counsel-stays` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/06-prevailing-wage` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/07-merits-syllabus` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/08-unofficial-sort` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/09-clemency-file` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/10-congress-the-wing` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/11-tie-the-island` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/12-decade-lines` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/14-open-quad` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` | 16 | audio |
-| `audio/albums/nill-bye/duty-switch/album` | 3 | none |
-| `audio/albums/nill-bye/duty-switch/cover` | 14 | klein |
+| `audio/albums/nill-bye/duty-switch/01-duty-switch` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/02-article-one` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/03-for-cause-lock` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/04-ig-notice` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/05-counsel-stays` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/06-prevailing-wage` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/07-merits-syllabus` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/08-unofficial-sort` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/09-clemency-file` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/10-congress-the-wing` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/11-tie-the-island` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/12-decade-lines` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/13-ratepayer-bus` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/14-open-quad` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/15-wrench-the-tap` | 17 | audio |
+| `audio/albums/nill-bye/duty-switch/album` | 4 | none |
+| `audio/albums/nill-bye/duty-switch/cover` | 15 | klein |
 
 ## `01-duty-switch`
 
@@ -559,6 +560,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-article-one`
 
 Catalog id `audio/albums/nill-bye/duty-switch/02-article-one`.
@@ -987,6 +994,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-for-cause-lock`
 
@@ -1420,6 +1433,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-ig-notice`
 
 Catalog id `audio/albums/nill-bye/duty-switch/04-ig-notice`.
@@ -1848,6 +1867,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-counsel-stays`
 
@@ -2281,6 +2306,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-prevailing-wage`
 
 Catalog id `audio/albums/nill-bye/duty-switch/06-prevailing-wage`.
@@ -2709,6 +2740,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-merits-syllabus`
 
@@ -3142,6 +3179,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-unofficial-sort`
 
 Catalog id `audio/albums/nill-bye/duty-switch/08-unofficial-sort`.
@@ -3570,6 +3613,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-clemency-file`
 
@@ -4003,6 +4052,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-congress-the-wing`
 
 Catalog id `audio/albums/nill-bye/duty-switch/10-congress-the-wing`.
@@ -4431,6 +4486,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-tie-the-island`
 
@@ -4864,6 +4925,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-decade-lines`
 
 Catalog id `audio/albums/nill-bye/duty-switch/12-decade-lines`.
@@ -5292,6 +5359,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-ratepayer-bus`
 
@@ -5725,6 +5798,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-open-quad`
 
 Catalog id `audio/albums/nill-bye/duty-switch/14-open-quad`.
@@ -6153,6 +6232,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-wrench-the-tap`
 
@@ -6589,6 +6674,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/duty-switch/album`.
@@ -6608,6 +6699,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6722,6 +6819,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7960,6 +8063,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

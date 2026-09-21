@@ -81,6 +81,7 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 | 24 | Crop guide frames | `LTXVCropGuides` | Ungrouped |
 | 25 | Quality | `EZQuality` | Ungrouped |
 | 26 | Format / platform | `EZVideoFormat` | Ungrouped |
+| 27 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1440,3 +1441,21 @@ LTX clip length.
 **How it affects generation:** Default 8 seconds (193 frames, 1+8n). Frontend writes latent length. Wan 5B stays 5 seconds. Film printers stay 5 seconds / 121.
 
 **This graph:** `8 seconds`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

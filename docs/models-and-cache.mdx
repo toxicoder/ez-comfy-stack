@@ -12,12 +12,13 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 - **Default location** and permissions for `${MODELS_DIR}` and `${COMFY_OUTPUT_DIR}` layout dirs
 - **Layout** (tier dirs, relative `comfy/` symlinks, reap)
 - **Pack map** pointing at download utilities (`download-image.sh`, `download-wan.sh`, `download-ltx.sh`, `download-llm.sh`)
+- **Check models** on every lab App (Queue skips it; click for the host download command)
 
 **What this enables**
 
 - **Downloading Klein 4B, Wan 2.2, and LTX-2.5 weights once** and reusing them across stacks
 - **Keeping weights** off the GHCR image (`us-safe-studio`)
-- **Checking the tree** without network access
+- **Checking the tree** without network access — including **Check models** on every lab App (Queue does not run that node)
 
 **Who this is for:** operators setting `MODELS_DIR` before `download-models`.
 
@@ -227,6 +228,8 @@ Full download, basename, resume, and pin reference: [Download packs](operate/mod
 ```
 
 `download-models` has **no** `--tier`. It always pulls the default still + Wan 5B + LTX-2.5 set.
+
+Every lab App also has an isolated **Check models** node (and an occupancy-chip button in App Mode). Queue does not run it. Click it to see whether this graph plus the current Quality combo is on disk; missing files print the host command above. Restart Comfy after a pull so `models/*` re-link.
 
 ## Disk headroom
 

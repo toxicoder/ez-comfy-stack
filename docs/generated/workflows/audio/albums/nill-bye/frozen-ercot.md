@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/02-abject-failure` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/06-property-hymn` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/10-mask-order` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/12-rack-tax` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/14-fourth-term` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` | 16 | audio |
-| `audio/albums/nill-bye/frozen-ercot/album` | 3 | none |
-| `audio/albums/nill-bye/frozen-ercot/cover` | 14 | klein |
+| `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/02-abject-failure` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/05-gavel-theater` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/06-property-hymn` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/10-mask-order` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/12-rack-tax` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/13-wudu-letter` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/14-fourth-term` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` | 17 | audio |
+| `audio/albums/nill-bye/frozen-ercot/album` | 4 | none |
+| `audio/albums/nill-bye/frozen-ercot/cover` | 15 | klein |
 
 ## `01-frozen-ercot`
 
@@ -540,6 +541,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-abject-failure`
 
@@ -991,6 +998,12 @@ cut
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-six-week-clock`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/03-six-week-clock`.
@@ -1426,6 +1439,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-no-bid-wire`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire`.
@@ -1854,6 +1873,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-gavel-theater`
 
@@ -2290,6 +2315,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-property-hymn`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/06-property-hymn`.
@@ -2718,6 +2749,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-voucher-raid`
 
@@ -3151,6 +3188,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-uninsured-blues`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues`.
@@ -3579,6 +3622,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-locked-stacks`
 
@@ -4012,6 +4061,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-mask-order`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/10-mask-order`.
@@ -4440,6 +4495,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-mid-decade-map`
 
@@ -4873,6 +4934,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-rack-tax`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/12-rack-tax`.
@@ -5301,6 +5368,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-wudu-letter`
 
@@ -5737,6 +5810,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-fourth-term`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/14-fourth-term`.
@@ -6165,6 +6244,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-campus-cordon`
 
@@ -6601,6 +6686,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/album`.
@@ -6620,6 +6711,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6734,6 +6831,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7972,6 +8075,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

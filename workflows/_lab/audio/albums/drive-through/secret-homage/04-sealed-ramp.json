@@ -1,7 +1,7 @@
 {
   "id": "04-sealed-ramp",
   "revision": 2,
-  "last_node_id": 15,
+  "last_node_id": 16,
   "last_link_id": 16,
   "nodes": [
     {
@@ -640,6 +640,30 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 16,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [

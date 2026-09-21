@@ -94,6 +94,7 @@ flowchart TB
 | 31 | Upscale still | `EZImageUpscale` | SHOT KEY |
 | 32 | Upscale still | `EZImageUpscale` | SHOT WINDOW |
 | 33 | Upscale still | `EZImageUpscale` | SHOT NIGHT LAMP |
+| 34 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1337,3 +1338,21 @@ Upscale mode.
 | `2x` | Double pixels. |
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/false-drop/01-false-drop` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/02-velvet-rope` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/03-fog-machine` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/04-guest-list` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/05-sparkler` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/06-bottle-service` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/07-strobe-claim` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/08-amen-rumor` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/09-wobble-alibi` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/10-supersaw-flex` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/11-laser-show` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/12-two-step` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/13-jersey-bounce` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/14-kick-split` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/15-uplift-rumor` | 16 | audio |
-| `audio/albums/nill-bye/false-drop/album` | 3 | none |
-| `audio/albums/nill-bye/false-drop/cover` | 14 | klein |
+| `audio/albums/nill-bye/false-drop/01-false-drop` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/02-velvet-rope` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/03-fog-machine` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/04-guest-list` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/05-sparkler` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/06-bottle-service` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/07-strobe-claim` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/08-amen-rumor` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/09-wobble-alibi` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/10-supersaw-flex` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/11-laser-show` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/12-two-step` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/13-jersey-bounce` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/14-kick-split` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/15-uplift-rumor` | 17 | audio |
+| `audio/albums/nill-bye/false-drop/album` | 4 | none |
+| `audio/albums/nill-bye/false-drop/cover` | 15 | klein |
 
 ## `01-false-drop`
 
@@ -528,6 +529,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-velvet-rope`
 
@@ -961,6 +968,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-fog-machine`
 
 Catalog id `audio/albums/nill-bye/false-drop/03-fog-machine`.
@@ -1386,6 +1399,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `04-guest-list`
 
@@ -1819,6 +1838,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `05-sparkler`
 
 Catalog id `audio/albums/nill-bye/false-drop/05-sparkler`.
@@ -2241,6 +2266,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `06-bottle-service`
 
@@ -2665,6 +2696,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `07-strobe-claim`
 
 Catalog id `audio/albums/nill-bye/false-drop/07-strobe-claim`.
@@ -3087,6 +3124,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `08-amen-rumor`
 
@@ -3511,6 +3554,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `09-wobble-alibi`
 
 Catalog id `audio/albums/nill-bye/false-drop/09-wobble-alibi`.
@@ -3933,6 +3982,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `10-supersaw-flex`
 
@@ -4357,6 +4412,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `11-laser-show`
 
 Catalog id `audio/albums/nill-bye/false-drop/11-laser-show`.
@@ -4779,6 +4840,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `12-two-step`
 
@@ -5203,6 +5270,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `13-jersey-bounce`
 
 Catalog id `audio/albums/nill-bye/false-drop/13-jersey-bounce`.
@@ -5625,6 +5698,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `14-kick-split`
 
@@ -6049,6 +6128,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `15-uplift-rumor`
 
 Catalog id `audio/albums/nill-bye/false-drop/15-uplift-rumor`.
@@ -6472,6 +6557,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/false-drop/album`.
@@ -6491,6 +6582,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6605,6 +6702,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7843,6 +7946,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

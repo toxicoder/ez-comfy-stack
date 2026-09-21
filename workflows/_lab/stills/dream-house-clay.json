@@ -1,7 +1,7 @@
 {
   "id": "dream-house-clay",
   "revision": 4,
-  "last_node_id": 130,
+  "last_node_id": 131,
   "last_link_id": 176,
   "nodes": [
     {
@@ -4344,6 +4344,30 @@
         "none"
       ],
       "title": "Upscale still"
+    },
+    {
+      "id": 131,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [

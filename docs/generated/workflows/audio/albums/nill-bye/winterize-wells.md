@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/winterize-wells/01-winterize-wells` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/02-registered-report` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/04-scif-only` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/05-hearing-first` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/06-keep-the-match` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/07-honest-census` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/08-paris-seat` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/09-qualified-divest` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/10-return-pdf` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/11-casework-screen` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/12-district-door` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/13-levy-in-code` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/15-one-college` | 16 | audio |
-| `audio/albums/nill-bye/winterize-wells/album` | 3 | none |
-| `audio/albums/nill-bye/winterize-wells/cover` | 14 | klein |
+| `audio/albums/nill-bye/winterize-wells/01-winterize-wells` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/02-registered-report` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/03-named-uncertainty` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/04-scif-only` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/05-hearing-first` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/06-keep-the-match` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/07-honest-census` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/08-paris-seat` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/09-qualified-divest` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/10-return-pdf` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/11-casework-screen` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/12-district-door` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/13-levy-in-code` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/15-one-college` | 17 | audio |
+| `audio/albums/nill-bye/winterize-wells/album` | 4 | none |
+| `audio/albums/nill-bye/winterize-wells/cover` | 15 | klein |
 
 ## `01-winterize-wells`
 
@@ -540,6 +541,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-registered-report`
 
@@ -991,6 +998,12 @@ cut
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-named-uncertainty`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/03-named-uncertainty`.
@@ -1423,6 +1436,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-scif-only`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/04-scif-only`.
@@ -1851,6 +1870,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-hearing-first`
 
@@ -2284,6 +2309,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-keep-the-match`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/06-keep-the-match`.
@@ -2712,6 +2743,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-honest-census`
 
@@ -3145,6 +3182,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-paris-seat`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/08-paris-seat`.
@@ -3573,6 +3616,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-qualified-divest`
 
@@ -4006,6 +4055,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-return-pdf`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/10-return-pdf`.
@@ -4434,6 +4489,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-casework-screen`
 
@@ -4867,6 +4928,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-district-door`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/12-district-door`.
@@ -5295,6 +5362,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-levy-in-code`
 
@@ -5728,6 +5801,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-fourteenth-clause`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause`.
@@ -6156,6 +6235,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-one-college`
 
@@ -6589,6 +6674,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/album`.
@@ -6608,6 +6699,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6722,6 +6819,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7960,6 +8063,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

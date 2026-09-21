@@ -1,7 +1,7 @@
 {
   "id": "album",
   "revision": 2,
-  "last_node_id": 3,
+  "last_node_id": 4,
   "last_link_id": 0,
   "nodes": [
     {
@@ -90,6 +90,30 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 4,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [],
