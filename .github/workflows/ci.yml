@@ -42,6 +42,7 @@ jobs:
               - 'mypy.ini'
               - 'pyrightconfig.json'
               - '.devcontainer/tool-versions.env'
+              - '.vscode/**'
             docs:
               - 'docs/**'
               - 'docs-site/**'

@@ -47,7 +47,7 @@ How merge commits, squash, rebase, and stacked PRs work in this repo: [How we la
 
 Install Python test tools once: `pip install -r tests/requirements.txt`.
 
-VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables.
+VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Also `doctor` and `docs-serve`. Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables. Format-on-save is shell and Starlark only.
 
 ```mermaid
 flowchart TB

@@ -21,6 +21,8 @@ TRACKED = (
 )
 FORBIDDEN_SETTING_KEYS = frozenset(
     {
+        "python.analysis.extraPaths",
+        "python.analysis.typeCheckingMode",
         "python.defaultInterpreterPath",
         "python.envFile",
     }
@@ -35,6 +37,70 @@ GITIGNORE_ALLOW = (
     "!.vscode/tasks.json",
     "!.vscode/launch.json",
 )
+REQUIRED_RECS = (
+    "bazelbuild.vscode-bazel",
+    "bradlc.vscode-tailwindcss",
+    "github.vscode-github-actions",
+    "mkhl.shfmt",
+    "ms-azuretools.vscode-containers",
+    "ms-python.debugpy",
+    "ms-python.mypy-type-checker",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode-remote.remote-containers",
+    "redhat.vscode-yaml",
+    "timonwong.shellcheck",
+    "unifiedjs.vscode-mdx",
+)
+REQUIRED_UNWANTED = (
+    "charliermarsh.ruff",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "foxundermoon.shell-format",
+    "ms-azuretools.vscode-docker",
+    "ms-python.autopep8",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.isort",
+    "ms-python.pylint",
+    "ms-vscode.makefile-tools",
+)
+EXPLORER_HIDE = (
+    "coverage",
+    "docs-site/.next",
+    "docs-site/node_modules",
+    "docs-site/out",
+    "docs-site/out-linux",
+    "site",
+)
+WATCHER_HIDE = (
+    "docs-site/public/assets/**",
+    "docs/assets/**",
+)
+READONLY_EXTRA = (
+    "docs-site/out/**",
+    "site/**",
+)
+NO_FORMAT_ON_SAVE = (
+    "[css]",
+    "[github-actions-workflow]",
+    "[javascript]",
+    "[json]",
+    "[jsonc]",
+    "[markdown]",
+    "[mdx]",
+    "[python]",
+    "[yaml]",
+)
+FORMAT_ON_SAVE = (
+    "[shellscript]",
+    "[starlark]",
+)
+TASK_ENV = {
+    "EZ_COMFY_PROGRESS": "0",
+    "HF_PROGRESS": "0",
+    "LAB_HERMETIC": "1",
+}
 
 
 def _load_json(path: Path) -> Any:
@@ -110,12 +176,25 @@ def test_gitignore_allowlists_shared_vscode_files() -> None:
     assert missing == [], f"gitignore missing allowlist lines: {missing}"
 
 
+def _extension_ids(payload: Any, key: str) -> set[str]:
+    """Collect string extension IDs from an extensions.json list.
+
+    Args:
+        payload: Parsed extensions.json.
+        key: ``recommendations`` or ``unwantedRecommendations``.
+
+    Returns:
+        Extension IDs.
+    """
+    assert isinstance(payload, dict)
+    items = payload.get(key)
+    assert isinstance(items, list)
+    return {item for item in items if isinstance(item, str)}
+
+
 def test_recommendations_cover_devcontainer_extensions() -> None:
     """Laptop recommendations are a superset of the devcontainer list."""
-    workspace = _load_json(VSCODE / "extensions.json")
-    recommended = workspace.get("recommendations")
-    assert isinstance(recommended, list)
-    rec_ids = {item for item in recommended if isinstance(item, str)}
+    rec_ids = _extension_ids(_load_json(VSCODE / "extensions.json"), "recommendations")
     dev = _load_json(DEVCONTAINER)
     custom = dev.get("customizations")
     assert isinstance(custom, dict)
@@ -131,12 +210,80 @@ def test_recommendations_cover_devcontainer_extensions() -> None:
     assert missing == [], f"devcontainer extensions missing from .vscode: {missing}"
 
 
+def test_recommendations_cover_repo_languages() -> None:
+    """Laptop recs cover Bazel, Python, shell, YAML, MDX, Tailwind, Actions, containers."""
+    rec_ids = _extension_ids(_load_json(VSCODE / "extensions.json"), "recommendations")
+    missing = [item for item in REQUIRED_RECS if item not in rec_ids]
+    assert missing == [], f"missing recommendations: {missing}"
+    assert "ms-azuretools.vscode-docker" not in rec_ids
+    assert "ms-playwright.playwright" not in rec_ids
+
+
+def test_unwanted_recommendations_hide_non_gates() -> None:
+    """Unwanted list hides formatters and the archived Docker pack."""
+    payload = _load_json(VSCODE / "extensions.json")
+    rec_ids = _extension_ids(payload, "recommendations")
+    unwanted = _extension_ids(payload, "unwantedRecommendations")
+    missing = [item for item in REQUIRED_UNWANTED if item not in unwanted]
+    assert missing == [], f"missing unwantedRecommendations: {missing}"
+    overlap = sorted(rec_ids & unwanted)
+    assert overlap == [], f"extension in both lists: {overlap}"
+
+
 def test_settings_do_not_pin_interpreter_or_env_file() -> None:
-    """Workspace settings must not point at a machine interpreter or .env."""
+    """Workspace settings must not pin interpreter, .env, or Pyright extras."""
     settings = _load_json(VSCODE / "settings.json")
     assert isinstance(settings, dict)
     present = sorted(FORBIDDEN_SETTING_KEYS & set(settings))
     assert present == []
+
+
+def test_settings_hide_generated_trees_and_keep_format_on_save_narrow() -> None:
+    """Explorer hides generated trees; format-on-save is shell and Starlark only."""
+    settings = _load_json(VSCODE / "settings.json")
+    assert isinstance(settings, dict)
+    exclude = settings.get("files.exclude")
+    assert isinstance(exclude, dict)
+    missing_exclude = [key for key in EXPLORER_HIDE if key not in exclude]
+    assert missing_exclude == [], f"files.exclude missing: {missing_exclude}"
+    watcher = settings.get("files.watcherExclude")
+    assert isinstance(watcher, dict)
+    missing_watch = [key for key in WATCHER_HIDE if key not in watcher]
+    assert missing_watch == [], f"files.watcherExclude missing: {missing_watch}"
+    readonly = settings.get("files.readonlyInclude")
+    assert isinstance(readonly, dict)
+    missing_ro = [key for key in READONLY_EXTRA if key not in readonly]
+    assert missing_ro == [], f"files.readonlyInclude missing: {missing_ro}"
+    assert settings.get("editor.formatOnSave") is False
+    assert settings.get("typescript.enablePromptUseWorkspaceTsdk") is True
+    assert settings.get("typescript.tsdk") == "docs-site/node_modules/typescript/lib"
+    assert settings.get("mypy-type-checker.cwd") == "${workspaceFolder}"
+    assert settings.get("css.lint.unknownAtRules") == "ignore"
+    tailwind_langs = settings.get("tailwindCSS.includeLanguages")
+    assert isinstance(tailwind_langs, dict)
+    assert tailwind_langs.get("mdx") == "html"
+    assert settings.get("tailwindCSS.experimental.configFile") == (
+        "docs-site/app/global.css"
+    )
+    associations = settings.get("files.associations")
+    assert isinstance(associations, dict)
+    assert associations.get("*.bats") == "shellscript"
+    assert associations.get("docker-compose*.yml") == "dockercompose"
+    assert associations.get("compose*.yml") == "dockercompose"
+    for lang in NO_FORMAT_ON_SAVE:
+        block = settings.get(lang)
+        assert isinstance(block, dict), f"{lang} settings missing"
+        assert block.get("editor.formatOnSave") is False, lang
+    for lang in FORMAT_ON_SAVE:
+        block = settings.get(lang)
+        assert isinstance(block, dict), f"{lang} settings missing"
+        assert block.get("editor.formatOnSave") is True, lang
+    markdown = settings.get("[markdown]")
+    assert isinstance(markdown, dict)
+    assert markdown.get("files.trimTrailingWhitespace") is False
+    mdx = settings.get("[mdx]")
+    assert isinstance(mdx, dict)
+    assert mdx.get("files.trimTrailingWhitespace") is False
 
 
 def test_launch_configs_do_not_use_env_file() -> None:
@@ -147,6 +294,7 @@ def test_launch_configs_do_not_use_env_file() -> None:
     configs = launch.get("configurations")
     assert isinstance(configs, list)
     assert configs
+    purposes: list[str] = []
     for config in configs:
         assert isinstance(config, dict)
         env = config.get("env")
@@ -154,6 +302,10 @@ def test_launch_configs_do_not_use_env_file() -> None:
         assert "PYTHONPATH" in env
         assert "${workspaceFolder}" in str(env["PYTHONPATH"])
         assert env.get("LAB_HERMETIC") == "1"
+        purpose = config.get("purpose")
+        if isinstance(purpose, list):
+            purposes.extend(item for item in purpose if isinstance(item, str))
+    assert "debug-test" in purposes
 
 
 def test_vscode_json_has_no_machine_or_secret_strings() -> None:
@@ -174,6 +326,12 @@ def test_tasks_wrap_bazelisk_entry_points() -> None:
     """Run Task labels call the same bazelisk commands as CONTRIBUTING."""
     tasks = _load_json(VSCODE / "tasks.json")
     assert isinstance(tasks, dict)
+    options = tasks.get("options")
+    assert isinstance(options, dict)
+    env = options.get("env")
+    assert isinstance(env, dict)
+    for key, value in TASK_ENV.items():
+        assert env.get(key) == value, key
     items = tasks.get("tasks")
     assert isinstance(items, list)
     by_label = {
@@ -188,3 +346,19 @@ def test_tasks_wrap_bazelisk_entry_points() -> None:
     assert "bazelisk test //:lint" in by_label["lint"]
     assert by_label["fix"] == "bazelisk run //:fix"
     assert by_label["docs"] == "bazelisk run //docs:docs"
+    assert by_label["doctor"] == "bazelisk run //:manage -- doctor"
+    assert by_label["docs-serve"] == "bazelisk run //docs:serve"
+    background = [
+        item.get("isBackground")
+        for item in items
+        if isinstance(item, dict) and item.get("label") == "docs-serve"
+    ]
+    assert background == [None] or background == [False]
+
+
+def test_bazel_core_path_filters_include_vscode() -> None:
+    """Workspace-only edits still run the core test slice."""
+    validate = (ROOT / "scripts" / "validate.sh").read_text(encoding="utf-8")
+    assert "[[ ${path} == .vscode/* ]]" in validate
+    ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "'.vscode/**'" in ci
