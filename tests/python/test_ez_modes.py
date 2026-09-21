@@ -59,7 +59,14 @@ def test_enhance_mode_output_matches_klein_combo() -> None:
 
     klein_modes = EZKleinPromptEnhance.INPUT_TYPES()["required"]["mode"][0]
     assert EZImageMode.RETURN_TYPES[1] == klein_modes
-    assert klein_modes == ["t2i", "edit", "identity", "text_swap"]
+    assert klein_modes == [
+        "t2i",
+        "edit",
+        "identity",
+        "text_swap",
+        "background_swap",
+        "background_edit",
+    ]
 
 
 def test_mode_catalog_is_one_hundred_unique_creator_modes() -> None:

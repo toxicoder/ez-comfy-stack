@@ -663,6 +663,34 @@ Use.
 
 **How it affects generation:** Draft, album take, 30 s bed, bumper. Catalog under generated/audio.
 
+### `EZBackgroundCast` — Background cast
+
+Choose whether companions and extras count as background on Klein background Apps.
+
+!!! warning "Lab notes"
+
+    stills/background-swap and stills/background-edit. On treats people as environment. Off keeps them locked with the hero. Defaults on.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `cast` | out | `STRING` | Compact other=1,crowd=1 token for Klein Enhance. |
+
+#### `other_characters`
+
+Type `BOOLEAN`. Range / default: on.
+
+Treat companions as background.
+
+**How it affects generation:** On: companions and group members are swapped or restyled with the environment. Off: keep them locked with the hero.
+
+#### `background_characters`
+
+Type `BOOLEAN`. Range / default: on.
+
+Treat extras as background.
+
+**How it affects generation:** On: extras, crowd, and distant figures are environment. Off: keep them as they appear.
+
 ### `EZCinemaRack` — Cinema Rack
 
 Pick one cinematography technique per axis and splice a Klein / Wan / LTX prompt.
@@ -2015,7 +2043,7 @@ Match a loaded still's aspect, or keep Format / platform.
 
 ### `EZImageMode` — Creator mode
 
-Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.
+Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity/background_swap/background_edit plus a save prefix.
 
 !!! warning "Lab notes"
 
@@ -2025,7 +2053,7 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 | --- | --- | --- | --- |
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
 | `context` | out | `STRING` | Mode instruction plus incoming look splice. |
-| `enhance_mode` | out | `COMBO` | t2i, edit, identity, or text_swap — same combo as EZKleinPromptEnhance.mode. |
+| `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode. |
 | `prefix` | out | `STRING` | SaveImage filename prefix. |
 
 #### `category`
@@ -2073,7 +2101,7 @@ Creator preset.
 | `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
 | `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
 | `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
-| `Background swap` | Keep the subject from the reference still. Replace only the background and ground contact. |
+| `Background swap` | Keep the subject from the reference still. Replace the background, ground or floor, and set dressing near the subject. |
 | `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
 | `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
 | `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |
@@ -2208,6 +2236,7 @@ Rewrite a lazy still/edit prompt for Klein 4B with on-box Qwen3-4B-Instruct.
 | `prompt` | in | `STRING` | Optional override of the widget (usually unwired). |
 | `context` | in | `STRING` | Bible/research. Ignored when Enhance is off. |
 | `image_desc` | in | `STRING` | Optional still caption from EZImageDescribe. |
+| `background_cast` | in | `STRING` | Optional compact token from EZBackgroundCast. |
 | `prompt` | out | `STRING` | String CLIP actually encodes. |
 
 #### `sample`
@@ -2236,11 +2265,11 @@ Run the rewriter.
 
 #### `mode`
 
-Type `COMBO`. Range / default: t2i / edit / identity / text_swap.
+Type `COMBO`. Range / default: t2i / edit / identity / text_swap / background_swap / background_edit.
 
 System prompt flavor.
 
-**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.
+**How it affects generation:** t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still. background_swap = replace environment including ground. background_edit = restyle the environment in place.
 
 **Other choices**
 
@@ -2250,6 +2279,8 @@ System prompt flavor.
 | `edit` | Klein-edit / clay / tweak. |
 | `identity` | Camera-free identity bible. |
 | `text_swap` | Replace lettering; source still owns look and size. |
+| `background_swap` | Replace backdrop, ground, and nearby set dressing. |
+| `background_edit` | Restyle or rewrite the environment; keep the subject. |
 
 #### `duration_hint`
 

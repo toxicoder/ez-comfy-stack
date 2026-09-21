@@ -807,6 +807,12 @@ def addendum_kind(system_name: str = "", mode: str = "") -> str:
         return "skip"
     if "text_swap" in name or mode_key == "text_swap":
         return "skip"
+    if (
+        "background_swap" in name
+        or "background_edit" in name
+        or mode_key in {"background_swap", "background_edit"}
+    ):
+        return "skip"
     if name.startswith("negative"):
         return "negative"
     if "identity" in name:

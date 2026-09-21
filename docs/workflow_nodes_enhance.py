@@ -17,6 +17,19 @@ def enhance_nodes() -> dict[str, Any]:
     """
     nodes: dict[str, Any] = {}
     # ez_prompt_enhance
+    nodes["EZBackgroundCast"] = _n(
+        "Background cast",
+        "Choose whether companions and extras count as background on Klein background Apps.",
+        origin="ez_prompt_enhance",
+        lab="stills/background-swap and stills/background-edit. On treats people as environment. Off keeps them locked with the hero. Defaults on.",
+        sockets=[
+            _s("cast", "STRING", "out", "Compact other=1,crowd=1 token for Klein Enhance."),
+        ],
+        widgets=[
+            _w("other_characters", index=0, typ="BOOLEAN", rng="on", desc="Treat companions as background.", gen="On: companions and group members are swapped or restyled with the environment. Off: keep them locked with the hero."),
+            _w("background_characters", index=1, typ="BOOLEAN", rng="on", desc="Treat extras as background.", gen="On: extras, crowd, and distant figures are environment. Off: keep them as they appear."),
+        ],
+    )
     nodes["EZImageDescribe"] = _n(
         "Describe image",
         "Caption a source still so Prompt Enhance can name inventory and lettering.",
@@ -39,13 +52,14 @@ def enhance_nodes() -> dict[str, Any]:
             _s("prompt", "STRING", "in", "Optional override of the widget (usually unwired)."),
             _s("context", "STRING", "in", "Bible/research. Ignored when Enhance is off."),
             _s("image_desc", "STRING", "in", "Optional still caption from EZImageDescribe."),
+            _s("background_cast", "STRING", "in", "Optional compact token from EZBackgroundCast."),
             _s("prompt", "STRING", "out", "String CLIP actually encodes."),
         ],
         widgets=[
             _w("sample", index=0, typ="COMBO", rng="custom", desc="Lab sample prompt or Custom.", gen="Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house)."),
             _w("prompt", index=1, desc="Lazy sentence or authored still prompt.", gen="When Enhance is on, the GGUF expands this into Klein-native sentences."),
             _w("enhance", index=2, typ="BOOLEAN", rng="on for lazy printers", desc="Run the rewriter.", gen="Off = encode the widget as-is (plus style suffix if set)."),
-            _w("mode", index=3, typ="COMBO", rng="t2i / edit / identity / text_swap", desc="System prompt flavor.", gen="t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still.", choices=[("t2i", "New still."), ("edit", "Klein-edit / clay / tweak."), ("identity", "Camera-free identity bible."), ("text_swap", "Replace lettering; source still owns look and size.")]),
+            _w("mode", index=3, typ="COMBO", rng="t2i / edit / identity / text_swap / background_swap / background_edit", desc="System prompt flavor.", gen="t2i = new still. edit = change an existing still. identity = camera-free bible (identity-sheet). text_swap = glyph-lock lettering on a source still. background_swap = replace environment including ground. background_edit = restyle the environment in place.", choices=[("t2i", "New still."), ("edit", "Klein-edit / clay / tweak."), ("identity", "Camera-free identity bible."), ("text_swap", "Replace lettering; source still owns look and size."), ("background_swap", "Replace backdrop, ground, and nearby set dressing."), ("background_edit", "Restyle or rewrite the environment; keep the subject.")]),
             _w("duration_hint", index=4, desc="Framing hint (YouTube 16:9 still, Instagram 4:5, …).", gen="Steers aspect language in the rewrite. Does not set the latent size — EmptyFlux2LatentImage does."),
             _w("style", index=5, typ="COMBO", rng="none", desc="Look reference woven into the CLIP prompt.", gen="none = off. Dropdown wins over style words already in the source. Hidden on I2V graphs.", choices_from="styles"),
             _w("catalog", index=6, desc="Sample-catalog id (graph stem).", gen="Internal. Leave as stamped so sample dropdowns resolve."),

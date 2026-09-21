@@ -1,4 +1,4 @@
-"""stills/background-swap: Klein edit, source-sized, 100 samples, no Format."""
+"""stills/background-swap and stills/background-edit: Klein source-sized edits."""
 
 from __future__ import annotations
 
@@ -25,8 +25,8 @@ from ez_prompt_enhance.samples import (  # noqa: E402
 )
 
 
-def _load() -> dict[str, Any]:
-    return load_lab_graph(lab_json("stills/background-swap.json"))
+def _load(rel: str = "stills/background-swap.json") -> dict[str, Any]:
+    return load_lab_graph(lab_json(rel))
 
 
 def _by_id(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
@@ -58,12 +58,15 @@ def test_background_swap_identity_and_app_mode() -> None:
     assert names[0] == "image"
     assert "enable" in names
     assert "upscale" in names
+    assert "other_characters" in names
+    assert "background_characters" in names
     assert "style" not in names
     assert "format" not in names
     types = {node.get("type") for node in graph["nodes"]}
     assert "EZImageFormat" not in types
     assert "EZImageUpscale" in types
     assert "EZImageDescribe" in types
+    assert "EZBackgroundCast" in types
 
 
 def test_background_swap_is_size_matched_klein_edit() -> None:
@@ -78,7 +81,8 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     )
     values = list(enh["widgets_values"] or [])
     mode = values[3] if len(values) >= 7 else values[2]
-    assert mode == "edit"
+    assert mode == "background_swap"
+    assert _src(graph, enh, "background_cast")["type"] == "EZBackgroundCast"
     desc = next(node for node in graph["nodes"] if node.get("type") == "EZImageDescribe")
     assert desc["widgets_values"][0] is False
     assert _src(graph, desc, "image")["type"] == "LoadImage"
@@ -98,7 +102,52 @@ def test_background_swap_catalog_has_one_hundred_recipes() -> None:
         labels.append((config or {}).get("label") or entry[1])
     assert "Describe image" in labels
     assert "Upscale" in labels
+    assert "New background" in labels
+    assert "Other characters" in labels
+    assert "Background characters" in labels
     assert any("source" in label.lower() for label in labels)
+
+
+def test_background_edit_identity_style_and_samples() -> None:
+    graph = _load("stills/background-edit.json")
+    extra = graph["extra"]
+    assert extra.get("lab_rel") == "stills/background-edit"
+    assert graph.get("id") == "background-edit"
+    mode = extra["lab_app_mode"]
+    assert mode["lane"] == "produce"
+    assert mode["occupancy"] == "klein"
+    save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
+    assert save["widgets_values"][0] == "ez_bg_edit"
+    names = [entry[1] for entry in extra["linearData"]["inputs"]]
+    assert names[0] == "image"
+    assert "style" in names
+    assert "other_characters" in names
+    assert "background_characters" in names
+    assert "format" not in names
+    types = {node.get("type") for node in graph["nodes"]}
+    assert "EZImageFormat" not in types
+    assert "EZBackgroundCast" in types
+    assert "ReferenceLatent" in types
+    assert "EZSnapImage" in types
+    assert "EZMatchImageSize" in types
+    enh = next(
+        node for node in graph["nodes"] if node.get("type") == "EZKleinPromptEnhance"
+    )
+    values = list(enh["widgets_values"] or [])
+    enhance_mode = values[3] if len(values) >= 7 else values[2]
+    assert enhance_mode == "background_edit"
+    assert catalog_for_rel("stills/background-edit") == "klein_background_edit"
+    rows = load_catalog("klein_background_edit")
+    assert len(rows) == 30
+    assert sample_labels("klein_background_edit")[-1] == "custom"
+    spec = STAMP_SPECS["stills/background-edit"]
+    labels: list[str] = []
+    for entry in infer_suite_inputs(graph, spec):
+        config = entry[2] if len(entry) > 2 else {}
+        labels.append((config or {}).get("label") or entry[1])
+    assert "Background edit" in labels
+    assert "Style" in labels
+    assert "Other characters" in labels
 
 
 def test_background_swap_json_roundtrip() -> None:

@@ -23,7 +23,14 @@ DEFAULT_MODE_ID = "gen_photoreal"
 """Authored default: generate a photoreal still."""
 DEFAULT_PREFIX = "ez_image_studio"
 """Fallback SaveImage prefix when a row omits prefix."""
-ENHANCE_MODE_COMBO = ["t2i", "edit", "identity", "text_swap"]
+ENHANCE_MODE_COMBO = [
+    "t2i",
+    "edit",
+    "identity",
+    "text_swap",
+    "background_swap",
+    "background_edit",
+]
 """Klein Prompt Enhance combo; also ``EZImageMode.enhance_mode`` output type."""
 ENHANCE_MODES = frozenset(ENHANCE_MODE_COMBO)
 """Klein Prompt Enhance modes this catalog may select."""

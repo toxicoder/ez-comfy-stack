@@ -56,6 +56,8 @@ def test_pick_template_heuristic() -> None:
     assert pick_template("still studio desk for IG", "auto") == "stills/still-studio"
     assert pick_template("image studio 4:5", "auto") == "stills/image-studio"
     assert pick_template("background swap a still", "auto") == "stills/background-swap"
+    assert pick_template("background edit cartoon alley", "auto") == "stills/background-edit"
+    assert pick_template("restyle background cel ink", "auto") == "stills/background-edit"
     assert pick_template("text swap a neon sign", "auto") == "stills/text-swap"
     assert pick_template("relabel the mug lettering", "auto") == "stills/text-swap"
     assert pick_template("anything", "stills/still-hero") == "stills/still-hero"

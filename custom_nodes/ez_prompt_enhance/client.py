@@ -146,6 +146,9 @@ REASON_STYLE_IGNORED_VC = "style ignored in vc (previous frames own look)"
 REASON_STYLE_IGNORED_TEXT_SWAP = (
     "style ignored in text_swap (source still owns look)"
 )
+REASON_STYLE_IGNORED_BG_SWAP = (
+    "style ignored in background_swap (source still owns subject look)"
+)
 STYLE_IGNORED_MODES = {
     "i2v": REASON_STYLE_IGNORED_I2V,
     "flf": REASON_STYLE_IGNORED_FLF,
@@ -153,6 +156,7 @@ STYLE_IGNORED_MODES = {
     "s2v": REASON_STYLE_IGNORED_S2V,
     "vc": REASON_STYLE_IGNORED_VC,
     "text_swap": REASON_STYLE_IGNORED_TEXT_SWAP,
+    "background_swap": REASON_STYLE_IGNORED_BG_SWAP,
 }
 
 _STYLES: dict[str, dict[str, Any]] | None = None

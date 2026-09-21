@@ -1,0 +1,152 @@
+[
+  {
+    "id": "cel-ink",
+    "label": "Cel ink",
+    "prompt": "cel-shaded ink and flat color"
+  },
+  {
+    "id": "gouache-rooftop",
+    "label": "Gouache rooftop",
+    "prompt": "gouache wash on walls and sky, keep massing"
+  },
+  {
+    "id": "add-lanterns",
+    "label": "Add lanterns",
+    "prompt": "add paper lanterns along the street"
+  },
+  {
+    "id": "strip-clutter",
+    "label": "Strip clutter",
+    "prompt": "remove parked cars, bins, and sidewalk clutter"
+  },
+  {
+    "id": "soaking-rain",
+    "label": "Soaking rain",
+    "prompt": "soaking rain, neon puddles, wet asphalt"
+  },
+  {
+    "id": "night-practicals",
+    "label": "Night practicals",
+    "prompt": "shift the plate to night with warm window practicals"
+  },
+  {
+    "id": "snow-dust",
+    "label": "Snow dust",
+    "prompt": "light falling snow and a thin white ground crust"
+  },
+  {
+    "id": "fog-bloom",
+    "label": "Fog bloom",
+    "prompt": "soft fog bloom that eats the far architecture"
+  },
+  {
+    "id": "woodcut-grain",
+    "label": "Woodcut grain",
+    "prompt": "bold woodcut grain and high-contrast ink flats"
+  },
+  {
+    "id": "watercolor-bleed",
+    "label": "Watercolor bleed",
+    "prompt": "watercolor bleed on sky and pavement, paper tooth"
+  },
+  {
+    "id": "blueprint-lines",
+    "label": "Blueprint lines",
+    "prompt": "cyan blueprint linework over the architecture"
+  },
+  {
+    "id": "toy-diorama",
+    "label": "Toy diorama",
+    "prompt": "miniature diorama set with painted foam hills"
+  },
+  {
+    "id": "stage-cyc",
+    "label": "Stage cyc",
+    "prompt": "seamless studio cyc with a soft floor sweep"
+  },
+  {
+    "id": "add-ferns",
+    "label": "Add ferns",
+    "prompt": "add potted ferns and hanging vines on the walls"
+  },
+  {
+    "id": "clear-sky",
+    "label": "Clear sky",
+    "prompt": "replace a busy sky with a clean dusk gradient"
+  },
+  {
+    "id": "golden-grade",
+    "label": "Golden grade",
+    "prompt": "warm golden-hour grade on the environment only"
+  },
+  {
+    "id": "cool-moon",
+    "label": "Cool moonlight",
+    "prompt": "cool moonlight grade, long blue shadows on the ground"
+  },
+  {
+    "id": "graffiti-wall",
+    "label": "Painted mural",
+    "prompt": "cover the far wall with an unmarked geometric mural"
+  },
+  {
+    "id": "remove-signage",
+    "label": "Remove signage",
+    "prompt": "strip storefront lettering and hanging signs"
+  },
+  {
+    "id": "marble-floor",
+    "label": "Marble floor",
+    "prompt": "swap the ground for polished unmarked marble"
+  },
+  {
+    "id": "wood-deck",
+    "label": "Wood deck",
+    "prompt": "swap the ground for weathered unmarked wood decking"
+  },
+  {
+    "id": "star-field",
+    "label": "Star field",
+    "prompt": "open the sky to a dense star field, keep the horizon"
+  },
+  {
+    "id": "overcast-soft",
+    "label": "Overcast soft",
+    "prompt": "even overcast light, pale ground, quiet air"
+  },
+  {
+    "id": "risograph-dots",
+    "label": "Risograph dots",
+    "prompt": "risograph halftone dots and two-ink flats"
+  },
+  {
+    "id": "stained-glass",
+    "label": "Stained glass",
+    "prompt": "turn windows into unmarked stained glass that paints the floor"
+  },
+  {
+    "id": "add-fountain",
+    "label": "Add fountain",
+    "prompt": "add a small unmarked stone fountain in the mid-ground"
+  },
+  {
+    "id": "desert-heat",
+    "label": "Desert heat",
+    "prompt": "heat shimmer, sand at the subject's feet, bleached walls"
+  },
+  {
+    "id": "autumn-leaves",
+    "label": "Autumn leaves",
+    "prompt": "scatter autumn leaves on the ground and in the air"
+  },
+  {
+    "id": "chrome-lobby",
+    "label": "Chrome lobby",
+    "prompt": "restyle the interior as an unmarked chrome-and-glass lobby"
+  },
+  {
+    "id": "storybook-hills",
+    "label": "Storybook hills",
+    "prompt": "rounded storybook hills and a painted paper sky"
+  }
+]

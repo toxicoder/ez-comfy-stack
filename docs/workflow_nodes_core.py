@@ -326,13 +326,13 @@ def core_nodes() -> dict[str, Any]:
         ),
         "EZImageMode": _n(
             "Creator mode",
-            "Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity plus a save prefix.",
+            "Pick one of 100 creator modes. Category filters Mode. Queue splices an instruction into Enhance context and selects t2i/edit/text_swap/identity/background_swap/background_edit plus a save prefix.",
             origin="ez_image",
             lab="stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.",
             sockets=[
                 _s("context", "STRING", "in", "Optional look-recipe splice from EZImageFormat."),
                 _s("context", "STRING", "out", "Mode instruction plus incoming look splice."),
-                _s("enhance_mode", "COMBO", "out", "t2i, edit, identity, or text_swap — same combo as EZKleinPromptEnhance.mode."),
+                _s("enhance_mode", "COMBO", "out", "t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode."),
                 _s("prefix", "STRING", "out", "SaveImage filename prefix."),
             ],
             widgets=[

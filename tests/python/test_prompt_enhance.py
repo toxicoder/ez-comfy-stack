@@ -141,6 +141,12 @@ def test_system_prompts_encode_model_rules() -> None:
     assert "spell" in swap.lower()
     assert "typeface" in swap.lower()
     assert "cinema rack" not in swap.lower()
+    bg_swap = client.load_system_prompt("klein_background_swap")
+    assert "ground" in bg_swap.lower()
+    assert "environment" in bg_swap.lower()
+    bg_edit = client.load_system_prompt("klein_background_edit")
+    assert "cartoon" in bg_edit.lower()
+    assert "environment" in bg_edit.lower()
     ident = client.load_system_prompt("klein_identity")
     assert "camera-free" in ident.lower()
     assert "lens" in ident.lower()
@@ -1555,6 +1561,7 @@ def test_enhance_context_ignored_when_off_included_when_on() -> None:
 def test_node_mappings_modes_preview_and_style() -> None:
     assert set(NODE_CLASS_MAPPINGS) == {
         "EZImageDescribe",
+        "EZBackgroundCast",
         "EZKleinPromptEnhance",
         "EZWanPromptEnhance",
         "EZLTXPromptEnhance",
@@ -1580,7 +1587,14 @@ def test_node_mappings_modes_preview_and_style() -> None:
     assert wan.INPUT_TYPES()["required"]["enhance"][1]["label_on"] == "On"
     assert ltx.INPUT_TYPES()["required"]["enhance"][1]["label_off"] == "Off"
     modes = klein.INPUT_TYPES()["required"]["mode"][0]
-    assert modes == ["t2i", "edit", "identity", "text_swap"]
+    assert modes == [
+        "t2i",
+        "edit",
+        "identity",
+        "text_swap",
+        "background_swap",
+        "background_edit",
+    ]
     styles = klein.INPUT_TYPES()["required"]["style"][0]
     assert styles[0] == "none"
     assert len(styles) == 301

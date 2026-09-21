@@ -139,7 +139,7 @@
       "category": "edit_scene",
       "enhance_mode": "edit",
       "needs_ref": 1,
-      "instruction": "Keep the subject from the reference still. Replace only the background and ground contact.",
+      "instruction": "Keep the subject from the reference still. Replace the background, ground or floor, and set dressing near the subject.",
       "prefix": "ez_edit_bg_swap"
     },
     {
