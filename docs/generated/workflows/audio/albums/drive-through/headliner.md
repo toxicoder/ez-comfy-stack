@@ -63,6 +63,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N15["Quality"]
+  N16["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -84,23 +85,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/headliner/01-lantern-merge` | 15 | audio |
-| `audio/albums/drive-through/headliner/02-firefly-lane` | 15 | audio |
-| `audio/albums/drive-through/headliner/03-canopy-bounce` | 15 | audio |
-| `audio/albums/drive-through/headliner/04-grove-wreck` | 15 | audio |
-| `audio/albums/drive-through/headliner/05-moss-sub` | 15 | audio |
-| `audio/albums/drive-through/headliner/06-fern-stack` | 15 | audio |
-| `audio/albums/drive-through/headliner/07-pollen-kick` | 15 | audio |
-| `audio/albums/drive-through/headliner/08-cedar-growl` | 15 | audio |
-| `audio/albums/drive-through/headliner/09-moon-ramp` | 15 | audio |
-| `audio/albums/drive-through/headliner/10-trail-bounce` | 15 | audio |
-| `audio/albums/drive-through/headliner/11-dew-wreck` | 15 | audio |
-| `audio/albums/drive-through/headliner/12-sap-stack` | 15 | audio |
-| `audio/albums/drive-through/headliner/13-glade-split` | 15 | audio |
-| `audio/albums/drive-through/headliner/14-root-chest` | 15 | audio |
-| `audio/albums/drive-through/headliner/15-ember-crest` | 15 | audio |
-| `audio/albums/drive-through/headliner/album` | 3 | none |
-| `audio/albums/drive-through/headliner/cover` | 14 | klein |
+| `audio/albums/drive-through/headliner/01-lantern-merge` | 16 | audio |
+| `audio/albums/drive-through/headliner/02-firefly-lane` | 16 | audio |
+| `audio/albums/drive-through/headliner/03-canopy-bounce` | 16 | audio |
+| `audio/albums/drive-through/headliner/04-grove-wreck` | 16 | audio |
+| `audio/albums/drive-through/headliner/05-moss-sub` | 16 | audio |
+| `audio/albums/drive-through/headliner/06-fern-stack` | 16 | audio |
+| `audio/albums/drive-through/headliner/07-pollen-kick` | 16 | audio |
+| `audio/albums/drive-through/headliner/08-cedar-growl` | 16 | audio |
+| `audio/albums/drive-through/headliner/09-moon-ramp` | 16 | audio |
+| `audio/albums/drive-through/headliner/10-trail-bounce` | 16 | audio |
+| `audio/albums/drive-through/headliner/11-dew-wreck` | 16 | audio |
+| `audio/albums/drive-through/headliner/12-sap-stack` | 16 | audio |
+| `audio/albums/drive-through/headliner/13-glade-split` | 16 | audio |
+| `audio/albums/drive-through/headliner/14-root-chest` | 16 | audio |
+| `audio/albums/drive-through/headliner/15-ember-crest` | 16 | audio |
+| `audio/albums/drive-through/headliner/album` | 4 | none |
+| `audio/albums/drive-through/headliner/cover` | 15 | klein |
 
 ## `01-lantern-merge`
 
@@ -253,6 +254,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-firefly-lane`
 
 Catalog id `audio/albums/drive-through/headliner/02-firefly-lane`.
@@ -399,6 +406,12 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-canopy-bounce`
 
@@ -550,6 +563,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, body bass, warped bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `04-grove-wreck`
 
@@ -706,6 +725,12 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `05-moss-sub`
 
 Catalog id `audio/albums/drive-through/headliner/05-moss-sub`.
@@ -856,6 +881,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `06-fern-stack`
 
@@ -1011,6 +1042,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-pollen-kick`
 
@@ -1171,6 +1208,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-cedar-growl`
 
 Catalog id `audio/albums/drive-through/headliner/08-cedar-growl`.
@@ -1317,6 +1360,12 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-moon-ramp`
 
@@ -1468,6 +1517,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `10-trail-bounce`
 
@@ -1623,6 +1678,12 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, body bass, 808, 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-dew-wreck`
 
@@ -1787,6 +1848,12 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-sap-stack`
 
 Catalog id `audio/albums/drive-through/headliner/12-sap-stack`.
@@ -1941,6 +2008,12 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-glade-split`
 
@@ -2100,6 +2173,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `14-root-chest`
 
@@ -2264,6 +2343,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `15-ember-crest`
 
 Catalog id `audio/albums/drive-through/headliner/15-ember-crest`.
@@ -2423,6 +2508,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/headliner/album`.
@@ -2442,6 +2533,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -2556,6 +2653,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -3713,6 +3816,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

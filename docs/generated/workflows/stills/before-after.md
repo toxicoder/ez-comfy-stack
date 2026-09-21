@@ -49,66 +49,11 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ## Graph
 
 ```mermaid
-flowchart LR
-  N1["Klein 4B distilled FP8"]
-  N2["Qwen3-4B TE"]
-  N3["Flux2 VAE"]
-  N4["IDENTITY"]
-  N5["Negative"]
-  N6["Latent (wired from Format)"]
-  N7["Operator note"]
-  N8["Encode plate 01"]
-  N9["Negative + identity plate"]
-  N10["SHOT BEFORE"]
-  N11["Positive BEFORE"]
-  N12["Sampler BEFORE"]
-  N13["Decode BEFORE"]
-  N14["Save BEFORE"]
-  N16["SHOT AFTER"]
-  N17["Positive AFTER"]
-  N18["Sampler AFTER"]
-  N19["Decode AFTER"]
-  N20["Save AFTER"]
-  N21["Ref from 01 (AFTER)"]
-  N22["Negative Prompt Enhance"]
-  N23["Quality"]
-  N24["Format / platform"]
-  N25["Upscale still"]
-  N26["Upscale still"]
-  N1 --> N12
-  N1 --> N18
-  N2 --> N5
-  N2 --> N11
-  N2 --> N17
-  N3 --> N8
-  N3 --> N13
-  N3 --> N19
-  N4 --> N10
-  N4 --> N16
-  N4 --> N22
-  N5 --> N9
-  N5 --> N12
-  N6 --> N12
-  N6 --> N18
-  N8 --> N9
-  N8 --> N21
-  N9 --> N18
-  N10 --> N11
-  N11 --> N12
-  N12 --> N13
-  N13 --> N8
-  N13 --> N25
-  N16 --> N17
-  N17 --> N21
-  N18 --> N19
-  N19 --> N26
-  N21 --> N18
-  N22 --> N5
-  N24 --> N6
-  N24 --> N4
-  N25 --> N14
-  N25 --> N26
-  N26 --> N20
+flowchart TB
+  GMODEL["MODEL"]
+  GIDENTITY["IDENTITY"]
+  GSHOT_BEFORE["SHOT BEFORE"]
+  GSHOT_AFTER["SHOT AFTER"]
 ```
 
 ## Nodes on this graph
@@ -140,6 +85,7 @@ flowchart LR
 | 24 | Format / platform | `EZImageFormat` | Ungrouped |
 | 25 | Upscale still | `EZImageUpscale` | SHOT BEFORE |
 | 26 | Upscale still | `EZImageUpscale` | SHOT AFTER |
+| 27 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1381,3 +1327,21 @@ Upscale mode.
 | `2x` | Double pixels. |
 | `4x` | Quadruple pixels. |
 | `4K` | Fit in a 4K box. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

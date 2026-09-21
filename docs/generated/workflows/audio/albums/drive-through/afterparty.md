@@ -63,6 +63,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N15["Quality"]
+  N16["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -84,28 +85,28 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/afterparty/01-brake-fade` | 15 | audio |
-| `audio/albums/drive-through/afterparty/02-diesel-hum` | 15 | audio |
-| `audio/albums/drive-through/afterparty/03-axle-grind` | 15 | audio |
-| `audio/albums/drive-through/afterparty/04-weigh-station` | 15 | audio |
-| `audio/albums/drive-through/afterparty/05-black-ice` | 15 | audio |
-| `audio/albums/drive-through/afterparty/06-high-beams` | 15 | audio |
-| `audio/albums/drive-through/afterparty/07-chain-hook` | 15 | audio |
-| `audio/albums/drive-through/afterparty/08-grit-plate` | 15 | audio |
-| `audio/albums/drive-through/afterparty/09-steel-grate` | 15 | audio |
-| `audio/albums/drive-through/afterparty/10-rest-bay` | 15 | audio |
-| `audio/albums/drive-through/afterparty/11-haul-crate` | 15 | audio |
-| `audio/albums/drive-through/afterparty/12-night-splice` | 15 | audio |
-| `audio/albums/drive-through/afterparty/13-torque-bay` | 15 | audio |
-| `audio/albums/drive-through/afterparty/14-spare-drum` | 15 | audio |
-| `audio/albums/drive-through/afterparty/15-oil-pan` | 15 | audio |
-| `audio/albums/drive-through/afterparty/16-curb-check` | 15 | audio |
-| `audio/albums/drive-through/afterparty/17-last-exit` | 15 | audio |
-| `audio/albums/drive-through/afterparty/18-asphalt-heart` | 15 | audio |
-| `audio/albums/drive-through/afterparty/19-clutch-slam` | 15 | audio |
-| `audio/albums/drive-through/afterparty/20-trailer-hitch` | 15 | audio |
-| `audio/albums/drive-through/afterparty/album` | 3 | none |
-| `audio/albums/drive-through/afterparty/cover` | 14 | klein |
+| `audio/albums/drive-through/afterparty/01-brake-fade` | 16 | audio |
+| `audio/albums/drive-through/afterparty/02-diesel-hum` | 16 | audio |
+| `audio/albums/drive-through/afterparty/03-axle-grind` | 16 | audio |
+| `audio/albums/drive-through/afterparty/04-weigh-station` | 16 | audio |
+| `audio/albums/drive-through/afterparty/05-black-ice` | 16 | audio |
+| `audio/albums/drive-through/afterparty/06-high-beams` | 16 | audio |
+| `audio/albums/drive-through/afterparty/07-chain-hook` | 16 | audio |
+| `audio/albums/drive-through/afterparty/08-grit-plate` | 16 | audio |
+| `audio/albums/drive-through/afterparty/09-steel-grate` | 16 | audio |
+| `audio/albums/drive-through/afterparty/10-rest-bay` | 16 | audio |
+| `audio/albums/drive-through/afterparty/11-haul-crate` | 16 | audio |
+| `audio/albums/drive-through/afterparty/12-night-splice` | 16 | audio |
+| `audio/albums/drive-through/afterparty/13-torque-bay` | 16 | audio |
+| `audio/albums/drive-through/afterparty/14-spare-drum` | 16 | audio |
+| `audio/albums/drive-through/afterparty/15-oil-pan` | 16 | audio |
+| `audio/albums/drive-through/afterparty/16-curb-check` | 16 | audio |
+| `audio/albums/drive-through/afterparty/17-last-exit` | 16 | audio |
+| `audio/albums/drive-through/afterparty/18-asphalt-heart` | 16 | audio |
+| `audio/albums/drive-through/afterparty/19-clutch-slam` | 16 | audio |
+| `audio/albums/drive-through/afterparty/20-trailer-hitch` | 16 | audio |
+| `audio/albums/drive-through/afterparty/album` | 4 | none |
+| `audio/albums/drive-through/afterparty/cover` | 15 | klein |
 
 ## `01-brake-fade`
 
@@ -258,6 +259,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-diesel-hum`
 
 Catalog id `audio/albums/drive-through/afterparty/02-diesel-hum`.
@@ -404,6 +411,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-axle-grind`
 
@@ -560,6 +573,12 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-weigh-station`
 
 Catalog id `audio/albums/drive-through/afterparty/04-weigh-station`.
@@ -710,6 +729,12 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-black-ice`
 
@@ -870,6 +895,12 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-high-beams`
 
 Catalog id `audio/albums/drive-through/afterparty/06-high-beams`.
@@ -1025,6 +1056,12 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `07-chain-hook`
 
 Catalog id `audio/albums/drive-through/afterparty/07-chain-hook`.
@@ -1167,6 +1204,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `08-grit-plate`
 
@@ -1314,6 +1357,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-steel-grate`
 
@@ -1478,6 +1527,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-rest-bay`
 
 Catalog id `audio/albums/drive-through/afterparty/10-rest-bay`.
@@ -1633,6 +1688,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `11-haul-crate`
 
 Catalog id `audio/albums/drive-through/afterparty/11-haul-crate`.
@@ -1784,6 +1845,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-night-splice`
 
 Catalog id `audio/albums/drive-through/afterparty/12-night-splice`.
@@ -1930,6 +1997,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-torque-bay`
 
@@ -2086,6 +2159,12 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-spare-drum`
 
 Catalog id `audio/albums/drive-through/afterparty/14-spare-drum`.
@@ -2236,6 +2315,12 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-oil-pan`
 
@@ -2391,6 +2476,12 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `16-curb-check`
 
@@ -2551,6 +2642,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `17-last-exit`
 
 Catalog id `audio/albums/drive-through/afterparty/17-last-exit`.
@@ -2698,6 +2795,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `18-asphalt-heart`
 
 Catalog id `audio/albums/drive-through/afterparty/18-asphalt-heart`.
@@ -2840,6 +2943,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `19-clutch-slam`
 
@@ -3004,6 +3113,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `20-trailer-hitch`
 
 Catalog id `audio/albums/drive-through/afterparty/20-trailer-hitch`.
@@ -3163,6 +3278,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/afterparty/album`.
@@ -3182,6 +3303,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -3296,6 +3423,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -4528,6 +4661,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 22 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

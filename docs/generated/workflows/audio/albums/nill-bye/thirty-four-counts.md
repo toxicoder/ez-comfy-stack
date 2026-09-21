@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/07-university-tab` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/11-census-question` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` | 16 | audio |
-| `audio/albums/nill-bye/thirty-four-counts/album` | 3 | none |
-| `audio/albums/nill-bye/thirty-four-counts/cover` | 14 | klein |
+| `audio/albums/nill-bye/thirty-four-counts/01-thirty-four-counts` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/02-one-eighty-seven` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/04-fake-electors` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/05-bathroom-boxes` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/07-university-tab` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/09-travel-memo` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/11-census-question` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/13-emoluments-suite` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/15-carroll-tab` | 17 | audio |
+| `audio/albums/nill-bye/thirty-four-counts/album` | 4 | none |
+| `audio/albums/nill-bye/thirty-four-counts/cover` | 15 | klein |
 
 ## `01-thirty-four-counts`
 
@@ -540,6 +541,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-one-eighty-seven`
 
@@ -991,6 +998,12 @@ cut
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-eleven-seven-eighty`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/03-eleven-seven-eighty`.
@@ -1423,6 +1436,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-fake-electors`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/04-fake-electors`.
@@ -1851,6 +1870,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-bathroom-boxes`
 
@@ -2284,6 +2309,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-statement-of-worth`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/06-statement-of-worth`.
@@ -2712,6 +2743,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-university-tab`
 
@@ -3145,6 +3182,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-ukraine-hold`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/08-ukraine-hold`.
@@ -3573,6 +3616,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-travel-memo`
 
@@ -4006,6 +4055,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-zero-tolerance`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance`.
@@ -4434,6 +4489,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-census-question`
 
@@ -4867,6 +4928,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-paris-walkout`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/12-paris-walkout`.
@@ -5295,6 +5362,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-emoluments-suite`
 
@@ -5728,6 +5801,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-seven-fifty`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/14-seven-fifty`.
@@ -6156,6 +6235,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-carroll-tab`
 
@@ -6589,6 +6674,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/thirty-four-counts/album`.
@@ -6608,6 +6699,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6722,6 +6819,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7960,6 +8063,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

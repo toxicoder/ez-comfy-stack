@@ -73,6 +73,7 @@ flowchart LR
   N16["Optional Klein ref"]
   N17["Upscale still"]
   N18["Describe image"]
+  N19["Check models"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
@@ -118,6 +119,7 @@ flowchart LR
 | 16 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
 | 17 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 18 | Describe image | `EZImageDescribe` | PROMPT |
+| 19 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1358,3 +1360,21 @@ Run the captioner.
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
 **This graph:** `false`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

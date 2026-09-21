@@ -212,11 +212,12 @@ Category `ez-comfy/image`. Size helpers for Klein edit graphs, still and video F
 
 ## ez_quality (Quality combo)
 
-Category `ez-comfy`. One combo on every `_lab` graph. Python does not walk sibling nodes; `ez_quality.js` writes KSampler steps/CFG and Klein 4B UNET on change and again `beforeQueued`. Nodes 2.0: `widget.value`, no `node_widget`.
+Category `ez-comfy`. One Quality combo and one isolated Check models node on every `_lab` graph. Python does not walk sibling nodes for Quality; `ez_quality.js` writes KSampler steps/CFG and Klein 4B UNET on change and again `beforeQueued`. Check models is **not** an output node — Queue skips it. Click **Check models** on the canvas node or the App occupancy chip (`POST /ez_quality/check`). Nodes 2.0: `widget.value`, no `node_widget`.
 
 | Class | Display name | Inputs | Outputs | Occupancy | QC / rights |
 | --- | --- | --- | --- | --- | --- |
 | `EZQuality` | Quality | `quality` combo `custom` `draft` `lab` `standard` `high` `Free Commercial Use (<$10M)` `ultra` `max` (default **lab**) | `STRING` quality | graph occupancy (overlay table) | custom freezes the last overlay. lab restores authored widgets. Named qualities may swap UNET/CLIP/VAE when files are on disk. Never changes size. Free Commercial Use is Klein 4B + LTX-2.5 (never 9B / FLUX.2-dev). ultra/max may select opt-in Non-Commercial weights. Not `--tier quality` |
+| `EZModelCheck` | Check models | `status` STRING (JS overwrites) | — | graph occupancy + Quality | Queue does not run this node. Reports Ready, or missing files plus the host command (`./scripts/manage.sh download-models` or an opt-in `download-image.sh --tier 9b`, …). Restart after a pull so `models/*` re-link |
 
 ---
 

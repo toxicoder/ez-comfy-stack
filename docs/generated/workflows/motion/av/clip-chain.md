@@ -156,6 +156,7 @@ flowchart TB
 | 228 | Beat 4 video (MP4) — open node for prev… | `VHS_VideoCombine` | 6. Beat 4 (8.00s LTX) |
 | 232 | Beat 4 last frame | `EZClipLastFrame` | 6. Beat 4 (8.00s LTX) |
 | 233 | Save beat 4 last frame | `SaveImage` | 6. Beat 4 (8.00s LTX) |
+| 234 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1697,3 +1698,21 @@ Save prefix.
 | Save beat 2 last frame | `ez_clip_b02_last` |
 | Save beat 3 last frame | `ez_clip_b03_last` |
 | Save beat 4 last frame | `ez_clip_b04_last` |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

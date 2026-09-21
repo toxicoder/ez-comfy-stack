@@ -1,7 +1,7 @@
 {
   "id": "first-last-from-guide",
   "revision": 6,
-  "last_node_id": 18,
+  "last_node_id": 19,
   "last_link_id": 19,
   "nodes": [
     {
@@ -715,6 +715,30 @@
         "lab"
       ],
       "title": "Quality"
+    },
+    {
+      "id": 19,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [

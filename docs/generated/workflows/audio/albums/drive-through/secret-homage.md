@@ -63,6 +63,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N15["Quality"]
+  N16["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -84,28 +85,28 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/secret-homage/01-hush-lane` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/02-cipher-lock` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/03-ghost-dock` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/04-sealed-ramp` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/05-fog-vault` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/06-dummy-light` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/07-quiet-wreck` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/08-off-ledger` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/09-back-alley` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/10-cellar-kick` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/11-hidden-booth` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/12-coded-sub` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/13-shadow-coil` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/14-mute-pyro` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/15-unlisted-row` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/16-night-cipher` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/17-blank-stencil` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/18-blind-stamp` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/19-cold-cache` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/20-secret-homage` | 15 | audio |
-| `audio/albums/drive-through/secret-homage/album` | 3 | none |
-| `audio/albums/drive-through/secret-homage/cover` | 14 | klein |
+| `audio/albums/drive-through/secret-homage/01-hush-lane` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/02-cipher-lock` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/03-ghost-dock` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/04-sealed-ramp` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/05-fog-vault` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/06-dummy-light` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/07-quiet-wreck` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/08-off-ledger` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/09-back-alley` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/10-cellar-kick` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/11-hidden-booth` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/12-coded-sub` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/13-shadow-coil` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/14-mute-pyro` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/15-unlisted-row` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/16-night-cipher` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/17-blank-stencil` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/18-blind-stamp` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/19-cold-cache` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/20-secret-homage` | 16 | audio |
+| `audio/albums/drive-through/secret-homage/album` | 4 | none |
+| `audio/albums/drive-through/secret-homage/cover` | 15 | klein |
 
 ## `01-hush-lane`
 
@@ -253,6 +254,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-cipher-lock`
 
@@ -405,6 +412,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-ghost-dock`
 
 Catalog id `audio/albums/drive-through/secret-homage/03-ghost-dock`.
@@ -551,6 +564,12 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `04-sealed-ramp`
 
@@ -707,6 +726,12 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `05-fog-vault`
 
 Catalog id `audio/albums/drive-through/secret-homage/05-fog-vault`.
@@ -858,6 +883,12 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-dummy-light`
 
 Catalog id `audio/albums/drive-through/secret-homage/06-dummy-light`.
@@ -1004,6 +1035,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-quiet-wreck`
 
@@ -1164,6 +1201,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, rave, 808, no sin
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-off-ledger`
 
 Catalog id `audio/albums/drive-through/secret-homage/08-off-ledger`.
@@ -1318,6 +1361,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-back-alley`
 
@@ -1478,6 +1527,12 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-cellar-kick`
 
 Catalog id `audio/albums/drive-through/secret-homage/10-cellar-kick`.
@@ -1624,6 +1679,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-hidden-booth`
 
@@ -1775,6 +1836,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `12-coded-sub`
 
@@ -1930,6 +1997,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-shadow-coil`
 
@@ -2090,6 +2163,12 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-mute-pyro`
 
 Catalog id `audio/albums/drive-through/secret-homage/14-mute-pyro`.
@@ -2236,6 +2315,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-unlisted-row`
 
@@ -2396,6 +2481,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `16-night-cipher`
 
 Catalog id `audio/albums/drive-through/secret-homage/16-night-cipher`.
@@ -2542,6 +2633,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, fold bass, 808, r
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `17-blank-stencil`
 
@@ -2698,6 +2795,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `18-blind-stamp`
 
 Catalog id `audio/albums/drive-through/secret-homage/18-blind-stamp`.
@@ -2848,6 +2951,12 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `19-cold-cache`
 
@@ -3008,6 +3117,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, chest-sub bass, warped bass, rave
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `20-secret-homage`
 
 Catalog id `audio/albums/drive-through/secret-homage/20-secret-homage`.
@@ -3155,6 +3270,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, stacked 808, w
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/secret-homage/album`.
@@ -3174,6 +3295,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -3288,6 +3415,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -4520,6 +4653,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 22 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

@@ -1,7 +1,7 @@
 {
   "id": "platform-pack",
   "revision": 4,
-  "last_node_id": 53,
+  "last_node_id": 54,
   "last_link_id": 80,
   "nodes": [
     {
@@ -2160,6 +2160,30 @@
         "none"
       ],
       "title": "Upscale still"
+    },
+    {
+      "id": 54,
+      "type": "EZModelCheck",
+      "pos": [
+        40.0,
+        -332.0
+      ],
+      "size": [
+        320.0,
+        140.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "EZModelCheck"
+      },
+      "widgets_values": [
+        "Click Check models. Queue does not run this node."
+      ],
+      "title": "Check models"
     }
   ],
   "links": [

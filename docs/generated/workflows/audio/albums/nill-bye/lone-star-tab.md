@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/lone-star-tab/01-lone-star-tab` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/02-river-buoy` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/03-bus-receipt` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/04-guard-detail` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/05-chase-wreck` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/06-frequency-drop` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/07-permitless` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/08-trigger-clock` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/09-disaster-stamp` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/10-windmill-blame` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/11-yass-primary` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/12-hold-request` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/13-sharia-plank` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/15-demolish-hook` | 16 | audio |
-| `audio/albums/nill-bye/lone-star-tab/album` | 3 | none |
-| `audio/albums/nill-bye/lone-star-tab/cover` | 14 | klein |
+| `audio/albums/nill-bye/lone-star-tab/01-lone-star-tab` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/02-river-buoy` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/03-bus-receipt` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/04-guard-detail` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/05-chase-wreck` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/06-frequency-drop` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/07-permitless` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/08-trigger-clock` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/09-disaster-stamp` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/10-windmill-blame` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/11-yass-primary` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/12-hold-request` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/13-sharia-plank` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/15-demolish-hook` | 17 | audio |
+| `audio/albums/nill-bye/lone-star-tab/album` | 4 | none |
+| `audio/albums/nill-bye/lone-star-tab/cover` | 15 | klein |
 
 ## `01-lone-star-tab`
 
@@ -541,6 +542,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-river-buoy`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/02-river-buoy`.
@@ -972,6 +979,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-bus-receipt`
 
@@ -1408,6 +1421,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-guard-detail`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/04-guard-detail`.
@@ -1839,6 +1858,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `05-chase-wreck`
 
@@ -2275,6 +2300,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-frequency-drop`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/06-frequency-drop`.
@@ -2706,6 +2737,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-permitless`
 
@@ -3142,6 +3179,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `08-trigger-clock`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/08-trigger-clock`.
@@ -3573,6 +3616,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `09-disaster-stamp`
 
@@ -4027,6 +4076,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `10-windmill-blame`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/10-windmill-blame`.
@@ -4458,6 +4513,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `11-yass-primary`
 
@@ -4894,6 +4955,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `12-hold-request`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/12-hold-request`.
@@ -5325,6 +5392,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `13-sharia-plank`
 
@@ -5761,6 +5834,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `14-invasion-hymn`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/14-invasion-hymn`.
@@ -6192,6 +6271,12 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `15-demolish-hook`
 
@@ -6628,6 +6713,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/lone-star-tab/album`.
@@ -6647,6 +6738,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6761,6 +6858,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -7999,6 +8102,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

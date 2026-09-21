@@ -63,6 +63,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N15["Quality"]
+  N16["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -84,23 +85,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/drive-through/hour-1/01-night-window` | 15 | audio |
-| `audio/albums/drive-through/hour-1/02-open-lane` | 15 | audio |
-| `audio/albums/drive-through/hour-1/03-exit-seven` | 15 | audio |
-| `audio/albums/drive-through/hour-1/04-skyline-pass` | 15 | audio |
-| `audio/albums/drive-through/hour-1/05-on-ramp` | 15 | audio |
-| `audio/albums/drive-through/hour-1/06-tunnel-bass` | 15 | audio |
-| `audio/albums/drive-through/hour-1/07-wide-open` | 15 | audio |
-| `audio/albums/drive-through/hour-1/08-overpass` | 15 | audio |
-| `audio/albums/drive-through/hour-1/09-second-wave` | 15 | audio |
-| `audio/albums/drive-through/hour-1/10-freight-pulse` | 15 | audio |
-| `audio/albums/drive-through/hour-1/11-keep-going` | 15 | audio |
-| `audio/albums/drive-through/hour-1/12-horizon-kick` | 15 | audio |
-| `audio/albums/drive-through/hour-1/13-clean-wreckage` | 15 | audio |
-| `audio/albums/drive-through/hour-1/14-heart-lane` | 15 | audio |
-| `audio/albums/drive-through/hour-1/15-dawn-receipt` | 15 | audio |
-| `audio/albums/drive-through/hour-1/album` | 3 | none |
-| `audio/albums/drive-through/hour-1/cover` | 14 | klein |
+| `audio/albums/drive-through/hour-1/01-night-window` | 16 | audio |
+| `audio/albums/drive-through/hour-1/02-open-lane` | 16 | audio |
+| `audio/albums/drive-through/hour-1/03-exit-seven` | 16 | audio |
+| `audio/albums/drive-through/hour-1/04-skyline-pass` | 16 | audio |
+| `audio/albums/drive-through/hour-1/05-on-ramp` | 16 | audio |
+| `audio/albums/drive-through/hour-1/06-tunnel-bass` | 16 | audio |
+| `audio/albums/drive-through/hour-1/07-wide-open` | 16 | audio |
+| `audio/albums/drive-through/hour-1/08-overpass` | 16 | audio |
+| `audio/albums/drive-through/hour-1/09-second-wave` | 16 | audio |
+| `audio/albums/drive-through/hour-1/10-freight-pulse` | 16 | audio |
+| `audio/albums/drive-through/hour-1/11-keep-going` | 16 | audio |
+| `audio/albums/drive-through/hour-1/12-horizon-kick` | 16 | audio |
+| `audio/albums/drive-through/hour-1/13-clean-wreckage` | 16 | audio |
+| `audio/albums/drive-through/hour-1/14-heart-lane` | 16 | audio |
+| `audio/albums/drive-through/hour-1/15-dawn-receipt` | 16 | audio |
+| `audio/albums/drive-through/hour-1/album` | 4 | none |
+| `audio/albums/drive-through/hour-1/cover` | 15 | klein |
 
 ## `01-night-window`
 
@@ -253,6 +254,12 @@ warped hybrid-trap, trap drums, rapid hi-hats, formant bass, chest-sub, 808, war
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `02-open-lane`
 
 Catalog id `audio/albums/drive-through/hour-1/02-open-lane`.
@@ -399,6 +406,12 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `03-exit-seven`
 
@@ -559,6 +572,12 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `04-skyline-pass`
 
 Catalog id `audio/albums/drive-through/hour-1/04-skyline-pass`.
@@ -714,6 +733,12 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, reese bass, warped ba
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `05-on-ramp`
 
 Catalog id `audio/albums/drive-through/hour-1/05-on-ramp`.
@@ -865,6 +890,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `06-tunnel-bass`
 
 Catalog id `audio/albums/drive-through/hour-1/06-tunnel-bass`.
@@ -1011,6 +1042,12 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `07-wide-open`
 
@@ -1164,6 +1201,12 @@ hey
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `08-overpass`
 
@@ -1324,6 +1367,12 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, warped bass, r
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `09-second-wave`
 
 Catalog id `audio/albums/drive-through/hour-1/09-second-wave`.
@@ -1476,6 +1525,12 @@ go
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `10-freight-pulse`
 
@@ -1636,6 +1691,12 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `11-keep-going`
 
 Catalog id `audio/albums/drive-through/hour-1/11-keep-going`.
@@ -1786,6 +1847,12 @@ neuro bass, reese bass, chest-sub, rapid hi-hats, trap drums, warped bass, rave,
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `12-horizon-kick`
 
@@ -1942,6 +2009,12 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `13-clean-wreckage`
 
 Catalog id `audio/albums/drive-through/hour-1/13-clean-wreckage`.
@@ -2088,6 +2161,12 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, warpe
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `14-heart-lane`
 
@@ -2240,6 +2319,12 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, chest-sub bass, rave, no
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `15-dawn-receipt`
 
 Catalog id `audio/albums/drive-through/hour-1/15-dawn-receipt`.
@@ -2387,6 +2472,12 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, body bass, warped bass, r
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/drive-through/hour-1/album`.
@@ -2406,6 +2497,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -2520,6 +2617,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -3709,6 +3812,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 

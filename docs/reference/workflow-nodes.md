@@ -3588,6 +3588,22 @@ Resize a still to another image's exact width and height.
 
 No widgets. Sockets only.
 
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
 Rewrite a negative CLIP seed so it does not fight the positive.

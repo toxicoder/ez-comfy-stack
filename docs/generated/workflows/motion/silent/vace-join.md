@@ -72,6 +72,7 @@ flowchart LR
   N17["Negative Prompt Enhance"]
   N18["Quality"]
   N19["Describe image"]
+  N20["Check models"]
   N1 --> N9
   N2 --> N6
   N2 --> N7
@@ -114,6 +115,7 @@ flowchart LR
 | 17 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
 | 18 | Quality | `EZQuality` | Ungrouped |
 | 19 | Describe image | `EZImageDescribe` | Ungrouped |
+| 20 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -1259,3 +1261,21 @@ Run the captioner.
 **How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
 
 **This graph:** `false`
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

@@ -12,7 +12,7 @@ from _stamp_app_mode import BANNED, NODE_MODE_BYPASS, linear_input_node_id
 
 ROOT = Path(__file__).resolve().parents[2]
 NOTE_TYPES = {"Note", "MarkdownNote"}
-ISOLATE_OK = NOTE_TYPES | {"EZQuality"}
+ISOLATE_OK = NOTE_TYPES | {"EZQuality", "EZModelCheck"}
 LTX_LATENT_TYPES = {
     "LTXVImgToVideo",
     "EmptyLTXVLatentVideo",

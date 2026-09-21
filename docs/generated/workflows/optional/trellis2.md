@@ -77,6 +77,7 @@ flowchart LR
   N20["PaintMesh"]
   N21["Save GLB"]
   N22["Quality"]
+  N23["Check models"]
   N2 --> N3
   N3 --> N8
   N4 --> N8
@@ -134,6 +135,7 @@ flowchart LR
 | 20 | PaintMesh | `PaintMesh` | Ungrouped |
 | 21 | Save GLB | `MeshToFile3D` | Ungrouped |
 | 22 | Quality | `EZQuality` | Ungrouped |
+| 23 | Check models | `EZModelCheck` | Ungrouped |
 
 ## Node parameter reference
 
@@ -697,3 +699,21 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph:** `Click Check models. Queue does not run this node.`

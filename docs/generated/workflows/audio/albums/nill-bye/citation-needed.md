@@ -66,6 +66,7 @@ flowchart LR
   N13["Cover image"]
   N14["Album metadata"]
   N16["Quality"]
+  N17["Check models"]
   N1 --> N2
   N1 --> N6
   N1 --> N9
@@ -88,23 +89,23 @@ flowchart LR
 
 | Graph | Nodes | Occupancy |
 | --- | --- | --- |
-| `audio/albums/nill-bye/citation-needed/01-citation-needed` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/02-p-hacking` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/03-null-result` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/04-expired-reagent` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/05-lab-safety` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/06-rumor-mill` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/07-gym-selfie` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/08-rented-drip` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/09-clout-diet` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/10-mood-forecast` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/11-algorithm` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/12-story-time` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/13-caption` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/14-energy-drink` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/15-campfire` | 16 | audio |
-| `audio/albums/nill-bye/citation-needed/album` | 3 | none |
-| `audio/albums/nill-bye/citation-needed/cover` | 14 | klein |
+| `audio/albums/nill-bye/citation-needed/01-citation-needed` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/02-p-hacking` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/03-null-result` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/04-expired-reagent` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/05-lab-safety` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/06-rumor-mill` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/07-gym-selfie` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/08-rented-drip` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/09-clout-diet` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/10-mood-forecast` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/11-algorithm` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/12-story-time` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/13-caption` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/14-energy-drink` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/15-campfire` | 17 | audio |
+| `audio/albums/nill-bye/citation-needed/album` | 4 | none |
+| `audio/albums/nill-bye/citation-needed/cover` | 15 | klein |
 
 ## `01-citation-needed`
 
@@ -537,6 +538,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `02-p-hacking`
 
@@ -973,6 +980,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `03-null-result`
 
 Catalog id `audio/albums/nill-bye/citation-needed/03-null-result`.
@@ -1407,6 +1420,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `04-expired-reagent`
 
@@ -1843,6 +1862,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `05-lab-safety`
 
 Catalog id `audio/albums/nill-bye/citation-needed/05-lab-safety`.
@@ -2277,6 +2302,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `06-rumor-mill`
 
@@ -2713,6 +2744,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `07-gym-selfie`
 
 Catalog id `audio/albums/nill-bye/citation-needed/07-gym-selfie`.
@@ -3147,6 +3184,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `08-rented-drip`
 
@@ -3583,6 +3626,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `09-clout-diet`
 
 Catalog id `audio/albums/nill-bye/citation-needed/09-clout-diet`.
@@ -4017,6 +4066,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `10-mood-forecast`
 
@@ -4453,6 +4508,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `11-algorithm`
 
 Catalog id `audio/albums/nill-bye/citation-needed/11-algorithm`.
@@ -4887,6 +4948,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `12-story-time`
 
@@ -5341,6 +5408,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `13-caption`
 
 Catalog id `audio/albums/nill-bye/citation-needed/13-caption`.
@@ -5775,6 +5848,12 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `14-energy-drink`
 
@@ -6211,6 +6290,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `15-campfire`
 
 Catalog id `audio/albums/nill-bye/citation-needed/15-campfire`.
@@ -6646,6 +6731,12 @@ yeah
 | --- | --- |
 | 0 | `lab` |
 
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
+
 ## `album`
 
 Catalog id `audio/albums/nill-bye/citation-needed/album`.
@@ -6665,6 +6756,12 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## `cover`
 
@@ -6779,6 +6876,12 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Check models** (`EZModelCheck`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Click Check models. Queue does not run this node.` |
 
 ## Node parameter reference
 
@@ -8017,6 +8120,24 @@ custom freezes last overlay; lab restores graph defaults.
 | `Free Commercial Use (<$10M)` | Klein 4B stills (never 9B / FLUX.2-dev) + LTX-2.5 steps. Optional SeedVR2 polish on the PNG, not 4K. Wan / audio / trellis are no-ops. |
 | `ultra` | Klein 9B distilled when on disk (FLUX Non-Commercial). Else high. |
 | `max` | Klein 9B base or FLUX.2-dev when on disk (FLUX Non-Commercial). Else high. |
+
+### `EZModelCheck` — Check models
+
+Manual disk check for occupancy + Quality weights. Queue does not run this node.
+
+!!! warning "Lab notes"
+
+    Click Check models (canvas button or App occupancy chip). Reports Ready, or missing files plus the host download command. Not an output node.
+
+#### `status`
+
+Type `STRING`.
+
+Last check result.
+
+**How it affects generation:** JS overwrites after Check models. Queue ignores this node.
+
+**This graph (all 17 instances):** `Click Check models. Queue does not run this node.`
 
 ### `EZAlbumPack` — Album Pack
 
