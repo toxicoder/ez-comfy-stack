@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "bazelbuild.vscode-bazel",
+    "mkhl.shfmt",
+    "ms-azuretools.vscode-docker",
+    "ms-python.debugpy",
+    "ms-python.mypy-type-checker",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-vscode-remote.remote-containers",
+    "redhat.vscode-yaml",
+    "timonwong.shellcheck",
+    "unifiedjs.vscode-mdx"
+  ],
+  "unwantedRecommendations": [
+    "charliermarsh.ruff",
+    "esbenp.prettier-vscode",
+    "foxundermoon.shell-format",
+    "ms-python.autopep8",
+    "ms-python.black-formatter"
+  ]
+}

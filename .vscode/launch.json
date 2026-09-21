@@ -1,0 +1,35 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "pytest: current file",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["${file}", "-q"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "env": {
+        "EZ_COMFY_PROGRESS": "0",
+        "HF_PROGRESS": "0",
+        "LAB_HERMETIC": "1",
+        "PYTHONPATH": "${workspaceFolder}/docker:${workspaceFolder}/docker/pythonpath:${workspaceFolder}/custom_nodes:${workspaceFolder}/scripts/lib:${workspaceFolder}/studio-ui:${workspaceFolder}/docs:${workspaceFolder}/tools:${workspaceFolder}/tools/blender"
+      }
+    },
+    {
+      "name": "pytest: tests/python",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/python", "-q"],
+      "cwd": "${workspaceFolder}",
+      "justMyCode": true,
+      "env": {
+        "EZ_COMFY_PROGRESS": "0",
+        "HF_PROGRESS": "0",
+        "LAB_HERMETIC": "1",
+        "PYTHONPATH": "${workspaceFolder}/docker:${workspaceFolder}/docker/pythonpath:${workspaceFolder}/custom_nodes:${workspaceFolder}/scripts/lib:${workspaceFolder}/studio-ui:${workspaceFolder}/docs:${workspaceFolder}/tools:${workspaceFolder}/tools/blender"
+      }
+    }
+  ]
+}

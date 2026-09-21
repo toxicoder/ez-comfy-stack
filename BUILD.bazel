@@ -43,6 +43,17 @@ filegroup(
 )
 
 filegroup(
+    name = "vscode",
+    srcs = [
+        ".vscode/extensions.json",
+        ".vscode/launch.json",
+        ".vscode/settings.json",
+        ".vscode/tasks.json",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
     name = "ci_workflows",
     srcs = [
         ".github/actions/setup-bazel/action.yml",
@@ -102,6 +113,7 @@ filegroup(
         "mkdocs.yml",
         ":ci_workflows",
         ":devcontainer",
+        ":vscode",
         "//config:policy",
         "//custom_nodes:sources",
         "//docker:sources",

@@ -10,6 +10,7 @@ tags: [contributing, pr, tdd, docs]
 
 - **Canonical file** — repo-root `CONTRIBUTING.md` (this page is a summary)
 - **Branch + TDD** — from `development`, tests in the same commit
+- **Editor** — shared `.vscode/` tasks wrap `bazelisk` (no secrets in workspace files)
 - **PR checklist** including safety and docs
 - **Human review** — **AI-drafted docs still need a human pass**
 
@@ -45,6 +46,8 @@ Session vars are for operator fences. Contributors still branch from **`developm
 How merge commits, squash, rebase, and stacked PRs work in this repo: [How we land changes](../learn/merges.md). Land each PR **into `development`**. A GitHub Merged badge on a PR whose base is another topic branch does not update `development`.
 
 Install Python test tools once: `pip install -r tests/requirements.txt`.
+
+VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables.
 
 ```mermaid
 flowchart TB

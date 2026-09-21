@@ -44,7 +44,13 @@ comfy-state/
 # OS / IDE
 .DS_Store
 .idea/
-.vscode/
+# Shared workspace files are tracked; keep local-only VS Code state ignored
+# (.env, history, task storage, unsaved extras).
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
 *.swp
 *~
 

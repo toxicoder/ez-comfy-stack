@@ -33,6 +33,10 @@ flowchart TB
   D --> E["PR into development"]
 ```
 
+## Editor
+
+VS Code / Cursor: open the **repo root**. Accept the recommended extensions (Pylance, mypy, shfmt, ShellCheck, Bazel). **Run Task** → `validate` is `bazelisk run //:validate`. Debug configs run pytest with a relative `PYTHONPATH` only — no `.env`, interpreter path, or host variables are committed. `main` and `development` are branch-protected in the workspace so casual commits on those names prompt first.
+
 ## Commit messages
 
 ```text
