@@ -727,6 +727,7 @@ def test_studio_app_chrome_pack_exists() -> None:
     assert "execution_start" in body
     assert "SaveImage" in body
     assert "EZFilmConcat" in body
+    assert "EZClipConcat" in body
 
 
 def test_web_directory_and_preview_js() -> None:

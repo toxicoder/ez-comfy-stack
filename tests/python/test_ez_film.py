@@ -126,8 +126,10 @@ def test_pack_imports_without_comfy() -> None:
     js = ROOT / "custom_nodes" / "ez_film" / "js" / "ez_film_preview.js"
     body = js.read_text(encoding="utf-8")
     assert "EZFilmConcat" in body
+    assert "EZClipConcat" in body
     assert "onExecuted" in body
     assert "Film ready" in body
+    assert "Clip chain ready" in body
     assert "download" in body.lower()
 
 
