@@ -699,7 +699,7 @@ def render_param_reference(
         "## Node parameter reference",
         "",
         "Every unique node type on this graph. Widgets are in lab JSON order. "
-        "Choices are ComfyUI v0.34.6 / lab `INPUT_TYPES` — not SD1.5 folklore.",
+        "Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.",
         "",
     ]
     by_type: dict[str, list[dict[str, Any]]] = defaultdict(list)
@@ -1146,7 +1146,7 @@ def render_encyclopedia_page(
         "",
         "> Generated from `docs/workflow_nodes.py`. Do not hand-edit this file.",
         "",
-        "ComfyUI pin **v0.34.6**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.",
+        "ComfyUI pin **v0.37.0**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.",
         "",
     ]
     dummy_nodes = [

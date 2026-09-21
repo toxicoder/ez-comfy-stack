@@ -1,7 +1,7 @@
 """Hand-authored encyclopedia of every Comfy node type used in workflows/_lab.
 
 Widget order matches lab JSON ``widgets_values`` (list index or VHS dict key).
-Combo lists are ComfyUI v0.34.6 INPUT_TYPES, lab ez_* INPUT_TYPES, or the ACE
+Combo lists are ComfyUI v0.37.0 INPUT_TYPES, lab ez_* INPUT_TYPES, or the ACE
 encoder contract in tests/python/_ace_widgets_contract.py.
 
 Do not invent sampler/CLIP/VHS values. Lab-specific generation effects live

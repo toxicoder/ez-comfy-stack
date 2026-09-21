@@ -21,11 +21,11 @@ tags: [workflows, generated, comfyui, reference]
 
 > Generated from `docs/workflow_nodes.py`. Do not hand-edit this file.
 
-ComfyUI pin **v0.34.6**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.
+ComfyUI pin **v0.37.0**. MiniMax is banned. Klein 9B / FLUX.2-dev are opt-in NC, not lab defaults.
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.34.6 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
 
 ### `AudioAdjustVolume` — Audio Adjust Volume
 
@@ -5135,6 +5135,7 @@ ODE / SDE algorithm that removes noise.
 | `ipndm` | iPNDM multistep. |
 | `ipndm_v` | iPNDM (v-prediction). |
 | `deis` | DEIS multistep. |
+| `cfgpp_ud10_ab` | CFG++ UD10 AB. Added in ComfyUI 0.35; not a lab default. |
 | `res_multistep` | Res multistep. Some turbo recipes. |
 | `res_multistep_cfg_pp` | Res multistep CFG++. |
 | `res_multistep_ancestral` | Ancestral res multistep. |

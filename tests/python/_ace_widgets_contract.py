@@ -1,4 +1,4 @@
-"""TextEncodeAceStepAudio1.5 widgets_values layout (ComfyUI v0.34.6).
+"""TextEncodeAceStepAudio1.5 widgets_values layout (ComfyUI v0.37.0).
 
 Not collected by pytest (leading underscore). Native ACE-Step 1.5 seed
 has control_after_generate, so widgets_values is 15 slots — seed is
@@ -16,7 +16,7 @@ ACE_ENCODER_TYPE = "TextEncodeAceStepAudio1.5"
 ACE_WIDGET_COUNT = 15
 ACE_SEED_CONTROL = frozenset({"fixed", "increment", "decrement", "randomize"})
 ACE_TIMESIGNATURE = frozenset({"2", "3", "4", "6"})
-# comfy_extras/nodes_ace.py TextEncodeAceStepAudio1.5 language combo (v0.34.6).
+# comfy_extras/nodes_ace.py TextEncodeAceStepAudio1.5 language combo (v0.37.0).
 ACE_LANGUAGE = frozenset(
     {
         "ar",

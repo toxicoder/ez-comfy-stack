@@ -116,7 +116,7 @@ flowchart LR
 
 ## Node parameter reference
 
-Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.34.6 / lab `INPUT_TYPES` — not SD1.5 folklore.
+Every unique node type on this graph. Widgets are in lab JSON order. Choices are ComfyUI v0.37.0 / lab `INPUT_TYPES` — not SD1.5 folklore.
 
 ### `UNETLoader` — Load Diffusion Model
 
@@ -509,6 +509,7 @@ ODE / SDE algorithm that removes noise.
 | `ipndm` | iPNDM multistep. |
 | `ipndm_v` | iPNDM (v-prediction). |
 | `deis` | DEIS multistep. |
+| `cfgpp_ud10_ab` | CFG++ UD10 AB. Added in ComfyUI 0.35; not a lab default. |
 | `res_multistep` | Res multistep. Some turbo recipes. |
 | `res_multistep_cfg_pp` | Res multistep CFG++. |
 | `res_multistep_ancestral` | Ancestral res multistep. |
