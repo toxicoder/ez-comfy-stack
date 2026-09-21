@@ -179,7 +179,7 @@ CFG_RETRY_BELOW = 0.45
 CFG_SAME_LANG = 0.5
 EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
-CLONE_REPETITION_PENALTY = 1.9
+CLONE_REPETITION_PENALTY = 1.2
 CLONE_MIN_P = 0.05
 CLONE_TOP_P = 1.0
 EXPECTED_WORDS_PER_S = 2.7
@@ -234,6 +234,10 @@ TRANSLATE_BLOCKING_MARKERS = (
     "GGUF failed to load",
 )
 NO_TURNS_STATUS = "no turns — ASR/translate did not run"
+NO_TARGET_STATUS = (
+    "no target lines — translation did not produce target-language text"
+)
+ASR_HALLUCINATION_SILENCE_S = 2.0
 MISSING_SOURCE_STATUS = (
     "missing source.wav — pick Source file or Upload media, "
     "turn I have rights on, then Queue"
@@ -930,23 +934,34 @@ def _whisper_segments(
             segments, info = model.transcribe(
                 path,
                 language=lang,
-                word_timestamps=False,
+                word_timestamps=True,
                 vad_filter=True,
                 beam_size=5,
                 condition_on_previous_text=False,
+                hallucination_silence_threshold=ASR_HALLUCINATION_SILENCE_S,
             )
         except TypeError:
             try:
                 segments, info = model.transcribe(
                     path,
                     language=lang,
-                    word_timestamps=False,
+                    word_timestamps=True,
                     vad_filter=True,
+                    beam_size=5,
+                    condition_on_previous_text=False,
                 )
             except TypeError:
-                segments, info = model.transcribe(
-                    path, language=lang, word_timestamps=False
-                )
+                try:
+                    segments, info = model.transcribe(
+                        path,
+                        language=lang,
+                        word_timestamps=True,
+                        vad_filter=True,
+                    )
+                except TypeError:
+                    segments, info = model.transcribe(
+                        path, language=lang, word_timestamps=False
+                    )
     except Exception as exc:  # noqa: BLE001 — fail-soft
         reason = f"faster-whisper failed: {exc}"
         _log(reason)
@@ -956,6 +971,27 @@ def _whisper_segments(
         text = str(getattr(seg, "text", "") or "").strip()
         start = float(getattr(seg, "start", 0.0) or 0.0)
         end = float(getattr(seg, "end", start) or start)
+        words = getattr(seg, "words", None) or []
+        if words:
+            first = words[0]
+            last = words[-1]
+            w0 = (
+                first.get("start")
+                if isinstance(first, dict)
+                else getattr(first, "start", None)
+            )
+            w1 = (
+                last.get("end")
+                if isinstance(last, dict)
+                else getattr(last, "end", None)
+            )
+            try:
+                if w0 is not None:
+                    start = float(w0)
+                if w1 is not None:
+                    end = float(w1)
+            except (TypeError, ValueError):
+                pass
         if not text or end <= start:
             continue
         turns.append(
@@ -1038,6 +1074,7 @@ def _translate_user_message(
     prev_source: str = "",
     prev_target: str = "",
     next_source: str = "",
+    window_s: float = 0.0,
 ) -> str:
     """Build the GGUF user prompt for one turn.
 
@@ -1048,6 +1085,7 @@ def _translate_user_message(
         prev_source: Previous source line (context only).
         prev_target: Previous translation (context only).
         next_source: Following source line (context only).
+        window_s: Source turn duration in seconds (hint only).
 
     Returns:
         Prompt string with ``/no_think``.
@@ -1060,6 +1098,8 @@ def _translate_user_message(
         "Output only the translated sentence.\n\n"
         f"Source: {text}"
     ]
+    if window_s > 0.0:
+        parts.append(f"Source window: {window_s:.1f} s.")
     if prev_source:
         parts.append(
             "Context (previous turn, do not translate this block):\n"
@@ -1145,6 +1185,10 @@ def translate_turns(
             next_source = ""
             if idx + 1 < n_turns:
                 next_source = str(turns[idx + 1].get("text") or "").strip()
+            window_s = max(
+                0.0,
+                float(item.get("t1") or 0.0) - float(item.get("t0") or 0.0),
+            )
             user = _translate_user_message(
                 source_text,
                 src,
@@ -1152,6 +1196,7 @@ def translate_turns(
                 prev_source=prev_source,
                 prev_target=prev_target,
                 next_source=next_source,
+                window_s=window_s,
             )
             rewritten, reason = complete(
                 system,
@@ -1189,24 +1234,25 @@ def translate_turns(
                     rewritten or "", source_text=source_text, language=tgt
                 )
             if not cleaned:
-                item["text_target"] = source_text
+                item["text_target"] = ""
                 passthrough += 1
                 last_reason = reason or REASON_EMPTY
                 merged.append(item)
                 continue
             if cleaned == source_text:
-                item["text_target"] = source_text
+                item["text_target"] = ""
                 passthrough += 1
                 last_reason = "passthrough"
                 merged.append(item)
                 continue
-            item["text_target"] = cleaned
             if src != tgt and not looks_like_target(cleaned, tgt):
+                item["text_target"] = ""
                 passthrough += 1
                 suspect += 1
                 last_reason = "passthrough"
                 merged.append(item)
                 continue
+            item["text_target"] = cleaned
             translated += 1
             merged.append(item)
     finally:
@@ -1926,20 +1972,15 @@ def synthesize_turn(
     chunks = split_clone_text(text)
     if not chunks:
         return [], SAMPLE_RATE, ""
-    if hook is not None:
-        joined: list[float] = []
-        rate = SAMPLE_RATE
-        for chunk in chunks:
-            pcm, sr = hook(chunk, lang, ref_wav, engine)
-            rate = sr or rate
-            joined.extend(pcm)
-        return joined, rate, ""
     name = engine if engine in ENGINES else ENGINE_CHATTERBOX
-    joined_pcm: list[float] = []
+    pieces: list[list[float]] = []
     out_rate = SAMPLE_RATE
     last_err = ""
     for chunk in chunks:
-        if name == ENGINE_QWEN3TTS:
+        if hook is not None:
+            pcm, sr = hook(chunk, lang, ref_wav, engine)
+            err = ""
+        elif name == ENGINE_QWEN3TTS:
             pcm, sr, err = _try_qwen3tts(chunk, lang, ref_wav, ref_text=ref_text)
         else:
             pcm, sr, err = _try_chatterbox(
@@ -1956,10 +1997,14 @@ def synthesize_turn(
         if not pcm:
             continue
         out_rate = sr or out_rate
-        joined_pcm.extend(pcm)
-    if not joined_pcm:
+        cropped = crop_hallucination_tail(pcm, out_rate, chunk)
+        if cropped:
+            pieces.append(cropped)
+    if not pieces:
         return [], out_rate, last_err
-    return joined_pcm, out_rate, ""
+    if len(pieces) == 1:
+        return pieces[0], out_rate, ""
+    return _concat_crossfade(pieces, out_rate), out_rate, ""
 
 
 def _maybe_loudnorm_yt(
@@ -2114,6 +2159,26 @@ def _clamp_render_knobs(
     return pace, exag, cfg
 
 
+def fit_speed_cap(pace: float) -> float:
+    """Compression ceiling for :func:`fit_turn`.
+
+    Lab default ``1.0`` uses :data:`MAX_SPEED` (1.25×). Values above
+    ``1.0`` stay capped at ``MAX_SPEED`` so 1.5 cannot crush.
+
+    Args:
+        pace: Speaking-speed widget after clamp.
+
+    Returns:
+        Factor in ``[1.0, MAX_SPEED]``.
+    """
+    value = float(pace) if pace else 1.0
+    if value <= 1.0:
+        return MAX_SPEED
+    if value > MAX_SPEED:
+        return MAX_SPEED
+    return value
+
+
 def _empty_render(
     dest: Path,
     rate: int,
@@ -2197,6 +2262,9 @@ def render_mix(
                 return [], rate, qwen_miss
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
     lang = language_code(payload.get("target_language") or "es")
+    src_lang = str(payload.get("source_language") or "en")
+    tgt_lang = str(payload.get("target_language") or "es")
+    cross_lang = not _same_language(src_lang, tgt_lang)
     clones: list[dict[str, Any]] = []
     render_dir = dest / "render"
     render_dir.mkdir(parents=True, exist_ok=True)
@@ -2285,7 +2353,7 @@ def render_mix(
         cloned_n += 1
         src_chunk = _slice_pcm(samples, rate, float(turn["t0"]), float(turn["t1"]))
         pcm = match_rms(pcm, rms(src_chunk))
-        cap = min(MAX_SPEED, max(1.0, pace))
+        cap = fit_speed_cap(pace)
         fitted, meta = fit_turn(
             pcm,
             rate,
@@ -2297,8 +2365,6 @@ def render_mix(
             flags.append(f"turn {turn['id']} trimmed")
         write_wav(render_dir / f"turn_{int(turn['id']):04d}.wav", fitted, rate)
         clones.append({"t0": turn["t0"], "pcm": fitted})
-    src_lang = str(payload.get("source_language") or "en")
-    tgt_lang = str(payload.get("target_language") or "es")
     (dest / f"ez_dub.{src_lang}.srt").write_text(
         turns_to_srt(turns, field="text"), encoding="utf-8"
     )
@@ -2313,14 +2379,17 @@ def render_mix(
     )
     write_json(dest / "translation.json", payload)
     if not had_spoken:
-        status = "no spoken text — ASR produced empty turns"
+        has_source = any(str(t.get("text") or "").strip() for t in turns)
+        if cross_lang and has_source:
+            status = NO_TARGET_STATUS
+        else:
+            status = "no spoken text — ASR produced empty turns"
         return _empty_render(dest, rate, status, flags)
     unvoiced_only = (not cloned) and any("unvoiced" in f for f in flags)
     if not cloned and not unvoiced_only:
         status = last_err or CLONE_MISSING_STATUS
         flags.append(status)
         return _empty_render(dest, rate, status, flags)
-    cross_lang = not _same_language(src_lang, tgt_lang)
     if not cloned and unvoiced_only and cross_lang:
         status = CLONE_UNVOICED_STATUS
         flags.append(status)

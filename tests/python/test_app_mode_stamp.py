@@ -404,6 +404,15 @@ def test_shipped_required_image_is_first_linear_input() -> None:
             assert names[0] == "image", path
 
 
+def test_dub_render_speed_help_is_fit_ceiling_not_kokoro() -> None:
+    node = {"type": "EZDubRender"}
+    text = widget_description("speed", node) or ""
+    assert "1.25" in text
+    assert "Fit ceiling" in text
+    assert "Kokoro" not in text
+    assert widget_description("speed") == DEFAULT_WIDGET_DESCRIPTIONS["speed"]
+
+
 def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert widget_description("prompt") == DEFAULT_WIDGET_DESCRIPTIONS["prompt"]
     assert display_label(None, "prompt") == "Prompt"

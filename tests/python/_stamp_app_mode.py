@@ -822,6 +822,11 @@ def display_label(
 def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str | None:
     """Help text for one App Mode widget."""
     ntype = (node or {}).get("type")
+    if ntype == "EZDubRender" and name == "speed":
+        return (
+            "Fit ceiling. 1.0 uses the lab 1.25× pitch-preserving lock "
+            "(then spill, then fade-trim the end). 1.5 still caps at 1.25."
+        )
     if ntype == "EZAudioRack":
         return {
             "brief": (

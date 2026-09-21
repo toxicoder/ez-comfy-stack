@@ -52,6 +52,7 @@ _PREFIX_RE = re.compile(
     re.IGNORECASE,
 )
 _TOKEN_RE = re.compile(r"[A-Za-zÀ-ÿ']+")
+_SPOKEN_ENDERS = frozenset({".", "!", "?", "。", "？", "！"})
 _TAIL_CONNECTOR_RE = re.compile(
     r"(?:,|;|:|-|\s+|de una manera que|de forma que|in a way that)+$",
     re.IGNORECASE,
@@ -157,8 +158,32 @@ def looks_like_target(text: str, language: str) -> bool:
     return True
 
 
+def ensure_spoken_punctuation(text: str) -> str:
+    """Collapse LLM ellipses and ensure a sentence ender for TTS.
+
+    Chatterbox ``punc_norm`` does the same inside ``generate``. Apply it
+    here so SRT and the Qwen3 path match.
+
+    Args:
+        text: Translation body.
+
+    Returns:
+        Spoken line, or empty when ``text`` is blank.
+    """
+    out = " ".join((text or "").split())
+    if not out:
+        return ""
+    out = out.replace("...", ", ").replace("…", ", ")
+    out = " ".join(out.split())
+    if out[0].islower():
+        out = out[0].upper() + out[1:]
+    if not any(out.endswith(mark) for mark in _SPOKEN_ENDERS):
+        out += "."
+    return out
+
+
 def sanitize_target(text: str, *, source_text: str, language: str) -> str:
-    """strip fences → strip leak tails → strip().
+    """strip fences → strip leak tails → spoken punctuation.
 
     Args:
         text: Raw GGUF output.
@@ -171,4 +196,4 @@ def sanitize_target(text: str, *, source_text: str, language: str) -> str:
     del source_text, language
     out = strip_model_fences(text)
     out = strip_leak_tails(out)
-    return out.strip()
+    return ensure_spoken_punctuation(out.strip())

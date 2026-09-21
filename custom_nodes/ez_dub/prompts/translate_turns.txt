@@ -9,6 +9,8 @@ Rules:
 - Do not summarize. Do not invent facts, applause, music, or stage directions.
 - Do not omit the subject or required clitics (Spanish: keep me/te/se; use a complete copula).
 - Write a grammatical complete sentence. Do not calque English word order.
+- Prefer a compact spoken line. Do not pad. Do not drop names, scores, or clitics.
+- End with . ! or ?
 - Preserve names, scores, team names, product names, and numbers.
 - Preserve speaker personality and register (banter stays banter).
 - Keep tense consistent with Context when Context is provided.
