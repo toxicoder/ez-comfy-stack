@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        588
       ],
       "size": [
         360,
@@ -52,7 +52,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        436
+        944
       ],
       "size": [
         360,
@@ -97,7 +97,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        614
+        1122
       ],
       "size": [
         360,
@@ -139,7 +139,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        974
+        1482
       ],
       "size": [
         420,
@@ -196,8 +196,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        40,
-        1466
+        2380,
+        588
       ],
       "size": [
         420,
@@ -252,8 +252,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        40,
-        1698
+        2848,
+        880
       ],
       "size": [
         280,
@@ -322,7 +322,7 @@
       "type": "Note",
       "pos": [
         40,
-        2370
+        80
       ],
       "size": [
         420,
@@ -346,7 +346,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        80
+        588
       ],
       "size": [
         420,
@@ -387,7 +387,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        80
+        588
       ],
       "size": [
         360,
@@ -434,7 +434,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        80
+        588
       ],
       "size": [
         320,
@@ -494,7 +494,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        80
+        588
       ],
       "size": [
         240,
@@ -536,7 +536,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        80
+        588
       ],
       "size": [
         280,
@@ -566,7 +566,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        652
+        1160
       ],
       "size": [
         420,
@@ -607,7 +607,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        652
+        1160
       ],
       "size": [
         360,
@@ -654,7 +654,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        652
+        1160
       ],
       "size": [
         320,
@@ -714,7 +714,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        652
+        1160
       ],
       "size": [
         240,
@@ -756,7 +756,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        652
+        1160
       ],
       "size": [
         280,
@@ -786,7 +786,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1174
+        1682
       ],
       "size": [
         420,
@@ -827,7 +827,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1174
+        1682
       ],
       "size": [
         360,
@@ -874,7 +874,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1174
+        1682
       ],
       "size": [
         320,
@@ -934,7 +934,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1174
+        1682
       ],
       "size": [
         240,
@@ -976,7 +976,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1174
+        1682
       ],
       "size": [
         280,
@@ -1006,7 +1006,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1708
+        2216
       ],
       "size": [
         420,
@@ -1047,7 +1047,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1708
+        2216
       ],
       "size": [
         360,
@@ -1094,7 +1094,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1708
+        2216
       ],
       "size": [
         320,
@@ -1154,7 +1154,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1708
+        2216
       ],
       "size": [
         240,
@@ -1196,7 +1196,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1708
+        2216
       ],
       "size": [
         280,
@@ -1226,7 +1226,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2230
+        2738
       ],
       "size": [
         420,
@@ -1267,7 +1267,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2230
+        2738
       ],
       "size": [
         360,
@@ -1314,7 +1314,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2230
+        2738
       ],
       "size": [
         320,
@@ -1374,7 +1374,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2230
+        2738
       ],
       "size": [
         240,
@@ -1416,7 +1416,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2230
+        2738
       ],
       "size": [
         280,
@@ -1446,7 +1446,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        2752
+        3260
       ],
       "size": [
         420,
@@ -1487,7 +1487,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        2752
+        3260
       ],
       "size": [
         360,
@@ -1534,7 +1534,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        2752
+        3260
       ],
       "size": [
         320,
@@ -1594,7 +1594,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        2752
+        3260
       ],
       "size": [
         240,
@@ -1636,7 +1636,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        2752
+        3260
       ],
       "size": [
         280,
@@ -1666,7 +1666,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3274
+        3782
       ],
       "size": [
         420,
@@ -1707,7 +1707,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3274
+        3782
       ],
       "size": [
         360,
@@ -1754,7 +1754,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3274
+        3782
       ],
       "size": [
         320,
@@ -1814,7 +1814,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3274
+        3782
       ],
       "size": [
         240,
@@ -1856,7 +1856,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3274
+        3782
       ],
       "size": [
         280,
@@ -1886,7 +1886,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        3796
+        4304
       ],
       "size": [
         420,
@@ -1927,7 +1927,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        3796
+        4304
       ],
       "size": [
         360,
@@ -1974,7 +1974,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        3796
+        4304
       ],
       "size": [
         320,
@@ -2034,7 +2034,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        3796
+        4304
       ],
       "size": [
         240,
@@ -2076,7 +2076,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        3796
+        4304
       ],
       "size": [
         280,
@@ -2106,7 +2106,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4318
+        4826
       ],
       "size": [
         420,
@@ -2147,7 +2147,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4318
+        4826
       ],
       "size": [
         360,
@@ -2194,7 +2194,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4318
+        4826
       ],
       "size": [
         320,
@@ -2254,7 +2254,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4318
+        4826
       ],
       "size": [
         240,
@@ -2296,7 +2296,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4318
+        4826
       ],
       "size": [
         280,
@@ -2326,7 +2326,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        4840
+        5348
       ],
       "size": [
         420,
@@ -2367,7 +2367,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        4840
+        5348
       ],
       "size": [
         360,
@@ -2414,7 +2414,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        4840
+        5348
       ],
       "size": [
         320,
@@ -2474,7 +2474,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        4840
+        5348
       ],
       "size": [
         240,
@@ -2516,7 +2516,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        4840
+        5348
       ],
       "size": [
         280,
@@ -2546,7 +2546,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        5092
+        5600
       ],
       "size": [
         420,
@@ -2586,8 +2586,8 @@
       "id": 61,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        876,
+        80
       ],
       "size": [
         320.0,
@@ -2617,8 +2617,8 @@
       "id": 62,
       "type": "EZImageFormat",
       "pos": [
-        40,
-        2078
+        2848,
+        588
       ],
       "size": [
         360,
@@ -2692,7 +2692,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        422
+        930
       ],
       "size": [
         280,
@@ -2747,7 +2747,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        994
+        1502
       ],
       "size": [
         280,
@@ -2800,7 +2800,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1516
+        2024
       ],
       "size": [
         280,
@@ -2853,7 +2853,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2050
+        2558
       ],
       "size": [
         280,
@@ -2906,7 +2906,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        2572
+        3080
       ],
       "size": [
         280,
@@ -2959,7 +2959,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3094
+        3602
       ],
       "size": [
         280,
@@ -3012,7 +3012,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        3616
+        4124
       ],
       "size": [
         280,
@@ -3065,7 +3065,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4138
+        4646
       ],
       "size": [
         280,
@@ -3118,7 +3118,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        4660
+        5168
       ],
       "size": [
         280,
@@ -3171,7 +3171,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        5182
+        5690
       ],
       "size": [
         280,
@@ -3223,8 +3223,8 @@
       "id": 73,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        508,
+        80
       ],
       "size": [
         320.0,
@@ -4257,10 +4257,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        460,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        488,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
         400,
         692
       ],
@@ -4269,11 +4295,11 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "HOUSE IDENTITY",
       "bounding": [
         20,
-        918,
+        1426,
         460,
         520
       ],
@@ -4282,11 +4308,76 @@
       "flags": {}
     },
     {
-      "id": 10,
+      "id": 5,
       "title": "SHOT 01 tower",
       "bounding": [
         500,
-        24,
+        532,
+        1852,
+        522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SHOT 02 foyer",
+      "bounding": [
+        500,
+        1104,
+        1852,
+        522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "SHOT 03 lounge",
+      "bounding": [
+        500,
+        1626,
+        1852,
+        522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "SHOT 04 kitchen",
+      "bounding": [
+        500,
+        2160,
+        1852,
+        522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 9,
+      "title": "SHOT 05 dining",
+      "bounding": [
+        500,
+        2682,
+        1852,
+        522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SHOT 06 bedroom",
+      "bounding": [
+        500,
+        3204,
         1852,
         522
       ],
@@ -4296,10 +4387,10 @@
     },
     {
       "id": 11,
-      "title": "SHOT 02 foyer",
+      "title": "SHOT 07 bath",
       "bounding": [
         500,
-        596,
+        3726,
         1852,
         522
       ],
@@ -4309,10 +4400,10 @@
     },
     {
       "id": 12,
-      "title": "SHOT 03 lounge",
+      "title": "SHOT 08 terrace",
       "bounding": [
         500,
-        1118,
+        4248,
         1852,
         522
       ],
@@ -4322,10 +4413,10 @@
     },
     {
       "id": 13,
-      "title": "SHOT 04 kitchen",
+      "title": "SHOT 09 drone",
       "bounding": [
         500,
-        1652,
+        4770,
         1852,
         522
       ],
@@ -4335,12 +4426,12 @@
     },
     {
       "id": 14,
-      "title": "SHOT 05 dining",
+      "title": "SHOT 10 study",
       "bounding": [
-        500,
-        2174,
-        1852,
-        522
+        460,
+        5292,
+        1892,
+        772
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -4348,64 +4439,25 @@
     },
     {
       "id": 15,
-      "title": "SHOT 06 bedroom",
+      "title": "PROMPT",
       "bounding": [
-        500,
-        2696,
-        1852,
-        522
+        2360,
+        532,
+        460,
+        260
       ],
-      "color": "#3f789e",
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     },
     {
       "id": 16,
-      "title": "SHOT 07 bath",
+      "title": "SETTINGS",
       "bounding": [
-        500,
-        3218,
-        1852,
-        522
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 17,
-      "title": "SHOT 08 terrace",
-      "bounding": [
-        500,
-        3740,
-        1852,
-        522
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 18,
-      "title": "SHOT 09 drone",
-      "bounding": [
-        500,
-        4262,
-        1852,
-        522
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 19,
-      "title": "SHOT 10 study",
-      "bounding": [
-        460,
-        4784,
-        1892,
-        772
+        2828,
+        532,
+        400,
+        498
       ],
       "color": "#3f789e",
       "font_size": 24,

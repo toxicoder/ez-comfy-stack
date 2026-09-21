@@ -50,10 +50,14 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GIDENTITY["IDENTITY"]
   GSHOT_BEFORE["SHOT BEFORE"]
   GSHOT_AFTER["SHOT AFTER"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -64,11 +68,11 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | IDENTITY | `EZKleinPromptEnhance` | IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 8 | Encode plate 01 | `VAEEncode` | SHOT BEFORE |
-| 9 | Negative + identity plate | `ReferenceLatent` | Ungrouped |
+| 9 | Negative + identity plate | `ReferenceLatent` | SETTINGS |
 | 10 | SHOT BEFORE | `EZPromptJoin` | SHOT BEFORE |
 | 11 | Positive BEFORE | `CLIPTextEncode` | SHOT BEFORE |
 | 12 | Sampler BEFORE | `KSampler` | SHOT BEFORE |
@@ -80,12 +84,12 @@ flowchart TB
 | 19 | Decode AFTER | `VAEDecode` | SHOT AFTER |
 | 20 | Save AFTER | `SaveImage` | SHOT AFTER |
 | 21 | Ref from 01 (AFTER) | `ReferenceLatent` | SHOT AFTER |
-| 22 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 23 | Quality | `EZQuality` | Ungrouped |
-| 24 | Format / platform | `EZImageFormat` | Ungrouped |
+| 22 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 23 | Quality | `EZQuality` | QUALITY |
+| 24 | Format / platform | `EZImageFormat` | SETTINGS |
 | 25 | Upscale still | `EZImageUpscale` | SHOT BEFORE |
 | 26 | Upscale still | `EZImageUpscale` | SHOT AFTER |
-| 27 | Check models | `EZModelCheck` | Ungrouped |
+| 27 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

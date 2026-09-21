@@ -1,6 +1,6 @@
 {
   "id": "maps-post",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 20,
   "last_link_id": 30,
   "nodes": [
@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        508
       ],
       "size": [
         360,
@@ -43,7 +43,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        662
       ],
       "size": [
         360,
@@ -79,7 +79,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        412
+        840
       ],
       "size": [
         360,
@@ -113,7 +113,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        80
+        508
       ],
       "size": [
         420,
@@ -159,8 +159,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        948,
-        604
+        480,
+        1492
       ],
       "size": [
         420,
@@ -206,8 +206,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        948,
-        836
+        1440,
+        1260
       ],
       "size": [
         280,
@@ -267,7 +267,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        80
+        508
       ],
       "size": [
         320,
@@ -327,7 +327,7 @@
       "type": "VAEDecode",
       "pos": [
         1840,
-        80
+        508
       ],
       "size": [
         240,
@@ -369,7 +369,7 @@
       "type": "SaveImage",
       "pos": [
         1840,
-        198
+        626
       ],
       "size": [
         280,
@@ -399,7 +399,7 @@
       "type": "Note",
       "pos": [
         40,
-        1032
+        80
       ],
       "size": [
         960,
@@ -422,8 +422,8 @@
       "id": 11,
       "type": "LoadImage",
       "pos": [
-        2180,
-        80
+        2548,
+        508
       ],
       "size": [
         320,
@@ -461,7 +461,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         480,
-        80
+        508
       ],
       "size": [
         420,
@@ -515,7 +515,7 @@
       "type": "EZNegativePromptEnhance",
       "pos": [
         480,
-        1384
+        1000
       ],
       "size": [
         420,
@@ -555,8 +555,8 @@
       "id": 14,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -586,8 +586,8 @@
       "id": 15,
       "type": "EZImageFormat",
       "pos": [
-        1048,
-        1014
+        1440,
+        968
       ],
       "size": [
         360,
@@ -660,8 +660,8 @@
       "id": 16,
       "type": "EZOptionalImage",
       "pos": [
-        -400.0,
-        400.0
+        2548,
+        894
       ],
       "size": [
         360.0,
@@ -708,8 +708,8 @@
       "id": 17,
       "type": "EZKleinRefCanvas",
       "pos": [
-        -400,
-        1012
+        2548,
+        1248
       ],
       "size": [
         360.0,
@@ -768,8 +768,8 @@
       "id": 18,
       "type": "EZImageUpscale",
       "pos": [
-        1800,
-        540
+        1848,
+        968
       ],
       "size": [
         280,
@@ -813,8 +813,8 @@
       "id": 19,
       "type": "EZImageDescribe",
       "pos": [
-        480,
-        572
+        2548,
+        1086
       ],
       "size": [
         280,
@@ -860,8 +860,8 @@
       "id": 20,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1070,10 +1070,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        1000,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        452,
         400,
         490
       ],
@@ -1082,41 +1108,54 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "PROMPT",
       "bounding": [
         460,
-        24,
+        452,
         928,
-        520
+        1244
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "SETTINGS",
       "bounding": [
         1420,
-        24,
-        360,
-        362
+        452,
+        400,
+        958
       ],
       "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         1820,
-        24,
-        320,
-        488
+        452,
+        328,
+        640
       ],
       "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "INPUT",
+      "bounding": [
+        2528,
+        452,
+        400,
+        980
+      ],
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     }

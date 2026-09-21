@@ -105,21 +105,21 @@ flowchart LR
 | 2 | UMT5 CLIP (wan) | `CLIPLoader` | Load models |
 | 3 | Wan 2.2 VAE | `VAELoader` | Load models |
 | 4 | First frame | `LoadImage` | For i2v, LoadImage enabled (byp… |
-| 6 | Positive | `CLIPTextEncode` | Ungrouped |
-| 7 | Negative | `CLIPTextEncode` | Ungrouped |
-| 8 | Video size & length | `Wan22ImageToVideoLatent` | Ungrouped |
-| 9 | Shift | `ModelSamplingSD3` | Ungrouped |
-| 10 | KSampler | `KSampler` | Ungrouped |
-| 11 | VAE Decode | `VAEDecode` | Ungrouped |
-| 12 | Save frames (secondary) | `SaveImage` | Ungrouped |
-| 13 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | Ungrouped |
-| 14 | Operator note | `Note` | Ungrouped |
-| 15 | Wan Prompt Enhance | `EZWanPromptEnhance` | Ungrouped |
-| 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 17 | Quality | `EZQuality` | Ungrouped |
-| 18 | Format / platform | `EZVideoFormat` | Ungrouped |
-| 19 | Describe image | `EZImageDescribe` | Ungrouped |
-| 20 | Check models | `EZModelCheck` | Ungrouped |
+| 6 | Positive | `CLIPTextEncode` | PROMPT |
+| 7 | Negative | `CLIPTextEncode` | PROMPT |
+| 8 | Video size & length | `Wan22ImageToVideoLatent` | SETTINGS |
+| 9 | Shift | `ModelSamplingSD3` | SETTINGS |
+| 10 | KSampler | `KSampler` | SETTINGS |
+| 11 | VAE Decode | `VAEDecode` | OUTPUT |
+| 12 | Save frames (secondary) | `SaveImage` | OUTPUT |
+| 13 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | OUTPUT |
+| 14 | Operator note | `Note` | NOTE |
+| 15 | Wan Prompt Enhance | `EZWanPromptEnhance` | PROMPT |
+| 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 17 | Quality | `EZQuality` | QUALITY |
+| 18 | Format / platform | `EZVideoFormat` | SETTINGS |
+| 19 | Describe image | `EZImageDescribe` | INPUT |
+| 20 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

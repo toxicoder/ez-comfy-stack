@@ -33,7 +33,7 @@
       "type": "EZAlbumPack",
       "pos": [
         728,
-        80
+        648
       ],
       "size": [
         360,
@@ -64,8 +64,8 @@
       "id": 3,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1096,
+        80
       ],
       "size": [
         320.0,
@@ -95,8 +95,8 @@
       "id": 4,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        728,
+        80
       ],
       "size": [
         320.0,
@@ -133,10 +133,23 @@
     },
     {
       "id": 2,
-      "title": "PACK",
+      "title": "QUALITY",
       "bounding": [
         708,
         24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PACK",
+      "bounding": [
+        708,
+        592,
         400,
         220
       ],

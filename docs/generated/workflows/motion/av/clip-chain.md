@@ -70,6 +70,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   G1__LTX_models["1. LTX models"]
   G2__Start___occupancy___format["2. Start / occupancy / format"]
   G3__Beat_1__8_00s_LTX_["3. Beat 1 (8.00s LTX)"]
@@ -89,8 +91,8 @@ flowchart TB
 | 4 | Start image | `LoadImage` | 2. Start / occupancy / format |
 | 13 | LTX-2.5 audio VAE | `VAELoader` | 1. LTX models |
 | 14 | Empty LTX audio latent | `LTXVEmptyLatentAudio` | 1. LTX models |
-| 17 | Operator note — clip chain | `Note` | Ungrouped |
-| 22 | Quality | `EZQuality` | Ungrouped |
+| 17 | Operator note — clip chain | `Note` | NOTE |
+| 22 | Quality | `EZQuality` | QUALITY |
 | 23 | Format / platform | `EZVideoFormat` | 2. Start / occupancy / format |
 | 24 | Describe image | `EZImageDescribe` | 2. Start / occupancy / format |
 | 30 | Occupancy gate (ltx) | `EZDCCOccupancyGate` | 2. Start / occupancy / format |
@@ -156,7 +158,7 @@ flowchart TB
 | 228 | Beat 4 video (MP4) — open node for prev… | `VHS_VideoCombine` | 6. Beat 4 (8.00s LTX) |
 | 232 | Beat 4 last frame | `EZClipLastFrame` | 6. Beat 4 (8.00s LTX) |
 | 233 | Save beat 4 last frame | `SaveImage` | 6. Beat 4 (8.00s LTX) |
-| 234 | Check models | `EZModelCheck` | Ungrouped |
+| 234 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -9,7 +9,7 @@
       "type": "EZDubIngest",
       "pos": [
         40,
-        80
+        708
       ],
       "size": [
         420,
@@ -52,7 +52,7 @@
       "type": "EZDubScript",
       "pos": [
         508,
-        80
+        708
       ],
       "size": [
         440,
@@ -96,7 +96,7 @@
       "type": "EZDubRender",
       "pos": [
         500,
-        512
+        1140
       ],
       "size": [
         440,
@@ -146,7 +146,7 @@
       "type": "SaveAudio",
       "pos": [
         1000,
-        80
+        708
       ],
       "size": [
         320,
@@ -176,7 +176,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         1000,
-        422
+        1050
       ],
       "size": [
         320,
@@ -206,8 +206,8 @@
       "id": 6,
       "type": "Note",
       "pos": [
-        1000,
-        764
+        40,
+        80
       ],
       "size": [
         420,
@@ -230,8 +230,8 @@
       "id": 7,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        876,
+        80
       ],
       "size": [
         320.0,
@@ -261,8 +261,8 @@
       "id": 8,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        508,
+        80
       ],
       "size": [
         320.0,
@@ -327,10 +327,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "INPUT",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        460,
+        580
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        488,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "INPUT",
+      "bounding": [
+        20,
+        652,
         460,
         360
       ],
@@ -339,11 +365,11 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "PROMPT",
       "bounding": [
         480,
-        24,
+        652,
         488,
         832
       ],
@@ -352,13 +378,13 @@
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "OUTPUT",
       "bounding": [
         980,
-        24,
-        460,
-        1264
+        652,
+        360,
+        712
       ],
       "color": "#3f789e",
       "font_size": 24,

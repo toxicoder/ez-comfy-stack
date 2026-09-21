@@ -10,7 +10,14 @@ import json
 from pathlib import Path
 from typing import Any
 
-from _lab_layout import estimated_node_size
+from _lab_layout import (
+    LAB_NODE_Y0,
+    LAB_X0,
+    NODE_GAP,
+    estimated_node_size,
+    node_pos,
+    operator_note,
+)
 from _lab_paths import lab_graph_paths
 
 QUALITY_TYPE = "EZQuality"
@@ -73,32 +80,49 @@ def _occupied(graph: dict[str, Any]) -> list[tuple[float, float, float, float]]:
 def _place(graph: dict[str, Any]) -> list[float]:
     boxes = _occupied(graph)
     width, height = QUALITY_SIZE
-    ys = [float((n.get("pos") or [0, 0])[1]) for n in graph.get("nodes") or []]
-    xs = [float((n.get("pos") or [0, 0])[0]) for n in graph.get("nodes") or []]
-    min_y = min(ys) if ys else 80.0
-    min_x = min(xs) if xs else 40.0
-    max_x = max(xs) if xs else 40.0
-    candidates: list[tuple[float, float]] = [
-        (40.0, -120.0),
-        (40.0, min_y - 140.0),
-        (min_x, min_y - 140.0),
-        (-360.0, min_y),
-        (max_x + 380.0, min_y),
-        (min_x - 360.0, -120.0),
-    ]
-    y_cursor = min_y - 400.0
-    while y_cursor <= min_y - 80.0:
-        x_cursor = min_x - 400.0
-        while x_cursor <= min_x + 80.0:
-            candidates.append((x_cursor, y_cursor))
-            x_cursor += 40.0
-        y_cursor += 40.0
+    note = operator_note(graph)
+    check = next(
+        (node for node in graph.get("nodes") or [] if node.get("type") == "EZModelCheck"),
+        None,
+    )
+    candidates: list[tuple[float, float]] = []
+    if note is not None:
+        nx, ny = node_pos(note)
+        nw, _nh = estimated_node_size(note)
+        x = nx + nw + NODE_GAP
+        if check is not None:
+            cx, _cy = node_pos(check)
+            cw, _ch = estimated_node_size(check)
+            x = cx + cw + NODE_GAP
+        candidates.append((x, ny))
+    else:
+        candidates.append((float(LAB_X0), float(LAB_NODE_Y0)))
+        if check is not None:
+            cx, cy = node_pos(check)
+            cw, _ch = estimated_node_size(check)
+            candidates.insert(0, (cx + cw + NODE_GAP, cy))
+    ys = [node_pos(node)[1] for node in graph.get("nodes") or []]
+    xs = [node_pos(node)[0] for node in graph.get("nodes") or []]
+    min_y = min(ys) if ys else float(LAB_NODE_Y0)
+    min_x = min(xs) if xs else float(LAB_X0)
+    max_x = max(xs) if xs else float(LAB_X0)
+    candidates.extend(
+        [
+            (float(LAB_X0), min_y + 40.0),
+            (max_x + 380.0, min_y),
+            (min_x, min_y + 180.0),
+        ]
+    )
+    floor_y = node_pos(note)[1] if note is not None else None
     for x, y in candidates:
+        if floor_y is not None and y + 1e-6 < floor_y:
+            continue
         probe = _padded(x, y, width, height)
         if any(_hit(probe, box) for box in boxes):
             continue
         return [x, y]
-    return [min_x - 400.0, min_y - 200.0]
+    fallback_y = floor_y if floor_y is not None else min_y
+    return [min_x + 380.0, fallback_y]
 
 
 def _next_node_id(graph: dict[str, Any]) -> int:

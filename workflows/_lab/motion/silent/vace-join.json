@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        548
       ],
       "size": [
         360,
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        702
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        416
+        884
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        574
+        1042
       ],
       "size": [
         320,
@@ -157,8 +157,8 @@
       "id": 6,
       "type": "CLIPTextEncode",
       "pos": [
-        948,
-        280
+        3156,
+        1040
       ],
       "size": [
         420,
@@ -205,8 +205,8 @@
       "id": 7,
       "type": "CLIPTextEncode",
       "pos": [
-        948,
-        804
+        3156,
+        1764
       ],
       "size": [
         420,
@@ -253,8 +253,8 @@
       "id": 8,
       "type": "Wan22ImageToVideoLatent",
       "pos": [
-        1420,
-        546
+        3624,
+        678
       ],
       "size": [
         280,
@@ -302,8 +302,8 @@
       "id": 9,
       "type": "ModelSamplingSD3",
       "pos": [
-        1420,
-        80
+        3624,
+        548
       ],
       "size": [
         210,
@@ -342,8 +342,8 @@
       "id": 10,
       "type": "KSampler",
       "pos": [
-        1700,
-        80
+        3624,
+        900
       ],
       "size": [
         320,
@@ -403,8 +403,8 @@
       "id": 11,
       "type": "VAEDecode",
       "pos": [
-        2080,
-        80
+        3992,
+        548
       ],
       "size": [
         240,
@@ -447,8 +447,8 @@
       "id": 12,
       "type": "SaveImage",
       "pos": [
-        2080,
-        198
+        3992,
+        1158
       ],
       "size": [
         280,
@@ -477,8 +477,8 @@
       "id": 13,
       "type": "VHS_VideoCombine",
       "pos": [
-        2420,
-        80
+        3992,
+        666
       ],
       "size": [
         320,
@@ -542,7 +542,7 @@
       "type": "Note",
       "pos": [
         40,
-        1666
+        80
       ],
       "size": [
         960,
@@ -565,8 +565,8 @@
       "id": 15,
       "type": "EZWanPromptEnhance",
       "pos": [
-        480,
-        280
+        3156,
+        548
       ],
       "size": [
         420,
@@ -611,8 +611,8 @@
       "id": 16,
       "type": "LoadImage",
       "pos": [
-        40,
-        1280
+        2788,
+        548
       ],
       "size": [
         320,
@@ -650,8 +650,8 @@
       "id": 17,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480,
-        934
+        3156,
+        1272
       ],
       "size": [
         420,
@@ -691,8 +691,8 @@
       "id": 18,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -722,8 +722,8 @@
       "id": 19,
       "type": "EZImageDescribe",
       "pos": [
-        480,
-        772
+        2788,
+        934
       ],
       "size": [
         280,
@@ -769,8 +769,8 @@
       "id": 20,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -939,10 +939,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "Load models",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        1000,
+        420
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "Load models",
+      "bounding": [
+        20,
+        492,
         400,
         494
       ],
@@ -951,13 +977,65 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "For i2v, LoadImage enabled (bypass for t2v)",
       "bounding": [
         20,
-        518,
+        986,
         360,
         414
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "INPUT",
+      "bounding": [
+        2768,
+        492,
+        360,
+        576
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "PROMPT",
+      "bounding": [
+        3136,
+        492,
+        460,
+        1476
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "SETTINGS",
+      "bounding": [
+        3604,
+        492,
+        360,
+        714
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "OUTPUT",
+      "bounding": [
+        3972,
+        492,
+        360,
+        980
       ],
       "color": "#3f789e",
       "font_size": 24,

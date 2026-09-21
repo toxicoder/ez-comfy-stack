@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        648
       ],
       "size": [
         360,
@@ -44,7 +44,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        234
+        802
       ],
       "size": [
         360,
@@ -81,7 +81,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        416
+        984
       ],
       "size": [
         360,
@@ -116,7 +116,7 @@
       "type": "LoadImage",
       "pos": [
         40,
-        546
+        1114
       ],
       "size": [
         320,
@@ -158,7 +158,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        280
+        848
       ],
       "size": [
         420,
@@ -206,7 +206,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         948,
-        804
+        1372
       ],
       "size": [
         420,
@@ -254,7 +254,7 @@
       "type": "Wan22ImageToVideoLatent",
       "pos": [
         1420,
-        546
+        1114
       ],
       "size": [
         280,
@@ -319,7 +319,7 @@
       "type": "ModelSamplingSD3",
       "pos": [
         1420,
-        80
+        648
       ],
       "size": [
         210,
@@ -359,7 +359,7 @@
       "type": "KSampler",
       "pos": [
         1700,
-        80
+        648
       ],
       "size": [
         320,
@@ -420,7 +420,7 @@
       "type": "VAEDecode",
       "pos": [
         2080,
-        80
+        648
       ],
       "size": [
         240,
@@ -465,7 +465,7 @@
       "type": "SaveImage",
       "pos": [
         2080,
-        198
+        766
       ],
       "size": [
         280,
@@ -495,7 +495,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         2420,
-        80
+        648
       ],
       "size": [
         320,
@@ -559,7 +559,7 @@
       "type": "Note",
       "pos": [
         40,
-        1036
+        80
       ],
       "size": [
         960,
@@ -583,7 +583,7 @@
       "type": "ImageFromBatch",
       "pos": [
         2420,
-        586
+        1154
       ],
       "size": [
         240,
@@ -624,7 +624,7 @@
       "type": "SaveImage",
       "pos": [
         2420,
-        800
+        1368
       ],
       "size": [
         280,
@@ -654,7 +654,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         480,
-        280
+        848
       ],
       "size": [
         420,
@@ -707,8 +707,8 @@
       "id": 18,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        480,
-        1528
+        2788,
+        648
       ],
       "size": [
         420,
@@ -748,8 +748,8 @@
       "id": 19,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1416,
+        80
       ],
       "size": [
         320.0,
@@ -780,7 +780,7 @@
       "type": "EZVideoFormat",
       "pos": [
         1420,
-        768
+        1336
       ],
       "size": [
         360,
@@ -840,7 +840,7 @@
       "type": "EZImageDescribe",
       "pos": [
         480,
-        772
+        1340
       ],
       "size": [
         280,
@@ -886,8 +886,8 @@
       "id": 22,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1048,
+        80
       ],
       "size": [
         320.0,
@@ -1096,12 +1096,51 @@
   "groups": [
     {
       "id": 1,
-      "title": "DRAFT Wan 5s",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        1000,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1028,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "DRAFT Wan 5s",
+      "bounding": [
+        20,
+        592,
         2740,
-        1476
+        1090
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "PROMPT",
+      "bounding": [
+        2768,
+        592,
+        460,
+        520
       ],
       "color": "#3f789e",
       "font_size": 24,

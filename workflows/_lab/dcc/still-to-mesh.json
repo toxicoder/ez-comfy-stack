@@ -9,7 +9,7 @@
       "type": "Note",
       "pos": [
         40,
-        40
+        80
       ],
       "size": [
         720,
@@ -33,8 +33,8 @@
       "id": 2,
       "type": "EZDCCLoadStillPack",
       "pos": [
-        40,
-        472
+        448,
+        588
       ],
       "size": [
         320,
@@ -80,8 +80,8 @@
       "id": 3,
       "type": "EZUnloadModels",
       "pos": [
-        408,
-        472
+        1124,
+        740
       ],
       "size": [
         280,
@@ -118,7 +118,7 @@
       "type": "CLIPVisionLoader",
       "pos": [
         40,
-        858
+        588
       ],
       "size": [
         360,
@@ -151,7 +151,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        1010
+        740
       ],
       "size": [
         360,
@@ -188,7 +188,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1172
+        902
       ],
       "size": [
         360,
@@ -223,7 +223,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        1314
+        1044
       ],
       "size": [
         360,
@@ -255,8 +255,8 @@
       "id": 8,
       "type": "Trellis2Conditioning",
       "pos": [
-        736,
-        472
+        816,
+        588
       ],
       "size": [
         260,
@@ -305,8 +305,8 @@
       "id": 9,
       "type": "EmptyTrellis2LatentStructure",
       "pos": [
-        736,
-        634
+        1124,
+        588
       ],
       "size": [
         260,
@@ -337,8 +337,8 @@
       "id": 10,
       "type": "KSampler",
       "pos": [
-        1044,
-        472
+        1124,
+        892
       ],
       "size": [
         280,
@@ -397,8 +397,8 @@
       "id": 11,
       "type": "VaeDecodeStructureTrellis2",
       "pos": [
-        1380,
-        472
+        1452,
+        588
       ],
       "size": [
         280,
@@ -440,8 +440,8 @@
       "id": 12,
       "type": "Trellis2ShapeStage",
       "pos": [
-        1380,
-        634
+        1452,
+        750
       ],
       "size": [
         280,
@@ -502,8 +502,8 @@
       "id": 13,
       "type": "KSampler",
       "pos": [
-        1720,
-        472
+        1124,
+        1234
       ],
       "size": [
         280,
@@ -562,8 +562,8 @@
       "id": 14,
       "type": "Trellis2UpsampleStage",
       "pos": [
-        2060,
-        472
+        1452,
+        902
       ],
       "size": [
         300,
@@ -632,8 +632,8 @@
       "id": 15,
       "type": "KSampler",
       "pos": [
-        2420,
-        472
+        1124,
+        1576
       ],
       "size": [
         280,
@@ -693,8 +693,8 @@
       "id": 16,
       "type": "VaeDecodeShapeTrellis",
       "pos": [
-        2760,
-        472
+        1452,
+        1104
       ],
       "size": [
         280,
@@ -741,8 +741,8 @@
       "id": 17,
       "type": "Trellis2TextureStage",
       "pos": [
-        2760,
-        634
+        1452,
+        1256
       ],
       "size": [
         280,
@@ -801,8 +801,8 @@
       "id": 18,
       "type": "KSampler",
       "pos": [
-        3100,
-        472
+        1124,
+        1918
       ],
       "size": [
         280,
@@ -861,8 +861,8 @@
       "id": 19,
       "type": "VaeDecodeTextureTrellis",
       "pos": [
-        3440,
-        472
+        1452,
+        1428
       ],
       "size": [
         280,
@@ -907,8 +907,8 @@
       "id": 20,
       "type": "PaintMesh",
       "pos": [
-        3780,
-        472
+        1452,
+        1600
       ],
       "size": [
         240,
@@ -948,8 +948,8 @@
       "id": 21,
       "type": "MeshToFile3D",
       "pos": [
-        4080,
-        472
+        1452,
+        1752
       ],
       "size": [
         240,
@@ -985,8 +985,8 @@
       "id": 22,
       "type": "EZDCCOccupancyGate",
       "pos": [
-        408,
-        624
+        448,
+        974
       ],
       "size": [
         280,
@@ -1024,8 +1024,8 @@
       "id": 23,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1176,
+        80
       ],
       "size": [
         320.0,
@@ -1055,8 +1055,8 @@
       "id": 24,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        808,
+        80
       ],
       "size": [
         320.0,
@@ -1398,7 +1398,99 @@
       "IMAGE"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        760,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        788,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
+        400,
+        626
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "INPUT",
+      "bounding": [
+        428,
+        532,
+        360,
+        576
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "PROMPT",
+      "bounding": [
+        796,
+        532,
+        300,
+        180
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "SETTINGS",
+      "bounding": [
+        1104,
+        532,
+        320,
+        1700
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "OUTPUT",
+      "bounding": [
+        1432,
+        532,
+        340,
+        1324
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_note": "## dcc/still-to-mesh\n\nStill pack plate \u2192 native TRELLIS.2 INT8 mesh (Comfy core nodes). Occupancy: **trellis**.\n\n```bash\n./scripts/manage.sh download-3d --tier trellis2\n./scripts/manage.sh occupancy enter trellis --yes\n```\n\nEZDCCLoadStillPack slug ``go-see`` plate ``mug`` \u2192 OccupancyGate \u2192 EZUnloadModels \u2192 TRELLIS.2 INT8. Save under ``assets/objects/_lab-mug/`` (output tree, never MODELS_DIR). Do not mint an Asset Bible row from this graph.\n\nNo Preview3D / Load3D / Save3D types in-tree \u2014 inspect the GLB with core Load 3D / Preview 3D after Queue. Native INT8 only.\n",

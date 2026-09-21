@@ -54,6 +54,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GPROMPT["PROMPT"]
   GSETTINGS["SETTINGS"]
@@ -84,15 +86,15 @@ flowchart TB
 | 16 | 48 kHz-class mix | `AudioMerge` | OUTPUT |
 | 17 | FLAC master | `SaveAudio` | OUTPUT |
 | 18 | MP3 320k | `SaveAudioMP3` | OUTPUT |
-| 19 | Operator note | `Note` | OUTPUT |
+| 19 | Operator note | `Note` | NOTE |
 | 30 | Wan bumper (off) | `UNETLoader` | WAN BUMPER (off) |
 | 31 | ez_radio_bumper preview (off) | `VHS_VideoCombine` | WAN BUMPER (off) |
 | 32 | LTX hook (off) | `UNETLoader` | LTX HOOK (off) |
 | 33 | ez_radio_hook preview (off) | `VHS_VideoCombine` | LTX HOOK (off) |
-| 34 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | Ungrouped |
-| 35 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | Ungrouped |
-| 36 | Quality | `EZQuality` | Ungrouped |
-| 37 | Check models | `EZModelCheck` | Ungrouped |
+| 34 | ez_radio_sting enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 35 | ez_radio_bed enhance | `EZAceStepPromptEnhance` | PROMPT |
+| 36 | Quality | `EZQuality` | QUALITY |
+| 37 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

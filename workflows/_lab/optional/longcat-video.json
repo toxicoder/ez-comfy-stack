@@ -33,7 +33,7 @@
       "type": "EZSamplePrompt",
       "pos": [
         40,
-        512
+        588
       ],
       "size": [
         420,
@@ -67,8 +67,8 @@
       "id": 3,
       "type": "EZLongCatPromptEnhance",
       "pos": [
-        508,
-        512
+        40,
+        1080
       ],
       "size": [
         420,
@@ -115,8 +115,8 @@
       "id": 4,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        976,
-        512
+        40,
+        1572
       ],
       "size": [
         420,
@@ -154,8 +154,8 @@
       "id": 5,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1796,
+        80
       ],
       "size": [
         320.0,
@@ -185,8 +185,8 @@
       "id": 6,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1428,
+        80
       ],
       "size": [
         320.0,
@@ -224,7 +224,47 @@
       "STRING"
     ]
   ],
-  "groups": [],
+  "groups": [
+    {
+      "id": 1,
+      "title": "NOTE",
+      "bounding": [
+        20,
+        24,
+        1380,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1408,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "PROMPT",
+      "bounding": [
+        20,
+        532,
+        460,
+        1504
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
   "config": {},
   "extra": {
     "lab_note": "## optional/longcat-video\n\nOpt-in LongCat-Video (MIT) prompt preview. Not download-models. No UNET on this canvas.\n\nDownload: ./scripts/manage.sh download-longcat --tier video\nContext-parallel two-Spark only with LAB_ALLOW_CONTEXT_PARALLEL=1. NCCL is out of this sample \u2014 tensor-parallel LLMs belong in nvidia-dgx-spark-lab.\nUnload LTX first. Occupancy: one heavy job when you Queue a real LongCat printer.\n\nThis canvas rewrites a lazy sentence with LongCat Prompt Enhance (T2V / I2V / continuation). Copy the CLIP box into your LongCat graph. Distilled LongCat is CFG 1 (negatives ignored); standard CFG is about 4.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Enhance off to pin the widget text.\n",

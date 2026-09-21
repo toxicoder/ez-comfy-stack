@@ -94,17 +94,17 @@ flowchart LR
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | Positive | `CLIPTextEncode` | PROMPT |
 | 5 | Negative | `CLIPTextEncode` | PROMPT |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
 | 7 | KSampler | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
-| 10 | Operator note | `Note` | Ungrouped |
+| 10 | Operator note | `Note` | NOTE |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
-| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 13 | Quality | `EZQuality` | Ungrouped |
+| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 13 | Quality | `EZQuality` | QUALITY |
 | 14 | Format / platform | `EZImageFormat` | SETTINGS |
 | 15 | Upscale still | `EZImageUpscale` | OUTPUT |
-| 16 | Check models | `EZModelCheck` | Ungrouped |
+| 16 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

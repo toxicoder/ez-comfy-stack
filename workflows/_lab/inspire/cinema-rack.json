@@ -33,7 +33,7 @@
       "type": "EZCinemaRack",
       "pos": [
         40,
-        540
+        588
       ],
       "size": [
         1340,
@@ -89,7 +89,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        1060
+        1108
       ],
       "size": [
         420,
@@ -137,7 +137,7 @@
       "type": "EZWanPromptEnhance",
       "pos": [
         508,
-        1060
+        1108
       ],
       "size": [
         420,
@@ -183,7 +183,7 @@
       "type": "EZLTXPromptEnhance",
       "pos": [
         976,
-        1060
+        1108
       ],
       "size": [
         420,
@@ -234,8 +234,8 @@
       "id": 6,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1796,
+        80
       ],
       "size": [
         320.0,
@@ -265,8 +265,8 @@
       "id": 7,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1428,
+        80
       ],
       "size": [
         320.0,
@@ -336,10 +336,23 @@
     },
     {
       "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1408,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
       "title": "RACK",
       "bounding": [
         20,
-        484,
+        532,
         1380,
         520
       ],
@@ -348,24 +361,11 @@
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 4,
       "title": "KLEIN",
       "bounding": [
         20,
-        1004,
-        460,
-        520
-      ],
-      "color": "#3f789e",
-      "font_size": 24,
-      "flags": {}
-    },
-    {
-      "id": 4,
-      "title": "WAN",
-      "bounding": [
-        488,
-        1004,
+        1052,
         460,
         520
       ],
@@ -375,10 +375,23 @@
     },
     {
       "id": 5,
+      "title": "WAN",
+      "bounding": [
+        488,
+        1052,
+        460,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
       "title": "LTX",
       "bounding": [
         956,
-        1004,
+        1052,
         460,
         520
       ],

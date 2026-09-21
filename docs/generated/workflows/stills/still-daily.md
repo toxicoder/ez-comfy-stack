@@ -112,16 +112,16 @@ flowchart LR
 | 7 | Sampler (seed / steps / CFG) | `KSampler` | SETTINGS |
 | 8 | VAE Decode | `VAEDecode` | OUTPUT |
 | 9 | Save PNG | `SaveImage` | OUTPUT |
-| 10 | Operator note | `Note` | Ungrouped |
+| 10 | Operator note | `Note` | NOTE |
 | 11 | Klein Prompt Enhance | `EZKleinPromptEnhance` | PROMPT |
-| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 13 | Quality | `EZQuality` | Ungrouped |
+| 12 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 13 | Quality | `EZQuality` | QUALITY |
 | 14 | Format / platform | `EZImageFormat` | SETTINGS |
-| 15 | Example / reference (optional) | `EZOptionalImage` | Ungrouped |
-| 16 | Optional Klein ref | `EZKleinRefCanvas` | Ungrouped |
+| 15 | Example / reference (optional) | `EZOptionalImage` | INPUT |
+| 16 | Optional Klein ref | `EZKleinRefCanvas` | INPUT |
 | 17 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 18 | Describe image | `EZImageDescribe` | PROMPT |
-| 19 | Check models | `EZModelCheck` | Ungrouped |
+| 19 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

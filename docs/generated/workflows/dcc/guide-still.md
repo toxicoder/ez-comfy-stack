@@ -97,25 +97,25 @@ flowchart LR
 
 | Id | Title | Type | Group |
 | --- | --- | --- | --- |
-| 1 | Klein 4B distilled FP8 | `UNETLoader` | Ungrouped |
-| 2 | Qwen3-4B TE | `CLIPLoader` | Ungrouped |
-| 3 | Flux2 VAE | `VAELoader` | Ungrouped |
-| 4 | Positive | `CLIPTextEncode` | Ungrouped |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent 1280x704 batch 1 | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | KSampler | `KSampler` | Ungrouped |
-| 8 | VAE Decode | `VAEDecode` | Ungrouped |
-| 9 | Save ez_guide_hero | `SaveImage` | Ungrouped |
-| 10 | Operator note | `Note` | Ungrouped |
-| 11 | Load guide still | `EZDCCLoadGuideStill` | Ungrouped |
-| 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | Ungrouped |
-| 13 | Encode clay plate | `VAEEncode` | Ungrouped |
-| 14 | Positive + clay plate | `ReferenceLatent` | Ungrouped |
-| 15 | Occupancy gate (klein) | `EZDCCOccupancyGate` | Ungrouped |
-| 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 17 | Quality | `EZQuality` | Ungrouped |
-| 18 | Upscale still | `EZImageUpscale` | Ungrouped |
-| 19 | Check models | `EZModelCheck` | Ungrouped |
+| 1 | Klein 4B distilled FP8 | `UNETLoader` | MODEL |
+| 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
+| 3 | Flux2 VAE | `VAELoader` | MODEL |
+| 4 | Positive | `CLIPTextEncode` | PROMPT |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent 1280x704 batch 1 | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | KSampler | `KSampler` | SETTINGS |
+| 8 | VAE Decode | `VAEDecode` | OUTPUT |
+| 9 | Save ez_guide_hero | `SaveImage` | OUTPUT |
+| 10 | Operator note | `Note` | NOTE |
+| 11 | Load guide still | `EZDCCLoadGuideStill` | INPUT |
+| 12 | Klein Prompt Enhance (edit) | `EZKleinPromptEnhance` | PROMPT |
+| 13 | Encode clay plate | `VAEEncode` | SETTINGS |
+| 14 | Positive + clay plate | `ReferenceLatent` | SETTINGS |
+| 15 | Occupancy gate (klein) | `EZDCCOccupancyGate` | INPUT |
+| 16 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 17 | Quality | `EZQuality` | QUALITY |
+| 18 | Upscale still | `EZImageUpscale` | OUTPUT |
+| 19 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

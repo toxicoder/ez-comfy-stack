@@ -53,6 +53,8 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 
 ```mermaid
 flowchart TB
+  GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GMODEL["MODEL"]
   GHOUSE_IDENTITY["HOUSE IDENTITY"]
   GSHOT_01_tower["SHOT 01 tower"]
@@ -65,6 +67,8 @@ flowchart TB
   GSHOT_08_terrace["SHOT 08 terrace"]
   GSHOT_09_drone["SHOT 09 drone"]
   GSHOT_10_study["SHOT 10 study"]
+  GPROMPT["PROMPT"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -75,9 +79,9 @@ flowchart TB
 | 2 | Qwen3-4B TE | `CLIPLoader` | MODEL |
 | 3 | Flux2 VAE | `VAELoader` | MODEL |
 | 4 | HOUSE IDENTITY | `EZKleinPromptEnhance` | HOUSE IDENTITY |
-| 5 | Negative | `CLIPTextEncode` | Ungrouped |
-| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | Ungrouped |
-| 7 | Operator note | `Note` | Ungrouped |
+| 5 | Negative | `CLIPTextEncode` | PROMPT |
+| 6 | Latent (wired from Format) | `EmptyFlux2LatentImage` | SETTINGS |
+| 7 | Operator note | `Note` | NOTE |
 | 10 | SHOT 01 tower | `EZPromptJoin` | SHOT 01 tower |
 | 11 | Positive 01 | `CLIPTextEncode` | SHOT 01 tower |
 | 12 | Sampler 01 | `KSampler` | SHOT 01 tower |
@@ -129,8 +133,8 @@ flowchart TB
 | 58 | Decode 10 | `VAEDecode` | SHOT 10 study |
 | 59 | Save 10 | `SaveImage` | SHOT 10 study |
 | 60 | Negative Prompt Enhance | `EZNegativePromptEnhance` | SHOT 10 study |
-| 61 | Quality | `EZQuality` | Ungrouped |
-| 62 | Format / platform | `EZImageFormat` | Ungrouped |
+| 61 | Quality | `EZQuality` | QUALITY |
+| 62 | Format / platform | `EZImageFormat` | SETTINGS |
 | 63 | Upscale still | `EZImageUpscale` | SHOT 01 tower |
 | 64 | Upscale still | `EZImageUpscale` | SHOT 02 foyer |
 | 65 | Upscale still | `EZImageUpscale` | SHOT 03 lounge |
@@ -141,7 +145,7 @@ flowchart TB
 | 70 | Upscale still | `EZImageUpscale` | SHOT 08 terrace |
 | 71 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
 | 72 | Upscale still | `EZImageUpscale` | SHOT 10 study |
-| 73 | Check models | `EZModelCheck` | Ungrouped |
+| 73 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

@@ -71,6 +71,7 @@ Do not edit raw `_lab` JSON. Save keepers under `_user/`.
 ```mermaid
 flowchart TB
   GNOTE["NOTE"]
+  GQUALITY["QUALITY"]
   GDESK["DESK"]
   GBEAT_1["BEAT 1"]
   GBEAT_2["BEAT 2"]
@@ -78,6 +79,7 @@ flowchart TB
   GBEAT_4["BEAT 4"]
   GBEAT_5["BEAT 5"]
   GBEAT_6["BEAT 6"]
+  GSETTINGS["SETTINGS"]
 ```
 
 ## Nodes on this graph
@@ -88,7 +90,7 @@ flowchart TB
 | 2 | Logline | `EZSamplePrompt` | DESK |
 | 3 | Script | `PrimitiveNode` | DESK |
 | 4 | Audio policy | `PrimitiveNode` | DESK |
-| 5 | Score | `PrimitiveNode` | Ungrouped |
+| 5 | Score | `PrimitiveNode` | SETTINGS |
 | 6 | Desk context | `EZContextJoin` | DESK |
 | 7 | Beat 1 enter | `PrimitiveNode` | BEAT 1 |
 | 8 | Beat 1 enter LTX enhance | `EZLTXPromptEnhance` | BEAT 1 |
@@ -126,8 +128,8 @@ flowchart TB
 | 40 | Beat 6 traverse LTX enhance | `EZLTXPromptEnhance` | BEAT 6 |
 | 41 | Beat 6 exit | `PrimitiveNode` | BEAT 6 |
 | 42 | Beat 6 exit LTX enhance | `EZLTXPromptEnhance` | BEAT 6 |
-| 43 | Quality | `EZQuality` | Ungrouped |
-| 44 | Check models | `EZModelCheck` | Ungrouped |
+| 43 | Quality | `EZQuality` | QUALITY |
+| 44 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

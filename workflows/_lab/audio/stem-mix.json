@@ -33,7 +33,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        600
+        648
       ],
       "size": [
         300.0,
@@ -68,7 +68,7 @@
       "type": "PrimitiveNode",
       "pos": [
         388,
-        600
+        648
       ],
       "size": [
         300.0,
@@ -103,7 +103,7 @@
       "type": "PrimitiveNode",
       "pos": [
         736,
-        600
+        648
       ],
       "size": [
         300.0,
@@ -138,7 +138,7 @@
       "type": "PrimitiveNode",
       "pos": [
         1084,
-        600
+        648
       ],
       "size": [
         300.0,
@@ -173,7 +173,7 @@
       "type": "PrimitiveNode",
       "pos": [
         1432,
-        600
+        648
       ],
       "size": [
         300.0,
@@ -207,8 +207,8 @@
       "id": 7,
       "type": "SaveAudio",
       "pos": [
-        40,
-        792
+        1780,
+        648
       ],
       "size": [
         320,
@@ -237,8 +237,8 @@
       "id": 8,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        1796,
+        80
       ],
       "size": [
         320.0,
@@ -268,8 +268,8 @@
       "id": 9,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        1428,
+        80
       ],
       "size": [
         320.0,
@@ -306,12 +306,38 @@
     },
     {
       "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        1408,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
       "title": "STEMS",
       "bounding": [
         20,
-        544,
+        592,
         1732,
         220
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "OUTPUT",
+      "bounding": [
+        1760,
+        592,
+        360,
+        370
       ],
       "color": "#3f789e",
       "font_size": 24,

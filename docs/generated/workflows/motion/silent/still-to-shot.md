@@ -128,15 +128,15 @@ flowchart LR
 | 11 | VAE Decode | `VAEDecode` | DRAFT Wan 5s |
 | 12 | Save frames (secondary) | `SaveImage` | DRAFT Wan 5s |
 | 13 | Save video (MP4) — open node for preview | `VHS_VideoCombine` | DRAFT Wan 5s |
-| 14 | Operator note | `Note` | DRAFT Wan 5s |
+| 14 | Operator note | `Note` | NOTE |
 | 15 | Last frame | `ImageFromBatch` | DRAFT Wan 5s |
 | 16 | Save last frame | `SaveImage` | DRAFT Wan 5s |
 | 17 | Wan Prompt Enhance | `EZWanPromptEnhance` | DRAFT Wan 5s |
-| 18 | Negative Prompt Enhance | `EZNegativePromptEnhance` | Ungrouped |
-| 19 | Quality | `EZQuality` | Ungrouped |
+| 18 | Negative Prompt Enhance | `EZNegativePromptEnhance` | PROMPT |
+| 19 | Quality | `EZQuality` | QUALITY |
 | 20 | Format / platform | `EZVideoFormat` | DRAFT Wan 5s |
 | 21 | Describe image | `EZImageDescribe` | DRAFT Wan 5s |
-| 22 | Check models | `EZModelCheck` | Ungrouped |
+| 22 | Check models | `EZModelCheck` | QUALITY |
 
 ## Node parameter reference
 

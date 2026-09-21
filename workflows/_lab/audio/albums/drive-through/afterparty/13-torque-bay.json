@@ -9,7 +9,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         40,
-        80
+        728
       ],
       "size": [
         360,
@@ -58,7 +58,7 @@
       "type": "ModelSamplingAuraFlow",
       "pos": [
         40,
-        252
+        900
       ],
       "size": [
         330,
@@ -97,7 +97,7 @@
       "type": "PrimitiveNode",
       "pos": [
         40,
-        412
+        1060
       ],
       "size": [
         280,
@@ -135,7 +135,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         40,
-        566
+        1214
       ],
       "size": [
         320,
@@ -178,7 +178,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         40,
-        896
+        1544
       ],
       "size": [
         400,
@@ -224,7 +224,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         40,
-        1388
+        2036
       ],
       "size": [
         400,
@@ -302,7 +302,7 @@
       "type": "ConditioningZeroOut",
       "pos": [
         488,
-        896
+        1544
       ],
       "size": [
         240,
@@ -339,7 +339,7 @@
       "type": "KSampler",
       "pos": [
         488,
-        1014
+        1662
       ],
       "size": [
         330,
@@ -399,7 +399,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         920,
-        80
+        728
       ],
       "size": [
         280,
@@ -443,7 +443,7 @@
       "type": "SaveAudio",
       "pos": [
         920,
-        212
+        860
       ],
       "size": [
         320,
@@ -473,7 +473,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         920,
-        554
+        1202
       ],
       "size": [
         320,
@@ -503,8 +503,8 @@
       "id": 12,
       "type": "Note",
       "pos": [
-        920,
-        896
+        40,
+        80
       ],
       "size": [
         440,
@@ -527,8 +527,8 @@
       "id": 13,
       "type": "LoadImage",
       "pos": [
-        2200,
-        80
+        2608,
+        728
       ],
       "size": [
         320,
@@ -565,8 +565,8 @@
       "id": 14,
       "type": "EZAudioMetadata",
       "pos": [
-        2200,
-        534
+        920,
+        1544
       ],
       "size": [
         360,
@@ -614,8 +614,8 @@
       "id": 15,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        896,
+        80
       ],
       "size": [
         320.0,
@@ -645,8 +645,8 @@
       "id": 16,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        528,
+        80
       ],
       "size": [
         320.0,
@@ -799,10 +799,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        480,
+        600
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        508,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        672,
         400,
         332
       ],
@@ -811,11 +837,11 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "DURATION",
       "bounding": [
         20,
-        356,
+        1004,
         360,
         336
       ],
@@ -824,11 +850,11 @@
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "PROMPT",
       "bounding": [
         20,
-        840,
+        1488,
         818,
         1012
       ],
@@ -837,15 +863,28 @@
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         900,
-        24,
-        480,
-        1416
+        672,
+        400,
+        1136
       ],
       "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "INPUT",
+      "bounding": [
+        2588,
+        672,
+        360,
+        414
+      ],
+      "color": "#a1309b",
       "font_size": 24,
       "flags": {}
     }

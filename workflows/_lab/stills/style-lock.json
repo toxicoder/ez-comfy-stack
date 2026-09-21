@@ -9,7 +9,7 @@
       "type": "UNETLoader",
       "pos": [
         40,
-        80
+        588
       ],
       "size": [
         360,
@@ -46,7 +46,7 @@
       "type": "CLIPLoader",
       "pos": [
         40,
-        436
+        944
       ],
       "size": [
         360,
@@ -85,7 +85,7 @@
       "type": "VAELoader",
       "pos": [
         40,
-        614
+        1122
       ],
       "size": [
         360,
@@ -121,7 +121,7 @@
       "type": "EZKleinPromptEnhance",
       "pos": [
         40,
-        886
+        1394
       ],
       "size": [
         420,
@@ -172,8 +172,8 @@
       "id": 5,
       "type": "CLIPTextEncode",
       "pos": [
-        40,
-        1378
+        2380,
+        1080
       ],
       "size": [
         420,
@@ -222,8 +222,8 @@
       "id": 6,
       "type": "EmptyFlux2LatentImage",
       "pos": [
-        40,
-        1610
+        2848,
+        880
       ],
       "size": [
         280,
@@ -286,7 +286,7 @@
       "type": "Note",
       "pos": [
         40,
-        2080
+        80
       ],
       "size": [
         420,
@@ -310,7 +310,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        80
+        588
       ],
       "size": [
         420,
@@ -351,7 +351,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        80
+        588
       ],
       "size": [
         360,
@@ -398,7 +398,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        80
+        588
       ],
       "size": [
         320,
@@ -458,7 +458,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        80
+        588
       ],
       "size": [
         240,
@@ -500,7 +500,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        80
+        588
       ],
       "size": [
         280,
@@ -530,7 +530,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        602
+        1110
       ],
       "size": [
         420,
@@ -571,7 +571,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        602
+        1110
       ],
       "size": [
         360,
@@ -618,7 +618,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        602
+        1110
       ],
       "size": [
         320,
@@ -678,7 +678,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        602
+        1110
       ],
       "size": [
         240,
@@ -720,7 +720,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        602
+        1110
       ],
       "size": [
         280,
@@ -750,7 +750,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1124
+        1632
       ],
       "size": [
         420,
@@ -791,7 +791,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1124
+        1632
       ],
       "size": [
         360,
@@ -838,7 +838,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1124
+        1632
       ],
       "size": [
         320,
@@ -898,7 +898,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1124
+        1632
       ],
       "size": [
         240,
@@ -940,7 +940,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1124
+        1632
       ],
       "size": [
         280,
@@ -970,7 +970,7 @@
       "type": "EZPromptJoin",
       "pos": [
         520,
-        1646
+        2154
       ],
       "size": [
         420,
@@ -1011,7 +1011,7 @@
       "type": "CLIPTextEncode",
       "pos": [
         988,
-        1646
+        2154
       ],
       "size": [
         360,
@@ -1058,7 +1058,7 @@
       "type": "KSampler",
       "pos": [
         1396,
-        1646
+        2154
       ],
       "size": [
         320,
@@ -1118,7 +1118,7 @@
       "type": "VAEDecode",
       "pos": [
         1764,
-        1646
+        2154
       ],
       "size": [
         240,
@@ -1160,7 +1160,7 @@
       "type": "SaveImage",
       "pos": [
         2052,
-        1646
+        2154
       ],
       "size": [
         280,
@@ -1189,8 +1189,8 @@
       "id": 33,
       "type": "EZNegativePromptEnhance",
       "pos": [
-        508,
-        2086
+        2380,
+        588
       ],
       "size": [
         420,
@@ -1230,8 +1230,8 @@
       "id": 34,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        876,
+        80
       ],
       "size": [
         320.0,
@@ -1261,8 +1261,8 @@
       "id": 35,
       "type": "EZImageFormat",
       "pos": [
-        40,
-        1788
+        2848,
+        588
       ],
       "size": [
         360,
@@ -1336,7 +1336,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        422
+        930
       ],
       "size": [
         280,
@@ -1385,7 +1385,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        944
+        1452
       ],
       "size": [
         280,
@@ -1438,7 +1438,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1466
+        1974
       ],
       "size": [
         280,
@@ -1491,7 +1491,7 @@
       "type": "EZImageUpscale",
       "pos": [
         2012,
-        1988
+        2496
       ],
       "size": [
         280,
@@ -1543,8 +1543,8 @@
       "id": 40,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        508,
+        80
       ],
       "size": [
         320.0,
@@ -2001,10 +2001,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        460,
+        460
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        488,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        532,
         400,
         692
       ],
@@ -2013,11 +2039,11 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "IDENTITY",
       "bounding": [
         20,
-        830,
+        1338,
         460,
         520
       ],
@@ -2026,11 +2052,11 @@
       "flags": {}
     },
     {
-      "id": 10,
+      "id": 5,
       "title": "SHOT FACADE",
       "bounding": [
         500,
-        24,
+        532,
         1852,
         522
       ],
@@ -2039,11 +2065,11 @@
       "flags": {}
     },
     {
-      "id": 11,
+      "id": 6,
       "title": "SHOT LIVING",
       "bounding": [
         500,
-        546,
+        1054,
         1852,
         522
       ],
@@ -2052,11 +2078,11 @@
       "flags": {}
     },
     {
-      "id": 12,
+      "id": 7,
       "title": "SHOT TERRACE",
       "bounding": [
         500,
-        1068,
+        1576,
         1852,
         522
       ],
@@ -2065,13 +2091,39 @@
       "flags": {}
     },
     {
-      "id": 13,
+      "id": 8,
       "title": "SHOT RAIN",
       "bounding": [
         500,
-        1590,
+        2098,
         1852,
         522
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 9,
+      "title": "PROMPT",
+      "bounding": [
+        2360,
+        532,
+        460,
+        752
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 10,
+      "title": "SETTINGS",
+      "bounding": [
+        2828,
+        532,
+        400,
+        498
       ],
       "color": "#3f789e",
       "font_size": 24,

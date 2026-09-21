@@ -9,7 +9,7 @@
       "type": "CheckpointLoaderSimple",
       "pos": [
         40,
-        80
+        648
       ],
       "size": [
         360,
@@ -62,7 +62,7 @@
       "type": "EZPodcastScript",
       "pos": [
         500,
-        80
+        648
       ],
       "size": [
         420,
@@ -101,7 +101,7 @@
       "type": "EZPodcastDisclosure",
       "pos": [
         500,
-        706
+        1274
       ],
       "size": [
         420,
@@ -138,7 +138,7 @@
       "type": "EZKokoroTTS",
       "pos": [
         500,
-        858
+        1426
       ],
       "size": [
         420,
@@ -184,7 +184,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         48,
-        442
+        1010
       ],
       "size": [
         400,
@@ -253,7 +253,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         48,
-        934
+        1502
       ],
       "size": [
         400,
@@ -322,7 +322,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         48,
-        1346
+        1914
       ],
       "size": [
         400,
@@ -376,7 +376,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         1440,
-        80
+        648
       ],
       "size": [
         320,
@@ -410,7 +410,7 @@
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
         1440,
-        422
+        990
       ],
       "size": [
         320,
@@ -444,7 +444,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        574
+        1142
       ],
       "size": [
         320,
@@ -504,7 +504,7 @@
       "type": "KSampler",
       "pos": [
         1440,
-        974
+        1542
       ],
       "size": [
         320,
@@ -564,7 +564,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1860,
-        80
+        648
       ],
       "size": [
         280,
@@ -606,7 +606,7 @@
       "type": "VAEDecodeAudio",
       "pos": [
         1860,
-        402
+        970
       ],
       "size": [
         280,
@@ -648,7 +648,7 @@
       "type": "AudioConcat",
       "pos": [
         1860,
-        534
+        1102
       ],
       "size": [
         300,
@@ -692,7 +692,7 @@
       "type": "AudioAdjustVolume",
       "pos": [
         1860,
-        706
+        1274
       ],
       "size": [
         300,
@@ -731,7 +731,7 @@
       "type": "AudioMerge",
       "pos": [
         1860,
-        858
+        1426
       ],
       "size": [
         300,
@@ -776,7 +776,7 @@
       "type": "SaveAudio",
       "pos": [
         2220,
-        80
+        648
       ],
       "size": [
         320,
@@ -806,7 +806,7 @@
       "type": "SaveAudioMP3",
       "pos": [
         2220,
-        422
+        990
       ],
       "size": [
         320,
@@ -836,8 +836,8 @@
       "id": 19,
       "type": "Note",
       "pos": [
-        2220,
-        764
+        40,
+        80
       ],
       "size": [
         400,
@@ -861,7 +861,7 @@
       "type": "UNETLoader",
       "pos": [
         2720,
-        80
+        648
       ],
       "size": [
         360,
@@ -893,7 +893,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         2720,
-        442
+        1010
       ],
       "size": [
         320,
@@ -922,7 +922,7 @@
       "type": "UNETLoader",
       "pos": [
         2720,
-        742
+        1310
       ],
       "size": [
         360,
@@ -954,7 +954,7 @@
       "type": "VHS_VideoCombine",
       "pos": [
         2720,
-        982
+        1550
       ],
       "size": [
         320,
@@ -982,8 +982,8 @@
       "id": 34,
       "type": "EZAceStepPromptEnhance",
       "pos": [
-        -400,
-        442
+        500,
+        1818
       ],
       "size": [
         400,
@@ -1034,8 +1034,8 @@
       "id": 35,
       "type": "EZAceStepPromptEnhance",
       "pos": [
-        -400,
-        934
+        500,
+        2310
       ],
       "size": [
         400,
@@ -1086,8 +1086,8 @@
       "id": 36,
       "type": "EZQuality",
       "pos": [
-        40.0,
-        -120.0
+        856,
+        80
       ],
       "size": [
         320.0,
@@ -1117,8 +1117,8 @@
       "id": 37,
       "type": "EZModelCheck",
       "pos": [
-        40.0,
-        -332.0
+        488,
+        80
       ],
       "size": [
         320.0,
@@ -1383,10 +1383,36 @@
   "groups": [
     {
       "id": 1,
-      "title": "MODEL",
+      "title": "NOTE",
       "bounding": [
         20,
         24,
+        440,
+        520
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "QUALITY",
+      "bounding": [
+        468,
+        24,
+        728,
+        240
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "MODEL",
+      "bounding": [
+        20,
+        592,
         448,
         1626
       ],
@@ -1395,24 +1421,24 @@
       "flags": {}
     },
     {
-      "id": 2,
+      "id": 4,
       "title": "PROMPT",
       "bounding": [
         480,
-        24,
+        592,
         460,
-        1198
+        2182
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 3,
+      "id": 5,
       "title": "SETTINGS",
       "bounding": [
         1420,
-        24,
+        592,
         360,
         1256
       ],
@@ -1421,24 +1447,24 @@
       "flags": {}
     },
     {
-      "id": 4,
+      "id": 6,
       "title": "OUTPUT",
       "bounding": [
         1840,
-        24,
-        800,
-        1204
+        592,
+        720,
+        998
       ],
       "color": "#3f789e",
       "font_size": 24,
       "flags": {}
     },
     {
-      "id": 5,
+      "id": 7,
       "title": "WAN BUMPER (off)",
       "bounding": [
         2700,
-        24,
+        592,
         400,
         662
       ],
@@ -1447,11 +1473,11 @@
       "flags": {}
     },
     {
-      "id": 6,
+      "id": 8,
       "title": "LTX HOOK (off)",
       "bounding": [
         2700,
-        686,
+        1254,
         400,
         540
       ],
