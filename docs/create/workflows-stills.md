@@ -62,7 +62,7 @@ App Mode (frontend **1.41.13+**) is a widget surface on the same lab JSON. Occup
 | **[stills/dream-house-clay](../generated/workflows/stills/dream-house-clay.md)** | Same tour as Klein **edit** of clay (`ez_house_clay_01`…`10`). `start` seeds plates; optional `house-views` dump. Prefix `ez_dream_house_clay_*` |
 | **[stills/character-draft](../generated/workflows/stills/character-draft.md)** | Character still, 1024×1280, style dropdown, prefix `ez_character` |
 | **[stills/character-tweak](../generated/workflows/stills/character-tweak.md)** | Edit `ez_character_*.png` with a change prompt (ReferenceLatent) |
-| **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | Keep the subject; replace backdrop, ground, and nearby set dressing. 100 sample places + Custom (Cubic block world rebuilds this place as cubes). Other/background character toggles. Prefix `ez_bg_swap` |
+| **[stills/background-swap](../generated/workflows/stills/background-swap.md)** | Keep the subject; replace backdrop, ground, and nearby set dressing. 100 sample places + Custom. Cubic block world rebuilds this place as cubes from a block study, then pastes the original people. Other/background character toggles. Prefix `ez_bg_swap` |
 | **[stills/background-edit](../generated/workflows/stills/background-edit.md)** | Keep the subject; restyle the environment in place (cartoon, add/remove, weather). 30 samples + Custom. Other/background character toggles. Prefix `ez_bg_edit` |
 | **[stills/hook-still](../generated/workflows/stills/hook-still.md)** | Vertical 9:16 hook still |
 

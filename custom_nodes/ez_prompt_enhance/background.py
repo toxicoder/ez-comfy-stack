@@ -47,12 +47,14 @@ ENTIRE_ENV_VERB = (
 VOXEL_TRAILER = "Voxel art, cubic voxels, limited palette."
 """Short CLIP trailer for cube / block-world reconstructions."""
 RECONSTRUCT_BARE = (
-    "Keep the main subject from the reference. Rebuild this photographed place "
-    "as voxel art: axis-aligned unit cubes, cubic voxels, limited palette, "
-    "square albedo and a visible texel grid on every backdrop, sky, building, "
-    "tree, water, floor, and prop. Cube floors meet every sole. Match scale "
-    "and wrap light. Do not invent a new hero. Empty of new lettering. "
-    "Place or look: {place}."
+    "Rebuild this photographed place as a constructed cubic block world. "
+    "Same camera, horizon, and inventory. The reference is a coarse block "
+    "study of that place. Rebuild every backdrop, sky, building, tree, water, "
+    "floor, and prop as large axis-aligned cubes with visible tops and sides, "
+    "square faces, and a coarse texel grid. Stacked block walls, cube canopies, "
+    "cube water, cube tiles under every sole. Person-shaped regions become the "
+    "cube surfaces behind those people. Place or look: {place}. "
+    "Empty of new lettering."
 )
 """Wrapper for a bare cube / voxel phrase in background_swap."""
 REASON_PRECISE_BACKGROUND = "precise background instruction"
@@ -70,10 +72,18 @@ _ONLY_BG_RE = re.compile(
 )
 """Weak backdrop-only phrasing to upgrade on background_swap."""
 _RECONSTRUCT_RE = re.compile(
-    r"\b(cubes?|cubic|voxels?|block[-\s]?world|texture-pack|texel grid)\b",
+    r"\b(cubes?|cubic|voxels?|block[-\s]?world|texture-pack|texel grid|"
+    r"minecraft|mojang)\b",
     re.IGNORECASE,
 )
 """Needles for in-place cube / voxel reconstruction."""
+_REBUILD_LEAD_RE = re.compile(
+    r"^\s*rebuild this photographed place\b",
+    re.IGNORECASE,
+)
+"""Full cubic rebuild instructions that must pass through unwrapped."""
+_TRADEMARK_RE = re.compile(r"\b(minecraft|mojang)\b", re.IGNORECASE)
+"""Brand names that must not reach Klein CLIP."""
 _SOURCE_STILL_RE = re.compile(r"source still:", re.IGNORECASE)
 """True when a Describe caption is already spliced onto the CLIP line."""
 
@@ -237,6 +247,30 @@ def is_reconstruction(text: object) -> bool:
     return bool(_RECONSTRUCT_RE.search(raw))
 
 
+def _scrub_block_trademarks(text: str) -> str:
+    """Replace block-world brand names with the word cubic.
+
+    Args:
+        text: Operator prompt or sample body.
+
+    Returns:
+        Text with minecraft / mojang rewritten to ``cubic``.
+    """
+    return _TRADEMARK_RE.sub("cubic", text)
+
+
+def _is_rebuild_instruction(text: str) -> bool:
+    """True when ``text`` is already the full cubic rebuild paragraph.
+
+    Args:
+        text: Operator prompt or sample body.
+
+    Returns:
+        Whether the line should pass through instead of ``RECONSTRUCT_BARE``.
+    """
+    return bool(_REBUILD_LEAD_RE.search(text))
+
+
 def splice_source_caption(text: object, caption: object = "") -> str:
     """Append a Describe caption so CLIP sees source inventory.
 
@@ -296,7 +330,9 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     already start with Keep/Replace/Edit pass through. ``background_swap``
     upgrades "replace only the background" to the entire environment, and cube
     / voxel requests stay a reconstruction of the photographed place (never
-    nested inside ``SWAP_BARE``). Cast clauses always splice unless they are
+    nested inside ``SWAP_BARE``). A line that already starts with "Rebuild this
+    photographed place" passes through. Brand names minecraft and mojang are
+    rewritten to cubic before CLIP. Cast clauses always splice unless they are
     already present.
 
     Args:
@@ -313,10 +349,11 @@ def wrap_background_prompt(text: object, mode: str, cast: object = "") -> str:
     kind = (mode or "").strip().lower()
     other, crowd = parse_background_cast(cast)
     clauses = _cast_clauses(other, crowd)
+    raw = _scrub_block_trademarks(raw)
     if kind == "background_swap":
         raw = strengthen_swap_instruction(raw)
         if is_reconstruction(raw):
-            if is_background_instruction(raw):
+            if _is_rebuild_instruction(raw) or is_background_instruction(raw):
                 body = _with_voxel_trailer(raw)
             else:
                 body = RECONSTRUCT_BARE.format(place=raw)

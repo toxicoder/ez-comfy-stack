@@ -56,6 +56,7 @@ from .background import (
     REASON_PRECISE_BACKGROUND,
     format_background_cast,
     is_background_instruction,
+    is_reconstruction,
     splice_source_caption,
     wrap_background_prompt,
 )
@@ -291,7 +292,9 @@ def _run(
     if mode == "text_swap":
         original = wrap_text_swap_prompt(original)
     elif mode in BACKGROUND_MODES:
-        precise_background = is_background_instruction(original)
+        precise_background = is_background_instruction(original) or is_reconstruction(
+            original
+        )
         original = wrap_background_prompt(original, mode, background_cast)
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")

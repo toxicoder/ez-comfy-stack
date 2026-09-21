@@ -73,7 +73,9 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     graph = _load()
     types = {node.get("type") for node in graph["nodes"]}
     assert "EmptyFlux2LatentImage" not in types
-    assert "ReferenceLatent" in types
+    assert "ReferenceLatent" not in types
+    assert "EZCubicCondition" in types
+    assert "EZReinsertPeople" in types
     assert "EZSnapImage" in types
     assert "EZEmptyFlux2FromImage" in types
     assert "EZMatchImageSize" in types
@@ -94,8 +96,20 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert _src(graph, enh, "image_desc")["type"] == "EZImageDescribe"
     sampler = next(node for node in graph["nodes"] if node.get("type") == "KSampler")
     assert _src(graph, sampler, "latent_image")["type"] == "EZEmptyFlux2FromImage"
-    ref = next(node for node in graph["nodes"] if node.get("type") == "ReferenceLatent")
+    assert _src(graph, sampler, "positive")["type"] == "EZCubicCondition"
+    ref = next(node for node in graph["nodes"] if node.get("type") == "EZCubicCondition")
     assert _src(graph, ref, "latent")["type"] == "VAEEncode"
+    assert _src(graph, ref, "image")["type"] == "EZSnapImage"
+    assert _src(graph, ref, "vae")["type"] == "VAELoader"
+    assert _src(graph, ref, "prompt")["type"] == "EZKleinPromptEnhance"
+    assert ref.get("widgets_values") == []
+    match = next(node for node in graph["nodes"] if node.get("type") == "EZMatchImageSize")
+    pasted = _src(graph, match, "image")
+    assert pasted["type"] == "EZReinsertPeople"
+    assert pasted.get("widgets_values") == []
+    assert _src(graph, pasted, "plate")["type"] == "VAEDecode"
+    assert _src(graph, pasted, "source")["type"] == "EZSnapImage"
+    assert _src(graph, pasted, "prompt")["type"] == "EZKleinPromptEnhance"
     empty = next(
         node for node in graph["nodes"] if node.get("type") == "EZEmptyFlux2FromImage"
     )
@@ -118,6 +132,8 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     note = graph["extra"]["lab_note"].casefold()
     assert "empty flux" in note or "empty klein" in note
     assert "describe image (default on)" in note
+    assert "block study" in note
+    assert "pasted back" in note
 
 
 def test_background_swap_catalog_has_one_hundred_recipes() -> None:
@@ -159,6 +175,8 @@ def test_background_edit_identity_style_and_samples() -> None:
     assert "EZImageFormat" not in types
     assert "EZBackgroundCast" in types
     assert "ReferenceLatent" in types
+    assert "EZCubicCondition" not in types
+    assert "EZReinsertPeople" not in types
     assert "EZSnapImage" in types
     assert "EZMatchImageSize" in types
     enh = next(

@@ -170,21 +170,19 @@ def test_catalogs_stay_clean_of_banned_strings() -> None:
 
 
 def test_cubic_block_world_rebuilds_the_photographed_place() -> None:
-    """stills/background-swap Cubic block world voxelizes the source scene in place."""
+    """Cubic block world rebuilds this place as cubes and leaves people to paste."""
     rows = load_catalog("klein_background_swap")
     hit = next(item for item in rows if item.id == "voxel-block-world")
     assert hit.label == "Cubic block world"
     folded = hit.prompt.casefold()
-    assert folded.startswith("keep the subject from the reference")
-    assert "same photographed place" in folded or "this photographed place" in folded
+    assert folded.startswith("rebuild this photographed place")
+    assert "block study" in folded
     assert "cube water" in folded
-    assert "stacked block facades" in folded
+    assert "stacked block walls" in folded
     assert "texel grid" in folded
-    assert "voxel art" in folded
-    assert "cubic voxels" in folded
-    assert "limited palette" in folded
     assert "sole" in folded
-    assert "face" in folded and "wardrobe" in folded
+    assert "person-shaped" in folded
+    assert "keep the subject" not in folded
     assert "minecraft" not in folded
     assert "mojang" not in folded
     assert len(hit.prompt.split()) < 100

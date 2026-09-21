@@ -191,9 +191,10 @@ Other characters / Background characters (default on) treat companions and extra
 
 Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
-Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
+
+**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 """
 
 BACKGROUND_EDIT_NOTE = """## stills/background-edit
@@ -1882,6 +1883,125 @@ def _rewire_background_swap_canvas(graph: dict) -> None:
     graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), link_empty_samp)
 
 
+def _wire_cubic_rebuild(graph: dict) -> None:
+    """Route cube prompts through a block study and paste people after decode.
+
+    Ordinary place swaps keep the photo latent. Idempotent when the cubic
+    nodes are already present.
+
+    Args:
+        graph: Serialized background-swap graph (mutated).
+    """
+    from _build_dcc_workflows import _add_link, _append_out_link
+    from _wire_prompt_enhance import next_ids
+
+    if any(node.get("type") == "EZCubicCondition" for node in graph.get("nodes") or []):
+        return
+    ref = next(node for node in graph["nodes"] if node.get("type") == "ReferenceLatent")
+    snap = next(node for node in graph["nodes"] if node.get("type") == "EZSnapImage")
+    vae = next(node for node in graph["nodes"] if node.get("type") == "VAELoader")
+    enhance = next(
+        node for node in graph["nodes"] if node.get("type") == "EZKleinPromptEnhance"
+    )
+    decode = next(node for node in graph["nodes"] if node.get("type") == "VAEDecode")
+    match = next(node for node in graph["nodes"] if node.get("type") == "EZMatchImageSize")
+
+    cond_link = next(
+        item.get("link")
+        for item in ref.get("inputs") or []
+        if item.get("name") == "conditioning"
+    )
+    latent_link = next(
+        item.get("link")
+        for item in ref.get("inputs") or []
+        if item.get("name") == "latent"
+    )
+    ref["type"] = "EZCubicCondition"
+    ref["title"] = "Cubic or photo reference"
+    ref["properties"] = {"Node name for S&R": "EZCubicCondition"}
+    ref["widgets_values"] = []
+    ref["size"] = [320, 130]
+
+    nid, lid = next_ids(graph)
+    link_snap = lid
+    link_vae = lid + 1
+    link_prompt = lid + 2
+    ref_id = int(ref["id"])
+    ref["inputs"] = [
+        {"name": "conditioning", "type": "CONDITIONING", "link": cond_link},
+        {"name": "latent", "type": "LATENT", "link": latent_link},
+        {"name": "image", "type": "IMAGE", "link": link_snap},
+        {"name": "vae", "type": "VAE", "link": link_vae},
+        {"name": "prompt", "type": "STRING", "link": link_prompt},
+    ]
+    _append_out_link(snap, 0, link_snap)
+    _append_out_link(vae, 0, link_vae)
+    _append_out_link(enhance, 0, link_prompt)
+    _add_link(graph, link_snap, int(snap["id"]), 0, ref_id, 2, "IMAGE")
+    _add_link(graph, link_vae, int(vae["id"]), 0, ref_id, 3, "VAE")
+    _add_link(graph, link_prompt, int(enhance["id"]), 0, ref_id, 4, "STRING")
+
+    match_image = next(
+        item for item in match.get("inputs") or [] if item.get("name") == "image"
+    )
+    old_link = int(match_image["link"])
+    old = next(link for link in graph["links"] if int(link[0]) == old_link)
+    decode_id = int(old[1])
+    decode_slot = int(old[2])
+    image_slot = next(
+        index
+        for index, item in enumerate(match.get("inputs") or [])
+        if item.get("name") == "image"
+    )
+    graph["links"] = [link for link in graph["links"] if int(link[0]) != old_link]
+    dec_out = decode["outputs"][decode_slot]
+    dec_links = dec_out.get("links") or []
+    dec_out["links"] = [item for item in dec_links if int(item) != old_link]
+
+    re_id = nid
+    link_dec = lid + 3
+    link_src = lid + 4
+    link_pr = lid + 5
+    link_out = lid + 6
+    graph["nodes"].append(
+        {
+            "id": re_id,
+            "type": "EZReinsertPeople",
+            "pos": [int(match["pos"][0]), int(match["pos"][1]) - 140],
+            "size": [280, 110],
+            "flags": {},
+            "order": 23,
+            "mode": 0,
+            "inputs": [
+                {"name": "plate", "type": "IMAGE", "link": link_dec},
+                {"name": "source", "type": "IMAGE", "link": link_src},
+                {"name": "prompt", "type": "STRING", "link": link_pr},
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [link_out],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZReinsertPeople"},
+            "widgets_values": [],
+            "title": "Reinsert people",
+        }
+    )
+    match_image["link"] = link_out
+    _append_out_link(decode, decode_slot, link_dec)
+    _append_out_link(snap, 0, link_src)
+    _append_out_link(enhance, 0, link_pr)
+    _add_link(graph, link_dec, decode_id, decode_slot, re_id, 0, "IMAGE")
+    _add_link(graph, link_src, int(snap["id"]), 0, re_id, 1, "IMAGE")
+    _add_link(graph, link_pr, int(enhance["id"]), 0, re_id, 2, "STRING")
+    _add_link(graph, link_out, re_id, 0, int(match["id"]), image_slot, "IMAGE")
+    graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), re_id)
+    graph["last_link_id"] = max(int(graph.get("last_link_id") or 0), link_out)
+
+
 def _paint_background_swap_defaults(graph: dict) -> None:
     """Describe on; drop game-engine / illustration negatives on swap.
 
@@ -2036,8 +2156,9 @@ def build_background_swap() -> dict:
         rel="stills/background-swap",
         note=BACKGROUND_SWAP_NOTE,
         description=(
-            "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas "
-            "plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
+            "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas. "
+            "Photo reference for place swaps. Cubic block world uses a block study "
+            "and pastes people. Prefix ez_bg_swap."
         ),
         prefix="ez_bg_swap",
         mode="background_swap",
@@ -2051,6 +2172,7 @@ def build_background_swap() -> dict:
     )
     _rewire_background_swap_canvas(graph)
     _paint_background_swap_defaults(graph)
+    _wire_cubic_rebuild(graph)
     return graph
 
 
