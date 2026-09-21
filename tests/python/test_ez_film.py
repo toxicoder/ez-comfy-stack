@@ -29,6 +29,9 @@ from ez_film.accept import (  # noqa: E402
 )
 from ez_film.concat import (  # noqa: E402
     AUDIO_FILTER,
+    CLIP_CAP_DEFAULT_S,
+    CLIP_CAP_MAX_S,
+    CLIP_COUNT_MAX,
     LOUDNORM_FILTER,
     LTX_120_DECODED_FRAMES,
     MOVFLAGS,
@@ -38,6 +41,8 @@ from ez_film.concat import (  # noqa: E402
     copy_publish_master,
     encoder_missing,
     ffmpeg_audio_acrossfade_argv,
+    ffmpeg_clip_stitch_argv,
+    ffmpeg_clip_stitch_copy_argv,
     ffmpeg_mux_copy_argv,
     ffmpeg_pad_stem_argv,
     ffmpeg_stitch_argv,
@@ -49,12 +54,15 @@ from ez_film.concat import (  # noqa: E402
     probe_has_audio,
     publish_path,
     resolve_shot_path,
+    stitch_clips,
     stitch_film,
     validate_stitch_stems,
     write_disclosure_sidecar,
     write_preview_html,
 )
 from ez_film.nodes import (  # noqa: E402
+    EZClipConcat,
+    EZClipLastFrame,
     EZFilmConcat,
     EZFilmDisclosure,
     EZUnloadModels,
@@ -77,11 +85,16 @@ def test_pack_imports_without_comfy() -> None:
         "EZUnloadModels",
         "EZFilmConcat",
         "EZFilmDisclosure",
+        "EZClipLastFrame",
+        "EZClipConcat",
     }
     assert ez_film.WEB_DIRECTORY == "./js"
     assert EZUnloadModels.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.CATEGORY == "ez-comfy/film"
+    assert EZClipLastFrame.CATEGORY == "ez-comfy/film"
+    assert EZClipConcat.CATEGORY == "ez-comfy/film"
     assert EZFilmConcat.OUTPUT_NODE is True
+    assert EZClipConcat.OUTPUT_NODE is True
     spec = EZFilmConcat.INPUT_TYPES()
     assert spec["required"]["film"][0][0] == "go-see"
     assert "tide-table" in spec["required"]["film"][0]
@@ -91,6 +104,25 @@ def test_pack_imports_without_comfy() -> None:
     for index in range(1, 19):
         assert spec["required"][f"shot_{index:02d}"][0] == "VHS_FILENAMES"
     assert spec["optional"]["disclosure"][0] == "STRING"
+    clip_spec = EZClipConcat.INPUT_TYPES()
+    assert clip_spec["required"]["clip_01"][0] == "VHS_FILENAMES"
+    assert clip_spec["required"]["prefix"][1]["default"] == "ez_clip_chain"
+    assert clip_spec["required"]["cap_seconds"][1]["default"] == CLIP_CAP_DEFAULT_S
+    assert clip_spec["required"]["cap_seconds"][1]["default"] == 600.0
+    assert clip_spec["required"]["cap_seconds"][1]["max"] == CLIP_CAP_MAX_S
+    assert clip_spec["required"]["cap_seconds"][1]["max"] == 1800.0
+    assert clip_spec["required"]["xfade_cs"][1]["default"] == 0
+    assert "clip_01" not in clip_spec["optional"]
+    for index in range(2, CLIP_COUNT_MAX + 1):
+        assert clip_spec["optional"][f"clip_{index:02d}"][0] == "VHS_FILENAMES"
+    assert "clip_25" not in clip_spec["optional"]
+    assert clip_spec["optional"]["disclosure"][0] == "STRING"
+    last_spec = EZClipLastFrame.INPUT_TYPES()
+    assert last_spec["required"]["image"][0] == "IMAGE"
+    assert EZClipLastFrame.RETURN_TYPES == ("IMAGE",)
+    assert EZClipLastFrame.RETURN_NAMES == ("last_frame",)
+    assert EZClipConcat.RETURN_TYPES == ("STRING",)
+    assert EZClipConcat.RETURN_NAMES == ("path",)
     js = ROOT / "custom_nodes" / "ez_film" / "js" / "ez_film_preview.js"
     body = js.read_text(encoding="utf-8")
     assert "EZFilmConcat" in body
@@ -642,6 +674,228 @@ def test_film_concat_node_picks_vhs_audio_mp4(
         packed = EZFilmConcat().run("go-see", 90.0, 8, disclosure="", act=0, **shots)
     assert captured == [expected]
     assert packed["result"][0].endswith("ez_gosee_90s.mp4")
+
+
+class _FakeImage:
+    """Numpy-like IMAGE batch with ``.shape`` and slice ``__getitem__``."""
+
+    def __init__(self, frames: list[object], height: int = 8, width: int = 8) -> None:
+        self.frames = list(frames)
+        self.shape = (len(self.frames), height, width, 3)
+
+    def __getitem__(self, key: object) -> _FakeImage:
+        if isinstance(key, slice):
+            sliced = self.frames[key]
+            return _FakeImage(sliced, self.shape[1], self.shape[2])
+        raise TypeError("expected slice")
+
+
+def test_clip_last_frame_empty_and_passthrough() -> None:
+    with pytest.raises(ValueError, match="empty IMAGE batch; cannot extract last frame"):
+        EZClipLastFrame().run(None)
+    with pytest.raises(ValueError, match="empty IMAGE batch; cannot extract last frame"):
+        EZClipLastFrame().run(object())
+    empty = _FakeImage([])
+    assert empty.shape[0] == 0
+    with pytest.raises(ValueError, match="empty IMAGE batch; cannot extract last frame"):
+        EZClipLastFrame().run(empty)
+    single = _FakeImage(["only"])
+    out = EZClipLastFrame().run(single)[0]
+    assert isinstance(out, _FakeImage)
+    assert out.shape[0] == 1
+    assert out.frames == ["only"]
+    batch = _FakeImage(["a", "b", "c"])
+    last = EZClipLastFrame().run(batch)[0]
+    assert isinstance(last, _FakeImage)
+    assert last.shape[0] == 1
+    assert last.frames == ["c"]
+
+
+def test_clip_concat_collect_until_gap(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    clip_01 = tmp_path / "c01.mp4"
+    clip_03 = tmp_path / "c03.mp4"
+    clip_01.write_bytes(b"x")
+    clip_03.write_bytes(b"x")
+    node = EZClipConcat()
+    with pytest.raises(
+        RuntimeError, match="missing clip_02; refusing to stitch with a hole"
+    ):
+        node.run("ez_clip_chain", 600.0, 0, clip_01=str(clip_01), clip_03=str(clip_03))
+
+    captured: list[list[str]] = []
+
+    def fake_stitch(
+        paths: list[str], out_mp4: str, cap: float, xfade_cs: int = 0
+    ) -> str:
+        captured.append(list(paths))
+        assert cap == CLIP_CAP_DEFAULT_S
+        assert xfade_cs == 0
+        Path(out_mp4).write_bytes(b"out")
+        return out_mp4
+
+    with patch.object(film_nodes, "stitch_clips", side_effect=fake_stitch):
+        packed = node.run("ez_clip_chain", 600.0, 0, clip_01=str(clip_01))
+    assert captured == [[str(clip_01)]]
+    assert packed["result"][0].endswith("ez_clip_chain.mp4")
+    assert packed["ui"]["gifs"][0]["filename"] == "ez_clip_chain.mp4"
+    assert packed["ui"]["gifs"][0]["format"] == "video/h264-mp4"
+    assert packed["ui"]["gifs"][0]["type"] == "output"
+    assert packed["ui"]["gifs"][0]["subfolder"] == ""
+    assert packed["ui"]["gifs"][0]["frame_rate"] == 24
+    assert (tmp_path / "ez_clip_chain.html").is_file()
+    assert not (tmp_path / "films").exists()
+
+    captured.clear()
+    with patch.object(film_nodes, "stitch_clips", side_effect=fake_stitch):
+        node.run("ez_clip_chain", 600.0, 0, clip_01=str(clip_01), clip_02=None)
+    assert captured == [[str(clip_01)]]
+
+    clip_02 = tmp_path / "c02.mp4"
+    clip_02.write_bytes(b"x")
+    captured.clear()
+    with patch.object(film_nodes, "stitch_clips", side_effect=fake_stitch):
+        packed = node.run(
+            "ez_clip_chain", 600.0, 0, clip_01=str(clip_01), clip_02=str(clip_02)
+        )
+    assert captured == [[str(clip_01), str(clip_02)]]
+    assert packed["result"][0].endswith("ez_clip_chain.mp4")
+
+
+def test_clip_concat_xfade_refused_before_ffmpeg(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    with pytest.raises(
+        RuntimeError, match=r"clip xfade not in v1; use xfade_cs=0 \(hard cut\)"
+    ):
+        EZClipConcat().run("ez_clip_chain", 600.0, 1, clip_01=None)
+
+
+def test_ffmpeg_clip_stitch_argv_omits_cap_and_apad() -> None:
+    argv = ffmpeg_clip_stitch_argv("/tmp/list.txt", "/tmp/out.mp4", "ffmpeg")
+    assert "-t" not in argv
+    assert "600" not in argv
+    assert argv[argv.index("-f") + 1] == "concat"
+    assert argv[argv.index("-r") + 1] == "24"
+    assert argv[argv.index("-c:v") + 1] == "libx264"
+    assert argv[argv.index("-af") + 1] == AUDIO_FILTER
+    assert ",apad" not in argv[argv.index("-af") + 1]
+    assert argv[argv.index("-movflags") + 1] == MOVFLAGS
+    copy_argv = ffmpeg_clip_stitch_copy_argv("/tmp/list.txt", "/tmp/out.mp4", "ffmpeg")
+    assert copy_argv[copy_argv.index("-c:v") + 1] == "copy"
+    assert "-t" not in copy_argv
+    assert copy_argv[copy_argv.index("-af") + 1] == AUDIO_FILTER
+    assert ",apad" not in copy_argv[copy_argv.index("-af") + 1]
+
+
+def _write_clip_mp4s(tmp_path: Path, count: int) -> list[str]:
+    tmp_path.mkdir(parents=True, exist_ok=True)
+    paths = [str(tmp_path / f"c{i:02d}.mp4") for i in range(count)]
+    for path in paths:
+        Path(path).write_bytes(b"mp4")
+    return paths
+
+
+def test_stitch_clips_duration_head_size_cap_and_sum(tmp_path: Path) -> None:
+    illegal = _write_clip_mp4s(tmp_path, 1)
+    out = str(tmp_path / "ez_clip_chain.mp4")
+
+    def refuse_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
+        raise AssertionError(f"ffmpeg should not run: {argv}")
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=7.71),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(
+            RuntimeError,
+            match=r"clip duration 7.71s is not in \(5.00, 8.00, 10.00, 12.00\)",
+        ):
+            stitch_clips(
+                illegal, out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=refuse_run
+            )
+
+    pair = _write_clip_mp4s(tmp_path / "size", 2)
+
+    def size_wh(path: str, **_kwargs: Any) -> tuple[int, int]:
+        if path.endswith("c00.mp4"):
+            return (1280, 704)
+        return (768, 1280)
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", side_effect=size_wh),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(RuntimeError, match="clip size mismatch"):
+            stitch_clips(
+                pair, out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=refuse_run
+            )
+
+    four = _write_clip_mp4s(tmp_path / "cap", 4)
+    captured: list[list[str]] = []
+
+    def capture_run(argv: list[str], **_kwargs: Any) -> SimpleNamespace:
+        captured.append(list(argv))
+        Path(str(argv[-1])).write_bytes(b"mp4")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(
+            RuntimeError, match=r"clip concat duration 32.0s exceeds cap 30.0s"
+        ):
+            stitch_clips(
+                four, out, 30.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=capture_run
+            )
+    assert captured == []
+
+    stems = _write_clip_mp4s(tmp_path / "sum", 2)
+    master = str(tmp_path / "sum" / "ez_clip_chain.mp4")
+
+    def probe_sum(path: str, **_kwargs: Any) -> float:
+        if path == master:
+            return 16.0834
+        return 8.0417
+
+    with (
+        patch.object(film_concat, "probe_seconds", side_effect=probe_sum),
+        patch.object(film_concat, "probe_wh", return_value=(768, 1280)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=16.0834),
+    ):
+        stitch_clips(
+            stems, master, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=capture_run
+        )
+    assert captured
+    argv = captured[0]
+    assert "-t" not in argv
+    assert "-t" not in [str(part) for part in argv]
+    joined = " ".join(str(part) for part in argv)
+    assert "-t 600" not in joined
+    assert ",apad" not in joined
+    assert argv[argv.index("-f") + 1] == "concat"
+    assert argv[argv.index("-r") + 1] == "24"
+    assert argv[argv.index("-c:v") + 1] == "libx264"
+    assert AUDIO_FILTER in argv
+    assert argv[argv.index("-af") + 1] == AUDIO_FILTER
+    assert argv[argv.index("-movflags") + 1] == MOVFLAGS
+    assert Path(master).is_file()
+
+    with pytest.raises(
+        RuntimeError, match=r"clip xfade not in v1; use xfade_cs=0 \(hard cut\)"
+    ):
+        stitch_clips(
+            stems, master, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=refuse_run,
+            xfade_cs=10,
+        )
 
 
 def test_write_preview_html_and_x264_fallback(tmp_path: Path) -> None:
