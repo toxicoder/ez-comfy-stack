@@ -4,6 +4,8 @@
  * Nodes 2.0: set widget.value; treat inputEl as optional (Vue STRING widgets
  * have no canvas textarea). Sample combo uses a getter on widget.options.values
  * so App Mode (Vue) and refreshComboInNodes cannot restore the Python union.
+ * Typing prompt/tags/lyrics/sources selects Sample custom so Queue uses the box
+ * at any Quality. Named samples still copy the recipe into the box.
  */
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
@@ -33,6 +35,7 @@ const PREVIEW_SKIP = new Set([
 ]);
 
 const SAMPLE_CUSTOM = "custom";
+const TEXT_WIDGET_NAMES = ["prompt", "tags", "lyrics", "sources"];
 const catalogCache = new Map();
 
 /** Node type + mode/flavor → catalog stem. Mirrors samples.py _FAMILY_FOR_MODE. */
@@ -295,6 +298,132 @@ function applySampleRow(node, row, readOnly) {
 }
 
 /**
+ * True when the live widget text differs from the catalog field.
+ * @param {object|undefined} widget
+ * @param {*} catalogText
+ * @returns {boolean}
+ */
+function textDiverged(widget, catalogText) {
+  if (!widget || catalogText == null) {
+    return false;
+  }
+  return String(widget.value ?? "") !== String(catalogText);
+}
+
+/**
+ * Unlock prompt-like textareas on a node.
+ * @param {object} node
+ * @returns {void}
+ */
+function unlockTextWidgets(node) {
+  for (const name of TEXT_WIDGET_NAMES) {
+    const widget = widgetByName(node, name);
+    if (widget?.inputEl) {
+      widget.inputEl.readOnly = false;
+      widget.inputEl.style.opacity = "1";
+    }
+  }
+}
+
+/**
+ * Select Sample custom so Queue encodes the textarea, not the catalog row.
+ * @param {object} node
+ * @returns {void}
+ */
+function freezeSampleToCustom(node) {
+  if (node?._ezApplyingSample) {
+    return;
+  }
+  const sampleWidget = widgetByName(node, "sample");
+  if (!sampleWidget) {
+    return;
+  }
+  const choice = String(sampleWidget.value || "")
+    .trim()
+    .toLowerCase();
+  if (!choice || choice === SAMPLE_CUSTOM) {
+    return;
+  }
+  node._ezApplyingSample = true;
+  try {
+    sampleWidget.value = SAMPLE_CUSTOM;
+    if (Array.isArray(node.widgets_values) && node.widgets) {
+      const idx = node.widgets.indexOf(sampleWidget);
+      if (idx >= 0) {
+        node.widgets_values[idx] = SAMPLE_CUSTOM;
+      }
+    }
+    if (typeof sampleWidget.callback === "function") {
+      sampleWidget.callback(SAMPLE_CUSTOM, app.canvas, node);
+    }
+    const graph = node.graph;
+    if (graph && typeof graph.setDirtyCanvas === "function") {
+      graph.setDirtyCanvas(true, true);
+    }
+  } finally {
+    node._ezApplyingSample = false;
+  }
+  unlockTextWidgets(node);
+}
+
+/**
+ * Chain prompt/tags/lyrics/sources callbacks so typing selects Sample custom.
+ * @param {object} node
+ * @returns {void}
+ */
+function bindTextWatchers(node) {
+  for (const name of TEXT_WIDGET_NAMES) {
+    const widget = widgetByName(node, name);
+    if (!widget || widget._ezPromptWatch) {
+      continue;
+    }
+    widget._ezPromptWatch = true;
+    const prior = widget.callback;
+    /**
+     * Chain the prior callback then freeze Sample at custom.
+     * @returns {void}
+     */
+    widget.callback = function () {
+      if (typeof prior === "function") {
+        prior.apply(this, arguments);
+      }
+      freezeSampleToCustom(node);
+    };
+  }
+}
+
+/**
+ * If live text diverged from the selected sample, select Sample custom.
+ * @param {object} node
+ * @returns {Promise<void>}
+ */
+async function freezeSampleIfPromptDiverged(node) {
+  const sampleWidget = widgetByName(node, "sample");
+  if (!sampleWidget) {
+    return;
+  }
+  const choice = sampleWidget.value;
+  const isCustom =
+    !choice || String(choice).trim().toLowerCase() === SAMPLE_CUSTOM;
+  if (isCustom) {
+    return;
+  }
+  const rows = await loadCatalog(catalogIdFromNode(node));
+  const row = lookupSample(rows, choice);
+  if (!row) {
+    return;
+  }
+  if (
+    textDiverged(widgetByName(node, "prompt"), row.prompt) ||
+    textDiverged(widgetByName(node, "sources"), row.prompt) ||
+    textDiverged(widgetByName(node, "tags"), row.tags) ||
+    textDiverged(widgetByName(node, "lyrics"), row.lyrics)
+  ) {
+    freezeSampleToCustom(node);
+  }
+}
+
+/**
  * Refresh sample combo values and apply or unlock the chosen sample.
  * @param {object} node
  * @returns {Promise<void>}
@@ -312,16 +441,15 @@ async function syncSample(node) {
     !choice || String(choice).trim().toLowerCase() === SAMPLE_CUSTOM;
   const row = lookupSample(rows, choice);
   if (!isCustom && row) {
-    applySampleRow(node, row, true);
+    node._ezApplyingSample = true;
+    try {
+      applySampleRow(node, row, true);
+    } finally {
+      node._ezApplyingSample = false;
+    }
     return;
   }
-  for (const name of ["prompt", "tags", "lyrics", "sources"]) {
-    const widget = widgetByName(node, name);
-    if (widget?.inputEl) {
-      widget.inputEl.readOnly = false;
-      widget.inputEl.style.opacity = "1";
-    }
-  }
+  unlockTextWidgets(node);
 }
 
 /**
@@ -335,6 +463,7 @@ function bindSamplePicker(node) {
     return;
   }
   installValuesGetter(sampleWidget, node);
+  bindTextWatchers(node);
   if (!sampleWidget._ezSampleBound) {
     sampleWidget._ezSampleBound = true;
     const prior = sampleWidget.callback;
@@ -347,6 +476,13 @@ function bindSamplePicker(node) {
         prior.apply(this, arguments);
       }
       syncSample(node);
+    };
+    /**
+     * Use the textarea when it diverged from the selected sample.
+     * @returns {Promise<void>}
+     */
+    sampleWidget.beforeQueued = async function () {
+      await freezeSampleIfPromptDiverged(node);
     };
   }
   syncSample(node);
@@ -489,6 +625,18 @@ app.registerExtension({
       graph.addEventListener("configured", () => {
         syncAllSamplePickers();
       });
+    }
+  },
+  /**
+   * Prefer the typed prompt over a stale sample combo at Queue.
+   * @returns {Promise<void>}
+   */
+  async beforeQueued() {
+    for (const node of app.graph?.nodes || []) {
+      const ntype = node?.comfyClass || node?.type;
+      if (NODE_CLASSES.has(ntype)) {
+        await freezeSampleIfPromptDiverged(node);
+      }
     }
   },
 });

@@ -90,6 +90,38 @@ def test_quality_js_writes_vue_safe_widget_values_on_the_node_graph() -> None:
     assert "applyQuality(value, node)" in body
     assert "localStorage.setItem" in body
     assert "localStorage.getItem" in body
+    assert "node.widgets.map((item) => item.value)" not in body
+    assert "widgets_values[idx]" in body
+
+
+def test_quality_js_freezes_to_custom_on_overlay_edits() -> None:
+    """User Steps/CFG/UNET edits select custom; overlay writes do not."""
+    body = QUALITY_JS.read_text(encoding="utf-8")
+    assert "function freezeQualityToCustom" in body
+    assert "function bindOverlayWidget" in body
+    assert "_ezQualityWatch" in body
+    assert "nodeCreated" in body
+    for name in ("steps", "cfg", "unet_name", "clip_name", "vae_name"):
+        assert f'"{name}"' in body
+    assert "CLIPLoader" in body
+    assert "persistLastQuality" in body
+    assert "applyingByGraph" in body
+    assert "seedingByGraph" in body
+
+
+def test_sample_picker_js_freezes_to_custom_on_prompt_edits() -> None:
+    """Typed prompt/tags/lyrics/sources select Sample custom before Queue."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "function freezeSampleToCustom" in body
+    assert "function freezeSampleIfPromptDiverged" in body
+    assert "function bindTextWatchers" in body
+    assert "_ezApplyingSample" in body
+    assert "_ezPromptWatch" in body
+    assert "beforeQueued" in body
+    for name in ("prompt", "tags", "lyrics", "sources"):
+        assert f'"{name}"' in body
 
 
 def test_format_js_uses_vue_safe_widget_writes() -> None:

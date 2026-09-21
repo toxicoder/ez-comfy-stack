@@ -44,6 +44,8 @@ class EZQuality:
         "ultra is Klein 9B distilled when on disk (FLUX Non-Commercial, not YouTube-ok). "
         "max is 9B base or FLUX.2-dev when on disk (same NC license). "
         "Named qualities may swap UNET, CLIP, and VAE. Never changes size. "
+        "Editing Steps / CFG / UNET / CLIP / VAE selects custom so Queue keeps "
+        "those values. Prompt text is not overlaid. "
         "Not --tier quality."
     )
 
