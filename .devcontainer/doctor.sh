@@ -35,14 +35,15 @@ usage() {
   cat <<'EOF'
 Usage: doctor.sh [--quiet] [--help]
 
-Verify contributor tooling (bazelisk, shellcheck, shfmt, buildifier)
-against .devcontainer/tool-versions.env.
+Verify contributor tooling (bazelisk, shellcheck, shfmt, buildifier,
+python3, node, grok) against .devcontainer/tool-versions.env.
 
 Preferred next step: bazelisk run //:validate
 
 Platform notes:
   - Container is always Linux (amd64 or arm64).
-  - Hosts: macOS Apple Silicon, Windows x86_64 (Docker Desktop), Linux, DGX Spark.
+  - Hosts: macOS Apple Silicon, Windows x86_64 (Docker Desktop/WSL2), Linux, DGX Spark.
+  - Grok Build talks to host LLMs at host.docker.internal (not --network=host).
 EOF
 }
 
@@ -106,6 +107,8 @@ require buildifier
 require shfmt
 require shellcheck
 require python3
+require node
+require grok
 
 if [[ ${FAIL} -ne 0 ]]; then
   if [[ ${STRICT} == "0" ]]; then

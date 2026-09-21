@@ -47,7 +47,7 @@ How merge commits, squash, rebase, and stacked PRs work in this repo: [How we la
 
 Install Python test tools once: `pip install -r tests/requirements.txt`.
 
-VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Also `doctor` and `docs-serve`. Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables. Format-on-save is shell and Starlark only.
+VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Also `doctor` and `docs-serve`. Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables. Format-on-save is shell and Starlark only. Optional Linux toolchain: [Contributor Dev Container](devcontainer.md).
 
 ```mermaid
 flowchart TB
@@ -91,6 +91,7 @@ Do not weaken `restart: "no"`, heavy confirm on `start`, headroom, or download-l
 | Need | Page |
 | --- | --- |
 | Shell / Docker / docs chrome | [Project conventions](../project-conventions.md) |
+| Contributor Dev Container | [Dev Container](devcontainer.md) |
 | Page template / ezcmd | [Docs style](docs-style.md) |
 | Make targets / Pages aliases | [Testing docs](testing-docs.md) |
 | Vulnerability reporting | [Security](security.md) |

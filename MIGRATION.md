@@ -75,9 +75,9 @@ Inside `docs-site/` the same steps are npm scripts: `npm run dev`, `npm run buil
 `npm run unit`, `npm run nav:check`, `npm run verify`. `nav:generate` and `codemod`
 remain for a repository that still has its `mkdocs.yml`.
 
-Dependencies: Node 22+ (the devcontainer Node feature installs it; on a host
-`brew install node@22`). Python is only needed by the generators and the pytest
-gates — `docs/requirements.txt` no longer installs MkDocs.
+Dependencies: Node 22+ (the contributor Dev Container bakes the official Node 22
+tarball; on a host `brew install node@22`). Python is only needed by the
+generators and the pytest gates — `docs/requirements.txt` no longer installs MkDocs.
 
 ## Stable URLs
 

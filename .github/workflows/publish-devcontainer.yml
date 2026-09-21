@@ -1,0 +1,148 @@
+# Publish the contributor Dev Container image (not the Comfy CUDA image).
+# Privacy: no Hugging Face credentials, no .env, no model weights, no host secrets.
+#
+# Tags:
+#   main         → latest + main + sha-*
+#   development  → development + sha-*
+name: publish-devcontainer
+
+on:
+  push:
+    branches: [main, development]
+    paths:
+      - ".devcontainer/**"
+      - ".github/workflows/publish-devcontainer.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: publish-devcontainer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+            cache_tag: buildcache-amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            cache_tag: buildcache-arm64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata (public labels only)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer
+
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .devcontainer
+          file: .devcontainer/Dockerfile
+          platforms: ${{ matrix.platform }}
+          provenance: false
+          sbom: false
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer
+          outputs: type=image,push-by-digest=true,name-canonical=true,push=true
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer:${{ matrix.cache_tag }}
+            type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer:development
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer:${{ matrix.cache_tag }},mode=max,image-manifest=true,oci-mediatypes=true,compression=zstd
+
+      - name: Export digest
+        run: |
+          set -euo pipefail
+          mkdir -p "${RUNNER_TEMP}/digests"
+          digest="${{ steps.build.outputs.digest }}"
+          echo "${digest}" >"${RUNNER_TEMP}/digests/${{ matrix.cache_tag }}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.cache_tag }}
+          path: ${{ runner.temp }}/digests/${{ matrix.cache_tag }}
+          if-no-files-found: error
+          retention-days: 1
+
+  merge:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digest-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ github.ref_name }}
+            type=sha,prefix=sha-,format=short
+
+      - name: Create multi-arch manifest
+        working-directory: ${{ runner.temp }}/digests
+        env:
+          IMAGE: ghcr.io/${{ github.repository_owner }}/ez-comfy-devcontainer
+        run: |
+          set -euo pipefail
+          refs=()
+          for digest_file in *; do
+            [[ -f ${digest_file} ]] || continue
+            digest="$(tr -d '[:space:]' <"${digest_file}")"
+            [[ ${digest} == sha256:* ]] || {
+              echo "unexpected digest in ${digest_file}: ${digest}" >&2
+              exit 1
+            }
+            refs+=("${IMAGE}@${digest}")
+          done
+          [[ ${#refs[@]} -eq 2 ]] || {
+            echo "expected two platform digests, got ${#refs[@]}" >&2
+            exit 1
+          }
+          tag_args=()
+          while IFS= read -r tag; do
+            [[ -n ${tag} ]] || continue
+            tag_args+=("-t" "${tag}")
+          done < <(printf '%s\n' "${{ steps.meta.outputs.tags }}")
+          docker buildx imagetools create "${tag_args[@]}" "${refs[@]}"

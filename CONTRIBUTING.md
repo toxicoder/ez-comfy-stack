@@ -35,7 +35,7 @@ flowchart TB
 
 ## Editor
 
-VS Code / Cursor: open the **repo root**. Accept the recommended extensions (Pylance, mypy, shfmt, ShellCheck, Bazel, Container Tools, GitHub Actions, Tailwind CSS, MDX). **Run Task** → `validate` is `bazelisk run //:validate`; `doctor` and `docs-serve` wrap `//:manage -- doctor` and `//docs:serve`. Format-on-save is shell (shfmt) and Starlark only. Debug configs run pytest with a relative `PYTHONPATH` only — no `.env`, interpreter path, or host variables are committed. `main` and `development` are branch-protected in the workspace so casual commits on those names prompt first.
+VS Code / Cursor: open the **repo root**. Accept the recommended extensions (Pylance, mypy, shfmt, ShellCheck, Bazel, Container Tools, GitHub Actions, Tailwind CSS, MDX). Optional: **Dev Containers: Reopen in Container** ([Contributor Dev Container](docs/contribute/devcontainer.md)) for a Linux amd64/arm64 toolchain with Grok Build. **Run Task** → `validate` is `bazelisk run //:validate`; `doctor` and `docs-serve` wrap `//:manage -- doctor` and `//docs:serve`. Format-on-save is shell (shfmt) and Starlark only. Debug configs run pytest with a relative `PYTHONPATH` only — no `.env`, interpreter path, or host variables are committed. `main` and `development` are branch-protected in the workspace so casual commits on those names prompt first.
 
 ## Commit messages
 

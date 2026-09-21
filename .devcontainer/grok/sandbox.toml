@@ -1,0 +1,14 @@
+# Grok sandbox profiles for the contributor container only.
+# Do not copy this file to the repo-root .grok/ tree (that would bind host sessions).
+
+[profiles.devcontainer]
+extends = "workspace"
+restrict_network = false
+deny = [
+  "/var/run/docker.sock",
+  "/var/run/docker-host.sock",
+  "**/.env",
+  "**/*.pem",
+  "**/id_rsa",
+  "**/id_ed25519",
+]

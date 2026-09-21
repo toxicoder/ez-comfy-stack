@@ -1,0 +1,21 @@
+# Fleet defaults for the contributor container (also copied to ~/.grok/config.toml).
+# Not a secret file. Host LLM is opt-in via /model host-llm.
+
+[cli]
+auto_update = false
+installer = "internal"
+
+[sandbox]
+profile = "devcontainer"
+
+[shell_environment_policy]
+inherit = "core"
+ignore_default_excludes = false
+
+[model.host-llm]
+model = "local"
+base_url = "http://host.docker.internal:11434/v1"
+name = "Host LLM"
+description = "OpenAI-compatible server on the Docker host (Ollama default 11434). Bind the host server to 0.0.0.0 on Linux Engine."
+api_backend = "chat_completions"
+api_key = "local"

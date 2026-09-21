@@ -174,6 +174,7 @@ def test_nav_includes_planned_homes() -> None:
         "contribute/testing-docs.md",
         "contribute/contributing.md",
         "contribute/security.md",
+        "contribute/devcontainer.md",
     )
     missing = [p for p in required if p not in listed]
     assert missing == [], "planned pages missing from nav:\n" + "\n".join(missing)

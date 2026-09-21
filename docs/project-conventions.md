@@ -257,6 +257,7 @@ flowchart LR
   - Compose bind-mounts ops scripts + `install-comfy/` for zero-rebuild iteration
   - `docker/.dockerignore` is **whitelist-only** (`*` then `!exceptions`). Every `COPY` source from the build context must have a matching `!` line or GHCR/`docker build` fails with `not found`
 - GHCR channel by long-lived branch: publish tags `us-safe-studio` (`main`) and `us-safe-studio-development`; `manage.sh` pulls the tag for the current git branch (feature branches use the development channel). Old `flux-to-ltx*` tags freeze on the previous image.
+- Contributor Dev Container (`.devcontainer/`, `ghcr.io/toxicoder/ez-comfy-devcontainer`) is a separate image — not the Comfy CUDA tags. See [Contributor Dev Container](contribute/devcontainer.md).
 - Scripts as real files (not inline ConfigMap YAML)
 - Host model cache + named volume for Comfy state
 - Compose `restart: "no"`; explicit `mem_limit` / `mem_reservation`

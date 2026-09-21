@@ -33,9 +33,12 @@ exports_files([
 filegroup(
     name = "devcontainer",
     srcs = [
+        ".devcontainer/.dockerignore",
         ".devcontainer/Dockerfile",
         ".devcontainer/devcontainer.json",
         ".devcontainer/doctor.sh",
+        ".devcontainer/grok/config.toml",
+        ".devcontainer/grok/sandbox.toml",
         ".devcontainer/post-create.sh",
         ".devcontainer/tool-versions.env",
     ],
@@ -59,6 +62,7 @@ filegroup(
         ".github/actions/setup-bazel/action.yml",
         ".github/workflows/ci.yml",
         ".github/workflows/deploy-docs.yml",
+        ".github/workflows/publish-devcontainer.yml",
         ".github/workflows/publish-image.yml",
     ],
     visibility = ["//visibility:public"],
