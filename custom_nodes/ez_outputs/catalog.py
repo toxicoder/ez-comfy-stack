@@ -47,6 +47,7 @@ class OutputRow(TypedDict):
         size: Byte length.
         mtime: Unix mtime (seconds).
         suffix: Lowercase suffix including the dot.
+        parent: Parent directory relative to the root, or ``""`` at root.
     """
 
     rel: str
@@ -55,6 +56,31 @@ class OutputRow(TypedDict):
     size: int
     mtime: float
     suffix: str
+    parent: str
+
+
+class BatchError(TypedDict):
+    """One refused path in a bulk delete or copy.
+
+    Attributes:
+        rel: Relative path that failed.
+        error: Operator-facing reason.
+    """
+
+    rel: str
+    error: str
+
+
+class CopyRow(TypedDict):
+    """One successful copy into the LoadImage input directory.
+
+    Attributes:
+        rel: Source path relative to the output root.
+        name: Destination file name (LoadImage combo value).
+    """
+
+    rel: str
+    name: str
 
 
 class CatalogError(ValueError):
@@ -183,9 +209,13 @@ def list_outputs(
             continue
         if want != "all" and media_kind != want:
             continue
-        rel = path.resolve().relative_to(base.resolve()).as_posix()
+        rel_path = path.resolve().relative_to(base.resolve())
+        rel = rel_path.as_posix()
         if needle and needle not in rel.lower():
             continue
+        parent = rel_path.parent.as_posix()
+        if parent == ".":
+            parent = ""
         try:
             stat = path.stat()
         except OSError:
@@ -198,6 +228,7 @@ def list_outputs(
                 "size": int(stat.st_size),
                 "mtime": float(stat.st_mtime),
                 "suffix": suffix,
+                "parent": parent,
             }
         )
     rows.sort(key=lambda row: row["mtime"], reverse=True)
@@ -235,6 +266,33 @@ def resolve_under(root: Path, rel: str) -> Path:
     return path
 
 
+def bounded_rels(rels: list[str]) -> list[str]:
+    """Return a non-empty, de-duplicated, cap-sliced list of relative paths.
+
+    Args:
+        rels: Candidate relative paths.
+
+    Returns:
+        Cleaned paths in first-seen order, at most :data:`LIST_CAP`.
+
+    Raises:
+        CatalogError: when no usable path remains.
+    """
+    cleaned: list[str] = []
+    seen: set[str] = set()
+    for raw in rels:
+        text = str(raw or "").strip()
+        if not text or text in seen:
+            continue
+        seen.add(text)
+        cleaned.append(text)
+        if len(cleaned) >= LIST_CAP:
+            break
+    if not cleaned:
+        raise CatalogError("invalid output path")
+    return cleaned
+
+
 def delete_output(root: Path, rel: str) -> Path:
     """Unlink one media file under ``root``.
 
@@ -251,6 +309,34 @@ def delete_output(root: Path, rel: str) -> Path:
     path = resolve_under(root, rel)
     path.unlink()
     return path
+
+
+def delete_many(root: Path, rels: list[str]) -> tuple[list[str], list[BatchError]]:
+    """Delete many media files under ``root``.
+
+    Each path still goes through :func:`resolve_under`. One refuse does not
+    abort the rest of the batch.
+
+    Args:
+        root: Output directory.
+        rels: Relative paths.
+
+    Returns:
+        ``(deleted, errors)`` where errors are ``{rel, error}``.
+
+    Raises:
+        CatalogError: when ``rels`` is empty after cleaning.
+    """
+    deleted: list[str] = []
+    errors: list[BatchError] = []
+    for rel in bounded_rels(rels):
+        try:
+            delete_output(root, rel)
+        except CatalogError as exc:
+            errors.append({"rel": rel, "error": str(exc)})
+            continue
+        deleted.append(rel)
+    return deleted, errors
 
 
 def copy_to_input(
@@ -278,3 +364,35 @@ def copy_to_input(
     dest = dest_dir / src.name
     shutil.copy2(src, dest)
     return dest
+
+
+def copy_many_to_input(
+    output_dir: Path,
+    rels: list[str],
+    *,
+    input_dir: Path | None = None,
+) -> tuple[list[CopyRow], list[BatchError]]:
+    """Copy many media files into the LoadImage input directory.
+
+    Args:
+        output_dir: Output root.
+        rels: Relative paths under ``output_dir``.
+        input_dir: Destination directory; default :func:`input_root`.
+
+    Returns:
+        ``(copied, errors)`` where copied rows have ``rel`` and ``name``.
+
+    Raises:
+        CatalogError: when ``rels`` is empty after cleaning.
+    """
+    copied: list[CopyRow] = []
+    errors: list[BatchError] = []
+    dest_root = Path(input_dir) if input_dir is not None else input_root()
+    for rel in bounded_rels(rels):
+        try:
+            dest = copy_to_input(output_dir, rel, input_dir=dest_root)
+        except CatalogError as exc:
+            errors.append({"rel": rel, "error": str(exc)})
+            continue
+        copied.append({"rel": rel, "name": dest.name})
+    return copied, errors

@@ -10,7 +10,10 @@ import pytest
 
 from ez_outputs.catalog import (
     CatalogError,
+    bounded_rels,
+    copy_many_to_input,
     copy_to_input,
+    delete_many,
     delete_output,
     input_root,
     kind_of,
@@ -23,6 +26,7 @@ from ez_outputs.routes import (
     handle_list,
     handle_to_input,
     register_routes,
+    rels_from_args,
     request_json,
 )
 
@@ -235,14 +239,30 @@ def test_pack_exports_empty_mappings_and_js() -> None:
 
     assert ez_outputs.NODE_CLASS_MAPPINGS == {}
     assert ez_outputs.WEB_DIRECTORY == "./js"
-    js = Path(__file__).resolve().parents[2] / "custom_nodes" / "ez_outputs" / "js" / "ez_outputs.js"
+    pack_js = Path(__file__).resolve().parents[2] / "custom_nodes" / "ez_outputs" / "js"
+    js = pack_js / "ez_outputs.js"
+    css = pack_js / "ez_outputs.css"
     body = js.read_text(encoding="utf-8")
+    sheet = css.read_text(encoding="utf-8")
     assert "registerSidebarTab" in body
     assert "ez.outputs" in body
     assert "History does not" in body
     assert "node_widget" not in body
     assert "onResize" not in body
-    assert "registerSidebarTab" in body
+    assert "ez-out-grid" in body
+    assert "ez-out-list" in body
+    assert "--ez-out-thumb" in body
+    assert "preview=webp" in body
+    assert "localStorage" in body
+    assert "rels" in body
+    assert 'type = "checkbox"' in body
+    assert "shiftKey" in body
+    assert "Select all" in body
+    assert "executed" in body
+    assert "ez-out-grid" in sheet
+    assert "ez-out-list" in sheet
+    assert "--ez-out-thumb" in sheet
+    assert "auto-fill" in sheet
 
 
 def test_output_and_input_root_env(
@@ -398,6 +418,134 @@ def test_copy_to_input_default_dir(
     dest = copy_to_input(root, "still.png")
     assert dest == tmp_path / "auto-in" / "still.png"
     assert dest.is_file()
+
+
+def test_list_outputs_parent_and_truncated(tmp_path: Path) -> None:
+    _touch(tmp_path / "root.png")
+    _touch(tmp_path / "shots" / "take.webp")
+    rows = {row["rel"]: row for row in list_outputs(tmp_path)}
+    assert rows["root.png"]["parent"] == ""
+    assert rows["shots/take.webp"]["parent"] == "shots"
+    status, payload = handle_list({"limit": 1}, root=tmp_path)
+    assert status == 200
+    assert payload["truncated"] is True
+    assert payload["count"] == 1
+    assert len(payload["items"]) == 1
+    full = handle_list({"limit": 50}, root=tmp_path)
+    assert full[1]["truncated"] is False
+    assert full[1]["count"] == 2
+
+
+def test_bounded_rels_and_bulk_delete_copy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from ez_outputs import catalog as cat
+
+    root = tmp_path / "out"
+    _touch(root / "keep.png", b"k")
+    _touch(root / "gone.png", b"g")
+    _touch(root / "also.png", b"a")
+    _touch(root / "comfy-user" / "hid.png", b"h")
+    _touch(root / "clip.mp4", b"v")
+    with pytest.raises(CatalogError, match="invalid"):
+        bounded_rels([])
+    with pytest.raises(CatalogError, match="invalid"):
+        bounded_rels(["", "  "])
+    assert bounded_rels(["a.png", "a.png", "b.png"]) == ["a.png", "b.png"]
+    monkeypatch.setattr(cat, "LIST_CAP", 2)
+    assert bounded_rels(["a", "b", "c"]) == ["a", "b"]
+    monkeypatch.setattr(cat, "LIST_CAP", 500)
+
+    deleted, errors = delete_many(
+        root, ["gone.png", "missing.png", "comfy-user/hid.png", "../x.png", "also.png"]
+    )
+    assert deleted == ["gone.png", "also.png"]
+    reasons = {row["rel"]: row["error"] for row in errors}
+    assert "missing.png" in reasons
+    assert "comfy-user/hid.png" in reasons
+    assert (root / "keep.png").is_file()
+    assert not (root / "gone.png").exists()
+
+    dest = tmp_path / "in"
+    copied, copy_err = copy_many_to_input(
+        root, ["keep.png", "clip.mp4", "missing.png"], input_dir=dest
+    )
+    assert [row["name"] for row in copied] == ["keep.png", "clip.mp4"]
+    assert copy_err[0]["rel"] == "missing.png"
+    assert (dest / "keep.png").is_file()
+    with pytest.raises(CatalogError, match="invalid"):
+        delete_many(root, [])
+    with pytest.raises(CatalogError, match="invalid"):
+        copy_many_to_input(root, [], input_dir=dest)
+
+
+def test_rels_from_args_and_bulk_handlers(tmp_path: Path) -> None:
+    assert rels_from_args({"rel": "a.png"}) == ["a.png"]
+    assert rels_from_args({"rels": ["a.png", "", "b.png"]}) == ["a.png", "b.png"]
+    assert rels_from_args({"rels": "solo.png"}) == ["solo.png"]
+    assert rels_from_args({"rels": [], "rel": "fallback.png"}) == ["fallback.png"]
+    assert rels_from_args({"rels": {"x": 1}, "rel": "ok.png"}) == ["ok.png"]
+    assert rels_from_args({}) == []
+
+    root = tmp_path / "out"
+    inputs = tmp_path / "in"
+    _touch(root / "one.png")
+    _touch(root / "two.png")
+    _touch(root / "three.png")
+    single = handle_delete({"rels": ["one.png"]}, root=root)
+    assert single == (200, {"ok": True, "rel": "one.png"})
+    bulk = handle_delete({"rels": ["two.png", "missing.png", "three.png"]}, root=root)
+    assert bulk[0] == 200
+    assert bulk[1]["deleted"] == ["two.png", "three.png"]
+    assert bulk[1]["errors"][0]["rel"] == "missing.png"
+    none = handle_delete({"rels": ["nope.png", "also-no.png"]}, root=root)
+    assert none[0] == 400
+    assert "error" in none[1]
+    empty_bulk = handle_delete({"rels": []}, root=root)
+    assert empty_bulk[0] == 400
+
+    _touch(root / "still.png")
+    _touch(root / "song.flac")
+    copied = handle_to_input(
+        {"rels": ["still.png", "song.flac", "gone.png"]},
+        root=root,
+        input_dir=inputs,
+    )
+    assert copied[0] == 200
+    names = [row["name"] for row in copied[1]["copied"]]
+    assert names == ["still.png", "song.flac"]
+    assert (inputs / "still.png").is_file()
+    one = handle_to_input({"rels": ["still.png"]}, root=root, input_dir=inputs)
+    assert one[0] == 200
+    assert one[1]["name"] == "still.png"
+    fail_copy = handle_to_input({"rels": ["nope.png", "no2.png"]}, root=root, input_dir=inputs)
+    assert fail_copy[0] == 400
+
+
+def test_bulk_handlers_catalog_error_and_copy_default(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import ez_outputs.routes as routes_mod
+    from ez_outputs import catalog as cat
+
+    def _boom(*_args: Any, **_kwargs: Any) -> Any:
+        raise CatalogError("invalid output path")
+
+    monkeypatch.setattr(routes_mod, "delete_many", _boom)
+    monkeypatch.setattr(routes_mod, "copy_many_to_input", _boom)
+    bad_del = handle_delete({"rels": ["a.png", "b.png"]}, root=tmp_path)
+    assert bad_del[0] == 400
+    assert "error" in bad_del[1]
+    bad_copy = handle_to_input(
+        {"rels": ["a.png", "b.png"]}, root=tmp_path, input_dir=tmp_path
+    )
+    assert bad_copy[0] == 400
+
+    root = tmp_path / "out"
+    _touch(root / "still.png")
+    monkeypatch.setattr(cat, "input_root", lambda **_kwargs: tmp_path / "auto-in")
+    copied, errors = copy_many_to_input(root, ["still.png"])
+    assert errors == []
+    assert copied[0]["name"] == "still.png"
+    assert (tmp_path / "auto-in" / "still.png").is_file()
 
 
 def test_register_routes_server_import_fails(monkeypatch: pytest.MonkeyPatch) -> None:

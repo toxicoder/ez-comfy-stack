@@ -53,7 +53,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 | `ez_research` | 1 node | Creative research chat |
 | `ez_studio_forge` | 1 node | Clone lab graphs into live `_user/` |
 | `ez_studio_app` | empty | App Mode JS occupancy chip |
-| `ez_outputs` | empty | Outputs sidebar: browse/delete/send-to-LoadImage files on `${COMFY_OUTPUT_DIR}` |
+| `ez_outputs` | empty | Outputs sidebar: thumbnail grid/list, bulk delete/copy, send-to-LoadImage on `${COMFY_OUTPUT_DIR}` |
 | `ez_studio_blocks` | empty | Subgraph blueprints |
 
 ---
@@ -243,7 +243,14 @@ This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget cata
 
 **No canvas nodes.** `NODE_CLASS_MAPPINGS` is empty. `WEB_DIRECTORY = ./js`.
 
-`ez_outputs.js` registers a Comfy **Outputs** sidebar tab. It lists media on `${COMFY_OUTPUT_DIR}` (container `/outputs`) newest first, skips `comfy-user` / `custom-nodes-user` / `input` / `temp`, and can **Delete** or **Use as start image** (copy into `/inputs` and set `LoadImage` when that node is on the open graph). Comfy History is in-memory and empty after `start`; these files persist. Routes: `GET /ez_outputs/list`, `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Path traversal and non-media files are refused.
+`ez_outputs.js` registers a Comfy **Outputs** sidebar tab (**Browse saved generations**). It lists media on `${COMFY_OUTPUT_DIR}` (container `/outputs`), skips `comfy-user` / `custom-nodes-user` / `input` / `temp`, and is a thumbnail browser — not only a path list:
+
+- **Grid** (default, reflowing `auto-fill`) or **List**, with an adjustable thumbnail size (80–280px, persisted)
+- Multi-select (checkbox, Shift-click range, Ctrl/Cmd-click, Select all) and bulk **Delete** / **Copy to input** / **Download** / **Copy paths**
+- Stills use Comfy `/view?preview=webp;80` thumbs; video plays on hover; double-click opens a lightbox
+- **Use as start image** copies into `/inputs` and sets `LoadImage.image` (then `EZOptionalImage.filename`); audio sets `LoadAudio.audio`
+
+Comfy History is in-memory and empty after `start`; these files persist. Sort, view, and thumb size live in `localStorage`. Routes: `GET /ez_outputs/list` (`truncated` when the 500-file cap clips), `POST /ez_outputs/delete`, `POST /ez_outputs/to-input`. Bodies accept a single `rel` or a `rels` list. Path traversal and non-media files are refused.
 
 ---
 

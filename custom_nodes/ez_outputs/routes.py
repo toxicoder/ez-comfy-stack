@@ -2,7 +2,7 @@
 
 Hermetic import: aiohttp / ``server.PromptServer`` are optional. Tests call
 :func:`handle_list`, :func:`handle_delete`, and :func:`handle_to_input`
-with plain dicts.
+with plain dicts. Delete and copy accept a single ``rel`` or a ``rels`` list.
 """
 
 from __future__ import annotations
@@ -12,7 +12,9 @@ from typing import Any
 
 from .catalog import (
     CatalogError,
+    copy_many_to_input,
     copy_to_input,
+    delete_many,
     delete_output,
     input_root,
     list_outputs,
@@ -33,6 +35,29 @@ def _json_ok(payload: dict[str, Any], *, status: int = 200) -> tuple[int, dict[s
     return status, payload
 
 
+def rels_from_args(args: dict[str, Any]) -> list[str]:
+    """Collect ``rel`` or ``rels`` from a request body.
+
+    Prefers a non-empty ``rels`` list. Falls back to a single ``rel`` string
+    so ``ez_media_pick.js`` keeps working.
+
+    Args:
+        args: Body/query mapping.
+
+    Returns:
+        Relative paths (may be empty).
+    """
+    raw = args.get("rels")
+    if isinstance(raw, list):
+        found = [str(item).strip() for item in raw if str(item).strip()]
+        if found:
+            return found
+    if isinstance(raw, str) and raw.strip():
+        return [raw.strip()]
+    rel = str(args.get("rel") or "").strip()
+    return [rel] if rel else []
+
+
 def handle_list(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, dict[str, Any]]:
     """List media files.
 
@@ -41,7 +66,7 @@ def handle_list(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, 
         root: Output root override for tests.
 
     Returns:
-        ``(200, {items})``.
+        ``(200, {items, truncated, count})``.
     """
     base = output_directory() if root is None else root
     kind = str(args.get("kind") or "all")
@@ -50,27 +75,42 @@ def handle_list(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, 
         limit = int(args.get("limit") or 0)
     except (TypeError, ValueError):
         limit = 0
-    items = list_outputs(base, kind=kind, query=query, limit=limit or 500)
-    return _json_ok({"items": items})
+    cap = limit if limit > 0 else 500
+    items = list_outputs(base, kind=kind, query=query, limit=cap + 1)
+    truncated = len(items) > cap
+    clipped = items[:cap]
+    return _json_ok({"items": clipped, "truncated": truncated, "count": len(clipped)})
 
 
 def handle_delete(args: dict[str, Any], *, root: Any | None = None) -> tuple[int, dict[str, Any]]:
-    """Delete one media file.
+    """Delete one media file, or many when ``rels`` is a list.
 
     Args:
-        args: Body/query with ``rel``.
+        args: Body/query with ``rel`` or ``rels``.
         root: Output root override for tests.
 
     Returns:
-        ``(200, {ok, rel})`` or ``(400, {error})``.
+        Single: ``(200, {ok, rel})`` or ``(400, {error})``.
+        Bulk: ``(200, {ok, deleted, errors})`` when any succeeded, else 400.
     """
     base = output_directory() if root is None else root
-    rel = str(args.get("rel") or "")
+    rels = rels_from_args(args)
+    if len(rels) <= 1:
+        rel = rels[0] if rels else str(args.get("rel") or "")
+        try:
+            delete_output(base, rel)
+        except CatalogError as exc:
+            return _json_ok({"error": str(exc)}, status=400)
+        return _json_ok({"ok": True, "rel": rel})
     try:
-        delete_output(base, rel)
+        deleted, errors = delete_many(base, rels)
     except CatalogError as exc:
         return _json_ok({"error": str(exc)}, status=400)
-    return _json_ok({"ok": True, "rel": rel})
+    payload = {"ok": True, "deleted": deleted, "errors": errors}
+    if not deleted:
+        first = errors[0]["error"] if errors else "invalid output path"
+        return _json_ok({"error": first, "deleted": deleted, "errors": errors}, status=400)
+    return _json_ok(payload)
 
 
 def handle_to_input(
@@ -79,24 +119,35 @@ def handle_to_input(
     root: Any | None = None,
     input_dir: Any | None = None,
 ) -> tuple[int, dict[str, Any]]:
-    """Copy one media file into the LoadImage input directory.
+    """Copy one media file (or many) into the LoadImage input directory.
 
     Args:
-        args: Body/query with ``rel``.
+        args: Body/query with ``rel`` or ``rels``.
         root: Output root override for tests.
         input_dir: Input directory override for tests.
 
     Returns:
-        ``(200, {ok, name})`` or ``(400, {error})``.
+        Single: ``(200, {ok, name})`` or ``(400, {error})``.
+        Bulk: ``(200, {ok, copied, errors})`` when any succeeded, else 400.
     """
     base = output_directory() if root is None else root
     dest_root = input_root() if input_dir is None else input_dir
-    rel = str(args.get("rel") or "")
+    rels = rels_from_args(args)
+    if len(rels) <= 1:
+        rel = rels[0] if rels else str(args.get("rel") or "")
+        try:
+            dest = copy_to_input(base, rel, input_dir=dest_root)
+        except CatalogError as exc:
+            return _json_ok({"error": str(exc)}, status=400)
+        return _json_ok({"ok": True, "name": dest.name, "rel": dest.name})
     try:
-        dest = copy_to_input(base, rel, input_dir=dest_root)
+        copied, errors = copy_many_to_input(base, rels, input_dir=dest_root)
     except CatalogError as exc:
         return _json_ok({"error": str(exc)}, status=400)
-    return _json_ok({"ok": True, "name": dest.name, "rel": dest.name})
+    if not copied:
+        first = errors[0]["error"] if errors else "invalid output path"
+        return _json_ok({"error": first, "copied": copied, "errors": errors}, status=400)
+    return _json_ok({"ok": True, "copied": copied, "errors": errors})
 
 
 async def request_json(request: object) -> object:
