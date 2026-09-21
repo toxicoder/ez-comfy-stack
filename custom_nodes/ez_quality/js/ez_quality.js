@@ -3,6 +3,8 @@
  *
  * Nodes 2.0: writes widget.value (and widget.callback). Does not change size
  * or length. Custom freezes the last overlay. Lab restores the authored snapshot.
+ * Overlay-widget edits select custom and keep the new values. Prompt widgets
+ * are never overlaid. setWidgetValue writes only that widget's widgets_values slot.
  */
 import { app } from "../../scripts/app.js";
 
@@ -84,6 +86,13 @@ const applyingByGraph = new WeakMap();
 const defaulted = new WeakMap();
 const seedingByGraph = new WeakMap();
 const LAST_QUALITY_KEY = "ez-comfy.quality.last";
+const OVERLAY_WIDGET_NAMES = new Set([
+  "steps",
+  "cfg",
+  "unet_name",
+  "clip_name",
+  "vae_name",
+]);
 
 /**
  * Find a widget by name on a node.
@@ -595,8 +604,11 @@ function setWidgetValue(node, widget, value) {
     return;
   }
   widget.value = value;
-  if (node?.widgets) {
-    node.widgets_values = node.widgets.map((item) => item.value);
+  if (Array.isArray(node?.widgets_values) && node.widgets) {
+    const idx = node.widgets.indexOf(widget);
+    if (idx >= 0) {
+      node.widgets_values[idx] = value;
+    }
   }
   if (typeof widget.callback === "function") {
     widget.callback(value, app.canvas, node);
@@ -829,6 +841,103 @@ function applyQuality(choice, qualityNode) {
 }
 
 /**
+ * Select Quality custom so Queue keeps live overlay-widget values.
+ * Skips overlay/seed writes. Does not persist custom as last named Quality.
+ * @param {object|undefined} graph
+ * @returns {void}
+ */
+function freezeQualityToCustom(graph) {
+  if (!graph || applyingByGraph.get(graph) || seedingByGraph.get(graph)) {
+    return;
+  }
+  for (const node of graph.nodes || []) {
+    if (node.type !== "EZQuality" && node.comfyClass !== "EZQuality") {
+      continue;
+    }
+    const widget = widgetByName(node, "quality");
+    if (!widget) {
+      continue;
+    }
+    if (normalizeQuality(widget.value) === QUALITY_CUSTOM) {
+      return;
+    }
+    setWidgetValue(node, widget, QUALITY_CUSTOM);
+    return;
+  }
+}
+
+/**
+ * True when this widget is a Quality overlay field on this node.
+ * @param {object} node
+ * @param {object|undefined} widget
+ * @returns {boolean}
+ */
+function isOverlayWidget(node, widget) {
+  const name = widget?.name;
+  if (!name) {
+    return false;
+  }
+  if (OVERLAY_WIDGET_NAMES.has(name)) {
+    return true;
+  }
+  const ntype = node?.comfyClass || node?.type || "";
+  return name === "type" && ntype === "CLIPLoader";
+}
+
+/**
+ * Chain a user-edit callback so overlay-widget changes freeze Quality.
+ * @param {object} node
+ * @param {object|undefined} widget
+ * @returns {void}
+ */
+function bindOverlayWidget(node, widget) {
+  if (!widget || widget._ezQualityWatch || !isOverlayWidget(node, widget)) {
+    return;
+  }
+  const ntype = node?.comfyClass || node?.type || "";
+  if (ntype === "EZQuality") {
+    return;
+  }
+  widget._ezQualityWatch = true;
+  const prior = widget.callback;
+  /**
+   * Chain the prior callback then freeze Quality at custom.
+   * @returns {void}
+   */
+  widget.callback = function () {
+    if (typeof prior === "function") {
+      prior.apply(this, arguments);
+    }
+    freezeQualityToCustom(node.graph);
+  };
+}
+
+/**
+ * Bind overlay-widget watchers on one node.
+ * @param {object|undefined} node
+ * @returns {void}
+ */
+function bindOverlayWatchersForNode(node) {
+  if (!node?.widgets) {
+    return;
+  }
+  for (const widget of node.widgets) {
+    bindOverlayWidget(node, widget);
+  }
+}
+
+/**
+ * Bind overlay-widget watchers on every node of a graph.
+ * @param {object|undefined} graph
+ * @returns {void}
+ */
+function bindOverlayWatchers(graph) {
+  for (const node of graph?.nodes || []) {
+    bindOverlayWatchersForNode(node);
+  }
+}
+
+/**
  * Bind the quality combo once so changes and Queue apply the overlay.
  * @param {object} node
  * @returns {void}
@@ -925,6 +1034,7 @@ function bindAll() {
   if (fresh || !snapshots.has(graph)) {
     snapshotGraph(graph);
   }
+  bindOverlayWatchers(graph);
   for (const node of graph.nodes || []) {
     if (node.type === "EZQuality" || node.comfyClass === "EZQuality") {
       bindQualityNode(node);
@@ -963,6 +1073,7 @@ app.registerExtension({
     nodeType.prototype.onNodeCreated = function () {
       onNodeCreated?.apply(this, arguments);
       bindQualityNode(this);
+      bindOverlayWatchers(this.graph);
     };
   },
   /**
@@ -971,5 +1082,13 @@ app.registerExtension({
    */
   async afterConfigureGraph() {
     bindAll();
+  },
+  /**
+   * Watch overlay widgets when a node is created after graph load.
+   * @param {object} node
+   * @returns {void}
+   */
+  nodeCreated(node) {
+    bindOverlayWatchersForNode(node);
   },
 });

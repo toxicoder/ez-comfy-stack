@@ -626,6 +626,8 @@ def test_js_mirrors_preset_constants() -> None:
     assert QUALITY_CUSTOM in body
     assert "clip_name" in body
     assert VAE_SMALL in body
+    assert "freezeQualityToCustom" in body
+    assert "widgets_values[idx]" in body
 
 
 def test_custom_and_lab_are_noop() -> None:
