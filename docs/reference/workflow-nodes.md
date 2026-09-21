@@ -1039,6 +1039,25 @@ Catalog id.
 
 **How it affects generation:** Leave as stamped.
 
+### `EZCubicCondition` — Cubic or photo reference
+
+Attach the photo latent, or a block-study latent when the prompt rebuilds the place as cubes.
+
+!!! warning "Lab notes"
+
+    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world encodes a coarse cube picture of that photo instead, so Klein is not locked to photoreal surfaces.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `conditioning` | in | `CONDITIONING` | Positive CLIP conditioning before any reference. |
+| `latent` | in | `LATENT` | VAE encode of the snapped photograph. |
+| `image` | in | `IMAGE` | Snapped source still. |
+| `vae` | in | `VAE` | Flux.2 VAE. |
+| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
+| `CONDITIONING` | out | `CONDITIONING` | Conditioning with one reference latent. |
+
+No widgets. Sockets only.
+
 ### `EZDCCLoadGuideStill` — Load guide still
 
 Load clay/depth/canny/first/last from guides/<slug>/<shot_id>/. Fail-closed QC.
@@ -1829,7 +1848,7 @@ Allocate an empty Flux.2 latent matching a still's snapped width and height.
 
 !!! warning "Lab notes"
 
-    stills/background-swap uses this as KSampler.latent_image so the encoded source is only a ReferenceLatent.
+    stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3989,6 +4008,23 @@ Type `STRING`.
 Catalog id.
 
 **How it affects generation:** Leave as stamped.
+
+### `EZReinsertPeople` — Reinsert people
+
+Paste detected people from the source photo onto a cubic rebuild.
+
+!!! warning "Lab notes"
+
+    stills/background-swap, between decode and match-to-source. Other prompts pass the plate through. Missing DeepLab weights fail soft (people stay cubed).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `plate` | in | `IMAGE` | Decoded still. |
+| `source` | in | `IMAGE` | Snapped photograph. |
+| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
+| `IMAGE` | out | `IMAGE` | Plate with people pasted when the prompt is a cube rebuild. |
+
+No widgets. Sockets only.
 
 ### `EZSamplePrompt` — Sample Prompt
 

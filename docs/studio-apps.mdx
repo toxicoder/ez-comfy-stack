@@ -128,7 +128,7 @@ Ship plates and ~5 s clips. Hide UNET/CLIP/VAE except **klein-still-daily**, **s
 | **motion/av/audio-to-video-8s** | ltx | Freeze a ~8 s wav; mux original audio. Prefix `ez_ltx_a2v` |
 | **stills/platform-pack** | klein | Six plates from one identity (`ez_pack_thumb` / ig / portrait / shorts / og / banner). Ctrl+B unused groups |
 | **stills/text-swap** | klein | `ez_text_swap` — replace lettering, lock type/angle/look, match source size |
-| **stills/background-swap** | klein | `ez_bg_swap` — replace backdrop, ground, and nearby set dressing; empty Flux.2 canvas + ReferenceLatent; match source size. Other/background character toggles |
+| **stills/background-swap** | klein | `ez_bg_swap` — replace backdrop, ground, and nearby set dressing; empty Flux.2 canvas; photo reference for place swaps; Cubic block world uses a block study and pastes people. Other/background character toggles |
 | **stills/background-edit** | klein | `ez_bg_edit` — restyle the environment in place (cartoon, add/remove, weather); match source size. Other/background character toggles |
 
 Creator plates (packshot, end-card, quote, food, bumper, B-roll, orbit, …) stay in the [catalog](studio-workflows.md). One hundred extra platform Apps live under `_lab/creator/` (YouTube channel art, IG 4:5, Pinterest 2:3, Twitch BRB, Spotify Canvas, merch mocks): [Creator pack](create/workflows-creator.md). Example chain: **creator/stills/instagram-portrait** → **creator/silent/instagram-story-loop** → **creator/av/instagram-reel-lifestyle**. Klein stills may use 1280×720; LTX feeders stay **1280×704**. Lab sizes match platform **aspect**; scale in an editor if a host wants more pixels.

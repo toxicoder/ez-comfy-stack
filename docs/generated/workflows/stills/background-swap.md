@@ -1,6 +1,6 @@
 ---
 title: "stills/background-swap"
-description: "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas plus ReferenceLatent. Replace environment including ground. Prefix ez_bg_swap."
+description: "Klein 4B background swap. LoadImage source still. Empty Flux.2 canvas. Photo reference for place swaps. Cubic block world uses a block study and pastes people"
 tags: [workflows, generated, comfyui, stills]
 ---
 
@@ -35,9 +35,10 @@ Other characters / Background characters (default on) treat companions and extra
 
 Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
-Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
+
+**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ## How to Queue
@@ -68,36 +69,43 @@ flowchart LR
   N18["Upscale still"]
   N19["Describe image"]
   N20["Encode snapped source"]
-  N21["Positive + source plate"]
+  N21["Cubic or photo reference"]
   N22["Snap to Klein grid"]
   N23["Match source size"]
   N24["Background cast"]
   N25["Check models"]
   N26["Empty Klein canvas"]
+  N27["Reinsert people"]
   N1 --> N7
   N2 --> N4
   N2 --> N5
   N3 --> N8
   N3 --> N20
+  N3 --> N21
   N4 --> N21
   N5 --> N7
   N7 --> N8
-  N8 --> N23
+  N8 --> N27
   N11 --> N22
   N11 --> N23
   N11 --> N19
   N12 --> N4
   N12 --> N13
+  N12 --> N21
+  N12 --> N27
   N13 --> N5
+  N18 --> N9
   N19 --> N12
   N20 --> N21
   N21 --> N7
   N22 --> N20
   N22 --> N26
+  N22 --> N21
+  N22 --> N27
   N23 --> N18
-  N18 --> N9
   N24 --> N12
   N26 --> N7
+  N27 --> N23
 ```
 
 ## Nodes on this graph
@@ -120,12 +128,13 @@ flowchart LR
 | 18 | Upscale still | `EZImageUpscale` | OUTPUT |
 | 19 | Describe image | `EZImageDescribe` | INPUT |
 | 20 | Encode snapped source | `VAEEncode` | SETTINGS |
-| 21 | Positive + source plate | `ReferenceLatent` | SETTINGS |
+| 21 | Cubic or photo reference | `EZCubicCondition` | SETTINGS |
 | 22 | Snap to Klein grid | `EZSnapImage` | SETTINGS |
 | 23 | Match source size | `EZMatchImageSize` | SETTINGS |
 | 24 | Background cast | `EZBackgroundCast` | SETTINGS |
 | 25 | Check models | `EZModelCheck` | QUALITY |
 | 26 | Empty Klein canvas | `EZEmptyFlux2FromImage` | SETTINGS |
+| 27 | Reinsert people | `EZReinsertPeople` | SETTINGS |
 
 ## Node parameter reference
 
@@ -519,9 +528,10 @@ Other characters / Background characters (default on) treat companions and extra
 
 Do not Queue without a start image. Describe image (default on) captions the source so CLIP can name inventory; missing `download-llm --tier describe` fail-softs empty. Upscale (default none) is lanczos after decode.
 
-The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is only the ReferenceLatent (identity), not the denoise start. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
+The sampler canvas is an empty Flux.2 latent of the snapped source size. VAEEncode of the snapped source is the photo reference for ordinary place swaps. Occupancy: klein — stop Wan, LTX, podcast, music. One GB10 job.
 Prompt enhance is on by default for bare place names (on-box Qwen3-4B-Instruct-2507). Named samples skip the rewriter so Cubic block world and the place recipes reach CLIP as written. Style is hidden — the source still owns the subject's look.
-Cubic block world rebuilds this photographed place as cubes, not a generic cube biome. Stubborn plates: Quality **High** (Klein base if `download-image --tier base` is on disk).
+
+**Cubic block world** does not edit the photograph in place. Klein sees a coarse block study of this photo (same camera and layout, cube faces) and rebuilds that study as a constructed block world. Detected people are pasted back from the source pixels (every person the mask catches; animals stay cubed). Other / background character toggles still apply to the other place samples. The person segmenter is BSD-3 DeepLabV3, optional, under `${MODELS_DIR}/comfy/ez-person/` (not part of `download-models`). Missing weights still save the block world; people stay cubed. Set `EZ_PERSON_MASK=off` to skip the paste. If the plate is only the flat study, set Quality **High** (Klein base if `download-image --tier base` is on disk).
 ```
 
 ### `LoadImage` — Load Image
@@ -1122,19 +1132,22 @@ Encode pixels to a latent (Klein edit / clay).
 
 No widgets. Sockets only.
 
-### `ReferenceLatent` — Reference Latent
+### `EZCubicCondition` — Cubic or photo reference
 
-Pack an encoded image latent into positive conditioning (Klein edit).
+Attach the photo latent, or a block-study latent when the prompt rebuilds the place as cubes.
 
 !!! warning "Lab notes"
 
-    character-tweak, clay, dream-house-clay, before-after, time-of-day edits. denoise on those KSamplers stays 1.0; the reference owns structure.
+    stills/background-swap. Ordinary place swaps keep the encoded photo. Cubic block world encodes a coarse cube picture of that photo instead, so Klein is not locked to photoreal surfaces.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `conditioning` | in | `CONDITIONING` | Positive CLIP cond. |
-| `latent` | in | `LATENT` | VAE-encoded start still. |
-| `CONDITIONING` | out | `CONDITIONING` | Positive with reference latent attached. |
+| `conditioning` | in | `CONDITIONING` | Positive CLIP conditioning before any reference. |
+| `latent` | in | `LATENT` | VAE encode of the snapped photograph. |
+| `image` | in | `IMAGE` | Snapped source still. |
+| `vae` | in | `VAE` | Flux.2 VAE. |
+| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
+| `CONDITIONING` | out | `CONDITIONING` | Conditioning with one reference latent. |
 
 No widgets. Sockets only.
 
@@ -1225,11 +1238,28 @@ Allocate an empty Flux.2 latent matching a still's snapped width and height.
 
 !!! warning "Lab notes"
 
-    stills/background-swap uses this as KSampler.latent_image so the encoded source is only a ReferenceLatent.
+    stills/background-swap uses this as KSampler.latent_image. The encoded source is a reference (photo, or a block study for Cubic block world), not the denoise start.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `image` | in | `IMAGE` | Snapped still. |
 | `LATENT` | out | `LATENT` | Empty Flux.2 noise canvas (÷16, 128 channels). |
+
+No widgets. Sockets only.
+
+### `EZReinsertPeople` — Reinsert people
+
+Paste detected people from the source photo onto a cubic rebuild.
+
+!!! warning "Lab notes"
+
+    stills/background-swap, between decode and match-to-source. Other prompts pass the plate through. Missing DeepLab weights fail soft (people stay cubed).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `plate` | in | `IMAGE` | Decoded still. |
+| `source` | in | `IMAGE` | Snapped photograph. |
+| `prompt` | in | `STRING` | Enhance STRING. A link, not an App widget. |
+| `IMAGE` | out | `IMAGE` | Plate with people pasted when the prompt is a cube rebuild. |
 
 No widgets. Sockets only.

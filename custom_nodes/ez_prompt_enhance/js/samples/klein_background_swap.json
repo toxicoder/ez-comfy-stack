@@ -497,6 +497,6 @@
   {
     "id": "voxel-block-world",
     "label": "Cubic block world",
-    "prompt": "Keep the subject from the reference \u2014 same face, body, wardrobe, and pose. Rebuild this photographed place as voxel art: axis-aligned unit cubes, cubic voxels, limited palette, square albedo and a visible texel grid on every backdrop, sky, building, tree, water, floor, and prop. Cube water, stacked block facades, cube canopies, cube tiles under every sole so people stand inserted in the block world. Match scale and wrap light. Original characters only. Empty of new lettering."
+    "prompt": "Rebuild this photographed place as a constructed cubic block world. Same camera, horizon, and inventory. The reference is a coarse block study of that place. Rebuild every backdrop, sky, building, tree, water, floor, and prop as large axis-aligned cubes with visible tops and sides, square faces, and a coarse texel grid. Stacked block walls, cube canopies, cube water, cube tiles under every sole. Person-shaped regions become the cube surfaces behind those people. Empty of new lettering."
   }
 ]

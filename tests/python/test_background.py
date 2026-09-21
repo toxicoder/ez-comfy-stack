@@ -103,20 +103,32 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
         for item in load_catalog("klein_background_swap")
         if item.id == "voxel-block-world"
     )
-    assert is_background_instruction(cubic.prompt)
+    assert not is_background_instruction(cubic.prompt)
     assert is_reconstruction(cubic.prompt)
     cubic_wrap = wrap_background_prompt(cubic.prompt, "background_swap")
     assert cubic_wrap.startswith(cubic.prompt)
+    assert VOXEL_TRAILER in cubic_wrap
     assert OTHER_ON in cubic_wrap
     assert CROWD_ON in cubic_wrap
     assert "with: Keep the subject" not in cubic_wrap
     assert SWAP_BARE.format(place=cubic.prompt) not in cubic_wrap
+    assert RECONSTRUCT_BARE.format(place=cubic.prompt) not in cubic_wrap
     cubes = wrap_background_prompt("voxel cubes", "background_swap")
     assert cubes.startswith(RECONSTRUCT_BARE.format(place="voxel cubes"))
+    assert "minecraft" not in cubes.casefold()
+    branded = wrap_background_prompt("minecraft harbor", "background_swap")
+    assert "minecraft" not in branded.casefold()
+    assert "mojang" not in wrap_background_prompt("Mojang plaza", "background_swap").casefold()
+    assert "cubic" in branded.casefold()
     assert VOXEL_TRAILER in wrap_background_prompt(
         "Keep the subject from the reference. Rebuild this place as a block world.",
         "background_swap",
     )
+    already = wrap_background_prompt(
+        "Rebuild this photographed place with cubic voxels already named.",
+        "background_swap",
+    )
+    assert already.count("cubic voxels") == 1
     assert strengthen_swap_instruction("") == ""
     assert strengthen_swap_instruction("fog harbor") == "fog harbor"
     assert is_reconstruction("") is False
@@ -204,6 +216,15 @@ def test_klein_background_modes_wrap_before_enhance() -> None:
     assert cubic.prompt in text
     assert "Source still: wet dock, red coat, unmarked hull" in text
     assert packed["ui"]["passthrough"][0] == REASON_PRECISE_BACKGROUND
+    with patch.object(client, "complete", return_value=("rewritten-cubes", None)) as mock:
+        bare = klein.run("voxel cubes", True, "background_swap", "match the source still", "none")
+    mock.assert_not_called()
+    assert bare["result"][0].startswith(RECONSTRUCT_BARE.format(place="voxel cubes"))
+    assert bare["ui"]["passthrough"][0] == REASON_PRECISE_BACKGROUND
+    with patch.object(client, "complete", return_value=("rewritten-brand", None)) as mock:
+        brand = klein.run("minecraft", True, "background_swap", "match the source still", "none")
+    mock.assert_not_called()
+    assert "minecraft" not in brand["result"][0].casefold()
     off = klein.run(
         cubic.prompt,
         False,
@@ -233,6 +254,7 @@ def test_background_cast_node_and_mode_combo() -> None:
     assert "cinema rack" not in swap.lower()
     swap_l = swap.lower()
     assert "photographed place" in swap_l
+    assert "block study" in swap_l
     assert "texel" in swap_l or "texture-pack" in swap_l
     assert "generic cube biome" in swap_l
     assert "minecraft" not in swap_l

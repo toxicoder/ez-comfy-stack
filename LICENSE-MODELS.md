@@ -20,6 +20,7 @@ Policy: US-based casual creators (YouTube, client shorts, ads under a small LLC)
 | TRELLIS.2 native | Comfy-Org/TRELLIS.2 | MIT | Yes | Yes | none | MIT NOTICE | No extra ban beyond MIT. No nvdiffrast/nvdiffrec | No |
 | DINOv3 ViT-L (TRELLIS companion) | Comfy-Org/TRELLIS.2 (clip_vision) | DINOv3 License | Yes | Yes if you comply with the DINOv3 license | none | DINOv3 LICENSE with the pack | card | No |
 | DA3-BASE | depth-anything/DA3-BASE | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
+| DeepLabV3 ResNet50 person mask | pytorch/vision (deeplabv3_resnet50 COCO-with-VOC) | BSD-3 | Yes | Yes | none | BSD NOTICE if you redistribute weights | No extra ban beyond BSD | No |
 | Wan 2.1 VACE 1.3B | Wan-AI/Wan2.1-VACE-1.3B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | Wan 2.2 S2V 14B | Wan-AI/Wan2.2-S2V-14B | Apache 2.0 | Yes | Yes | none | Apache NOTICE if you redistribute weights | No extra ban beyond Apache | No |
 | SuperSplat | playcanvas/supersplat | MIT | Yes | Yes | none | MIT | Host static viewer. Not in Dockerfile | No |
