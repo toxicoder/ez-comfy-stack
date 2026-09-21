@@ -12,6 +12,8 @@
 # Safety: Read-only source scan.
 
 set -euo pipefail
+# ASCII function names; keep comm and sort in the same order on every runner.
+export LC_ALL=C
 
 # shellcheck source=repo_root.sh disable=SC1091
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/repo_root.sh"
@@ -37,6 +39,25 @@ list_production_functions() {
 }
 
 #######################################
+# Identifiers named under tests/, comments stripped.
+# Globals:
+#   None
+# Arguments:
+#   None
+# Outputs:
+#   Sorted unique identifiers, one per line
+# Returns:
+#   0
+#######################################
+list_test_identifiers() {
+  # One scan. A per-function grep of this blob exceeds the 60s CI timeout.
+  grep -hvE '^[[:space:]]*(#|//)' \
+    tests/bats/*.bats tests/bats/*.bash tests/python/*.py tests/*.sh 2>/dev/null |
+    grep -hoE '[A-Za-z_][A-Za-z0-9_]*' |
+    sort -u || true
+}
+
+#######################################
 # Fail when a production function is not named under tests/.
 # Globals:
 #   None
@@ -49,31 +70,15 @@ list_production_functions() {
 #######################################
 main() {
   echo "=== Shell function inventory (strict: must appear under tests/) ==="
-  local funcs missing f
-  funcs="$(list_production_functions)"
-  local test_blob
-  # Strip full-line comments so a name that appears only in a comment does not count.
-  test_blob="$(
-    grep -hvE '^[[:space:]]*(#|//)' tests/bats/*.bats tests/bats/*.bash tests/python/*.py tests/*.sh 2>/dev/null || true
-  )"
-  missing=""
-  while IFS= read -r f; do
-    [[ -z ${f} ]] && continue
-    case "${f}" in
-      main) continue ;;
-    esac
-    if ! grep -qE "\\b${f}\\b" <<<"${test_blob}"; then
-      missing="${missing}${f}"$'\n'
-    fi
-  done <<<"${funcs}"
-
+  local funcs missing count
+  funcs="$(list_production_functions | grep -vx 'main' || true)"
+  missing="$(comm -23 <(printf '%s\n' "${funcs}") <(list_test_identifiers))"
   if [[ -n ${missing} ]]; then
     echo "Untested shell functions (not referenced under tests/):" >&2
-    printf '%s' "${missing}" >&2
+    printf '%s\n' "${missing}" >&2
     return 1
   fi
-  local count
-  count="$(echo "${funcs}" | grep -c . || true)"
+  count="$(printf '%s\n' "${funcs}" | grep -c . || true)"
   echo "All ${count} production shell functions referenced under tests/."
 }
 
