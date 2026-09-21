@@ -74,6 +74,7 @@ const SAVE_TYPES = new Set([
   "SaveAudio",
   "SaveAudioMP3",
   "EZFilmConcat",
+  "EZClipConcat",
   "EZAlbumPack",
   "EZAudioMetadata",
 ]);

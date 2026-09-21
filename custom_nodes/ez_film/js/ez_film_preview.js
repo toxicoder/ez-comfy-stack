@@ -1,12 +1,14 @@
 /**
- * EZFilmConcat frontend: overlay a downloadable film MP4 after Queue.
+ * EZFilmConcat / EZClipConcat frontend: overlay a downloadable MP4 after Queue.
  *
  * Nodes 2.0: DOM overlay via document.createElement. Does not touch LiteGraph
- * canvas drawing or require inputEl.
+ * canvas drawing or require inputEl. Overlay chrome is identical; only the
+ * ready title differs so films stay "Film ready".
  */
 import { app } from "../../scripts/app.js";
 
 const OVERLAY_ID = "ez-film-preview-overlay";
+const PREVIEW_TYPES = new Set(["EZFilmConcat", "EZClipConcat"]);
 
 /**
  * First VHS gif payload with a filename, or null.
@@ -40,7 +42,7 @@ function viewUrl(item) {
 }
 
 /**
- * Reuse or create the fixed film-ready overlay element.
+ * Reuse or create the fixed play/download overlay element.
  * @returns {HTMLElement}
  */
 function ensureOverlay() {
@@ -51,7 +53,6 @@ function ensureOverlay() {
   el = document.createElement("div");
   el.id = OVERLAY_ID;
   el.setAttribute("role", "dialog");
-  el.setAttribute("aria-label", "Film ready");
   el.style.cssText = [
     "position:fixed",
     "right:16px",
@@ -72,15 +73,18 @@ function ensureOverlay() {
 /**
  * Fill the overlay with a video player and download link.
  * @param {object} item
+ * @param {string} heading
  * @returns {void}
  */
-function renderOverlay(item) {
+function renderOverlay(item, heading) {
   const el = ensureOverlay();
+  // Singleton overlay: restamp aria-label so clip vs film titles do not stick.
+  el.setAttribute("aria-label", heading);
   const src = viewUrl(item);
   const name = item.filename;
   el.innerHTML = "";
   const title = document.createElement("div");
-  title.textContent = "Film ready";
+  title.textContent = heading;
   title.style.cssText = "font-weight:600;margin-bottom:8px";
   const video = document.createElement("video");
   video.controls = true;
@@ -109,15 +113,16 @@ function renderOverlay(item) {
 app.registerExtension({
   name: "ez_film.preview",
   /**
-   * Wrap EZFilmConcat so Queue shows a 90s film overlay.
+   * Wrap EZFilmConcat / EZClipConcat so Queue shows a play/download overlay.
    * @param {object} nodeType
    * @param {object} nodeData
    * @returns {Promise<void>}
    */
   async beforeRegisterNodeDef(nodeType, nodeData) {
-    if (nodeData.name !== "EZFilmConcat") {
+    if (!PREVIEW_TYPES.has(nodeData.name)) {
       return;
     }
+    const heading = nodeData.name === "EZClipConcat" ? "Clip chain ready" : "Film ready";
     const onExecuted = nodeType.prototype.onExecuted;
     /**
      * Show the overlay when the concat node returns a gif payload.
@@ -128,7 +133,7 @@ app.registerExtension({
       onExecuted?.apply(this, arguments);
       const item = firstGif(message);
       if (item) {
-        renderOverlay(item);
+        renderOverlay(item, heading);
       }
     };
   },

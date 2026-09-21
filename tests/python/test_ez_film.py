@@ -126,9 +126,22 @@ def test_pack_imports_without_comfy() -> None:
     js = ROOT / "custom_nodes" / "ez_film" / "js" / "ez_film_preview.js"
     body = js.read_text(encoding="utf-8")
     assert "EZFilmConcat" in body
+    assert "EZClipConcat" in body
     assert "onExecuted" in body
     assert "Film ready" in body
+    assert "Clip chain ready" in body
+    assert 'const PREVIEW_TYPES = new Set(["EZFilmConcat", "EZClipConcat"]);' in body
+    assert (
+        'nodeData.name === "EZClipConcat" ? "Clip chain ready" : "Film ready"'
+        in body
+    )
     assert "download" in body.lower()
+    studio = (
+        ROOT / "custom_nodes" / "ez_studio_app" / "js" / "ez_studio_app.js"
+    ).read_text(encoding="utf-8")
+    save_types = studio.split("const SAVE_TYPES = new Set([", 1)[1].split("]);", 1)[0]
+    assert '"EZFilmConcat"' in save_types
+    assert '"EZClipConcat"' in save_types
 
 
 def test_write_disclosure_sidecar(tmp_path: Path) -> None:
