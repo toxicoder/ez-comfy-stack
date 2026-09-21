@@ -844,6 +844,82 @@ Short-form hook.
 
 **How it affects generation:** Platform-agnostic hook grammar. Catalog under generated/cinema.
 
+### `EZClipConcat` — Save clip chain (MP4)
+
+Concat 1–24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.
+
+!!! warning "Lab notes"
+
+    clip_01 required; clip_02…24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ≈ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `clip_01` | in | `VHS_FILENAMES` | First clip MP4. |
+| `clip_02` | in | `VHS_FILENAMES` | Clip 02 MP4 (optional). |
+| `clip_03` | in | `VHS_FILENAMES` | Clip 03 MP4 (optional). |
+| `clip_04` | in | `VHS_FILENAMES` | Clip 04 MP4 (optional). |
+| `clip_05` | in | `VHS_FILENAMES` | Clip 05 MP4 (optional). |
+| `clip_06` | in | `VHS_FILENAMES` | Clip 06 MP4 (optional). |
+| `clip_07` | in | `VHS_FILENAMES` | Clip 07 MP4 (optional). |
+| `clip_08` | in | `VHS_FILENAMES` | Clip 08 MP4 (optional). |
+| `clip_09` | in | `VHS_FILENAMES` | Clip 09 MP4 (optional). |
+| `clip_10` | in | `VHS_FILENAMES` | Clip 10 MP4 (optional). |
+| `clip_11` | in | `VHS_FILENAMES` | Clip 11 MP4 (optional). |
+| `clip_12` | in | `VHS_FILENAMES` | Clip 12 MP4 (optional). |
+| `clip_13` | in | `VHS_FILENAMES` | Clip 13 MP4 (optional). |
+| `clip_14` | in | `VHS_FILENAMES` | Clip 14 MP4 (optional). |
+| `clip_15` | in | `VHS_FILENAMES` | Clip 15 MP4 (optional). |
+| `clip_16` | in | `VHS_FILENAMES` | Clip 16 MP4 (optional). |
+| `clip_17` | in | `VHS_FILENAMES` | Clip 17 MP4 (optional). |
+| `clip_18` | in | `VHS_FILENAMES` | Clip 18 MP4 (optional). |
+| `clip_19` | in | `VHS_FILENAMES` | Clip 19 MP4 (optional). |
+| `clip_20` | in | `VHS_FILENAMES` | Clip 20 MP4 (optional). |
+| `clip_21` | in | `VHS_FILENAMES` | Clip 21 MP4 (optional). |
+| `clip_22` | in | `VHS_FILENAMES` | Clip 22 MP4 (optional). |
+| `clip_23` | in | `VHS_FILENAMES` | Clip 23 MP4 (optional). |
+| `clip_24` | in | `VHS_FILENAMES` | Clip 24 MP4 (optional). |
+| `disclosure` | in | `STRING` | EZFilmDisclosure text. |
+| `path` | out | `STRING` | Published MP4 path. |
+
+#### `prefix`
+
+Type `STRING`. Range / default: ez_clip_chain.
+
+Output filename stem.
+
+**How it affects generation:** Writes ez_clip_chain.mp4 under Comfy output. Rename if you Queue more than one chain.
+
+#### `cap_seconds`
+
+Type `FLOAT`. Range / default: 600 default, 1800 max.
+
+Fail-closed duration ceiling.
+
+**How it affects generation:** Not a pad target. 4×8 s is ~32 s. Past 24 stems use concat-shots.sh --files … --cap-seconds.
+
+#### `xfade_cs`
+
+Type `INT`. Range / default: 0–50; v1 must be 0.
+
+Audio acrossfade in centiseconds.
+
+**How it affects generation:** v1 raises unless 0 (hard cut). Widget stays for a later overlap-off acrossfade.
+
+### `EZClipLastFrame` — Last frame (IMAGE)
+
+Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.
+
+!!! warning "Lab notes"
+
+    Duration-safe. Do not hardcode ImageFromBatch 120 — legal last indices are 120 / 192 / 240 / 288.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded video batch. |
+| `last_frame` | out | `IMAGE` | Last frame (batch dim 1). |
+
+No widgets. Sockets only.
+
 ### `EZContextJoin` — Context Join
 
 Pack labeled desk fields into one context STRING for rewriter nodes.

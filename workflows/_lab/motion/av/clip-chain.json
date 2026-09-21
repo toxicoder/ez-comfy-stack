@@ -1,0 +1,5106 @@
+{
+  "id": "clip-chain",
+  "revision": 2,
+  "last_node_id": 233,
+  "last_link_id": 141,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        40.0,
+        80.0
+      ],
+      "size": [
+        520,
+        82
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            20,
+            55,
+            89,
+            123
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-22b-distilled-transformer-comfy-int8-convrot.safetensors",
+        "default"
+      ],
+      "title": "LTX-2.5 distilled INT8-convrot"
+    },
+    {
+      "id": 2,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        238
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            12,
+            27,
+            47,
+            62,
+            81,
+            96,
+            115,
+            130
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-video-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 video VAE"
+    },
+    {
+      "id": 3,
+      "type": "CLIPLoader",
+      "pos": [
+        40,
+        376
+      ],
+      "size": [
+        400,
+        110
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            5,
+            6,
+            40,
+            41,
+            74,
+            75,
+            108,
+            109
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "gemma4-12b-with-proj-ltx-2.5-comfy-int8-convrot.safetensors",
+        "ltxv",
+        "default"
+      ],
+      "title": "Gemma4-with-proj (ltxv)"
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        620.0,
+        80.0
+      ],
+      "size": [
+        320,
+        314
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ],
+      "title": "Start image"
+    },
+    {
+      "id": 13,
+      "type": "VAELoader",
+      "pos": [
+        40,
+        572
+      ],
+      "size": [
+        360,
+        58
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            3,
+            29,
+            64,
+            98,
+            132
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "ltx-2.5-audio-vae-bf16.safetensors"
+      ],
+      "title": "LTX-2.5 audio VAE"
+    },
+    {
+      "id": 14,
+      "type": "LTXVEmptyLatentAudio",
+      "pos": [
+        40,
+        702
+      ],
+      "size": [
+        300,
+        130
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Latent",
+          "type": "LATENT",
+          "links": [
+            19,
+            54,
+            88,
+            122
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVEmptyLatentAudio"
+      },
+      "widgets_values": [
+        193,
+        24.0,
+        1
+      ],
+      "title": "Empty LTX audio latent"
+    },
+    {
+      "id": 17,
+      "type": "Note",
+      "pos": [
+        40.0,
+        4480.0
+      ],
+      "size": [
+        960,
+        520
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four \u00d7 8 s sequential prints are tens of minutes on GB10 \u2014 not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5\u201324:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06\u2026).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` \u2192 new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` \u2192 the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n"
+      ],
+      "title": "Operator note \u2014 clip chain"
+    },
+    {
+      "id": 22,
+      "type": "EZQuality",
+      "pos": [
+        40.0,
+        -120.0
+      ],
+      "size": [
+        320.0,
+        82.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "quality",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZQuality"
+      },
+      "widgets_values": [
+        "lab"
+      ],
+      "title": "Quality"
+    },
+    {
+      "id": 23,
+      "type": "EZVideoFormat",
+      "pos": [
+        620,
+        1454
+      ],
+      "size": [
+        360,
+        180
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            14,
+            49,
+            83,
+            117
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            15,
+            50,
+            84,
+            118
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "hint",
+          "type": "STRING",
+          "links": [
+            35,
+            70,
+            104,
+            138
+          ],
+          "slot_index": 2
+        },
+        {
+          "name": "prefix",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 3
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZVideoFormat"
+      },
+      "widgets_values": [
+        "LTX-2.5",
+        "LTX \u00b7 16:9 YouTube (1280\u00d7704)",
+        1280,
+        704,
+        "Match input",
+        "8 seconds"
+      ],
+      "title": "Format / platform"
+    },
+    {
+      "id": 24,
+      "type": "EZImageDescribe",
+      "pos": [
+        620,
+        520
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "enable",
+          "type": "BOOLEAN",
+          "link": null,
+          "widget": {
+            "name": "enable"
+          }
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "name": "caption",
+          "type": "STRING",
+          "links": [
+            39
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZImageDescribe"
+      },
+      "widgets_values": [
+        false
+      ],
+      "title": "Describe image"
+    },
+    {
+      "id": 30,
+      "type": "EZDCCOccupancyGate",
+      "pos": [
+        988,
+        80
+      ],
+      "size": [
+        280,
+        90
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            2,
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZDCCOccupancyGate"
+      },
+      "widgets_values": [
+        "ltx"
+      ],
+      "title": "Occupancy gate (ltx)"
+    },
+    {
+      "id": 31,
+      "type": "PrimitiveNode",
+      "pos": [
+        620,
+        682
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            24,
+            59,
+            93,
+            127
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        42,
+        "fixed"
+      ],
+      "title": "Seed"
+    },
+    {
+      "id": 32,
+      "type": "PrimitiveNode",
+      "pos": [
+        620,
+        836
+      ],
+      "size": [
+        320,
+        82
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "BOOLEAN",
+          "type": "BOOLEAN",
+          "links": [
+            36,
+            71,
+            105,
+            139
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        true,
+        "fixed"
+      ],
+      "title": "Rewrite prompt"
+    },
+    {
+      "id": 33,
+      "type": "PrimitiveNode",
+      "pos": [
+        620,
+        990
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            37,
+            72,
+            106,
+            140
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "world SFX matching the start image, no score",
+        "fixed"
+      ],
+      "title": "Audio notes"
+    },
+    {
+      "id": 34,
+      "type": "PrimitiveNode",
+      "pos": [
+        620,
+        1222
+      ],
+      "size": [
+        420,
+        160
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            38,
+            73,
+            107,
+            141
+          ],
+          "widget": {
+            "name": "value"
+          },
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "PrimitiveNode"
+      },
+      "widgets_values": [
+        "",
+        "fixed"
+      ],
+      "title": "Logline / context"
+    },
+    {
+      "id": 40,
+      "type": "EZClipConcat",
+      "pos": [
+        40.0,
+        4100.0
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip_01",
+          "type": "VHS_FILENAMES",
+          "link": 34
+        },
+        {
+          "name": "clip_02",
+          "type": "VHS_FILENAMES",
+          "link": 69
+        },
+        {
+          "name": "clip_03",
+          "type": "VHS_FILENAMES",
+          "link": 103
+        },
+        {
+          "name": "clip_04",
+          "type": "VHS_FILENAMES",
+          "link": 137
+        },
+        {
+          "name": "clip_05",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_06",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_07",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_08",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_09",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_10",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_11",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_12",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_13",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_14",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_15",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_16",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_17",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_18",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_19",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_20",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_21",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_22",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_23",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "clip_24",
+          "type": "VHS_FILENAMES",
+          "link": null
+        },
+        {
+          "name": "disclosure",
+          "type": "STRING",
+          "link": 4,
+          "widget": {
+            "name": "disclosure"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZClipConcat"
+      },
+      "widgets_values": [
+        "ez_clip_chain",
+        600.0,
+        0
+      ],
+      "title": "Save clip chain (MP4) \u2014 play / download"
+    },
+    {
+      "id": 41,
+      "type": "EZFilmDisclosure",
+      "pos": [
+        508,
+        4100
+      ],
+      "size": [
+        420,
+        120
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZFilmDisclosure"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "LTX AI-media disclosure (end-card)"
+    },
+    {
+      "id": 109,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        1480.0,
+        80.0
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 109,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 35,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "image_desc",
+          "type": "STRING",
+          "link": 39
+        },
+        {
+          "name": "enhance",
+          "type": "BOOLEAN",
+          "link": 36,
+          "widget": {
+            "name": "enhance"
+          }
+        },
+        {
+          "name": "audio_notes",
+          "type": "STRING",
+          "link": 37,
+          "widget": {
+            "name": "audio_notes"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 38
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            7,
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        true,
+        "i2v",
+        "8 seconds, 24 fps",
+        "world SFX matching the start image, no score",
+        "none",
+        "motion/av/clip-chain"
+      ],
+      "title": "Beat 1"
+    },
+    {
+      "id": 100,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        80
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 100,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 7,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. The camera dollies in slowly toward the subject while fabric or foliage drifts. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
+      ],
+      "title": "Beat 1 prompt"
+    },
+    {
+      "id": 111,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        1480,
+        572
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 111,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Beat 1 negative enhance"
+    },
+    {
+      "id": 101,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        668
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 101,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 6
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 9,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Beat 1 negative"
+    },
+    {
+      "id": 102,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        2416,
+        80
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 102,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 10
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 11
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 12
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 13
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 14,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 15,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            16
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            17
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            18
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        704,
+        193,
+        1
+      ]
+    },
+    {
+      "id": 103,
+      "type": "LTXVConditioning",
+      "pos": [
+        2400,
+        376
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 103,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 16
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            21
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            22
+          ],
+          "slot_index": 1
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 106,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        2400,
+        530
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 106,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 18
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            23
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 104,
+      "type": "KSampler",
+      "pos": [
+        2784,
+        80
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 104,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 20
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 21
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 22
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 23
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": 24,
+          "widget": {
+            "name": "seed"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            25
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Beat 1 KSampler"
+    },
+    {
+      "id": 107,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        2760,
+        414
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 107,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            26
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            28
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 105,
+      "type": "VAEDecode",
+      "pos": [
+        3152,
+        80
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 105,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 26
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 27
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            30,
+            32
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 110,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        3152,
+        572
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 110,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 28
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            31
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
+    },
+    {
+      "id": 108,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        3440.0,
+        80.0
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 108,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 30
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 31,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": [
+            34
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_clip_b01_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Beat 1 video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 112,
+      "type": "EZClipLastFrame",
+      "pos": [
+        3152,
+        710
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 112,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 32
+        }
+      ],
+      "outputs": [
+        {
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": [
+            33,
+            48
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZClipLastFrame"
+      },
+      "widgets_values": [],
+      "title": "Beat 1 last frame"
+    },
+    {
+      "id": 113,
+      "type": "SaveImage",
+      "pos": [
+        3520,
+        612
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 113,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 33
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_clip_b01_last"
+      ],
+      "title": "Save beat 1 last frame"
+    },
+    {
+      "id": 149,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        1480,
+        1092
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 149,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 70,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "enhance",
+          "type": "BOOLEAN",
+          "link": 71,
+          "widget": {
+            "name": "enhance"
+          }
+        },
+        {
+          "name": "audio_notes",
+          "type": "STRING",
+          "link": 72,
+          "widget": {
+            "name": "audio_notes"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 73
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            42,
+            43
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "The start image holds as the first frame. The camera continues the slow dolly, then eases into a gentle pan as fabric or foliage keeps drifting. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        true,
+        "i2v",
+        "8 seconds, 24 fps",
+        "world SFX matching the start image, no score",
+        "none",
+        "motion/av/clip-chain"
+      ],
+      "title": "Beat 2"
+    },
+    {
+      "id": 140,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        1092
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 140,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 40
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 42,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            45
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. The camera continues the slow dolly, then eases into a gentle pan as fabric or foliage keeps drifting. Light wind and world SFX matching the start image sit under the action. Keep every object and surface from the start image; do not redesign. No music and no score."
+      ],
+      "title": "Beat 2 prompt"
+    },
+    {
+      "id": 151,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        1480,
+        1584
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 151,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 43
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            44
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Beat 2 negative enhance"
+    },
+    {
+      "id": 141,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        1680
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 141,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 41
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 44,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            46
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Beat 2 negative"
+    },
+    {
+      "id": 142,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        2416,
+        1092
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 142,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 45
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 46
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 47
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 48
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 49,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 50,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            51
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            52
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            53
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        704,
+        193,
+        1
+      ]
+    },
+    {
+      "id": 143,
+      "type": "LTXVConditioning",
+      "pos": [
+        2400,
+        1388
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 143,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 51
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 52
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            56
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            57
+          ],
+          "slot_index": 1
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 146,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        2400,
+        1542
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 146,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 53
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 54
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            58
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 144,
+      "type": "KSampler",
+      "pos": [
+        2784,
+        1092
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 144,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 55
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 56
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 57
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 58
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": 59,
+          "widget": {
+            "name": "seed"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            60
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Beat 2 KSampler"
+    },
+    {
+      "id": 147,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        2760,
+        1426
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 147,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 60
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            61
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            63
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 145,
+      "type": "VAEDecode",
+      "pos": [
+        3152,
+        1092
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 145,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 61
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 62
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            65,
+            67
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 150,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        3152,
+        1584
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 150,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 63
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 64
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            66
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
+    },
+    {
+      "id": 148,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        3440,
+        1092
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 148,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 65
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 66,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": [
+            69
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_clip_b02_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Beat 2 video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 152,
+      "type": "EZClipLastFrame",
+      "pos": [
+        3152,
+        1722
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 152,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 67
+        }
+      ],
+      "outputs": [
+        {
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": [
+            68,
+            82
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZClipLastFrame"
+      },
+      "widgets_values": [],
+      "title": "Beat 2 last frame"
+    },
+    {
+      "id": 153,
+      "type": "SaveImage",
+      "pos": [
+        3520,
+        1624
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 153,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 68
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_clip_b02_last"
+      ],
+      "title": "Save beat 2 last frame"
+    },
+    {
+      "id": 189,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        1480,
+        2104
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 189,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 104,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "enhance",
+          "type": "BOOLEAN",
+          "link": 105,
+          "widget": {
+            "name": "enhance"
+          }
+        },
+        {
+          "name": "audio_notes",
+          "type": "STRING",
+          "link": 106,
+          "widget": {
+            "name": "audio_notes"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 107
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            76,
+            77
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "The start image holds as the first frame. The subject continues the same action while the camera holds, then drifts a half-step closer. World SFX stay continuous with the previous beat. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        true,
+        "i2v",
+        "8 seconds, 24 fps",
+        "world SFX matching the start image, no score",
+        "none",
+        "motion/av/clip-chain"
+      ],
+      "title": "Beat 3"
+    },
+    {
+      "id": 180,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        2104
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 180,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 74
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 76,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            79
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. The subject continues the same action while the camera holds, then drifts a half-step closer. World SFX stay continuous with the previous beat. Keep every object and surface from the start image; do not redesign. No music and no score."
+      ],
+      "title": "Beat 3 prompt"
+    },
+    {
+      "id": 191,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        1480,
+        2596
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 191,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 77
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            78
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Beat 3 negative enhance"
+    },
+    {
+      "id": 181,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        2692
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 181,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 75
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 78,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            80
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Beat 3 negative"
+    },
+    {
+      "id": 182,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        2416,
+        2104
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 182,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 79
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 80
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 81
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 82
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 83,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 84,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            85
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            86
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            87
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        704,
+        193,
+        1
+      ]
+    },
+    {
+      "id": 183,
+      "type": "LTXVConditioning",
+      "pos": [
+        2400,
+        2400
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 183,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 85
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 86
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            90
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            91
+          ],
+          "slot_index": 1
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 186,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        2400,
+        2554
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 186,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 87
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 88
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            92
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 184,
+      "type": "KSampler",
+      "pos": [
+        2784,
+        2104
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 184,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 89
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 90
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 91
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 92
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": 93,
+          "widget": {
+            "name": "seed"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            94
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Beat 3 KSampler"
+    },
+    {
+      "id": 187,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        2760,
+        2438
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 187,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 94
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            95
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            97
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 185,
+      "type": "VAEDecode",
+      "pos": [
+        3152,
+        2104
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 185,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 95
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 96
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            99,
+            101
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 190,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        3152,
+        2596
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 190,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 97
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 98
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            100
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
+    },
+    {
+      "id": 188,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        3440,
+        2104
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 188,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 99
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 100,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": [
+            103
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_clip_b03_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Beat 3 video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 192,
+      "type": "EZClipLastFrame",
+      "pos": [
+        3152,
+        2734
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 192,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 101
+        }
+      ],
+      "outputs": [
+        {
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": [
+            102,
+            116
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZClipLastFrame"
+      },
+      "widgets_values": [],
+      "title": "Beat 3 last frame"
+    },
+    {
+      "id": 193,
+      "type": "SaveImage",
+      "pos": [
+        3520,
+        2636
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 193,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 102
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_clip_b03_last"
+      ],
+      "title": "Save beat 3 last frame"
+    },
+    {
+      "id": 229,
+      "type": "EZLTXPromptEnhance",
+      "pos": [
+        1480,
+        3116
+      ],
+      "size": [
+        420,
+        340
+      ],
+      "flags": {},
+      "order": 229,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "duration_hint",
+          "type": "STRING",
+          "link": 138,
+          "widget": {
+            "name": "duration_hint"
+          }
+        },
+        {
+          "name": "enhance",
+          "type": "BOOLEAN",
+          "link": 139,
+          "widget": {
+            "name": "enhance"
+          }
+        },
+        {
+          "name": "audio_notes",
+          "type": "STRING",
+          "link": 140,
+          "widget": {
+            "name": "audio_notes"
+          }
+        },
+        {
+          "name": "context",
+          "type": "STRING",
+          "link": 141
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            110,
+            111
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZLTXPromptEnhance"
+      },
+      "widgets_values": [
+        "custom",
+        "The start image holds as the first frame. Motion settles: the camera eases to a hold as fabric or foliage slows. World SFX stay under the action and fade slightly. Keep every object and surface from the start image; do not redesign. No music and no score.",
+        true,
+        "i2v",
+        "8 seconds, 24 fps",
+        "world SFX matching the start image, no score",
+        "none",
+        "motion/av/clip-chain"
+      ],
+      "title": "Beat 4"
+    },
+    {
+      "id": 220,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        3116
+      ],
+      "size": [
+        420,
+        140
+      ],
+      "flags": {},
+      "order": 220,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 108
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 110,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            113
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "The start image holds as the first frame. Motion settles: the camera eases to a hold as fabric or foliage slows. World SFX stay under the action and fade slightly. Keep every object and surface from the start image; do not redesign. No music and no score."
+      ],
+      "title": "Beat 4 prompt"
+    },
+    {
+      "id": 231,
+      "type": "EZNegativePromptEnhance",
+      "pos": [
+        1480,
+        3608
+      ],
+      "size": [
+        420,
+        280
+      ],
+      "flags": {},
+      "order": 231,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "STRING",
+          "link": 111
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            112
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZNegativePromptEnhance"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
+        true,
+        "ltx"
+      ],
+      "title": "Beat 4 negative enhance"
+    },
+    {
+      "id": 221,
+      "type": "CLIPTextEncode",
+      "pos": [
+        1948,
+        3704
+      ],
+      "size": [
+        420,
+        100
+      ],
+      "flags": {},
+      "order": 221,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 109
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 112,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            114
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text"
+      ],
+      "title": "Beat 4 negative"
+    },
+    {
+      "id": 222,
+      "type": "LTXVImgToVideo",
+      "pos": [
+        2416,
+        3116
+      ],
+      "size": [
+        320,
+        200
+      ],
+      "flags": {},
+      "order": 222,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 113
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 114
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 115
+        },
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 116
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "link": 117,
+          "widget": {
+            "name": "width"
+          }
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "link": 118,
+          "widget": {
+            "name": "height"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            119
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            120
+          ],
+          "slot_index": 1
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            121
+          ],
+          "slot_index": 2
+        }
+      ],
+      "title": "LTX Img\u2192Video condition",
+      "properties": {
+        "Node name for S&R": "LTXVImgToVideo"
+      },
+      "widgets_values": [
+        1280,
+        704,
+        193,
+        1
+      ]
+    },
+    {
+      "id": 223,
+      "type": "LTXVConditioning",
+      "pos": [
+        2400,
+        3412
+      ],
+      "size": [
+        280,
+        82
+      ],
+      "flags": {},
+      "order": 223,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 119
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 120
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            124
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            125
+          ],
+          "slot_index": 1
+        }
+      ],
+      "title": "LTX frame rate cond",
+      "properties": {
+        "Node name for S&R": "LTXVConditioning"
+      },
+      "widgets_values": [
+        24.0
+      ]
+    },
+    {
+      "id": 226,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        2400,
+        3566
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 226,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 121
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 122
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            126
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVConcatAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Concat AV latents"
+    },
+    {
+      "id": 224,
+      "type": "KSampler",
+      "pos": [
+        2784,
+        3116
+      ],
+      "size": [
+        320,
+        262
+      ],
+      "flags": {},
+      "order": 224,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 123
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 124
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 125
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 126
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "link": 127,
+          "widget": {
+            "name": "seed"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            128
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1.0,
+        "euler",
+        "simple",
+        1.0
+      ],
+      "title": "Beat 4 KSampler"
+    },
+    {
+      "id": 227,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        2760,
+        3450
+      ],
+      "size": [
+        280,
+        66
+      ],
+      "flags": {},
+      "order": 227,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 128
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            129
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            131
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVSeparateAVLatent"
+      },
+      "widgets_values": [],
+      "title": "Separate AV latents"
+    },
+    {
+      "id": 225,
+      "type": "VAEDecode",
+      "pos": [
+        3152,
+        3116
+      ],
+      "size": [
+        240,
+        46
+      ],
+      "flags": {},
+      "order": 225,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 129
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 130
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            133,
+            135
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAEDecode"
+      },
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 230,
+      "type": "LTXVAudioVAEDecode",
+      "pos": [
+        3152,
+        3608
+      ],
+      "size": [
+        320,
+        66
+      ],
+      "flags": {},
+      "order": 230,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 131
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 132
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Audio",
+          "type": "AUDIO",
+          "links": [
+            134
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LTXVAudioVAEDecode"
+      },
+      "widgets_values": [],
+      "title": "Audio VAE Decode"
+    },
+    {
+      "id": 228,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        3440,
+        3116
+      ],
+      "size": [
+        320,
+        420
+      ],
+      "flags": {},
+      "order": 228,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 133
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 134,
+          "shape": 7
+        },
+        {
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "link": null,
+          "shape": 7
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null,
+          "shape": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": [
+            137
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VHS_VideoCombine"
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "ez_clip_b04_ltx_video",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 18,
+        "save_metadata": true,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "title": "Beat 4 video (MP4) \u2014 open node for preview"
+    },
+    {
+      "id": 232,
+      "type": "EZClipLastFrame",
+      "pos": [
+        3152,
+        3746
+      ],
+      "size": [
+        280,
+        60
+      ],
+      "flags": {},
+      "order": 232,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 135
+        }
+      ],
+      "outputs": [
+        {
+          "name": "last_frame",
+          "type": "IMAGE",
+          "links": [
+            136
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZClipLastFrame"
+      },
+      "widgets_values": [],
+      "title": "Beat 4 last frame"
+    },
+    {
+      "id": 233,
+      "type": "SaveImage",
+      "pos": [
+        3520,
+        3648
+      ],
+      "size": [
+        280,
+        270
+      ],
+      "flags": {},
+      "order": 233,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 136
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ez_clip_b04_last"
+      ],
+      "title": "Save beat 4 last frame"
+    }
+  ],
+  "links": [
+    [
+      1,
+      4,
+      0,
+      30,
+      0,
+      "IMAGE"
+    ],
+    [
+      2,
+      30,
+      0,
+      24,
+      1,
+      "IMAGE"
+    ],
+    [
+      3,
+      13,
+      0,
+      14,
+      0,
+      "VAE"
+    ],
+    [
+      4,
+      41,
+      0,
+      40,
+      24,
+      "STRING"
+    ],
+    [
+      5,
+      3,
+      0,
+      100,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      3,
+      0,
+      101,
+      0,
+      "CLIP"
+    ],
+    [
+      7,
+      109,
+      0,
+      100,
+      1,
+      "STRING"
+    ],
+    [
+      8,
+      109,
+      0,
+      111,
+      0,
+      "STRING"
+    ],
+    [
+      9,
+      111,
+      0,
+      101,
+      1,
+      "STRING"
+    ],
+    [
+      10,
+      100,
+      0,
+      102,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      11,
+      101,
+      0,
+      102,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      12,
+      2,
+      0,
+      102,
+      2,
+      "VAE"
+    ],
+    [
+      13,
+      30,
+      0,
+      102,
+      3,
+      "IMAGE"
+    ],
+    [
+      14,
+      23,
+      0,
+      102,
+      4,
+      "INT"
+    ],
+    [
+      15,
+      23,
+      1,
+      102,
+      5,
+      "INT"
+    ],
+    [
+      16,
+      102,
+      0,
+      103,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      17,
+      102,
+      1,
+      103,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      18,
+      102,
+      2,
+      106,
+      0,
+      "LATENT"
+    ],
+    [
+      19,
+      14,
+      0,
+      106,
+      1,
+      "LATENT"
+    ],
+    [
+      20,
+      1,
+      0,
+      104,
+      0,
+      "MODEL"
+    ],
+    [
+      21,
+      103,
+      0,
+      104,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      22,
+      103,
+      1,
+      104,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      23,
+      106,
+      0,
+      104,
+      3,
+      "LATENT"
+    ],
+    [
+      24,
+      31,
+      0,
+      104,
+      4,
+      "INT"
+    ],
+    [
+      25,
+      104,
+      0,
+      107,
+      0,
+      "LATENT"
+    ],
+    [
+      26,
+      107,
+      0,
+      105,
+      0,
+      "LATENT"
+    ],
+    [
+      27,
+      2,
+      0,
+      105,
+      1,
+      "VAE"
+    ],
+    [
+      28,
+      107,
+      1,
+      110,
+      0,
+      "LATENT"
+    ],
+    [
+      29,
+      13,
+      0,
+      110,
+      1,
+      "VAE"
+    ],
+    [
+      30,
+      105,
+      0,
+      108,
+      0,
+      "IMAGE"
+    ],
+    [
+      31,
+      110,
+      0,
+      108,
+      1,
+      "AUDIO"
+    ],
+    [
+      32,
+      105,
+      0,
+      112,
+      0,
+      "IMAGE"
+    ],
+    [
+      33,
+      112,
+      0,
+      113,
+      0,
+      "IMAGE"
+    ],
+    [
+      34,
+      108,
+      0,
+      40,
+      0,
+      "VHS_FILENAMES"
+    ],
+    [
+      35,
+      23,
+      2,
+      109,
+      0,
+      "STRING"
+    ],
+    [
+      36,
+      32,
+      0,
+      109,
+      2,
+      "BOOLEAN"
+    ],
+    [
+      37,
+      33,
+      0,
+      109,
+      3,
+      "STRING"
+    ],
+    [
+      38,
+      34,
+      0,
+      109,
+      4,
+      "STRING"
+    ],
+    [
+      39,
+      24,
+      0,
+      109,
+      1,
+      "STRING"
+    ],
+    [
+      40,
+      3,
+      0,
+      140,
+      0,
+      "CLIP"
+    ],
+    [
+      41,
+      3,
+      0,
+      141,
+      0,
+      "CLIP"
+    ],
+    [
+      42,
+      149,
+      0,
+      140,
+      1,
+      "STRING"
+    ],
+    [
+      43,
+      149,
+      0,
+      151,
+      0,
+      "STRING"
+    ],
+    [
+      44,
+      151,
+      0,
+      141,
+      1,
+      "STRING"
+    ],
+    [
+      45,
+      140,
+      0,
+      142,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      46,
+      141,
+      0,
+      142,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      47,
+      2,
+      0,
+      142,
+      2,
+      "VAE"
+    ],
+    [
+      48,
+      112,
+      0,
+      142,
+      3,
+      "IMAGE"
+    ],
+    [
+      49,
+      23,
+      0,
+      142,
+      4,
+      "INT"
+    ],
+    [
+      50,
+      23,
+      1,
+      142,
+      5,
+      "INT"
+    ],
+    [
+      51,
+      142,
+      0,
+      143,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      52,
+      142,
+      1,
+      143,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      53,
+      142,
+      2,
+      146,
+      0,
+      "LATENT"
+    ],
+    [
+      54,
+      14,
+      0,
+      146,
+      1,
+      "LATENT"
+    ],
+    [
+      55,
+      1,
+      0,
+      144,
+      0,
+      "MODEL"
+    ],
+    [
+      56,
+      143,
+      0,
+      144,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      57,
+      143,
+      1,
+      144,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      58,
+      146,
+      0,
+      144,
+      3,
+      "LATENT"
+    ],
+    [
+      59,
+      31,
+      0,
+      144,
+      4,
+      "INT"
+    ],
+    [
+      60,
+      144,
+      0,
+      147,
+      0,
+      "LATENT"
+    ],
+    [
+      61,
+      147,
+      0,
+      145,
+      0,
+      "LATENT"
+    ],
+    [
+      62,
+      2,
+      0,
+      145,
+      1,
+      "VAE"
+    ],
+    [
+      63,
+      147,
+      1,
+      150,
+      0,
+      "LATENT"
+    ],
+    [
+      64,
+      13,
+      0,
+      150,
+      1,
+      "VAE"
+    ],
+    [
+      65,
+      145,
+      0,
+      148,
+      0,
+      "IMAGE"
+    ],
+    [
+      66,
+      150,
+      0,
+      148,
+      1,
+      "AUDIO"
+    ],
+    [
+      67,
+      145,
+      0,
+      152,
+      0,
+      "IMAGE"
+    ],
+    [
+      68,
+      152,
+      0,
+      153,
+      0,
+      "IMAGE"
+    ],
+    [
+      69,
+      148,
+      0,
+      40,
+      1,
+      "VHS_FILENAMES"
+    ],
+    [
+      70,
+      23,
+      2,
+      149,
+      0,
+      "STRING"
+    ],
+    [
+      71,
+      32,
+      0,
+      149,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      72,
+      33,
+      0,
+      149,
+      2,
+      "STRING"
+    ],
+    [
+      73,
+      34,
+      0,
+      149,
+      3,
+      "STRING"
+    ],
+    [
+      74,
+      3,
+      0,
+      180,
+      0,
+      "CLIP"
+    ],
+    [
+      75,
+      3,
+      0,
+      181,
+      0,
+      "CLIP"
+    ],
+    [
+      76,
+      189,
+      0,
+      180,
+      1,
+      "STRING"
+    ],
+    [
+      77,
+      189,
+      0,
+      191,
+      0,
+      "STRING"
+    ],
+    [
+      78,
+      191,
+      0,
+      181,
+      1,
+      "STRING"
+    ],
+    [
+      79,
+      180,
+      0,
+      182,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      80,
+      181,
+      0,
+      182,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      81,
+      2,
+      0,
+      182,
+      2,
+      "VAE"
+    ],
+    [
+      82,
+      152,
+      0,
+      182,
+      3,
+      "IMAGE"
+    ],
+    [
+      83,
+      23,
+      0,
+      182,
+      4,
+      "INT"
+    ],
+    [
+      84,
+      23,
+      1,
+      182,
+      5,
+      "INT"
+    ],
+    [
+      85,
+      182,
+      0,
+      183,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      86,
+      182,
+      1,
+      183,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      87,
+      182,
+      2,
+      186,
+      0,
+      "LATENT"
+    ],
+    [
+      88,
+      14,
+      0,
+      186,
+      1,
+      "LATENT"
+    ],
+    [
+      89,
+      1,
+      0,
+      184,
+      0,
+      "MODEL"
+    ],
+    [
+      90,
+      183,
+      0,
+      184,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      91,
+      183,
+      1,
+      184,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      92,
+      186,
+      0,
+      184,
+      3,
+      "LATENT"
+    ],
+    [
+      93,
+      31,
+      0,
+      184,
+      4,
+      "INT"
+    ],
+    [
+      94,
+      184,
+      0,
+      187,
+      0,
+      "LATENT"
+    ],
+    [
+      95,
+      187,
+      0,
+      185,
+      0,
+      "LATENT"
+    ],
+    [
+      96,
+      2,
+      0,
+      185,
+      1,
+      "VAE"
+    ],
+    [
+      97,
+      187,
+      1,
+      190,
+      0,
+      "LATENT"
+    ],
+    [
+      98,
+      13,
+      0,
+      190,
+      1,
+      "VAE"
+    ],
+    [
+      99,
+      185,
+      0,
+      188,
+      0,
+      "IMAGE"
+    ],
+    [
+      100,
+      190,
+      0,
+      188,
+      1,
+      "AUDIO"
+    ],
+    [
+      101,
+      185,
+      0,
+      192,
+      0,
+      "IMAGE"
+    ],
+    [
+      102,
+      192,
+      0,
+      193,
+      0,
+      "IMAGE"
+    ],
+    [
+      103,
+      188,
+      0,
+      40,
+      2,
+      "VHS_FILENAMES"
+    ],
+    [
+      104,
+      23,
+      2,
+      189,
+      0,
+      "STRING"
+    ],
+    [
+      105,
+      32,
+      0,
+      189,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      106,
+      33,
+      0,
+      189,
+      2,
+      "STRING"
+    ],
+    [
+      107,
+      34,
+      0,
+      189,
+      3,
+      "STRING"
+    ],
+    [
+      108,
+      3,
+      0,
+      220,
+      0,
+      "CLIP"
+    ],
+    [
+      109,
+      3,
+      0,
+      221,
+      0,
+      "CLIP"
+    ],
+    [
+      110,
+      229,
+      0,
+      220,
+      1,
+      "STRING"
+    ],
+    [
+      111,
+      229,
+      0,
+      231,
+      0,
+      "STRING"
+    ],
+    [
+      112,
+      231,
+      0,
+      221,
+      1,
+      "STRING"
+    ],
+    [
+      113,
+      220,
+      0,
+      222,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      114,
+      221,
+      0,
+      222,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      115,
+      2,
+      0,
+      222,
+      2,
+      "VAE"
+    ],
+    [
+      116,
+      192,
+      0,
+      222,
+      3,
+      "IMAGE"
+    ],
+    [
+      117,
+      23,
+      0,
+      222,
+      4,
+      "INT"
+    ],
+    [
+      118,
+      23,
+      1,
+      222,
+      5,
+      "INT"
+    ],
+    [
+      119,
+      222,
+      0,
+      223,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      120,
+      222,
+      1,
+      223,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      121,
+      222,
+      2,
+      226,
+      0,
+      "LATENT"
+    ],
+    [
+      122,
+      14,
+      0,
+      226,
+      1,
+      "LATENT"
+    ],
+    [
+      123,
+      1,
+      0,
+      224,
+      0,
+      "MODEL"
+    ],
+    [
+      124,
+      223,
+      0,
+      224,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      125,
+      223,
+      1,
+      224,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      126,
+      226,
+      0,
+      224,
+      3,
+      "LATENT"
+    ],
+    [
+      127,
+      31,
+      0,
+      224,
+      4,
+      "INT"
+    ],
+    [
+      128,
+      224,
+      0,
+      227,
+      0,
+      "LATENT"
+    ],
+    [
+      129,
+      227,
+      0,
+      225,
+      0,
+      "LATENT"
+    ],
+    [
+      130,
+      2,
+      0,
+      225,
+      1,
+      "VAE"
+    ],
+    [
+      131,
+      227,
+      1,
+      230,
+      0,
+      "LATENT"
+    ],
+    [
+      132,
+      13,
+      0,
+      230,
+      1,
+      "VAE"
+    ],
+    [
+      133,
+      225,
+      0,
+      228,
+      0,
+      "IMAGE"
+    ],
+    [
+      134,
+      230,
+      0,
+      228,
+      1,
+      "AUDIO"
+    ],
+    [
+      135,
+      225,
+      0,
+      232,
+      0,
+      "IMAGE"
+    ],
+    [
+      136,
+      232,
+      0,
+      233,
+      0,
+      "IMAGE"
+    ],
+    [
+      137,
+      228,
+      0,
+      40,
+      3,
+      "VHS_FILENAMES"
+    ],
+    [
+      138,
+      23,
+      2,
+      229,
+      0,
+      "STRING"
+    ],
+    [
+      139,
+      32,
+      0,
+      229,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      140,
+      33,
+      0,
+      229,
+      2,
+      "STRING"
+    ],
+    [
+      141,
+      34,
+      0,
+      229,
+      3,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. LTX models",
+      "bounding": [
+        20,
+        24,
+        560,
+        852
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. Start / occupancy / format",
+      "bounding": [
+        600,
+        24,
+        688,
+        1654
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3. Beat 1 (8.00s LTX)",
+      "bounding": [
+        1460,
+        24,
+        2360,
+        1012
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4. Beat 2 (8.00s LTX)",
+      "bounding": [
+        1460,
+        1036,
+        2360,
+        1012
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5. Beat 3 (8.00s LTX)",
+      "bounding": [
+        1460,
+        2048,
+        2360,
+        1012
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "6. Beat 4 (8.00s LTX)",
+      "bounding": [
+        1460,
+        3060,
+        2360,
+        1012
+      ],
+      "color": "#a1309b",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "7. Publish clip chain",
+      "bounding": [
+        20,
+        4044,
+        928,
+        380
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "lab_profile": "motion/av/clip-chain",
+    "lab_ltx_tier": "balanced",
+    "lab_note": "## motion/av/clip-chain\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nLTX canvas 1280x704 (width/height must be divisible by 32; 720 and 1080 are invalid).\n\nFour LTX AV beats share one UNET / video VAE / audio VAE / CLIP. Last frame of beat N starts beat N+1. EZClipConcat stitches the four MP4s (hard cut). Primary output: `${COMFY_OUTPUT_DIR}/ez_clip_chain.mp4` plus per-beat VHS (`ez_clip_b0N_ltx_video`) and last-frame PNG (`ez_clip_b0N_last`). No full-batch SaveImage.\n\n**8 seconds, 24 fps** (193 frames = 1+8n) chain-wide. Duration combo stays 5/8/10/12; mixed per-beat lengths are unsupported. Four \u00d7 8 s sequential prints are tens of minutes on GB10 \u2014 not a hang. Headroom preflight still applies at `start`.\n\nOccupancy: ltx \u2014 stop Wan, podcast, music, other LTX. One GB10 job. Occupancy ltx XOR. `occupancy enter ltx` before Queue. No Klein identity on this canvas.\n\nDuplicate Beat groups on canvas for beats 5\u201324:\n\n1. Duplicate the last Beat group.\n2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06\u2026).\n3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.\n4. Wire previous `EZClipLastFrame.last_frame` \u2192 new `LTXVImgToVideo.image`.\n5. Wire new `VHS_VideoCombine.Filenames` \u2192 the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).\n6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).\n7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.\n\nPast 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (default `--files` cap is 90 s).\n\nLTX-2.5 distilled AV. LTX Community License \u2014 not Apache. $10M company-revenue cap. Disclose AI-generated media; do not strip provenance; do not distill.\n\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). After Queue, the Enhance node shows the prompt CLIP used (or a passthrough reason). Turn Enhance off to use the widget text as-is. Optional style dropdown is hidden on I2V.\n\nLoadImage default example.png; after a still set ez_still_hero_*.png. Match input Format. MagCache off.\n",
+    "lab_ltx_av": true,
+    "lab_description": "Four LTX AV beats with last-frame continuity, 8.00 s / 193 each",
+    "lab_app_mode": {
+      "enabled": true,
+      "default_view": "app",
+      "frontend_min": "1.41.13",
+      "lane": "produce",
+      "occupancy": "ltx",
+      "enhance_off_identity": false,
+      "handoff": []
+    },
+    "linearData": {
+      "inputs": [
+        [
+          4,
+          "image",
+          {
+            "description": "Start frame or reference still. Only shown when the LoadImage is wired.",
+            "label": "Start image"
+          }
+        ],
+        [
+          22,
+          "quality",
+          {
+            "label": "Quality",
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+          }
+        ],
+        [
+          109,
+          "sample",
+          {
+            "description": "Pick a lab recipe, or Custom to type your own.",
+            "label": "Sample prompt"
+          }
+        ],
+        [
+          109,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Beat 1 prompt",
+            "height": 140
+          }
+        ],
+        [
+          149,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Beat 2 prompt",
+            "height": 140
+          }
+        ],
+        [
+          189,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Beat 3 prompt",
+            "height": 140
+          }
+        ],
+        [
+          229,
+          "prompt",
+          {
+            "description": "What to generate. Rewrite prompt expands this for the model.",
+            "label": "Beat 4 prompt",
+            "height": 140
+          }
+        ],
+        [
+          23,
+          "format",
+          {
+            "description": "Aspect or named platform job. Sets clip width and height on the Wan \u00f716 or LTX \u00f732 grid. Custom uses Width \u00d7 Height. Length stays on the latent node.",
+            "label": "Format / platform"
+          }
+        ],
+        [
+          23,
+          "size_mode",
+          {
+            "description": "Match input uses a loaded still's aspect (nearest catalog row). Force format keeps Format / platform. No still: authored format.",
+            "label": "Output size"
+          }
+        ],
+        [
+          23,
+          "duration_s",
+          {
+            "description": "LTX clip length: 5, 8 (default), 10, or 12 seconds at 24 fps. Writes a legal 1+8n frame count. Wan 5B stays 5 seconds.",
+            "label": "Duration"
+          }
+        ],
+        [
+          24,
+          "enable",
+          {
+            "description": "On: caption the source still so Rewrite prompt can name inventory. Off (default) skips the describe GGUF. Needs download-llm --tier describe.",
+            "label": "Describe image"
+          }
+        ],
+        [
+          32,
+          "value",
+          {
+            "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
+            "label": "Rewrite prompt"
+          }
+        ],
+        [
+          33,
+          "value",
+          {
+            "description": "World SFX to interleave. No score unless you asked for music.",
+            "label": "Audio notes",
+            "height": 80
+          }
+        ],
+        [
+          34,
+          "value",
+          {
+            "description": "Optional logline shared by every beat. Ignored when Rewrite prompt is off.",
+            "label": "Logline / context",
+            "height": 140
+          }
+        ],
+        [
+          31,
+          "value",
+          {
+            "description": "Fix to iterate; randomize to explore.",
+            "label": "Seed"
+          }
+        ],
+        [
+          23,
+          "width",
+          {
+            "description": "Latent width in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Width"
+          }
+        ],
+        [
+          23,
+          "height",
+          {
+            "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
+            "label": "Height"
+          }
+        ]
+      ],
+      "outputs": [
+        108,
+        148,
+        188,
+        228,
+        40,
+        113,
+        153,
+        193,
+        233
+      ]
+    },
+    "linearMode": true,
+    "lab_rel": "motion/av/clip-chain",
+    "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    }
+  },
+  "version": 0.4
+}

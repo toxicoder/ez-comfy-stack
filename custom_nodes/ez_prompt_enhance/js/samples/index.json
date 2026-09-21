@@ -64,6 +64,7 @@
   "motion/av/product-hero": "ltx_product",
   "motion/av/first-last-8s": "ltx_flf",
   "motion/av/audio-to-video-8s": "ltx_a2v",
+  "motion/av/clip-chain": "ltx_i2v",
   "dcc/depth-control-8s": "ltx_iclora",
   "dcc/canny-control-8s": "ltx_iclora",
   "dcc/depth-control-shorts": "ltx_iclora",

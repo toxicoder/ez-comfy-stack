@@ -43,6 +43,7 @@ tags: [comfyui, workflows, wan, ltx, motion, catalog]
 | Workflow | What it does |
 | --- | --- |
 | **[motion/av/still-to-video-8s](../generated/workflows/motion/av/still-to-video-8s.md)** | ~8 s I2V. Default **1280×704**; **Format / platform** (LTX 16:9 / 9:16 / Custom, never 720). Native audio (Community License, $10M cap) |
+| **[motion/av/clip-chain](../generated/workflows/motion/av/clip-chain.md)** | Four 8.00 s LTX AV beats, last-frame continuity, `EZClipConcat` master. Occupancy **ltx**. Prefix `ez_clip_b01`…`b04`. Match-input Format. Enhance on. No Klein |
 | **[motion/av/text-to-video-8s](../generated/workflows/motion/av/text-to-video-8s.md)** | ~8 s T2V AV. Default **1280×704**; same Format / platform combo |
 
 ---
@@ -88,3 +89,17 @@ Pack 2 — motion / AV:
 | **[motion/av/hook-av](../generated/workflows/motion/av/hook-av.md)** | ~8 s AV cold open |
 
 90s shot printers (**[motion/silent/still-to-shot](../generated/workflows/motion/silent/still-to-shot.md)**, **[motion/av/still-to-shot](../generated/workflows/motion/av/still-to-shot.md)**) live with the films: [Film catalog](workflows-film.md).
+
+## Duplicate clip-chain beats (5–24)
+
+Shipped **[motion/av/clip-chain](../generated/workflows/motion/av/clip-chain.md)** is four beats. Duplicate **Beat** groups on the canvas for longer chains. App Mode will not pick up Beat 5+ prompts. 4 × 8 s sequential prints are tens of minutes on GB10. Occupancy **ltx** XOR.
+
+1. Duplicate the last Beat group.
+2. Set `VHS_VideoCombine.filename_prefix` to `ez_clip_b05_ltx_video` (then b06…).
+3. Set last-frame SaveImage prefix to `ez_clip_b05_last`.
+4. Wire previous `EZClipLastFrame.last_frame` → new `LTXVImgToVideo.image`.
+5. Wire new `VHS_VideoCombine.Filenames` → the next free `EZClipConcat.clip_0N` (`clip_05` for the fifth beat).
+6. Keep the shared UNET / VAE / CLIP / Format / Seed / Rewrite / Audio notes wires (do not duplicate loaders).
+7. Save under `_user/` if you want a personal App; shipped `_lab` stays 4 beats.
+
+Past 24 stems: host `./scripts/utilities/concat-shots.sh --files a.mp4,b.mp4 --cap-seconds <sum> --yes` (the default `--files` cap is 90 s).

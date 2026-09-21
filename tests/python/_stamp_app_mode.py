@@ -219,6 +219,7 @@ OUTPUT_TYPES = (
     "EZAlbumPack",
     "EZAudioMetadata",
     "MeshToFile3D",
+    "EZClipConcat",
 )
 
 ENHANCE_TYPES = (
@@ -992,6 +993,17 @@ def widget_description(name: str, node: Mapping[str, Any] | None = None) -> str 
             return "Lazy sentence. All three family rewriters read this."
         if title == "Context":
             return "Optional research brief or bible. Empty is fine."
+        if title == "Seed":
+            return DEFAULT_WIDGET_DESCRIPTIONS.get("seed")
+        if title == "Rewrite prompt":
+            return DEFAULT_WIDGET_DESCRIPTIONS.get("enhance")
+        if title == "Audio notes":
+            return DEFAULT_WIDGET_DESCRIPTIONS.get("audio_notes")
+        if title == "Logline / context":
+            return (
+                "Optional logline shared by every beat. "
+                "Ignored when Rewrite prompt is off."
+            )
     return DEFAULT_WIDGET_DESCRIPTIONS.get(name)
 
 
@@ -1006,7 +1018,17 @@ def widget_config(
     text = overrides.get(name) or widget_description(name, node)
     label = display_label(node, name, collide=collide)
     height = WIDGET_HEIGHTS.get(name)
-    if name == "value" and str((node or {}).get("title") or "") == "Prompt":
+    title = str((node or {}).get("title") or "")
+    if name == "value" and str((node or {}).get("type") or "") == "PrimitiveNode":
+        if title == "Prompt":
+            height = WIDGET_HEIGHTS.get("prompt")
+        elif title in {"Seed", "Rewrite prompt"}:
+            height = None
+        elif title == "Audio notes":
+            height = WIDGET_HEIGHTS.get("audio_notes")
+        elif title == "Logline / context":
+            height = WIDGET_HEIGHTS.get("prompt")
+    elif name == "value" and title == "Prompt":
         height = WIDGET_HEIGHTS.get("prompt")
     config: dict[str, Any] = {}
     if text:
@@ -1082,6 +1104,7 @@ def _spec(
     ace_instrumental_score: bool = False,
     expose_look: bool = False,
     hide_style: bool = False,
+    clip_chain_widgets: bool = False,
 ) -> dict[str, Any]:
     return {
         "lane": lane,
@@ -1103,6 +1126,7 @@ def _spec(
         "ace_instrumental_score": ace_instrumental_score,
         "expose_look": expose_look,
         "hide_style": hide_style,
+        "clip_chain_widgets": clip_chain_widgets,
     }
 
 
@@ -1307,6 +1331,7 @@ STAMP_SPECS: dict[str, dict[str, Any]] = {
     "motion/av/product-hero": _spec("produce", "ltx"),
     "motion/av/first-last-8s": _spec("produce", "ltx"),
     "motion/av/audio-to-video-8s": _spec("produce", "ltx"),
+    "motion/av/clip-chain": _spec("produce", "ltx", clip_chain_widgets=True),
     "films/go-see": _spec(
         "film",
         "film",
@@ -2042,8 +2067,98 @@ def _quality_input_specs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec
     return specs
 
 
+def _clip_chain_input_specs(
+    graph: dict, spec: Mapping[str, Any]
+) -> list[InputSpec]:
+    """Explicit App Mode widgets for ``motion/av/clip-chain`` (K12 order).
+
+    Occupancy ``required_mode``, I2V style, and per-beat sample/enhance/seed
+    widgets stay off this list. Shared primitives own Rewrite / Audio notes /
+    Logline / Seed.
+
+    Args:
+        graph: Serialized clip-chain graph.
+        spec: ``STAMP_SPECS`` row (descriptions overlay).
+
+    Returns:
+        Linear input specs in App widget order.
+    """
+    load = _resolve_node(graph, "LoadImage", kind="input")
+    quality = _resolve_node(graph, "EZQuality", kind="input")
+    enhances = [
+        _resolve_node(graph, f"Beat {index}", kind="input") for index in range(1, 5)
+    ]
+    fmt = _resolve_node(graph, "EZVideoFormat", kind="input")
+    describe = _resolve_node(graph, "EZImageDescribe", kind="input")
+    rewrite = _resolve_node(graph, "Rewrite prompt", kind="input")
+    audio = _resolve_node(graph, "Audio notes", kind="input")
+    logline = _resolve_node(graph, "Logline / context", kind="input")
+    seed = _resolve_node(graph, "Seed", kind="input")
+    specs: list[InputSpec] = [
+        _input_spec(load["id"], "image", spec, node=load),
+        _input_spec(quality["id"], "quality", spec, node=quality),
+        _input_spec(enhances[0]["id"], "sample", spec, node=enhances[0]),
+    ]
+    for enh in enhances:
+        entry = _input_spec(enh["id"], "prompt", spec, node=enh)
+        node_ref, name, config = _parse_input(entry)
+        cfg = dict(config or {})
+        cfg["label"] = f"{enh.get('title')} prompt"
+        specs.append((node_ref, name, cfg))
+    specs.extend(
+        [
+            _input_spec(fmt["id"], "format", spec, node=fmt),
+            _input_spec(fmt["id"], "size_mode", spec, node=fmt),
+            _input_spec(fmt["id"], "duration_s", spec, node=fmt),
+            _input_spec(describe["id"], "enable", spec, node=describe),
+            _input_spec(rewrite["id"], "value", spec, node=rewrite),
+            _input_spec(audio["id"], "value", spec, node=audio),
+            _input_spec(logline["id"], "value", spec, node=logline),
+            _input_spec(seed["id"], "value", spec, node=seed),
+            _input_spec(fmt["id"], "width", spec, node=fmt),
+            _input_spec(fmt["id"], "height", spec, node=fmt),
+        ]
+    )
+    return specs
+
+
+def _clip_chain_output_ids(graph: dict) -> list[int]:
+    """Four VHS stems, then EZClipConcat, then last-frame SaveImage.
+
+    Args:
+        graph: Serialized clip-chain graph.
+
+    Returns:
+        Output node ids in App Mode order.
+    """
+    vhs = [
+        node
+        for node in graph.get("nodes") or []
+        if node.get("type") == "VHS_VideoCombine"
+    ]
+    vhs.sort(
+        key=lambda node: (
+            str((node.get("widgets_values") or {}).get("filename_prefix") or "")
+            if isinstance(node.get("widgets_values"), dict)
+            else ""
+        )
+    )
+    concat = _resolve_node(graph, "EZClipConcat", kind="output")
+    saves = [
+        node for node in graph.get("nodes") or [] if node.get("type") == "SaveImage"
+    ]
+    saves.sort(key=lambda node: str((node.get("widgets_values") or [""])[0]))
+    return (
+        [int(node["id"]) for node in vhs]
+        + [int(concat["id"])]
+        + [int(node["id"]) for node in saves]
+    )
+
+
 def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
     """Creator widgets only: prompt first, no join-shot cards, no latent size except daily."""
+    if spec.get("clip_chain_widgets"):
+        return _clip_chain_input_specs(graph, spec)
     raw = _collect_raw_inputs(graph, spec)
     counts = Counter(name for _nid, name, _node in raw)
     inputs: list[InputSpec] = []
@@ -2062,6 +2177,8 @@ def infer_suite_inputs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec]:
 
 def infer_suite_outputs(graph: dict, spec: Mapping[str, Any] | None = None) -> list[int]:
     spec = spec or {}
+    if spec.get("clip_chain_widgets"):
+        return _clip_chain_output_ids(graph)
     found = [
         int(node["id"])
         for node in graph.get("nodes") or []

@@ -218,6 +218,7 @@ tags: [workflows, generated, comfyui]
 | --- | --- |
 | `motion/av/audio-to-video-8s` | [motion/av/audio-to-video-8s.md](motion/av/audio-to-video-8s.md) |
 | `motion/av/broll-ambient` | [motion/av/broll-ambient.md](motion/av/broll-ambient.md) |
+| `motion/av/clip-chain` | [motion/av/clip-chain.md](motion/av/clip-chain.md) |
 | `motion/av/dialogue-8s` | [motion/av/dialogue-8s.md](motion/av/dialogue-8s.md) |
 | `motion/av/first-last-8s` | [motion/av/first-last-8s.md](motion/av/first-last-8s.md) |
 | `motion/av/hook-av` | [motion/av/hook-av.md](motion/av/hook-av.md) |
