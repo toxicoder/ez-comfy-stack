@@ -9,6 +9,9 @@
  * Linked CLIPTextEncode (Positive / Motion) and ACE encoder widgets are a
  * preview: they follow Prompt / Rewrite prompt, then the rewritten string
  * after Queue. Queue still uses the STRING link, not the preview widget.
+ * That preview sets options.serialize (prompt inclusion) only. widget.serialize
+ * is persistence; clearing it before the encoder configures skips tags/lyrics
+ * and shifts seed, BPM, meter, language, key, and cfg.
  */
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
@@ -665,7 +668,7 @@ function linkedDestinations(node, slot) {
 }
 
 /**
- * Write a linked CLIP/ACE preview widget without serializing it at Queue.
+ * Write a linked CLIP/ACE preview widget. Queue uses the STRING link.
  * @param {object} dest
  * @param {string} widgetName
  * @param {string} text
@@ -679,8 +682,8 @@ function setLinkedClipWidget(dest, widgetName, text) {
     }
     return;
   }
-  widget.serialize = false;
-  widget.serializeValue = async () => undefined;
+  widget.options = widget.options || {};
+  widget.options.serialize = false;
   setTextWidget(widget, text, true);
   if (Array.isArray(dest.widgets_values) && dest.widgets) {
     const idx = dest.widgets.indexOf(widget);
