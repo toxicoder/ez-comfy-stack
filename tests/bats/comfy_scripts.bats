@@ -69,7 +69,7 @@ teardown() {
   : >"${TEST_TMP_DIR}/pip_llama.log"
   run install_llama_cpp_cpu
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pass through"* || "${output}" == *"failed"* || "${output}" == *"Queue"* ]]
+  [[ ${output} == *"pass through"* || ${output} == *"failed"* || ${output} == *"Queue"* ]]
   grep -q 'extra-index-url' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'index-url' "${TEST_TMP_DIR}/pip_llama.log"
   grep -q 'llama-cpp-python==0.3.35' "${TEST_TMP_DIR}/pip_llama.log"
@@ -93,7 +93,7 @@ teardown() {
   pip_install() { return 1; }
   run install_dub_wheels
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"empty mix"* || "${output}" == *"failed"* ]]
+  [[ ${output} == *"empty mix"* || ${output} == *"failed"* ]]
   pip_install() { return 0; }
   run install_dub_wheels
   [ "${status}" -eq 0 ]
@@ -125,14 +125,14 @@ teardown() {
   [ "${status}" -eq 0 ]
   run chatterbox_tts_zip_url
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"resemble-ai/chatterbox/archive"* ]]
+  [[ ${output} == *"resemble-ai/chatterbox/archive"* ]]
   run chatterbox_setuptools_pin
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"setuptools<82"* ]]
+  [[ ${output} == *"setuptools<82"* ]]
   run chatterbox_clone_extra_packages
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"resemble-perth"* ]]
-  [[ "${output}" == *"spacy-pkuseg"* ]]
+  [[ ${output} == *"resemble-perth"* ]]
+  [[ ${output} == *"spacy-pkuseg"* ]]
   run grep -E 'pip_install --no-deps chatterbox-tts' \
     "${REPO_ROOT}/docker/install-comfy/phase-nodes.sh"
   [ "${status}" -ne 0 ]
@@ -163,9 +163,9 @@ teardown() {
   source "${REPO_ROOT}/docker/install-comfy/qwen-tts.sh"
   run qwen_tts_extra_packages
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"einops"* ]]
-  [[ "${output}" == *"soundfile"* ]]
-  [[ "${output}" != *"transformers"* ]]
+  [[ ${output} == *"einops"* ]]
+  [[ ${output} == *"soundfile"* ]]
+  [[ ${output} != *"transformers"* ]]
   run qwen_tts_wheel
   [ "${output}" = "qwen-tts" ]
   run grep -E 'pip install[[:space:]]+qwen-tts([[:space:]]|$)' \
@@ -245,7 +245,7 @@ teardown() {
   [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
   grep -q 'manager_requirements.txt' "${TEST_TMP_DIR}/pip_mgr.log"
   grep -q -- '-c' "${TEST_TMP_DIR}/pip_mgr.log"
-  [[ "${output}" == *"leftover"* ]]
+  [[ ${output} == *"leftover"* ]]
 }
 
 @test "ensure_lab_manager falls back to comfyui_manager pin without requirements file" {
@@ -297,15 +297,15 @@ teardown() {
   }
   run ensure_lab_manager
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"failed"* ]]
+  [[ ${output} == *"failed"* ]]
   write_torch_pip_constraint() { return 1; }
   run ensure_lab_manager
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"failed"* ]]
+  [[ ${output} == *"failed"* ]]
   rm -f "${COMFY_HOME}/manager_requirements.txt"
   run ensure_lab_manager
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"failed"* ]]
+  [[ ${output} == *"failed"* ]]
 }
 
 @test "remove_legacy_comfyui_manager_custom_node keeps a pack with __init__.py" {
@@ -328,7 +328,7 @@ teardown() {
   [ "${status}" -eq 0 ]
   [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-Manager ]]
   [[ -f ${COMFY_HOME}/custom_nodes/_user/mine.py ]]
-  [[ "${output}" == *"leftover"* ]]
+  [[ ${output} == *"leftover"* ]]
   mkdir -p "${COMFY_HOME}/custom_nodes/ComfyUI-Manager"
   echo 'NODE_CLASS_MAPPINGS = {}' >"${COMFY_HOME}/custom_nodes/ComfyUI-Manager/__init__.py"
   run heal_legacy_comfyui_manager_dir "${COMFY_HOME}/custom_nodes"
@@ -344,10 +344,10 @@ teardown() {
   run nunchaku_platform_tag bogus
   [ "${output}" = "" ]
   run nunchaku_wheel_url "linux_x86_64" "cp312" "cu13.0" "torch2.11"
-  [[ "${output}" == *"nunchaku-ai/nunchaku/releases/download"* ]]
-  [[ "${output}" == *"linux_x86_64.whl"* ]]
-  [[ "${output}" == *"cp312"* ]]
-  [[ "${output}" != *"pypi.org"* ]]
+  [[ ${output} == *"nunchaku-ai/nunchaku/releases/download"* ]]
+  [[ ${output} == *"linux_x86_64.whl"* ]]
+  [[ ${output} == *"cp312"* ]]
+  [[ ${output} != *"pypi.org"* ]]
 
   # aarch64 path: skip without attempting bare PyPI nunchaku
   : >"${TEST_TMP_DIR}/pip_calls.log"
@@ -359,7 +359,7 @@ teardown() {
   cleanup_wrong_nunchaku() { return 0; }
   run install_nunchaku_wheel
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"aarch64"* || "${output}" == *"skipping"* || "${output}" == *"no official"* ]]
+  [[ ${output} == *"aarch64"* || ${output} == *"skipping"* || ${output} == *"no official"* ]]
   # Must never install the bare package name from PyPI
   if [[ -s ${TEST_TMP_DIR}/pip_calls.log ]]; then
     ! grep -qE 'pip install( --[^ ]+)* nunchaku( |$)' "${TEST_TMP_DIR}/pip_calls.log"
@@ -369,7 +369,7 @@ teardown() {
 @test "install-comfy log warn link_models clone_node" {
   run log "hello"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"[comfy-install]"* ]]
+  [[ ${output} == *"[comfy-install]"* ]]
   run warn "careful"
   [ "${status}" -eq 0 ]
 
@@ -380,8 +380,8 @@ teardown() {
   [ "${output}" = "1:30" ]
   run step 1 12 "Clone ComfyUI"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"step 1/12"* ]]
-  [[ "${output}" == *"Clone ComfyUI"* ]]
+  [[ ${output} == *"step 1/12"* ]]
+  [[ ${output} == *"Clone ComfyUI"* ]]
 
   mkdir -p "${COMFY_HOME}/models"
   export HOST_UID
@@ -390,7 +390,7 @@ teardown() {
   HOST_GID="$(id -g)"
   run layout_host_uid_gid
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"$(id -u)"* ]]
+  [[ ${output} == *"$(id -u)"* ]]
   run link_models diffusion_models
   [ "${status}" -eq 0 ]
   [[ -L "${COMFY_HOME}/models/diffusion_models" ]]
@@ -398,7 +398,7 @@ teardown() {
   unset HOST_UID HOST_GID
   run layout_host_uid_gid
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *":"* ]]
+  [[ ${output} == *":"* ]]
 
   # Empty existing dir path branch
   rm -f "${COMFY_HOME}/models/vae"
@@ -424,7 +424,7 @@ teardown() {
   install_mock_bin pip 'echo "pip $*"; exit 0'
   run clone_node "https://example.com/node.git" "DemoNode"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"custom node"* ]]
+  [[ ${output} == *"custom node"* ]]
   run clone_node_ref_is_sha 47bdd2aca97e568087c4e92d2d2f0426bdce7a37
   [ "${status}" -eq 0 ]
   run clone_node_ref_is_sha 0.5.0
@@ -440,8 +440,8 @@ teardown() {
   install_mock_bin git 'echo "git $*" >>"${TEST_TMP_DIR}/git.log"; exit 1'
   run clone_node "https://example.com/vhs.git" "ComfyUI-VideoHelperSuite"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"already present"* ]]
-  [[ "${output}" == *"skip clone"* ]]
+  [[ ${output} == *"already present"* ]]
+  [[ ${output} == *"skip clone"* ]]
   [[ ! -f ${TEST_TMP_DIR}/git.log ]]
   [[ -f ${CUSTOM}/ComfyUI-VideoHelperSuite/nodes.py ]]
 
@@ -509,11 +509,11 @@ teardown() {
   export COMFY_HOME="${dest}"
   run prebuilt_exclude_patterns
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"/custom_nodes/_user/"* ]]
-  [[ "${output}" == *"/input/"* ]]
+  [[ ${output} == *"/custom_nodes/_user/"* ]]
+  [[ ${output} == *"/input/"* ]]
   # Unanchored `input/` would also drop comfy_api/input.
-  [[ "${output}" != $'input/'* ]]
-  [[ "${output}" != *$'\ninput/'* ]]
+  [[ ${output} != $'input/'* ]]
+  [[ ${output} != *$'\ninput/'* ]]
   run seed_from_prebuilt
   [ "${status}" -eq 0 ]
   [[ -f ${dest}/main.py ]]
@@ -541,7 +541,7 @@ teardown() {
   export COMFY_HOME="${dest}"
   run heal_comfy_api_input_from_prebuilt
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Healing comfy_api/input"* ]]
+  [[ ${output} == *"Healing comfy_api/input"* ]]
   [[ -f ${dest}/comfy_api/input/__init__.py ]]
   [[ -f ${dest}/input/start.png ]]
   [[ ! -f ${dest}/input/example.png ]]
@@ -563,7 +563,7 @@ teardown() {
   echo keep-pack >"${dest}/custom_nodes/_user/mine.py"
   run copy_prebuilt_tree "${pre}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"seed copy finished"* ]]
+  [[ ${output} == *"seed copy finished"* ]]
   [[ -f ${dest}/main.py ]]
   [[ -f ${dest}/user/default/mine.json ]]
   [[ ! -f ${dest}/user/default/lab.json ]]
@@ -630,14 +630,14 @@ teardown() {
   [[ -f ${dest}/ez_studio_blocks/subgraphs/klein-t2i-backbone.json ]]
   [[ ! -d ${dest}/not_a_pack ]]
   [[ ! -f ${dest}/stray.txt ]]
-  [[ "${output}" == *"installed 3 custom node pack"* ]]
+  [[ ${output} == *"installed 3 custom node pack"* ]]
   run install_all_lab_custom_nodes "${TEST_TMP_DIR}/missing-root" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_missing"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"optional mount"* ]]
+  [[ ${output} == *"optional mount"* ]]
   mkdir -p "${TEST_TMP_DIR}/empty_packs"
   run install_all_lab_custom_nodes "${TEST_TMP_DIR}/empty_packs" "${TEST_TMP_DIR}/ComfyUI/custom_nodes_empty"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"no custom node packs under"* ]]
+  [[ ${output} == *"no custom node packs under"* ]]
 }
 
 @test "lab_workflow_lane maps _lab and legacy globs" {
@@ -737,7 +737,7 @@ teardown() {
   [[ "$(cat "${dest}/_user/keep-me.json")" == poison ]]
   [[ -f ${dest}/stills/still-draft.json ]]
   [[ "$(cat "${dest}/stills/still-draft.json")" == leftover ]]
-  [[ "${output}" == *"in _lab/stills"* ]]
+  [[ ${output} == *"in _lab/stills"* ]]
   run log_lab_seed_counts "${dest}/_lab"
   [ "${status}" -eq 0 ]
   run install_lab_workflows "${src}" "${dest}"
@@ -826,21 +826,23 @@ teardown() {
 @test "install_lab_workflows rescues operator _lab JSON into _user" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/entrypoint.sh"
-  local src dest
+  local src dest manifest app_json i
   src="${TEST_TMP_DIR}/wf_rescue"
   dest="${TEST_TMP_DIR}/user_wf_rescue"
+  app_json='{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft"}}'
   mkdir -p "${src}/_lab/stills" "${src}/_lab/klein" "${dest}/_lab/stills" "${dest}/_lab/klein" "${dest}/_user/klein"
-  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"}}}' \
-    >"${src}/_lab/stills/still-draft.json"
+  printf '%s\n' "${app_json}" >"${src}/_lab/stills/still-draft.json"
   echo '{}' >"${src}/_lab/klein/plain.json"
   echo 'user-hook' >"${dest}/_lab/klein/my-hook.app.json"
   echo 'edited-lab' >"${dest}/_lab/stills/still-draft.app.json"
   echo 'stale' >"${dest}/_lab/klein/stale-gone.json"
   echo 'poison' >"${dest}/_user/keep-me.json"
   echo 'mine' >"${dest}/_user/klein/my-hook.app.json"
+  printf '%s\n' '{"extra":{"lab_rel":"stills/still-draft"}}' \
+    >"${dest}/_lab/stills/moved-catalog.app.json"
   run lab_src_json_for_dest "${src}/_lab" "stills/still-draft.app.json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"/stills/still-draft.json" ]]
+  [[ ${output} == *"/stills/still-draft.json" ]]
   run lab_src_json_for_dest "${src}/_lab" "klein/missing.json"
   [ "${status}" -ne 0 ]
   run rescue_unique_path "${dest}/_user/keep-me.json" "${dest}/_user/keep-me.json"
@@ -849,19 +851,41 @@ teardown() {
   echo 'other' >"${TEST_TMP_DIR}/other.json"
   run rescue_unique_path "${dest}/_user/keep-me.json" "${TEST_TMP_DIR}/other.json"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *".rescued-"* ]]
+  [[ ${output} == *".rescued-"* ]]
+  run lab_seed_manifest_path "${dest}"
+  [ "${status}" -eq 0 ]
+  [ "${output}" = "${dest}/.lab-seed-manifest" ]
+  run lab_json_index "${src}/_lab"
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"stills/still-draft.json"* ]]
+  run lab_index_has_lab_rel "${TEST_TMP_DIR}/missing.idx" "stills/still-draft"
+  [ "${status}" -ne 0 ]
+  lab_json_index "${src}/_lab" >"${TEST_TMP_DIR}/src.idx"
+  run lab_index_has_lab_rel "${TEST_TMP_DIR}/src.idx" "stills/still-draft"
+  [ "${status}" -eq 0 ]
+  run lab_index_has_lab_rel "${TEST_TMP_DIR}/src.idx" "missing/id"
+  [ "${status}" -ne 0 ]
+  run lab_manifest_digest "${TEST_TMP_DIR}/missing-manifest" "stills/still-draft.app.json"
+  [ "${status}" -ne 0 ]
+  run lab_manifest_digest_for_rel "${TEST_TMP_DIR}/missing-manifest" "stills/still-draft.app.json"
+  [ "${status}" -ne 0 ]
   run rescue_operator_lab_json "${src}/_lab" "${TEST_TMP_DIR}/missing_dest_lab" "${dest}/_user"
   [ "${status}" -eq 0 ]
+  run warn_user_rescued_lab_dump "${dest}/_user"
+  [ "${status}" -eq 0 ]
+  [[ ${output} != *"WARN"* ]]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"rescued"* ]]
-  [[ "${output}" == *"_rescued"* ]]
+  [[ ${output} == *"no .lab-seed-manifest"* ]]
+  [[ ${output} == *"rescued"* ]]
+  [[ ${output} != *"copied "* ]]
   [ ! -f "${dest}/_lab/klein/my-hook.app.json" ]
   [ ! -f "${dest}/_lab/klein/stale-gone.json" ]
+  [ ! -f "${dest}/_lab/stills/moved-catalog.app.json" ]
+  [ ! -d "${dest}/_user/_rescued" ] || [ ! -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
+  [ ! -f "${dest}/_user/stills/moved-catalog.app.json" ]
   [ -f "${dest}/_lab/stills/still-draft.app.json" ]
   [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
-  [ -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
-  [ "$(cat "${dest}/_user/_rescued/stills/still-draft.app.json")" = "edited-lab" ]
   [ -f "${dest}/_user/klein/stale-gone.json" ]
   [ "$(cat "${dest}/_user/klein/stale-gone.json")" = "stale" ]
   [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
@@ -870,12 +894,63 @@ teardown() {
   local -a collided=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
   [ "${#collided[@]}" -eq 1 ]
   [ "$(cat "${collided[0]}")" = "user-hook" ]
+  manifest="$(lab_seed_manifest_path "${dest}")"
+  [ -f "${manifest}" ]
+  run lab_manifest_digest "${manifest}" "stills/still-draft.app.json"
+  [ "${status}" -eq 0 ]
+  [ -n "${output}" ]
+  run lab_manifest_digest_for_rel "${manifest}" "stills/still-draft.json"
+  [ "${status}" -eq 0 ]
+  run write_lab_seed_manifest "${dest}/_lab" "${manifest}"
+  [ "${status}" -eq 0 ]
+
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft","stamp":"v2"}}' \
+    >"${src}/_lab/stills/still-draft.json"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ ${output} != *"copied "* ]]
+  [ ! -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
+  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
+  [ "$(cat "${dest}/_user/keep-me.json")" = "poison" ]
+
+  echo 'edited-lab' >"${dest}/_lab/stills/still-draft.app.json"
+  printf '%s\n' '{"extra":{"linearMode":true,"lab_app_mode":{"enabled":true,"default_view":"app"},"lab_rel":"stills/still-draft","stamp":"v3"}}' \
+    >"${src}/_lab/stills/still-draft.json"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"_rescued"* ]]
+  [ -f "${dest}/_user/_rescued/stills/still-draft.app.json" ]
+  [ "$(cat "${dest}/_user/_rescued/stills/still-draft.app.json")" = "edited-lab" ]
+  [ "$(cat "${dest}/_lab/stills/still-draft.app.json")" = "$(cat "${src}/_lab/stills/still-draft.json")" ]
   run install_lab_workflows "${src}" "${dest}"
   [ "${status}" -eq 0 ]
   local -a rescued_edits=("${dest}/_user/_rescued/stills/still-draft.app.json")
   [ "${#rescued_edits[@]}" -eq 1 ]
   local -a collided2=("${dest}/_user/klein/my-hook.rescued-"*.app.json)
   [ "${#collided2[@]}" -eq 1 ]
+
+  echo 'dup' >"${dest}/_lab/stills/still-draft-copy.app.json"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [ ! -f "${dest}/_lab/stills/still-draft-copy.app.json" ]
+  [ -f "${dest}/_user/stills/still-draft-copy.app.json" ]
+  [ "$(cat "${dest}/_user/stills/still-draft-copy.app.json")" = "dup" ]
+
+  [ -f "${dest}/_lab/klein/plain.json" ]
+  rm -f "${src}/_lab/klein/plain.json"
+  run install_lab_workflows "${src}" "${dest}"
+  [ "${status}" -eq 0 ]
+  [ ! -f "${dest}/_lab/klein/plain.json" ]
+  [ ! -f "${dest}/_user/klein/plain.json" ]
+
+  mkdir -p "${dest}/_user/_rescued/dump"
+  for i in $(seq 1 21); do
+    echo "clone-${i}" >"${dest}/_user/_rescued/dump/${i}.json"
+  done
+  run warn_user_rescued_lab_dump "${dest}/_user"
+  [ "${status}" -eq 0 ]
+  [[ ${output} == *"WARN"* ]]
+  [[ ${output} == *"_user/_rescued"* ]]
 }
 
 @test "heal_misplaced_host_output_dir copies overlay into outputs bind" {
@@ -955,7 +1030,7 @@ PY
   export LAB_OUTPUTS_MOUNT="${TEST_TMP_DIR}/outputs_main"
   run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"LAB_ENTRYPOINT_NO_EXEC"* || "${output}" == *"phase"* || "${output}" == *"refresh"* ]]
+  [[ ${output} == *"LAB_ENTRYPOINT_NO_EXEC"* || ${output} == *"phase"* || ${output} == *"refresh"* ]]
   [[ -L ${COMFY_HOME}/output ]]
   [[ -f ${COMFY_HOME}/custom_nodes/ez_ltx_spatial/__init__.py ]]
 }
@@ -983,7 +1058,7 @@ PY
   unset LAB_FORCE_COLD_INSTALL
   run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pin"* || "${output}" == *"Re-seeding"* ]]
+  [[ ${output} == *"pin"* || ${output} == *"Re-seeding"* ]]
   [[ -f ${COMFY_HOME}/marker_pin.txt ]]
 }
 
@@ -1006,7 +1081,7 @@ PY
   unset LAB_FORCE_COLD_INSTALL
   run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Seeding"* || "${output}" == *"prebuilt"* || "${output}" == *"Seed"* ]]
+  [[ ${output} == *"Seeding"* || ${output} == *"prebuilt"* || ${output} == *"Seed"* ]]
   [[ -f ${COMFY_HOME}/marker.txt ]]
   [[ -x ${COMFY_HOME}/.venv/bin/python ]]
 }
@@ -1030,8 +1105,8 @@ PY
   source "${REPO_ROOT}/docker/entrypoint.sh"
   run ep_log "progress marker"
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"[entrypoint"* ]]
-  [[ "${output}" == *"progress marker"* ]]
+  [[ ${output} == *"[entrypoint"* ]]
+  [[ ${output} == *"progress marker"* ]]
 
   local pre dest
   pre="${TEST_TMP_DIR}/seed_src"
@@ -1052,7 +1127,7 @@ PY
   install_mock_bin pip 'echo "pip $*"; exit 0'
   run pip_install -U pip
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pip:"* || "${output}" == *"pip "* ]]
+  [[ ${output} == *"pip:"* || ${output} == *"pip "* ]]
 }
 
 @test "install-comfy parse_install_args and run_install_phase" {
@@ -1071,7 +1146,7 @@ PY
 
   run run_install_phase not-a-phase
   [ "${status}" -eq 2 ]
-  [[ "${output}" == *"unknown phase"* ]]
+  [[ ${output} == *"unknown phase"* ]]
 }
 
 @test "install-comfy phase helpers with mocks" {
@@ -1092,7 +1167,7 @@ PY
 
   run phase_torch
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pip:"* || "${output}" == *"torch"* ]]
+  [[ ${output} == *"pip:"* || ${output} == *"torch"* ]]
 
   run phase_clone_comfy
   [ "${status}" -eq 0 ]
@@ -1110,19 +1185,19 @@ PY
 
   run apply_free_memory_patch
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
+  [[ ${output} == *"not found"* || ${output} == *"patch"* || -z ${output} ]]
 
   run apply_unified_memory_copy_patch
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || -z ${output} ]]
+  [[ ${output} == *"not found"* || ${output} == *"patch"* || -z ${output} ]]
 
   run apply_magcache_compat_patch
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"magcache"* || -z ${output} ]]
+  [[ ${output} == *"not found"* || ${output} == *"patch"* || ${output} == *"magcache"* || -z ${output} ]]
 
   run apply_vhs_widget_inputs_patch
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"not found"* || "${output}" == *"patch"* || "${output}" == *"vhs"* || "${output}" == *"widgetInputs"* || -z ${output} ]]
+  [[ ${output} == *"not found"* || ${output} == *"patch"* || ${output} == *"vhs"* || ${output} == *"widgetInputs"* || -z ${output} ]]
 
   # finalize with mocked strip deps
   run phase_finalize
@@ -1146,7 +1221,7 @@ PY
   run comfy_pin_matches
   [ "${status}" -ne 0 ]
   run comfy_pin_file
-  [[ "${output}" == *".lab-comfyui-ref"* ]]
+  [[ ${output} == *".lab-comfyui-ref"* ]]
 }
 
 @test "refresh_comfy_pin_if_needed skips when pin matches" {
@@ -1158,7 +1233,7 @@ PY
   write_comfy_pin
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"already on volume"* ]]
+  [[ ${output} == *"already on volume"* ]]
 }
 
 @test "refresh_comfy_pin_if_needed clones when volume pin lags and prebuilt missing" {
@@ -1176,7 +1251,7 @@ PY
   COMFYUI_REF="v0.37.0"
   run refresh_comfy_pin_if_needed
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"cloning"* || "${output}" == *"Syncing"* ]]
+  [[ ${output} == *"cloning"* || ${output} == *"Syncing"* ]]
   run read_comfy_pin
   [ "${output}" = "v0.37.0" ]
 }
@@ -1208,7 +1283,7 @@ PY
   [[ -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
   [[ -f ${COMFY_HOME}/input/start.png ]]
   [[ ! -f ${COMFY_HOME}/input/example.png ]]
-  [[ "${output}" == *"Re-seeding"* || "${output}" == *"prebuilt"* ]]
+  [[ ${output} == *"Re-seeding"* || ${output} == *"prebuilt"* ]]
 }
 
 @test "heal_comfy_api_input_from_prebuilt copies nested package when pin matches" {
@@ -1227,13 +1302,13 @@ PY
   [[ ! -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
   run heal_comfy_api_input_from_prebuilt
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Healing comfy_api/input"* ]]
+  [[ ${output} == *"Healing comfy_api/input"* ]]
   [[ -f ${COMFY_HOME}/comfy_api/input/__init__.py ]]
   [[ -f ${COMFY_HOME}/input/start.png ]]
   [[ ! -f ${COMFY_HOME}/input/example.png ]]
   run heal_comfy_api_input_from_prebuilt
   [ "${status}" -eq 0 ]
-  [[ "${output}" != *"Healing"* ]]
+  [[ ${output} != *"Healing"* ]]
 }
 
 @test "install-comfy main stamp-present refresh invokes pin sync" {
@@ -1251,8 +1326,8 @@ PY
   write_comfy_pin
   run main
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"fast refresh"* || "${output}" == *"already on volume"* ]]
-  [[ "${output}" == *"Install complete"* ]]
+  [[ ${output} == *"fast refresh"* || ${output} == *"already on volume"* ]]
+  [[ ${output} == *"Install complete"* ]]
 }
 
 @test "install-comfy main --phase dispatches without full cold install" {
@@ -1262,8 +1337,8 @@ PY
   install_mock_bin pip 'echo "pip $*"; exit 0'
   run main --phase venv
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Docker phase: venv"* || "${output}" == *"phase venv"* || "${output}" == *"venv"* ]]
-  [[ "${output}" == *"Phase venv complete"* || "${output}" == *"complete"* ]]
+  [[ ${output} == *"Docker phase: venv"* || ${output} == *"phase venv"* || ${output} == *"venv"* ]]
+  [[ ${output} == *"Phase venv complete"* || ${output} == *"complete"* ]]
 }
 
 @test "package_prebuilt_parts splits venv and app when LAB_PACKAGE_PARTS=1" {
@@ -1341,22 +1416,22 @@ PY
   [ "${status}" -ne 0 ]
   run assert_torch_cuda
   # Hermetic hosts: torch missing (2) or CPU-only (1); CUDA (0) is also fine.
-  [[ "${status}" -eq 0 || "${status}" -eq 1 || "${status}" -eq 2 ]]
+  [[ ${status} -eq 0 || ${status} -eq 1 || ${status} -eq 2 ]]
 }
 
 @test "default pins are non-empty validated tags" {
   # shellcheck disable=SC1090
   source "${REPO_ROOT}/docker/install-comfy.sh"
   [[ -n ${COMFYUI_REF} ]]
-  [[ "${COMFYUI_REF}" == v0.* ]]
+  [[ ${COMFYUI_REF} == v0.* ]]
   [[ -n ${COMFYUI_MANAGER_REF} ]]
   [[ -n ${COMFYUI_NUNCHAKU_NODE_REF} ]]
-  [[ "${COMFYUI_NUNCHAKU_NODE_REF}" == v* ]]
-  [[ "${COMFYUI_OPENCUT_REF}" == "0.5.0" ]]
+  [[ ${COMFYUI_NUNCHAKU_NODE_REF} == v* ]]
+  [[ ${COMFYUI_OPENCUT_REF} == "0.5.0" ]]
   [[ ${#COMFYUI_MAGCACHE_REF} -ge 7 ]]
   [[ ${#COMFYUI_LTX_DIRECTOR_REF} -ge 7 ]]
   [[ -n ${TORCH_VERSION} ]]
-  [[ "${TORCH_INDEX_URL}" == *cu130* ]]
+  [[ ${TORCH_INDEX_URL} == *cu130* ]]
 }
 
 @test "install-comfy modules exist for Docker phase COPY contract" {
@@ -1401,15 +1476,15 @@ PY
 
   run find_libcuda_dir
   [ "${status}" -eq 0 ]
-  [[ "${output}" == "${fake_dir}" ]]
+  [[ ${output} == "${fake_dir}" ]]
 
   run ensure_triton_build_env
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"libcuda dir=${fake_dir}"* ]]
+  [[ ${output} == *"libcuda dir=${fake_dir}"* ]]
   # ensure_triton_build_env exports in subshell via run — re-run in current shell
   ensure_triton_build_env
-  [[ "${LIBRARY_PATH}" == *"${fake_dir}"* ]]
-  [[ "${LD_LIBRARY_PATH}" == *"${fake_dir}"* ]]
+  [[ ${LIBRARY_PATH} == *"${fake_dir}"* ]]
+  [[ ${LD_LIBRARY_PATH} == *"${fake_dir}"* ]]
 }
 
 @test "find_libcuda_dir fails when libcuda missing" {
@@ -1460,9 +1535,9 @@ PY
   export LAB_DISABLE_TORCH_NATIVE_TRITON=1
   run configure_torch_native_triton
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"LAB_DISABLE_TORCH_NATIVE_TRITON=1"* ]]
+  [[ ${output} == *"LAB_DISABLE_TORCH_NATIVE_TRITON=1"* ]]
   configure_torch_native_triton
-  [[ "${PYTHONPATH}" == *"${LAB_PYTHONPATH_ROOT}"* ]]
+  [[ ${PYTHONPATH} == *"${LAB_PYTHONPATH_ROOT}"* ]]
 
   # Auto-disable when deps incomplete
   export LAB_DISABLE_TORCH_NATIVE_TRITON=0
@@ -1470,7 +1545,7 @@ PY
   export LD_LIBRARY_PATH="${TEST_TMP_DIR}/no_cuda2"
   mkdir -p "${LD_LIBRARY_PATH}"
   configure_torch_native_triton
-  [[ "${LAB_DISABLE_TORCH_NATIVE_TRITON}" == "1" ]]
+  [[ ${LAB_DISABLE_TORCH_NATIVE_TRITON} == "1" ]]
 }
 
 @test "configure_torch_native_triton keeps Triton when deps OK" {
@@ -1489,7 +1564,7 @@ PY
   install_mock_bin gcc 'exit 0'
   install_mock_bin python "echo '${py_inc}'"
   configure_torch_native_triton
-  [[ "${LAB_DISABLE_TORCH_NATIVE_TRITON}" == "0" ]]
+  [[ ${LAB_DISABLE_TORCH_NATIVE_TRITON} == "0" ]]
 }
 
 @test "comfy_exec_args is Kitchen XOR Sage and never highvram" {
@@ -1498,27 +1573,27 @@ PY
   run comfy_exec_args
   [ "${status}" -eq 0 ]
   local args="${output}"
-  [[ "${args}" == *"--use-ck-attention"* ]]
-  [[ "${args}" == *"--disable-mmap"* ]]
-  [[ "${args}" == *"--bf16-unet"* ]]
-  [[ "${args}" == *"--input-directory"* ]]
-  [[ "${args}" == *"--output-directory"* ]]
-  [[ "${args}" == *"--user-directory"* ]]
-  [[ "${args}" == *"/comfy-state/ComfyUI/user"* ]]
-  [[ "${args}" == *"--enable-manager"* ]]
+  [[ ${args} == *"--use-ck-attention"* ]]
+  [[ ${args} == *"--disable-mmap"* ]]
+  [[ ${args} == *"--bf16-unet"* ]]
+  [[ ${args} == *"--input-directory"* ]]
+  [[ ${args} == *"--output-directory"* ]]
+  [[ ${args} == *"--user-directory"* ]]
+  [[ ${args} == *"/comfy-state/ComfyUI/user"* ]]
+  [[ ${args} == *"--enable-manager"* ]]
   # One token per line from comfy_exec_args. grep -Fx so bash 3.2 set -e
   # does not swallow a failed [[ != ]] in the middle of the test function.
-  run grep -Fx -- '--use-sage-attention' <<< "${args}"
+  run grep -Fx -- '--use-sage-attention' <<<"${args}"
   [ "${status}" -ne 0 ]
-  run grep -Fx -- '--enable-manager-legacy-ui' <<< "${args}"
+  run grep -Fx -- '--enable-manager-legacy-ui' <<<"${args}"
   [ "${status}" -ne 0 ]
-  run grep -Fx -- '--highvram' <<< "${args}"
+  run grep -Fx -- '--highvram' <<<"${args}"
   [ "${status}" -ne 0 ]
-  run grep -Fx -- '--gpu-only' <<< "${args}"
+  run grep -Fx -- '--gpu-only' <<<"${args}"
   [ "${status}" -ne 0 ]
-  run grep -Fx -- '--lowvram' <<< "${args}"
+  run grep -Fx -- '--lowvram' <<<"${args}"
   [ "${status}" -ne 0 ]
-  run grep -Fx -- '--normalvram' <<< "${args}"
+  run grep -Fx -- '--normalvram' <<<"${args}"
   [ "${status}" -ne 0 ]
 }
 
@@ -1529,21 +1604,24 @@ PY
   unset LAB_SAGE_WHEEL_SHA256
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"Kitchen"* || "${output}" == *"skipped"* ]]
+  [[ ${output} == *"Kitchen"* || ${output} == *"skipped"* ]]
   export LAB_SAGE_WHEEL_URL="https://example.invalid/sage.whl"
   unset LAB_SAGE_WHEEL_SHA256
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"SHA256"* || "${output}" == *"refusing"* ]]
+  [[ ${output} == *"SHA256"* || ${output} == *"refusing"* ]]
   export LAB_SAGE_WHEEL_SHA256="deadbeef"
-  pip_install() { echo "pip ${1}"; return 0; }
+  pip_install() {
+    echo "pip ${1}"
+    return 0
+  }
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"pip ok"* || "${output}" == *"pinned"* ]]
+  [[ ${output} == *"pip ok"* || ${output} == *"pinned"* ]]
   pip_install() { return 1; }
   run install_sage_wheel_if_pinned
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"failed"* || "${output}" == *"optional"* ]]
+  [[ ${output} == *"failed"* || ${output} == *"optional"* ]]
 }
 
 @test "ensure_llama_cpp_cpu installs CPU wheel when Llama missing" {
@@ -1714,7 +1792,7 @@ PY
   run ensure_pkuseg_home "${link}"
   [ "${status}" -eq 0 ]
   [[ -L ${link} ]]
-  [[ "${output}" == *"pkuseg home"* ]]
+  [[ ${output} == *"pkuseg home"* ]]
   run grep -F 'ensure_pkuseg_home' "${REPO_ROOT}/docker/entrypoint.sh"
   [ "${status}" -eq 0 ]
   run grep -F 'PKUSEG_HOME' "${REPO_ROOT}/docker/docker-compose.yml"
@@ -1754,7 +1832,7 @@ PY
   export CLONE_IMPORT_RC=1
   run comfy_runtime_python
   [ "${status}" -eq 0 ]
-  [[ "${output}" == "${VIRTUAL_ENV}/bin/python" ]]
+  [[ ${output} == "${VIRTUAL_ENV}/bin/python" ]]
   run ensure_dub_wheels
   [ "${status}" -eq 0 ]
   grep -q 'faster-whisper' "${DUB_PIP_LOG}"
@@ -1796,7 +1874,7 @@ PY
   [ "${status}" -eq 0 ]
   [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
   [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
-  [[ "${output}" == *"disabled"* ]]
+  [[ ${output} == *"disabled"* ]]
   run configure_nunchaku_pack
   [ "${status}" -eq 0 ]
   export NUNCHAKU_IMPORT_RC=0
@@ -1804,7 +1882,7 @@ PY
   [ "${status}" -eq 0 ]
   [[ -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku ]]
   [[ ! -d ${COMFY_HOME}/custom_nodes/ComfyUI-nunchaku.disabled ]]
-  [[ "${output}" == *"enabled"* ]]
+  [[ ${output} == *"enabled"* ]]
 }
 
 @test "seed_clay_inputs_if_missing writes plates via LAB_SEED_CLAY_PY" {
@@ -1819,7 +1897,7 @@ PY
   export LAB_SEED_CLAY_PY="${TEST_TMP_DIR}/missing_seed.py"
   run seed_clay_inputs_if_missing
   [ "${status}" -eq 0 ]
-  [[ "${output}" == *"missing"* ]]
+  [[ ${output} == *"missing"* ]]
 }
 
 @test "entrypoint main writes _user stub" {

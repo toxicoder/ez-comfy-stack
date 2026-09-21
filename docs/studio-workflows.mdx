@@ -21,7 +21,7 @@ tags: [comfyui, workflows, klein, wan, ltx, catalog]
 
 **Who this is for:** studio users after the first still-draft Queue. Node-by-node widgets: [Workflow details](create/workflows-index.md). Encyclopedia: [Workflow node parameters](reference/workflow-nodes.md).
 
-After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). A Save that landed in `_lab/` is **rescued** into `_user/` or `_user/_rescued/` on the next start. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
+After `download-models` + `start`, load from Comfy’s **Workflows** sidebar under **`_lab/<lane>/`** (seeded from host `workflows/_lab/`). Filenames are short stems in lane folders (`stills/still-draft.json`); the unique id is `extra.lab_rel`. Every shipped graph is Nodes 2.0 native (`extra.workflowRendererVersion` = `Vue-corrected`). App Mode graphs also appear under Comfy’s **Apps** sidebar (`*.app.json` on disk under the same lane folder; same stem). Save your own graphs in **`_user/`**. Live `_lab/` is the git catalog (overwritten on start). An explicit Save that landed in `_lab/` is **rescued** into `_user/` (new files) or `_user/_rescued/` (in-place lab Saves). Catalog restamps on `start` do **not** clone shipped `_lab` graphs into `_user/`. Do **not** edit raw JSON — change widgets on the canvas. Toggle Nodes 2.0 from the Comfy logo menu if you need classic LiteGraph; the JSON still loads.
 
 Sidebar tree after start:
 
@@ -45,7 +45,7 @@ user/default/workflows/
       albums/nill-bye/<album>/     nine Nill Bye albums (numbered tracks + cover + album)
       albums/drive-through/<album>/  five Drive-through albums
     inspire/   prompt-forge, cinema-rack, audio-rack, research-chat, app-forge, beat-sheet
-  _user/       your graphs (never overwritten; `_rescued/` holds in-place lab edits)
+  _user/       your graphs (never overwritten; `_rescued/` holds explicit in-place lab Saves, not catalog updates)
 ```
 
 Reusable printer blocks live in the node library after start (`custom_nodes/ez_studio_blocks/subgraphs/`): **klein-t2i-backbone**, **wan-i2v-5s**, **ltx-av-8s**, **ltx-film-shot**. Drop them from the subgraph menu instead of copy-pasting chains.

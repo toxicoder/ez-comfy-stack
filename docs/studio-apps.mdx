@@ -10,7 +10,7 @@ tags: [comfyui, app-mode, workflows, occupancy, klein, wan, ltx]
 
 - How App Mode relates to the node graph
 - Apps sidebar (`.app.json`) vs Workflows
-- Where operator Apps persist (`_user/`, rescue from `_lab/`)
+- Where operator Apps persist (`_user/`; explicit lab Save or duplicate only)
 - Creator widgets: Quality (Lab / Draft / High / Free Commercial Use), Prompt, Style, Rewrite prompt, Seed (unique labels, wired LoadImage / LoadAudio)
 - Occupancy (one GB10 job) — chip at the top of the widget list, plus App summary and Quality caption
 - Lane A (Inspire) vs Lane B (Produce)
@@ -52,7 +52,7 @@ Comfy’s **Apps** sidebar lists files whose name ends in `.app.json`. On `start
 
 Filenames: [Workflow catalog](studio-workflows.md). Playbook: [Still to motion to AV](visual-generative-ai.md). Restart the container after a pull so the `.app.json` copy runs.
 
-Save your own Apps under **`_user/`**. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start`; extras that were never in git move to `_user/`. Re-open the rescued file — `_lab/` is the shipped catalog.
+Save your own Apps under **`_user/`**. Duplicate a lab graph (App Forge, Save As `_user/`, or a new file under live `_lab/`) and it stays in `_user/`. A Save that overwrites live `_lab/<lane>/*.app.json` is rescued into `_user/_rescued/` on the next `start`. Catalog updates (pull + `start`) do **not** copy shipped `_lab` graphs into `_user/`. Re-open a rescued file — `_lab/` is the shipped catalog. If `_user/_rescued/` is already full of catalog clones from older starts, delete that folder (keep the rest of `_user/`).
 
 ---
 

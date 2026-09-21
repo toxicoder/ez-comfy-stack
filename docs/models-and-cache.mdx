@@ -76,7 +76,7 @@ tags: [models, huggingface, cache, klein, wan, ltx]
 | Comfy `user/` (sidebar, history) | `${COMFY_OUTPUT_DIR}/comfy-user` | `/comfy-state/ComfyUI/user` (`--user-directory`) | persist |
 | Live lab graphs | `…/comfy-user/default/workflows/_lab/` | same | **overwrite** from repo `workflows/_lab/` |
 | Live operator graphs | `…/comfy-user/default/workflows/_user/` | same | **never overwrite** |
-| Operator JSON saved under `_lab/` | same tree | same | **rescue** into `_user/` (extras) or `_user/_rescued/` (edited lab graphs), then lab overwrite |
+| Operator JSON saved under `_lab/` | same tree | same | **rescue** extras into `_user/` and explicit in-place Saves into `_user/_rescued/`, then lab overwrite. Catalog restamps do **not** clone `_lab` |
 | Other files under live workflows | same tree | same | **never touch** |
 | Lab custom nodes `ez_*` | git `custom_nodes/` | `$COMFY_HOME/custom_nodes/ez_*` | overwrite |
 | Operator custom nodes | `${COMFY_OUTPUT_DIR}/custom-nodes-user` | `$COMFY_HOME/custom_nodes/_user` | persist (pin refresh excludes this tree) |
