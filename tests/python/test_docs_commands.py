@@ -8,6 +8,7 @@ from types import ModuleType
 
 import importlib.util
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -18,6 +19,7 @@ COMMANDS_PY = ROOT / "docs" / "commands.py"
 BUILDER_JSON = ROOT / "includes" / "command-builder.json"
 HOOKS_PY = ROOT / "docs" / "hooks.py"
 COMMANDS_TS = ROOT / "docs-site" / "lib" / "command-vars.ts"
+COMMANDS_TSX = ROOT / "docs-site" / "components" / "command-vars.tsx"
 COMMANDS_JS = ROOT / "docs" / "javascripts" / "commands.js"
 EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 CONVENTIONS = ROOT / "docs" / "project-conventions.md"
@@ -250,6 +252,27 @@ def test_mkdocs_wires_commands_js(cmd: ModuleType) -> None:
         getting = getting.with_suffix(".mdx")
     text = getting.read_text(encoding="utf-8")
     assert "click" in text.lower() or "edit" in text.lower() or "SPARK_HOST" in text
+
+
+def test_command_builder_copy_is_icon_in_box_corner() -> None:
+    """EzCommand copy control is a corner icon, not a labelled Copy pill."""
+    tsx = COMMANDS_TSX.read_text(encoding="utf-8")
+    assert "CopyCommandButton" in tsx
+    assert "from \"lucide-react\"" in tsx
+    assert "Clipboard" in tsx
+    assert "Check" in tsx
+    assert 'aria-label={label}' in tsx
+    assert "Copy command" in tsx
+    assert not re.search(r">\s*Copy\s*<", tsx)
+    css = EXTRA_CSS.read_text(encoding="utf-8")
+    copy_rule = re.search(r"\.ez-cmd-builder__copy\s*\{[^}]+\}", css, re.S)
+    assert copy_rule is not None
+    assert "position: absolute" in copy_rule.group(0)
+    assert "top: 0.5rem" in copy_rule.group(0)
+    assert "right: 0.5rem" in copy_rule.group(0)
+    code_rule = re.search(r"\.ez-cmd-builder__code\s*\{[^}]+\}", css, re.S)
+    assert code_rule is not None
+    assert "position: relative" in code_rule.group(0)
 
 
 def test_download_tiers_page_states_pack_not_quality() -> None:

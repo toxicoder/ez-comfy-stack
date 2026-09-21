@@ -272,6 +272,11 @@ for (const scheme of ["light", "dark"]) {
     Array.from(document.querySelectorAll('a[href*="github.com"]')).map((a) => a.getAttribute("href"))
   );
   check(`[${scheme}] repository link present`, repoLinks.length > 0, JSON.stringify(repoLinks.slice(0, 2)));
+  const sidebarRepo = await page.evaluate(() => {
+    const repo = "https://github.com/toxicoder/ez-comfy-stack";
+    return Array.from(document.querySelectorAll(`#nd-sidebar a[href="${repo}"]`)).length;
+  });
+  check(`[${scheme}] one GitHub icon in the sidebar`, sidebarRepo === 1, `count=${sidebarRepo}`);
   const edit = await page.evaluate(() => {
     const a = Array.from(document.querySelectorAll("a")).find((x) => /edit this page/i.test(x.textContent ?? ""));
     return a?.getAttribute("href") ?? null;
@@ -397,6 +402,47 @@ const panel = await withPage(async (page) => {
     prose: await page.evaluate(() => document.body.innerText),
   };
 });
+const copyChrome = await withPage(async (page) => {
+  await goto(page, "/getting-started/", 2500);
+  return page.evaluate(() => {
+    const copies = Array.from(document.querySelectorAll(".ez-cmd-builder__copy"));
+    const first = copies[0];
+    const box = first?.closest(".ez-cmd-builder__code");
+    const btnRect = first?.getBoundingClientRect();
+    const boxRect = box?.getBoundingClientRect();
+    return {
+      copyCount: copies.length,
+      copyText: first ? (first.textContent ?? "").replace(/\s+/gu, " ").trim() : null,
+      copyLabel: first?.getAttribute("aria-label") ?? null,
+      hasSvg: Boolean(first?.querySelector("svg")),
+      insetRight: boxRect && btnRect ? boxRect.right - btnRect.right : null,
+      insetTop: boxRect && btnRect ? btnRect.top - boxRect.top : null
+    };
+  });
+});
+const okCopy = copyChrome !== PROBE_FAILED;
+check(
+  "command-builder copy is an icon",
+  okCopy && copyChrome.copyCount > 0 && copyChrome.copyText === "" && copyChrome.hasSvg,
+  JSON.stringify(copyChrome)
+);
+check(
+  "command-builder copy sits in the box corner",
+  okCopy &&
+    copyChrome.insetRight !== null &&
+    copyChrome.insetTop !== null &&
+    copyChrome.insetRight >= 0 &&
+    copyChrome.insetRight <= 24 &&
+    copyChrome.insetTop >= 0 &&
+    copyChrome.insetTop <= 24,
+  JSON.stringify(copyChrome)
+);
+check(
+  "command-builder copy has an accessible name",
+  okCopy && /copy command/i.test(copyChrome.copyLabel ?? ""),
+  JSON.stringify(okCopy ? copyChrome.copyLabel : copyChrome)
+);
+
 const okPanel = panel !== PROBE_FAILED;
 check("command-vars panel renders with editable tokens", okPanel && panel.present && panel.inputs > 0, JSON.stringify(panel));
 check("token stays user-editable (not frozen)", okPanel && panel.after === "10.0.0.99" && panel.before !== panel.after, `${okPanel ? panel.before : "?"} -> ${okPanel ? panel.after : "?"}`);

@@ -336,15 +336,40 @@ article table:not([class]) {
   font-size: 0.9em;
 }
 
+.ez-cmd-builder__code {
+  position: relative;
+}
+
+.ez-cmd-builder__code pre {
+  margin: 0;
+  padding-right: 2.25rem;
+}
+
 .ez-cmd-builder__copy {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--color-fd-card) 72%, transparent);
+  color: var(--color-fd-muted-foreground);
   cursor: pointer;
-  margin-top: 0.35rem;
-  font: inherit;
-  padding: 0.2rem 0.55rem;
-  border: 1px solid var(--color-fd-border);
-  border-radius: 3px;
-  background: var(--color-fd-primary);
-  color: var(--color-fd-primary-foreground);
+}
+
+.ez-cmd-builder__copy:hover {
+  color: var(--color-fd-accent-foreground);
+  background: var(--color-fd-accent);
+}
+
+.ez-cmd-builder__copy svg {
+  width: 1rem;
+  height: 1rem;
 }
 
 .ez-var {

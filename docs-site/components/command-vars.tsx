@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, Clipboard } from "lucide-react";
 import {
   createContext,
   useCallback,
@@ -285,17 +286,37 @@ export function EzCommand({ id }: { id: string }) {
         <pre>
           <code>{line}</code>
         </pre>
-        <button
-          type="button"
-          className="ez-cmd-builder__copy"
-          onClick={() => {
-            void navigator.clipboard.writeText(line);
-          }}
-        >
-          Copy
-        </button>
+        <CopyCommandButton line={line} />
       </div>
     </div>
+  );
+}
+
+/** Clipboard icon overlay for one rendered command line. */
+function CopyCommandButton({ line }: { line: string }) {
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return undefined;
+    const timer = window.setTimeout(() => setCopied(false), 1500);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+
+  const label = copied ? "Copied" : "Copy command";
+  return (
+    <button
+      type="button"
+      className="ez-cmd-builder__copy"
+      title={label}
+      aria-label={label}
+      onClick={() => {
+        void navigator.clipboard.writeText(line).then(() => {
+          setCopied(true);
+        });
+      }}
+    >
+      {copied ? <Check aria-hidden /> : <Clipboard aria-hidden />}
+    </button>
   );
 }
 
