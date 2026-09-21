@@ -227,6 +227,20 @@ class NextExportMemoryTests(unittest.TestCase):
         self.assertRegex(page, r"await[\s\S]*\.load\(")
 
 
+class LayoutChromeTests(unittest.TestCase):
+    """Sidebar repo button and page layout wiring."""
+
+    def test_docs_layout_has_one_github_entry(self) -> None:
+        """githubUrl already adds the sidebar icon; do not pass a second links item."""
+        page = (SITE_DIR / "app" / "[[...slug]]" / "page.tsx").read_text(encoding="utf-8")
+        self.assertIn("githubUrl={REPO_URL}", page)
+        self.assertNotIn("links={", page)
+        self.assertNotIn("RepoIcon", page)
+        wordmark = (SITE_DIR / "components" / "wordmark.tsx").read_text(encoding="utf-8")
+        self.assertNotIn("RepoIcon", wordmark)
+        self.assertIn("export function Wordmark", wordmark)
+
+
 class ThemeTests(unittest.TestCase):
     """Voltage tokens, no Material indigo."""
 

@@ -17,7 +17,7 @@ import { CommandVarsProvider } from "@/components/command-vars";
 import { mdxComponentsFor } from "@/components/mdx-components";
 import { PublishedChip } from "@/components/published-chip";
 import { TableChrome } from "@/components/table-chrome";
-import { RepoIcon, Wordmark } from "@/components/wordmark";
+import { Wordmark } from "@/components/wordmark";
 import { buildPageTree, neighborsOf } from "@/lib/nav";
 import { formatPublishedLabel, publishedAt } from "@/lib/published";
 import { isDevelopmentAlias, REPO_URL, repoFileUrl } from "@/lib/site";
@@ -71,15 +71,6 @@ export default async function DocsRoute({ params }: PageProps) {
       tree={tree}
       githubUrl={REPO_URL}
       nav={{ title: Wordmark }}
-      links={[
-        {
-          type: "icon",
-          label: "Repository",
-          icon: <RepoIcon />,
-          text: "GitHub",
-          url: REPO_URL
-        }
-      ]}
     >
       {isDevelopmentAlias() && (
         <Banner id="development-alias" variant="normal" changeLayout={false}>
