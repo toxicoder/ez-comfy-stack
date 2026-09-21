@@ -61,7 +61,13 @@
         "terminal.integrated.defaultProfile.linux": "bash",
         "bazel.executable": "/usr/local/bin/bazelisk",
         "bazel.buildifierExecutable": "/usr/local/bin/buildifier",
-        "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python"
+        "python.defaultInterpreterPath": "/home/vscode/.venv/bin/python",
+        "python.analysis.diagnosticMode": "openFilesOnly",
+        "python.testing.autoTestDiscoverOnSaveEnabled": false,
+        "mypy-type-checker.reportingScope": "file",
+        "bazel.queriesShareServer": false,
+        "bazel.enableCodeLens": false,
+        "bazel.enableWorkspaceTree": false
       }
     }
   },
