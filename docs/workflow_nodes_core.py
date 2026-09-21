@@ -268,10 +268,21 @@ def core_nodes() -> dict[str, Any]:
             "Snap image (div 16)",
             "Scale a still to the largest width and height that fit inside the source and are multiples of 16.",
             origin="ez_image",
-            lab="stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode.",
+            lab="stills/text-swap snaps the start image to the Flux.2 Klein VAE grid before VAEEncode. stills/background-swap also feeds EZEmptyFlux2FromImage.",
             sockets=[
                 _s("image", "IMAGE", "in", "Source still."),
                 _s("IMAGE", "IMAGE", "out", "Snapped still."),
+            ],
+            widgets=[],
+        ),
+        "EZEmptyFlux2FromImage": _n(
+            "Empty Flux.2 from image",
+            "Allocate an empty Flux.2 latent matching a still's snapped width and height.",
+            origin="ez_image",
+            lab="stills/background-swap uses this as KSampler.latent_image so the encoded source is only a ReferenceLatent.",
+            sockets=[
+                _s("image", "IMAGE", "in", "Snapped still."),
+                _s("LATENT", "LATENT", "out", "Empty Flux.2 noise canvas (÷16, 128 channels)."),
             ],
             widgets=[],
         ),

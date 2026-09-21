@@ -75,6 +75,7 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     assert "EmptyFlux2LatentImage" not in types
     assert "ReferenceLatent" in types
     assert "EZSnapImage" in types
+    assert "EZEmptyFlux2FromImage" in types
     assert "EZMatchImageSize" in types
     enh = next(
         node for node in graph["nodes"] if node.get("type") == "EZKleinPromptEnhance"
@@ -82,11 +83,41 @@ def test_background_swap_is_size_matched_klein_edit() -> None:
     values = list(enh["widgets_values"] or [])
     mode = values[3] if len(values) >= 7 else values[2]
     assert mode == "background_swap"
+    prompt = str(values[1] if len(values) >= 7 else values[0])
+    assert "entire environment" in prompt.casefold()
+    assert "ground or floor" in prompt.casefold()
+    assert "replace only the background" not in prompt.casefold()
     assert _src(graph, enh, "background_cast")["type"] == "EZBackgroundCast"
     desc = next(node for node in graph["nodes"] if node.get("type") == "EZImageDescribe")
-    assert desc["widgets_values"][0] is False
+    assert desc["widgets_values"][0] is True
     assert _src(graph, desc, "image")["type"] == "LoadImage"
     assert _src(graph, enh, "image_desc")["type"] == "EZImageDescribe"
+    sampler = next(node for node in graph["nodes"] if node.get("type") == "KSampler")
+    assert _src(graph, sampler, "latent_image")["type"] == "EZEmptyFlux2FromImage"
+    ref = next(node for node in graph["nodes"] if node.get("type") == "ReferenceLatent")
+    assert _src(graph, ref, "latent")["type"] == "VAEEncode"
+    empty = next(
+        node for node in graph["nodes"] if node.get("type") == "EZEmptyFlux2FromImage"
+    )
+    assert _src(graph, empty, "image")["type"] == "EZSnapImage"
+    pos = next(
+        node
+        for node in graph["nodes"]
+        if node.get("type") == "CLIPTextEncode" and node.get("title") != "Negative"
+    )
+    assert "entire environment" in str(pos["widgets_values"][0]).casefold()
+    neg = next(
+        node
+        for node in graph["nodes"]
+        if node.get("type") == "CLIPTextEncode" and node.get("title") == "Negative"
+    )
+    neg_text = str(neg["widgets_values"][0]).casefold()
+    assert "game-engine" not in neg_text
+    assert "pixar" not in neg_text
+    assert "illustration" not in neg_text
+    note = graph["extra"]["lab_note"].casefold()
+    assert "empty flux" in note or "empty klein" in note
+    assert "describe image (default on)" in note
 
 
 def test_background_swap_catalog_has_one_hundred_recipes() -> None:

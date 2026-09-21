@@ -53,7 +53,10 @@ from .cinema import (
 )
 from .background import (
     BACKGROUND_MODES,
+    REASON_PRECISE_BACKGROUND,
     format_background_cast,
+    is_background_instruction,
+    splice_source_caption,
     wrap_background_prompt,
 )
 from .describe import describe_image, last_status as describe_last_status
@@ -284,12 +287,16 @@ def _run(
         node_type=node_type,
         mode=mode,
     )
+    precise_background = False
     if mode == "text_swap":
         original = wrap_text_swap_prompt(original)
     elif mode in BACKGROUND_MODES:
+        precise_background = is_background_instruction(original)
         original = wrap_background_prompt(original, mode, background_cast)
     ctx = context if isinstance(context, str) else str(context or "")
     caption = image_desc if isinstance(image_desc, str) else str(image_desc or "")
+    if mode in BACKGROUND_MODES:
+        original = splice_source_caption(original, caption)
     if caption.strip():
         ctx = join_context_fields(("Context", ctx), ("Image", caption))
     do_enhance = _as_bool(enhance)
@@ -300,11 +307,16 @@ def _run(
         apply_style = False
         _log(ignored)
 
+    skip_precise = bool(precise_background and do_enhance)
+    if skip_precise:
+        do_enhance = False
+
     if not do_enhance:
         text = original
         if apply_style:
             text = apply_style_to_prompt(original, style)
-        return _pack(EnhanceResult(text, "enhance off"))
+        status = REASON_PRECISE_BACKGROUND if skip_precise else "enhance off"
+        return _pack(EnhanceResult(text, status))
 
     user = _compose_user(original, duration_hint, audio_notes, ctx)
     system = load_system_prompt(system_name)
@@ -359,6 +371,7 @@ class EZKleinPromptEnhance:
         "Qwen3-4B-Instruct-2507 GGUF. Modes: t2i, edit, identity (camera-free "
         "bible), text_swap (glyph-lock lettering), background_swap (replace "
         "environment including ground), background_edit (restyle environment). "
+        "Named background samples skip the rewriter (precise instruction). "
         "Optional context is bible/research (ignored when Enhance is "
         "off). Enhance defaults on. After Queue the CLIP prompt box is the "
         "CLIP string; Enhance status explains passthrough. Fail-soft without "

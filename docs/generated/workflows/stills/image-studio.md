@@ -1375,7 +1375,7 @@ Creator preset.
 | `Exterior architecture` | Exterior architecture still. Massing, facade material, and sun angle. Empty of signage. |
 | `Macro detail` | Macro still of a small subject. Shallow depth, tactile material, no readable type. |
 | `Illustration still` | Illustration still in a named medium (ink, gouache, woodcut). Not photoreal. |
-| `Background swap` | Keep the subject from the reference still. Replace the background, ground or floor, and set dressing near the subject. |
+| `Background swap` | Keep the subject from the reference still. Replace the entire environment — backdrop, sky, architecture, ground or floor, and set dressing near the subject. |
 | `Sky replace` | Keep the scene from the reference. Replace only the sky and the light it casts. |
 | `Time of day` | Keep inventory and camera. Relight the reference for a new time of day. |
 | `Weather change` | Keep the place. Change weather only: rain, snow, fog, or clear air as prompted. |

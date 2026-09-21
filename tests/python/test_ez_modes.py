@@ -133,7 +133,7 @@ def test_resolve_mode_splices_instruction_and_look_context() -> None:
     swapped = resolve_mode("Background swap", extra_context="Golden wide splice")
     assert "Keep the subject" in swapped.context
     assert "Golden wide splice" in swapped.context
-    assert swapped.enhance_mode == "edit"
+    assert swapped.enhance_mode == "background_swap"
     assert swapped.prefix == "ez_edit_bg_swap"
     assert splice_mode_context("", "") == ""
     assert splice_mode_context("A", "") == "A"

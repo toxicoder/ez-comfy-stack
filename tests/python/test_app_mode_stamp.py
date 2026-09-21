@@ -417,6 +417,25 @@ def test_text_swap_prompt_help_allows_missing_node() -> None:
     assert display_label(enh, "prompt") == "New lettering"
 
 
+def test_background_swap_prompt_help_and_describe_default() -> None:
+    graph = _load("stills/background-swap.json")
+    enh = next(
+        node
+        for node in graph["nodes"]
+        if node.get("type") == "EZKleinPromptEnhance"
+    )
+    help_text = widget_description("prompt", enh) or ""
+    assert "entire environment" in help_text
+    assert "Named samples skip" in help_text
+    desc = next(
+        node for node in graph["nodes"] if node.get("type") == "EZImageDescribe"
+    )
+    enable = widget_description("enable", desc) or ""
+    assert enable.startswith("On (default)")
+    off = widget_description("enable") or ""
+    assert "Off (default)" in off
+
+
 def test_ltx_showcase_app_widgets() -> None:
     flf = _load("motion/av/first-last-8s.json")
     names = _widget_names(flf)
