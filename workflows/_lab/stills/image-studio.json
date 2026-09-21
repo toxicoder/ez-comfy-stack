@@ -2,7 +2,7 @@
   "id": "image-studio",
   "revision": 6,
   "last_node_id": 20,
-  "last_link_id": 34,
+  "last_link_id": 36,
   "nodes": [
     {
       "id": 1,
@@ -422,7 +422,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## stills/image-studio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, \u2026).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width \u00d7 Height (snapped to \u00f716, max 2048). Quality does not change size.\nExample / reference is optional \u2014 Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nHandoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
+        "## stills/image-studio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, \u2026).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width \u00d7 Height (snapped to \u00f716, max 2048). Quality does not change size.\nExample / reference is optional \u2014 Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nHandoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -577,7 +577,7 @@
       "type": "EZImageFormat",
       "pos": [
         1440,
-        1180
+        1400
       ],
       "size": [
         360,
@@ -586,7 +586,13 @@
       "flags": {},
       "order": 11,
       "mode": 0,
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 35
+        }
+      ],
       "outputs": [
         {
           "name": "width",
@@ -669,7 +675,8 @@
           "type": "IMAGE",
           "links": [
             21,
-            34
+            34,
+            35
           ],
           "slot_index": 0
         },
@@ -683,7 +690,8 @@
           "name": "has_image",
           "type": "BOOLEAN",
           "links": [
-            22
+            22,
+            36
           ],
           "slot_index": 2
         }
@@ -765,7 +773,7 @@
       ],
       "size": [
         360,
-        140
+        360
       ],
       "flags": {},
       "order": 12,
@@ -775,6 +783,11 @@
           "name": "context",
           "type": "STRING",
           "link": 18
+        },
+        {
+          "name": "has_image",
+          "type": "BOOLEAN",
+          "link": 36
         }
       ],
       "outputs": [
@@ -815,7 +828,9 @@
       },
       "widgets_values": [
         "Generate",
-        "Photoreal still"
+        "Photoreal still",
+        false,
+        ""
       ],
       "title": "Creator mode"
     },
@@ -1159,6 +1174,22 @@
       19,
       1,
       "IMAGE"
+    ],
+    [
+      35,
+      15,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      36,
+      15,
+      2,
+      17,
+      1,
+      "BOOLEAN"
     ]
   ],
   "groups": [
@@ -1221,7 +1252,7 @@
         1420,
         452,
         400,
-        992
+        1220
       ],
       "color": "#a1309b",
       "font_size": 24,
@@ -1265,8 +1296,8 @@
         0
       ]
     },
-    "lab_note": "## stills/image-studio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, \u2026).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width \u00d7 Height (snapped to \u00f716, max 2048). Quality does not change size.\nExample / reference is optional \u2014 Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nHandoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
-    "lab_description": "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref",
+    "lab_note": "## stills/image-studio\n\nFormat / platform sets pixels (Custom uses Width \u00d7 Height). Quality does not change size.\n\nUniversal Klein 4B still desk with 100 creator modes (background swap, change text, change ratio, face lock, packshot, \u2026).\nPick Mode category then Creator mode. The mode sets Rewrite prompt mode (t2i / edit / text_swap / identity / background_swap / background_edit), save prefix, and a locked instruction spliced into Enhance context.\nFormat / platform still sets pixels and Look recipe. Custom uses Width \u00d7 Height (snapped to \u00f716, max 2048). Quality does not change size.\nExample / reference is optional \u2014 Queue without a file. When present, Klein attaches it as a native Flux.2 reference. Modes never error if the still is empty. Face swap is original characters only.\nAuthored models: flux-2-klein-4b-fp8.safetensors + qwen_3_4b.safetensors (CLIP type flux2) + flux2-vae.safetensors. Apache-2.0.\nQuality ultra/max may select opt-in Non-Commercial weights when those files are on disk (gated, not YouTube-ok). Lab default stays 4B. Do not pin those filenames on this graph.\nSave prefix follows Creator mode (`ez_gen_photoreal` for Photoreal still). Empty of lettering unless the mode is a text job.\nIterate is the first App control (off by default). On: the first Run is text-to-image with prefix `ez_iterate`. The saved still is copied into the reference and the next Run edits that file. Clear the reference to start from text again. This run lists the mode, prompt, size, prefix, and sampler values Queue will send. Creator mode is not used while Iterate is on.\nPrompt enhance is on by default (on-box Qwen3-4B-Instruct-2507). Turn Rewrite prompt off to pin the widget text. Optional style dropdown.\nHandoff: motion/silent/still-to-video-5s, motion/av/still-to-video-8s, stills/text-swap, stills/still-studio.\n\nOccupancy: klein \u2014 stop Wan, LTX, podcast, music. One GB10 job.\n",
+    "lab_description": "Klein 4B universal still desk: 100 creator modes, format/platform, optional ref, iterate",
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1284,11 +1315,28 @@
     "linearData": {
       "inputs": [
         [
+          17,
+          "iterate",
+          {
+            "description": "Off: creator mode. On: first Run is text-to-image. After it saves, the still is the next Run's reference and that Run is an edit. Clear the reference to start from text again.",
+            "label": "Iterate"
+          }
+        ],
+        [
+          17,
+          "run_summary",
+          {
+            "description": "Values Queue will send: pass, Enhance mode, prompt, style, size, prefix, steps, CFG, model, and seed. Rewrite on means the prompt is the rewriter source, not the CLIP text.",
+            "label": "This run",
+            "height": 160
+          }
+        ],
+        [
           13,
           "quality",
           {
-            "label": "Quality",
-            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier."
+            "description": "custom freezes the last overlay. lab restores graph defaults. Free Commercial Use (<$10M) is Klein 4B + LTX-2.5 (never Non-Commercial stills). ultra/max may select opt-in Non-Commercial weights when on disk. Family-specific \u2014 not --tier.",
+            "label": "Quality"
           }
         ],
         [
@@ -1352,7 +1400,7 @@
           17,
           "mode",
           {
-            "description": "Creator preset. Sets Enhance mode, save prefix, and a locked instruction. Optional reference stills stay optional.",
+            "description": "Creator preset. Sets Enhance mode, save prefix, and a locked instruction. Optional reference stills stay optional. Ignored for mode, instruction, and prefix while Iterate is on.",
             "label": "Creator mode"
           }
         ],
@@ -1376,8 +1424,8 @@
           12,
           "enhance",
           {
-            "label": "Rewrite negative",
-            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs.",
+            "label": "Rewrite negative"
           }
         ],
         [

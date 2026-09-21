@@ -758,10 +758,9 @@ function enhanceIsOn(node) {
 /**
  * Push current prompt/tags/lyrics onto linked CLIP widgets.
  * @param {object} node
- * @param {boolean} fromEnhanceToggle
  * @returns {void}
  */
-function syncLinkedClipFromWidgets(node, fromEnhanceToggle) {
+function syncLinkedClipFromWidgets(node) {
   const ntype = node?.comfyClass || node?.type || "";
   if (PREVIEW_SKIP.has(ntype)) {
     return;
@@ -795,9 +794,7 @@ function syncLinkedClipFromWidgets(node, fromEnhanceToggle) {
     populate(node, preview, "enhance off");
     return;
   }
-  if (fromEnhanceToggle) {
-    populate(node, "", "Queue to rewrite");
-  }
+  populate(node, "", "Queue to rewrite");
 }
 
 /**
@@ -868,7 +865,7 @@ function bindEnhanceWatcher(node) {
     if (typeof prior === "function") {
       prior.apply(this, arguments);
     }
-    syncLinkedClipFromWidgets(node, true);
+    syncLinkedClipFromWidgets(node);
     syncNegativeFamily(node);
   };
 }

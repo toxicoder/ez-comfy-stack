@@ -2138,14 +2138,15 @@ Pick one of 100 creator modes. Category filters Mode. Queue splices an instructi
 
 !!! warning "Lab notes"
 
-    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional.
+    stills/image-studio wires context into EZKleinPromptEnhance, enhance_mode into the Enhance mode widget, and prefix into SaveImage. Optional references stay optional. Iterate forces text-to-image, then edit once has_image is set.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
 | `context` | in | `STRING` | Optional look-recipe splice from EZImageFormat. |
-| `context` | out | `STRING` | Mode instruction plus incoming look splice. |
+| `has_image` | in | `BOOLEAN` | Presence flag from EZOptionalImage. Force input. Off while Iterate is on means the next Run is text-to-image. |
+| `context` | out | `STRING` | Mode instruction plus incoming look splice, or the Iterate edit line. |
 | `enhance_mode` | out | `COMBO` | t2i, edit, identity, text_swap, background_swap, or background_edit — same combo as EZKleinPromptEnhance.mode. |
-| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. ez_iterate while Iterate is on. |
 
 #### `category`
 
@@ -2153,7 +2154,7 @@ Type `COMBO`. Range / default: Generate / Scene / Subject / ….
 
 Filter Creator mode.
 
-**How it affects generation:** JS hides modes outside this category. Python run() uses Mode even if Category is stale.
+**How it affects generation:** JS hides modes outside this category. Python run() uses Mode even if Category is stale. Ignored for mode and prefix while Iterate is on.
 
 **Other choices**
 
@@ -2176,7 +2177,7 @@ Type `COMBO`. Range / default: Photoreal still / Background swap / Change text /
 
 Creator preset.
 
-**How it affects generation:** Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error.
+**How it affects generation:** Sets Enhance mode, save prefix, and a locked instruction. Empty reference stills never error. Ignored while Iterate is on.
 
 **Other choices**
 
@@ -2282,6 +2283,22 @@ Creator preset.
 | `Empty of marks` | Keep the scene. Remove watermarks and stray logos. Empty of marks. |
 | `Straighten` | Keep the scene. Straighten horizon and verticals. |
 | `Match grade` | Grade ref 1 to match ref 2. Keep inventory of ref 1. |
+
+#### `iterate`
+
+Type `BOOLEAN`. Range / default: false.
+
+Text-to-image, then edit the saved still.
+
+**How it affects generation:** Off keeps creator mode. On: no reference is t2i (prefix ez_iterate); a reference is an edit. The App copies the saved still into the reference after Run. Clear the reference to start from text again.
+
+#### `run_summary`
+
+Type `STRING`. Range / default: multiline.
+
+This run. Values Queue will send.
+
+**How it affects generation:** Display only. Python run() ignores it. The App fills it from POST /ez_image/studio-preview before Run.
 
 ### `EZImageUpscale` — Upscale still
 
