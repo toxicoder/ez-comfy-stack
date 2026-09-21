@@ -35,6 +35,7 @@ export DOWNLOAD_LIMIT="${DOWNLOAD_LIMIT:-auto}"
 
 - Bazelisk (recommended) or Bazel 8.4.1 (`.bazelversion`)
 - Host tools for lint: shellcheck, shfmt, buildifier, `pip install -r tests/requirements.txt`
+- Or the [Contributor Dev Container](devcontainer.md) (Ubuntu 24.04, Python 3.12, Node 22, Grok Build; `linux/amd64` + `linux/arm64`)
 
 ```bash
 # macOS

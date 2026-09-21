@@ -333,6 +333,10 @@
         "path": "contribute/building-with-bazel.md"
       },
       {
+        "title": "Contributor Dev Container",
+        "path": "contribute/devcontainer.md"
+      },
+      {
         "title": "Docs style",
         "path": "contribute/docs-style.md"
       },
