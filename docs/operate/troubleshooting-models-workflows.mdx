@@ -8,7 +8,7 @@ tags: [troubleshooting, models, workflows, comfyui, occupancy]
 
 **What's on this page**
 
-- **Empty models**, bad CLIP/VAE links, MagCache, and App Mode
+- **Empty models**, bad CLIP/VAE links, MagCache, App Mode, and `_user` vs catalog clones
 - **Missing Node Packs** for in-tree `EZImageDescribe` / `EZImageUpscale` (Unknown pack)
 - **90s film** concat, dream-house, ACE/rap, and Enhance GGUF
 - **Occupancy** blender-desk vs heavy klein / wan / ltx / trellis
@@ -132,7 +132,8 @@ tags: [troubleshooting, models, workflows, comfyui, occupancy]
 | `concat-shots --film tide-table` expected 90 shots | Only act 1 printed, or looking at `ez_*_act1_90s.mp4` as the film master | Queue act-02…05 (LoadImage the previous last frame). Then `film-accept` + concat. The 7.5 min file is `ez_<slug>_450s.mp4`, never the act master |
 | Act 2 start frame does not match act 1 exit | LoadImage still on `example.png`, or identity drift | Set LoadImage to `ez_<slug>_b6_s3_last_*.png` (act 3 uses b12, act 4 b18, act 5 b24). Reprint the previous exit if the plant is gone — [Short films](../shorts.md) |
 | 90s film / shot graph missing in the Comfy UI | Looking at the old flat `user/default/workflows/` list, or seed skipped | Look under **`_lab/films/`** (and `_lab/stills`, `_lab/motion`, `_lab/creator`, …). Restart so `install_lab_workflows` rsyncs into `_lab/` only. Load **films/go-see** (or still-here / switchyard). YAML shot lists stay on the host at `workflows/shorts/*.shots.yaml` |
-| My edit to a lab graph vanished after restart | You edited the live `_lab/` copy | Live `_lab/` is the git catalog and is overwritten on every start. Start **rescues** extras into `_user/` and edited lab graphs into `_user/_rescued/` first. Re-open that copy. Prefer Save As **`_user/`**. Operator files outside `_lab/` are never deleted |
+| My edit to a lab graph vanished after restart | You edited the live `_lab/` copy | Live `_lab/` is the git catalog and is overwritten on every start. Start **rescues** dest-only extras into `_user/` and explicit in-place Saves into `_user/_rescued/` (not catalog restamps). Re-open that copy. Prefer Save As **`_user/`**. Operator files outside `_lab/` are never deleted |
+| Apps/Workflows full of copies of every lab graph after a pull | Older starts treated catalog restamps as operator edits and filled `_user/_rescued/` | Pull latest and restart. `start` no longer clones shipped `_lab` on update. Delete `${COMFY_OUTPUT_DIR}/comfy-user/default/workflows/_user/_rescued` if it is full of catalog clones; keep the rest of `_user/` |
 | Manager-installed custom nodes vanished after pin refresh | Pack lived in `custom_nodes/` but not `_user/` | Install operator packs under `${COMFY_OUTPUT_DIR}/custom-nodes-user` (container `$COMFY_HOME/custom_nodes/_user`). Lab `ez_*` packs still overwrite from git |
 | Lab graph is in Workflows but not in Apps | Seeded as `*.json` (film default, or pre-`.app.json` volume) | App Mode graphs seed as `*.app.json`. Pull latest and restart so the entrypoint re-copies and removes the old `.json` sibling. 90s films stay Workflows-only (`default_view: graph`). This is not `studio-ui`. |
 | App panel shows occupancy / Run but no Prompt, Style, or Rewrite | Old `linearData` used two-part ids (`"11:prompt"`). ComfyUI frontend 1.49.6+ treats a colon as a subgraph locator and drops the widget | Pull latest, `./scripts/manage.sh stop` then `start` (type **yes**) so `_lab/` reseeds. Hard-refresh the Comfy tab. The first `linearData.inputs` id must be a number (`11`), not `11:prompt` |

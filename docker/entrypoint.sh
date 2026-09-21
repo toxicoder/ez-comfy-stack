@@ -718,6 +718,201 @@ lab_src_json_for_dest() {
 }
 
 #######################################
+# Index JSON under a _lab tree: sha256, relative path, extra.lab_rel.
+# One python3 pass so macOS bats and the Ubuntu entrypoint stay portable.
+# Globals:
+#   None
+# Arguments:
+#   $1  directory to walk
+# Outputs:
+#   Lines of digest<TAB>rel<TAB>lab_rel (lab_rel may be empty)
+# Returns:
+#   0
+#######################################
+lab_json_index() {
+  local root="${1:?}"
+  if [[ ! -d ${root} ]]; then
+    return 0
+  fi
+  if ! command -v python3 >/dev/null 2>&1; then
+    return 0
+  fi
+  python3 - "${root}" <<'PY'
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+if not root.is_dir():
+    raise SystemExit(0)
+for path in sorted(p for p in root.rglob("*.json") if p.is_file()):
+    rel = path.relative_to(root).as_posix()
+    data = path.read_bytes()
+    digest = hashlib.sha256(data).hexdigest()
+    lab_rel = ""
+    try:
+        obj = json.loads(data.decode("utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, TypeError, ValueError):
+        obj = None
+    if isinstance(obj, dict):
+        extra = obj.get("extra") or {}
+        if isinstance(extra, dict):
+            value = extra.get("lab_rel")
+            if isinstance(value, str):
+                lab_rel = value.strip()
+    sys.stdout.write(f"{digest}\t{rel}\t{lab_rel}\n")
+PY
+}
+
+#######################################
+# Path of the last-seed checksum file (sibling of _lab/ and _user/).
+# Globals:
+#   None
+# Arguments:
+#   $1  destination user/default/workflows directory
+# Outputs:
+#   Manifest path on stdout
+# Returns:
+#   0
+#######################################
+lab_seed_manifest_path() {
+  local dest="${1:?}"
+  printf '%s\n' "${dest}/.lab-seed-manifest"
+}
+
+#######################################
+# Look up a dest-relative path in a last-seed manifest.
+# Globals:
+#   None
+# Arguments:
+#   $1  manifest path
+#   $2  path relative to dest _lab
+# Outputs:
+#   SHA-256 digest on stdout when found
+# Returns:
+#   0 when found; 1 otherwise
+#######################################
+lab_manifest_digest() {
+  local manifest="${1:?}"
+  local rel="${2:?}"
+  local digest
+  if [[ ! -f ${manifest} ]]; then
+    return 1
+  fi
+  digest="$(awk -F '\t' -v rel="${rel}" '$2 == rel { print $1; exit }' "${manifest}")"
+  if [[ -z ${digest} ]]; then
+    return 1
+  fi
+  printf '%s\n' "${digest}"
+}
+
+#######################################
+# Manifest digest for a dest rel, accepting stem.app.json ↔ stem.json.
+# Globals:
+#   None
+# Arguments:
+#   $1  manifest path
+#   $2  path relative to dest _lab
+# Outputs:
+#   SHA-256 digest on stdout when found
+# Returns:
+#   0 when found; 1 otherwise
+#######################################
+lab_manifest_digest_for_rel() {
+  local manifest="${1:?}"
+  local rel="${2:?}"
+  local digest alt
+  digest="$(lab_manifest_digest "${manifest}" "${rel}" || true)"
+  if [[ -n ${digest} ]]; then
+    printf '%s\n' "${digest}"
+    return 0
+  fi
+  case "${rel}" in
+    *.app.json)
+      alt="${rel%.app.json}.json"
+      ;;
+    *.json)
+      alt="${rel%.json}.app.json"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+  lab_manifest_digest "${manifest}" "${alt}"
+}
+
+#######################################
+# True when an index from lab_json_index lists extra.lab_rel.
+# Globals:
+#   None
+# Arguments:
+#   $1  index file
+#   $2  lab_rel id
+# Outputs:
+#   None
+# Returns:
+#   0 when present; 1 otherwise
+#######################################
+lab_index_has_lab_rel() {
+  local index="${1:?}"
+  local lab_rel="${2:?}"
+  if [[ ! -f ${index} || -z ${lab_rel} ]]; then
+    return 1
+  fi
+  awk -F '\t' -v id="${lab_rel}" '$3 == id { found=1; exit } END { exit !found }' "${index}"
+}
+
+#######################################
+# Write last-seed checksums for dest _lab JSON (after .app.json rename).
+# Globals:
+#   None
+# Arguments:
+#   $1  destination _lab directory
+#   $2  manifest path
+# Outputs:
+#   None
+# Returns:
+#   0
+#######################################
+write_lab_seed_manifest() {
+  local dest_lab="${1:?}"
+  local manifest="${2:?}"
+  local dir tmp
+  dir="$(dirname "${manifest}")"
+  mkdir -p "${dir}"
+  tmp="${manifest}.tmp"
+  if lab_json_index "${dest_lab}" >"${tmp}"; then
+    mv "${tmp}" "${manifest}"
+  else
+    rm -f "${tmp}"
+  fi
+}
+
+#######################################
+# Warn when _user/_rescued looks like a catalog dump from older starts.
+# Does not delete operator files.
+# Globals:
+#   None
+# Arguments:
+#   $1  destination _user directory
+# Outputs:
+#   ep_log WARN when more than 20 rescued JSON files exist
+# Returns:
+#   0
+#######################################
+warn_user_rescued_lab_dump() {
+  local dest_user="${1:?}"
+  local n=0
+  if [[ -d ${dest_user}/_rescued ]]; then
+    n="$(find "${dest_user}/_rescued" -type f -name '*.json' | wc -l | tr -d ' ')"
+  fi
+  if ((n > 20)); then
+    ep_log "WARN: ${n} graphs under _user/_rescued — catalog clones from older starts can be deleted; keep _user/ itself"
+  fi
+}
+
+#######################################
 # Choose a dest path that does not clobber a different existing file.
 # Empty stdout means dest already has identical content (caller skips).
 # Globals:
@@ -761,8 +956,10 @@ rescue_unique_path() {
 
 #######################################
 # Move operator JSON out of dest _lab before rsync --delete.
-# Extras (not in src) go to dest/_user/<rel>. Edited lab graphs go to
-# dest/_user/_rescued/<rel>. Never overwrites a different _user file.
+# Compares live files to the last seed, not the new git catalog, so a
+# pull/restamp does not clone _lab into _user. Dest-only extras and
+# explicit in-place Saves still go to _user/ and _user/_rescued/.
+# Never overwrites a different _user file.
 # Globals:
 #   None
 # Arguments:
@@ -778,28 +975,32 @@ rescue_operator_lab_json() {
   local src_lab="${1:?}"
   local dest_lab="${2:?}"
   local dest_user="${3:?}"
-  local path rel src_json unique target extras=0 edits=0
+  local dest_root digest rel lab_rel path src_json unique target seeded
+  local tmp dest_index src_index manifest extras=0 edits=0
   if [[ ! -d ${dest_lab} ]]; then
     return 0
   fi
   mkdir -p "${dest_user}"
-  while IFS= read -r -d '' path; do
-    rel="${path#"${dest_lab}"/}"
+  dest_root="$(dirname "${dest_lab}")"
+  manifest="$(lab_seed_manifest_path "${dest_root}")"
+  tmp="$(mktemp -d)"
+  dest_index="${tmp}/dest.idx"
+  src_index="${tmp}/src.idx"
+  lab_json_index "${dest_lab}" >"${dest_index}"
+  lab_json_index "${src_lab}" >"${src_index}"
+  if [[ ! -f ${manifest} ]]; then
+    ep_log "no .lab-seed-manifest; not copying catalog _lab graphs into _user"
+  fi
+  while IFS=$'\t' read -r digest rel lab_rel || [[ -n ${digest} ]]; do
+    [[ -n ${rel} ]] || continue
+    path="${dest_lab}/${rel}"
+    [[ -f ${path} ]] || continue
     src_json="$(lab_src_json_for_dest "${src_lab}" "${rel}" || true)"
-    if [[ -z ${src_json} ]]; then
-      target="${dest_user}/${rel}"
-      mkdir -p "$(dirname "${target}")"
-      unique="$(rescue_unique_path "${target}" "${path}")"
-      if [[ -z ${unique} ]]; then
-        rm -f "${path}"
-      else
-        mkdir -p "$(dirname "${unique}")"
-        mv "${path}" "${unique}"
-        extras=$((extras + 1))
+    seeded="$(lab_manifest_digest_for_rel "${manifest}" "${rel}" || true)"
+    if [[ -n ${src_json} ]]; then
+      if [[ -z ${seeded} || ${digest} == "${seeded}" ]]; then
+        continue
       fi
-      continue
-    fi
-    if ! cmp -s "${path}" "${src_json}"; then
       target="${dest_user}/_rescued/${rel}"
       mkdir -p "$(dirname "${target}")"
       unique="$(rescue_unique_path "${target}" "${path}")"
@@ -808,8 +1009,27 @@ rescue_operator_lab_json() {
         cp -a "${path}" "${unique}"
         edits=$((edits + 1))
       fi
+      continue
     fi
-  done < <(find "${dest_lab}" -type f -name '*.json' -print0)
+    if [[ -n ${seeded} && ${digest} == "${seeded}" ]]; then
+      continue
+    fi
+    if [[ ! -f ${manifest} && -n ${lab_rel} ]] &&
+      lab_index_has_lab_rel "${src_index}" "${lab_rel}"; then
+      continue
+    fi
+    target="${dest_user}/${rel}"
+    mkdir -p "$(dirname "${target}")"
+    unique="$(rescue_unique_path "${target}" "${path}")"
+    if [[ -z ${unique} ]]; then
+      rm -f "${path}"
+    else
+      mkdir -p "$(dirname "${unique}")"
+      mv "${path}" "${unique}"
+      extras=$((extras + 1))
+    fi
+  done <"${dest_index}"
+  rm -rf "${tmp}"
   if ((extras > 0)); then
     ep_log "rescued ${extras} operator graph(s) from _lab to _user"
   fi
@@ -820,9 +1040,10 @@ rescue_operator_lab_json() {
 
 #######################################
 # Copy host lab JSON into Comfy user/default/workflows/_lab/<lane>/.
-# Preferred: rescue operator JSON, then rsync -a --delete src/_lab/ → dest/_lab/
-# (JSON only). Transition: when src/_lab is missing, map legacy flat globs.
-# Then rename App Mode graphs to stem.app.json in dest only.
+# Preferred: rescue operator JSON (last-seed, not new-catalog cmp), then
+# rsync -a --delete src/_lab/ → dest/_lab/ (JSON only). Transition: when
+# src/_lab is missing, map legacy flat globs. Then rename App Mode graphs
+# to stem.app.json in dest only and rewrite .lab-seed-manifest.
 # Never overwrites dest/_user/ or dest root. Never copies YAML, NOTICE, quality/.
 # Globals:
 #   None
@@ -844,11 +1065,13 @@ install_lab_workflows() {
   fi
   if [[ -d ${src}/_lab ]]; then
     rescue_operator_lab_json "${src}/_lab" "${dest}/_lab" "${dest}/_user"
+    warn_user_rescued_lab_dump "${dest}/_user"
     sync_lab_json_dir "${src}/_lab" "${dest}/_lab"
   else
     seed_legacy_lab_workflows "${src}" "${dest}/_lab"
   fi
   apply_lab_app_json_names "${dest}/_lab"
+  write_lab_seed_manifest "${dest}/_lab" "$(lab_seed_manifest_path "${dest}")"
   log_lab_seed_counts "${dest}/_lab"
 }
 
