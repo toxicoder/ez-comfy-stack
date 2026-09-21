@@ -103,6 +103,88 @@ TASK_ENV = {
     "HF_PROGRESS": "0",
     "LAB_HERMETIC": "1",
 }
+RUNTIME_EXPLORER_HIDE = (
+    ".models",
+    "comfy-state",
+    "output",
+    "outputs",
+    "input",
+    "inputs",
+    "external",
+    ".bazel",
+    ".cache",
+)
+RUNTIME_SEARCH_HIDE = (
+    "docs/generated",
+    "docs/assets",
+    *RUNTIME_EXPLORER_HIDE,
+    "**/.ruff_cache",
+)
+RUNTIME_WATCHER_HIDE = (
+    "**/.venv/**",
+    ".venv-docs/**",
+    "**/.ruff_cache/**",
+    ".models/**",
+    "comfy-state/**",
+    "output/**",
+    "outputs/**",
+    "input/**",
+    "inputs/**",
+    "external/**",
+    ".bazel/**",
+    ".cache/**",
+    "docs/generated/**",
+)
+PYLANCE_ANALYSIS_EXCLUDE = [
+    "docs-site",
+    "docs/generated",
+    "docs/assets",
+    "workflows",
+    "site",
+    "coverage",
+    "bazel-*",
+    "docs-site/node_modules",
+    "docs-site/.next",
+    "docs-site/out",
+    "docs-site/out-linux",
+]
+MYPY_IGNORE_PATTERNS = [
+    "docs-site/**",
+    "docs/generated/**",
+    "workflows/**",
+    "site/**",
+    "coverage/**",
+]
+TAILWIND_FILES_EXCLUDE = [
+    "**/docs/generated/**",
+    "**/docs-site/.next/**",
+    "**/docs-site/out/**",
+    "**/docs-site/out-linux/**",
+    "**/docs-site/node_modules/**",
+]
+PYRIGHT_EXCLUDE = [
+    "**/__pycache__",
+    "site",
+    "coverage",
+    ".venv",
+    "venv",
+    "docs-site",
+    "docs/generated",
+    "docs/assets",
+    "workflows",
+    "**/node_modules",
+    "bazel-*",
+    ".models",
+    "comfy-state",
+]
+SOURCE_TREES_STAY_VISIBLE = (
+    "workflows",
+    "workflows/_lab",
+)
+EXPLORER_STAYS_VISIBLE = (
+    "docs/generated",
+    "docs/assets",
+)
 
 
 def _load_json(path: Path) -> Any:
@@ -159,6 +241,19 @@ def _walk_keys(value: Any) -> list[str]:
                 found.append(key)
             found.extend(_walk_keys(item))
     return found
+
+
+def _assert_map_true(mapping: Any, keys: tuple[str, ...], label: str) -> None:
+    """Require each key to be present and true.
+
+    Args:
+        mapping: JSON object under test.
+        keys: Paths that must be hidden.
+        label: Setting name used in the failure message.
+    """
+    assert isinstance(mapping, dict), label
+    missing = [key for key in keys if mapping.get(key) is not True]
+    assert missing == [], f"{label} missing or not true: {missing}"
 
 
 def test_tracked_vscode_files_are_strict_json() -> None:
@@ -364,3 +459,114 @@ def test_bazel_core_path_filters_include_vscode() -> None:
     assert "[[ ${path} == .vscode/* ]]" in validate
     ci = (ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "'.vscode/**'" in ci
+
+
+def test_editor_perf_scopes_language_servers() -> None:
+    """Pylance, mypy, Bazel, YAML, Tailwind, and ShellCheck stay scoped."""
+    settings = _load_json(VSCODE / "settings.json")
+    assert isinstance(settings, dict)
+    assert settings.get("python.analysis.diagnosticMode") == "openFilesOnly"
+    assert settings.get("python.analysis.indexing") is True
+    assert settings.get("python.languageServer") == "Pylance"
+    assert "python.analysis.languageServerMode" not in settings
+    assert settings.get("python.analysis.exclude") == PYLANCE_ANALYSIS_EXCLUDE
+    assert settings.get("python.testing.autoTestDiscoverOnSaveEnabled") is False
+    assert settings.get("mypy-type-checker.reportingScope") == "file"
+    assert settings.get("mypy-type-checker.ignorePatterns") == MYPY_IGNORE_PATTERNS
+    assert settings.get("bazel.queriesShareServer") is False
+    assert settings.get("bazel.enableCodeLens") is False
+    assert settings.get("bazel.enableWorkspaceTree") is False
+    assert settings.get("yaml.schemaStore.enable") is False
+    assert settings.get("tailwindCSS.files.exclude") == TAILWIND_FILES_EXCLUDE
+    assert settings.get("shellcheck.run") == "onSave"
+    assert settings.get("shellcheck.enable") is True
+    assert settings.get("shellcheck.customArgs") == ["-x", "--severity=warning"]
+
+
+def test_editor_perf_hides_runtime_dumps_not_workflow_source() -> None:
+    """Watchers skip runtime dumps; workflow JSON stays searchable."""
+    settings = _load_json(VSCODE / "settings.json")
+    assert isinstance(settings, dict)
+    exclude = settings.get("files.exclude")
+    search = settings.get("search.exclude")
+    watcher = settings.get("files.watcherExclude")
+    readonly = settings.get("files.readonlyInclude")
+    _assert_map_true(exclude, RUNTIME_EXPLORER_HIDE, "files.exclude")
+    _assert_map_true(search, RUNTIME_SEARCH_HIDE, "search.exclude")
+    _assert_map_true(watcher, RUNTIME_WATCHER_HIDE, "files.watcherExclude")
+    assert isinstance(exclude, dict)
+    assert isinstance(search, dict)
+    for key in EXPLORER_STAYS_VISIBLE:
+        assert key not in exclude, key
+    for key in SOURCE_TREES_STAY_VISIBLE:
+        assert key not in exclude, key
+        assert key not in search, key
+    assert isinstance(readonly, dict)
+    assert readonly.get("docs/generated/**") is True
+
+
+def test_pyrightconfig_excludes_generated_and_runtime_trees() -> None:
+    """Pyright exclude grows; typeCheckingMode stays standard."""
+    config = _load_json(ROOT / "pyrightconfig.json")
+    assert isinstance(config, dict)
+    assert config.get("exclude") == PYRIGHT_EXCLUDE
+    assert config.get("typeCheckingMode") == "standard"
+
+
+def test_extensions_still_recommend_pylance_and_mypy() -> None:
+    """Editor perf does not drop Pylance or the mypy extension."""
+    rec_ids = _extension_ids(
+        _load_json(VSCODE / "extensions.json"),
+        "recommendations",
+    )
+    assert "ms-python.vscode-pylance" in rec_ids
+    assert "ms-python.mypy-type-checker" in rec_ids
+
+
+def test_tasks_do_not_run_on_folder_open() -> None:
+    """No task auto-runs when the folder opens."""
+    tasks = _load_json(VSCODE / "tasks.json")
+    assert isinstance(tasks, dict)
+    items = tasks.get("tasks")
+    assert isinstance(items, list)
+    for item in items:
+        assert isinstance(item, dict)
+        assert "runOptions" not in item
+        assert "runOn" not in item
+
+
+def test_launch_configs_are_debugpy_pytest_only() -> None:
+    """Debug configs are debugpy/pytest and do not pre-launch Comfy or docs."""
+    launch = _load_json(VSCODE / "launch.json")
+    assert isinstance(launch, dict)
+    configs = launch.get("configurations")
+    assert isinstance(configs, list)
+    assert configs
+    for config in configs:
+        assert isinstance(config, dict)
+        assert config.get("type") == "debugpy"
+        assert "preLaunchTask" not in config
+        if "module" in config:
+            assert config.get("module") == "pytest"
+
+
+def test_devcontainer_mirrors_editor_perf_settings() -> None:
+    """Dev Container overlay scopes Pylance and Bazel the same way."""
+    dev = _load_json(DEVCONTAINER)
+    assert isinstance(dev, dict)
+    custom = dev.get("customizations")
+    assert isinstance(custom, dict)
+    vscode = custom.get("vscode")
+    assert isinstance(vscode, dict)
+    extensions = vscode.get("extensions")
+    assert isinstance(extensions, list)
+    assert "ms-python.mypy-type-checker" in extensions
+    settings = vscode.get("settings")
+    assert isinstance(settings, dict)
+    assert settings.get("python.analysis.diagnosticMode") == "openFilesOnly"
+    assert settings.get("python.testing.autoTestDiscoverOnSaveEnabled") is False
+    assert settings.get("mypy-type-checker.reportingScope") == "file"
+    assert settings.get("bazel.queriesShareServer") is False
+    assert settings.get("bazel.enableCodeLens") is False
+    assert settings.get("bazel.enableWorkspaceTree") is False
+    assert settings.get("bazel.executable") == "/usr/local/bin/bazelisk"

@@ -10,7 +10,7 @@ tags: [contributing, pr, tdd, docs]
 
 - **Canonical file** — repo-root `CONTRIBUTING.md` (this page is a summary)
 - **Branch + TDD** — from `development`, tests in the same commit
-- **Editor** — shared `.vscode/` tasks wrap `bazelisk` (no secrets in workspace files)
+- **Editor** — shared `.vscode/` tasks wrap `bazelisk`; watchers and Pylance are scoped (no secrets in workspace files)
 - **PR checklist** including safety and docs
 - **Human review** — **AI-drafted docs still need a human pass**
 
@@ -48,6 +48,8 @@ How merge commits, squash, rebase, and stacked PRs work in this repo: [How we la
 Install Python test tools once: `pip install -r tests/requirements.txt`.
 
 VS Code / Cursor: open the repo root and **Run Task → validate** (same as `bazelisk run //:validate`). Also `doctor` and `docs-serve`. Shared `.vscode/` files are generic — no `.env`, interpreter path, or host variables. Format-on-save is shell and Starlark only. Optional Linux toolchain: [Contributor Dev Container](devcontainer.md).
+
+File watchers ignore local runtime dumps (`.models`, `comfy-state`, `output` / `outputs`, `input` / `inputs`, venvs, and Bazel `external/`). Pylance reports diagnostics for open files only; workspace-wide Pyright and mypy still run in `bazelisk test //:test-fast`. Bazel CodeLens and the Targets tree are off so the extension does not background-query (`bazel.queriesShareServer` is false). Tailwind does not scan `docs/generated` or docs-site build output. If the editor is still heavy: Command Palette → **Developer: Open Process Explorer** / **Extension Bisect**, starting with Bazel, Tailwind, and MDX.
 
 ```mermaid
 flowchart TB

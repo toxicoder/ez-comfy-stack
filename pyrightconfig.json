@@ -13,7 +13,15 @@
     "site",
     "coverage",
     ".venv",
-    "venv"
+    "venv",
+    "docs-site",
+    "docs/generated",
+    "docs/assets",
+    "workflows",
+    "**/node_modules",
+    "bazel-*",
+    ".models",
+    "comfy-state"
   ],
   "extraPaths": [
     "custom_nodes",

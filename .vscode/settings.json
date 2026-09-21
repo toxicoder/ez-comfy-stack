@@ -1,6 +1,9 @@
 {
   "bazel.buildifierExecutable": "buildifier",
+  "bazel.enableCodeLens": false,
+  "bazel.enableWorkspaceTree": false,
   "bazel.executable": "bazelisk",
+  "bazel.queriesShareServer": false,
   "css.lint.unknownAtRules": "ignore",
   "editor.formatOnSave": false,
   "editor.insertSpaces": true,
@@ -36,7 +39,16 @@
     "docs-site/out": true,
     "docs-site/out-linux": true,
     ".venv-docs": true,
-    "site": true
+    "site": true,
+    ".models": true,
+    "comfy-state": true,
+    "output": true,
+    "outputs": true,
+    "input": true,
+    "inputs": true,
+    "external": true,
+    ".bazel": true,
+    ".cache": true
   },
   "files.insertFinalNewline": true,
   "files.readonlyInclude": {
@@ -59,18 +71,54 @@
     "docs-site/out/**": true,
     "docs-site/public/assets/**": true,
     "docs/assets/**": true,
-    "site/**": true
+    "site/**": true,
+    "**/.venv/**": true,
+    ".venv-docs/**": true,
+    "**/.ruff_cache/**": true,
+    ".models/**": true,
+    "comfy-state/**": true,
+    "output/**": true,
+    "outputs/**": true,
+    "input/**": true,
+    "inputs/**": true,
+    "external/**": true,
+    ".bazel/**": true,
+    ".cache/**": true,
+    "docs/generated/**": true
   },
   "git.branchProtection": ["development", "main"],
   "git.branchProtectionPrompt": "alwaysPrompt",
   "git.inputValidationSubjectLength": 72,
   "mypy-type-checker.cwd": "${workspaceFolder}",
+  "mypy-type-checker.ignorePatterns": [
+    "docs-site/**",
+    "docs/generated/**",
+    "workflows/**",
+    "site/**",
+    "coverage/**"
+  ],
   "mypy-type-checker.importStrategy": "fromEnvironment",
+  "mypy-type-checker.reportingScope": "file",
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.exclude": [
+    "docs-site",
+    "docs/generated",
+    "docs/assets",
+    "workflows",
+    "site",
+    "coverage",
+    "bazel-*",
+    "docs-site/node_modules",
+    "docs-site/.next",
+    "docs-site/out",
+    "docs-site/out-linux"
+  ],
   "python.analysis.indexing": true,
   "python.languageServer": "Pylance",
   "python.testing.cwd": "${workspaceFolder}",
   "python.testing.pytestArgs": ["tests/python"],
   "python.testing.pytestEnabled": true,
+  "python.testing.autoTestDiscoverOnSaveEnabled": false,
   "python.testing.unittestEnabled": false,
   "search.exclude": {
     "**/.mypy_cache": true,
@@ -85,10 +133,23 @@
     "docs-site/out": true,
     "docs-site/out-linux": true,
     ".venv-docs": true,
-    "site": true
+    "site": true,
+    "docs/generated": true,
+    "docs/assets": true,
+    ".models": true,
+    "comfy-state": true,
+    "output": true,
+    "outputs": true,
+    "input": true,
+    "inputs": true,
+    "external": true,
+    ".bazel": true,
+    ".cache": true,
+    "**/.ruff_cache": true
   },
   "shellcheck.customArgs": ["-x", "--severity=warning"],
   "shellcheck.enable": true,
+  "shellcheck.run": "onSave",
   "shellcheck.executablePath": "shellcheck",
   "shellcheck.ignorePatterns": {
     "**/bazel-*/**": true,
@@ -100,11 +161,19 @@
   "shfmt.executableArgs": ["-s", "-i", "2", "-ci"],
   "shfmt.executablePath": "shfmt",
   "tailwindCSS.experimental.configFile": "docs-site/app/global.css",
+  "tailwindCSS.files.exclude": [
+    "**/docs/generated/**",
+    "**/docs-site/.next/**",
+    "**/docs-site/out/**",
+    "**/docs-site/out-linux/**",
+    "**/docs-site/node_modules/**"
+  ],
   "tailwindCSS.includeLanguages": {
     "mdx": "html"
   },
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "docs-site/node_modules/typescript/lib",
+  "yaml.schemaStore.enable": false,
   "[bazel]": {
     "editor.defaultFormatter": "bazelbuild.vscode-bazel",
     "editor.formatOnSave": true
