@@ -7,6 +7,7 @@ from pathlib import Path
 
 from ez_music.diss_examples import DISS_EXAMPLES
 from ez_music.edm_examples import EDM_EXAMPLES
+from ez_music.song_plan import demo_draft_seconds, demo_full_seconds
 
 from _ace_widgets_contract import assert_ace_encoder_widgets, iter_ace_encoders
 from _lab_paths import lab_example_paths, lab_json
@@ -31,28 +32,44 @@ def test_every_lab_ace_encoder_has_seed_control_and_valid_combos() -> None:
 
 
 def test_music_rap_encoder_keeps_vocal_codes_and_c_minor() -> None:
-    cases: list[tuple[str, float, int]] = [
-        ("audio/music/rap-draft", 32.0, 88),
-        ("audio/music/rap-full", 96.0, 88),
+    cases: list[tuple[str, float, int, str, str]] = [
+        ("audio/music/rap-draft", float(demo_draft_seconds()), 88, "4", "C minor"),
+        ("audio/music/rap-full", float(demo_full_seconds()), 88, "4", "C minor"),
     ]
     for diss in DISS_EXAMPLES:
-        cases.append((diss["stem"], float(diss["duration"]), int(diss["bpm"])))
+        cases.append(
+            (
+                diss["stem"],
+                float(diss["duration"]),
+                int(diss["bpm"]),
+                str(diss["meter"]),
+                str(diss["keyscale"]),
+            )
+        )
     for edm in EDM_EXAMPLES:
-        cases.append((edm["stem"], float(edm["duration"]), int(edm["bpm"])))
-    for stem, duration, bpm in cases:
+        cases.append(
+            (
+                edm["stem"],
+                float(edm["duration"]),
+                int(edm["bpm"]),
+                str(edm["meter"]),
+                str(edm["keyscale"]),
+            )
+        )
+    for stem, duration, bpm, meter, keyscale in cases:
         graph = _load(lab_json(stem))
         enc = next(iter_ace_encoders(graph))
         widgets = assert_ace_encoder_widgets(enc, where=stem)
         assert widgets[3] == "fixed"
         assert widgets[4] == bpm
         assert widgets[5] == duration
-        assert widgets[6] == "4"
+        assert widgets[6] == meter
         expect_lang = "en"
         row = next((ex for ex in EDM_EXAMPLES if ex["stem"] == stem), None)
         if row is not None and row["ace_mode"] == "instrumental":
             expect_lang = "unknown"
         assert widgets[7] == expect_lang
-        assert widgets[8] == "C minor"
+        assert widgets[8] == keyscale
         assert widgets[9] is True
 
 

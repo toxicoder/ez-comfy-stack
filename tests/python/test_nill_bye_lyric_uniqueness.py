@@ -18,7 +18,8 @@ if str(CUSTOM) not in sys.path:
 from ez_music.diss_examples import DISS_EXAMPLES, DissExample  # noqa: E402
 
 SECTION_RE = re.compile(
-    r"^\[(verse|chorus|intro|outro|spoken word)\]\s*$",
+    r"^\[(verse|chorus|intro|outro|spoken word|pre-chorus|bridge|inst|breakdown)"
+    r"(?:\s*-\s*[^\]]*)?\]\s*$",
     re.IGNORECASE,
 )
 PUNCT_RE = re.compile(r"[^a-z0-9']+")

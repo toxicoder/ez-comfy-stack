@@ -1,6 +1,6 @@
 ---
 title: "audio/music/rap-full"
-description: "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or f"
+description: "US-safe rap full track: ACE-Step 1.5 turbo AIO, pre-chorus boom-bap, invented vocal Prompt enhance is **off** so authored text (recipe, script labels, ACE tag"
 tags: [workflows, generated, comfyui, audio]
 ---
 
@@ -29,7 +29,7 @@ Occupancy **audio**. Outputs under `${COMFY_OUTPUT_DIR}`. Unload the previous fa
 ```text
 ## audio/music/rap-full
 
-US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.
+US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
@@ -101,7 +101,7 @@ flowchart LR
 | 1 | ACE-Step 1.5 turbo AIO | `CheckpointLoaderSimple` | MODEL |
 | 2 | AuraFlow sampling | `ModelSamplingAuraFlow` | MODEL |
 | 3 | Song Duration | `PrimitiveNode` | DURATION |
-| 4 | Latent length (seconds) | `EmptyAceStep1.5LatentAudio` | DURATION |
+| 4 | Latent length (seconds) | `EmptyAceStep1.5LatentAudio` | SETTINGS |
 | 15 | Rap lyrics | `EZRapLyrics` | PROMPT |
 | 5 | ez_rap_prompt | `EZAceStepPromptEnhance` | PROMPT |
 | 6 | ACE tags + lyrics | `TextEncodeAceStepAudio1.5` | PROMPT |
@@ -187,7 +187,7 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph:** `96.0`
+**This graph:** `153.0`
 
 #### `control_after_generate`
 
@@ -214,7 +214,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -223,13 +223,13 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph:** `96.0`
+**This graph:** `153.0`
 
 #### `batch_size`
 
@@ -268,7 +268,7 @@ Sectioned lyrics.
 
 **How it affects generation:** Human rewrite required before any release. Catalog takes keep Enhance off.
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [chorus] Own the…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
 
 ```text
 [intro]
@@ -281,6 +281,10 @@ Fan stays loud on a quiet street
 Weights on disk, no rented beat
 Card runs hot, the cut stays clean
 If it ships from here it stays unseen
+
+[pre-chorus]
+Own the booth, own the stack
+No ghost in the hook, no borrowed track
 
 [chorus]
 Own the booth, own the stack
@@ -370,7 +374,7 @@ Sectioned lyrics.
 
 **How it affects generation:** Enhance off on catalog takes so exclusive verses stay pinned.
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [chorus] Own the…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
 
 ```text
 [intro]
@@ -383,6 +387,10 @@ Fan stays loud on a quiet street
 Weights on disk, no rented beat
 Card runs hot, the cut stays clean
 If it ships from here it stays unseen
+
+[pre-chorus]
+Own the booth, own the stack
+No ghost in the hook, no borrowed track
 
 [chorus]
 Own the booth, own the stack
@@ -481,7 +489,7 @@ Sectioned lyrics or [inst] cues.
 
 **How it affects generation:** Non-empty lines under a section are sung. Instrumental graphs must keep cues inside [brackets].
 
-**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [chorus] Own the…`
+**This graph:** `[intro] yeah local signal on the box [verse] Fan stays loud on a quiet street Weights on disk, no rented beat Card runs hot, the cut stays clean If it ships from here it stays unseen [pre-chorus] Own…`
 
 ```text
 [intro]
@@ -494,6 +502,10 @@ Fan stays loud on a quiet street
 Weights on disk, no rented beat
 Card runs hot, the cut stays clean
 If it ships from here it stays unseen
+
+[pre-chorus]
+Own the booth, own the stack
+No ghost in the hook, no borrowed track
 
 [chorus]
 Own the booth, own the stack
@@ -564,7 +576,7 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph:** `96.0`
+**This graph:** `153.0`
 
 #### `timesignature`
 
@@ -572,7 +584,7 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
 **This graph:** `4`
 
@@ -657,7 +669,7 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
 **This graph:** `C minor`
 
@@ -682,7 +694,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -1020,12 +1032,12 @@ Markdown-ish operator note.
 
 **How it affects generation:** Does not affect pixels. Read it before Queue.
 
-**This graph:** `## audio/music/rap-full US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s. 1. Queue **audio/music/rap-draft** first. Then this graph. 2. W…`
+**This graph:** `## audio/music/rap-full US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary…`
 
 ```text
 ## audio/music/rap-full
 
-US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.
+US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 153 s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).

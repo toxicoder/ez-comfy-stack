@@ -1,4 +1,4 @@
-"""Federal-club 180s Nill Bye diss takes (rap over club beds).
+"""Federal-club full-length Nill Bye diss takes (rap over club beds).
 
 Fictional MC Nill Bye roasting public-record satire of Donald Trump.
 Original lyrics. No living-MC names. No disability punchlines. No autotune.

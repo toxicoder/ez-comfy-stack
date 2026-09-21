@@ -1,4 +1,4 @@
-"""Canned lab-catalog 180s Nill Bye vs Rake diss takes.
+"""Canned lab-catalog full-length Nill Bye vs Rake diss takes.
 
 Fictional MCs only. Original lyrics. No living-artist names.
 Imported by diss_examples after types and tag constants exist.

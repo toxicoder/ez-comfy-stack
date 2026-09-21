@@ -17,9 +17,9 @@ tags: [music, rap, edm, ace-step, us-safe, disclosure]
 
 **What this enables**
 
-- **A first 32 s boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
-- **One hundred thirty-five 180 s original Nill Bye takes** without cloud music APIs
-- **Eighty-five 180 s original Drive-through EDM takes** without cloud music APIs
+- **A cold-open boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
+- **One hundred thirty-five original Nill Bye takes** (64–210 s, varied form) without cloud music APIs
+- **Eighty-five original Drive-through EDM takes** (64–210 s, varied arcs) without cloud music APIs
 - **Reusing** the podcast ACE-Step AIO dest so the 10 GB file is not pulled twice
 - **Keeping** the visual studio bootable when the music pack is missing
 - **Muxing** a cover still + FLAC into a YouTube MP4 without changing the rap graphs
@@ -43,10 +43,10 @@ sequenceDiagram
   participant D as VAEDecodeAudio
 
   U->>L: original bars (Enhance on)
-  U->>C: Queue draft 32 s
+  U->>C: Queue cold-open draft
   C->>D: latent audio
   D->>U: ez_rap_draft FLAC + MP3
-  U->>C: Queue full 96 s when the draft is good
+  U->>C: Queue the pre-chorus full take when the draft is good
 ```
 
 Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step together.
@@ -55,14 +55,14 @@ Cover art is a **later** Klein session. Occupancy: do not load LTX + ACE-Step to
   <Card title="RAP-FIRST">
     ---
 
-    Draft **32 s**, full **96 s**, then nine Nill Bye 180 s albums (135 takes).
+    Cold-open draft, pre-chorus full take, then nine Nill Bye albums (135 takes, 64–210 s, varied form).
 
     [Nill Bye albums](create/music-rap.md)
   </Card>
   <Card title="Drive-through EDM">
     ---
 
-    Five bass-set albums (85 takes). Drop-first warped hybrid-trap. Not rap over a club bed.
+    Five bass-set albums (85 takes, 64–210 s). Warped hybrid-trap with intros, builds, and breakdowns. Not rap over a club bed.
 
     [Drive-through EDM](create/music-edm.md)
   </Card>
@@ -83,7 +83,7 @@ Catalog filenames: [Audio catalog](create/workflows-audio.md).
 
 Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same role as **klein-still-draft**. App **Duration (seconds)** defaults to **32**. Prefix `ez_rap_draft`. Full stage table: [RAP-FIRST](create/music-rap.md#draft-first-queue).
 
-Then load **audio/music/rap-full** (96 s), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`.
+Then load **audio/music/rap-full** (pre-chorus form), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`.
 
 ---
 
@@ -115,7 +115,7 @@ Relative symlinks only (host `/mnt/models` vs container `/models`).
 1. `./scripts/manage.sh download-music --tier turbo`
 2. `./scripts/manage.sh start` — type **yes**
 3. Load **audio/music/rap-draft**. Enhance on. Queue. Files under `${COMFY_OUTPUT_DIR}` as `ez_rap_draft_*.flac` / `ez_rap_draft_*.mp3`
-4. Then load **audio/music/rap-full** (96 s), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review --art skip|upload|generate`
+4. Then load **audio/music/rap-full** (pre-chorus form), **or** a numbered take under `_lab/audio/albums/nill-bye/<album>/`, **or** `_lab/audio/albums/drive-through/<album>/`. Full album: `./scripts/manage.sh album-render --album nill-bye/peer-review --art skip|upload|generate`
 5. Album art: App **Album art** skip (default) / upload / generate, or `album-render --art skip|upload|generate`. Cover LoadImage is **bypassed** (and unwired) so App Queue does not require a file. Upload: graph view, **Ctrl+B** Cover image, then wire IMAGE to Album metadata. Generate queues `cover.json` (klein occupancy) then POST `/free` then ACE tracks. Do not co-resident Klein + ACE. Generic stills: **stills/thumbnail** or **stills/podcast-cover** in a later session.
 6. Optional YouTube still-image video (host ffmpeg; graphs still save FLAC + MP3):
 

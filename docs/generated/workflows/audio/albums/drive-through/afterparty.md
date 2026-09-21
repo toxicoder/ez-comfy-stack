@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/drive-through/afterparty/`. Queue one track, 
 ```text
 ## 01-brake-fade
 
-US-safe EDM **180 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe EDM **72 s** take: **brake fade**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **e_drop_first**. Warped hybrid-trap, trap drums. Intros, builds, and breakdowns are part of the arc. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** — draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics — keep cues inside the brackets.
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language unknown, timesignature 4, generate_audio_codes true. Seed 457.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 72 s, bpm 150, language unknown, timesignature 4, key E minor, form e_drop_first, generate_audio_codes true. Seed 457.
 7. Saves: `01 - Brake Fade` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -106,13 +106,13 @@ flowchart LR
 | `audio/albums/drive-through/afterparty/19-clutch-slam` | 16 | audio |
 | `audio/albums/drive-through/afterparty/20-trailer-hitch` | 16 | audio |
 | `audio/albums/drive-through/afterparty/album` | 4 | none |
-| `audio/albums/drive-through/afterparty/cover` | 15 | klein |
+| `audio/albums/drive-through/afterparty/cover` | 18 | klein |
 
 ## `01-brake-fade`
 
 Catalog id `audio/albums/drive-through/afterparty/01-brake-fade`.
 
-US-safe EDM 180s: Drive-through brake-fade dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through brake-fade dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -131,14 +131,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -147,7 +147,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rav…` |
-| 2 | `[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0] [inst - …` |
+| 2 | `[drop - heavy dirty drop, harder growl drop, full send drop, warped wall] [inst…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/01-brake-fade` |
@@ -157,17 +157,13 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 ```
 
 ```text
-[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0]
+[drop - heavy dirty drop, harder growl drop, full send drop, warped wall]
 
-[inst - rapid hi-hats roll, 808 slide, grid 457 1]
+[inst - chest-sub 808 warp, 808 slide, snare roll, warped dirty, rapid hi-hats roll]
 
-[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]
+[drop - brake wreck, stacked 808 wall, low rumble wreck, chest-sub 808 warp, stacked wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 457 3]
-
-[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 457 5]
+[outro - rapid hi-hats roll, formant grind, chest-sub 808 punch, kick holds, 808 ride]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -175,14 +171,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rav…` |
-| 1 | `[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0] [inst - …` |
+| 1 | `[drop - heavy dirty drop, harder growl drop, full send drop, warped wall] [inst…` |
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `72.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -195,17 +191,13 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 ```
 
 ```text
-[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0]
+[drop - heavy dirty drop, harder growl drop, full send drop, warped wall]
 
-[inst - rapid hi-hats roll, 808 slide, grid 457 1]
+[inst - chest-sub 808 warp, 808 slide, snare roll, warped dirty, rapid hi-hats roll]
 
-[drop - harder growl drop, stacked 808 wall, formant grind, grid 457 2]
+[drop - brake wreck, stacked 808 wall, low rumble wreck, chest-sub 808 warp, stacked wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 457 3]
-
-[drop - full send drop, low rumble wreck, warped dirty, grid 457 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 457 5]
+[outro - rapid hi-hats roll, formant grind, chest-sub 808 punch, kick holds, 808 ride]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -269,7 +261,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, stacked 808, rave
 
 Catalog id `audio/albums/drive-through/afterparty/02-diesel-hum`.
 
-US-safe EDM 180s: Drive-through diesel-hum hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through diesel-hum hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -288,14 +280,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -304,7 +296,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 2 | `[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 46…` |
+| 2 | `[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll] [d…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/02-diesel-hum` |
@@ -314,15 +306,15 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 ```
 
 ```text
-[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 461 0]
+[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 461 1]
+[drop - heavy warped drop, harder growl drop, full send drop, warped wall]
 
-[drop - harder growl drop, stacked 808 wall, hybrid formant, grid 461 2]
+[breakdown - pedal 808 hold, pedal warp, pedal ride, pluck]
 
-[drop - full send drop, chest-sub wreck, pedal warp, grid 461 3]
+[drop - chest-sub 808 wreck, stacked 808 wall, chest-sub wreck, heavy warped drop, stacked wreck]
 
-[outro - kick holds, hats denser, pedal ride, grid 461 4]
+[outro - rapid hi-hats roll, kick holds, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -330,14 +322,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-su…` |
-| 1 | `[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 46…` |
+| 1 | `[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll] [d…` |
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `152` |
-| 5 | `180.0` |
+| 5 | `120.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `G major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -350,15 +342,15 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 ```
 
 ```text
-[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 461 0]
+[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 461 1]
+[drop - heavy warped drop, harder growl drop, full send drop, warped wall]
 
-[drop - harder growl drop, stacked 808 wall, hybrid formant, grid 461 2]
+[breakdown - pedal 808 hold, pedal warp, pedal ride, pluck]
 
-[drop - full send drop, chest-sub wreck, pedal warp, grid 461 3]
+[drop - chest-sub 808 wreck, stacked 808 wall, chest-sub wreck, heavy warped drop, stacked wreck]
 
-[outro - kick holds, hats denser, pedal ride, grid 461 4]
+[outro - rapid hi-hats roll, kick holds, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -422,7 +414,7 @@ warped hybrid-trap, trap drums, rapid hi-hats, dual-action pedal bass, chest-sub
 
 Catalog id `audio/albums/drive-through/afterparty/03-axle-grind`.
 
-US-safe EDM 180s: Drive-through axle-grind tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through axle-grind tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -441,14 +433,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `175.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `175.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -457,7 +449,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 2 | `[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0] [inst - metal…` |
+| 2 | `[intro - warped axle, chest-sub 808, axle grind, filter down] [build-up - metal…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/03-axle-grind` |
@@ -467,19 +459,15 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 ```
 
 ```text
-[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0]
+[intro - warped axle, chest-sub 808, axle grind, filter down]
 
-[inst - metal hats roll, growl sustain, grid 463 1]
+[build-up - metal hats roll, rapid hi-hats denser, kick holds, snare roll]
 
-[drop - harder formant drop, sub crush, chest-sub 808, grid 463 2]
+[drop - heavy tearout drop, growl wreck, harder formant drop, full send drop, stacked growl wreck, harder growl drop, low 808 wreck, warped wall]
 
-[inst - rapid hi-hats denser, growl hold, grid 463 3]
+[inst - growl sustain, growl hold, hats denser, rapid hi-hats]
 
-[drop - full send drop, stacked growl wreck, tearout warp, grid 463 4]
-
-[drop - harder growl drop, low 808 wreck, axle grind, grid 463 5]
-
-[outro - kick holds, hats denser, growl ride, grid 463 6]
+[outro - sub crush, tearout warp, growl ride, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -487,14 +475,14 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 | Slot | Value |
 | --- | --- |
 | 0 | `tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, ra…` |
-| 1 | `[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0] [inst - metal…` |
+| 1 | `[intro - warped axle, chest-sub 808, axle grind, filter down] [build-up - metal…` |
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `155` |
-| 5 | `180.0` |
+| 5 | `175.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -507,19 +495,15 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 ```
 
 ```text
-[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0]
+[intro - warped axle, chest-sub 808, axle grind, filter down]
 
-[inst - metal hats roll, growl sustain, grid 463 1]
+[build-up - metal hats roll, rapid hi-hats denser, kick holds, snare roll]
 
-[drop - harder formant drop, sub crush, chest-sub 808, grid 463 2]
+[drop - heavy tearout drop, growl wreck, harder formant drop, full send drop, stacked growl wreck, harder growl drop, low 808 wreck, warped wall]
 
-[inst - rapid hi-hats denser, growl hold, grid 463 3]
+[inst - growl sustain, growl hold, hats denser, rapid hi-hats]
 
-[drop - full send drop, stacked growl wreck, tearout warp, grid 463 4]
-
-[drop - harder growl drop, low 808 wreck, axle grind, grid 463 5]
-
-[outro - kick holds, hats denser, growl ride, grid 463 6]
+[outro - sub crush, tearout warp, growl ride, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -583,7 +567,7 @@ tearout, warped bass, chest-sub, rapid hi-hats, trap drums, growl bass, 808, rav
 
 Catalog id `audio/albums/drive-through/afterparty/04-weigh-station`.
 
-US-safe EDM 180s: Drive-through weigh-station brostep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through weigh-station brostep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -602,14 +586,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `79.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `79.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -618,7 +602,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped …` |
-| 2 | `[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0] [inst - …` |
+| 2 | `[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare ro…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/04-weigh-station` |
@@ -628,17 +612,13 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 ```
 
 ```text
-[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]
+[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare roll]
 
-[inst - rapid hi-hats roll, growl hold, grid 467 1]
+[inst - growl hold, snare roll, kick holds, rapid hi-hats]
 
-[drop - harder growl drop, chest-sub wall, formant 808, grid 467 2]
+[drop - heavy brostep drop, stacked 808 warp, weigh wreck, harder growl drop, full send drop, body bass wreck, warped wall]
 
-[inst - snare roll, 808 punch, grid 467 3]
-
-[drop - full send drop, body bass wreck, warped brostep, grid 467 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 467 5]
+[outro - chest-sub wall, 808 punch, rapid hi-hats roll, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -646,14 +626,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped …` |
-| 1 | `[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0] [inst - …` |
+| 1 | `[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare ro…` |
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `158` |
-| 5 | `180.0` |
+| 5 | `79.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `D major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -666,17 +646,13 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 ```
 
 ```text
-[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0]
+[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare roll]
 
-[inst - rapid hi-hats roll, growl hold, grid 467 1]
+[inst - growl hold, snare roll, kick holds, rapid hi-hats]
 
-[drop - harder growl drop, chest-sub wall, formant 808, grid 467 2]
+[drop - heavy brostep drop, stacked 808 warp, weigh wreck, harder growl drop, full send drop, body bass wreck, warped wall]
 
-[inst - snare roll, 808 punch, grid 467 3]
-
-[drop - full send drop, body bass wreck, warped brostep, grid 467 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 467 5]
+[outro - chest-sub wall, 808 punch, rapid hi-hats roll, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -740,7 +716,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, stacked 808, warped b
 
 Catalog id `audio/albums/drive-through/afterparty/05-black-ice`.
 
-US-safe EDM 180s: Drive-through black-ice riddim warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through black-ice riddim warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -759,14 +735,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `132.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `132.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -775,7 +751,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 8…` |
-| 2 | `[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0] [inst - metal …` |
+| 2 | `[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick h…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/05-black-ice` |
@@ -785,21 +761,15 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 ```
 
 ```text
-[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]
+[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick holds]
 
-[inst - metal hats roll, wobble sustain, grid 479 1]
+[build-up - metal hats roll, wobble hold, riddim 808, snare roll]
 
-[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]
+[drop - heavy riddim drop, wobble wreck, harder growl drop, chest growl wreck, full send drop, sub crush wreck, harder warped drop, low rumble wreck, warped wall]
 
-[inst - rapid hi-hats denser, wobble hold, grid 479 3]
+[breakdown - wobble sustain, chest formant, kick holds, pluck]
 
-[drop - full send drop, sub crush wreck, chest formant, grid 479 4]
-
-[inst - snare roll, growl bass hold, grid 479 5]
-
-[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]
-
-[outro - kick holds, hats denser, wobble ride, grid 479 7]
+[outro - 808 crush, snare roll, hats denser, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -807,14 +777,14 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 8…` |
-| 1 | `[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0] [inst - metal …` |
+| 1 | `[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick h…` |
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `160` |
-| 5 | `180.0` |
+| 5 | `132.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -827,21 +797,15 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 ```
 
 ```text
-[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0]
+[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick holds]
 
-[inst - metal hats roll, wobble sustain, grid 479 1]
+[build-up - metal hats roll, wobble hold, riddim 808, snare roll]
 
-[drop - harder growl drop, chest growl wreck, 808 crush, grid 479 2]
+[drop - heavy riddim drop, wobble wreck, harder growl drop, chest growl wreck, full send drop, sub crush wreck, harder warped drop, low rumble wreck, warped wall]
 
-[inst - rapid hi-hats denser, wobble hold, grid 479 3]
+[breakdown - wobble sustain, chest formant, kick holds, pluck]
 
-[drop - full send drop, sub crush wreck, chest formant, grid 479 4]
-
-[inst - snare roll, growl bass hold, grid 479 5]
-
-[drop - harder warped drop, low rumble wreck, riddim 808, grid 479 6]
-
-[outro - kick holds, hats denser, wobble ride, grid 479 7]
+[outro - 808 crush, snare roll, hats denser, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -905,7 +869,7 @@ riddim, warped bass, chest-sub, rapid hi-hats, trap drums, wobble bass, rave, 80
 
 Catalog id `audio/albums/drive-through/afterparty/06-high-beams`.
 
-US-safe EDM 180s: Drive-through high-beams color bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through high-beams color bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -924,14 +888,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `188.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `188.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -940,7 +904,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action ped…` |
-| 2 | `[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 …` |
+| 2 | `[drop - heavy color drop, full send drop, harder growl drop, half-time growl] […` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/06-high-beams` |
@@ -950,19 +914,13 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 ```
 
 ```text
-[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 0]
+[drop - heavy color drop, full send drop, harder growl drop, half-time growl]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 487 1]
+[build-up - dual-action pedal bass, pedal 808 hold, hybrid 808 wall, snare roll, warped color, kick holds, color ride]
 
-[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]
+[drop - harder stacked drop, body sub wreck, stacked 808 wreck, chest-sub 808 warp, double-time hats]
 
-[inst - snare roll, chest-sub 808, grid 487 3]
-
-[drop - full send drop, body sub wreck, warped color, grid 487 4]
-
-[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]
-
-[outro - kick holds, hats denser, color ride, grid 487 6]
+[outro - chest-sub 808 warp, rapid hi-hats roll, color formant, chest-sub 808, pedal warp, hats denser, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -970,14 +928,14 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action ped…` |
-| 1 | `[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 …` |
+| 1 | `[drop - heavy color drop, full send drop, harder growl drop, half-time growl] […` |
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `165` |
-| 5 | `180.0` |
+| 5 | `188.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `A major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -990,19 +948,13 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 ```
 
 ```text
-[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 0]
+[drop - heavy color drop, full send drop, harder growl drop, half-time growl]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 487 1]
+[build-up - dual-action pedal bass, pedal 808 hold, hybrid 808 wall, snare roll, warped color, kick holds, color ride]
 
-[drop - harder stacked drop, hybrid 808 wall, color formant, grid 487 2]
+[drop - harder stacked drop, body sub wreck, stacked 808 wreck, chest-sub 808 warp, double-time hats]
 
-[inst - snare roll, chest-sub 808, grid 487 3]
-
-[drop - full send drop, body sub wreck, warped color, grid 487 4]
-
-[drop - harder growl drop, stacked 808 wreck, pedal warp, grid 487 5]
-
-[outro - kick holds, hats denser, color ride, grid 487 6]
+[outro - chest-sub 808 warp, rapid hi-hats roll, color formant, chest-sub 808, pedal warp, hats denser, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1066,7 +1018,7 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, dual-action peda
 
 Catalog id `audio/albums/drive-through/afterparty/07-chain-hook`.
 
-US-safe EDM 180s: Drive-through chain-hook dirty dubstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through chain-hook dirty dubstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1085,14 +1037,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `90.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `90.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1101,7 +1053,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 2 | `[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0] [drop - hard…` |
+| 2 | `[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/07-chain-hook` |
@@ -1111,13 +1063,9 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 ```
 
 ```text
-[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]
+[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full send drop, stacked 808 wreck, warped wall]
 
-[drop - harder dirty drop, dubstep wreck, chest-sub 808 formant, grid 491 1]
-
-[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]
-
-[outro - kick holds, rapid hi-hats roll, growl ride, grid 491 3]
+[outro - warped chain, chest-sub 808 formant, trap growl, kick holds, rapid hi-hats roll, growl ride]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1125,14 +1073,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 8…` |
-| 1 | `[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0] [drop - hard…` |
+| 1 | `[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full…` |
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `180.0` |
+| 5 | `90.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1145,13 +1093,9 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 ```
 
 ```text
-[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0]
+[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full send drop, stacked 808 wreck, warped wall]
 
-[drop - harder dirty drop, dubstep wreck, chest-sub 808 formant, grid 491 1]
-
-[drop - full send drop, stacked 808 wreck, trap growl, grid 491 2]
-
-[outro - kick holds, rapid hi-hats roll, growl ride, grid 491 3]
+[outro - warped chain, chest-sub 808 formant, trap growl, kick holds, rapid hi-hats roll, growl ride]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1215,7 +1159,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, growl bass, 80
 
 Catalog id `audio/albums/drive-through/afterparty/08-grit-plate`.
 
-US-safe EDM 180s: Drive-through grit-plate wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through grit-plate wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1234,14 +1178,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `144.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `144.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1250,7 +1194,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 2 | `[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0] [inst - rapid…` |
+| 2 | `[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats] [build-up - rapi…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/08-grit-plate` |
@@ -1260,15 +1204,17 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 ```
 
 ```text
-[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0]
+[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats]
 
-[inst - rapid hi-hats denser, wave 808 hold grit, grid 499 1]
+[build-up - rapid hi-hats denser, kick holds, snare roll]
 
-[drop - harder growl drop, stacked 808 wall, chest formant, grid 499 2]
+[drop - heavy wave drop, harder growl drop, full send drop, warped wall]
 
-[drop - full send drop, body bass wreck, wave warp, grid 499 3]
+[breakdown - wave 808 hold grit, hats denser, pluck]
 
-[outro - kick holds, hats denser, wave ride, grid 499 4]
+[drop - warped 808 wreck, stacked 808 wall, body bass wreck, stacked wreck]
+
+[outro - chest formant, wave ride, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1276,14 +1222,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 1 | `[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0] [inst - rapid…` |
+| 1 | `[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats] [build-up - rapi…` |
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `144.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `C major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1296,15 +1242,17 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 ```
 
 ```text
-[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0]
+[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats]
 
-[inst - rapid hi-hats denser, wave 808 hold grit, grid 499 1]
+[build-up - rapid hi-hats denser, kick holds, snare roll]
 
-[drop - harder growl drop, stacked 808 wall, chest formant, grid 499 2]
+[drop - heavy wave drop, harder growl drop, full send drop, warped wall]
 
-[drop - full send drop, body bass wreck, wave warp, grid 499 3]
+[breakdown - wave 808 hold grit, hats denser, pluck]
 
-[outro - kick holds, hats denser, wave ride, grid 499 4]
+[drop - warped 808 wreck, stacked 808 wall, body bass wreck, stacked wreck]
+
+[outro - chest formant, wave ride, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1368,7 +1316,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 
 Catalog id `audio/albums/drive-through/afterparty/09-steel-grate`.
 
-US-safe EDM 180s: Drive-through steel-grate drumstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through steel-grate drumstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1387,14 +1335,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1403,7 +1351,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 2 | `[drop - heavy amen drop, reese wreck, warped grate, grid 503 0] [inst - amen br…` |
+| 2 | `[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/09-steel-grate` |
@@ -1413,23 +1361,15 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 ```
 
 ```text
-[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]
+[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds]
 
-[inst - amen break, rapid hi-hats 808 grate, grid 503 1]
+[drop - heavy amen drop, harder growl drop, stacked amen wreck, chest-sub 808 wreck, low rumble wreck, amen freight]
 
-[drop - harder growl drop, reese stack, chest-sub 808, grid 503 2]
+[breakdown - amen break, chest-sub 808, formant 808, drumstep grind, amen break, bell]
 
-[inst - hats denser, reese hold, grid 503 3]
+[drop - reese wreck, full send drop, harder warped drop, full send drop, warped wall]
 
-[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]
-
-[inst - snare roll, chest-sub 808 punch, grid 503 5]
-
-[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 503 6]
-
-[drop - full send drop, low rumble wreck, reese wall, grid 503 7]
-
-[outro - kick holds, amen break, reese ride, grid 503 8]
+[outro - rapid hi-hats 808 grate, hats denser, snare roll, reese wall, reese ride, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1437,14 +1377,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 1 | `[drop - heavy amen drop, reese wreck, warped grate, grid 503 0] [inst - amen br…` |
+| 1 | `[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds…` |
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `172` |
-| 5 | `180.0` |
+| 5 | `198.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1457,23 +1397,15 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 ```
 
 ```text
-[drop - heavy amen drop, reese wreck, warped grate, grid 503 0]
+[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds]
 
-[inst - amen break, rapid hi-hats 808 grate, grid 503 1]
+[drop - heavy amen drop, harder growl drop, stacked amen wreck, chest-sub 808 wreck, low rumble wreck, amen freight]
 
-[drop - harder growl drop, reese stack, chest-sub 808, grid 503 2]
+[breakdown - amen break, chest-sub 808, formant 808, drumstep grind, amen break, bell]
 
-[inst - hats denser, reese hold, grid 503 3]
+[drop - reese wreck, full send drop, harder warped drop, full send drop, warped wall]
 
-[drop - full send drop, stacked amen wreck, formant 808, grid 503 4]
-
-[inst - snare roll, chest-sub 808 punch, grid 503 5]
-
-[drop - harder warped drop, chest-sub 808 wreck, drumstep grind, grid 503 6]
-
-[drop - full send drop, low rumble wreck, reese wall, grid 503 7]
-
-[outro - kick holds, amen break, reese ride, grid 503 8]
+[outro - rapid hi-hats 808 grate, hats denser, snare roll, reese wall, reese ride, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1537,7 +1469,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 
 Catalog id `audio/albums/drive-through/afterparty/10-rest-bay`.
 
-US-safe EDM 180s: Drive-through rest-bay chest bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through rest-bay chest bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1556,14 +1488,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1572,7 +1504,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 2 | `[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0] […` |
+| 2 | `[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, sna…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/10-rest-bay` |
@@ -1582,19 +1514,15 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 ```
 
 ```text
-[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0]
+[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 509 1]
+[drop - heavy chest drop, harder growl drop, full send drop, harder stacked drop, offbeat kick]
 
-[drop - harder growl drop, stacked 808 wall, chest formant, grid 509 2]
+[inst - pedal 808 hold, snare roll, trap growl, pedal ride, rapid hi-hats]
 
-[inst - snare roll, chest-sub 808, grid 509 3]
+[drop - sub warp wreck, stacked 808 wall, body chest wreck, low 808 wreck, stacked wreck]
 
-[drop - full send drop, body chest wreck, pedal warp, grid 509 4]
-
-[drop - harder stacked drop, low 808 wreck, trap growl, grid 509 5]
-
-[outro - kick holds, hats denser, pedal ride, grid 509 6]
+[outro - rapid hi-hats roll, chest-sub 808, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1602,14 +1530,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, …` |
-| 1 | `[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0] […` |
+| 1 | `[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, sna…` |
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `155` |
-| 5 | `180.0` |
+| 5 | `99.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `G major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1622,19 +1550,15 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 ```
 
 ```text
-[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0]
+[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 509 1]
+[drop - heavy chest drop, harder growl drop, full send drop, harder stacked drop, offbeat kick]
 
-[drop - harder growl drop, stacked 808 wall, chest formant, grid 509 2]
+[inst - pedal 808 hold, snare roll, trap growl, pedal ride, rapid hi-hats]
 
-[inst - snare roll, chest-sub 808, grid 509 3]
+[drop - sub warp wreck, stacked 808 wall, body chest wreck, low 808 wreck, stacked wreck]
 
-[drop - full send drop, body chest wreck, pedal warp, grid 509 4]
-
-[drop - harder stacked drop, low 808 wreck, trap growl, grid 509 5]
-
-[outro - kick holds, hats denser, pedal ride, grid 509 6]
+[outro - rapid hi-hats roll, chest-sub 808, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1698,7 +1622,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, dual-action pedal bass, w
 
 Catalog id `audio/albums/drive-through/afterparty/11-haul-crate`.
 
-US-safe EDM 180s: Drive-through haul-crate hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through haul-crate hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1717,14 +1641,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `155.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `155.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1733,7 +1657,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 2 | `[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0] [ins…` |
+| 2 | `[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall] [ins…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/11-haul-crate` |
@@ -1743,17 +1667,13 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 ```
 
 ```text
-[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0]
+[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall]
 
-[inst - rapid hi-hats roll, 808 slide, grid 521 1]
+[inst - warped crate, 808 slide, snare roll, chest-sub 808 wall, kick holds, 808 ride, rapid hi-hats]
 
-[drop - harder growl drop, stacked trap bass, chest formant, grid 521 2]
+[drop - trap drums 808 wreck, stacked trap bass, warped crate, stacked wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 521 3]
-
-[drop - full send drop, chest-sub 808 wall, hybrid warp, grid 521 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 521 5]
+[outro - rapid hi-hats roll, chest formant, chest-sub 808 punch, hybrid warp, rapid hi-hats roll, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1761,14 +1681,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, …` |
-| 1 | `[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0] [ins…` |
+| 1 | `[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall] [ins…` |
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `170` |
-| 5 | `180.0` |
+| 5 | `155.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1781,17 +1701,13 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 ```
 
 ```text
-[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0]
+[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall]
 
-[inst - rapid hi-hats roll, 808 slide, grid 521 1]
+[inst - warped crate, 808 slide, snare roll, chest-sub 808 wall, kick holds, 808 ride, rapid hi-hats]
 
-[drop - harder growl drop, stacked trap bass, chest formant, grid 521 2]
+[drop - trap drums 808 wreck, stacked trap bass, warped crate, stacked wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 521 3]
-
-[drop - full send drop, chest-sub 808 wall, hybrid warp, grid 521 4]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 521 5]
+[outro - rapid hi-hats roll, chest formant, chest-sub 808 punch, hybrid warp, rapid hi-hats roll, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -1855,7 +1771,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, chest-sub bass, r
 
 Catalog id `audio/albums/drive-through/afterparty/12-night-splice`.
 
-US-safe EDM 180s: Drive-through night-splice wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through night-splice wave bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1874,14 +1790,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -1890,7 +1806,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 2 | `[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0] [inst - rap…` |
+| 2 | `[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll] [drop - hea…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/12-night-splice` |
@@ -1900,15 +1816,15 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 ```
 
 ```text
-[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]
+[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll]
 
-[inst - rapid hi-hats denser, wave 808 sustain splice, grid 523 1]
+[drop - heavy wave drop, harder growl drop, low swell wreck, warped wall]
 
-[drop - harder growl drop, chest-sub 808 wall, formant fold, grid 523 2]
+[breakdown - rapid hi-hats denser, formant fold, hats denser, bell]
 
-[drop - full send drop, low swell wreck, wave warp, grid 523 3]
+[drop - warped bass wreck, full send drop, stacked wreck]
 
-[outro - kick holds, hats denser, wave ride, grid 523 4]
+[outro - wave 808 sustain splice, wave warp, wave ride, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -1916,14 +1832,14 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 | Slot | Value |
 | --- | --- |
 | 0 | `wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, r…` |
-| 1 | `[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0] [inst - rap…` |
+| 1 | `[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll] [drop - hea…` |
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `152` |
-| 5 | `180.0` |
+| 5 | `208.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `D major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1936,15 +1852,15 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 ```
 
 ```text
-[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0]
+[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll]
 
-[inst - rapid hi-hats denser, wave 808 sustain splice, grid 523 1]
+[drop - heavy wave drop, harder growl drop, low swell wreck, warped wall]
 
-[drop - harder growl drop, chest-sub 808 wall, formant fold, grid 523 2]
+[breakdown - rapid hi-hats denser, formant fold, hats denser, bell]
 
-[drop - full send drop, low swell wreck, wave warp, grid 523 3]
+[drop - warped bass wreck, full send drop, stacked wreck]
 
-[outro - kick holds, hats denser, wave ride, grid 523 4]
+[outro - wave 808 sustain splice, wave warp, wave ride, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2008,7 +1924,7 @@ wave bass, warped bass, 808, rapid hi-hats, trap drums, fold bass, chest-sub, ra
 
 Catalog id `audio/albums/drive-through/afterparty/13-torque-bay`.
 
-US-safe EDM 180s: Drive-through torque-bay neuro bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through torque-bay neuro bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2027,14 +1943,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2043,7 +1959,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 2 | `[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0] [inst - h…` |
+| 2 | `[intro - warped torque, rapid hi-hats roll, kick holds, filter down] [build-up …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/13-torque-bay` |
@@ -2053,19 +1969,15 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 ```
 
 ```text
-[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0]
+[intro - warped torque, rapid hi-hats roll, kick holds, filter down]
 
-[inst - hats denser, reese hold, grid 541 1]
+[build-up - hats denser, 808 punch, rapid hi-hats roll, snare roll]
 
-[drop - harder stacked drop, chest reese wreck, formant coil, grid 541 2]
+[drop - heavy neuro drop, reese 808 wreck, harder stacked drop, chest reese wreck, full send drop, neuro 808 wreck, harder growl drop, stacked reese wreck, warped wall]
 
-[inst - rapid hi-hats roll, 808 punch, grid 541 3]
+[inst - reese hold, chest warp, reese ride, rapid hi-hats]
 
-[drop - full send drop, neuro 808 wreck, chest warp, grid 541 4]
-
-[drop - harder growl drop, stacked reese wreck, torque grind, grid 541 5]
-
-[outro - kick holds, rapid hi-hats roll, reese ride, grid 541 6]
+[outro - formant coil, torque grind, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2073,14 +1985,14 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped …` |
-| 1 | `[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0] [inst - h…` |
+| 1 | `[intro - warped torque, rapid hi-hats roll, kick holds, filter down] [build-up …` |
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `176` |
-| 5 | `180.0` |
+| 5 | `108.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2093,19 +2005,15 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 ```
 
 ```text
-[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0]
+[intro - warped torque, rapid hi-hats roll, kick holds, filter down]
 
-[inst - hats denser, reese hold, grid 541 1]
+[build-up - hats denser, 808 punch, rapid hi-hats roll, snare roll]
 
-[drop - harder stacked drop, chest reese wreck, formant coil, grid 541 2]
+[drop - heavy neuro drop, reese 808 wreck, harder stacked drop, chest reese wreck, full send drop, neuro 808 wreck, harder growl drop, stacked reese wreck, warped wall]
 
-[inst - rapid hi-hats roll, 808 punch, grid 541 3]
+[inst - reese hold, chest warp, reese ride, rapid hi-hats]
 
-[drop - full send drop, neuro 808 wreck, chest warp, grid 541 4]
-
-[drop - harder growl drop, stacked reese wreck, torque grind, grid 541 5]
-
-[outro - kick holds, rapid hi-hats roll, reese ride, grid 541 6]
+[outro - formant coil, torque grind, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2169,7 +2077,7 @@ drumstep, amen break, chest-sub, rapid hi-hats, trap drums, reese bass, warped b
 
 Catalog id `audio/albums/drive-through/afterparty/14-spare-drum`.
 
-US-safe EDM 180s: Drive-through spare-drum brostep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through spare-drum brostep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2188,14 +2096,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2204,7 +2112,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal ba…` |
-| 2 | `[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 54…` |
+| 2 | `[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats den…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/14-spare-drum` |
@@ -2214,17 +2122,13 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 ```
 
 ```text
-[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 547 0]
+[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 547 1]
+[inst - chest-sub 808 warp, formant growl, pedal warp, brostep ride, rapid hi-hats]
 
-[drop - harder stacked drop, 808 wall wreck, formant growl, grid 547 2]
+[drop - heavy brostep drop, harder stacked drop, 808 wall wreck, full send drop, body bass wreck, chest-sub 808 warp, warped wall]
 
-[inst - snare roll, chest-sub 808, grid 547 3]
-
-[drop - full send drop, body bass wreck, pedal warp, grid 547 4]
-
-[outro - kick holds, hats denser, brostep ride, grid 547 5]
+[outro - pedal 808 hold, snare roll, kick holds, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2232,14 +2136,14 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 | Slot | Value |
 | --- | --- |
 | 0 | `brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal ba…` |
-| 1 | `[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 54…` |
+| 1 | `[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats den…` |
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `165` |
-| 5 | `180.0` |
+| 5 | `167.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `A major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2252,17 +2156,13 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 ```
 
 ```text
-[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 547 0]
+[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats denser, snare roll]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 547 1]
+[inst - chest-sub 808 warp, formant growl, pedal warp, brostep ride, rapid hi-hats]
 
-[drop - harder stacked drop, 808 wall wreck, formant growl, grid 547 2]
+[drop - heavy brostep drop, harder stacked drop, 808 wall wreck, full send drop, body bass wreck, chest-sub 808 warp, warped wall]
 
-[inst - snare roll, chest-sub 808, grid 547 3]
-
-[drop - full send drop, body bass wreck, pedal warp, grid 547 4]
-
-[outro - kick holds, hats denser, brostep ride, grid 547 5]
+[outro - pedal 808 hold, snare roll, kick holds, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2326,7 +2226,7 @@ brostep, growl bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bas
 
 Catalog id `audio/albums/drive-through/afterparty/15-oil-pan`.
 
-US-safe EDM 180s: Drive-through oil-pan color bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through oil-pan color bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2345,14 +2245,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2361,7 +2261,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bas…` |
-| 2 | `[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0] [inst - rapi…` |
+| 2 | `[intro - pan grind, snare roll, kick holds] [build-up - rapid hi-hats roll, che…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/15-oil-pan` |
@@ -2371,19 +2271,15 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 ```
 
 ```text
-[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]
+[intro - pan grind, snare roll, kick holds]
 
-[inst - rapid hi-hats roll, 808 punch hold, grid 557 1]
+[build-up - rapid hi-hats roll, chest-sub 808, hats denser, snare roll]
 
-[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]
+[drop - heavy color drop, warped 808 wreck, harder growl drop, stacked color 808, full send drop, body bass wreck, harder stacked drop, chest-sub wreck, warped wall]
 
-[inst - snare roll, chest-sub 808, grid 557 3]
+[breakdown - 808 punch hold, color warp, color ride, bell]
 
-[drop - full send drop, body bass wreck, color warp, grid 557 4]
-
-[drop - harder stacked drop, chest-sub wreck, warped 808 wall, grid 557 5]
-
-[outro - kick holds, hats denser, color ride, grid 557 6]
+[outro - chest formant, warped 808 wall, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2391,14 +2287,14 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 | Slot | Value |
 | --- | --- |
 | 0 | `color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bas…` |
-| 1 | `[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0] [inst - rapi…` |
+| 1 | `[intro - pan grind, snare roll, kick holds] [build-up - rapid hi-hats roll, che…` |
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `210.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2411,19 +2307,15 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 ```
 
 ```text
-[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0]
+[intro - pan grind, snare roll, kick holds]
 
-[inst - rapid hi-hats roll, 808 punch hold, grid 557 1]
+[build-up - rapid hi-hats roll, chest-sub 808, hats denser, snare roll]
 
-[drop - harder growl drop, stacked color 808, chest formant, grid 557 2]
+[drop - heavy color drop, warped 808 wreck, harder growl drop, stacked color 808, full send drop, body bass wreck, harder stacked drop, chest-sub wreck, warped wall]
 
-[inst - snare roll, chest-sub 808, grid 557 3]
+[breakdown - 808 punch hold, color warp, color ride, bell]
 
-[drop - full send drop, body bass wreck, color warp, grid 557 4]
-
-[drop - harder stacked drop, chest-sub wreck, warped 808 wall, grid 557 5]
-
-[outro - kick holds, hats denser, color ride, grid 557 6]
+[outro - chest formant, warped 808 wall, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2487,7 +2379,7 @@ color bass, formant bass, chest-sub, rapid hi-hats, trap drums, 808, warped bass
 
 Catalog id `audio/albums/drive-through/afterparty/16-curb-check`.
 
-US-safe EDM 180s: Drive-through curb-check drumstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through curb-check drumstep warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2506,14 +2398,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `73.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `73.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2522,7 +2414,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 2 | `[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0] [inst - amen b…` |
+| 2 | `[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/16-curb-check` |
@@ -2532,21 +2424,13 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 ```
 
 ```text
-[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0]
+[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop, half-time growl]
 
-[inst - amen break, rapid hi-hats 808 curb, grid 563 1]
+[build-up - curb grind, rapid hi-hats 808 curb, hats denser, warped 808, curb 808 punch, kick holds, reese ride, snare roll]
 
-[drop - harder stacked drop, reese 808 wreck, chest formant, grid 563 2]
+[drop - 808 warp wreck, reese 808 wreck, stacked amen wreck, chest trap wreck, double-time hats]
 
-[inst - hats denser, reese hold, grid 563 3]
-
-[drop - full send drop, stacked amen wreck, warped 808, grid 563 4]
-
-[inst - snare roll, curb 808 punch, grid 563 5]
-
-[drop - harder growl drop, chest trap wreck, drumstep grind, grid 563 6]
-
-[outro - kick holds, amen break, reese ride, grid 563 7]
+[outro - amen break, chest formant, reese hold, snare roll, drumstep grind, amen break, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2554,14 +2438,14 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 | Slot | Value |
 | --- | --- |
 | 0 | `drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808…` |
-| 1 | `[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0] [inst - amen b…` |
+| 1 | `[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop…` |
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `180.0` |
+| 5 | `73.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `C major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2574,21 +2458,13 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 ```
 
 ```text
-[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0]
+[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop, half-time growl]
 
-[inst - amen break, rapid hi-hats 808 curb, grid 563 1]
+[build-up - curb grind, rapid hi-hats 808 curb, hats denser, warped 808, curb 808 punch, kick holds, reese ride, snare roll]
 
-[drop - harder stacked drop, reese 808 wreck, chest formant, grid 563 2]
+[drop - 808 warp wreck, reese 808 wreck, stacked amen wreck, chest trap wreck, double-time hats]
 
-[inst - hats denser, reese hold, grid 563 3]
-
-[drop - full send drop, stacked amen wreck, warped 808, grid 563 4]
-
-[inst - snare roll, curb 808 punch, grid 563 5]
-
-[drop - harder growl drop, chest trap wreck, drumstep grind, grid 563 6]
-
-[outro - kick holds, amen break, reese ride, grid 563 7]
+[outro - amen break, chest formant, reese hold, snare roll, drumstep grind, amen break, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2652,7 +2528,7 @@ drumstep, amen break, chest-sub, trap drums, reese bass, warped bass, rave, 808,
 
 Catalog id `audio/albums/drive-through/afterparty/17-last-exit`.
 
-US-safe EDM 180s: Drive-through last-exit dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through last-exit dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2671,14 +2547,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `118.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `118.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2687,7 +2563,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 2 | `[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0] [ins…` |
+| 2 | `[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, …` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/17-last-exit` |
@@ -2697,15 +2573,9 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 ```
 
 ```text
-[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]
+[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, warped wall]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 569 1]
-
-[drop - harder growl drop, chest-sub 808 wall, formant crush, grid 569 2]
-
-[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]
-
-[outro - kick holds, hats denser, pedal ride, grid 569 4]
+[outro - dual-action pedal bass, warped exit, pedal 808 hold, rapid hi-hats roll, chest-sub 808 wall, formant crush, pedal warp, kick holds, hats denser, pedal ride]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2713,14 +2583,14 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action peda…` |
-| 1 | `[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0] [ins…` |
+| 1 | `[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, …` |
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `160` |
-| 5 | `180.0` |
+| 5 | `118.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2733,15 +2603,9 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 ```
 
 ```text
-[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0]
+[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, warped wall]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 569 1]
-
-[drop - harder growl drop, chest-sub 808 wall, formant crush, grid 569 2]
-
-[drop - full send drop, low rumble wreck, pedal warp, grid 569 3]
-
-[outro - kick holds, hats denser, pedal ride, grid 569 4]
+[outro - dual-action pedal bass, warped exit, pedal 808 hold, rapid hi-hats roll, chest-sub 808 wall, formant crush, pedal warp, kick holds, hats denser, pedal ride]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2805,7 +2669,7 @@ dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal
 
 Catalog id `audio/albums/drive-through/afterparty/18-asphalt-heart`.
 
-US-safe EDM 180s: Drive-through asphalt-heart chest bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through asphalt-heart chest bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2824,14 +2688,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `177.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `177.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2840,7 +2704,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass…` |
-| 2 | `[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0] [inst - rapi…` |
+| 2 | `[inst - asphalt 808, kick holds, rapid hi-hats] [build-up - rapid hi-hats dense…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/18-asphalt-heart` |
@@ -2850,13 +2714,17 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 ```
 
 ```text
-[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]
+[inst - asphalt 808, kick holds, rapid hi-hats]
 
-[inst - rapid hi-hats denser, chest-sub 808 hold, grid 571 1]
+[build-up - rapid hi-hats denser, rapid hi-hats roll, snare roll]
 
-[drop - full send drop, body chest wreck, warped 808, grid 571 2]
+[drop - heavy chest drop, full send drop, sub warp wreck, warped wall]
 
-[outro - kick holds, rapid hi-hats roll, chest ride, grid 571 3]
+[breakdown - chest-sub 808 hold, chest ride, bell]
+
+[drop - sub warp wreck, body chest wreck, stacked wreck]
+
+[outro - warped 808, filter down]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -2864,14 +2732,14 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 | Slot | Value |
 | --- | --- |
 | 0 | `chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass…` |
-| 1 | `[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0] [inst - rapi…` |
+| 1 | `[inst - asphalt 808, kick holds, rapid hi-hats] [build-up - rapid hi-hats dense…` |
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `155` |
-| 5 | `180.0` |
+| 5 | `177.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `G major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2884,13 +2752,17 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 ```
 
 ```text
-[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0]
+[inst - asphalt 808, kick holds, rapid hi-hats]
 
-[inst - rapid hi-hats denser, chest-sub 808 hold, grid 571 1]
+[build-up - rapid hi-hats denser, rapid hi-hats roll, snare roll]
 
-[drop - full send drop, body chest wreck, warped 808, grid 571 2]
+[drop - heavy chest drop, full send drop, sub warp wreck, warped wall]
 
-[outro - kick holds, rapid hi-hats roll, chest ride, grid 571 3]
+[breakdown - chest-sub 808 hold, chest ride, bell]
+
+[drop - sub warp wreck, body chest wreck, stacked wreck]
+
+[outro - warped 808, filter down]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -2954,7 +2826,7 @@ chest bass, chest-sub, 808, rapid hi-hats, trap drums, stacked 808, warped bass,
 
 Catalog id `audio/albums/drive-through/afterparty/19-clutch-slam`.
 
-US-safe EDM 180s: Drive-through clutch-slam tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through clutch-slam tearout warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2973,14 +2845,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -2989,7 +2861,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action p…` |
-| 2 | `[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0] [i…` |
+| 2 | `[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/19-clutch-slam` |
@@ -2999,23 +2871,15 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 ```
 
 ```text
-[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0]
+[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick holds]
 
-[inst - metal hats roll, growl sustain, grid 577 1]
+[drop - heavy tearout drop, harder formant drop, stacked growl wreck, chest-sub 808 wreck, low rumble wreck, amen freight]
 
-[drop - harder formant drop, sub crush, chest-sub 808, grid 577 2]
+[breakdown - metal hats roll, chest-sub 808, warped clutch, tearout warp, hats denser, muted stab]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 577 3]
+[drop - growl wreck, full send drop, harder stacked drop, full send drop, warped wall]
 
-[drop - full send drop, stacked growl wreck, warped clutch, grid 577 4]
-
-[inst - snare roll, 808 punch, grid 577 5]
-
-[drop - harder stacked drop, chest-sub 808 wreck, tearout warp, grid 577 6]
-
-[drop - full send drop, low rumble wreck, pedal growl, grid 577 7]
-
-[outro - kick holds, hats denser, growl ride, grid 577 8]
+[outro - growl sustain, pedal 808 hold, snare roll, pedal growl, growl ride, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3023,14 +2887,14 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 | Slot | Value |
 | --- | --- |
 | 0 | `dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action p…` |
-| 1 | `[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0] [i…` |
+| 1 | `[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick…` |
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `180.0` |
+| 5 | `80.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3043,23 +2907,15 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 ```
 
 ```text
-[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0]
+[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick holds]
 
-[inst - metal hats roll, growl sustain, grid 577 1]
+[drop - heavy tearout drop, harder formant drop, stacked growl wreck, chest-sub 808 wreck, low rumble wreck, amen freight]
 
-[drop - harder formant drop, sub crush, chest-sub 808, grid 577 2]
+[breakdown - metal hats roll, chest-sub 808, warped clutch, tearout warp, hats denser, muted stab]
 
-[inst - pedal 808 hold, rapid hi-hats roll, grid 577 3]
+[drop - growl wreck, full send drop, harder stacked drop, full send drop, warped wall]
 
-[drop - full send drop, stacked growl wreck, warped clutch, grid 577 4]
-
-[inst - snare roll, 808 punch, grid 577 5]
-
-[drop - harder stacked drop, chest-sub 808 wreck, tearout warp, grid 577 6]
-
-[drop - full send drop, low rumble wreck, pedal growl, grid 577 7]
-
-[outro - kick holds, hats denser, growl ride, grid 577 8]
+[outro - growl sustain, pedal 808 hold, snare roll, pedal growl, growl ride, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3123,7 +2979,7 @@ dirty dubstep, wobble bass, chest-sub, rapid hi-hats, trap drums, dual-action pe
 
 Catalog id `audio/albums/drive-through/afterparty/20-trailer-hitch`.
 
-US-safe EDM 180s: Drive-through trailer-hitch hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
+US-safe EDM take: Drive-through trailer-hitch hybrid trap warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3142,14 +2998,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `1` |
 
 **ez_edm_prompt** (`EZAceStepPromptEnhance`)
@@ -3158,7 +3014,7 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | --- | --- |
 | 0 | `custom` |
 | 1 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 2 | `[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0] [inst …` |
+| 2 | `[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll] [dr…` |
 | 3 | `false` |
 | 4 | `instrumental` |
 | 5 | `audio/albums/drive-through/afterparty/20-trailer-hitch` |
@@ -3168,21 +3024,15 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 ```
 
 ```text
-[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0]
+[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll]
 
-[inst - rapid hi-hats roll, 808 slide, grid 587 1]
+[drop - heavy warped drop, harder stacked drop, full send drop, harder growl drop, full send drop, offbeat kick]
 
-[drop - harder stacked drop, stacked 808 wall, hybrid formant, grid 587 2]
+[inst - rapid hi-hats roll, snare roll, chest formant, rapid hi-hats roll, chest-sub 808 wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 587 3]
+[drop - chest-sub 808 wreck, stacked 808 wall, body bass wreck, stacked 808 wreck, chest-sub wreck, heavy warped drop, stacked wreck]
 
-[drop - full send drop, body bass wreck, trap warp, grid 587 4]
-
-[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]
-
-[drop - full send drop, chest-sub wreck, warped hitch, grid 587 6]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 587 7]
+[outro - 808 slide, chest-sub 808 punch, warped hitch, 808 ride, kick holds]
 ```
 
 **ACE tags + lyrics** (`TextEncodeAceStepAudio1.5`)
@@ -3190,14 +3040,14 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 | Slot | Value |
 | --- | --- |
 | 0 | `warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped b…` |
-| 1 | `[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0] [inst …` |
+| 1 | `[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll] [dr…` |
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `165` |
-| 5 | `180.0` |
+| 5 | `131.0` |
 | 6 | `4` |
 | 7 | `unknown` |
-| 8 | `C minor` |
+| 8 | `D major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3210,21 +3060,15 @@ warped hybrid-trap, trap drums, rapid hi-hats, stacked 808, chest-sub, warped ba
 ```
 
 ```text
-[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0]
+[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll]
 
-[inst - rapid hi-hats roll, 808 slide, grid 587 1]
+[drop - heavy warped drop, harder stacked drop, full send drop, harder growl drop, full send drop, offbeat kick]
 
-[drop - harder stacked drop, stacked 808 wall, hybrid formant, grid 587 2]
+[inst - rapid hi-hats roll, snare roll, chest formant, rapid hi-hats roll, chest-sub 808 wreck]
 
-[inst - snare roll, chest-sub 808 punch, grid 587 3]
+[drop - chest-sub 808 wreck, stacked 808 wall, body bass wreck, stacked 808 wreck, chest-sub wreck, heavy warped drop, stacked wreck]
 
-[drop - full send drop, body bass wreck, trap warp, grid 587 4]
-
-[drop - harder growl drop, stacked 808 wreck, chest formant, grid 587 5]
-
-[drop - full send drop, chest-sub wreck, warped hitch, grid 587 6]
-
-[outro - kick holds, rapid hi-hats roll, 808 ride, grid 587 7]
+[outro - 808 slide, chest-sub 808 punch, warped hitch, 808 ride, kick holds]
 ```
 
 **ACE sampler** (`KSampler`)
@@ -3357,7 +3201,7 @@ square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit s
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
+**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -3394,16 +3238,20 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `custom` |
-| 1 | `square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit …` |
+| 0 | `square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit …` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `audio/albums/drive-through/afterparty/cover` |
+| 6 | `stills/instagram-square` |
 
 ```text
 square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit steel, fictional act Drive-through, album Afterparty, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
+
+```text
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -3423,6 +3271,29 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Format / platform** (`EZImageFormat`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Instagram · square (1024×1024)` |
+| 1 | `none` |
+| 2 | `1024` |
+| 3 | `1024` |
+| 4 | `1` |
+| 5 | `Match input` |
+
+**Upscale still** (`EZImageUpscale`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `none` |
+
+**Describe image** (`EZImageDescribe`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -3501,7 +3372,28 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph (all 20 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Song Duration | `72.0` |
+| Song Duration | `120.0` |
+| Song Duration | `175.0` |
+| Song Duration | `79.0` |
+| Song Duration | `132.0` |
+| Song Duration | `188.0` |
+| Song Duration | `90.0` |
+| Song Duration | `144.0` |
+| Song Duration | `198.0` |
+| Song Duration | `99.0` |
+| Song Duration | `155.0` |
+| Song Duration | `208.0` |
+| Song Duration | `108.0` |
+| Song Duration | `167.0` |
+| Song Duration | `210.0` |
+| Song Duration | `73.0` |
+| Song Duration | `118.0` |
+| Song Duration | `177.0` |
+| Song Duration | `80.0` |
+| Song Duration | `131.0` |
 
 #### `control_after_generate`
 
@@ -3528,7 +3420,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -3537,13 +3429,34 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph (all 20 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Latent length (seconds) | `72.0` |
+| Latent length (seconds) | `120.0` |
+| Latent length (seconds) | `175.0` |
+| Latent length (seconds) | `79.0` |
+| Latent length (seconds) | `132.0` |
+| Latent length (seconds) | `188.0` |
+| Latent length (seconds) | `90.0` |
+| Latent length (seconds) | `144.0` |
+| Latent length (seconds) | `198.0` |
+| Latent length (seconds) | `99.0` |
+| Latent length (seconds) | `155.0` |
+| Latent length (seconds) | `208.0` |
+| Latent length (seconds) | `108.0` |
+| Latent length (seconds) | `167.0` |
+| Latent length (seconds) | `210.0` |
+| Latent length (seconds) | `73.0` |
+| Latent length (seconds) | `118.0` |
+| Latent length (seconds) | `177.0` |
+| Latent length (seconds) | `80.0` |
+| Latent length (seconds) | `131.0` |
 
 #### `batch_size`
 
@@ -3620,26 +3533,26 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_edm_prompt | `[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0] [inst - …` |
-| ez_edm_prompt | `[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 46…` |
-| ez_edm_prompt | `[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0] [inst - metal…` |
-| ez_edm_prompt | `[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0] [inst - …` |
-| ez_edm_prompt | `[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0] [inst - metal …` |
-| ez_edm_prompt | `[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 …` |
-| ez_edm_prompt | `[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0] [drop - hard…` |
-| ez_edm_prompt | `[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0] [inst - rapid…` |
-| ez_edm_prompt | `[drop - heavy amen drop, reese wreck, warped grate, grid 503 0] [inst - amen br…` |
-| ez_edm_prompt | `[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0] […` |
-| ez_edm_prompt | `[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0] [ins…` |
-| ez_edm_prompt | `[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0] [inst - rap…` |
-| ez_edm_prompt | `[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0] [inst - h…` |
-| ez_edm_prompt | `[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 54…` |
-| ez_edm_prompt | `[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0] [inst - rapi…` |
-| ez_edm_prompt | `[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0] [inst - amen b…` |
-| ez_edm_prompt | `[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0] [ins…` |
-| ez_edm_prompt | `[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0] [inst - rapi…` |
-| ez_edm_prompt | `[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0] [i…` |
-| ez_edm_prompt | `[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0] [inst …` |
+| ez_edm_prompt | `[drop - heavy dirty drop, harder growl drop, full send drop, warped wall] [inst…` |
+| ez_edm_prompt | `[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll] [d…` |
+| ez_edm_prompt | `[intro - warped axle, chest-sub 808, axle grind, filter down] [build-up - metal…` |
+| ez_edm_prompt | `[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare ro…` |
+| ez_edm_prompt | `[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick h…` |
+| ez_edm_prompt | `[drop - heavy color drop, full send drop, harder growl drop, half-time growl] […` |
+| ez_edm_prompt | `[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full…` |
+| ez_edm_prompt | `[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats] [build-up - rapi…` |
+| ez_edm_prompt | `[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds…` |
+| ez_edm_prompt | `[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, sna…` |
+| ez_edm_prompt | `[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall] [ins…` |
+| ez_edm_prompt | `[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll] [drop - hea…` |
+| ez_edm_prompt | `[intro - warped torque, rapid hi-hats roll, kick holds, filter down] [build-up …` |
+| ez_edm_prompt | `[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats den…` |
+| ez_edm_prompt | `[intro - pan grind, snare roll, kick holds] [build-up - rapid hi-hats roll, che…` |
+| ez_edm_prompt | `[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop…` |
+| ez_edm_prompt | `[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, …` |
+| ez_edm_prompt | `[inst - asphalt 808, kick holds, rapid hi-hats] [build-up - rapid hi-hats dense…` |
+| ez_edm_prompt | `[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick…` |
+| ez_edm_prompt | `[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll] [dr…` |
 
 #### `enhance`
 
@@ -3756,26 +3669,26 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[drop - heavy dirty drop, chest-sub 808 warp, brake wreck, grid 457 0] [inst - …` |
-| ACE tags + lyrics | `[drop - heavy warped drop, dual-action pedal bass, chest-sub 808 wreck, grid 46…` |
-| ACE tags + lyrics | `[drop - heavy tearout drop, growl wreck, warped axle, grid 463 0] [inst - metal…` |
-| ACE tags + lyrics | `[drop - heavy brostep drop, stacked 808 warp, weigh wreck, grid 467 0] [inst - …` |
-| ACE tags + lyrics | `[drop - heavy riddim drop, wobble wreck, warped ice, grid 479 0] [inst - metal …` |
-| ACE tags + lyrics | `[drop - heavy color drop, dual-action pedal bass, chest-sub 808 warp, grid 487 …` |
-| ACE tags + lyrics | `[drop - heavy brostep drop, growl wreck, warped chain, grid 491 0] [drop - hard…` |
-| ACE tags + lyrics | `[drop - heavy wave drop, warped 808 wreck, grit fold, grid 499 0] [inst - rapid…` |
-| ACE tags + lyrics | `[drop - heavy amen drop, reese wreck, warped grate, grid 503 0] [inst - amen br…` |
-| ACE tags + lyrics | `[drop - heavy chest drop, dual-action pedal bass, sub warp wreck, grid 509 0] […` |
-| ACE tags + lyrics | `[drop - heavy hybrid drop, trap drums 808 wreck, warped crate, grid 521 0] [ins…` |
-| ACE tags + lyrics | `[drop - heavy wave drop, warped bass wreck, splice 808, grid 523 0] [inst - rap…` |
-| ACE tags + lyrics | `[drop - heavy neuro drop, reese 808 wreck, warped torque, grid 541 0] [inst - h…` |
-| ACE tags + lyrics | `[drop - heavy brostep drop, dual-action pedal bass, chest-sub 808 warp, grid 54…` |
-| ACE tags + lyrics | `[drop - heavy color drop, warped 808 wreck, pan grind, grid 557 0] [inst - rapi…` |
-| ACE tags + lyrics | `[drop - heavy amen drop, 808 warp wreck, curb grind, grid 563 0] [inst - amen b…` |
-| ACE tags + lyrics | `[drop - heavy dirty drop, dual-action pedal bass, warped exit, grid 569 0] [ins…` |
-| ACE tags + lyrics | `[drop - heavy chest drop, sub warp wreck, asphalt 808, grid 571 0] [inst - rapi…` |
-| ACE tags + lyrics | `[drop - heavy tearout drop, dual-action pedal bass, growl wreck, grid 577 0] [i…` |
-| ACE tags + lyrics | `[drop - heavy warped drop, chest-sub 808 wreck, hitch grind, grid 587 0] [inst …` |
+| ACE tags + lyrics | `[drop - heavy dirty drop, harder growl drop, full send drop, warped wall] [inst…` |
+| ACE tags + lyrics | `[build-up - dual-action pedal bass, hybrid formant, hats denser, snare roll] [d…` |
+| ACE tags + lyrics | `[intro - warped axle, chest-sub 808, axle grind, filter down] [build-up - metal…` |
+| ACE tags + lyrics | `[build-up - rapid hi-hats roll, formant 808, warped brostep, 808 ride, snare ro…` |
+| ACE tags + lyrics | `[intro - warped ice, rapid hi-hats denser, growl bass hold, wobble ride, kick h…` |
+| ACE tags + lyrics | `[drop - heavy color drop, full send drop, harder growl drop, half-time growl] […` |
+| ACE tags + lyrics | `[drop - heavy brostep drop, growl wreck, harder dirty drop, dubstep wreck, full…` |
+| ACE tags + lyrics | `[inst - grit fold, wave warp, warped 808 wreck, rapid hi-hats] [build-up - rapi…` |
+| ACE tags + lyrics | `[intro - warped grate, reese stack, reese hold, chest-sub 808 punch, kick holds…` |
+| ACE tags + lyrics | `[build-up - dual-action pedal bass, chest formant, pedal warp, hats denser, sna…` |
+| ACE tags + lyrics | `[drop - heavy hybrid drop, harder growl drop, full send drop, warped wall] [ins…` |
+| ACE tags + lyrics | `[build-up - splice 808, chest-sub 808 wall, kick holds, snare roll] [drop - hea…` |
+| ACE tags + lyrics | `[intro - warped torque, rapid hi-hats roll, kick holds, filter down] [build-up …` |
+| ACE tags + lyrics | `[build-up - dual-action pedal bass, rapid hi-hats roll, chest-sub 808, hats den…` |
+| ACE tags + lyrics | `[intro - pan grind, snare roll, kick holds] [build-up - rapid hi-hats roll, che…` |
+| ACE tags + lyrics | `[drop - heavy amen drop, harder stacked drop, full send drop, harder growl drop…` |
+| ACE tags + lyrics | `[drop - heavy dirty drop, harder growl drop, full send drop, low rumble wreck, …` |
+| ACE tags + lyrics | `[inst - asphalt 808, kick holds, rapid hi-hats] [build-up - rapid hi-hats dense…` |
+| ACE tags + lyrics | `[intro - dual-action pedal bass, sub crush, rapid hi-hats roll, 808 punch, kick…` |
+| ACE tags + lyrics | `[build-up - hitch grind, hybrid formant, trap warp, kick holds, snare roll] [dr…` |
 
 #### `seed`
 
@@ -3866,7 +3779,28 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph (all 20 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `72.0` |
+| ACE tags + lyrics | `120.0` |
+| ACE tags + lyrics | `175.0` |
+| ACE tags + lyrics | `79.0` |
+| ACE tags + lyrics | `132.0` |
+| ACE tags + lyrics | `188.0` |
+| ACE tags + lyrics | `90.0` |
+| ACE tags + lyrics | `144.0` |
+| ACE tags + lyrics | `198.0` |
+| ACE tags + lyrics | `99.0` |
+| ACE tags + lyrics | `155.0` |
+| ACE tags + lyrics | `208.0` |
+| ACE tags + lyrics | `108.0` |
+| ACE tags + lyrics | `167.0` |
+| ACE tags + lyrics | `210.0` |
+| ACE tags + lyrics | `73.0` |
+| ACE tags + lyrics | `118.0` |
+| ACE tags + lyrics | `177.0` |
+| ACE tags + lyrics | `80.0` |
+| ACE tags + lyrics | `131.0` |
 
 #### `timesignature`
 
@@ -3874,7 +3808,7 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
 **This graph (all 20 instances):** `4`
 
@@ -3959,9 +3893,30 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
-**This graph (all 20 instances):** `C minor`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G major` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `D major` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A major` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `C major` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G major` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `D major` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A major` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `C major` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G major` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `D major` |
 
 **Other choices**
 
@@ -3984,7 +3939,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -4388,26 +4343,26 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-brake-fade US-safe EDM **180 s** take: **brake fade**. Fictional act **Dr…` |
-| Operator note | `## 02-diesel-hum US-safe EDM **180 s** take: **diesel hum**. Fictional act **Dr…` |
-| Operator note | `## 03-axle-grind US-safe EDM **180 s** take: **axle grind**. Fictional act **Dr…` |
-| Operator note | `## 04-weigh-station US-safe EDM **180 s** take: **weigh station**. Fictional ac…` |
-| Operator note | `## 05-black-ice US-safe EDM **180 s** take: **black ice**. Fictional act **Driv…` |
-| Operator note | `## 06-high-beams US-safe EDM **180 s** take: **high beams**. Fictional act **Dr…` |
-| Operator note | `## 07-chain-hook US-safe EDM **180 s** take: **chain hook**. Fictional act **Dr…` |
-| Operator note | `## 08-grit-plate US-safe EDM **180 s** take: **grit plate**. Fictional act **Dr…` |
-| Operator note | `## 09-steel-grate US-safe EDM **180 s** take: **steel grate**. Fictional act **…` |
-| Operator note | `## 10-rest-bay US-safe EDM **180 s** take: **rest bay**. Fictional act **Drive-…` |
-| Operator note | `## 11-haul-crate US-safe EDM **180 s** take: **haul crate**. Fictional act **Dr…` |
-| Operator note | `## 12-night-splice US-safe EDM **180 s** take: **night splice**. Fictional act …` |
-| Operator note | `## 13-torque-bay US-safe EDM **180 s** take: **torque bay**. Fictional act **Dr…` |
-| Operator note | `## 14-spare-drum US-safe EDM **180 s** take: **spare drum**. Fictional act **Dr…` |
-| Operator note | `## 15-oil-pan US-safe EDM **180 s** take: **oil pan**. Fictional act **Drive-th…` |
-| Operator note | `## 16-curb-check US-safe EDM **180 s** take: **curb check**. Fictional act **Dr…` |
-| Operator note | `## 17-last-exit US-safe EDM **180 s** take: **last exit**. Fictional act **Driv…` |
-| Operator note | `## 18-asphalt-heart US-safe EDM **180 s** take: **asphalt heart**. Fictional ac…` |
-| Operator note | `## 19-clutch-slam US-safe EDM **180 s** take: **clutch slam**. Fictional act **…` |
-| Operator note | `## 20-trailer-hitch US-safe EDM **180 s** take: **trailer hitch**. Fictional ac…` |
+| Operator note | `## 01-brake-fade US-safe EDM **72 s** take: **brake fade**. Fictional act **Dri…` |
+| Operator note | `## 02-diesel-hum US-safe EDM **120 s** take: **diesel hum**. Fictional act **Dr…` |
+| Operator note | `## 03-axle-grind US-safe EDM **175 s** take: **axle grind**. Fictional act **Dr…` |
+| Operator note | `## 04-weigh-station US-safe EDM **79 s** take: **weigh station**. Fictional act…` |
+| Operator note | `## 05-black-ice US-safe EDM **132 s** take: **black ice**. Fictional act **Driv…` |
+| Operator note | `## 06-high-beams US-safe EDM **188 s** take: **high beams**. Fictional act **Dr…` |
+| Operator note | `## 07-chain-hook US-safe EDM **90 s** take: **chain hook**. Fictional act **Dri…` |
+| Operator note | `## 08-grit-plate US-safe EDM **144 s** take: **grit plate**. Fictional act **Dr…` |
+| Operator note | `## 09-steel-grate US-safe EDM **198 s** take: **steel grate**. Fictional act **…` |
+| Operator note | `## 10-rest-bay US-safe EDM **99 s** take: **rest bay**. Fictional act **Drive-t…` |
+| Operator note | `## 11-haul-crate US-safe EDM **155 s** take: **haul crate**. Fictional act **Dr…` |
+| Operator note | `## 12-night-splice US-safe EDM **208 s** take: **night splice**. Fictional act …` |
+| Operator note | `## 13-torque-bay US-safe EDM **108 s** take: **torque bay**. Fictional act **Dr…` |
+| Operator note | `## 14-spare-drum US-safe EDM **167 s** take: **spare drum**. Fictional act **Dr…` |
+| Operator note | `## 15-oil-pan US-safe EDM **210 s** take: **oil pan**. Fictional act **Drive-th…` |
+| Operator note | `## 16-curb-check US-safe EDM **73 s** take: **curb check**. Fictional act **Dri…` |
+| Operator note | `## 17-last-exit US-safe EDM **118 s** take: **last exit**. Fictional act **Driv…` |
+| Operator note | `## 18-asphalt-heart US-safe EDM **177 s** take: **asphalt heart**. Fictional ac…` |
+| Operator note | `## 19-clutch-slam US-safe EDM **80 s** take: **clutch slam**. Fictional act **D…` |
+| Operator note | `## 20-trailer-hitch US-safe EDM **131 s** take: **trailer hitch**. Fictional ac…` |
 | Operator note | `## audio/albums/drive-through/afterparty/album Album **Afterparty** by **Drive-…` |
 | Operator note | `## audio/albums/drive-through/afterparty/cover Album cover for **Drive-through …` |
 
@@ -4976,7 +4931,11 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `custom`
+**This graph:** `square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit steel, fictional act Drive-through, album Afterparty, no text, no letters, no logos, no living person likeness, no celeb…`
+
+```text
+square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit steel, fictional act Drive-through, album Afterparty, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
 
 #### `prompt`
 
@@ -4986,10 +4945,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit steel, fictional act Drive-through, album Afterparty, no text, no letters, no logos, no living person likeness, no celeb…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-square album cover, graphic print, empty lot sodium lamps, trailer hitch, grit steel, fictional act Drive-through, album Afterparty, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 #### `enhance`
@@ -5357,7 +5316,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `audio/albums/drive-through/afterparty/cover`
+**This graph:** `stills/instagram-square`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -5413,3 +5372,252 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZImageFormat` — Format / platform
+
+Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
+
+!!! warning "Lab notes"
+
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
+| `width` | out | `INT` | Latent width (÷16). |
+| `height` | out | `INT` | Latent height (÷16). |
+| `batch` | out | `INT` | Batch size. |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+
+**This graph:** `Instagram · square (1024×1024)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to ÷16. |
+| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
+| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
+| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
+| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
+| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
+| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
+| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
+| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
+| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
+| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
+| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
+| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
+| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
+| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
+| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
+| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
+| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
+| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
+| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
+| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
+| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
+| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
+| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
+| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
+| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
+| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
+| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
+| `Instagram · profile (768×768)` | 768×768. ig_profile. |
+| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
+| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
+| `X · post (1280×720)` | 1280×720. x_post. |
+| `X · header (1536×512)` | 1536×512. x_header. |
+| `X · card (1216×640)` | 1216×640. x_card. |
+| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
+| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
+| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
+| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
+| `Pinterest · pin (768×1152)` | 768×1152. pin. |
+| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
+| `Facebook · post (1216×640)` | 1216×640. fb_post. |
+| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
+| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
+| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
+| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
+| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
+| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
+| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
+| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
+| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
+| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
+| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
+| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
+| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
+| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
+| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
+| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
+| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
+| `Open Graph / blog (1216×640)` | 1216×640. og. |
+| `Email · header (1216×640)` | 1216×640. email_header. |
+| `Substack · hero (1216×640)` | 1216×640. substack. |
+| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
+| `Channel · banner (1536×512)` | 1536×512. banner. |
+| `End-card / CTA (1280×720)` | 1280×720. endcard. |
+| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
+| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
+| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
+| `Shorts still (432×768)` | 432×768. shorts_still. |
+| `Hook still (432×768)` | 432×768. hook_still. |
+| `Product packshot (1024×1024)` | 1024×1024. packshot. |
+| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
+| `Desk setup (1280×720)` | 1280×720. desk_setup. |
+| `Coming soon (1280×720)` | 1280×720. coming_soon. |
+| `Slide title (1280×720)` | 1280×720. slide_title. |
+| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
+| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
+| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
+| `Print poster (768×1152)` | 768×1152. poster. |
+
+#### `look`
+
+Type `COMBO`. Range / default: none.
+
+Optional Cinema Rack starter.
+
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Style + Prompt own look. |
+| `Noir interrogation` | rec_noir_push |
+| `Locked portrait` | rec_locked_portrait |
+| `Golden wide` | rec_golden_wide |
+| `Handheld documentary` | rec_handheld_doc |
+| `Vertical hook` | rec_vertical_hook |
+| `Rain track` | rec_rain_track |
+| `Product orbit` | rec_orbit_product |
+| `Drone reveal` | rec_drone_reveal |
+| `Night bible` | rec_identity_night |
+| `Western noon` | rec_western_noon |
+| `Slow push to eyes` | rec_slow_push_eyes |
+| `FPV dive` | rec_fpv_dive |
+| `Match-cut AV` | rec_match_cut_ltx |
+| `Fog push` | rec_fog_push |
+| `Body-cam sprint` | rec_bodycam_sprint |
+| `Bounce beauty` | rec_romcom_beauty |
+| `Overcast wide` | rec_overcast_wide |
+| `Macro pour` | rec_macro_pour |
+| `Crane reveal` | rec_crane_reveal |
+| `Split diopter two-plane` | rec_split_diopter |
+| `Night practical push` | rec_night_practical_push |
+| `Hyperlapse path` | rec_hyperlapse |
+| `Talking MCU` | rec_talking_mcu |
+| `Anamorphic-class night` | rec_anamorphic_night |
+
+#### `width`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `height`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1–4.
+
+How many stills in one Run.
+
+**How it affects generation:** Large canvases stay at 1.
+
+**This graph:** `1`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

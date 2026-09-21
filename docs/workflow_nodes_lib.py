@@ -181,7 +181,7 @@ ACE_KEYSCALE_CHOICES: list[dict[str, str]] = [
     {
         "id": f"{root} {qual}",
         "description": (
-            "Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement."
+            "Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes."
             if root == "C" and qual == "minor"
             else f"{qual.capitalize()} key of {root}."
         ),

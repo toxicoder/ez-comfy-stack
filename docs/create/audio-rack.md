@@ -45,7 +45,7 @@ Pick **none** or one id per axis. Splicing is across axes, not two tempos on one
 | Harmony | Harmony and Mode | kept (tags only; does not set ACE keyscale) |
 | Instruments | Instruments and Texture | kept |
 | Vocal | Vocal Identity | omitted |
-| Form | Form and Arrangement | `[inst]` / `[drop]` empty-body markers |
+| Form | Form and Arrangement | Timed ACE skeletons (`[pre-chorus]`, `[bridge]`, `[breakdown]`, `[build-up]`), not color pockets |
 | Mix | Mix and Production | kept |
 | Space | Space and Ambience | kept |
 | Sound design | Sound Design | drop-first FX may be dropped on podcast |
@@ -72,7 +72,7 @@ The rack emits at most one BPM token. Match `TextEncodeAceStepAudio1.5` BPM to t
 
 ## Drive-through recipes
 
-Shipped 180s takes under `_lab/audio/albums/drive-through/` splice these starters (tempo and bass still override per track):
+Shipped Drive-through takes under `_lab/audio/albums/drive-through/` splice these starters (tempo, bass, and the song-plan form still override per track):
 
 | Recipe | Genre |
 | --- | --- |

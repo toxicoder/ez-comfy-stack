@@ -1,6 +1,6 @@
 {
   "id": "05-moss-sub",
-  "revision": 2,
+  "revision": 1,
   "last_node_id": 16,
   "last_link_id": 16,
   "nodes": [
@@ -125,7 +125,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        180.0,
+        131.0,
         "fixed"
       ],
       "title": "Song Duration"
@@ -168,7 +168,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        180.0,
+        131.0,
         1
       ],
       "title": "Latent length (seconds)"
@@ -212,7 +212,7 @@
       "widgets_values": [
         "custom",
         "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
-        "[drop - heavy dirty drop, chest-sub warp, trap drums 808 wreck, grid 389 0]\n\n[inst - rapid hi-hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 389 2]\n\n[inst - hats denser, chest-sub 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 389 5]",
+        "[intro - chest-sub warp, hats denser, rapid hi-hats roll, kick holds]\n\n[build-up - rapid hi-hats roll, chest-sub 808, pedal ride, snare roll]\n\n[drop - heavy dirty drop, trap drums 808 wreck, harder growl drop, stacked 808 wall, full send drop, body 808 wreck, warped wall]\n\n[breakdown - pedal 808 hold, warped trap, pluck]\n\n[outro - dual-action pedal bass, kick holds]",
         false,
         "instrumental",
         "audio/albums/drive-through/headliner/05-moss-sub"
@@ -280,14 +280,14 @@
       },
       "widgets_values": [
         "dirty bass, warped bass, chest-sub, rapid hi-hats, trap drums, dual-action pedal bass, 808, rave, no singing, no choir, no vocal chops, original composition, riser, drop first, 150 bpm, instrumental, no vocals",
-        "[drop - heavy dirty drop, chest-sub warp, trap drums 808 wreck, grid 389 0]\n\n[inst - rapid hi-hats roll, pedal 808 hold, grid 389 1]\n\n[drop - harder growl drop, dual-action pedal bass, stacked 808 wall, grid 389 2]\n\n[inst - hats denser, chest-sub 808, grid 389 3]\n\n[drop - full send drop, body 808 wreck, warped trap, grid 389 4]\n\n[outro - kick holds, rapid hi-hats roll, pedal ride, grid 389 5]",
+        "[intro - chest-sub warp, hats denser, rapid hi-hats roll, kick holds]\n\n[build-up - rapid hi-hats roll, chest-sub 808, pedal ride, snare roll]\n\n[drop - heavy dirty drop, trap drums 808 wreck, harder growl drop, stacked 808 wall, full send drop, body 808 wreck, warped wall]\n\n[breakdown - pedal 808 hold, warped trap, pluck]\n\n[outro - dual-action pedal bass, kick holds]",
         389,
         "fixed",
         150,
-        180.0,
+        131.0,
         "4",
         "unknown",
-        "C minor",
+        "A minor",
         true,
         2.0,
         0.85,
@@ -519,7 +519,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 05-moss-sub\n\nUS-safe EDM **180 s** take: **moss sub**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language unknown, timesignature 4, generate_audio_codes true. Seed 389.\n7. Saves: `05 - Moss Sub` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 05-moss-sub\n\nUS-safe EDM **131 s** take: **moss sub**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **e_one_drop**. Warped hybrid-trap, trap drums. Intros, builds, and breakdowns are part of the arc. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 131 s, bpm 150, language unknown, timesignature 4, key A minor, form e_one_drop, generate_audio_codes true. Seed 389.\n7. Saves: `05 - Moss Sub` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -905,8 +905,8 @@
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 05-moss-sub\n\nUS-safe EDM **180 s** take: **moss sub**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE does not sing production notes. Drop-first warped hybrid-trap, trap drums, no quiet dips. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language unknown, timesignature 4, generate_audio_codes true. Seed 389.\n7. Saves: `05 - Moss Sub` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe EDM 180s: Drive-through moss-sub dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## 05-moss-sub\n\nUS-safe EDM **131 s** take: **moss sub**. Fictional act **Drive-through** (hardcore, pure of heart). Native ACE-Step 1.5 turbo AIO. Live bass-set take. Instrumental score is empty-body ACE markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, `[breakdown]`, `[outro]`) so ACE does not sing production notes. Form **e_one_drop**. Warped hybrid-trap, trap drums. Intros, builds, and breakdowns are part of the arc. Vocals are a rare DJ treat on other graphs, not here. Queue this graph **on its own** \u2014 draft-first is the generic rap lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[drop]` / `[inst]` / `[outro]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. Keep App **Vocal / instrumental** on instrumental so ACE does not sing. Encoder language is `unknown`. Free-text lines under a marker are lyrics \u2014 keep cues inside the brackets.\n4. Original arrangements only. No \u201cin the style of <living artist>\u201d. No living-DJ names. No famous-hook paraphrases.\n5. ACE-Step timbre is **invented**, not a cloned act.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 131 s, bpm 150, language unknown, timesignature 4, key A minor, form e_one_drop, generate_audio_codes true. Seed 389.\n7. Saves: `05 - Moss Sub` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe EDM take: Drive-through moss-sub dirty bass warp, ACE-Step 1.5 turbo AIO, instrumental, warped bass, invented timbre\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -988,7 +988,7 @@
           3,
           "seconds",
           {
-            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64\u2013210 s.",
             "label": "Duration (seconds)"
           }
         ],

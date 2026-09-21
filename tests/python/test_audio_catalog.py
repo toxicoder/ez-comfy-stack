@@ -121,10 +121,32 @@ def test_each_axis_has_at_least_one_hundred_unique_techniques() -> None:
             if row.get("_bpm_axis"):
                 assert str(row.get("bpm") or "").strip(), f"{tid} needs bpm"
             if row.get("_form_axis"):
-                assert (
-                    str(row.get("lyrics_form") or "").strip()
-                    or str(row.get("lyrics_form_inst") or "").strip()
-                ), f"{tid} needs lyrics form"
+                form_blob = "\n".join(
+                    (
+                        str(row.get("lyrics_form") or ""),
+                        str(row.get("lyrics_form_inst") or ""),
+                    )
+                )
+                assert form_blob.strip(), f"{tid} needs lyrics form"
+                assert "[form-" not in form_blob, tid
+                for line in form_blob.splitlines():
+                    stripped = line.strip()
+                    if not stripped.startswith("["):
+                        continue
+                    label = stripped[1:].split("]", 1)[0].split(" - ", 1)[0].strip()
+                    assert label in {
+                        "intro",
+                        "verse",
+                        "pre-chorus",
+                        "chorus",
+                        "bridge",
+                        "inst",
+                        "breakdown",
+                        "build-up",
+                        "drop",
+                        "outro",
+                        "spoken word",
+                    }, (tid, label)
             for field in ("clause", "tags", "lyrics_form", "bpm", "label"):
                 blob = str(row.get(field) or "").lower()
                 for brand in _BANNED:

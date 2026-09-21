@@ -1,4 +1,4 @@
-"""Canned 180s Nill Bye vs Rake diss takes for ACE-Step rap lab graphs.
+"""Canned Nill Bye vs Rake diss takes for ACE-Step rap lab graphs.
 
 Fictional MCs only. Original lyrics. No living-artist names.
 """
@@ -9,6 +9,7 @@ from typing import Any, Literal, Mapping, Sequence, TypedDict
 
 from .albums import album_rel, nill_album_for_series
 from .naming import music_output_prefix
+from .song_plan import arrange_vocal, assign_album_plans
 
 # ACE-Step tag beds, duration, and locked Nill Bye vocal.
 BOOM_BAP_TAGS_88 = (
@@ -66,6 +67,9 @@ class DissExample(TypedDict):
         tracktotal: Album track count.
         year: Release year.
         cover_prompt: US-safe cover-art prompt.
+        form_id: Song-plan archetype (``v_pre``, ``v_bridge``, …).
+        meter: ACE time signature ``2``, ``3``, ``4``, or ``6``.
+        keyscale: ACE key, not a global C minor.
     """
 
     stem: str
@@ -89,6 +93,9 @@ class DissExample(TypedDict):
     tracktotal: int
     year: int
     cover_prompt: str
+    form_id: str
+    meter: str
+    keyscale: str
 
 
 def nill_output_prefix(title: str, track: int) -> str:
@@ -127,7 +134,7 @@ def _desc(take: str) -> str:
         Operator-facing description string.
     """
     return (
-        f"US-safe rap 180s diss: Nill Bye {take}, "
+        f"US-safe rap diss: Nill Bye {take}, "
         "ACE-Step 1.5 turbo AIO, invented vocal"
     )
 
@@ -142,7 +149,7 @@ def _progress_desc(take: str) -> str:
         Operator-facing description string.
     """
     return (
-        f"US-safe rap 180s progress: Nill Bye {take}, "
+        f"US-safe rap progress: Nill Bye {take}, "
         "ACE-Step 1.5 turbo AIO, invented vocal"
     )
 
@@ -155,7 +162,10 @@ def format_diss_lyrics(
     outro: str,
     spoken: str | None = None,
 ) -> str:
-    """Build a 180s diss lyric block with repeating choruses.
+    """Build a diss lyric block with a chorus after each verse.
+
+    ``finalize_nill_album`` re-sections this block into a song plan.
+    The authored lines stay; the form, meter, key, and length change.
 
     Args:
         intro: Intro bar block.
@@ -207,9 +217,18 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
     if not rows:
         return ()
     info = nill_album_for_series(rows[0]["series"])
+    plans = assign_album_plans(
+        family=str(rows[0]["series"]),
+        album_slug=str(info["slug"]),
+        bpms=[int(row["bpm"]) for row in rows],
+        tags=[str(row["tags"]) for row in rows],
+        lyrics=[str(row["lyrics"]) for row in rows],
+        kind="vocal",
+    )
     total = len(rows)
     out: list[DissExample] = []
     for index, row in enumerate(rows, 1):
+        plan = plans[index - 1]
         slug = nill_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
         payload: dict[str, Any] = dict(row)
@@ -228,6 +247,11 @@ def finalize_nill_album(rows: Sequence[Mapping[str, Any]]) -> tuple[DissExample,
                 "cover_prompt": info["cover_prompt"],
                 "phase": info["phase"],
                 "prefix": music_output_prefix(str(row["title"]), index),
+                "lyrics": arrange_vocal(str(row["lyrics"]), plan),
+                "duration": float(plan["duration_s"]),
+                "form_id": plan["form_id"],
+                "meter": plan["meter"],
+                "keyscale": plan["keyscale"],
             }
         )
         out.append(payload)  # type: ignore[arg-type]

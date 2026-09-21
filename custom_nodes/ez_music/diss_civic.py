@@ -1,4 +1,4 @@
-"""Civic-pack 180s Nill Bye diss takes (non-trap, non-EDM beds).
+"""Civic-pack full-length Nill Bye diss takes (non-trap, non-EDM beds).
 
 Fictional MC Nill Bye roasting public-record satire of Texas Gov. Greg Abbott.
 Original lyrics. No living-MC names. No disability punchlines. No autotune.

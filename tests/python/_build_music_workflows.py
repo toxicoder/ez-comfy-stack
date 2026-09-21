@@ -38,6 +38,7 @@ from ez_music.albums import AlbumInfo, album_rel, shipped_albums  # noqa: E402
 from ez_music.edm_examples import EDM_EXAMPLES, EdmExample  # noqa: E402
 from ez_music.naming import album_output_dir  # noqa: E402
 from ez_music.nodes import DRAFT_LYRICS, FULL_LYRICS  # noqa: E402
+from ez_music.song_plan import demo_draft_seconds, demo_full_seconds  # noqa: E402
 
 ACE_CKPT = "ace_step_1.5_turbo_aio.safetensors"
 ACE_TAGS = BOOM_BAP_TAGS_88
@@ -53,7 +54,7 @@ US-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-
 3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {demo_draft_seconds()} s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.
 7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -67,7 +68,7 @@ Canned style swaps (tags widget only — not extra files):
 
 FULL_NOTE = f"""## audio/music/rap-full
 
-US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration 96 s.
+US-safe rap **full track**. Same model and sampler as the draft (8 steps, cfg 1, euler, simple). Duration {demo_full_seconds()} s on the pre-chorus form (4/4, C minor, 88 bpm). Album takes vary form, meter, key, and length.
 
 1. Queue **audio/music/rap-draft** first. Then this graph.
 2. Weights: `./scripts/manage.sh download-music --tier turbo` (shared AIO with podcast acestep).
@@ -97,6 +98,8 @@ def _ace_widgets(
     tags: str = ACE_TAGS,
     bpm: int = 88,
     language: str = "en",
+    meter: str = "4",
+    keyscale: str = "C minor",
 ) -> list:
     # seed is followed by control_after_generate (native TextEncodeAceStepAudio1.5).
     return [
@@ -106,9 +109,9 @@ def _ace_widgets(
         "fixed",
         bpm,
         duration,
-        "4",
+        meter,
         language,
-        "C minor",
+        keyscale,
         True,
         2.0,
         0.85,
@@ -296,7 +299,7 @@ US-safe rap **{duration_s} s {kind}** take: **{ex["title"]}**. {_diss_cast(ex)}.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language en, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -323,10 +326,11 @@ def _edm_note(ex: EdmExample) -> str:
     else:
         score_blurb = (
             "Live bass-set take. Instrumental score is empty-body ACE "
-            "markers (`[drop - cues]`, `[inst - cues]`, `[outro]`) so ACE "
-            "does not sing production notes. Drop-first warped hybrid-trap, "
-            "trap drums, no quiet dips. Vocals are a rare DJ treat on other "
-            "graphs, not here."
+            "markers (`[drop - cues]`, `[inst - cues]`, `[build-up]`, "
+            "`[breakdown]`, `[outro]`) so ACE does not sing production notes. "
+            f"Form **{ex['form_id']}**. Warped hybrid-trap, trap drums. "
+            "Intros, builds, and breakdowns are part of the arc. "
+            "Vocals are a rare DJ treat on other graphs, not here."
         )
         mode_blurb = (
             "Keep App **Vocal / instrumental** on instrumental so ACE does "
@@ -343,7 +347,7 @@ US-safe EDM **{duration_s} s** take: **{ex["title"]}**. Fictional act **Drive-th
 3. Tags vs score: tags are genre/instrument hints; lyrics are the arrangement. {mode_blurb}
 4. Original arrangements only. No “in the style of <living artist>”. No living-DJ names. No famous-hook paraphrases.
 5. ACE-Step timbre is **invented**, not a cloned act.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature 4, generate_audio_codes true. Seed {ex["seed"]}.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration {duration_s} s, bpm {ex["bpm"]}, language {"en" if treat else "unknown"}, timesignature {ex["meter"]}, key {ex["keyscale"]}, form {ex["form_id"]}, generate_audio_codes true. Seed {ex["seed"]}.
 7. Saves: `{ex["prefix"]}` FLAC master + 320 kbps MP3 under `${{COMFY_OUTPUT_DIR}}`.
 8. Cover separately: Queue **{COVER_THUMB}** or **{COVER_PODCAST}**. Do not embed Klein here.
 9. Human selection and edit before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -367,6 +371,8 @@ def _build_ace(
     layout: str = "column",
     album_meta: dict | None = None,
     rap_writer: bool = False,
+    meter: str = "4",
+    keyscale: str = "C minor",
 ) -> dict:
     pos, group_specs = _ace_layout(layout)
     pos[13] = [2200, 80]
@@ -478,6 +484,8 @@ def _build_ace(
             tags=tags,
             bpm=bpm,
             language="unknown" if ace_mode == "instrumental" else "en",
+            meter=meter,
+            keyscale=keyscale,
         ),
         inputs=[
             g.inp("clip", "CLIP"),
@@ -625,11 +633,11 @@ def _build_ace(
 def build_draft() -> dict:
     return _build_ace(
         "audio/music/rap-draft",
-        32.0,
+        float(demo_draft_seconds()),
         DRAFT_LYRICS,
         "ez_rap_draft",
         DRAFT_NOTE,
-        "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal",
+        "US-safe rap draft: ACE-Step 1.5 turbo AIO, cold-open boom-bap, invented vocal",
         rap_writer=True,
         album_meta={
             "artist": "Local",
@@ -646,11 +654,11 @@ def build_draft() -> dict:
 def build_full() -> dict:
     return _build_ace(
         "audio/music/rap-full",
-        96.0,
+        float(demo_full_seconds()),
         FULL_LYRICS,
         "ez_rap_full",
         FULL_NOTE,
-        "US-safe rap full track: ACE-Step 1.5 turbo AIO, 96s boom-bap, invented vocal",
+        "US-safe rap full track: ACE-Step 1.5 turbo AIO, pre-chorus boom-bap, invented vocal",
         rap_writer=True,
         album_meta={
             "artist": "Local",
@@ -696,6 +704,8 @@ def build_diss(ex: DissExample) -> dict:
         seed=int(ex["seed"]),
         album_meta=_catalog_meta(ex),
         rap_writer=True,
+        meter=str(ex["meter"]),
+        keyscale=str(ex["keyscale"]),
     )
 
 
@@ -710,6 +720,8 @@ def build_edm(ex: EdmExample) -> dict:
         tags=ex["tags"],
         bpm=int(ex["bpm"]),
         seed=int(ex["seed"]),
+        meter=str(ex["meter"]),
+        keyscale=str(ex["keyscale"]),
         ace_mode=ex["ace_mode"],
         enhance_title="ez_edm_prompt",
         layout=ex["layout"],

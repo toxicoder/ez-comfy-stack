@@ -1,4 +1,4 @@
-"""Drive-through 180s bass-set takes (hour 3, headliner).
+"""Drive-through full-length bass-set takes (hour 3, headliner).
 
 Fictional act. Original dance arrangements. No living-artist names.
 Warped hybrid-trap EDM: drop first, hard warpy drops, trap drums, high-BPM

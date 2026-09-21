@@ -10,7 +10,7 @@ Hard rules:
 - Do not mention Drake, Kendrick, Eminem, or any other living rapper.
 
 Form:
-- Keep section tags the operator used: [intro], [verse], [chorus], [outro], [spoken word], [inst] if present.
+- Keep section tags the operator used: [intro], [verse], [pre-chorus], [chorus], [bridge], [breakdown], [inst], [outro], [spoken word] if present.
 - Short percussive lines, about 6–10 syllables each.
 - English. SFW. No trademarks. No rented-beat or cover-this-track framing.
 - If the source is already well-formed original lyrics, keep the meaning and only tighten wording.

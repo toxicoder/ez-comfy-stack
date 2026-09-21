@@ -1,6 +1,6 @@
 ---
 title: RAP-FIRST (Nill Bye)
-description: US-safe ACE-Step rap draft and full-track graphs plus all nine Nill Bye 180 s albums.
+description: US-safe ACE-Step rap draft and full-track graphs plus all nine Nill Bye albums (64–210 s, varied form).
 tags: [music, rap, ace-step, nill-bye, us-safe]
 ---
 
@@ -14,8 +14,8 @@ tags: [music, rap, ace-step, nill-bye, us-safe]
 
 **What this enables**
 
-- **A first 32 s boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
-- **One hundred thirty-five 180 s original Nill Bye takes** with exclusive verses and punchlines
+- **A cold-open boom-bap draft** on one NVIDIA DGX Spark without cloud music APIs
+- **One hundred thirty-five original Nill Bye takes** (64–210 s) with exclusive verses, varied form, and punchlines
 
 **Who this is for:** studio users after `download-music --tier turbo`. Overview: [Local music](../music.md). Disclosure: [Music disclosure](music-disclosure.md). EDM pack: [Drive-through EDM](music-edm.md).
 
@@ -32,7 +32,7 @@ Graph: **audio/music/rap-draft** (`extra.lab_profile` `us-safe-music`). Same rol
 | Stage | What runs | Prefix |
 | --- | --- | --- |
 | MODEL | `CheckpointLoaderSimple` `ace_step_1.5_turbo_aio.safetensors` + `ModelSamplingAuraFlow` | — |
-| DURATION | App **Duration (seconds)** (primitive **32** s) → `EmptyAceStep1.5LatentAudio` | — |
+| DURATION | App **Duration (seconds)** (cold-open bar length) → `EmptyAceStep1.5LatentAudio` | — |
 | PROMPT | App **Tags**, **Lyrics**, **Rewrite prompt**, **Vocal / instrumental**. `EZAceStepPromptEnhance` enhance **off** so tags, BPM, and `[verse]`/`[chorus]` stay as written. `ConditioningZeroOut` negative. KSampler 8 / cfg 1 / euler / simple | `ez_rap_prompt` |
 | OUTPUT | `VAEDecodeAudio` → FLAC + 320 kbps MP3 | `ez_rap_draft` |
 | COVER | Queue **stills/thumbnail** or **stills/podcast-cover** separately | `ez_thumbnail` / `ez_podcast` |
@@ -50,11 +50,11 @@ Canned style swaps (tags widget only — not extra files):
 
 ### Full track
 
-Graph: **audio/music/rap-full**. App **Duration (seconds)** defaults to **96** s. Same sampler and model. Prefix `ez_rap_full`. Same voice + second verse + repeated chorus + `[outro]`. Human rewrite required before any release.
+Graph: **audio/music/rap-full**. App **Duration (seconds)** is the pre-chorus form's bar length at 88 bpm (not a flat 96). Same sampler and model. Prefix `ez_rap_full`. Intro, verse, pre-chorus, chorus, second verse, chorus, `[outro]`. Human rewrite required before any release.
 
-### 180s Nill Bye diss examples
+### Nill Bye diss examples
 
-One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** defaults to **180**. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
+One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64–210 s), not a flat 180. Each album mixes forms (hook-each, delayed hook, bridge, pre-chorus, breakdown, half-time chorus, and others), meters, and keys. Dance-bed albums stay 4/4. Authored verses stay in order; a bridge is the last lines of the last verse moved, not new claims. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover. The graph note names the form, meter, and key.
 
 **Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5–6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7–8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 

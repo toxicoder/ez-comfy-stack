@@ -1,4 +1,4 @@
-"""Canned 180s Drive-through EDM takes for ACE-Step lab graphs.
+"""Canned Drive-through EDM takes for ACE-Step lab graphs.
 
 Fictional act only. Original warped hybrid-trap arrangements.
 No living-artist names.
@@ -11,6 +11,7 @@ from typing import Literal, TypedDict
 
 from .albums import album_rel, drive_album_for_phase
 from .naming import music_output_prefix
+from .song_plan import arrange_edm, assign_album_plans
 
 # Take length and Drive-through vocal locks.
 EDM_DURATION_S = 180.0
@@ -219,6 +220,9 @@ class EdmExample(TypedDict):
         cover_prompt: US-safe cover-art prompt.
         recipe: Audio Rack recipe id.
         picks: Axis overrides spliced with the recipe.
+        form_id: Song-plan arc (``e_build``, ``e_drop_first``, …).
+        meter: ACE time signature. Dance takes stay ``4``.
+        keyscale: Key on the album's fifths path.
     """
 
     stem: str
@@ -246,6 +250,9 @@ class EdmExample(TypedDict):
     cover_prompt: str
     recipe: str
     picks: dict[str, str]
+    form_id: str
+    meter: str
+    keyscale: str
 
 
 def _tempo_id(bpm: int) -> str:
@@ -326,7 +333,7 @@ def _desc(take: str, *, treat: bool = False) -> str:
     """
     vocal = "sparse DJ vocal chop" if treat else "instrumental"
     return (
-        f"US-safe EDM 180s: Drive-through {take}, "
+        f"US-safe EDM take: Drive-through {take}, "
         f"ACE-Step 1.5 turbo AIO, {vocal}, warped bass, invented timbre"
     )
 
@@ -378,6 +385,9 @@ def _ex(
         "tags": tags,
         "bpm": bpm_n,
         "duration": EDM_DURATION_S,
+        "form_id": "",
+        "meter": "4",
+        "keyscale": "A minor",
         "seed": seed,
         "phase": phase,
         "prefix": "",
@@ -469,7 +479,10 @@ def _spell_score_body(text: str) -> str:
 
 
 def format_edm_score(*sections: tuple[str, str]) -> str:
-    """Build a 180s ACE-Step score from labeled sections.
+    """Build an ACE-Step score from labeled sections.
+
+    ``finalize_drive_album`` redistributes these cues into a song plan.
+    This checker still requires a drop-first authored sketch.
 
     Labels are intro, inst, drop, build-up, outro, and chorus (DJ-shout
     treats only). Instrumental sections emit empty-body markers with
@@ -553,9 +566,18 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
     if not rows:
         return ()
     info = drive_album_for_phase(int(rows[0]["phase"]))
+    plans = assign_album_plans(
+        family="drive-through",
+        album_slug=str(info["slug"]),
+        bpms=[int(row["bpm"]) for row in rows],
+        tags=[str(row["tags"]) for row in rows],
+        lyrics=[str(row["lyrics"]) for row in rows],
+        kind="edm",
+    )
     total = len(rows)
     out: list[EdmExample] = []
     for index, row in enumerate(rows, 1):
+        plan = plans[index - 1]
         slug = drive_slug_from_stem(str(row.get("slug") or row["stem"]))
         stem = f"{index:02d}-{slug}"
         out.append(
@@ -573,6 +595,16 @@ def finalize_drive_album(rows: tuple[EdmExample, ...]) -> tuple[EdmExample, ...]
                 "year": info["year"],
                 "cover_prompt": info["cover_prompt"],
                 "prefix": music_output_prefix(row["title"], index),
+                "lyrics": arrange_edm(
+                    str(row["lyrics"]),
+                    plan,
+                    treat=row["ace_mode"] == "vocal",
+                    bounce=int(row["phase"]) == 2,
+                ),
+                "duration": float(plan["duration_s"]),
+                "form_id": plan["form_id"],
+                "meter": plan["meter"],
+                "keyscale": plan["keyscale"],
             }
         )
     return tuple(out)

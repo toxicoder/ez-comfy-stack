@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/nill-bye/frozen-ercot/`. Queue one track, or 
 ```text
 ## 01-frozen-ercot
 
-US-safe rap **180 s diss** take: **frozen ercot**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of Texas Gov. **Greg Abbott**. Abbott is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **71 s diss** take: **frozen ercot**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of Texas Gov. **Greg Abbott**. Abbott is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 88, language en, timesignature 4, generate_audio_codes true. Seed 191.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 71 s, bpm 88, language en, timesignature 4, key C minor, form v_long, generate_audio_codes true. Seed 191.
 7. Saves: `01 - Frozen Ercot` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -105,13 +105,13 @@ flowchart LR
 | `audio/albums/nill-bye/frozen-ercot/14-fourth-term` | 17 | audio |
 | `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` | 17 | audio |
 | `audio/albums/nill-bye/frozen-ercot/album` | 4 | none |
-| `audio/albums/nill-bye/frozen-ercot/cover` | 15 | klein |
+| `audio/albums/nill-bye/frozen-ercot/cover` | 18 | klein |
 
 ## `01-frozen-ercot`
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/01-frozen-ercot`.
 
-US-safe rap 180s diss: Nill Bye frozen-ercot roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye frozen-ercot roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -130,14 +130,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `71.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `71.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -199,6 +199,8 @@ Gas froze in the wellhead
 Two-four-six on the docket
 Your grid failed the weather
 
+[inst - pocket snare, hats only]
+
 [verse]
 Ten years of freeze memos unread
 Two-thousand-eleven already warned you
@@ -213,14 +215,6 @@ Then you begged when the hertz fell
 Four days dark and the pumps died
 Your miracle state took a cold quiz
 
-[chorus]
-Frozen ERCOT
-Nill Bye on the blackout
-Abbott blamed the windmill
-Gas froze in the wellhead
-Two-four-six on the docket
-Your grid failed the weather
-
 [verse]
 Twenty-twenty-six you called it flawless
 Radio grin on a five-year boast-tour
@@ -232,6 +226,8 @@ The isolated grid still sits alone
 No neighbor to borrow a watt from
 You weatherized the talking points
 Not the wells, not the flanges
+
+[bridge]
 I run the numbers, you run Fox
 Frozen ERCOT is the whole thesis
 
@@ -315,6 +311,8 @@ Gas froze in the wellhead
 Two-four-six on the docket
 Your grid failed the weather
 
+[inst - pocket snare, hats only]
+
 [verse]
 Ten years of freeze memos unread
 Two-thousand-eleven already warned you
@@ -329,14 +327,6 @@ Then you begged when the hertz fell
 Four days dark and the pumps died
 Your miracle state took a cold quiz
 
-[chorus]
-Frozen ERCOT
-Nill Bye on the blackout
-Abbott blamed the windmill
-Gas froze in the wellhead
-Two-four-six on the docket
-Your grid failed the weather
-
 [verse]
 Twenty-twenty-six you called it flawless
 Radio grin on a five-year boast-tour
@@ -348,6 +338,8 @@ The isolated grid still sits alone
 No neighbor to borrow a watt from
 You weatherized the talking points
 Not the wells, not the flanges
+
+[bridge]
 I run the numbers, you run Fox
 Frozen ERCOT is the whole thesis
 
@@ -375,7 +367,7 @@ yeah
 | 2 | `191` |
 | 3 | `fixed` |
 | 4 | `88` |
-| 5 | `180.0` |
+| 5 | `71.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -440,6 +432,8 @@ Gas froze in the wellhead
 Two-four-six on the docket
 Your grid failed the weather
 
+[inst - pocket snare, hats only]
+
 [verse]
 Ten years of freeze memos unread
 Two-thousand-eleven already warned you
@@ -454,14 +448,6 @@ Then you begged when the hertz fell
 Four days dark and the pumps died
 Your miracle state took a cold quiz
 
-[chorus]
-Frozen ERCOT
-Nill Bye on the blackout
-Abbott blamed the windmill
-Gas froze in the wellhead
-Two-four-six on the docket
-Your grid failed the weather
-
 [verse]
 Twenty-twenty-six you called it flawless
 Radio grin on a five-year boast-tour
@@ -473,6 +459,8 @@ The isolated grid still sits alone
 No neighbor to borrow a watt from
 You weatherized the talking points
 Not the wells, not the flanges
+
+[bridge]
 I run the numbers, you run Fox
 Frozen ERCOT is the whole thesis
 
@@ -552,7 +540,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/02-abject-failure`.
 
-US-safe rap 180s diss: Nill Bye abject-failure roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye abject-failure roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -571,14 +559,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -598,10 +586,6 @@ Two teachers
 Seventy-seven minutes
 Abject failure
 
-[intro]
-hallway quiet
-Nill Bye stopwatching
-
 [verse]
 May twenty-four, Robb went silent
 Nineteen kids and two teachers gone
@@ -615,14 +599,6 @@ Nill Bye stopwatching the two-track speech
 Uvalde heard all options open
 The convention heard statutes don't matter
 You cannot be in both rooms honest
-
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
 
 [verse]
 HB nineteen-twenty-seven already inked
@@ -638,14 +614,6 @@ You sent a clip and kept the donors
 Robb is a method, not a moment
 Your reform was a presser loop
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 They waited in a classroom dark-wait
 Parents begged at the fence
@@ -660,14 +628,6 @@ That did not reload the minute
 You grieved in Uvalde on camera
 And greenlit Houston on a hard drive
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 No assault-ban in the after-bills
 Hardening the door, not the gun-code
@@ -681,6 +641,10 @@ You chose the convention over the fix
 A video is not a spine
 I clock the minutes, you clock the PACs
 The hallway did the math for you
+
+[pre-chorus]
+Abject failure
+Nill Bye stamps the hallway
 
 [chorus]
 Abject failure
@@ -719,10 +683,6 @@ Two teachers
 Seventy-seven minutes
 Abject failure
 
-[intro]
-hallway quiet
-Nill Bye stopwatching
-
 [verse]
 May twenty-four, Robb went silent
 Nineteen kids and two teachers gone
@@ -736,14 +696,6 @@ Nill Bye stopwatching the two-track speech
 Uvalde heard all options open
 The convention heard statutes don't matter
 You cannot be in both rooms honest
-
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
 
 [verse]
 HB nineteen-twenty-seven already inked
@@ -759,14 +711,6 @@ You sent a clip and kept the donors
 Robb is a method, not a moment
 Your reform was a presser loop
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 They waited in a classroom dark-wait
 Parents begged at the fence
@@ -781,14 +725,6 @@ That did not reload the minute
 You grieved in Uvalde on camera
 And greenlit Houston on a hard drive
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 No assault-ban in the after-bills
 Hardening the door, not the gun-code
@@ -802,6 +738,10 @@ You chose the convention over the fix
 A video is not a spine
 I clock the minutes, you clock the PACs
 The hallway did the math for you
+
+[pre-chorus]
+Abject failure
+Nill Bye stamps the hallway
 
 [chorus]
 Abject failure
@@ -826,10 +766,10 @@ cut
 | 2 | `193` |
 | 3 | `fixed` |
 | 4 | `86` |
-| 5 | `180.0` |
+| 5 | `120.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -849,10 +789,6 @@ Two teachers
 Seventy-seven minutes
 Abject failure
 
-[intro]
-hallway quiet
-Nill Bye stopwatching
-
 [verse]
 May twenty-four, Robb went silent
 Nineteen kids and two teachers gone
@@ -866,14 +802,6 @@ Nill Bye stopwatching the two-track speech
 Uvalde heard all options open
 The convention heard statutes don't matter
 You cannot be in both rooms honest
-
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
 
 [verse]
 HB nineteen-twenty-seven already inked
@@ -889,14 +817,6 @@ You sent a clip and kept the donors
 Robb is a method, not a moment
 Your reform was a presser loop
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 They waited in a classroom dark-wait
 Parents begged at the fence
@@ -911,14 +831,6 @@ That did not reload the minute
 You grieved in Uvalde on camera
 And greenlit Houston on a hard drive
 
-[chorus]
-Abject failure
-Nill Bye stamps the hallway
-Abbott split the message
-Tape for the gun show
-Kids still in the classroom
-Your courage took a video
-
 [verse]
 No assault-ban in the after-bills
 Hardening the door, not the gun-code
@@ -932,6 +844,10 @@ You chose the convention over the fix
 A video is not a spine
 I clock the minutes, you clock the PACs
 The hallway did the math for you
+
+[pre-chorus]
+Abject failure
+Nill Bye stamps the hallway
 
 [chorus]
 Abject failure
@@ -1008,7 +924,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/03-six-week-clock`.
 
-US-safe rap 180s diss: Nill Bye six-week-clock roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye six-week-clock roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1027,14 +943,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1042,16 +958,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| 1 | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` |
 
 ```text
-[intro]
-metronome
-cardiac tick
-Nill Bye ticking
-
 [verse]
 SB eight, May twenty-twenty-one
 Heartbeat Act with a bounty clause
@@ -1129,6 +1040,16 @@ You banned the procedure, kept the risk
 Then blamed the doctor for the pause
 I time the cardiac, you time the PACs
 SB eight is a snitch statute
+
+[chorus]
+Six week clock
+Nill Bye times the bounty
+Abbott signed the heartbeat
+Private suit, public scare
+Doctors freeze, mothers travel
+Your exception was a fog-bank
+
+[bridge]
 HB twelve-eighty is the cage
 Your clock runs out on the patient
 
@@ -1153,7 +1074,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot…` |
-| 2 | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| 2 | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/03-six-week-clock` |
@@ -1163,11 +1084,6 @@ jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth
 ```
 
 ```text
-[intro]
-metronome
-cardiac tick
-Nill Bye ticking
-
 [verse]
 SB eight, May twenty-twenty-one
 Heartbeat Act with a bounty clause
@@ -1245,6 +1161,16 @@ You banned the procedure, kept the risk
 Then blamed the doctor for the pause
 I time the cardiac, you time the PACs
 SB eight is a snitch statute
+
+[chorus]
+Six week clock
+Nill Bye times the bounty
+Abbott signed the heartbeat
+Private suit, public scare
+Doctors freeze, mothers travel
+Your exception was a fog-bank
+
+[bridge]
 HB twelve-eighty is the cage
 Your clock runs out on the patient
 
@@ -1268,14 +1194,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry boot…` |
-| 1 | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| 1 | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | 2 | `197` |
 | 3 | `fixed` |
 | 4 | `90` |
-| 5 | `180.0` |
+| 5 | `176.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1288,11 +1214,6 @@ jazz hop, brushed drums, upright bass, muted trumpet, male rap vocals, dry booth
 ```
 
 ```text
-[intro]
-metronome
-cardiac tick
-Nill Bye ticking
-
 [verse]
 SB eight, May twenty-twenty-one
 Heartbeat Act with a bounty clause
@@ -1370,6 +1291,16 @@ You banned the procedure, kept the risk
 Then blamed the doctor for the pause
 I time the cardiac, you time the PACs
 SB eight is a snitch statute
+
+[chorus]
+Six week clock
+Nill Bye times the bounty
+Abbott signed the heartbeat
+Private suit, public scare
+Doctors freeze, mothers travel
+Your exception was a fog-bank
+
+[bridge]
 HB twelve-eighty is the cage
 Your clock runs out on the patient
 
@@ -1449,7 +1380,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/04-no-bid-wire`.
 
-US-safe rap 180s diss: Nill Bye no-bid-wire roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye no-bid-wire roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1468,14 +1399,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1505,14 +1436,6 @@ New Yorker mapped the donor-contractors
 Campaign cash in, state checks out
 Watchdogs said a billion steered to friends
 Your emergency is a procurement trick
-
-[chorus]
-No-bid wire
-Nill Bye on the ledger
-Abbott stamped emergency
-Contracts skip the bidding
-Three-point-five in the dark-fund
-Your donors got the wire
 
 [verse]
 Border spend north of eleven billion
@@ -1620,14 +1543,6 @@ Campaign cash in, state checks out
 Watchdogs said a billion steered to friends
 Your emergency is a procurement trick
 
-[chorus]
-No-bid wire
-Nill Bye on the ledger
-Abbott stamped emergency
-Contracts skip the bidding
-Three-point-five in the dark-fund
-Your donors got the wire
-
 [verse]
 Border spend north of eleven billion
 Still asking D.C. to reimburse the spree
@@ -1709,10 +1624,10 @@ cut
 | 2 | `199` |
 | 3 | `fixed` |
 | 4 | `108` |
-| 5 | `180.0` |
-| 6 | `4` |
+| 5 | `80.0` |
+| 6 | `2` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1742,14 +1657,6 @@ New Yorker mapped the donor-contractors
 Campaign cash in, state checks out
 Watchdogs said a billion steered to friends
 Your emergency is a procurement trick
-
-[chorus]
-No-bid wire
-Nill Bye on the ledger
-Abbott stamped emergency
-Contracts skip the bidding
-Three-point-five in the dark-fund
-Your donors got the wire
 
 [verse]
 Border spend north of eleven billion
@@ -1884,7 +1791,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/05-gavel-theater`.
 
-US-safe rap 180s diss: Nill Bye gavel-theater roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye gavel-theater roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1903,14 +1810,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2148,10 +2055,10 @@ yeah
 | 2 | `211` |
 | 3 | `fixed` |
 | 4 | `112` |
-| 5 | `180.0` |
+| 5 | `131.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2325,7 +2232,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/06-property-hymn`.
 
-US-safe rap 180s diss: Nill Bye property-hymn roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye property-hymn roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2344,14 +2251,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2381,14 +2288,6 @@ You sold a hymn, delivered a coupon
 Renters get none of the choir
 Business personal, still a maze
 Your miracle is a levy with a smile
-
-[chorus]
-Property hymn
-Nill Bye on the appraisal
-Abbott sings no income tax
-The homestead still gets the bill
-Fifty percent in a campaign key
-Your relief is a verse you defer
 
 [verse]
 Gina's race made affordability the issue
@@ -2496,14 +2395,6 @@ Renters get none of the choir
 Business personal, still a maze
 Your miracle is a levy with a smile
 
-[chorus]
-Property hymn
-Nill Bye on the appraisal
-Abbott sings no income tax
-The homestead still gets the bill
-Fifty percent in a campaign key
-Your relief is a verse you defer
-
 [verse]
 Gina's race made affordability the issue
 So you retuned the property hymn
@@ -2585,10 +2476,10 @@ cut
 | 2 | `223` |
 | 3 | `fixed` |
 | 4 | `82` |
-| 5 | `180.0` |
-| 6 | `4` |
+| 5 | `187.0` |
+| 6 | `3` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2618,14 +2509,6 @@ You sold a hymn, delivered a coupon
 Renters get none of the choir
 Business personal, still a maze
 Your miracle is a levy with a smile
-
-[chorus]
-Property hymn
-Nill Bye on the appraisal
-Abbott sings no income tax
-The homestead still gets the bill
-Fifty percent in a campaign key
-Your relief is a verse you defer
 
 [verse]
 Gina's race made affordability the issue
@@ -2760,7 +2643,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/07-voucher-raid`.
 
-US-safe rap 180s diss: Nill Bye voucher-raid roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye voucher-raid roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2779,14 +2662,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2794,15 +2677,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| 1 | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` |
 
 ```text
-[intro]
-fiddle scrape
-Nill Bye totaling
-
 [verse]
 Jeff Yass wired ten million in
 Pennsylvania money for a Texas raid
@@ -2846,6 +2725,8 @@ Abbott spent the out-of-state cash
 Rural schools took the raid
 Public dollars, private pews
 Your choice was a donor errand
+
+[inst - pocket snare, hats only]
 
 [verse]
 Twenty-three you lost a House vote
@@ -2904,7 +2785,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot…` |
-| 2 | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| 2 | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/07-voucher-raid` |
@@ -2914,10 +2795,6 @@ country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autotu
 ```
 
 ```text
-[intro]
-fiddle scrape
-Nill Bye totaling
-
 [verse]
 Jeff Yass wired ten million in
 Pennsylvania money for a Texas raid
@@ -2961,6 +2838,8 @@ Abbott spent the out-of-state cash
 Rural schools took the raid
 Public dollars, private pews
 Your choice was a donor errand
+
+[inst - pocket snare, hats only]
 
 [verse]
 Twenty-three you lost a House vote
@@ -3018,14 +2897,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot…` |
-| 1 | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| 1 | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | 2 | `227` |
 | 3 | `fixed` |
 | 4 | `100` |
-| 5 | `180.0` |
+| 5 | `89.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3038,10 +2917,6 @@ country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autotu
 ```
 
 ```text
-[intro]
-fiddle scrape
-Nill Bye totaling
-
 [verse]
 Jeff Yass wired ten million in
 Pennsylvania money for a Texas raid
@@ -3085,6 +2960,8 @@ Abbott spent the out-of-state cash
 Rural schools took the raid
 Public dollars, private pews
 Your choice was a donor errand
+
+[inst - pocket snare, hats only]
 
 [verse]
 Twenty-three you lost a House vote
@@ -3198,7 +3075,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/08-uninsured-blues`.
 
-US-safe rap 180s diss: Nill Bye uninsured-blues roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye uninsured-blues roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3217,14 +3094,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3255,14 +3132,6 @@ A form is harder than a slogan
 You refused the federal match
 Then billed the poor for the ideology
 
-[chorus]
-Uninsured blues
-Nill Bye on the coverage gap
-Abbott never expanded Medicaid
-Kids first in the unwind
-Highest uninsured in the union
-Your freedom is a hospital bill
-
 [verse]
 Unwinding, Texas chose speed
 Two-point-five million dropped, most of any state
@@ -3276,6 +3145,10 @@ Backlog of two hundred thousand applications
 Eligible people hunting a portal
 Rural wards close when the uninsured walk in
 Your blues are a policy instrument
+
+[pre-chorus]
+Uninsured blues
+Nill Bye on the coverage gap
 
 [chorus]
 Uninsured blues
@@ -3369,14 +3242,6 @@ A form is harder than a slogan
 You refused the federal match
 Then billed the poor for the ideology
 
-[chorus]
-Uninsured blues
-Nill Bye on the coverage gap
-Abbott never expanded Medicaid
-Kids first in the unwind
-Highest uninsured in the union
-Your freedom is a hospital bill
-
 [verse]
 Unwinding, Texas chose speed
 Two-point-five million dropped, most of any state
@@ -3390,6 +3255,10 @@ Backlog of two hundred thousand applications
 Eligible people hunting a portal
 Rural wards close when the uninsured walk in
 Your blues are a policy instrument
+
+[pre-chorus]
+Uninsured blues
+Nill Bye on the coverage gap
 
 [chorus]
 Uninsured blues
@@ -3458,10 +3327,10 @@ cut
 | 2 | `229` |
 | 3 | `fixed` |
 | 4 | `74` |
-| 5 | `180.0` |
+| 5 | `143.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3492,14 +3361,6 @@ A form is harder than a slogan
 You refused the federal match
 Then billed the poor for the ideology
 
-[chorus]
-Uninsured blues
-Nill Bye on the coverage gap
-Abbott never expanded Medicaid
-Kids first in the unwind
-Highest uninsured in the union
-Your freedom is a hospital bill
-
 [verse]
 Unwinding, Texas chose speed
 Two-point-five million dropped, most of any state
@@ -3513,6 +3374,10 @@ Backlog of two hundred thousand applications
 Eligible people hunting a portal
 Rural wards close when the uninsured walk in
 Your blues are a policy instrument
+
+[pre-chorus]
+Uninsured blues
+Nill Bye on the coverage gap
 
 [chorus]
 Uninsured blues
@@ -3633,7 +3498,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/09-locked-stacks`.
 
-US-safe rap 180s diss: Nill Bye locked-stacks roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye locked-stacks roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3652,14 +3517,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3667,14 +3532,18 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| 1 | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` |
 
 ```text
-[intro]
-dusty loop
-Nill Bye shelving
+[chorus]
+Locked stacks
+Nill Bye on the library ban
+Abbott blessed the pull-list
+Titles vanish for a hearing
+Kids lose the shelf, PACs gain a clip
+Your curriculum is a confiscation
 
 [verse]
 School boards got a raid of lists
@@ -3690,14 +3559,6 @@ A graphic novel as contraband
 You don't have to burn it if you lock it
 The hearing is the bonfire with better lighting
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 HB this, SB that, a pile of culture bills
 Don't Say, don't teach, don't catalog
@@ -3712,14 +3573,6 @@ It is a loyalty ritual with a barcode
 Teachers self-censor to keep the job
 The lock is cheaper than a curriculum
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 Lo-fi beat on a quiet ban
 Rhodes under a confiscation
@@ -3733,14 +3586,6 @@ But it photographs worse for your base
 So the stack became the border
 Ideas in a restricted section
 Your Texas history skips the parts that sting
-
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
 
 [verse]
 Kids still find the text online
@@ -3777,7 +3622,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, …` |
-| 2 | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| 2 | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/09-locked-stacks` |
@@ -3787,9 +3632,13 @@ lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, n
 ```
 
 ```text
-[intro]
-dusty loop
-Nill Bye shelving
+[chorus]
+Locked stacks
+Nill Bye on the library ban
+Abbott blessed the pull-list
+Titles vanish for a hearing
+Kids lose the shelf, PACs gain a clip
+Your curriculum is a confiscation
 
 [verse]
 School boards got a raid of lists
@@ -3805,14 +3654,6 @@ A graphic novel as contraband
 You don't have to burn it if you lock it
 The hearing is the bonfire with better lighting
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 HB this, SB that, a pile of culture bills
 Don't Say, don't teach, don't catalog
@@ -3827,14 +3668,6 @@ It is a loyalty ritual with a barcode
 Teachers self-censor to keep the job
 The lock is cheaper than a curriculum
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 Lo-fi beat on a quiet ban
 Rhodes under a confiscation
@@ -3848,14 +3681,6 @@ But it photographs worse for your base
 So the stack became the border
 Ideas in a restricted section
 Your Texas history skips the parts that sting
-
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
 
 [verse]
 Kids still find the text online
@@ -3891,11 +3716,11 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, …` |
-| 1 | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| 1 | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | 2 | `233` |
 | 3 | `fixed` |
 | 4 | `86` |
-| 5 | `180.0` |
+| 5 | `198.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -3911,9 +3736,13 @@ lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, male rap vocals, dry booth, n
 ```
 
 ```text
-[intro]
-dusty loop
-Nill Bye shelving
+[chorus]
+Locked stacks
+Nill Bye on the library ban
+Abbott blessed the pull-list
+Titles vanish for a hearing
+Kids lose the shelf, PACs gain a clip
+Your curriculum is a confiscation
 
 [verse]
 School boards got a raid of lists
@@ -3929,14 +3758,6 @@ A graphic novel as contraband
 You don't have to burn it if you lock it
 The hearing is the bonfire with better lighting
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 HB this, SB that, a pile of culture bills
 Don't Say, don't teach, don't catalog
@@ -3951,14 +3772,6 @@ It is a loyalty ritual with a barcode
 Teachers self-censor to keep the job
 The lock is cheaper than a curriculum
 
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
-
 [verse]
 Lo-fi beat on a quiet ban
 Rhodes under a confiscation
@@ -3972,14 +3785,6 @@ But it photographs worse for your base
 So the stack became the border
 Ideas in a restricted section
 Your Texas history skips the parts that sting
-
-[chorus]
-Locked stacks
-Nill Bye on the library ban
-Abbott blessed the pull-list
-Titles vanish for a hearing
-Kids lose the shelf, PACs gain a clip
-Your curriculum is a confiscation
 
 [verse]
 Kids still find the text online
@@ -4071,7 +3876,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/10-mask-order`.
 
-US-safe rap 180s diss: Nill Bye mask-order roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye mask-order roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4090,14 +3895,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `100.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `100.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4158,6 +3963,8 @@ Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
 
+[breakdown - hats only]
+
 [verse]
 Neo-soul on a public-health veto
 Soft keys, hard preemption
@@ -4201,6 +4008,8 @@ Abbott banned the local rule
 Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
+
+[inst - pocket snare, hats only]
 
 [outro]
 rhodes out
@@ -4272,6 +4081,8 @@ Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
 
+[breakdown - hats only]
+
 [verse]
 Neo-soul on a public-health veto
 Soft keys, hard preemption
@@ -4316,6 +4127,8 @@ Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
 
+[inst - pocket snare, hats only]
+
 [outro]
 rhodes out
 order holds
@@ -4331,10 +4144,10 @@ cut
 | 2 | `239` |
 | 3 | `fixed` |
 | 4 | `84` |
-| 5 | `180.0` |
+| 5 | `100.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4395,6 +4208,8 @@ Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
 
+[breakdown - hats only]
+
 [verse]
 Neo-soul on a public-health veto
 Soft keys, hard preemption
@@ -4438,6 +4253,8 @@ Abbott banned the local rule
 Mayors stripped, campuses open
 A virus with a press secretary
 Your freedom was a gag on the city
+
+[inst - pocket snare, hats only]
 
 [outro]
 rhodes out
@@ -4506,7 +4323,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/11-mid-decade-map`.
 
-US-safe rap 180s diss: Nill Bye mid-decade-map roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye mid-decade-map roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4525,14 +4342,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4563,14 +4380,6 @@ It was reflecting the request
 Multistate fight, same playbook
 The map is a weapon with a legend
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Chiptune beep on a gerrymander
 Eight-bit drums on a cracked precinct
@@ -4584,6 +4393,10 @@ You need the House more than a principle
 So the principle became the House
 Democracy as a packing problem
 Your solution is a smaller opposition
+
+[pre-chorus]
+Mid decade map
+Nill Bye on the pixel
 
 [chorus]
 Mid decade map
@@ -4607,14 +4420,6 @@ The change is the coalition you fear
 So you draw them into a corner
 And call the corner a majority-minority trophy
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Twenty-twenty-six ballots on a new sketch
 Candidates running through a maze you built
@@ -4628,14 +4433,6 @@ Pixel by pixel, the state tilts
 A geometry that cannot lose
 Keep the chiptune, lose the honesty
 Your map is the quietest coup
-
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
 
 [outro]
 pixels halt
@@ -4678,14 +4475,6 @@ It was reflecting the request
 Multistate fight, same playbook
 The map is a weapon with a legend
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Chiptune beep on a gerrymander
 Eight-bit drums on a cracked precinct
@@ -4699,6 +4488,10 @@ You need the House more than a principle
 So the principle became the House
 Democracy as a packing problem
 Your solution is a smaller opposition
+
+[pre-chorus]
+Mid decade map
+Nill Bye on the pixel
 
 [chorus]
 Mid decade map
@@ -4722,14 +4515,6 @@ The change is the coalition you fear
 So you draw them into a corner
 And call the corner a majority-minority trophy
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Twenty-twenty-six ballots on a new sketch
 Candidates running through a maze you built
@@ -4743,14 +4528,6 @@ Pixel by pixel, the state tilts
 A geometry that cannot lose
 Keep the chiptune, lose the honesty
 Your map is the quietest coup
-
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
 
 [outro]
 pixels halt
@@ -4768,10 +4545,10 @@ yeah
 | 2 | `241` |
 | 3 | `fixed` |
 | 4 | `100` |
-| 5 | `180.0` |
+| 5 | `156.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4802,14 +4579,6 @@ It was reflecting the request
 Multistate fight, same playbook
 The map is a weapon with a legend
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Chiptune beep on a gerrymander
 Eight-bit drums on a cracked precinct
@@ -4823,6 +4592,10 @@ You need the House more than a principle
 So the principle became the House
 Democracy as a packing problem
 Your solution is a smaller opposition
+
+[pre-chorus]
+Mid decade map
+Nill Bye on the pixel
 
 [chorus]
 Mid decade map
@@ -4846,14 +4619,6 @@ The change is the coalition you fear
 So you draw them into a corner
 And call the corner a majority-minority trophy
 
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
-
 [verse]
 Twenty-twenty-six ballots on a new sketch
 Candidates running through a maze you built
@@ -4867,14 +4632,6 @@ Pixel by pixel, the state tilts
 A geometry that cannot lose
 Keep the chiptune, lose the honesty
 Your map is the quietest coup
-
-[chorus]
-Mid decade map
-Nill Bye on the pixel
-Abbott redrew for the boss
-A census skip, a power grab
-Districts snap to a partisan grid-file
-Your geometry is a cheat code
 
 [outro]
 pixels halt
@@ -4944,7 +4701,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/12-rack-tax`.
 
-US-safe rap 180s diss: Nill Bye rack-tax roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye rack-tax roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4963,14 +4720,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4978,15 +4735,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| 1 | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/12-rack-tax` |
 
 ```text
-[intro]
-neon bass
-Nill Bye watt-counting
-
 [verse]
 First the tax break, then the halo
 Texas as an AI epicenter pitch
@@ -5031,6 +4784,8 @@ Then audited it when the towns revolted
 Water and watts for a server farm
 Your AI boom is a rate-hike
 
+[inst - pocket snare, hats only]
+
 [verse]
 Synthwave on a server aisle
 Neon pads, dry booth, hot transformers
@@ -5045,7 +4800,7 @@ Gets recoded as coolant
 Then a memo says the creek is sacred
 After the groundbreaking photo
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5067,7 +4822,7 @@ The town will still see the invoice
 Keep the neon, lose the shrug
 Your epicenter has a water problem
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5087,7 +4842,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no …` |
-| 2 | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| 2 | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/12-rack-tax` |
@@ -5097,10 +4852,6 @@ synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-neon bass
-Nill Bye watt-counting
-
 [verse]
 First the tax break, then the halo
 Texas as an AI epicenter pitch
@@ -5145,6 +4896,8 @@ Then audited it when the towns revolted
 Water and watts for a server farm
 Your AI boom is a rate-hike
 
+[inst - pocket snare, hats only]
+
 [verse]
 Synthwave on a server aisle
 Neon pads, dry booth, hot transformers
@@ -5159,7 +4912,7 @@ Gets recoded as coolant
 Then a memo says the creek is sacred
 After the groundbreaking photo
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5181,7 +4934,7 @@ The town will still see the invoice
 Keep the neon, lose the shrug
 Your epicenter has a water problem
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5200,14 +4953,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no …` |
-| 1 | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| 1 | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | 2 | `251` |
 | 3 | `fixed` |
 | 4 | `104` |
-| 5 | `180.0` |
+| 5 | `208.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5220,10 +4973,6 @@ synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-neon bass
-Nill Bye watt-counting
-
 [verse]
 First the tax break, then the halo
 Texas as an AI epicenter pitch
@@ -5268,6 +5017,8 @@ Then audited it when the towns revolted
 Water and watts for a server farm
 Your AI boom is a rate-hike
 
+[inst - pocket snare, hats only]
+
 [verse]
 Synthwave on a server aisle
 Neon pads, dry booth, hot transformers
@@ -5282,7 +5033,7 @@ Gets recoded as coolant
 Then a memo says the creek is sacred
 After the groundbreaking photo
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5304,7 +5055,7 @@ The town will still see the invoice
 Keep the neon, lose the shrug
 Your epicenter has a water problem
 
-[chorus]
+[chorus - half-time drums]
 Rack tax
 Nill Bye on the megawatt lease
 Abbott courted the data barn
@@ -5379,7 +5130,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/13-wudu-letter`.
 
-US-safe rap 180s diss: Nill Bye wudu-letter roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye wudu-letter roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5398,14 +5149,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5467,6 +5218,8 @@ A basin is not a ban
 Travelers washing before prayer
 Your analogy is a smear with a seal
 
+[inst - pocket snare, hats only]
+
 [verse]
 Hand claps on a culture sermon
 Choir vowels over a DOJ seal
@@ -5481,14 +5234,6 @@ A segregated restroom was a crime
 Rhyming them is the tell
 You wanted the heat, not the holding
 
-[chorus]
-Wudu letter
-Nill Bye on the DOJ note
-Abbott smeared a prayer rinse
-A basin is not a ban
-Travelers washing before prayer
-Your analogy is a smear with a seal
-
 [verse]
 Convention week you previewed the plank
 Ban this, demolish that, rinse, repeat
@@ -5500,6 +5245,8 @@ I want a governor who can read a ritual
 You want a governor who can trend a slur
 Seal on the page, stain on the analogy
 The stall will still be there at dawn
+
+[bridge]
 Your letter will still be the smear
 Wudu is water. You made it a war
 
@@ -5583,6 +5330,8 @@ A basin is not a ban
 Travelers washing before prayer
 Your analogy is a smear with a seal
 
+[inst - pocket snare, hats only]
+
 [verse]
 Hand claps on a culture sermon
 Choir vowels over a DOJ seal
@@ -5597,14 +5346,6 @@ A segregated restroom was a crime
 Rhyming them is the tell
 You wanted the heat, not the holding
 
-[chorus]
-Wudu letter
-Nill Bye on the DOJ note
-Abbott smeared a prayer rinse
-A basin is not a ban
-Travelers washing before prayer
-Your analogy is a smear with a seal
-
 [verse]
 Convention week you previewed the plank
 Ban this, demolish that, rinse, repeat
@@ -5616,6 +5357,8 @@ I want a governor who can read a ritual
 You want a governor who can trend a slur
 Seal on the page, stain on the analogy
 The stall will still be there at dawn
+
+[bridge]
 Your letter will still be the smear
 Wudu is water. You made it a war
 
@@ -5643,10 +5386,10 @@ yeah
 | 2 | `257` |
 | 3 | `fixed` |
 | 4 | `78` |
-| 5 | `180.0` |
+| 5 | `108.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5708,6 +5451,8 @@ A basin is not a ban
 Travelers washing before prayer
 Your analogy is a smear with a seal
 
+[inst - pocket snare, hats only]
+
 [verse]
 Hand claps on a culture sermon
 Choir vowels over a DOJ seal
@@ -5722,14 +5467,6 @@ A segregated restroom was a crime
 Rhyming them is the tell
 You wanted the heat, not the holding
 
-[chorus]
-Wudu letter
-Nill Bye on the DOJ note
-Abbott smeared a prayer rinse
-A basin is not a ban
-Travelers washing before prayer
-Your analogy is a smear with a seal
-
 [verse]
 Convention week you previewed the plank
 Ban this, demolish that, rinse, repeat
@@ -5741,6 +5478,8 @@ I want a governor who can read a ritual
 You want a governor who can trend a slur
 Seal on the page, stain on the analogy
 The stall will still be there at dawn
+
+[bridge]
 Your letter will still be the smear
 Wudu is water. You made it a war
 
@@ -5820,7 +5559,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/14-fourth-term`.
 
-US-safe rap 180s diss: Nill Bye fourth-term roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye fourth-term roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5839,14 +5578,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5854,15 +5593,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
+| 1 | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/14-fourth-term` |
 
 ```text
-[intro]
-timpani roll
-Nill Bye enumerating
-
 [verse]
 November twenty-five he filed again
 A fourth term no Texas governor takes
@@ -5876,14 +5611,6 @@ Gina from McAllen on public school
 You on the border and the levy reprise
 A dynasty dressed as a job application
 The mansion is not a birthright
-
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
 
 [verse]
 Three terms of the same special session
@@ -5899,14 +5626,6 @@ The record is the campaign's opponent
 Hinojosa does not have to invent you
 You wrote the dossier in statutes
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 Cinematic strings on a long sit
 Timpani under a tired trademark
@@ -5921,14 +5640,6 @@ As if the seal were a personal mark
 Governors leave. That is the design
 You are arguing with the calendar
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 November three will weigh the unprecedented
 Not the ads, the aftertaste
@@ -5942,6 +5653,10 @@ Run if you want, own the dossier
 Don't call it destiny
 Don't call it humble service
 A fourth lap is a choice to not leave
+
+[pre-chorus]
+Fourth term
+Nill Bye on the unprecedented
 
 [chorus]
 Fourth term
@@ -5963,7 +5678,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune…` |
-| 2 | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
+| 2 | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/14-fourth-term` |
@@ -5973,10 +5688,6 @@ cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune,
 ```
 
 ```text
-[intro]
-timpani roll
-Nill Bye enumerating
-
 [verse]
 November twenty-five he filed again
 A fourth term no Texas governor takes
@@ -5990,14 +5701,6 @@ Gina from McAllen on public school
 You on the border and the levy reprise
 A dynasty dressed as a job application
 The mansion is not a birthright
-
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
 
 [verse]
 Three terms of the same special session
@@ -6013,14 +5716,6 @@ The record is the campaign's opponent
 Hinojosa does not have to invent you
 You wrote the dossier in statutes
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 Cinematic strings on a long sit
 Timpani under a tired trademark
@@ -6035,14 +5730,6 @@ As if the seal were a personal mark
 Governors leave. That is the design
 You are arguing with the calendar
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 November three will weigh the unprecedented
 Not the ads, the aftertaste
@@ -6056,6 +5743,10 @@ Run if you want, own the dossier
 Don't call it destiny
 Don't call it humble service
 A fourth lap is a choice to not leave
+
+[pre-chorus]
+Fourth term
+Nill Bye on the unprecedented
 
 [chorus]
 Fourth term
@@ -6076,14 +5767,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune…` |
-| 1 | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
+| 1 | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
 | 2 | `263` |
 | 3 | `fixed` |
 | 4 | `76` |
-| 5 | `180.0` |
+| 5 | `167.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6096,10 +5787,6 @@ cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune,
 ```
 
 ```text
-[intro]
-timpani roll
-Nill Bye enumerating
-
 [verse]
 November twenty-five he filed again
 A fourth term no Texas governor takes
@@ -6113,14 +5800,6 @@ Gina from McAllen on public school
 You on the border and the levy reprise
 A dynasty dressed as a job application
 The mansion is not a birthright
-
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
 
 [verse]
 Three terms of the same special session
@@ -6136,14 +5815,6 @@ The record is the campaign's opponent
 Hinojosa does not have to invent you
 You wrote the dossier in statutes
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 Cinematic strings on a long sit
 Timpani under a tired trademark
@@ -6158,14 +5829,6 @@ As if the seal were a personal mark
 Governors leave. That is the design
 You are arguing with the calendar
 
-[chorus]
-Fourth term
-Nill Bye on the unprecedented
-Abbott wants a fourth mansion lap
-Hinojosa in the tighter race
-Since ninety-four the map felt safer
-Your incumbency is the argument
-
 [verse]
 November three will weigh the unprecedented
 Not the ads, the aftertaste
@@ -6179,6 +5842,10 @@ Run if you want, own the dossier
 Don't call it destiny
 Don't call it humble service
 A fourth lap is a choice to not leave
+
+[pre-chorus]
+Fourth term
+Nill Bye on the unprecedented
 
 [chorus]
 Fourth term
@@ -6255,7 +5922,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/frozen-ercot/15-campus-cordon`.
 
-US-safe rap 180s diss: Nill Bye campus-cordon roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye campus-cordon roast of Abbott, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -6274,14 +5941,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -6289,16 +5956,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| 1 | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` |
 
 ```text
-[intro]
-live kit
-guitar stomp
-Nill Bye watching
-
 [verse]
 April on the Forty Acres
 Students on the lawn with a Gaza sign
@@ -6376,6 +6038,16 @@ I want a quad, you want a perimeter
 I want an argument, you want a booking
 Keep the stomp, lose the zip-tie
 The Forty Acres is not your stage
+
+[chorus]
+Campus cordon
+Nill Bye on the quad
+Abbott sent the troopers in
+UT Austin, spring twenty-four
+Speech limited after the zip-ties
+Your order is a riot helmet
+
+[bridge]
 Troopers don't grade a seminar
 Your order failed the forum
 
@@ -6400,7 +6072,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot…` |
-| 2 | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| 2 | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/frozen-ercot/15-campus-cordon` |
@@ -6410,11 +6082,6 @@ rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry booth
 ```
 
 ```text
-[intro]
-live kit
-guitar stomp
-Nill Bye watching
-
 [verse]
 April on the Forty Acres
 Students on the lawn with a Gaza sign
@@ -6492,6 +6159,16 @@ I want a quad, you want a perimeter
 I want an argument, you want a booking
 Keep the stomp, lose the zip-tie
 The Forty Acres is not your stage
+
+[chorus]
+Campus cordon
+Nill Bye on the quad
+Abbott sent the troopers in
+UT Austin, spring twenty-four
+Speech limited after the zip-ties
+Your order is a riot helmet
+
+[bridge]
 Troopers don't grade a seminar
 Your order failed the forum
 
@@ -6515,14 +6192,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry boot…` |
-| 1 | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| 1 | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 | 2 | `269` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `180.0` |
+| 5 | `210.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6535,11 +6212,6 @@ rap rock, live drums, overdriven guitar, crowd stomp, male rap vocals, dry booth
 ```
 
 ```text
-[intro]
-live kit
-guitar stomp
-Nill Bye watching
-
 [verse]
 April on the Forty Acres
 Students on the lawn with a Gaza sign
@@ -6617,6 +6289,16 @@ I want a quad, you want a perimeter
 I want an argument, you want a booking
 Keep the stomp, lose the zip-tie
 The Forty Acres is not your stage
+
+[chorus]
+Campus cordon
+Nill Bye on the quad
+Abbott sent the troopers in
+UT Austin, spring twenty-four
+Speech limited after the zip-ties
+Your order is a riot helmet
+
+[bridge]
 Troopers don't grade a seminar
 Your order failed the forum
 
@@ -6765,7 +6447,7 @@ square album cover, graphic print, iced power lines, Texas winter grid, cold blu
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
+**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -6802,16 +6484,20 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `custom` |
-| 1 | `square album cover, graphic print, iced power lines, Texas winter grid, cold bl…` |
+| 0 | `square album cover, graphic print, iced power lines, Texas winter grid, cold bl…` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `audio/albums/nill-bye/frozen-ercot/cover` |
+| 6 | `stills/instagram-square` |
 
 ```text
 square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
+
+```text
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -6831,6 +6517,29 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Format / platform** (`EZImageFormat`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Instagram · square (1024×1024)` |
+| 1 | `none` |
+| 2 | `1024` |
+| 3 | `1024` |
+| 4 | `1` |
+| 5 | `Match input` |
+
+**Upscale still** (`EZImageUpscale`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `none` |
+
+**Describe image** (`EZImageDescribe`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -6909,7 +6618,23 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Song Duration | `71.0` |
+| Song Duration | `120.0` |
+| Song Duration | `176.0` |
+| Song Duration | `80.0` |
+| Song Duration | `131.0` |
+| Song Duration | `187.0` |
+| Song Duration | `89.0` |
+| Song Duration | `143.0` |
+| Song Duration | `198.0` |
+| Song Duration | `100.0` |
+| Song Duration | `156.0` |
+| Song Duration | `208.0` |
+| Song Duration | `108.0` |
+| Song Duration | `167.0` |
+| Song Duration | `210.0` |
 
 #### `control_after_generate`
 
@@ -6936,7 +6661,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6945,13 +6670,29 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Latent length (seconds) | `71.0` |
+| Latent length (seconds) | `120.0` |
+| Latent length (seconds) | `176.0` |
+| Latent length (seconds) | `80.0` |
+| Latent length (seconds) | `131.0` |
+| Latent length (seconds) | `187.0` |
+| Latent length (seconds) | `89.0` |
+| Latent length (seconds) | `143.0` |
+| Latent length (seconds) | `198.0` |
+| Latent length (seconds) | `100.0` |
+| Latent length (seconds) | `156.0` |
+| Latent length (seconds) | `208.0` |
+| Latent length (seconds) | `108.0` |
+| Latent length (seconds) | `167.0` |
+| Latent length (seconds) | `210.0` |
 
 #### `batch_size`
 
@@ -6994,19 +6735,19 @@ Sectioned lyrics.
 | --- | --- |
 | Rap lyrics | `[intro] yeah grid down Nill Bye grid-gauging [verse] February iced the whole ER…` |
 | Rap lyrics | `[spoken word] Robb Elementary Nineteen children Two teachers Seventy-seven minu…` |
-| Rap lyrics | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| Rap lyrics | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | Rap lyrics | `[intro] invoice hum Nill Bye auditing [verse] Disaster order every month since …` |
 | Rap lyrics | `[intro] gavel wood brass hit Nill Bye grading [verse] Twenty-twenty-three, the …` |
 | Rap lyrics | `[intro] steel strings Nill Bye appraising [verse] No income tax is the state hy…` |
-| Rap lyrics | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| Rap lyrics | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | Rap lyrics | `[intro] harmonica sting Nill Bye charting [verse] Texas never took the expansio…` |
-| Rap lyrics | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| Rap lyrics | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | Rap lyrics | `[intro] rhodes wash Nill Bye noting [verse] GA-thirty-four, March twenty-twenty…` |
 | Rap lyrics | `[intro] pixel lead Nill Bye graphing [verse] Mid-decade is not how the clock ru…` |
-| Rap lyrics | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| Rap lyrics | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | Rap lyrics | `[intro] organ swell hand clap Nill Bye reading [verse] August twenty-twenty-six…` |
-| Rap lyrics | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
-| Rap lyrics | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| Rap lyrics | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
+| Rap lyrics | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 
 #### `enhance`
 
@@ -7106,19 +6847,19 @@ Sectioned lyrics.
 | --- | --- |
 | ez_rap_prompt | `[intro] yeah grid down Nill Bye grid-gauging [verse] February iced the whole ER…` |
 | ez_rap_prompt | `[spoken word] Robb Elementary Nineteen children Two teachers Seventy-seven minu…` |
-| ez_rap_prompt | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| ez_rap_prompt | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | ez_rap_prompt | `[intro] invoice hum Nill Bye auditing [verse] Disaster order every month since …` |
 | ez_rap_prompt | `[intro] gavel wood brass hit Nill Bye grading [verse] Twenty-twenty-three, the …` |
 | ez_rap_prompt | `[intro] steel strings Nill Bye appraising [verse] No income tax is the state hy…` |
-| ez_rap_prompt | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| ez_rap_prompt | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | ez_rap_prompt | `[intro] harmonica sting Nill Bye charting [verse] Texas never took the expansio…` |
-| ez_rap_prompt | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| ez_rap_prompt | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | ez_rap_prompt | `[intro] rhodes wash Nill Bye noting [verse] GA-thirty-four, March twenty-twenty…` |
 | ez_rap_prompt | `[intro] pixel lead Nill Bye graphing [verse] Mid-decade is not how the clock ru…` |
-| ez_rap_prompt | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| ez_rap_prompt | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | ez_rap_prompt | `[intro] organ swell hand clap Nill Bye reading [verse] August twenty-twenty-six…` |
-| ez_rap_prompt | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
-| ez_rap_prompt | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| ez_rap_prompt | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
+| ez_rap_prompt | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 
 #### `enhance`
 
@@ -7227,19 +6968,19 @@ Sectioned lyrics or [inst] cues.
 | --- | --- |
 | ACE tags + lyrics | `[intro] yeah grid down Nill Bye grid-gauging [verse] February iced the whole ER…` |
 | ACE tags + lyrics | `[spoken word] Robb Elementary Nineteen children Two teachers Seventy-seven minu…` |
-| ACE tags + lyrics | `[intro] metronome cardiac tick Nill Bye ticking [verse] SB eight, May twenty-tw…` |
+| ACE tags + lyrics | `[verse] SB eight, May twenty-twenty-one Heartbeat Act with a bounty clause Any …` |
 | ACE tags + lyrics | `[intro] invoice hum Nill Bye auditing [verse] Disaster order every month since …` |
 | ACE tags + lyrics | `[intro] gavel wood brass hit Nill Bye grading [verse] Twenty-twenty-three, the …` |
 | ACE tags + lyrics | `[intro] steel strings Nill Bye appraising [verse] No income tax is the state hy…` |
-| ACE tags + lyrics | `[intro] fiddle scrape Nill Bye totaling [verse] Jeff Yass wired ten million in …` |
+| ACE tags + lyrics | `[verse] Jeff Yass wired ten million in Pennsylvania money for a Texas raid Abbo…` |
 | ACE tags + lyrics | `[intro] harmonica sting Nill Bye charting [verse] Texas never took the expansio…` |
-| ACE tags + lyrics | `[intro] dusty loop Nill Bye shelving [verse] School boards got a raid of lists …` |
+| ACE tags + lyrics | `[chorus] Locked stacks Nill Bye on the library ban Abbott blessed the pull-list…` |
 | ACE tags + lyrics | `[intro] rhodes wash Nill Bye noting [verse] GA-thirty-four, March twenty-twenty…` |
 | ACE tags + lyrics | `[intro] pixel lead Nill Bye graphing [verse] Mid-decade is not how the clock ru…` |
-| ACE tags + lyrics | `[intro] neon bass Nill Bye watt-counting [verse] First the tax break, then the …` |
+| ACE tags + lyrics | `[verse] First the tax break, then the halo Texas as an AI epicenter pitch Abbot…` |
 | ACE tags + lyrics | `[intro] organ swell hand clap Nill Bye reading [verse] August twenty-twenty-six…` |
-| ACE tags + lyrics | `[intro] timpani roll Nill Bye enumerating [verse] November twenty-five he filed…` |
-| ACE tags + lyrics | `[intro] live kit guitar stomp Nill Bye watching [verse] April on the Forty Acre…` |
+| ACE tags + lyrics | `[verse] November twenty-five he filed again A fourth term no Texas governor tak…` |
+| ACE tags + lyrics | `[verse] April on the Forty Acres Students on the lawn with a Gaza sign Abbott s…` |
 
 #### `seed`
 
@@ -7320,7 +7061,23 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `71.0` |
+| ACE tags + lyrics | `120.0` |
+| ACE tags + lyrics | `176.0` |
+| ACE tags + lyrics | `80.0` |
+| ACE tags + lyrics | `131.0` |
+| ACE tags + lyrics | `187.0` |
+| ACE tags + lyrics | `89.0` |
+| ACE tags + lyrics | `143.0` |
+| ACE tags + lyrics | `198.0` |
+| ACE tags + lyrics | `100.0` |
+| ACE tags + lyrics | `156.0` |
+| ACE tags + lyrics | `208.0` |
+| ACE tags + lyrics | `108.0` |
+| ACE tags + lyrics | `167.0` |
+| ACE tags + lyrics | `210.0` |
 
 #### `timesignature`
 
@@ -7328,9 +7085,25 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
-**This graph (all 15 instances):** `4`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `2` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `3` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
 
 **Other choices**
 
@@ -7413,9 +7186,25 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
-**This graph (all 15 instances):** `C minor`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `F minor` |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
+| ACE tags + lyrics | `B minor` |
 
 **Other choices**
 
@@ -7438,7 +7227,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -7827,21 +7616,21 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-frozen-ercot US-safe rap **180 s diss** take: **frozen ercot**. Fictional…` |
-| Operator note | `## 02-abject-failure US-safe rap **180 s diss** take: **abject failure**. Ficti…` |
-| Operator note | `## 03-six-week-clock US-safe rap **180 s diss** take: **six week clock**. Ficti…` |
-| Operator note | `## 04-no-bid-wire US-safe rap **180 s diss** take: **no-bid wire**. Fictional M…` |
-| Operator note | `## 05-gavel-theater US-safe rap **180 s diss** take: **gavel theater**. Fiction…` |
-| Operator note | `## 06-property-hymn US-safe rap **180 s diss** take: **property hymn**. Fiction…` |
-| Operator note | `## 07-voucher-raid US-safe rap **180 s diss** take: **voucher raid**. Fictional…` |
-| Operator note | `## 08-uninsured-blues US-safe rap **180 s diss** take: **uninsured blues**. Fic…` |
-| Operator note | `## 09-locked-stacks US-safe rap **180 s diss** take: **locked stacks**. Fiction…` |
-| Operator note | `## 10-mask-order US-safe rap **180 s diss** take: **mask order**. Fictional MC …` |
-| Operator note | `## 11-mid-decade-map US-safe rap **180 s diss** take: **mid decade map**. Ficti…` |
-| Operator note | `## 12-rack-tax US-safe rap **180 s diss** take: **rack tax**. Fictional MC **Ni…` |
-| Operator note | `## 13-wudu-letter US-safe rap **180 s diss** take: **wudu letter**. Fictional M…` |
-| Operator note | `## 14-fourth-term US-safe rap **180 s diss** take: **fourth term**. Fictional M…` |
-| Operator note | `## 15-campus-cordon US-safe rap **180 s diss** take: **campus cordon**. Fiction…` |
+| Operator note | `## 01-frozen-ercot US-safe rap **71 s diss** take: **frozen ercot**. Fictional …` |
+| Operator note | `## 02-abject-failure US-safe rap **120 s diss** take: **abject failure**. Ficti…` |
+| Operator note | `## 03-six-week-clock US-safe rap **176 s diss** take: **six week clock**. Ficti…` |
+| Operator note | `## 04-no-bid-wire US-safe rap **80 s diss** take: **no-bid wire**. Fictional MC…` |
+| Operator note | `## 05-gavel-theater US-safe rap **131 s diss** take: **gavel theater**. Fiction…` |
+| Operator note | `## 06-property-hymn US-safe rap **187 s diss** take: **property hymn**. Fiction…` |
+| Operator note | `## 07-voucher-raid US-safe rap **89 s diss** take: **voucher raid**. Fictional …` |
+| Operator note | `## 08-uninsured-blues US-safe rap **143 s diss** take: **uninsured blues**. Fic…` |
+| Operator note | `## 09-locked-stacks US-safe rap **198 s diss** take: **locked stacks**. Fiction…` |
+| Operator note | `## 10-mask-order US-safe rap **100 s diss** take: **mask order**. Fictional MC …` |
+| Operator note | `## 11-mid-decade-map US-safe rap **156 s diss** take: **mid decade map**. Ficti…` |
+| Operator note | `## 12-rack-tax US-safe rap **208 s diss** take: **rack tax**. Fictional MC **Ni…` |
+| Operator note | `## 13-wudu-letter US-safe rap **108 s diss** take: **wudu letter**. Fictional M…` |
+| Operator note | `## 14-fourth-term US-safe rap **167 s diss** take: **fourth term**. Fictional M…` |
+| Operator note | `## 15-campus-cordon US-safe rap **210 s diss** take: **campus cordon**. Fiction…` |
 | Operator note | `## audio/albums/nill-bye/frozen-ercot/album Album **Frozen Ercot** by **Nill By…` |
 | Operator note | `## audio/albums/nill-bye/frozen-ercot/cover Album cover for **Nill Bye — Frozen…` |
 
@@ -8390,7 +8179,11 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `custom`
+**This graph:** `square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celeb…`
+
+```text
+square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
 
 #### `prompt`
 
@@ -8400,10 +8193,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celeb…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-square album cover, graphic print, iced power lines, Texas winter grid, cold blue night, fictional act Nill Bye, album Frozen Ercot, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 #### `enhance`
@@ -8771,7 +8564,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `audio/albums/nill-bye/frozen-ercot/cover`
+**This graph:** `stills/instagram-square`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -8827,3 +8620,252 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZImageFormat` — Format / platform
+
+Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
+
+!!! warning "Lab notes"
+
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
+| `width` | out | `INT` | Latent width (÷16). |
+| `height` | out | `INT` | Latent height (÷16). |
+| `batch` | out | `INT` | Batch size. |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+
+**This graph:** `Instagram · square (1024×1024)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to ÷16. |
+| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
+| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
+| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
+| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
+| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
+| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
+| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
+| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
+| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
+| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
+| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
+| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
+| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
+| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
+| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
+| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
+| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
+| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
+| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
+| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
+| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
+| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
+| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
+| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
+| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
+| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
+| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
+| `Instagram · profile (768×768)` | 768×768. ig_profile. |
+| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
+| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
+| `X · post (1280×720)` | 1280×720. x_post. |
+| `X · header (1536×512)` | 1536×512. x_header. |
+| `X · card (1216×640)` | 1216×640. x_card. |
+| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
+| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
+| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
+| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
+| `Pinterest · pin (768×1152)` | 768×1152. pin. |
+| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
+| `Facebook · post (1216×640)` | 1216×640. fb_post. |
+| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
+| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
+| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
+| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
+| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
+| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
+| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
+| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
+| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
+| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
+| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
+| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
+| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
+| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
+| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
+| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
+| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
+| `Open Graph / blog (1216×640)` | 1216×640. og. |
+| `Email · header (1216×640)` | 1216×640. email_header. |
+| `Substack · hero (1216×640)` | 1216×640. substack. |
+| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
+| `Channel · banner (1536×512)` | 1536×512. banner. |
+| `End-card / CTA (1280×720)` | 1280×720. endcard. |
+| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
+| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
+| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
+| `Shorts still (432×768)` | 432×768. shorts_still. |
+| `Hook still (432×768)` | 432×768. hook_still. |
+| `Product packshot (1024×1024)` | 1024×1024. packshot. |
+| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
+| `Desk setup (1280×720)` | 1280×720. desk_setup. |
+| `Coming soon (1280×720)` | 1280×720. coming_soon. |
+| `Slide title (1280×720)` | 1280×720. slide_title. |
+| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
+| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
+| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
+| `Print poster (768×1152)` | 768×1152. poster. |
+
+#### `look`
+
+Type `COMBO`. Range / default: none.
+
+Optional Cinema Rack starter.
+
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Style + Prompt own look. |
+| `Noir interrogation` | rec_noir_push |
+| `Locked portrait` | rec_locked_portrait |
+| `Golden wide` | rec_golden_wide |
+| `Handheld documentary` | rec_handheld_doc |
+| `Vertical hook` | rec_vertical_hook |
+| `Rain track` | rec_rain_track |
+| `Product orbit` | rec_orbit_product |
+| `Drone reveal` | rec_drone_reveal |
+| `Night bible` | rec_identity_night |
+| `Western noon` | rec_western_noon |
+| `Slow push to eyes` | rec_slow_push_eyes |
+| `FPV dive` | rec_fpv_dive |
+| `Match-cut AV` | rec_match_cut_ltx |
+| `Fog push` | rec_fog_push |
+| `Body-cam sprint` | rec_bodycam_sprint |
+| `Bounce beauty` | rec_romcom_beauty |
+| `Overcast wide` | rec_overcast_wide |
+| `Macro pour` | rec_macro_pour |
+| `Crane reveal` | rec_crane_reveal |
+| `Split diopter two-plane` | rec_split_diopter |
+| `Night practical push` | rec_night_practical_push |
+| `Hyperlapse path` | rec_hyperlapse |
+| `Talking MCU` | rec_talking_mcu |
+| `Anamorphic-class night` | rec_anamorphic_night |
+
+#### `width`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `height`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1–4.
+
+How many stills in one Run.
+
+**How it affects generation:** Large canvases stay at 1.
+
+**This graph:** `1`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

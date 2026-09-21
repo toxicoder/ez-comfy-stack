@@ -1,4 +1,4 @@
-"""Style-pack 180s Nill Bye vs Rake diss takes (non-trap, non-EDM beds).
+"""Style-pack full-length Nill Bye vs Rake diss takes (non-trap, non-EDM beds).
 
 Fictional MCs only. Original lyrics. No living-artist names.
 Same dry-booth vocal tags as the lab catalog.

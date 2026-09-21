@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/nill-bye/pardon-flood/`. Queue one track, or 
 ```text
 ## 01-pardon-flood
 
-US-safe rap **180 s diss** take: **pardon flood**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **72 s diss** take: **pardon flood**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 140, language en, timesignature 4, generate_audio_codes true. Seed 457.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 72 s, bpm 140, language en, timesignature 4, key F minor, form v_half, generate_audio_codes true. Seed 457.
 7. Saves: `01 - Pardon Flood` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -105,13 +105,13 @@ flowchart LR
 | `audio/albums/nill-bye/pardon-flood/14-shadow-docket` | 17 | audio |
 | `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` | 17 | audio |
 | `audio/albums/nill-bye/pardon-flood/album` | 4 | none |
-| `audio/albums/nill-bye/pardon-flood/cover` | 15 | klein |
+| `audio/albums/nill-bye/pardon-flood/cover` | 18 | klein |
 
 ## `01-pardon-flood`
 
 Catalog id `audio/albums/nill-bye/pardon-flood/01-pardon-flood`.
 
-US-safe rap 180s diss: Nill Bye pardon-flood roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye pardon-flood roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -130,14 +130,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -156,11 +156,6 @@ A proclamation
 Full, complete, unconditional
 Pending indictments dismissed with prejudice
 Clemency as a crowd-care package
-
-[intro]
-808
-half-time
-Nill Bye reading clemency
 
 [verse]
 About fifteen hundred names in one stroke
@@ -206,6 +201,8 @@ Seditious conspiracy commuted to time served
 Prejudice means you cannot even refile
 Your clemency failed the officers
 
+[inst - pocket snare, hats only]
+
 [verse]
 The Attorney General as a clerk for certificates
 Immediate issuance, immediate release, immediate dismiss
@@ -220,7 +217,7 @@ Officers still have the injuries. The docket does not
 That mismatch is the whole civic insult
 Clemency without triage is a loyalty program
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -242,7 +239,7 @@ The proclamation already told on the errand, tarrio
 Day one was not a coincidence of calendars
 It was the first product off the line, prejudice
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -280,11 +277,6 @@ Full, complete, unconditional
 Pending indictments dismissed with prejudice
 Clemency as a crowd-care package
 
-[intro]
-808
-half-time
-Nill Bye reading clemency
-
 [verse]
 About fifteen hundred names in one stroke
 Full pardon for the mass, commutations for the chiefs
@@ -329,6 +321,8 @@ Seditious conspiracy commuted to time served
 Prejudice means you cannot even refile
 Your clemency failed the officers
 
+[inst - pocket snare, hats only]
+
 [verse]
 The Attorney General as a clerk for certificates
 Immediate issuance, immediate release, immediate dismiss
@@ -343,7 +337,7 @@ Officers still have the injuries. The docket does not
 That mismatch is the whole civic insult
 Clemency without triage is a loyalty program
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -365,7 +359,7 @@ The proclamation already told on the errand, tarrio
 Day one was not a coincidence of calendars
 It was the first product off the line, prejudice
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -389,10 +383,10 @@ yeah
 | 2 | `457` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `72.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -411,11 +405,6 @@ A proclamation
 Full, complete, unconditional
 Pending indictments dismissed with prejudice
 Clemency as a crowd-care package
-
-[intro]
-808
-half-time
-Nill Bye reading clemency
 
 [verse]
 About fifteen hundred names in one stroke
@@ -461,6 +450,8 @@ Seditious conspiracy commuted to time served
 Prejudice means you cannot even refile
 Your clemency failed the officers
 
+[inst - pocket snare, hats only]
+
 [verse]
 The Attorney General as a clerk for certificates
 Immediate issuance, immediate release, immediate dismiss
@@ -475,7 +466,7 @@ Officers still have the injuries. The docket does not
 That mismatch is the whole civic insult
 Clemency without triage is a loyalty program
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -497,7 +488,7 @@ The proclamation already told on the errand, tarrio
 Day one was not a coincidence of calendars
 It was the first product off the line, prejudice
 
-[chorus]
+[chorus - half-time drums]
 Pardon flood
 Nill Bye on the day-one proclamation
 Trump emptied the Jan six docket like a gift shop
@@ -573,7 +564,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/02-ieepa-wreck`.
 
-US-safe rap 180s diss: Nill Bye ieepa-wreck roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye ieepa-wreck roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -592,14 +583,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -660,6 +651,8 @@ Roberts wrote that regulate is not a revenue power
 Liberation Day met a six-three wall
 Your IEEPA failed the importation clause
 
+[inst - pocket snare, hats only]
+
 [verse]
 Regulate importation does not say levy
 Levy is the verb you needed and did not receive
@@ -674,14 +667,6 @@ You stretched the grant until it looked like a rate card
 The Court put the stretch back in the box
 Boxes are where emergency powers belong
 
-[chorus]
-Ieepa wreck
-Nill Bye on the tariff statute
-Trump taxed the world on an emergency hobbyhorse
-Roberts wrote that regulate is not a revenue power
-Liberation Day met a six-three wall
-Your IEEPA failed the importation clause
-
 [verse]
 Keep the distortion, print the Roberts sentence
 Regulate is not a revenue power. That is the whole thesis
@@ -693,6 +678,8 @@ Lose the worldwide emergency as a VAT
 The toy companies already paid the homework
 Learning Resources was not a theory seminar
 It was a family firm catching a tax it never voted
+
+[bridge]
 The six-three already mailed the syllabus
 Liberation Day already met the wall, ratecard
 
@@ -774,6 +761,8 @@ Roberts wrote that regulate is not a revenue power
 Liberation Day met a six-three wall
 Your IEEPA failed the importation clause
 
+[inst - pocket snare, hats only]
+
 [verse]
 Regulate importation does not say levy
 Levy is the verb you needed and did not receive
@@ -788,14 +777,6 @@ You stretched the grant until it looked like a rate card
 The Court put the stretch back in the box
 Boxes are where emergency powers belong
 
-[chorus]
-Ieepa wreck
-Nill Bye on the tariff statute
-Trump taxed the world on an emergency hobbyhorse
-Roberts wrote that regulate is not a revenue power
-Liberation Day met a six-three wall
-Your IEEPA failed the importation clause
-
 [verse]
 Keep the distortion, print the Roberts sentence
 Regulate is not a revenue power. That is the whole thesis
@@ -807,6 +788,8 @@ Lose the worldwide emergency as a VAT
 The toy companies already paid the homework
 Learning Resources was not a theory seminar
 It was a family firm catching a tax it never voted
+
+[bridge]
 The six-three already mailed the syllabus
 Liberation Day already met the wall, ratecard
 
@@ -833,7 +816,7 @@ cut
 | 2 | `461` |
 | 3 | `fixed` |
 | 4 | `148` |
-| 5 | `180.0` |
+| 5 | `120.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -897,6 +880,8 @@ Roberts wrote that regulate is not a revenue power
 Liberation Day met a six-three wall
 Your IEEPA failed the importation clause
 
+[inst - pocket snare, hats only]
+
 [verse]
 Regulate importation does not say levy
 Levy is the verb you needed and did not receive
@@ -911,14 +896,6 @@ You stretched the grant until it looked like a rate card
 The Court put the stretch back in the box
 Boxes are where emergency powers belong
 
-[chorus]
-Ieepa wreck
-Nill Bye on the tariff statute
-Trump taxed the world on an emergency hobbyhorse
-Roberts wrote that regulate is not a revenue power
-Liberation Day met a six-three wall
-Your IEEPA failed the importation clause
-
 [verse]
 Keep the distortion, print the Roberts sentence
 Regulate is not a revenue power. That is the whole thesis
@@ -930,6 +907,8 @@ Lose the worldwide emergency as a VAT
 The toy companies already paid the homework
 Learning Resources was not a theory seminar
 It was a family firm catching a tax it never voted
+
+[bridge]
 The six-three already mailed the syllabus
 Liberation Day already met the wall, ratecard
 
@@ -1008,7 +987,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/03-gold-card`.
 
-US-safe rap 180s diss: Nill Bye gold-card roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye gold-card roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1027,14 +1006,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1042,15 +1021,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
+| 1 | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/03-gold-card` |
 
 ```text
-[intro]
-phonk bell
-Nill Bye pricing residency
-
 [verse]
 September nineteen, twenty-twenty-five, Oval photo
 Two orders: a gold card at a million, an H-1B at a hundred thousand
@@ -1064,14 +1039,6 @@ Permanent residency is not a commemorative coin
 Even if you already learned the coin trick in January
 A pathway that starts at a million is a silk rope
 Silk ropes are not an immigration method, skunumber
-
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
 
 [verse]
 Phonk cowbell on a sold status
@@ -1087,14 +1054,6 @@ The photo with Lutnick is the product launch
 Product launches belong in a catalog, not an EO
 An EO is not a checkout page, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 I will not roast the buyer. I will roast the SKU
 The buyer is a person in a process they did not design
@@ -1109,14 +1068,6 @@ Fine print is the science, millionpath
 The caption is the costume, lutnick
 I score the till, you score the caption, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 Keep the cowbell, print the million as a SKU
 A pathway can exist. This one is a checkout stall
@@ -1130,6 +1081,10 @@ Residency is a status
 You sold the status as a product
 The SKU already told on the gift talk, millionpath
 Gift talk already bounced off the till-receipt, lutnick
+
+[pre-chorus]
+Gold card
+Nill Bye on the million-dollar pathway
 
 [chorus]
 Gold card
@@ -1152,7 +1107,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut…` |
-| 2 | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
+| 2 | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/03-gold-card` |
@@ -1162,10 +1117,6 @@ phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no auto
 ```
 
 ```text
-[intro]
-phonk bell
-Nill Bye pricing residency
-
 [verse]
 September nineteen, twenty-twenty-five, Oval photo
 Two orders: a gold card at a million, an H-1B at a hundred thousand
@@ -1179,14 +1130,6 @@ Permanent residency is not a commemorative coin
 Even if you already learned the coin trick in January
 A pathway that starts at a million is a silk rope
 Silk ropes are not an immigration method, skunumber
-
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
 
 [verse]
 Phonk cowbell on a sold status
@@ -1202,14 +1145,6 @@ The photo with Lutnick is the product launch
 Product launches belong in a catalog, not an EO
 An EO is not a checkout page, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 I will not roast the buyer. I will roast the SKU
 The buyer is a person in a process they did not design
@@ -1224,14 +1159,6 @@ Fine print is the science, millionpath
 The caption is the costume, lutnick
 I score the till, you score the caption, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 Keep the cowbell, print the million as a SKU
 A pathway can exist. This one is a checkout stall
@@ -1245,6 +1172,10 @@ Residency is a status
 You sold the status as a product
 The SKU already told on the gift talk, millionpath
 Gift talk already bounced off the till-receipt, lutnick
+
+[pre-chorus]
+Gold card
+Nill Bye on the million-dollar pathway
 
 [chorus]
 Gold card
@@ -1266,14 +1197,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut…` |
-| 1 | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
+| 1 | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
 | 2 | `463` |
 | 3 | `fixed` |
 | 4 | `132` |
-| 5 | `180.0` |
+| 5 | `176.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1286,10 +1217,6 @@ phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no auto
 ```
 
 ```text
-[intro]
-phonk bell
-Nill Bye pricing residency
-
 [verse]
 September nineteen, twenty-twenty-five, Oval photo
 Two orders: a gold card at a million, an H-1B at a hundred thousand
@@ -1303,14 +1230,6 @@ Permanent residency is not a commemorative coin
 Even if you already learned the coin trick in January
 A pathway that starts at a million is a silk rope
 Silk ropes are not an immigration method, skunumber
-
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
 
 [verse]
 Phonk cowbell on a sold status
@@ -1326,14 +1245,6 @@ The photo with Lutnick is the product launch
 Product launches belong in a catalog, not an EO
 An EO is not a checkout page, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 I will not roast the buyer. I will roast the SKU
 The buyer is a person in a process they did not design
@@ -1348,14 +1259,6 @@ Fine print is the science, millionpath
 The caption is the costume, lutnick
 I score the till, you score the caption, skunumber
 
-[chorus]
-Gold card
-Nill Bye on the million-dollar pathway
-Trump sold a residency as a gift to the Nation
-A gift you invoice is a product
-Lutnick stood for the photo of the SKU
-Your pathway failed the immigration statute
-
 [verse]
 Keep the cowbell, print the million as a SKU
 A pathway can exist. This one is a checkout stall
@@ -1369,6 +1272,10 @@ Residency is a status
 You sold the status as a product
 The SKU already told on the gift talk, millionpath
 Gift talk already bounced off the till-receipt, lutnick
+
+[pre-chorus]
+Gold card
+Nill Bye on the million-dollar pathway
 
 [chorus]
 Gold card
@@ -1446,7 +1353,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/04-memecoin-tab`.
 
-US-safe rap 180s diss: Nill Bye memecoin-tab roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye memecoin-tab roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1465,14 +1372,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `79.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `79.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1480,15 +1387,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| 1 | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` |
 
 ```text
-[intro]
-trap pads
-Nill Bye reading OGE
-
 [verse]
 Three days before the oath, a social post as a launch
 CIC Digital and Fight Fight Fight on the cap table, cicdigital
@@ -1566,6 +1469,16 @@ The pre-oath post already timed the pump
 Timing is a method, ogefile
 The OGE already added the haul
 The wallet already shrugged
+
+[chorus]
+Memecoin tab
+Nill Bye on the inauguration token
+Trump posted GET YOUR dollar-sign now
+Affiliates kept about eighty percent of the supply
+A token is a wire from anyone, including a foreign desk
+Your disclosure failed the ethics office
+
+[bridge]
 Shrug is not an ethics plan, insiderfloat
 The float already told on the community talk, cicdigital
 
@@ -1589,7 +1502,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,…` |
-| 2 | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| 2 | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/04-memecoin-tab` |
@@ -1599,10 +1512,6 @@ trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-trap pads
-Nill Bye reading OGE
-
 [verse]
 Three days before the oath, a social post as a launch
 CIC Digital and Fight Fight Fight on the cap table, cicdigital
@@ -1680,6 +1589,16 @@ The pre-oath post already timed the pump
 Timing is a method, ogefile
 The OGE already added the haul
 The wallet already shrugged
+
+[chorus]
+Memecoin tab
+Nill Bye on the inauguration token
+Trump posted GET YOUR dollar-sign now
+Affiliates kept about eighty percent of the supply
+A token is a wire from anyone, including a foreign desk
+Your disclosure failed the ethics office
+
+[bridge]
 Shrug is not an ethics plan, insiderfloat
 The float already told on the community talk, cicdigital
 
@@ -1702,14 +1621,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune,…` |
-| 1 | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| 1 | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | 2 | `467` |
 | 3 | `fixed` |
 | 4 | `145` |
-| 5 | `180.0` |
+| 5 | `79.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1722,10 +1641,6 @@ trap, 808 bass, rapid hats, dark pads, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-trap pads
-Nill Bye reading OGE
-
 [verse]
 Three days before the oath, a social post as a launch
 CIC Digital and Fight Fight Fight on the cap table, cicdigital
@@ -1803,6 +1718,16 @@ The pre-oath post already timed the pump
 Timing is a method, ogefile
 The OGE already added the haul
 The wallet already shrugged
+
+[chorus]
+Memecoin tab
+Nill Bye on the inauguration token
+Trump posted GET YOUR dollar-sign now
+Affiliates kept about eighty percent of the supply
+A token is a wire from anyone, including a foreign desk
+Your disclosure failed the ethics office
+
+[bridge]
 Shrug is not an ethics plan, insiderfloat
 The float already told on the community talk, cicdigital
 
@@ -1881,7 +1806,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/05-east-wing-wreck`.
 
-US-safe rap 180s diss: Nill Bye east-wing-wreck roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye east-wing-wreck roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1900,14 +1825,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1937,14 +1862,6 @@ Under budget is a feeling. A doubled estimate is a number
 Private donors, incomplete list, a dinner for the till
 Amazon, Apple, Meta, defense names in the same toast
 A toast is not a congressional authorization
-
-[chorus]
-East wing wreck
-Nill Bye on the ballroom demolition
-Trump tore the wing first and shopped a statute later
-Ninety thousand square feet on a fifty-five thousand house
-Leon said no statute comes close
-Your ballroom failed the preservation
 
 [verse]
 House kick on a demolition that skipped the line, leonorder
@@ -2053,14 +1970,6 @@ Private donors, incomplete list, a dinner for the till
 Amazon, Apple, Meta, defense names in the same toast
 A toast is not a congressional authorization
 
-[chorus]
-East wing wreck
-Nill Bye on the ballroom demolition
-Trump tore the wing first and shopped a statute later
-Ninety thousand square feet on a fifty-five thousand house
-Leon said no statute comes close
-Your ballroom failed the preservation
-
 [verse]
 House kick on a demolition that skipped the line, leonorder
 Piano stab under a 90k addition on a 55k original
@@ -2143,10 +2052,10 @@ yeah
 | 2 | `479` |
 | 3 | `fixed` |
 | 4 | `126` |
-| 5 | `180.0` |
+| 5 | `131.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2176,14 +2085,6 @@ Under budget is a feeling. A doubled estimate is a number
 Private donors, incomplete list, a dinner for the till
 Amazon, Apple, Meta, defense names in the same toast
 A toast is not a congressional authorization
-
-[chorus]
-East wing wreck
-Nill Bye on the ballroom demolition
-Trump tore the wing first and shopped a statute later
-Ninety thousand square feet on a fifty-five thousand house
-Leon said no statute comes close
-Your ballroom failed the preservation
 
 [verse]
 House kick on a demolition that skipped the line, leonorder
@@ -2319,7 +2220,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/06-metro-surge`.
 
-US-safe rap 180s diss: Nill Bye metro-surge roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye metro-surge roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2338,14 +2239,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `188.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `188.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2579,10 +2480,10 @@ cut
 | 2 | `487` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `180.0` |
+| 5 | `188.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2754,7 +2655,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/07-due-process`.
 
-US-safe rap 180s diss: Nill Bye due-process roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye due-process roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2773,14 +2674,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2810,14 +2711,6 @@ Facilitate means work. Work is the opposite of a foreign-sovereign alibi
 I will not punch the man. I will punch the process failure
 A person with a withholding is not a poster
 He is a file the state already lost once and then chased
-
-[chorus]
-Due process
-Nill Bye on the administrative error
-Trump's shop flew a man with a withholding order to CECOT
-The Supreme Court said facilitate, not shrug
-A later charge sheet looked like payback to a bench
-Your error failed the hearing he was owed
 
 [verse]
 Jersey kicks on a process the shop treated as optional
@@ -2926,14 +2819,6 @@ I will not punch the man. I will punch the process failure
 A person with a withholding is not a poster
 He is a file the state already lost once and then chased
 
-[chorus]
-Due process
-Nill Bye on the administrative error
-Trump's shop flew a man with a withholding order to CECOT
-The Supreme Court said facilitate, not shrug
-A later charge sheet looked like payback to a bench
-Your error failed the hearing he was owed
-
 [verse]
 Jersey kicks on a process the shop treated as optional
 Kick drums under a CECOT transfer that skipped the hearing, xinis
@@ -3016,10 +2901,10 @@ yeah
 | 2 | `491` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `89.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3049,14 +2934,6 @@ Facilitate means work. Work is the opposite of a foreign-sovereign alibi
 I will not punch the man. I will punch the process failure
 A person with a withholding is not a poster
 He is a file the state already lost once and then chased
-
-[chorus]
-Due process
-Nill Bye on the administrative error
-Trump's shop flew a man with a withholding order to CECOT
-The Supreme Court said facilitate, not shrug
-A later charge sheet looked like payback to a bench
-Your error failed the hearing he was owed
 
 [verse]
 Jersey kicks on a process the shop treated as optional
@@ -3192,7 +3069,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque`.
 
-US-safe rap 180s diss: Nill Bye kennedy-plaque roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye kennedy-plaque roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3211,14 +3088,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `144.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `144.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3226,15 +3103,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| 1 | `[verse] The Center's organic statute names a president who was killed in office…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` |
 
 ```text
-[intro]
-future saw
-Nill Bye reading organic statutes
-
 [verse]
 The Center's organic statute names a president who was killed in office
 That name is the memorial. It is not a placeholder for a sequel brand, cooperorder
@@ -3278,6 +3151,8 @@ Trump's board stapled a second name on a statute that has one
 Cooper said Congress writes the title, not a tenant board
 A thunderstorm delay is not a legal theory
 Your plaque failed the organic act
+
+[inst - pocket snare, hats only]
 
 [verse]
 I will not roast the dead. I will roast the hyphenate
@@ -3335,7 +3210,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo…` |
-| 2 | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| 2 | `[verse] The Center's organic statute names a president who was killed in office…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/08-kennedy-plaque` |
@@ -3345,10 +3220,6 @@ future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boot
 ```
 
 ```text
-[intro]
-future saw
-Nill Bye reading organic statutes
-
 [verse]
 The Center's organic statute names a president who was killed in office
 That name is the memorial. It is not a placeholder for a sequel brand, cooperorder
@@ -3392,6 +3263,8 @@ Trump's board stapled a second name on a statute that has one
 Cooper said Congress writes the title, not a tenant board
 A thunderstorm delay is not a legal theory
 Your plaque failed the organic act
+
+[inst - pocket snare, hats only]
 
 [verse]
 I will not roast the dead. I will roast the hyphenate
@@ -3448,14 +3321,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo…` |
-| 1 | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| 1 | `[verse] The Center's organic statute names a president who was killed in office…` |
 | 2 | `499` |
 | 3 | `fixed` |
 | 4 | `148` |
-| 5 | `180.0` |
+| 5 | `144.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3468,10 +3341,6 @@ future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boot
 ```
 
 ```text
-[intro]
-future saw
-Nill Bye reading organic statutes
-
 [verse]
 The Center's organic statute names a president who was killed in office
 That name is the memorial. It is not a placeholder for a sequel brand, cooperorder
@@ -3515,6 +3384,8 @@ Trump's board stapled a second name on a statute that has one
 Cooper said Congress writes the title, not a tenant board
 A thunderstorm delay is not a legal theory
 Your plaque failed the organic act
+
+[inst - pocket snare, hats only]
 
 [verse]
 I will not roast the dead. I will roast the hyphenate
@@ -3627,7 +3498,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/09-birthright-order`.
 
-US-safe rap 180s diss: Nill Bye birthright-order roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye birthright-order roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3646,14 +3517,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3684,14 +3555,6 @@ A child is not a loophole. A child is a person the clause already addressed
 Addressed in 1868, not in a January stack of EOs
 A stack of EOs is not a convention
 
-[chorus]
-Birthright order
-Nill Bye on the citizenship EO
-Trump tried to edit a clause with a pen
-Barbara, June thirty, twenty-twenty-six: the pen lost
-Subject to the jurisdiction is a sentence, not a vibe
-Your order failed the Fourteenth
-
 [verse]
 Techno hats on a clause that does not take a pen
 Acid line under a day-one edit that needed two-thirds and the states
@@ -3705,6 +3568,10 @@ Moods do not write the Fourteenth
 Congress and the states did, the hard way
 The hard way is the point of an amendment
 Speed is the point of an EO. Speed lost, barbara
+
+[pre-chorus]
+Birthright order
+Nill Bye on the citizenship EO
 
 [chorus]
 Birthright order
@@ -3799,14 +3666,6 @@ A child is not a loophole. A child is a person the clause already addressed
 Addressed in 1868, not in a January stack of EOs
 A stack of EOs is not a convention
 
-[chorus]
-Birthright order
-Nill Bye on the citizenship EO
-Trump tried to edit a clause with a pen
-Barbara, June thirty, twenty-twenty-six: the pen lost
-Subject to the jurisdiction is a sentence, not a vibe
-Your order failed the Fourteenth
-
 [verse]
 Techno hats on a clause that does not take a pen
 Acid line under a day-one edit that needed two-thirds and the states
@@ -3820,6 +3679,10 @@ Moods do not write the Fourteenth
 Congress and the states did, the hard way
 The hard way is the point of an amendment
 Speed is the point of an EO. Speed lost, barbara
+
+[pre-chorus]
+Birthright order
+Nill Bye on the citizenship EO
 
 [chorus]
 Birthright order
@@ -3889,10 +3752,10 @@ yeah
 | 2 | `503` |
 | 3 | `fixed` |
 | 4 | `132` |
-| 5 | `180.0` |
+| 5 | `198.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3923,14 +3786,6 @@ A child is not a loophole. A child is a person the clause already addressed
 Addressed in 1868, not in a January stack of EOs
 A stack of EOs is not a convention
 
-[chorus]
-Birthright order
-Nill Bye on the citizenship EO
-Trump tried to edit a clause with a pen
-Barbara, June thirty, twenty-twenty-six: the pen lost
-Subject to the jurisdiction is a sentence, not a vibe
-Your order failed the Fourteenth
-
 [verse]
 Techno hats on a clause that does not take a pen
 Acid line under a day-one edit that needed two-thirds and the states
@@ -3944,6 +3799,10 @@ Moods do not write the Fourteenth
 Congress and the states did, the hard way
 The hard way is the point of an amendment
 Speed is the point of an EO. Speed lost, barbara
+
+[pre-chorus]
+Birthright order
+Nill Bye on the citizenship EO
 
 [chorus]
 Birthright order
@@ -4065,7 +3924,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/10-cook-firing`.
 
-US-safe rap 180s diss: Nill Bye cook-firing roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye cook-firing roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4084,14 +3943,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4099,14 +3958,18 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| 1 | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/10-cook-firing` |
 
 ```text
-[intro]
-dub wobble
-Nill Bye reading the Fed act
+[chorus]
+Cook firing
+Nill Bye on the first attempted governor-purge
+Trump reached for a Fed seat like it was a loyalty chair
+No president had tried that door since nineteen-thirteen
+The Court kept her in the chair pending the merits
+Your purge failed the independence
 
 [verse]
 The Federal Reserve Act built a board that does not sit at will
@@ -4122,14 +3985,6 @@ That is the point of the boring act, malfeasance
 You treated boring as a defect
 Boring is the feature that keeps a currency from becoming a souvenir
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Dubstep wobble on a for-cause that was not a cause
 Half-time snare under a loyalty chair the act does not sell
@@ -4144,14 +3999,6 @@ Scalps are for rallies. Rate seats are for data
 You wanted a scalp. The Court wanted the act, fedact
 The act already had a door with a lock
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Slaughter at the FTC is a different organic statute and a different holding, forcause
 This bar is the Fed, because the Fed is the one that prices the country
@@ -4165,14 +4012,6 @@ You tried to pick it with a presser, malfeasance
 Pressers are not for-cause
 The five-four already left her in the chair, fedact
 The chair already knew it was not a loyalty seat
-
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
 
 [verse]
 Keep the wobble, print the since-nineteen-thirteen
@@ -4208,7 +4047,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,…` |
-| 2 | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| 2 | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/10-cook-firing` |
@@ -4218,9 +4057,13 @@ dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-dub wobble
-Nill Bye reading the Fed act
+[chorus]
+Cook firing
+Nill Bye on the first attempted governor-purge
+Trump reached for a Fed seat like it was a loyalty chair
+No president had tried that door since nineteen-thirteen
+The Court kept her in the chair pending the merits
+Your purge failed the independence
 
 [verse]
 The Federal Reserve Act built a board that does not sit at will
@@ -4236,14 +4079,6 @@ That is the point of the boring act, malfeasance
 You treated boring as a defect
 Boring is the feature that keeps a currency from becoming a souvenir
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Dubstep wobble on a for-cause that was not a cause
 Half-time snare under a loyalty chair the act does not sell
@@ -4258,14 +4093,6 @@ Scalps are for rallies. Rate seats are for data
 You wanted a scalp. The Court wanted the act, fedact
 The act already had a door with a lock
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Slaughter at the FTC is a different organic statute and a different holding, forcause
 This bar is the Fed, because the Fed is the one that prices the country
@@ -4279,14 +4106,6 @@ You tried to pick it with a presser, malfeasance
 Pressers are not for-cause
 The five-four already left her in the chair, fedact
 The chair already knew it was not a loyalty seat
-
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
 
 [verse]
 Keep the wobble, print the since-nineteen-thirteen
@@ -4321,11 +4140,11 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune,…` |
-| 1 | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| 1 | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | 2 | `509` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `99.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -4341,9 +4160,13 @@ dubstep, wobble bass, half-time snare, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-dub wobble
-Nill Bye reading the Fed act
+[chorus]
+Cook firing
+Nill Bye on the first attempted governor-purge
+Trump reached for a Fed seat like it was a loyalty chair
+No president had tried that door since nineteen-thirteen
+The Court kept her in the chair pending the merits
+Your purge failed the independence
 
 [verse]
 The Federal Reserve Act built a board that does not sit at will
@@ -4359,14 +4182,6 @@ That is the point of the boring act, malfeasance
 You treated boring as a defect
 Boring is the feature that keeps a currency from becoming a souvenir
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Dubstep wobble on a for-cause that was not a cause
 Half-time snare under a loyalty chair the act does not sell
@@ -4381,14 +4196,6 @@ Scalps are for rallies. Rate seats are for data
 You wanted a scalp. The Court wanted the act, fedact
 The act already had a door with a lock
 
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
-
 [verse]
 Slaughter at the FTC is a different organic statute and a different holding, forcause
 This bar is the Fed, because the Fed is the one that prices the country
@@ -4402,14 +4209,6 @@ You tried to pick it with a presser, malfeasance
 Pressers are not for-cause
 The five-four already left her in the chair, fedact
 The chair already knew it was not a loyalty seat
-
-[chorus]
-Cook firing
-Nill Bye on the first attempted governor-purge
-Trump reached for a Fed seat like it was a loyalty chair
-No president had tried that door since nineteen-thirteen
-The Court kept her in the chair pending the merits
-Your purge failed the independence
 
 [verse]
 Keep the wobble, print the since-nineteen-thirteen
@@ -4500,7 +4299,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/11-inspector-purge`.
 
-US-safe rap 180s diss: Nill Bye inspector-purge roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye inspector-purge roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4519,14 +4318,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4587,6 +4386,8 @@ A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
 
+[breakdown - hats only]
+
 [verse]
 A watchdog that sits at will is a decoration
 Decorations do not audit a shop
@@ -4630,6 +4431,8 @@ Trump swept inspectors as if notice were optional weather
 A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
+
+[inst - pocket snare, hats only]
 
 [outro]
 claps rest
@@ -4702,6 +4505,8 @@ A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
 
+[breakdown - hats only]
+
 [verse]
 A watchdog that sits at will is a decoration
 Decorations do not audit a shop
@@ -4746,6 +4551,8 @@ A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
 
+[inst - pocket snare, hats only]
+
 [outro]
 claps rest
 IGA stands
@@ -4762,10 +4569,10 @@ yeah
 | 2 | `521` |
 | 3 | `fixed` |
 | 4 | `128` |
-| 5 | `180.0` |
+| 5 | `156.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4826,6 +4633,8 @@ A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
 
+[breakdown - hats only]
+
 [verse]
 A watchdog that sits at will is a decoration
 Decorations do not audit a shop
@@ -4869,6 +4678,8 @@ Trump swept inspectors as if notice were optional weather
 A district bench called the IGA violation obvious
 Obvious without a reinstatement is still a finding
 Your sweep failed the watchdog act
+
+[inst - pocket snare, hats only]
 
 [outro]
 claps rest
@@ -4938,7 +4749,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/12-law-firm-order`.
 
-US-safe rap 180s diss: Nill Bye law-firm-order roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye law-firm-order roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4957,14 +4768,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `207.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `207.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4995,14 +4806,6 @@ Starving is a method. A docket is a client choosing a lawyer
 Choosing a lawyer is the Sixth even when the client is a party you hate
 Hate is not a classification guide
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 UKG shuffle on a vendetta dressed as an EO
 Organ stab under a shop you tried to make radioactive
@@ -5016,6 +4819,10 @@ Chill is the science. The sticker is the furniture
 You wanted firms to flinch before a filing
 Flinch is a success metric only in a vendetta
 A vendetta is not a justice department
+
+[pre-chorus]
+Law firm order
+Nill Bye on the counsel-punishment memo
 
 [chorus]
 Law firm order
@@ -5039,14 +4846,6 @@ The holding still sits while the notice sits
 Sitting is what injunctions do
 The system already refused the unprecedented attack
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 Keep the shuffle, print the three amendments
 A counsel-punishment memo is a confession that you feared a filing
@@ -5060,14 +4859,6 @@ The Fifth already covers the process
 The Sixth already covers the despised client
 The injunction already mailed the trio
 The sticker already told on the vendetta
-
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
 
 [outro]
 garage hats sit
@@ -5109,14 +4900,6 @@ Starving is a method. A docket is a client choosing a lawyer
 Choosing a lawyer is the Sixth even when the client is a party you hate
 Hate is not a classification guide
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 UKG shuffle on a vendetta dressed as an EO
 Organ stab under a shop you tried to make radioactive
@@ -5130,6 +4913,10 @@ Chill is the science. The sticker is the furniture
 You wanted firms to flinch before a filing
 Flinch is a success metric only in a vendetta
 A vendetta is not a justice department
+
+[pre-chorus]
+Law firm order
+Nill Bye on the counsel-punishment memo
 
 [chorus]
 Law firm order
@@ -5153,14 +4940,6 @@ The holding still sits while the notice sits
 Sitting is what injunctions do
 The system already refused the unprecedented attack
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 Keep the shuffle, print the three amendments
 A counsel-punishment memo is a confession that you feared a filing
@@ -5174,14 +4953,6 @@ The Fifth already covers the process
 The Sixth already covers the despised client
 The injunction already mailed the trio
 The sticker already told on the vendetta
-
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
 
 [outro]
 garage hats sit
@@ -5198,10 +4969,10 @@ cut
 | 2 | `523` |
 | 3 | `fixed` |
 | 4 | `130` |
-| 5 | `180.0` |
+| 5 | `207.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5232,14 +5003,6 @@ Starving is a method. A docket is a client choosing a lawyer
 Choosing a lawyer is the Sixth even when the client is a party you hate
 Hate is not a classification guide
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 UKG shuffle on a vendetta dressed as an EO
 Organ stab under a shop you tried to make radioactive
@@ -5253,6 +5016,10 @@ Chill is the science. The sticker is the furniture
 You wanted firms to flinch before a filing
 Flinch is a success metric only in a vendetta
 A vendetta is not a justice department
+
+[pre-chorus]
+Law firm order
+Nill Bye on the counsel-punishment memo
 
 [chorus]
 Law firm order
@@ -5276,14 +5043,6 @@ The holding still sits while the notice sits
 Sitting is what injunctions do
 The system already refused the unprecedented attack
 
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
-
 [verse]
 Keep the shuffle, print the three amendments
 A counsel-punishment memo is a confession that you feared a filing
@@ -5297,14 +5056,6 @@ The Fifth already covers the process
 The Sixth already covers the despised client
 The injunction already mailed the trio
 The sticker already told on the vendetta
-
-[chorus]
-Law firm order
-Nill Bye on the counsel-punishment memo
-Trump aimed an EO at a shop for the clients it had dared
-Howell called it an unprecedented attack on the system
-The First, the Fifth, and the Sixth do not sit at will
-Your retaliation failed the counsel
 
 [outro]
 garage hats sit
@@ -5373,7 +5124,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/13-visa-ticket`.
 
-US-safe rap 180s diss: Nill Bye visa-ticket roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye visa-ticket roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5392,14 +5143,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `107.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `107.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5407,15 +5158,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| 1 | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/13-visa-ticket` |
 
 ```text
-[intro]
-hardstyle reverse
-Nill Bye pricing H-1B
-
 [verse]
 Same Oval photo as the million-dollar SKU, a two-product launch
 A hundred thousand on an H-1B as if a fee were a statute, hundredk
@@ -5460,6 +5207,8 @@ A gate that hears a wire is a wealth test, not a labor market
 Congress writes the categories. You wrote a price tag
 Your ticket failed the organic visa
 
+[inst - pocket snare, hats only]
+
 [verse]
 H-1B already had a fight worth having: wages, abuse, replacement
 That fight lives in a statute and a DOL file, not a price tag
@@ -5474,7 +5223,7 @@ It is a customer segment
 Customer segments belong in a catalog
 Catalogs are not organic visa acts
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5496,7 +5245,7 @@ Labor talk already bounced off the hello
 Hello is a price
 A price is not a statute, h1bfee
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5517,7 +5266,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,…` |
-| 2 | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| 2 | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/13-visa-ticket` |
@@ -5527,10 +5276,6 @@ hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-hardstyle reverse
-Nill Bye pricing H-1B
-
 [verse]
 Same Oval photo as the million-dollar SKU, a two-product launch
 A hundred thousand on an H-1B as if a fee were a statute, hundredk
@@ -5575,6 +5320,8 @@ A gate that hears a wire is a wealth test, not a labor market
 Congress writes the categories. You wrote a price tag
 Your ticket failed the organic visa
 
+[inst - pocket snare, hats only]
+
 [verse]
 H-1B already had a fight worth having: wages, abuse, replacement
 That fight lives in a statute and a DOL file, not a price tag
@@ -5589,7 +5336,7 @@ It is a customer segment
 Customer segments belong in a catalog
 Catalogs are not organic visa acts
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5611,7 +5358,7 @@ Labor talk already bounced off the hello
 Hello is a price
 A price is not a statute, h1bfee
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5631,14 +5378,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune,…` |
-| 1 | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| 1 | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | 2 | `541` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `107.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5651,10 +5398,6 @@ hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune, 
 ```
 
 ```text
-[intro]
-hardstyle reverse
-Nill Bye pricing H-1B
-
 [verse]
 Same Oval photo as the million-dollar SKU, a two-product launch
 A hundred thousand on an H-1B as if a fee were a statute, hundredk
@@ -5699,6 +5442,8 @@ A gate that hears a wire is a wealth test, not a labor market
 Congress writes the categories. You wrote a price tag
 Your ticket failed the organic visa
 
+[inst - pocket snare, hats only]
+
 [verse]
 H-1B already had a fight worth having: wages, abuse, replacement
 That fight lives in a statute and a DOL file, not a price tag
@@ -5713,7 +5458,7 @@ It is a customer segment
 Customer segments belong in a catalog
 Catalogs are not organic visa acts
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5735,7 +5480,7 @@ Labor talk already bounced off the hello
 Hello is a price
 A price is not a statute, h1bfee
 
-[chorus]
+[chorus - half-time drums]
 Visa ticket
 Nill Bye on the hundred-thousand fee
 Trump SKU'd a work status as a hundred-k gate
@@ -5811,7 +5556,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/pardon-flood/14-shadow-docket`.
 
-US-safe rap 180s diss: Nill Bye shadow-docket roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye shadow-docket roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5830,14 +5575,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5898,6 +5643,8 @@ Governing by application is a method, not a mood
 Twenty-nine grants by early twenty-twenty-six is a dataset
 Your pile failed the ordinary calendar
 
+[inst - pocket snare, hats only]
+
 [verse]
 A republic can have emergencies. It cannot have only emergencies
 Only is the tell that the pile is a strategy
@@ -5912,14 +5659,6 @@ Waiting lines are how other parties get a reason
 Reasons are what make a holding a holding, unsignedstay
 A grant without a reason is a weather system
 
-[chorus]
-Shadow docket
-Nill Bye on the emergency pile
-Trump filed a record stack of stay-asks
-Governing by application is a method, not a mood
-Twenty-nine grants by early twenty-twenty-six is a dataset
-Your pile failed the ordinary calendar
-
 [verse]
 Keep the pads, print the twenty-nine
 A dataset of stays is not a vibe. It is a governing style
@@ -5931,6 +5670,8 @@ The pile already told on the habit, nightlight
 The habit already wore the word emergency out
 Worn-out is a problem for a word you still need on a real day
 Real days still happen
+
+[bridge]
 You spent the word on a filing habit, unsignedstay
 The habit already met the ordinary calendar and dodged it
 
@@ -6012,6 +5753,8 @@ Governing by application is a method, not a mood
 Twenty-nine grants by early twenty-twenty-six is a dataset
 Your pile failed the ordinary calendar
 
+[inst - pocket snare, hats only]
+
 [verse]
 A republic can have emergencies. It cannot have only emergencies
 Only is the tell that the pile is a strategy
@@ -6026,14 +5769,6 @@ Waiting lines are how other parties get a reason
 Reasons are what make a holding a holding, unsignedstay
 A grant without a reason is a weather system
 
-[chorus]
-Shadow docket
-Nill Bye on the emergency pile
-Trump filed a record stack of stay-asks
-Governing by application is a method, not a mood
-Twenty-nine grants by early twenty-twenty-six is a dataset
-Your pile failed the ordinary calendar
-
 [verse]
 Keep the pads, print the twenty-nine
 A dataset of stays is not a vibe. It is a governing style
@@ -6045,6 +5780,8 @@ The pile already told on the habit, nightlight
 The habit already wore the word emergency out
 Worn-out is a problem for a word you still need on a real day
 Real days still happen
+
+[bridge]
 You spent the word on a filing habit, unsignedstay
 The habit already met the ordinary calendar and dodged it
 
@@ -6071,10 +5808,10 @@ cut
 | 2 | `547` |
 | 3 | `fixed` |
 | 4 | `138` |
-| 5 | `180.0` |
+| 5 | `167.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6135,6 +5872,8 @@ Governing by application is a method, not a mood
 Twenty-nine grants by early twenty-twenty-six is a dataset
 Your pile failed the ordinary calendar
 
+[inst - pocket snare, hats only]
+
 [verse]
 A republic can have emergencies. It cannot have only emergencies
 Only is the tell that the pile is a strategy
@@ -6149,14 +5888,6 @@ Waiting lines are how other parties get a reason
 Reasons are what make a holding a holding, unsignedstay
 A grant without a reason is a weather system
 
-[chorus]
-Shadow docket
-Nill Bye on the emergency pile
-Trump filed a record stack of stay-asks
-Governing by application is a method, not a mood
-Twenty-nine grants by early twenty-twenty-six is a dataset
-Your pile failed the ordinary calendar
-
 [verse]
 Keep the pads, print the twenty-nine
 A dataset of stays is not a vibe. It is a governing style
@@ -6168,6 +5899,8 @@ The pile already told on the habit, nightlight
 The habit already wore the word emergency out
 Worn-out is a problem for a word you still need on a real day
 Real days still happen
+
+[bridge]
 You spent the word on a filing habit, unsignedstay
 The habit already met the ordinary calendar and dodged it
 
@@ -6246,7 +5979,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/pardon-flood/15-immunity-hymn`.
 
-US-safe rap 180s diss: Nill Bye immunity-hymn roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye immunity-hymn roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -6265,14 +5998,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -6280,16 +6013,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| 1 | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` |
 
 ```text
-[intro]
-festival trap 808
-festival crowd
-Nill Bye reading official acts
-
 [verse]
 July twenty-twenty-four, Trump v. United States
 A former president is not a king. He is also not a regular defendant on official acts
@@ -6303,14 +6031,6 @@ The hymn begins when you hum the hard line over a dining room, coreacts
 A dining room is not a core act because you sat in it on January six
 Sitting is not speaking as the executive. Sitting is sitting
 The structure still has to sort the minutes. That is the homework
-
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
 
 [verse]
 Festival trap 808 on a permission structure
@@ -6326,14 +6046,6 @@ You want the hymn to cover the dining room, the tape, the find-request
 Those are not a single official blob
 Blobs are how a hymn gets lazy
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 A republic that cannot sort official from unofficial will eat itself
 Sorting is the whole point of the structure you received
@@ -6348,14 +6060,6 @@ You sold the get as the ask because the ask photographs better
 Better photographs are not a syllabus
 The syllabus already built the three rooms
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 Keep the 808, print the unofficial
 A closer that wants a halo is a closer that fears a sort
@@ -6369,6 +6073,10 @@ The Court already handed you a structure, not a crown, unofficial
 Crowns are for kings. You are not one
 The hymn already told on the fear of a sort
 The unofficial already has a dock
+
+[pre-chorus]
+Immunity hymn
+Nill Bye on the official-act halo
 
 [chorus]
 Immunity hymn
@@ -6391,7 +6099,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15…` |
-| 2 | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| 2 | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/pardon-flood/15-immunity-hymn` |
@@ -6401,11 +6109,6 @@ festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 150
 ```
 
 ```text
-[intro]
-festival trap 808
-festival crowd
-Nill Bye reading official acts
-
 [verse]
 July twenty-twenty-four, Trump v. United States
 A former president is not a king. He is also not a regular defendant on official acts
@@ -6419,14 +6122,6 @@ The hymn begins when you hum the hard line over a dining room, coreacts
 A dining room is not a core act because you sat in it on January six
 Sitting is not speaking as the executive. Sitting is sitting
 The structure still has to sort the minutes. That is the homework
-
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
 
 [verse]
 Festival trap 808 on a permission structure
@@ -6442,14 +6137,6 @@ You want the hymn to cover the dining room, the tape, the find-request
 Those are not a single official blob
 Blobs are how a hymn gets lazy
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 A republic that cannot sort official from unofficial will eat itself
 Sorting is the whole point of the structure you received
@@ -6464,14 +6151,6 @@ You sold the get as the ask because the ask photographs better
 Better photographs are not a syllabus
 The syllabus already built the three rooms
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 Keep the 808, print the unofficial
 A closer that wants a halo is a closer that fears a sort
@@ -6485,6 +6164,10 @@ The Court already handed you a structure, not a crown, unofficial
 Crowns are for kings. You are not one
 The hymn already told on the fear of a sort
 The unofficial already has a dock
+
+[pre-chorus]
+Immunity hymn
+Nill Bye on the official-act halo
 
 [chorus]
 Immunity hymn
@@ -6506,14 +6189,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 15…` |
-| 1 | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| 1 | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 | 2 | `557` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `210.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6526,11 +6209,6 @@ festival trap, 808 bass, crowd-bed, male rap vocals, dry booth, no autotune, 150
 ```
 
 ```text
-[intro]
-festival trap 808
-festival crowd
-Nill Bye reading official acts
-
 [verse]
 July twenty-twenty-four, Trump v. United States
 A former president is not a king. He is also not a regular defendant on official acts
@@ -6544,14 +6222,6 @@ The hymn begins when you hum the hard line over a dining room, coreacts
 A dining room is not a core act because you sat in it on January six
 Sitting is not speaking as the executive. Sitting is sitting
 The structure still has to sort the minutes. That is the homework
-
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
 
 [verse]
 Festival trap 808 on a permission structure
@@ -6567,14 +6237,6 @@ You want the hymn to cover the dining room, the tape, the find-request
 Those are not a single official blob
 Blobs are how a hymn gets lazy
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 A republic that cannot sort official from unofficial will eat itself
 Sorting is the whole point of the structure you received
@@ -6589,14 +6251,6 @@ You sold the get as the ask because the ask photographs better
 Better photographs are not a syllabus
 The syllabus already built the three rooms
 
-[chorus]
-Immunity hymn
-Nill Bye on the official-act halo
-Trump asked a Court for a permission structure
-Unofficial still sits in the dock. Official got a hymn
-A halo is not a finding that the dining room was a duty
-Your hymn failed the unofficial
-
 [verse]
 Keep the 808, print the unofficial
 A closer that wants a halo is a closer that fears a sort
@@ -6610,6 +6264,10 @@ The Court already handed you a structure, not a crown, unofficial
 Crowns are for kings. You are not one
 The hymn already told on the fear of a sort
 The unofficial already has a dock
+
+[pre-chorus]
+Immunity hymn
+Nill Bye on the official-act halo
 
 [chorus]
 Immunity hymn
@@ -6756,7 +6414,7 @@ square album cover, graphic print, flooded document stack, gold stamp, dark club
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
+**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -6793,16 +6451,20 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `custom` |
-| 1 | `square album cover, graphic print, flooded document stack, gold stamp, dark clu…` |
+| 0 | `square album cover, graphic print, flooded document stack, gold stamp, dark clu…` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `audio/albums/nill-bye/pardon-flood/cover` |
+| 6 | `stills/instagram-square` |
 
 ```text
 square album cover, graphic print, flooded document stack, gold stamp, dark club wash, fictional act Nill Bye, album Pardon Flood, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
+
+```text
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -6822,6 +6484,29 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Format / platform** (`EZImageFormat`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Instagram · square (1024×1024)` |
+| 1 | `none` |
+| 2 | `1024` |
+| 3 | `1024` |
+| 4 | `1` |
+| 5 | `Match input` |
+
+**Upscale still** (`EZImageUpscale`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `none` |
+
+**Describe image** (`EZImageDescribe`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -6900,7 +6585,23 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Song Duration | `72.0` |
+| Song Duration | `120.0` |
+| Song Duration | `176.0` |
+| Song Duration | `79.0` |
+| Song Duration | `131.0` |
+| Song Duration | `188.0` |
+| Song Duration | `89.0` |
+| Song Duration | `144.0` |
+| Song Duration | `198.0` |
+| Song Duration | `99.0` |
+| Song Duration | `156.0` |
+| Song Duration | `207.0` |
+| Song Duration | `107.0` |
+| Song Duration | `167.0` |
+| Song Duration | `210.0` |
 
 #### `control_after_generate`
 
@@ -6927,7 +6628,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6936,13 +6637,29 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Latent length (seconds) | `72.0` |
+| Latent length (seconds) | `120.0` |
+| Latent length (seconds) | `176.0` |
+| Latent length (seconds) | `79.0` |
+| Latent length (seconds) | `131.0` |
+| Latent length (seconds) | `188.0` |
+| Latent length (seconds) | `89.0` |
+| Latent length (seconds) | `144.0` |
+| Latent length (seconds) | `198.0` |
+| Latent length (seconds) | `99.0` |
+| Latent length (seconds) | `156.0` |
+| Latent length (seconds) | `207.0` |
+| Latent length (seconds) | `107.0` |
+| Latent length (seconds) | `167.0` |
+| Latent length (seconds) | `210.0` |
 
 #### `batch_size`
 
@@ -6985,19 +6702,19 @@ Sectioned lyrics.
 | --- | --- |
 | Rap lyrics | `[spoken word] January twenty, twenty-twenty-five A proclamation Full, complete,…` |
 | Rap lyrics | `[intro] rage 808 Nill Bye reading IEEPA [verse] February twenty, twenty-twenty-…` |
-| Rap lyrics | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
-| Rap lyrics | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| Rap lyrics | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
+| Rap lyrics | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | Rap lyrics | `[intro] house four Nill Bye measuring wings [verse] October twenty, twenty-twen…` |
 | Rap lyrics | `[intro] dnb amen Nill Bye reading the wave [verse] CNN sat with hundreds of pag…` |
 | Rap lyrics | `[intro] jersey chops Nill Bye reading withholding [verse] March fifteen, twenty…` |
-| Rap lyrics | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| Rap lyrics | `[verse] The Center's organic statute names a president who was killed in office…` |
 | Rap lyrics | `[intro] techno dry Nill Bye reading the Fourteenth [verse] Day one, an order ai…` |
-| Rap lyrics | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| Rap lyrics | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | Rap lyrics | `[intro] electro analog Nill Bye reading the IGA [verse] Inspectors general are …` |
 | Rap lyrics | `[intro] garage shuffle Nill Bye reading counsel EOs [verse] A republic that pun…` |
-| Rap lyrics | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| Rap lyrics | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | Rap lyrics | `[intro] trance gates Nill Bye counting applications [verse] More than thirty em…` |
-| Rap lyrics | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| Rap lyrics | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 
 #### `enhance`
 
@@ -7097,19 +6814,19 @@ Sectioned lyrics.
 | --- | --- |
 | ez_rap_prompt | `[spoken word] January twenty, twenty-twenty-five A proclamation Full, complete,…` |
 | ez_rap_prompt | `[intro] rage 808 Nill Bye reading IEEPA [verse] February twenty, twenty-twenty-…` |
-| ez_rap_prompt | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
-| ez_rap_prompt | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| ez_rap_prompt | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
+| ez_rap_prompt | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | ez_rap_prompt | `[intro] house four Nill Bye measuring wings [verse] October twenty, twenty-twen…` |
 | ez_rap_prompt | `[intro] dnb amen Nill Bye reading the wave [verse] CNN sat with hundreds of pag…` |
 | ez_rap_prompt | `[intro] jersey chops Nill Bye reading withholding [verse] March fifteen, twenty…` |
-| ez_rap_prompt | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| ez_rap_prompt | `[verse] The Center's organic statute names a president who was killed in office…` |
 | ez_rap_prompt | `[intro] techno dry Nill Bye reading the Fourteenth [verse] Day one, an order ai…` |
-| ez_rap_prompt | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| ez_rap_prompt | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | ez_rap_prompt | `[intro] electro analog Nill Bye reading the IGA [verse] Inspectors general are …` |
 | ez_rap_prompt | `[intro] garage shuffle Nill Bye reading counsel EOs [verse] A republic that pun…` |
-| ez_rap_prompt | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| ez_rap_prompt | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | ez_rap_prompt | `[intro] trance gates Nill Bye counting applications [verse] More than thirty em…` |
-| ez_rap_prompt | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| ez_rap_prompt | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 
 #### `enhance`
 
@@ -7218,19 +6935,19 @@ Sectioned lyrics or [inst] cues.
 | --- | --- |
 | ACE tags + lyrics | `[spoken word] January twenty, twenty-twenty-five A proclamation Full, complete,…` |
 | ACE tags + lyrics | `[intro] rage 808 Nill Bye reading IEEPA [verse] February twenty, twenty-twenty-…` |
-| ACE tags + lyrics | `[intro] phonk bell Nill Bye pricing residency [verse] September nineteen, twent…` |
-| ACE tags + lyrics | `[intro] trap pads Nill Bye reading OGE [verse] Three days before the oath, a so…` |
+| ACE tags + lyrics | `[verse] September nineteen, twenty-twenty-five, Oval photo Two orders: a gold c…` |
+| ACE tags + lyrics | `[verse] Three days before the oath, a social post as a launch CIC Digital and F…` |
 | ACE tags + lyrics | `[intro] house four Nill Bye measuring wings [verse] October twenty, twenty-twen…` |
 | ACE tags + lyrics | `[intro] dnb amen Nill Bye reading the wave [verse] CNN sat with hundreds of pag…` |
 | ACE tags + lyrics | `[intro] jersey chops Nill Bye reading withholding [verse] March fifteen, twenty…` |
-| ACE tags + lyrics | `[intro] future saw Nill Bye reading organic statutes [verse] The Center's organ…` |
+| ACE tags + lyrics | `[verse] The Center's organic statute names a president who was killed in office…` |
 | ACE tags + lyrics | `[intro] techno dry Nill Bye reading the Fourteenth [verse] Day one, an order ai…` |
-| ACE tags + lyrics | `[intro] dub wobble Nill Bye reading the Fed act [verse] The Federal Reserve Act…` |
+| ACE tags + lyrics | `[chorus] Cook firing Nill Bye on the first attempted governor-purge Trump reach…` |
 | ACE tags + lyrics | `[intro] electro analog Nill Bye reading the IGA [verse] Inspectors general are …` |
 | ACE tags + lyrics | `[intro] garage shuffle Nill Bye reading counsel EOs [verse] A republic that pun…` |
-| ACE tags + lyrics | `[intro] hardstyle reverse Nill Bye pricing H-1B [verse] Same Oval photo as the …` |
+| ACE tags + lyrics | `[verse] Same Oval photo as the million-dollar SKU, a two-product launch A hundr…` |
 | ACE tags + lyrics | `[intro] trance gates Nill Bye counting applications [verse] More than thirty em…` |
-| ACE tags + lyrics | `[intro] festival trap 808 festival crowd Nill Bye reading official acts [verse]…` |
+| ACE tags + lyrics | `[verse] July twenty-twenty-four, Trump v. United States A former president is n…` |
 
 #### `seed`
 
@@ -7311,7 +7028,23 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `72.0` |
+| ACE tags + lyrics | `120.0` |
+| ACE tags + lyrics | `176.0` |
+| ACE tags + lyrics | `79.0` |
+| ACE tags + lyrics | `131.0` |
+| ACE tags + lyrics | `188.0` |
+| ACE tags + lyrics | `89.0` |
+| ACE tags + lyrics | `144.0` |
+| ACE tags + lyrics | `198.0` |
+| ACE tags + lyrics | `99.0` |
+| ACE tags + lyrics | `156.0` |
+| ACE tags + lyrics | `207.0` |
+| ACE tags + lyrics | `107.0` |
+| ACE tags + lyrics | `167.0` |
+| ACE tags + lyrics | `210.0` |
 
 #### `timesignature`
 
@@ -7319,7 +7052,7 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
 **This graph (all 15 instances):** `4`
 
@@ -7404,9 +7137,25 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
-**This graph (all 15 instances):** `C minor`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `F minor` |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `F minor` |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
 
 **Other choices**
 
@@ -7429,7 +7178,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -7818,21 +7567,21 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-pardon-flood US-safe rap **180 s diss** take: **pardon flood**. Fictional…` |
-| Operator note | `## 02-ieepa-wreck US-safe rap **180 s diss** take: **ieepa wreck**. Fictional M…` |
-| Operator note | `## 03-gold-card US-safe rap **180 s diss** take: **gold card**. Fictional MC **…` |
-| Operator note | `## 04-memecoin-tab US-safe rap **180 s diss** take: **memecoin tab**. Fictional…` |
-| Operator note | `## 05-east-wing-wreck US-safe rap **180 s diss** take: **east wing wreck**. Fic…` |
-| Operator note | `## 06-metro-surge US-safe rap **180 s diss** take: **metro surge**. Fictional M…` |
-| Operator note | `## 07-due-process US-safe rap **180 s diss** take: **due process**. Fictional M…` |
-| Operator note | `## 08-kennedy-plaque US-safe rap **180 s diss** take: **kennedy plaque**. Ficti…` |
-| Operator note | `## 09-birthright-order US-safe rap **180 s diss** take: **birthright order**. F…` |
-| Operator note | `## 10-cook-firing US-safe rap **180 s diss** take: **cook firing**. Fictional M…` |
-| Operator note | `## 11-inspector-purge US-safe rap **180 s diss** take: **inspector purge**. Fic…` |
-| Operator note | `## 12-law-firm-order US-safe rap **180 s diss** take: **law firm order**. Ficti…` |
-| Operator note | `## 13-visa-ticket US-safe rap **180 s diss** take: **visa ticket**. Fictional M…` |
-| Operator note | `## 14-shadow-docket US-safe rap **180 s diss** take: **shadow docket**. Fiction…` |
-| Operator note | `## 15-immunity-hymn US-safe rap **180 s diss** take: **immunity hymn**. Fiction…` |
+| Operator note | `## 01-pardon-flood US-safe rap **72 s diss** take: **pardon flood**. Fictional …` |
+| Operator note | `## 02-ieepa-wreck US-safe rap **120 s diss** take: **ieepa wreck**. Fictional M…` |
+| Operator note | `## 03-gold-card US-safe rap **176 s diss** take: **gold card**. Fictional MC **…` |
+| Operator note | `## 04-memecoin-tab US-safe rap **79 s diss** take: **memecoin tab**. Fictional …` |
+| Operator note | `## 05-east-wing-wreck US-safe rap **131 s diss** take: **east wing wreck**. Fic…` |
+| Operator note | `## 06-metro-surge US-safe rap **188 s diss** take: **metro surge**. Fictional M…` |
+| Operator note | `## 07-due-process US-safe rap **89 s diss** take: **due process**. Fictional MC…` |
+| Operator note | `## 08-kennedy-plaque US-safe rap **144 s diss** take: **kennedy plaque**. Ficti…` |
+| Operator note | `## 09-birthright-order US-safe rap **198 s diss** take: **birthright order**. F…` |
+| Operator note | `## 10-cook-firing US-safe rap **99 s diss** take: **cook firing**. Fictional MC…` |
+| Operator note | `## 11-inspector-purge US-safe rap **156 s diss** take: **inspector purge**. Fic…` |
+| Operator note | `## 12-law-firm-order US-safe rap **207 s diss** take: **law firm order**. Ficti…` |
+| Operator note | `## 13-visa-ticket US-safe rap **107 s diss** take: **visa ticket**. Fictional M…` |
+| Operator note | `## 14-shadow-docket US-safe rap **167 s diss** take: **shadow docket**. Fiction…` |
+| Operator note | `## 15-immunity-hymn US-safe rap **210 s diss** take: **immunity hymn**. Fiction…` |
 | Operator note | `## audio/albums/nill-bye/pardon-flood/album Album **Pardon Flood** by **Nill By…` |
 | Operator note | `## audio/albums/nill-bye/pardon-flood/cover Album cover for **Nill Bye — Pardon…` |
 
@@ -8381,7 +8130,11 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `custom`
+**This graph:** `square album cover, graphic print, flooded document stack, gold stamp, dark club wash, fictional act Nill Bye, album Pardon Flood, no text, no letters, no logos, no living person likeness, no celebri…`
+
+```text
+square album cover, graphic print, flooded document stack, gold stamp, dark club wash, fictional act Nill Bye, album Pardon Flood, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
 
 #### `prompt`
 
@@ -8391,10 +8144,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `square album cover, graphic print, flooded document stack, gold stamp, dark club wash, fictional act Nill Bye, album Pardon Flood, no text, no letters, no logos, no living person likeness, no celebri…`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-square album cover, graphic print, flooded document stack, gold stamp, dark club wash, fictional act Nill Bye, album Pardon Flood, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 #### `enhance`
@@ -8762,7 +8515,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `audio/albums/nill-bye/pardon-flood/cover`
+**This graph:** `stills/instagram-square`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -8818,3 +8571,252 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZImageFormat` — Format / platform
+
+Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
+
+!!! warning "Lab notes"
+
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
+| `width` | out | `INT` | Latent width (÷16). |
+| `height` | out | `INT` | Latent height (÷16). |
+| `batch` | out | `INT` | Batch size. |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+
+**This graph:** `Instagram · square (1024×1024)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to ÷16. |
+| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
+| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
+| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
+| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
+| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
+| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
+| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
+| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
+| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
+| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
+| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
+| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
+| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
+| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
+| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
+| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
+| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
+| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
+| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
+| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
+| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
+| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
+| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
+| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
+| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
+| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
+| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
+| `Instagram · profile (768×768)` | 768×768. ig_profile. |
+| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
+| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
+| `X · post (1280×720)` | 1280×720. x_post. |
+| `X · header (1536×512)` | 1536×512. x_header. |
+| `X · card (1216×640)` | 1216×640. x_card. |
+| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
+| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
+| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
+| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
+| `Pinterest · pin (768×1152)` | 768×1152. pin. |
+| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
+| `Facebook · post (1216×640)` | 1216×640. fb_post. |
+| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
+| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
+| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
+| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
+| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
+| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
+| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
+| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
+| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
+| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
+| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
+| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
+| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
+| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
+| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
+| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
+| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
+| `Open Graph / blog (1216×640)` | 1216×640. og. |
+| `Email · header (1216×640)` | 1216×640. email_header. |
+| `Substack · hero (1216×640)` | 1216×640. substack. |
+| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
+| `Channel · banner (1536×512)` | 1536×512. banner. |
+| `End-card / CTA (1280×720)` | 1280×720. endcard. |
+| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
+| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
+| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
+| `Shorts still (432×768)` | 432×768. shorts_still. |
+| `Hook still (432×768)` | 432×768. hook_still. |
+| `Product packshot (1024×1024)` | 1024×1024. packshot. |
+| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
+| `Desk setup (1280×720)` | 1280×720. desk_setup. |
+| `Coming soon (1280×720)` | 1280×720. coming_soon. |
+| `Slide title (1280×720)` | 1280×720. slide_title. |
+| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
+| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
+| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
+| `Print poster (768×1152)` | 768×1152. poster. |
+
+#### `look`
+
+Type `COMBO`. Range / default: none.
+
+Optional Cinema Rack starter.
+
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Style + Prompt own look. |
+| `Noir interrogation` | rec_noir_push |
+| `Locked portrait` | rec_locked_portrait |
+| `Golden wide` | rec_golden_wide |
+| `Handheld documentary` | rec_handheld_doc |
+| `Vertical hook` | rec_vertical_hook |
+| `Rain track` | rec_rain_track |
+| `Product orbit` | rec_orbit_product |
+| `Drone reveal` | rec_drone_reveal |
+| `Night bible` | rec_identity_night |
+| `Western noon` | rec_western_noon |
+| `Slow push to eyes` | rec_slow_push_eyes |
+| `FPV dive` | rec_fpv_dive |
+| `Match-cut AV` | rec_match_cut_ltx |
+| `Fog push` | rec_fog_push |
+| `Body-cam sprint` | rec_bodycam_sprint |
+| `Bounce beauty` | rec_romcom_beauty |
+| `Overcast wide` | rec_overcast_wide |
+| `Macro pour` | rec_macro_pour |
+| `Crane reveal` | rec_crane_reveal |
+| `Split diopter two-plane` | rec_split_diopter |
+| `Night practical push` | rec_night_practical_push |
+| `Hyperlapse path` | rec_hyperlapse |
+| `Talking MCU` | rec_talking_mcu |
+| `Anamorphic-class night` | rec_anamorphic_night |
+
+#### `width`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `height`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1–4.
+
+How many stills in one Run.
+
+**How it affects generation:** Large canvases stay at 1.
+
+**This graph:** `1`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

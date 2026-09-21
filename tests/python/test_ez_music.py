@@ -396,15 +396,21 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         "progress": 7,
         "progress-club": 8,
     }
+    albums: dict[str, list] = {}
     for ex in DISS_EXAMPLES:
-        assert ex["duration"] == DISS_DURATION_S
+        assert 64.0 <= float(ex["duration"]) <= 210.0
+        assert ex["form_id"]
+        assert ex["meter"] in {"2", "3", "4", "6"}
+        assert ex["keyscale"]
+        if ex["series"] in {"trap-edm", "civic-club", "federal-club", "progress-club"}:
+            assert ex["meter"] == "4", ex["stem"]
         lyrics = ex["lyrics"]
         assert "[verse]" in lyrics
-        assert "[chorus]" in lyrics
+        assert "[chorus]" in lyrics or "[chorus -" in lyrics
         assert "[outro]" in lyrics
-        assert lyrics.count("[verse]") >= 3
-        assert lyrics.count("[chorus]") >= 3
+        assert lyrics.count("[verse]") >= 1
         assert "Nill Bye" in lyrics
+        albums.setdefault(str(ex["album_slug"]), []).append(ex)
         if ex["series"] in CIVIC_SERIES:
             assert "Abbott" in lyrics
             assert "Rake" not in lyrics
@@ -494,6 +500,12 @@ def test_nill_bye_diss_examples_are_original_180s() -> None:
         7: 15,
         8: 15,
     }
+    for slug, rows in albums.items():
+        assert len({row["form_id"] for row in rows}) >= 8, slug
+        assert len({row["duration"] for row in rows}) >= 8, slug
+        assert len({row["keyscale"] for row in rows}) >= 4, slug
+        forms = [str(row["form_id"]) for row in rows]
+        assert all(forms[i] != forms[i + 1] for i in range(len(forms) - 1)), slug
     assert spoken_titles == SPOKEN_WORD_TITLES
     assert any(seed != 42 for seed in seeds)
     assert tuple(ex["title"] for ex in DISS_EXAMPLES) == EXPECTED_NILL_BYE_TITLES
@@ -816,17 +828,17 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
     seeds: list[int] = []
     bpms: list[int] = []
     signatures: list[tuple[str, ...]] = []
-    triple_drops = 0
-    phase2_triple = 0
-    phase3_triple = 0
-    phase4_triple = 0
     phase4_core = 0
     pedal_rows = 0
     treat_titles: list[str] = []
-    drop_bodies: list[str] = []
-    bridge_bodies: list[str] = []
+    first_roles: list[str] = []
+    plan_ok = {"half-time", "filter down", "pluck", "bell"}
     for ex in EDM_EXAMPLES:
-        assert ex["duration"] == EDM_DURATION_S
+        assert 64.0 <= float(ex["duration"]) <= 210.0
+        assert ex["meter"] == "4"
+        assert ex["form_id"]
+        assert ex["keyscale"]
+        assert "grid " not in ex["lyrics"]
         assert ex["series"] == "drive-through"
         lyrics = ex["lyrics"]
         tags_low = ex["tags"].lower()
@@ -839,17 +851,30 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert "techno" not in tags_low, ex["stem"]
         assert "techno" not in lyrics_low, ex["stem"]
         for needle in FORBIDDEN_SCORE_NEEDLES:
+            if needle in plan_ok:
+                assert needle not in tags_low, (ex["stem"], needle)
+                continue
+            if needle == "mute":
+                assert "mute" not in lyrics_low.replace("muted", ""), (ex["stem"], needle)
+                continue
             assert needle not in lyrics_low, (ex["stem"], needle)
             if needle in ("drive-through", "drive through"):
                 continue
             assert needle not in tags_low, (ex["stem"], needle)
         for needle in HIGH_PITCH_NEEDLES:
             assert needle not in tags_low, (ex["stem"], needle)
+            if needle in {"pluck", "bell"}:
+                continue
             assert needle not in lyrics_low, (ex["stem"], needle)
         for needle in BANNED_STYLE_NEEDLES:
             assert needle not in tags_low, (ex["stem"], needle)
             assert needle not in lyrics_low, (ex["stem"], needle)
         for needle in QUIET_NEEDLES:
+            if needle in {"half-time", "filter down"}:
+                continue
+            if needle == "mute":
+                assert "mute" not in lyrics_low.replace("muted", ""), (ex["stem"], needle)
+                continue
             assert needle not in lyrics_low, (ex["stem"], needle)
         for needle in BED_CUT_NEEDLES:
             assert needle not in lyrics_low, (ex["stem"], needle)
@@ -864,15 +889,22 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
         assert ex["layout"] in EDM_LAYOUTS, ex["stem"]
         labels = _score_labels(lyrics)
         assert labels[-1] == "outro"
-        assert labels[0] == "drop", (ex["stem"], labels)
+        assert len(set(labels)) >= 2, (ex["stem"], labels)
+        if ex["form_id"] == "e_drop_first":
+            assert labels[0] == "drop", (ex["stem"], labels)
+        first_roles.append(labels[0])
         signatures.append(labels)
         sections = _section_blocks(lyrics)
-        drop_at = next(i for i, block in enumerate(sections) if "drop" in block.lower())
-        assert drop_at == 0, (ex["stem"], drop_at, labels)
         drops = _drop_blocks(lyrics)
-        assert len(drops) >= 2, (ex["stem"], len(drops))
-        if len(drops) >= 3:
-            triple_drops += 1
+        assert len(drops) >= 1, (ex["stem"], len(drops))
+        for block in sections:
+            role = _score_labels(block)[0]
+            low_block = block.lower()
+            if role != "breakdown":
+                assert "pluck" not in low_block, (ex["stem"], block)
+                assert "bell" not in low_block, (ex["stem"], block)
+            if role not in {"intro", "breakdown", "outro"}:
+                assert "filter down" not in low_block, (ex["stem"], block)
         for block in drops:
             low = block.lower()
             assert any(needle in low for needle in DROP_WEIGHT_NEEDLES), (
@@ -880,7 +912,6 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                 block,
             )
             assert _hits_needles(block, WARP_NEEDLES), (ex["stem"], block)
-            drop_bodies.append(_block_cues(block).lower())
         for block in sections:
             if not block.startswith("[inst"):
                 continue
@@ -892,7 +923,6 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
             tokens = set(body.lower().replace("\n", " ").replace(",", " ").split())
             assert tokens, (ex["stem"], block)
             assert not tokens <= PAUSE_ONLY_TOKENS, (ex["stem"], block)
-            bridge_bodies.append(body.lower())
         if ex["phase"] < 2:
             assert ex["layout"] == "column", ex["stem"]
         elif ex["phase"] == 2:
@@ -910,19 +940,13 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
                     ex["stem"],
                     block,
                 )
-            if len(drops) >= 3:
-                phase2_triple += 1
         elif ex["phase"] == 3:
             assert int(ex["bpm"]) >= 150, ex["stem"]
             assert ex["ace_mode"] == "instrumental", ex["stem"]
-            if len(drops) >= 3:
-                phase3_triple += 1
         else:
             assert ex["phase"] == 4, ex["stem"]
             assert int(ex["bpm"]) >= 140, ex["stem"]
             assert ex["ace_mode"] == "instrumental", ex["stem"]
-            if len(drops) >= 3:
-                phase4_triple += 1
             if _hits_needles(ex["tags"], SECRET_HOMAGE_NEEDLES):
                 phase4_core += 1
         treat = ex["title"] in DRIVE_TREAT_TITLES
@@ -935,7 +959,6 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
             treat_titles.append(ex["title"])
         else:
             assert "[chorus]" not in lyrics
-            assert labels[0] == "drop"
             for line in lyrics.splitlines():
                 stripped = line.strip()
                 if not stripped:
@@ -974,29 +997,29 @@ def test_drive_through_edm_examples_are_original_180s() -> None:
     assert min(int(ex["bpm"]) for ex in phase2) >= 148
     assert sum(1 for ex in phase2 if int(ex["bpm"]) >= 165) >= 4
     assert {ex["layout"] for ex in phase2} == EDM_LAYOUTS
-    assert phase2_triple >= 12
     phase3 = [ex for ex in EDM_EXAMPLES if ex["phase"] == 3]
     assert len(phase3) == 20
     assert min(int(ex["bpm"]) for ex in phase3) >= 150
     assert {ex["layout"] for ex in phase3} == EDM_LAYOUTS
-    assert phase3_triple >= 12
     phase4 = [ex for ex in EDM_EXAMPLES if ex["phase"] == 4]
     assert len(phase4) == 20
     assert min(int(ex["bpm"]) for ex in phase4) >= 140
     assert {ex["layout"] for ex in phase4} == EDM_LAYOUTS
-    assert phase4_triple >= 12
     assert phase4_core >= 8
     assert pedal_rows >= 8
     assert min(bpms) >= 140
     assert max(bpms) >= 170
     assert sum(1 for bpm in bpms if bpm >= 145) >= 12
-    assert triple_drops >= 36
+    assert len(set(first_roles)) >= 3
     assert len(set(signatures)) >= 8
     for left, right in zip(signatures, signatures[1:]):
         assert left != right
-    assert len(drop_bodies) == len(set(drop_bodies))
-    assert bridge_bodies
-    assert len(bridge_bodies) == len(set(bridge_bodies))
+    assert len({ex["lyrics"] for ex in EDM_EXAMPLES}) == 85
+    for phase in (0, 1, 2, 3, 4):
+        rows = [ex for ex in EDM_EXAMPLES if ex["phase"] == phase]
+        assert len({ex["form_id"] for ex in rows}) >= 8, phase
+        assert len({ex["duration"] for ex in rows}) >= 8, phase
+        assert len({ex["keyscale"] for ex in rows}) >= 4, phase
     assert frozenset(treat_titles) == DRIVE_TREAT_TITLES
     assert tuple(ex["title"] for ex in EDM_EXAMPLES) == EXPECTED_DRIVE_THROUGH_TITLES
     assert "warped" in EDM_EXAMPLES[0]["lyrics"].lower()

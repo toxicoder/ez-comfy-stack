@@ -28,7 +28,7 @@ tags: [music, disclosure, distrokid, spotify, youtube, usco, us-safe]
 ## Tags vs lyrics
 
 - **Tags** describe genre, drums, bass, booth, vocal character, and bpm.
-- **Lyrics** are the bars (rap) or the arrangement **structure** (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[chorus]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use empty-body `[drop]` / `[inst]` / `[outro]` with production cues **inside the brackets**. ACE-Step sings any free-text line under a marker. Eighty-three takes stay instrumental (encoder language `unknown`). Two bass-set treats add one 1–2 word `[chorus]` DJ chop (never `[verse]`). Do not put the act name in the score — ACE will sing it.
+- **Lyrics** are the bars (rap) or the arrangement **structure** (Drive-through EDM). Section labels `[intro]`, `[verse]`, `[pre-chorus]`, `[chorus]`, `[bridge]`, `[breakdown]`, `[inst]`, `[outro]`, and `[spoken word]` are vocal **hints** operators may add — they are not a rights grant. EDM graphs use empty-body `[drop]` / `[build-up]` / `[breakdown]` / `[inst]` / `[outro]` with production cues **inside the brackets**. ACE-Step sings any free-text line under a marker. Eighty-three takes stay instrumental (encoder language `unknown`). Two bass-set treats add one 1–2 word `[chorus]` DJ chop (never `[verse]`). Do not put the act name in the score — ACE will sing it. Length, meter, and key are encoder fields (one each per take), not a second timeline.
 - **Original lyrics only.** Do not write “in the style of \<living artist\>”. No living-MC names. No famous-hook paraphrases.
 - **Short percussive lines** (about 6–10 syllables) slur less. Keep `language=en` on `TextEncodeAceStepAudio1.5` (combo, not free text). The seeded graph stores seed control as **fixed** after the seed; re-open **audio/music/rap-draft** after a pull so those combos stay aligned.
 
@@ -49,7 +49,7 @@ ACE-Step generates the vocal from lyrics + tags. That timbre is an **invented id
 Do this **before any release**. These graphs are lab takes, not masters.
 
 - **Human rewrite** the lyrics on RAP-FIRST full tracks and every Nill Bye take. Seeded bars stay short and SFW.
-- **Human selection and edit** on Drive-through EDM. Arrangement scores are empty-body structure tags, not a verse/chorus loop.
+- **Human selection and edit** on Drive-through EDM. Arrangement scores are empty-body structure tags. Arcs include intros, builds, and breakdowns, not only back-to-back drops.
 - **Punch up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river.
 - **No living-MC names** and no famous-hook paraphrases. Each Nill Bye take owns exclusive verses and punchlines — content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks.
 - **ACE-Step vocal** is an invented identity, not a clone. Do not add Kokoro / Chatterbox / TTS-Audio-Suite to these graphs.

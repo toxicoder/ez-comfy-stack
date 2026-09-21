@@ -7,6 +7,7 @@ from pathlib import Path
 
 from ez_music.diss_examples import DISS_EXAMPLES
 from ez_music.edm_examples import EDM_EXAMPLES
+from ez_music.song_plan import demo_draft_seconds, demo_full_seconds
 
 from _ace_widgets_contract import assert_ace_encoder_widgets
 from _lab_paths import LAB_ROOT, lab_json
@@ -54,6 +55,8 @@ def _assert_shared(
     tags: str | None = None,
     ace_mode: str = "vocal",
     edm_vocal_treat: bool = False,
+    meter: str = "4",
+    keyscale: str = "C minor",
 ) -> None:
     assert graph["id"] == Path(stem).name
     extra = graph["extra"]
@@ -92,9 +95,9 @@ def _assert_shared(
     assert widgets[3] == "fixed"
     assert widgets[4] == bpm
     assert widgets[5] == duration
-    assert widgets[6] == "4"
+    assert widgets[6] == meter
     assert widgets[7] == ("unknown" if ace_mode == "instrumental" else "en")
-    assert widgets[8] == "C minor"
+    assert widgets[8] == keyscale
     assert widgets[9] is True
     sampler = next(n for n in graph["nodes"] if n["type"] == "KSampler")
     sw = sampler["widgets_values"]
@@ -130,7 +133,7 @@ def _assert_shared(
 
 def test_music_rap_draft_graph() -> None:
     graph = _load("audio/music/rap-draft")
-    _assert_shared(graph, "rap-draft", "ez_rap_draft", 32.0)
+    _assert_shared(graph, "rap-draft", "ez_rap_draft", float(demo_draft_seconds()))
     note = graph["extra"]["lab_note"].lower()
     assert "instrumental" in note
     assert "[inst]" in graph["extra"]["lab_note"]
@@ -140,9 +143,10 @@ def test_music_rap_draft_graph() -> None:
 
 def test_music_rap_full_graph() -> None:
     graph = _load("audio/music/rap-full")
-    _assert_shared(graph, "rap-full", "ez_rap_full", 96.0)
+    _assert_shared(graph, "rap-full", "ez_rap_full", float(demo_full_seconds()))
     blob = json.dumps(graph)
     assert "[outro]" in blob
+    assert "[pre-chorus]" in blob
     assert blob.count("[chorus]") >= 2
 
 
@@ -160,6 +164,8 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
             bpm=int(ex["bpm"]),
             seed=int(ex["seed"]),
             tags=ex["tags"],
+            meter=str(ex["meter"]),
+            keyscale=str(ex["keyscale"]),
         )
         blob = json.dumps(graph)
         assert "[outro]" in blob
@@ -179,9 +185,11 @@ def test_music_rap_nill_bye_diss_graphs() -> None:
             assert " diss" not in graph["extra"]["lab_note"].lower()
         else:
             assert "Rake" in blob
-        assert blob.count("[chorus]") >= 3
+        assert "[chorus]" in blob or "[chorus -" in blob
         note = graph["extra"]["lab_note"]
-        assert "180" in note
+        assert str(int(ex["duration"])) in note
+        assert ex["form_id"] in note
+        assert ex["keyscale"] in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
         if ex["title"] in {
             "peer review",
@@ -248,12 +256,15 @@ def test_music_edm_drive_through_graphs() -> None:
             tags=ex["tags"],
             ace_mode=ex["ace_mode"],
             edm_vocal_treat=treat,
+            meter=str(ex["meter"]),
+            keyscale=str(ex["keyscale"]),
         )
         blob = json.dumps(graph)
         assert "Drive-through" in blob
         assert "[verse]" not in blob
         note = graph["extra"]["lab_note"]
-        assert "180" in note
+        assert str(int(ex["duration"])) in note
+        assert ex["form_id"] in note
         assert "on its own" in note.lower() or "queue on its own" in note.lower()
         assert "rave" in note.lower() or "live" in note.lower()
         if treat:

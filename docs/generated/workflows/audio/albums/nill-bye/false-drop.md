@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/nill-bye/false-drop/`. Queue one track, or `.
 ```text
 ## 01-false-drop
 
-US-safe rap **180 s diss** take: **false drop**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **72 s diss** take: **false drop**. Fictional MCs **Nill Bye** (science guy) vs **Rake** (in his feels). Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 140, language en, timesignature 4, generate_audio_codes true. Seed 107.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 72 s, bpm 140, language en, timesignature 4, key F minor, form v_half, generate_audio_codes true. Seed 107.
 7. Saves: `01 - False Drop` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -105,13 +105,13 @@ flowchart LR
 | `audio/albums/nill-bye/false-drop/14-kick-split` | 17 | audio |
 | `audio/albums/nill-bye/false-drop/15-uplift-rumor` | 17 | audio |
 | `audio/albums/nill-bye/false-drop/album` | 4 | none |
-| `audio/albums/nill-bye/false-drop/cover` | 15 | klein |
+| `audio/albums/nill-bye/false-drop/cover` | 18 | klein |
 
 ## `01-false-drop`
 
 Catalog id `audio/albums/nill-bye/false-drop/01-false-drop`.
 
-US-safe rap 180s diss: Nill Bye false-drop roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye false-drop roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -130,14 +130,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `72.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -145,16 +145,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| 1 | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/01-false-drop` |
 
 ```text
-[intro]
-riser fake
-snare tease
-drop ducks
-
 [verse]
 Rake rides a riser with no punch
 Talks a climax that never lands
@@ -197,6 +192,8 @@ Rake sold a dummy
 Build-up mouth, kick never lands
 Your peak was a dummy cue
 
+[inst - pocket snare, hats only]
+
 [verse]
 The riser screams like a headline lie
 Then it dies when the kick should fly
@@ -210,7 +207,7 @@ Nill Bye reading the mute that stays
 Rake on a riser that never pays
 Tease, then stall, then a cheap goodbye
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -231,7 +228,7 @@ Put the tease back in the crate
 Your false drop cannot carry weight
 Mute remains when the riser drains
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -252,7 +249,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a…` |
-| 2 | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| 2 | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/01-false-drop` |
@@ -262,11 +259,6 @@ dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no au
 ```
 
 ```text
-[intro]
-riser fake
-snare tease
-drop ducks
-
 [verse]
 Rake rides a riser with no punch
 Talks a climax that never lands
@@ -309,6 +301,8 @@ Rake sold a dummy
 Build-up mouth, kick never lands
 Your peak was a dummy cue
 
+[inst - pocket snare, hats only]
+
 [verse]
 The riser screams like a headline lie
 Then it dies when the kick should fly
@@ -322,7 +316,7 @@ Nill Bye reading the mute that stays
 Rake on a riser that never pays
 Tease, then stall, then a cheap goodbye
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -343,7 +337,7 @@ Put the tease back in the crate
 Your false drop cannot carry weight
 Mute remains when the riser drains
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -363,14 +357,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no a…` |
-| 1 | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| 1 | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | 2 | `107` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `72.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -383,11 +377,6 @@ dark trap, 808 bass, rapid hi-hats, half-time, male rap vocals, dry booth, no au
 ```
 
 ```text
-[intro]
-riser fake
-snare tease
-drop ducks
-
 [verse]
 Rake rides a riser with no punch
 Talks a climax that never lands
@@ -430,6 +419,8 @@ Rake sold a dummy
 Build-up mouth, kick never lands
 Your peak was a dummy cue
 
+[inst - pocket snare, hats only]
+
 [verse]
 The riser screams like a headline lie
 Then it dies when the kick should fly
@@ -443,7 +434,7 @@ Nill Bye reading the mute that stays
 Rake on a riser that never pays
 Tease, then stall, then a cheap goodbye
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -464,7 +455,7 @@ Put the tease back in the crate
 Your false drop cannot carry weight
 Mute remains when the riser drains
 
-[chorus]
+[chorus - half-time drums]
 False drop
 You teased a climax
 Nill Bye waits on mute
@@ -540,7 +531,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/02-velvet-rope`.
 
-US-safe rap 180s diss: Nill Bye velvet-rope roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye velvet-rope roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -559,14 +550,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -627,6 +618,8 @@ Rake poses VIP
 Empty queue, clipboard dry
 No stamp, no entry
 
+[inst - pocket snare, hats only]
+
 [verse]
 You treat the rope like a personality
 Then you crash when they ask for ID
@@ -641,14 +634,6 @@ The list don't owe you a credit
 Wristband missing, the bouncer shrugs
 Your soundtrack snapped on a velvet tug
 
-[chorus]
-Velvet rope
-Blank name on the rail
-Nill Bye holds the list
-Rake poses VIP
-Empty queue, clipboard dry
-No stamp, no entry
-
 [verse]
 You print a lanyard off a printer
 Then you ask the rope to be nicer
@@ -660,6 +645,8 @@ Nill Bye shutting the empty slot
 Rake wants a throne for a name he dropped
 Put the lanyard back on the tray
 The rope don't score a vacant play
+
+[bridge]
 Stanchion stays, the file is closed
 Your soundtrack snapped on a velvet close
 
@@ -742,6 +729,8 @@ Rake poses VIP
 Empty queue, clipboard dry
 No stamp, no entry
 
+[inst - pocket snare, hats only]
+
 [verse]
 You treat the rope like a personality
 Then you crash when they ask for ID
@@ -756,14 +745,6 @@ The list don't owe you a credit
 Wristband missing, the bouncer shrugs
 Your soundtrack snapped on a velvet tug
 
-[chorus]
-Velvet rope
-Blank name on the rail
-Nill Bye holds the list
-Rake poses VIP
-Empty queue, clipboard dry
-No stamp, no entry
-
 [verse]
 You print a lanyard off a printer
 Then you ask the rope to be nicer
@@ -775,6 +756,8 @@ Nill Bye shutting the empty slot
 Rake wants a throne for a name he dropped
 Put the lanyard back on the tray
 The rope don't score a vacant play
+
+[bridge]
 Stanchion stays, the file is closed
 Your soundtrack snapped on a velvet close
 
@@ -802,7 +785,7 @@ yeah
 | 2 | `109` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `120.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -866,6 +849,8 @@ Rake poses VIP
 Empty queue, clipboard dry
 No stamp, no entry
 
+[inst - pocket snare, hats only]
+
 [verse]
 You treat the rope like a personality
 Then you crash when they ask for ID
@@ -880,14 +865,6 @@ The list don't owe you a credit
 Wristband missing, the bouncer shrugs
 Your soundtrack snapped on a velvet tug
 
-[chorus]
-Velvet rope
-Blank name on the rail
-Nill Bye holds the list
-Rake poses VIP
-Empty queue, clipboard dry
-No stamp, no entry
-
 [verse]
 You print a lanyard off a printer
 Then you ask the rope to be nicer
@@ -899,6 +876,8 @@ Nill Bye shutting the empty slot
 Rake wants a throne for a name he dropped
 Put the lanyard back on the tray
 The rope don't score a vacant play
+
+[bridge]
 Stanchion stays, the file is closed
 Your soundtrack snapped on a velvet close
 
@@ -978,7 +957,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/03-fog-machine`.
 
-US-safe rap 180s diss: Nill Bye fog-machine roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye fog-machine roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -997,14 +976,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `175.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `175.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1012,16 +991,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
+| 1 | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/03-fog-machine` |
 
 ```text
-[intro]
-jet hiss
-haze thick
-stage missing
-
 [verse]
 Rake hits the jet like a headline act
 Talks a set that the stage subtracts
@@ -1034,14 +1008,6 @@ Nill Bye staring through a rented plume
 You smiling through a highlight fume
 Show the set or leave the floor
 Haze covering a missing encore
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You treat the haze like a body double
@@ -1056,14 +1022,6 @@ Rake with a name-tag spin
 Show the body or kill the jet
 The jet is cheap and the haze falls flat
 
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
-
 [verse]
 You sell the haze like a limited drop
 Then you fold when the playlist pops
@@ -1076,14 +1034,6 @@ You wrapped a skip in a foggy shot
 Keep the jet, lose the alibi
 Hats stay put, the boast walks
 Haze for a show that never starts
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You write the set like a product sheet
@@ -1098,6 +1048,10 @@ Put the canister back on the tray
 The jet don't score a vacant play
 Jet cuts out, the file is closed
 Your soundtrack snapped on a haze close
+
+[pre-chorus]
+Fog machine
+The stage is missing
 
 [chorus]
 Fog machine
@@ -1120,7 +1074,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b…` |
-| 2 | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
+| 2 | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/03-fog-machine` |
@@ -1130,11 +1084,6 @@ rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 bp
 ```
 
 ```text
-[intro]
-jet hiss
-haze thick
-stage missing
-
 [verse]
 Rake hits the jet like a headline act
 Talks a set that the stage subtracts
@@ -1147,14 +1096,6 @@ Nill Bye staring through a rented plume
 You smiling through a highlight fume
 Show the set or leave the floor
 Haze covering a missing encore
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You treat the haze like a body double
@@ -1169,14 +1110,6 @@ Rake with a name-tag spin
 Show the body or kill the jet
 The jet is cheap and the haze falls flat
 
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
-
 [verse]
 You sell the haze like a limited drop
 Then you fold when the playlist pops
@@ -1189,14 +1122,6 @@ You wrapped a skip in a foggy shot
 Keep the jet, lose the alibi
 Hats stay put, the boast walks
 Haze for a show that never starts
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You write the set like a product sheet
@@ -1211,6 +1136,10 @@ Put the canister back on the tray
 The jet don't score a vacant play
 Jet cuts out, the file is closed
 Your soundtrack snapped on a haze close
+
+[pre-chorus]
+Fog machine
+The stage is missing
 
 [chorus]
 Fog machine
@@ -1232,14 +1161,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 b…` |
-| 1 | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
+| 1 | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
 | 2 | `113` |
 | 3 | `fixed` |
 | 4 | `148` |
-| 5 | `180.0` |
+| 5 | `175.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1252,11 +1181,6 @@ rage, distorted 808, laser hats, male rap vocals, dry booth, no autotune, 148 bp
 ```
 
 ```text
-[intro]
-jet hiss
-haze thick
-stage missing
-
 [verse]
 Rake hits the jet like a headline act
 Talks a set that the stage subtracts
@@ -1269,14 +1193,6 @@ Nill Bye staring through a rented plume
 You smiling through a highlight fume
 Show the set or leave the floor
 Haze covering a missing encore
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You treat the haze like a body double
@@ -1291,14 +1207,6 @@ Rake with a name-tag spin
 Show the body or kill the jet
 The jet is cheap and the haze falls flat
 
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
-
 [verse]
 You sell the haze like a limited drop
 Then you fold when the playlist pops
@@ -1311,14 +1219,6 @@ You wrapped a skip in a foggy shot
 Keep the jet, lose the alibi
 Hats stay put, the boast walks
 Haze for a show that never starts
-
-[chorus]
-Fog machine
-The stage is missing
-Nill Bye reads the haze
-Rake hides in the jet
-Fog for a missing set
-Haze is your alibi
 
 [verse]
 You write the set like a product sheet
@@ -1333,6 +1233,10 @@ Put the canister back on the tray
 The jet don't score a vacant play
 Jet cuts out, the file is closed
 Your soundtrack snapped on a haze close
+
+[pre-chorus]
+Fog machine
+The stage is missing
 
 [chorus]
 Fog machine
@@ -1410,7 +1314,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/04-guest-list`.
 
-US-safe rap 180s diss: Nill Bye guest-list roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye guest-list roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1429,14 +1333,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1444,16 +1348,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| 1 | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/04-guest-list` |
 
 ```text
-[intro]
-clipboard dry
-door shut
-name missing
-
 [verse]
 Rake taps the cowbell like a password
 No name inked, just a leftover
@@ -1530,6 +1429,16 @@ Door closed, that is the quote
 The bouncer stands, the thread is smoke
 He still leaking through a broken joke
 Blank name filed, the cowbell dries
+
+[chorus]
+Guest list closed
+You are not on it
+Nill Bye checks the door
+Rake argues the mark
+Clipboard miss, no pass
+Name never made the ink
+
+[bridge]
 Show the pass or step aside
 Phonk hush, the rumor died
 
@@ -1554,7 +1463,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut…` |
-| 2 | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| 2 | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/04-guest-list` |
@@ -1564,11 +1473,6 @@ phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no auto
 ```
 
 ```text
-[intro]
-clipboard dry
-door shut
-name missing
-
 [verse]
 Rake taps the cowbell like a password
 No name inked, just a leftover
@@ -1645,6 +1549,16 @@ Door closed, that is the quote
 The bouncer stands, the thread is smoke
 He still leaking through a broken joke
 Blank name filed, the cowbell dries
+
+[chorus]
+Guest list closed
+You are not on it
+Nill Bye checks the door
+Rake argues the mark
+Clipboard miss, no pass
+Name never made the ink
+
+[bridge]
 Show the pass or step aside
 Phonk hush, the rumor died
 
@@ -1668,14 +1582,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no aut…` |
-| 1 | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| 1 | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | 2 | `127` |
 | 3 | `fixed` |
 | 4 | `132` |
-| 5 | `180.0` |
+| 5 | `80.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1688,11 +1602,6 @@ phonk, cowbell, drifted 808, crunchy sample, male rap vocals, dry booth, no auto
 ```
 
 ```text
-[intro]
-clipboard dry
-door shut
-name missing
-
 [verse]
 Rake taps the cowbell like a password
 No name inked, just a leftover
@@ -1769,6 +1678,16 @@ Door closed, that is the quote
 The bouncer stands, the thread is smoke
 He still leaking through a broken joke
 Blank name filed, the cowbell dries
+
+[chorus]
+Guest list closed
+You are not on it
+Nill Bye checks the door
+Rake argues the mark
+Clipboard miss, no pass
+Name never made the ink
+
+[bridge]
 Show the pass or step aside
 Phonk hush, the rumor died
 
@@ -1848,7 +1767,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/05-sparkler`.
 
-US-safe rap 180s diss: Nill Bye sparkler roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye sparkler roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1867,14 +1786,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `132.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `132.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1904,14 +1823,6 @@ Ash on the table, that was the plan
 Nill Bye weighing a dead sparkler
 Your whole reaction is a tourist dollar
 Pretty burn, then the stick goes dull
-
-[chorus]
-Sparkler science
-Pretty burn, no yield
-Nill Bye wants a reaction
-Rake sold a stick
-Sparks are not a product
-Ash is all you built
 
 [verse]
 You name a spark like a published find
@@ -2017,14 +1928,6 @@ Nill Bye weighing a dead sparkler
 Your whole reaction is a tourist dollar
 Pretty burn, then the stick goes dull
 
-[chorus]
-Sparkler science
-Pretty burn, no yield
-Nill Bye wants a reaction
-Rake sold a stick
-Sparks are not a product
-Ash is all you built
-
 [verse]
 You name a spark like a published find
 Then you fold when I ask the yield behind
@@ -2104,10 +2007,10 @@ yeah
 | 2 | `131` |
 | 3 | `fixed` |
 | 4 | `145` |
-| 5 | `180.0` |
+| 5 | `132.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2137,14 +2040,6 @@ Ash on the table, that was the plan
 Nill Bye weighing a dead sparkler
 Your whole reaction is a tourist dollar
 Pretty burn, then the stick goes dull
-
-[chorus]
-Sparkler science
-Pretty burn, no yield
-Nill Bye wants a reaction
-Rake sold a stick
-Sparks are not a product
-Ash is all you built
 
 [verse]
 You name a spark like a published find
@@ -2277,7 +2172,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/06-bottle-service`.
 
-US-safe rap 180s diss: Nill Bye bottle-service roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye bottle-service roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2296,14 +2191,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2533,10 +2428,10 @@ yeah
 | 2 | `137` |
 | 3 | `fixed` |
 | 4 | `126` |
-| 5 | `180.0` |
+| 5 | `187.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2706,7 +2601,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/07-strobe-claim`.
 
-US-safe rap 180s diss: Nill Bye strobe-claim roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye strobe-claim roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2725,14 +2620,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2762,14 +2657,6 @@ That's a king with a disposable voltage
 Nill Bye standing when the bulbs go black
 Your whole claim is a strobe attack
 Flash, then nothing, then a cheaper flicker
-
-[chorus]
-Strobe claim
-Blink and the boast is gone
-Nill Bye stands in the dark
-Rake lives in a flash
-No substance, only pulse
-Your legend is a blink
 
 [verse]
 You sell a win like a lightning shutter
@@ -2875,14 +2762,6 @@ Nill Bye standing when the bulbs go black
 Your whole claim is a strobe attack
 Flash, then nothing, then a cheaper flicker
 
-[chorus]
-Strobe claim
-Blink and the boast is gone
-Nill Bye stands in the dark
-Rake lives in a flash
-No substance, only pulse
-Your legend is a blink
-
 [verse]
 You sell a win like a lightning shutter
 Then you vanish when the blackout clutters
@@ -2962,10 +2841,10 @@ yeah
 | 2 | `139` |
 | 3 | `fixed` |
 | 4 | `132` |
-| 5 | `180.0` |
+| 5 | `89.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2995,14 +2874,6 @@ That's a king with a disposable voltage
 Nill Bye standing when the bulbs go black
 Your whole claim is a strobe attack
 Flash, then nothing, then a cheaper flicker
-
-[chorus]
-Strobe claim
-Blink and the boast is gone
-Nill Bye stands in the dark
-Rake lives in a flash
-No substance, only pulse
-Your legend is a blink
 
 [verse]
 You sell a win like a lightning shutter
@@ -3135,7 +3006,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/08-amen-rumor`.
 
-US-safe rap 180s diss: Nill Bye amen-rumor roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye amen-rumor roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3154,14 +3025,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3169,16 +3040,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| 1 | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/08-amen-rumor` |
 
 ```text
-[intro]
-break empty
-fill missing
-rumor racing
-
 [verse]
 Rake chops an amen like a headline
 Talks a fill that he never signed
@@ -3220,6 +3086,8 @@ Nill Bye wants a fill
 Rake loops a ghost
 Break with no answer
 Rumor riding the snare
+
+[inst - pocket snare, hats only]
 
 [verse]
 Chop left, chop right, still no answer
@@ -3276,7 +3144,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, …` |
-| 2 | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| 2 | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/08-amen-rumor` |
@@ -3286,11 +3154,6 @@ drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, 1
 ```
 
 ```text
-[intro]
-break empty
-fill missing
-rumor racing
-
 [verse]
 Rake chops an amen like a headline
 Talks a fill that he never signed
@@ -3332,6 +3195,8 @@ Nill Bye wants a fill
 Rake loops a ghost
 Break with no answer
 Rumor riding the snare
+
+[inst - pocket snare, hats only]
 
 [verse]
 Chop left, chop right, still no answer
@@ -3387,14 +3252,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, …` |
-| 1 | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| 1 | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | 2 | `149` |
 | 3 | `fixed` |
 | 4 | `174` |
-| 5 | `180.0` |
+| 5 | `143.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `B minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3407,11 +3272,6 @@ drum and bass, amen break, sub reese, male rap vocals, dry booth, no autotune, 1
 ```
 
 ```text
-[intro]
-break empty
-fill missing
-rumor racing
-
 [verse]
 Rake chops an amen like a headline
 Talks a fill that he never signed
@@ -3453,6 +3313,8 @@ Nill Bye wants a fill
 Rake loops a ghost
 Break with no answer
 Rumor riding the snare
+
+[inst - pocket snare, hats only]
 
 [verse]
 Chop left, chop right, still no answer
@@ -3564,7 +3426,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/09-wobble-alibi`.
 
-US-safe rap 180s diss: Nill Bye wobble-alibi roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye wobble-alibi roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3583,14 +3445,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `197.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `197.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3621,14 +3483,6 @@ Nill Bye picking the miss in the growl
 Your whole alibi is a wobble rag
 Bass looks busy, the landing ducks
 
-[chorus]
-Wobble alibi
-Bass covering the miss
-Nill Bye hears the hole
-Rake hides in the growl
-LFO is not an excuse
-Your alibi wobbles too
-
 [verse]
 You name a drop like a courtroom oath
 Then you hide when the growl thins both
@@ -3641,6 +3495,10 @@ No landing there, just a sliding pillar
 Nill Bye timing the hole in the sweep
 Rake melting soon as the bass goes mild
 LFO busy, the substance stalls
+
+[pre-chorus]
+Wobble alibi
+Bass covering the miss
 
 [chorus]
 Wobble alibi
@@ -3733,14 +3591,6 @@ Nill Bye picking the miss in the growl
 Your whole alibi is a wobble rag
 Bass looks busy, the landing ducks
 
-[chorus]
-Wobble alibi
-Bass covering the miss
-Nill Bye hears the hole
-Rake hides in the growl
-LFO is not an excuse
-Your alibi wobbles too
-
 [verse]
 You name a drop like a courtroom oath
 Then you hide when the growl thins both
@@ -3753,6 +3603,10 @@ No landing there, just a sliding pillar
 Nill Bye timing the hole in the sweep
 Rake melting soon as the bass goes mild
 LFO busy, the substance stalls
+
+[pre-chorus]
+Wobble alibi
+Bass covering the miss
 
 [chorus]
 Wobble alibi
@@ -3820,10 +3674,10 @@ yeah
 | 2 | `151` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `197.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3854,14 +3708,6 @@ Nill Bye picking the miss in the growl
 Your whole alibi is a wobble rag
 Bass looks busy, the landing ducks
 
-[chorus]
-Wobble alibi
-Bass covering the miss
-Nill Bye hears the hole
-Rake hides in the growl
-LFO is not an excuse
-Your alibi wobbles too
-
 [verse]
 You name a drop like a courtroom oath
 Then you hide when the growl thins both
@@ -3874,6 +3720,10 @@ No landing there, just a sliding pillar
 Nill Bye timing the hole in the sweep
 Rake melting soon as the bass goes mild
 LFO busy, the substance stalls
+
+[pre-chorus]
+Wobble alibi
+Bass covering the miss
 
 [chorus]
 Wobble alibi
@@ -3993,7 +3843,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/10-supersaw-flex`.
 
-US-safe rap 180s diss: Nill Bye supersaw-flex roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye supersaw-flex roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4012,14 +3862,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `99.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4027,15 +3877,18 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| 1 | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/10-supersaw-flex` |
 
 ```text
-[intro]
-detune stacked
-patch flexing
-paper missing
+[chorus]
+Supersaw flex
+Stacked detune, no paper
+Nill Bye asks for a patch note
+Rake flexes a unison
+Saw stack is not a resume
+Your flex is a preset
 
 [verse]
 Rake stacks a saw like a diploma
@@ -4050,14 +3903,6 @@ Nill Bye reading a blank-patch file
 Your whole supersaw is costume vinyl
 Stacked detune, then a cheaper quiet
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 You name a chord like a vintage bank
 Then you freeze when I ask who wrote the patch
@@ -4071,14 +3916,6 @@ Nill Bye marking the empty patch
 Rake riding stacks like a stolen hatch
 Chord looks busy, the paper still idles
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 Detune left, detune right, still no sheet
 Your legend lives in a preset you cheat
@@ -4091,14 +3928,6 @@ The stack runs out, and so do the boasts
 Hold the unison or drop the stack
 Your flex never sat in the rack
 Empty in the middle, the boast looks lazy
-
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
 
 [verse]
 Morning comes, the saw is weary
@@ -4134,7 +3963,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo…` |
-| 2 | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| 2 | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/10-supersaw-flex` |
@@ -4144,10 +3973,13 @@ future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boot
 ```
 
 ```text
-[intro]
-detune stacked
-patch flexing
-paper missing
+[chorus]
+Supersaw flex
+Stacked detune, no paper
+Nill Bye asks for a patch note
+Rake flexes a unison
+Saw stack is not a resume
+Your flex is a preset
 
 [verse]
 Rake stacks a saw like a diploma
@@ -4162,14 +3994,6 @@ Nill Bye reading a blank-patch file
 Your whole supersaw is costume vinyl
 Stacked detune, then a cheaper quiet
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 You name a chord like a vintage bank
 Then you freeze when I ask who wrote the patch
@@ -4183,14 +4007,6 @@ Nill Bye marking the empty patch
 Rake riding stacks like a stolen hatch
 Chord looks busy, the paper still idles
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 Detune left, detune right, still no sheet
 Your legend lives in a preset you cheat
@@ -4203,14 +4019,6 @@ The stack runs out, and so do the boasts
 Hold the unison or drop the stack
 Your flex never sat in the rack
 Empty in the middle, the boast looks lazy
-
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
 
 [verse]
 Morning comes, the saw is weary
@@ -4245,11 +4053,11 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boo…` |
-| 1 | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| 1 | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | 2 | `157` |
 | 3 | `fixed` |
 | 4 | `148` |
-| 5 | `180.0` |
+| 5 | `99.0` |
 | 6 | `4` |
 | 7 | `en` |
 | 8 | `C minor` |
@@ -4265,10 +4073,13 @@ future bass, supersaw, pitched synth chords, 808 bass, male rap vocals, dry boot
 ```
 
 ```text
-[intro]
-detune stacked
-patch flexing
-paper missing
+[chorus]
+Supersaw flex
+Stacked detune, no paper
+Nill Bye asks for a patch note
+Rake flexes a unison
+Saw stack is not a resume
+Your flex is a preset
 
 [verse]
 Rake stacks a saw like a diploma
@@ -4283,14 +4094,6 @@ Nill Bye reading a blank-patch file
 Your whole supersaw is costume vinyl
 Stacked detune, then a cheaper quiet
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 You name a chord like a vintage bank
 Then you freeze when I ask who wrote the patch
@@ -4304,14 +4107,6 @@ Nill Bye marking the empty patch
 Rake riding stacks like a stolen hatch
 Chord looks busy, the paper still idles
 
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
-
 [verse]
 Detune left, detune right, still no sheet
 Your legend lives in a preset you cheat
@@ -4324,14 +4119,6 @@ The stack runs out, and so do the boasts
 Hold the unison or drop the stack
 Your flex never sat in the rack
 Empty in the middle, the boast looks lazy
-
-[chorus]
-Supersaw flex
-Stacked detune, no paper
-Nill Bye asks for a patch note
-Rake flexes a unison
-Saw stack is not a resume
-Your flex is a preset
 
 [verse]
 Morning comes, the saw is weary
@@ -4422,7 +4209,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/11-laser-show`.
 
-US-safe rap 180s diss: Nill Bye laser-show roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye laser-show roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4441,14 +4228,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4508,6 +4295,8 @@ Rake draws logos in haze
 Beams without a song
 Your show is a scanner
 
+[breakdown - hats only]
+
 [verse]
 Beam left, beam right, still no song
 Your legend lives in a gobo you hung
@@ -4549,6 +4338,8 @@ Nill Bye wants a set list
 Rake draws logos in haze
 Beams without a song
 Your show is a scanner
+
+[inst - pocket snare, hats only]
 
 [outro]
 beams off
@@ -4620,6 +4411,8 @@ Rake draws logos in haze
 Beams without a song
 Your show is a scanner
 
+[breakdown - hats only]
+
 [verse]
 Beam left, beam right, still no song
 Your legend lives in a gobo you hung
@@ -4662,6 +4455,8 @@ Rake draws logos in haze
 Beams without a song
 Your show is a scanner
 
+[inst - pocket snare, hats only]
+
 [outro]
 beams off
 logos fade
@@ -4678,10 +4473,10 @@ yeah
 | 2 | `163` |
 | 3 | `fixed` |
 | 4 | `128` |
-| 5 | `180.0` |
+| 5 | `156.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F# minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4741,6 +4536,8 @@ Rake draws logos in haze
 Beams without a song
 Your show is a scanner
 
+[breakdown - hats only]
+
 [verse]
 Beam left, beam right, still no song
 Your legend lives in a gobo you hung
@@ -4782,6 +4579,8 @@ Nill Bye wants a set list
 Rake draws logos in haze
 Beams without a song
 Your show is a scanner
+
+[inst - pocket snare, hats only]
 
 [outro]
 beams off
@@ -4851,7 +4650,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/12-two-step`.
 
-US-safe rap 180s diss: Nill Bye two-step roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye two-step roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4870,14 +4669,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `207.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `207.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4908,14 +4707,6 @@ Nill Bye planting a foot on the one
 Your two-step is a rumor sidestep
 Shuffle looks busy, the landing skips
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 You name a step like a courtroom plea
 Then you skip when the proof walks in
@@ -4928,6 +4719,10 @@ No landing there, just a shuffled idol
 Nill Bye timing the skip between
 Rake melting soon as the one goes slack
 Shuffle busy, the substance fades
+
+[pre-chorus]
+Two-step alibi
+Shuffle past the proof
 
 [chorus]
 Two-step alibi
@@ -4950,14 +4745,6 @@ Hold the one or drop the dodge
 Your two-step never sat in the brick
 Gap in the middle, the boast looks shuffled
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 House lights up, the shuffle looks worn
 Skip erased, the legend's dim
@@ -4970,14 +4757,6 @@ The shuffle never paid the brick
 File the skip, keep the one
 Shuffle chemistry is a party dodge
 Organ dead, the booth stays quiet
-
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
 
 [outro]
 shuffle stops
@@ -5020,14 +4799,6 @@ Nill Bye planting a foot on the one
 Your two-step is a rumor sidestep
 Shuffle looks busy, the landing skips
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 You name a step like a courtroom plea
 Then you skip when the proof walks in
@@ -5040,6 +4811,10 @@ No landing there, just a shuffled idol
 Nill Bye timing the skip between
 Rake melting soon as the one goes slack
 Shuffle busy, the substance fades
+
+[pre-chorus]
+Two-step alibi
+Shuffle past the proof
 
 [chorus]
 Two-step alibi
@@ -5062,14 +4837,6 @@ Hold the one or drop the dodge
 Your two-step never sat in the brick
 Gap in the middle, the boast looks shuffled
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 House lights up, the shuffle looks worn
 Skip erased, the legend's dim
@@ -5082,14 +4849,6 @@ The shuffle never paid the brick
 File the skip, keep the one
 Shuffle chemistry is a party dodge
 Organ dead, the booth stays quiet
-
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
 
 [outro]
 shuffle stops
@@ -5107,10 +4866,10 @@ yeah
 | 2 | `167` |
 | 3 | `fixed` |
 | 4 | `130` |
-| 5 | `180.0` |
+| 5 | `207.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5141,14 +4900,6 @@ Nill Bye planting a foot on the one
 Your two-step is a rumor sidestep
 Shuffle looks busy, the landing skips
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 You name a step like a courtroom plea
 Then you skip when the proof walks in
@@ -5161,6 +4912,10 @@ No landing there, just a shuffled idol
 Nill Bye timing the skip between
 Rake melting soon as the one goes slack
 Shuffle busy, the substance fades
+
+[pre-chorus]
+Two-step alibi
+Shuffle past the proof
 
 [chorus]
 Two-step alibi
@@ -5183,14 +4938,6 @@ Hold the one or drop the dodge
 Your two-step never sat in the brick
 Gap in the middle, the boast looks shuffled
 
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
-
 [verse]
 House lights up, the shuffle looks worn
 Skip erased, the legend's dim
@@ -5203,14 +4950,6 @@ The shuffle never paid the brick
 File the skip, keep the one
 Shuffle chemistry is a party dodge
 Organ dead, the booth stays quiet
-
-[chorus]
-Two-step alibi
-Shuffle past the proof
-Nill Bye stands on the one
-Rake skips the downbeat
-Garage excuse, no landing
-Your two-step is a dodge
 
 [outro]
 shuffle stops
@@ -5280,7 +5019,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/13-jersey-bounce`.
 
-US-safe rap 180s diss: Nill Bye jersey-bounce roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye jersey-bounce roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5299,14 +5038,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5314,16 +5053,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| 1 | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/13-jersey-bounce` |
 
 ```text
-[intro]
-squeaks up
-bounce hollow
-chops flying
-
 [verse]
 Rake chops a squeak like a headline
 Talks a body that he never signed
@@ -5366,6 +5100,8 @@ Rake chops an empty bed
 Squeaks without a claim
 Your bounce is a hollow
 
+[inst - pocket snare, hats only]
+
 [verse]
 Chop left, chop right, still no body
 Your legend lives in a squeak you copied
@@ -5379,7 +5115,7 @@ Hold the bounce or drop the mic
 Your rumor never sat in the bed
 Empty in the middle, the boast looks copied
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5400,7 +5136,7 @@ File the squeak, keep the gap
 Fast bounce is a party map
 Squeak dead, the booth stays sober
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5421,7 +5157,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry …` |
-| 2 | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| 2 | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/13-jersey-bounce` |
@@ -5431,11 +5167,6 @@ jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry b
 ```
 
 ```text
-[intro]
-squeaks up
-bounce hollow
-chops flying
-
 [verse]
 Rake chops a squeak like a headline
 Talks a body that he never signed
@@ -5478,6 +5209,8 @@ Rake chops an empty bed
 Squeaks without a claim
 Your bounce is a hollow
 
+[inst - pocket snare, hats only]
+
 [verse]
 Chop left, chop right, still no body
 Your legend lives in a squeak you copied
@@ -5491,7 +5224,7 @@ Hold the bounce or drop the mic
 Your rumor never sat in the bed
 Empty in the middle, the boast looks copied
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5512,7 +5245,7 @@ File the squeak, keep the gap
 Fast bounce is a party map
 Squeak dead, the booth stays sober
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5532,14 +5265,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry …` |
-| 1 | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| 1 | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | 2 | `173` |
 | 3 | `fixed` |
 | 4 | `140` |
-| 5 | `180.0` |
+| 5 | `108.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5552,11 +5285,6 @@ jersey club, chopped percussion, bed squeaks, kick drums, male rap vocals, dry b
 ```
 
 ```text
-[intro]
-squeaks up
-bounce hollow
-chops flying
-
 [verse]
 Rake chops a squeak like a headline
 Talks a body that he never signed
@@ -5599,6 +5327,8 @@ Rake chops an empty bed
 Squeaks without a claim
 Your bounce is a hollow
 
+[inst - pocket snare, hats only]
+
 [verse]
 Chop left, chop right, still no body
 Your legend lives in a squeak you copied
@@ -5612,7 +5342,7 @@ Hold the bounce or drop the mic
 Your rumor never sat in the bed
 Empty in the middle, the boast looks copied
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5633,7 +5363,7 @@ File the squeak, keep the gap
 Fast bounce is a party map
 Squeak dead, the booth stays sober
 
-[chorus]
+[chorus - half-time drums]
 Jersey bounce
 Bounce with no proof
 Nill Bye wants a body
@@ -5709,7 +5439,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/14-kick-split`.
 
-US-safe rap 180s diss: Nill Bye kick-split roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye kick-split roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5728,14 +5458,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `168.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `168.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5795,6 +5525,8 @@ Rake splits a rumor
 Dummy split, empty arms
 Your kick is a story
 
+[inst - pocket snare, hats only]
+
 [verse]
 Half left, half right, still no partner
 Your legend lives in a reverse barter
@@ -5808,14 +5540,6 @@ Hold the kick or drop the stack
 Your rumor never sat in the rack
 Empty in the middle, the boast looks dummy
 
-[chorus]
-Kick-split myth
-Reverse punch, no data
-Nill Bye wants both halves
-Rake splits a rumor
-Dummy split, empty arms
-Your kick is a story
-
 [verse]
 Morning comes, the reverse is weary
 Half never came, the rumor faded
@@ -5826,6 +5550,8 @@ Rake still calling it a crunch
 Kick king with a rented half
 The arm never paid the craft
 File the reverse, keep the dummy
+
+[bridge]
 Dummy split is a party sticker
 Screech dead, the booth stays stacked
 
@@ -5907,6 +5633,8 @@ Rake splits a rumor
 Dummy split, empty arms
 Your kick is a story
 
+[inst - pocket snare, hats only]
+
 [verse]
 Half left, half right, still no partner
 Your legend lives in a reverse barter
@@ -5920,14 +5648,6 @@ Hold the kick or drop the stack
 Your rumor never sat in the rack
 Empty in the middle, the boast looks dummy
 
-[chorus]
-Kick-split myth
-Reverse punch, no data
-Nill Bye wants both halves
-Rake splits a rumor
-Dummy split, empty arms
-Your kick is a story
-
 [verse]
 Morning comes, the reverse is weary
 Half never came, the rumor faded
@@ -5938,6 +5658,8 @@ Rake still calling it a crunch
 Kick king with a rented half
 The arm never paid the craft
 File the reverse, keep the dummy
+
+[bridge]
 Dummy split is a party sticker
 Screech dead, the booth stays stacked
 
@@ -5965,10 +5687,10 @@ yeah
 | 2 | `179` |
 | 3 | `fixed` |
 | 4 | `150` |
-| 5 | `180.0` |
+| 5 | `168.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `E minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6028,6 +5750,8 @@ Rake splits a rumor
 Dummy split, empty arms
 Your kick is a story
 
+[inst - pocket snare, hats only]
+
 [verse]
 Half left, half right, still no partner
 Your legend lives in a reverse barter
@@ -6041,14 +5765,6 @@ Hold the kick or drop the stack
 Your rumor never sat in the rack
 Empty in the middle, the boast looks dummy
 
-[chorus]
-Kick-split myth
-Reverse punch, no data
-Nill Bye wants both halves
-Rake splits a rumor
-Dummy split, empty arms
-Your kick is a story
-
 [verse]
 Morning comes, the reverse is weary
 Half never came, the rumor faded
@@ -6059,6 +5775,8 @@ Rake still calling it a crunch
 Kick king with a rented half
 The arm never paid the craft
 File the reverse, keep the dummy
+
+[bridge]
 Dummy split is a party sticker
 Screech dead, the booth stays stacked
 
@@ -6138,7 +5856,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/false-drop/15-uplift-rumor`.
 
-US-safe rap 180s diss: Nill Bye uplifting-rumor roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap diss: Nill Bye uplifting-rumor roast of Rake, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -6157,14 +5875,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -6172,16 +5890,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| 1 | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/false-drop/15-uplift-rumor` |
 
 ```text
-[intro]
-hands lifted
-pads gated
-numbers flat
-
 [verse]
 Rake throws his hands like a headline
 Talks a lift that he never signed
@@ -6194,14 +5907,6 @@ That's a king with a ghost in the pad
 Nill Bye counting the missing rise
 Your whole pickup is a rumor plateau
 Hands up, then a cheaper hush
-
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
 
 [verse]
 You name a lift like a vintage crest
@@ -6216,14 +5921,6 @@ Nill Bye marking the empty lift
 Rake riding hands like a stolen drift
 Pickup looks busy, the numbers still lag
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Hand left, hand right, still no altitude
 Your legend lives in a pickup salute
@@ -6237,14 +5934,6 @@ Hold the hands or drop the logo
 Your rumor never sat in the rafter
 Empty in the middle, the boast looks gated
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Morning comes, the pickup is dim
 Lift never came, the rumor rusted
@@ -6257,6 +5946,10 @@ The number never paid the truss
 File the pickup, keep the haze
 Hands-up rumor is a party stencil
 Pads dead, the booth stays still
+
+[pre-chorus]
+Uplifting rumor
+Hands up, numbers flat
 
 [chorus]
 Uplifting rumor
@@ -6279,7 +5972,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,…` |
-| 2 | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| 2 | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/false-drop/15-uplift-rumor` |
@@ -6289,11 +5982,6 @@ trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth, 
 ```
 
 ```text
-[intro]
-hands lifted
-pads gated
-numbers flat
-
 [verse]
 Rake throws his hands like a headline
 Talks a lift that he never signed
@@ -6306,14 +5994,6 @@ That's a king with a ghost in the pad
 Nill Bye counting the missing rise
 Your whole pickup is a rumor plateau
 Hands up, then a cheaper hush
-
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
 
 [verse]
 You name a lift like a vintage crest
@@ -6328,14 +6008,6 @@ Nill Bye marking the empty lift
 Rake riding hands like a stolen drift
 Pickup looks busy, the numbers still lag
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Hand left, hand right, still no altitude
 Your legend lives in a pickup salute
@@ -6349,14 +6021,6 @@ Hold the hands or drop the logo
 Your rumor never sat in the rafter
 Empty in the middle, the boast looks gated
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Morning comes, the pickup is dim
 Lift never came, the rumor rusted
@@ -6369,6 +6033,10 @@ The number never paid the truss
 File the pickup, keep the haze
 Hands-up rumor is a party stencil
 Pads dead, the booth stays still
+
+[pre-chorus]
+Uplifting rumor
+Hands up, numbers flat
 
 [chorus]
 Uplifting rumor
@@ -6390,14 +6058,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth,…` |
-| 1 | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| 1 | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 | 2 | `181` |
 | 3 | `fixed` |
 | 4 | `138` |
-| 5 | `180.0` |
+| 5 | `210.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6410,11 +6078,6 @@ trance, gated pads, rolling bass, pickup drum fill, male rap vocals, dry booth, 
 ```
 
 ```text
-[intro]
-hands lifted
-pads gated
-numbers flat
-
 [verse]
 Rake throws his hands like a headline
 Talks a lift that he never signed
@@ -6427,14 +6090,6 @@ That's a king with a ghost in the pad
 Nill Bye counting the missing rise
 Your whole pickup is a rumor plateau
 Hands up, then a cheaper hush
-
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
 
 [verse]
 You name a lift like a vintage crest
@@ -6449,14 +6104,6 @@ Nill Bye marking the empty lift
 Rake riding hands like a stolen drift
 Pickup looks busy, the numbers still lag
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Hand left, hand right, still no altitude
 Your legend lives in a pickup salute
@@ -6470,14 +6117,6 @@ Hold the hands or drop the logo
 Your rumor never sat in the rafter
 Empty in the middle, the boast looks gated
 
-[chorus]
-Uplifting rumor
-Hands up, numbers flat
-Nill Bye waits for lift
-Rake sells a pickup
-Pads gated, no rise
-Your rumor never lifts
-
 [verse]
 Morning comes, the pickup is dim
 Lift never came, the rumor rusted
@@ -6490,6 +6129,10 @@ The number never paid the truss
 File the pickup, keep the haze
 Hands-up rumor is a party stencil
 Pads dead, the booth stays still
+
+[pre-chorus]
+Uplifting rumor
+Hands up, numbers flat
 
 [chorus]
 Uplifting rumor
@@ -6636,7 +6279,7 @@ square album cover, graphic print, club fog, dry booth silhouette, magenta strob
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
+**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -6673,16 +6316,20 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `custom` |
-| 1 | `square album cover, graphic print, club fog, dry booth silhouette, magenta stro…` |
+| 0 | `square album cover, graphic print, club fog, dry booth silhouette, magenta stro…` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `audio/albums/nill-bye/false-drop/cover` |
+| 6 | `stills/instagram-square` |
 
 ```text
 square album cover, graphic print, club fog, dry booth silhouette, magenta strobe, no crowd faces, fictional act Nill Bye, album False Drop, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
+
+```text
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -6702,6 +6349,29 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Format / platform** (`EZImageFormat`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Instagram · square (1024×1024)` |
+| 1 | `none` |
+| 2 | `1024` |
+| 3 | `1024` |
+| 4 | `1` |
+| 5 | `Match input` |
+
+**Upscale still** (`EZImageUpscale`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `none` |
+
+**Describe image** (`EZImageDescribe`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -6780,7 +6450,23 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Song Duration | `72.0` |
+| Song Duration | `120.0` |
+| Song Duration | `175.0` |
+| Song Duration | `80.0` |
+| Song Duration | `132.0` |
+| Song Duration | `187.0` |
+| Song Duration | `89.0` |
+| Song Duration | `143.0` |
+| Song Duration | `197.0` |
+| Song Duration | `99.0` |
+| Song Duration | `156.0` |
+| Song Duration | `207.0` |
+| Song Duration | `108.0` |
+| Song Duration | `168.0` |
+| Song Duration | `210.0` |
 
 #### `control_after_generate`
 
@@ -6807,7 +6493,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6816,13 +6502,29 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Latent length (seconds) | `72.0` |
+| Latent length (seconds) | `120.0` |
+| Latent length (seconds) | `175.0` |
+| Latent length (seconds) | `80.0` |
+| Latent length (seconds) | `132.0` |
+| Latent length (seconds) | `187.0` |
+| Latent length (seconds) | `89.0` |
+| Latent length (seconds) | `143.0` |
+| Latent length (seconds) | `197.0` |
+| Latent length (seconds) | `99.0` |
+| Latent length (seconds) | `156.0` |
+| Latent length (seconds) | `207.0` |
+| Latent length (seconds) | `108.0` |
+| Latent length (seconds) | `168.0` |
+| Latent length (seconds) | `210.0` |
 
 #### `batch_size`
 
@@ -6863,21 +6565,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| Rap lyrics | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| Rap lyrics | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | Rap lyrics | `[intro] stanchion up list blank wristband fake [verse] Rake leans on velvet lik…` |
-| Rap lyrics | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
-| Rap lyrics | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| Rap lyrics | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
+| Rap lyrics | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | Rap lyrics | `[intro] stick lit pretty burn yield zero [verse] Rake lights a stick like a bre…` |
 | Rap lyrics | `[intro] magnum rented tab borrowed ice theater [verse] Rake pops a cork like he…` |
 | Rap lyrics | `[intro] flash burst blink gone boast missing [verse] Rake talks big in a white-…` |
-| Rap lyrics | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| Rap lyrics | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | Rap lyrics | `[intro] LFO thick growl covering miss hiding [verse] Rake throws a wobble over …` |
-| Rap lyrics | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| Rap lyrics | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | Rap lyrics | `[intro] scanner on gobo fake logos floating [verse] Rake draws a logo in a rent…` |
 | Rap lyrics | `[intro] shuffle left skip the one proof dodging [verse] Rake shuffles left when…` |
-| Rap lyrics | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| Rap lyrics | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | Rap lyrics | `[intro] reverse punch split dummy data missing [verse] Rake splits a kick like …` |
-| Rap lyrics | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| Rap lyrics | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 
 #### `enhance`
 
@@ -6975,21 +6677,21 @@ Sectioned lyrics.
 
 | Instance | Value |
 | --- | --- |
-| ez_rap_prompt | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| ez_rap_prompt | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | ez_rap_prompt | `[intro] stanchion up list blank wristband fake [verse] Rake leans on velvet lik…` |
-| ez_rap_prompt | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
-| ez_rap_prompt | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| ez_rap_prompt | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
+| ez_rap_prompt | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | ez_rap_prompt | `[intro] stick lit pretty burn yield zero [verse] Rake lights a stick like a bre…` |
 | ez_rap_prompt | `[intro] magnum rented tab borrowed ice theater [verse] Rake pops a cork like he…` |
 | ez_rap_prompt | `[intro] flash burst blink gone boast missing [verse] Rake talks big in a white-…` |
-| ez_rap_prompt | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| ez_rap_prompt | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | ez_rap_prompt | `[intro] LFO thick growl covering miss hiding [verse] Rake throws a wobble over …` |
-| ez_rap_prompt | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| ez_rap_prompt | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | ez_rap_prompt | `[intro] scanner on gobo fake logos floating [verse] Rake draws a logo in a rent…` |
 | ez_rap_prompt | `[intro] shuffle left skip the one proof dodging [verse] Rake shuffles left when…` |
-| ez_rap_prompt | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| ez_rap_prompt | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | ez_rap_prompt | `[intro] reverse punch split dummy data missing [verse] Rake splits a kick like …` |
-| ez_rap_prompt | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| ez_rap_prompt | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 
 #### `enhance`
 
@@ -7096,21 +6798,21 @@ Sectioned lyrics or [inst] cues.
 
 | Instance | Value |
 | --- | --- |
-| ACE tags + lyrics | `[intro] riser fake snare tease drop ducks [verse] Rake rides a riser with no pu…` |
+| ACE tags + lyrics | `[verse] Rake rides a riser with no punch Talks a climax that never lands Snare …` |
 | ACE tags + lyrics | `[intro] stanchion up list blank wristband fake [verse] Rake leans on velvet lik…` |
-| ACE tags + lyrics | `[intro] jet hiss haze thick stage missing [verse] Rake hits the jet like a head…` |
-| ACE tags + lyrics | `[intro] clipboard dry door shut name missing [verse] Rake taps the cowbell like…` |
+| ACE tags + lyrics | `[verse] Rake hits the jet like a headline act Talks a set that the stage subtra…` |
+| ACE tags + lyrics | `[verse] Rake taps the cowbell like a password No name inked, just a leftover I …` |
 | ACE tags + lyrics | `[intro] stick lit pretty burn yield zero [verse] Rake lights a stick like a bre…` |
 | ACE tags + lyrics | `[intro] magnum rented tab borrowed ice theater [verse] Rake pops a cork like he…` |
 | ACE tags + lyrics | `[intro] flash burst blink gone boast missing [verse] Rake talks big in a white-…` |
-| ACE tags + lyrics | `[intro] break empty fill missing rumor racing [verse] Rake chops an amen like a…` |
+| ACE tags + lyrics | `[verse] Rake chops an amen like a headline Talks a fill that he never signed Br…` |
 | ACE tags + lyrics | `[intro] LFO thick growl covering miss hiding [verse] Rake throws a wobble over …` |
-| ACE tags + lyrics | `[intro] detune stacked patch flexing paper missing [verse] Rake stacks a saw li…` |
+| ACE tags + lyrics | `[chorus] Supersaw flex Stacked detune, no paper Nill Bye asks for a patch note …` |
 | ACE tags + lyrics | `[intro] scanner on gobo fake logos floating [verse] Rake draws a logo in a rent…` |
 | ACE tags + lyrics | `[intro] shuffle left skip the one proof dodging [verse] Rake shuffles left when…` |
-| ACE tags + lyrics | `[intro] squeaks up bounce hollow chops flying [verse] Rake chops a squeak like …` |
+| ACE tags + lyrics | `[verse] Rake chops a squeak like a headline Talks a body that he never signed B…` |
 | ACE tags + lyrics | `[intro] reverse punch split dummy data missing [verse] Rake splits a kick like …` |
-| ACE tags + lyrics | `[intro] hands lifted pads gated numbers flat [verse] Rake throws his hands like…` |
+| ACE tags + lyrics | `[verse] Rake throws his hands like a headline Talks a lift that he never signed…` |
 
 #### `seed`
 
@@ -7191,7 +6893,23 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `72.0` |
+| ACE tags + lyrics | `120.0` |
+| ACE tags + lyrics | `175.0` |
+| ACE tags + lyrics | `80.0` |
+| ACE tags + lyrics | `132.0` |
+| ACE tags + lyrics | `187.0` |
+| ACE tags + lyrics | `89.0` |
+| ACE tags + lyrics | `143.0` |
+| ACE tags + lyrics | `197.0` |
+| ACE tags + lyrics | `99.0` |
+| ACE tags + lyrics | `156.0` |
+| ACE tags + lyrics | `207.0` |
+| ACE tags + lyrics | `108.0` |
+| ACE tags + lyrics | `168.0` |
+| ACE tags + lyrics | `210.0` |
 
 #### `timesignature`
 
@@ -7199,7 +6917,7 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
 **This graph (all 15 instances):** `4`
 
@@ -7284,9 +7002,25 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
-**This graph (all 15 instances):** `C minor`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `F minor` |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
+| ACE tags + lyrics | `B minor` |
+| ACE tags + lyrics | `F minor` |
+| ACE tags + lyrics | `C minor` |
+| ACE tags + lyrics | `F# minor` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `D minor` |
+| ACE tags + lyrics | `E minor` |
+| ACE tags + lyrics | `G minor` |
 
 **Other choices**
 
@@ -7309,7 +7043,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -7698,21 +7432,21 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-false-drop US-safe rap **180 s diss** take: **false drop**. Fictional MCs…` |
-| Operator note | `## 02-velvet-rope US-safe rap **180 s diss** take: **velvet rope**. Fictional M…` |
-| Operator note | `## 03-fog-machine US-safe rap **180 s diss** take: **fog machine**. Fictional M…` |
-| Operator note | `## 04-guest-list US-safe rap **180 s diss** take: **guest list**. Fictional MCs…` |
-| Operator note | `## 05-sparkler US-safe rap **180 s diss** take: **sparkler science**. Fictional…` |
-| Operator note | `## 06-bottle-service US-safe rap **180 s diss** take: **bottle service**. Ficti…` |
-| Operator note | `## 07-strobe-claim US-safe rap **180 s diss** take: **strobe claim**. Fictional…` |
-| Operator note | `## 08-amen-rumor US-safe rap **180 s diss** take: **amen rumor**. Fictional MCs…` |
-| Operator note | `## 09-wobble-alibi US-safe rap **180 s diss** take: **wobble alibi**. Fictional…` |
-| Operator note | `## 10-supersaw-flex US-safe rap **180 s diss** take: **supersaw flex**. Fiction…` |
-| Operator note | `## 11-laser-show US-safe rap **180 s diss** take: **laser show**. Fictional MCs…` |
-| Operator note | `## 12-two-step US-safe rap **180 s diss** take: **two-step alibi**. Fictional M…` |
-| Operator note | `## 13-jersey-bounce US-safe rap **180 s diss** take: **jersey bounce**. Fiction…` |
-| Operator note | `## 14-kick-split US-safe rap **180 s diss** take: **kick-split myth**. Fictiona…` |
-| Operator note | `## 15-uplift-rumor US-safe rap **180 s diss** take: **uplifting rumor**. Fictio…` |
+| Operator note | `## 01-false-drop US-safe rap **72 s diss** take: **false drop**. Fictional MCs …` |
+| Operator note | `## 02-velvet-rope US-safe rap **120 s diss** take: **velvet rope**. Fictional M…` |
+| Operator note | `## 03-fog-machine US-safe rap **175 s diss** take: **fog machine**. Fictional M…` |
+| Operator note | `## 04-guest-list US-safe rap **80 s diss** take: **guest list**. Fictional MCs …` |
+| Operator note | `## 05-sparkler US-safe rap **132 s diss** take: **sparkler science**. Fictional…` |
+| Operator note | `## 06-bottle-service US-safe rap **187 s diss** take: **bottle service**. Ficti…` |
+| Operator note | `## 07-strobe-claim US-safe rap **89 s diss** take: **strobe claim**. Fictional …` |
+| Operator note | `## 08-amen-rumor US-safe rap **143 s diss** take: **amen rumor**. Fictional MCs…` |
+| Operator note | `## 09-wobble-alibi US-safe rap **197 s diss** take: **wobble alibi**. Fictional…` |
+| Operator note | `## 10-supersaw-flex US-safe rap **99 s diss** take: **supersaw flex**. Fictiona…` |
+| Operator note | `## 11-laser-show US-safe rap **156 s diss** take: **laser show**. Fictional MCs…` |
+| Operator note | `## 12-two-step US-safe rap **207 s diss** take: **two-step alibi**. Fictional M…` |
+| Operator note | `## 13-jersey-bounce US-safe rap **108 s diss** take: **jersey bounce**. Fiction…` |
+| Operator note | `## 14-kick-split US-safe rap **168 s diss** take: **kick-split myth**. Fictiona…` |
+| Operator note | `## 15-uplift-rumor US-safe rap **210 s diss** take: **uplifting rumor**. Fictio…` |
 | Operator note | `## audio/albums/nill-bye/false-drop/album Album **False Drop** by **Nill Bye** …` |
 | Operator note | `## audio/albums/nill-bye/false-drop/cover Album cover for **Nill Bye — False Dr…` |
 
@@ -8261,7 +7995,11 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `custom`
+**This graph:** `square album cover, graphic print, club fog, dry booth silhouette, magenta strobe, no crowd faces, fictional act Nill Bye, album False Drop, no text, no letters, no logos, no living person likeness, …`
+
+```text
+square album cover, graphic print, club fog, dry booth silhouette, magenta strobe, no crowd faces, fictional act Nill Bye, album False Drop, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
 
 #### `prompt`
 
@@ -8271,10 +8009,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `square album cover, graphic print, club fog, dry booth silhouette, magenta strobe, no crowd faces, fictional act Nill Bye, album False Drop, no text, no letters, no logos, no living person likeness, …`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-square album cover, graphic print, club fog, dry booth silhouette, magenta strobe, no crowd faces, fictional act Nill Bye, album False Drop, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 #### `enhance`
@@ -8642,7 +8380,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `audio/albums/nill-bye/false-drop/cover`
+**This graph:** `stills/instagram-square`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -8698,3 +8436,252 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZImageFormat` — Format / platform
+
+Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
+
+!!! warning "Lab notes"
+
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
+| `width` | out | `INT` | Latent width (÷16). |
+| `height` | out | `INT` | Latent height (÷16). |
+| `batch` | out | `INT` | Batch size. |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+
+**This graph:** `Instagram · square (1024×1024)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to ÷16. |
+| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
+| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
+| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
+| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
+| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
+| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
+| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
+| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
+| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
+| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
+| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
+| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
+| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
+| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
+| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
+| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
+| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
+| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
+| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
+| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
+| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
+| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
+| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
+| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
+| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
+| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
+| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
+| `Instagram · profile (768×768)` | 768×768. ig_profile. |
+| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
+| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
+| `X · post (1280×720)` | 1280×720. x_post. |
+| `X · header (1536×512)` | 1536×512. x_header. |
+| `X · card (1216×640)` | 1216×640. x_card. |
+| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
+| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
+| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
+| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
+| `Pinterest · pin (768×1152)` | 768×1152. pin. |
+| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
+| `Facebook · post (1216×640)` | 1216×640. fb_post. |
+| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
+| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
+| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
+| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
+| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
+| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
+| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
+| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
+| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
+| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
+| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
+| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
+| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
+| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
+| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
+| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
+| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
+| `Open Graph / blog (1216×640)` | 1216×640. og. |
+| `Email · header (1216×640)` | 1216×640. email_header. |
+| `Substack · hero (1216×640)` | 1216×640. substack. |
+| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
+| `Channel · banner (1536×512)` | 1536×512. banner. |
+| `End-card / CTA (1280×720)` | 1280×720. endcard. |
+| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
+| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
+| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
+| `Shorts still (432×768)` | 432×768. shorts_still. |
+| `Hook still (432×768)` | 432×768. hook_still. |
+| `Product packshot (1024×1024)` | 1024×1024. packshot. |
+| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
+| `Desk setup (1280×720)` | 1280×720. desk_setup. |
+| `Coming soon (1280×720)` | 1280×720. coming_soon. |
+| `Slide title (1280×720)` | 1280×720. slide_title. |
+| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
+| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
+| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
+| `Print poster (768×1152)` | 768×1152. poster. |
+
+#### `look`
+
+Type `COMBO`. Range / default: none.
+
+Optional Cinema Rack starter.
+
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Style + Prompt own look. |
+| `Noir interrogation` | rec_noir_push |
+| `Locked portrait` | rec_locked_portrait |
+| `Golden wide` | rec_golden_wide |
+| `Handheld documentary` | rec_handheld_doc |
+| `Vertical hook` | rec_vertical_hook |
+| `Rain track` | rec_rain_track |
+| `Product orbit` | rec_orbit_product |
+| `Drone reveal` | rec_drone_reveal |
+| `Night bible` | rec_identity_night |
+| `Western noon` | rec_western_noon |
+| `Slow push to eyes` | rec_slow_push_eyes |
+| `FPV dive` | rec_fpv_dive |
+| `Match-cut AV` | rec_match_cut_ltx |
+| `Fog push` | rec_fog_push |
+| `Body-cam sprint` | rec_bodycam_sprint |
+| `Bounce beauty` | rec_romcom_beauty |
+| `Overcast wide` | rec_overcast_wide |
+| `Macro pour` | rec_macro_pour |
+| `Crane reveal` | rec_crane_reveal |
+| `Split diopter two-plane` | rec_split_diopter |
+| `Night practical push` | rec_night_practical_push |
+| `Hyperlapse path` | rec_hyperlapse |
+| `Talking MCU` | rec_talking_mcu |
+| `Anamorphic-class night` | rec_anamorphic_night |
+
+#### `width`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `height`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1–4.
+
+How many stills in one Run.
+
+**How it affects generation:** Large canvases stay at 1.
+
+**This graph:** `1`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`
