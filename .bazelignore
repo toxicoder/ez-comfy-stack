@@ -11,7 +11,9 @@ __pycache__/
 .mypy_cache/
 coverage/
 htmlcov/
+kcov-output/
 tests/bats/tmp
+docs-site/tests/visual/actuals/
 **/.DS_Store
 **/*~
 node_modules/

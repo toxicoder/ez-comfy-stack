@@ -38,6 +38,7 @@ jobs:
               - 'tools/**'
               - 'studio-ui/**'
               - 'workflows/**'
+              - 'schemas/**'
               - 'docs/*.py'
               - 'mypy.ini'
               - 'pyrightconfig.json'
@@ -57,6 +58,7 @@ jobs:
               - 'MODULE.bazel.lock'
               - '.bazelrc'
               - '.bazelversion'
+              - '.bazelignore'
               - 'fix.sh'
               - 'scripts/validate.sh'
             ci-workflow:

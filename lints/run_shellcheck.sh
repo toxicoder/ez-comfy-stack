@@ -23,6 +23,6 @@ find . -name '*.sh' \
   -not -path './site/*' \
   -not -path './bazel-*/*' \
   -not -path './.venv*/*' \
-  -not -path './node_modules/*' \
+  -not -path '*/node_modules/*' \
   -print0 | xargs -0 shellcheck -x --severity=warning
 echo "Shell lint step finished."

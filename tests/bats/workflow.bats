@@ -79,6 +79,39 @@ lab_wf() {
   [ "${status}" -eq 0 ]
 }
 
+@test "gitignore hides coverage xml, playwright actuals, dotenv variants, and URL clones" {
+  local gi="${REPO_ROOT}/.gitignore"
+  run grep -F '.coverage.*' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'coverage.xml' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'docs-site/tests/visual/actuals/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F 'playwright-report/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '/https:/' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '.env.*' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!.env.example' "${gi}"
+  [ "${status}" -eq 0 ]
+  cd "${REPO_ROOT}"
+  run git check-ignore -q coverage.xml
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q .coverage.1
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q docs-site/tests/visual/actuals/foo.png
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q playwright-report/index.html
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q .env.production
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q .env.example
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q 'https:/github.com/example.git'
+  [ "${status}" -eq 0 ]
+}
+
 @test "gitignore tracks shared vscode files and ignores local vscode state" {
   local gi="${REPO_ROOT}/.gitignore"
   run grep -F '.vscode/*' "${gi}"
