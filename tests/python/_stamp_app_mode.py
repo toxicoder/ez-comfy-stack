@@ -550,7 +550,7 @@ DEFAULT_WIDGET_DESCRIPTIONS = {
     "mode": "Rewrite family for this encoder.",
     "duration_hint": "Aspect or duration the rewriter should target.",
     "value": "Shot card. Paste into workflows/shorts/<slug>.shots.yaml.",
-    "seconds": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+    "seconds": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64–210 s.",
     "speaker_a_voice": "Kokoro built-in for Speaker A. Voice-clone refs stay graph-only.",
     "speaker_b_voice": "Kokoro built-in for Speaker B.",
     "announcer_voice": "Kokoro built-in for Announcer: lines.",

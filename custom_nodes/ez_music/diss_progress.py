@@ -1,4 +1,4 @@
-"""Progress-pack 180s Nill Bye takes (non-trap, non-EDM beds).
+"""Progress-pack full-length Nill Bye takes (non-trap, non-EDM beds).
 
 Fictional MC Nill Bye on public-record fixes: methods, statutes, measurement.
 Original lyrics. No living-MC names. No roast target. No autotune.

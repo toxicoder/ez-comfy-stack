@@ -1,6 +1,6 @@
 {
   "id": "10-zero-tolerance",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 17,
   "last_link_id": 17,
   "nodes": [
@@ -125,7 +125,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        180.0,
+        100.0,
         "fixed"
       ],
       "title": "Song Duration"
@@ -134,8 +134,8 @@
       "id": 4,
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
-        40,
-        1214
+        2976,
+        728
       ],
       "size": [
         320,
@@ -168,7 +168,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        180.0,
+        100.0,
         1
       ],
       "title": "Latent length (seconds)"
@@ -203,7 +203,7 @@
       },
       "widgets_values": [
         "custom",
-        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
+        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
         false,
         "audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance"
       ],
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        1564
+        1220
       ],
       "size": [
         400,
@@ -257,7 +257,7 @@
       "widgets_values": [
         "custom",
         "neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotune, 84 bpm",
-        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
+        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
         false,
         "vocal",
         "audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance"
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        2056
+        1712
       ],
       "size": [
         400,
@@ -325,14 +325,14 @@
       },
       "widgets_values": [
         "neo-soul, rhodes, soft snare, warm bass, male rap vocals, dry booth, no autotune, 84 bpm",
-        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
+        "[intro]\nsoft snare\nNill Bye reading memos\n\n[verse]\nSpring twenty-eighteen, a prosecutorial switch\nMisdemeanor crossing charged as a rule, not a triage\nTrump's cabinet put children on a different bus\nBecause the adult went to a dock\nNill Bye reading the separation memo, oigcount\nDHS OIG later counted the chaos in the handoff\nThousands of children, tracking that lagged the policy, reunification\nA government that cannot find the child it moved\nHas confessed the design was the shock, not the file, handoff\nDeterrence that uses a child is not border craft\nIt is a lever pulled on a person who cannot vote the lever\nThat is the punch-up: the lever, not the child\n\n[verse]\nNeo-soul keys on a prosecutorial parenting step\nWarm bass under a file that lost its own matches\nTrump said the law made him do it\nThe law did not require the child on a separate bus\nNill Bye mad at a choice sold as a statute, oigcount\nSessions announced the zero. Nielsen inherited the mess\nA later order tried to look like mercy\nMercy after the shock is a presser, not a method, reunification\nReunification became a scavenger hunt with lawyers\nA scavenger hunt is not a child-welfare system\nYou do not get to lose the match and keep the talking point, handoff\nThe match was the minimum the state owed\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nI will not mock a child. I will mock the memo, oigcount\nThe memo treated a family as a deterrent poster\nTrump still touring toughness as if toughness were tracking\nToughness that loses a child is incompetence with a slogan, reunification\nNill Bye filing the zero tolerance\nA prosecutorial switch can exist without the bus split\nYou added the split because the split photographs as pain\nPain as a message is the confession\nOIG papered the tracking failure\nPaper is the opposite of a vibe, handoff\nI want a file that can find a child\nYou wanted a headline that could move a poll\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[verse]\nKeep the rhodes, print the OIG count, oigcount\nA later undo does not un-ride the bus\nTrump still sure a slogan is a child-welfare plan, reunification\nA plan has matches, beds, counsel, a clock, handoff\nNill Bye posting the zero tolerance\nBring a match, lose the deterrent poster\nThe families were not a talking point, oigcount\nThey were the people the memo used\nUsed is the verb. I will keep using it\nA state does not get to use a child as a lever\nThe lever already told on the shop\nThe OIG already counted the lost matches\n\n[chorus]\nZero tolerance\nNill Bye on the separation memo\nTrump's shop made parenting a prosecutorial step\nKids as a deterrent is a policy confession\nA later executive undo is not a time machine\nYour memo failed the families it used\n\n[outro]\nkeys rest\nmatches due\ncut",
         421,
         "fixed",
         84,
-        180.0,
+        100.0,
         "4",
         "en",
-        "C minor",
+        "F# minor",
         true,
         2.0,
         0.85,
@@ -564,7 +564,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 10-zero-tolerance\n\nUS-safe rap **180 s diss** take: **zero tolerance**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 84, language en, timesignature 4, generate_audio_codes true. Seed 421.\n7. Saves: `10 - Zero Tolerance` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 10-zero-tolerance\n\nUS-safe rap **100 s diss** take: **zero tolerance**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 100 s, bpm 84, language en, timesignature 4, key F# minor, form v_delayed_hook, generate_audio_codes true. Seed 421.\n7. Saves: `10 - Zero Tolerance` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -895,8 +895,8 @@
       "bounding": [
         20,
         1004,
-        360,
-        336
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -909,7 +909,7 @@
         480,
         672,
         818,
-        1848
+        1504
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -940,13 +940,26 @@
       "color": "#a1309b",
       "font_size": 24,
       "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "SETTINGS",
+      "bounding": [
+        2956,
+        672,
+        360,
+        182
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
     }
   ],
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 10-zero-tolerance\n\nUS-safe rap **180 s diss** take: **zero tolerance**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 84, language en, timesignature 4, generate_audio_codes true. Seed 421.\n7. Saves: `10 - Zero Tolerance` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe rap 180s diss: Nill Bye zero-tolerance roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## 10-zero-tolerance\n\nUS-safe rap **100 s diss** take: **zero tolerance**. Fictional MC **Nill Bye** (science guy) roasting public-record satire of **Donald Trump**. Trump is a satire target, not a vocal identity. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 100 s, bpm 84, language en, timesignature 4, key F# minor, form v_delayed_hook, generate_audio_codes true. Seed 421.\n7. Saves: `10 - Zero Tolerance` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe rap diss: Nill Bye zero-tolerance roast of Trump, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -968,6 +981,9 @@
     },
     "lab_rel": "audio/albums/nill-bye/thirty-four-counts/10-zero-tolerance",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1025,7 +1041,7 @@
           3,
           "seconds",
           {
-            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64\u2013210 s.",
             "label": "Duration (seconds)"
           }
         ],
@@ -1100,10 +1116,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

@@ -28,14 +28,14 @@ Numbered takes under `audio/albums/nill-bye/winterize-wells/`. Queue one track, 
 ```text
 ## 01-winterize-wells
 
-US-safe rap **180 s progress** take: **winterize wells**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
+US-safe rap **71 s progress** take: **winterize wells**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** — draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.
 
 1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).
 2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.
 3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.
 4. Original lyrics only. No “in the style of <living artist>”. No living-MC names. No famous-hook paraphrases.
 5. ACE-Step vocal is an **invented** identity, not a cloned MC.
-6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 88, language en, timesignature 4, generate_audio_codes true. Seed 563.
+6. Sampler: 8 steps, cfg 1, euler, simple. Duration 71 s, bpm 88, language en, timesignature 4, key Bb major, form v_pre, generate_audio_codes true. Seed 563.
 7. Saves: `01 - Winterize Wells` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.
 8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.
 9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).
@@ -105,13 +105,13 @@ flowchart LR
 | `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` | 17 | audio |
 | `audio/albums/nill-bye/winterize-wells/15-one-college` | 17 | audio |
 | `audio/albums/nill-bye/winterize-wells/album` | 4 | none |
-| `audio/albums/nill-bye/winterize-wells/cover` | 15 | klein |
+| `audio/albums/nill-bye/winterize-wells/cover` | 18 | klein |
 
 ## `01-winterize-wells`
 
 Catalog id `audio/albums/nill-bye/winterize-wells/01-winterize-wells`.
 
-US-safe rap 180s progress: Nill Bye winterize-wells grid fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye winterize-wells grid fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -130,14 +130,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `71.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `71.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -169,14 +169,6 @@ Texas Railroad Commission mapped critical fuel in twenty-twenty-two
 A map of some wells is not a reliability standard
 I want the missing half named as the install, wellhead
 
-[chorus]
-Winterize wells
-Nill Bye on the missing gas rule
-EOP-012 jackets the generator
-Wells still sit outside NERC
-Write the production rule in a state house
-Your chain passes the cold quiz
-
 [verse]
 Boom-bap dust on a two-rung ladder
 Vinyl on a generator that already got a coat, flangekit
@@ -190,6 +182,10 @@ S.B. 3 jackets specified ERCOT wholesale generators in-state
 PUCT 25.55 is summer and winter prep for that set
 Set is not the whole fuel chain. Publish the miss on gathering lines, nercsheet
 Science is a jacket on the unit and a statute on the well
+
+[pre-chorus]
+Winterize wells
+Nill Bye on the missing gas rule
 
 [chorus]
 Winterize wells
@@ -285,14 +281,6 @@ Texas Railroad Commission mapped critical fuel in twenty-twenty-two
 A map of some wells is not a reliability standard
 I want the missing half named as the install, wellhead
 
-[chorus]
-Winterize wells
-Nill Bye on the missing gas rule
-EOP-012 jackets the generator
-Wells still sit outside NERC
-Write the production rule in a state house
-Your chain passes the cold quiz
-
 [verse]
 Boom-bap dust on a two-rung ladder
 Vinyl on a generator that already got a coat, flangekit
@@ -306,6 +294,10 @@ S.B. 3 jackets specified ERCOT wholesale generators in-state
 PUCT 25.55 is summer and winter prep for that set
 Set is not the whole fuel chain. Publish the miss on gathering lines, nercsheet
 Science is a jacket on the unit and a statute on the well
+
+[pre-chorus]
+Winterize wells
+Nill Bye on the missing gas rule
 
 [chorus]
 Winterize wells
@@ -375,10 +367,10 @@ yeah
 | 2 | `563` |
 | 3 | `fixed` |
 | 4 | `88` |
-| 5 | `180.0` |
+| 5 | `71.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `Bb major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -410,14 +402,6 @@ Texas Railroad Commission mapped critical fuel in twenty-twenty-two
 A map of some wells is not a reliability standard
 I want the missing half named as the install, wellhead
 
-[chorus]
-Winterize wells
-Nill Bye on the missing gas rule
-EOP-012 jackets the generator
-Wells still sit outside NERC
-Write the production rule in a state house
-Your chain passes the cold quiz
-
 [verse]
 Boom-bap dust on a two-rung ladder
 Vinyl on a generator that already got a coat, flangekit
@@ -431,6 +415,10 @@ S.B. 3 jackets specified ERCOT wholesale generators in-state
 PUCT 25.55 is summer and winter prep for that set
 Set is not the whole fuel chain. Publish the miss on gathering lines, nercsheet
 Science is a jacket on the unit and a statute on the well
+
+[pre-chorus]
+Winterize wells
+Nill Bye on the missing gas rule
 
 [chorus]
 Winterize wells
@@ -552,7 +540,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/02-registered-report`.
 
-US-safe rap 180s progress: Nill Bye registered-report open-science fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye registered-report open-science fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -571,14 +559,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `120.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -598,9 +586,13 @@ Results cannot un-write the protocol
 A null is a result
 Open science
 
-[intro]
-notebook click
-Nill Bye preregistering
+[chorus]
+Registered report
+Nill Bye on the protocol lock
+Write the method before the p lights up
+A surprise finding still has to survive the plan
+Center for Open Science already built the door
+Your results cannot un-write the protocol
 
 [verse]
 A hypothesis is a bet you place in public
@@ -616,14 +608,6 @@ Registered reports print the plan, then the weather
 Weather is honest. Fireworks are a selection effect
 I want the plan locked before the first pipette
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Boom-bap snare on an OSF timestamp
 Upright bass under a method that cannot sneak a new outcome
@@ -638,14 +622,6 @@ Retraction is a cleanup. Preregistration is a design, osfhash
 Design is cheaper than cleanup
 I install the lock. The lock is kindness to the next lab
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Replication is not a vibe. It is a second protocol
 A second lab, a second n, the same hashed plan, protocolock
@@ -659,14 +635,6 @@ I want a coastline. You can keep the brochure for a poster session
 The session is not the record. The OSF is the record
 Bring a hash, lose the secret outcome-swap
 The pipette already knew the honest order, osfhash
-
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
 
 [verse]
 Keep the dry booth, print the protocol lock
@@ -719,9 +687,13 @@ Results cannot un-write the protocol
 A null is a result
 Open science
 
-[intro]
-notebook click
-Nill Bye preregistering
+[chorus]
+Registered report
+Nill Bye on the protocol lock
+Write the method before the p lights up
+A surprise finding still has to survive the plan
+Center for Open Science already built the door
+Your results cannot un-write the protocol
 
 [verse]
 A hypothesis is a bet you place in public
@@ -737,14 +709,6 @@ Registered reports print the plan, then the weather
 Weather is honest. Fireworks are a selection effect
 I want the plan locked before the first pipette
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Boom-bap snare on an OSF timestamp
 Upright bass under a method that cannot sneak a new outcome
@@ -759,14 +723,6 @@ Retraction is a cleanup. Preregistration is a design, osfhash
 Design is cheaper than cleanup
 I install the lock. The lock is kindness to the next lab
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Replication is not a vibe. It is a second protocol
 A second lab, a second n, the same hashed plan, protocolock
@@ -780,14 +736,6 @@ I want a coastline. You can keep the brochure for a poster session
 The session is not the record. The OSF is the record
 Bring a hash, lose the secret outcome-swap
 The pipette already knew the honest order, osfhash
-
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
 
 [verse]
 Keep the dry booth, print the protocol lock
@@ -826,10 +774,10 @@ cut
 | 2 | `569` |
 | 3 | `fixed` |
 | 4 | `86` |
-| 5 | `180.0` |
+| 5 | `120.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `Eb major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -849,9 +797,13 @@ Results cannot un-write the protocol
 A null is a result
 Open science
 
-[intro]
-notebook click
-Nill Bye preregistering
+[chorus]
+Registered report
+Nill Bye on the protocol lock
+Write the method before the p lights up
+A surprise finding still has to survive the plan
+Center for Open Science already built the door
+Your results cannot un-write the protocol
 
 [verse]
 A hypothesis is a bet you place in public
@@ -867,14 +819,6 @@ Registered reports print the plan, then the weather
 Weather is honest. Fireworks are a selection effect
 I want the plan locked before the first pipette
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Boom-bap snare on an OSF timestamp
 Upright bass under a method that cannot sneak a new outcome
@@ -889,14 +833,6 @@ Retraction is a cleanup. Preregistration is a design, osfhash
 Design is cheaper than cleanup
 I install the lock. The lock is kindness to the next lab
 
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
-
 [verse]
 Replication is not a vibe. It is a second protocol
 A second lab, a second n, the same hashed plan, protocolock
@@ -910,14 +846,6 @@ I want a coastline. You can keep the brochure for a poster session
 The session is not the record. The OSF is the record
 Bring a hash, lose the secret outcome-swap
 The pipette already knew the honest order, osfhash
-
-[chorus]
-Registered report
-Nill Bye on the protocol lock
-Write the method before the p lights up
-A surprise finding still has to survive the plan
-Center for Open Science already built the door
-Your results cannot un-write the protocol
 
 [verse]
 Keep the dry booth, print the protocol lock
@@ -1008,7 +936,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/03-named-uncertainty`.
 
-US-safe rap 180s progress: Nill Bye named-uncertainty interval fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye named-uncertainty interval fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1027,14 +955,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `176.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1095,6 +1023,8 @@ n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
 
+[breakdown - hats only]
+
 [verse]
 Civic life needs the same tax, honestytax
 A budget forecast without a band is a hymn, nullband
@@ -1138,6 +1068,8 @@ A point estimate without a range is a costume number
 n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
+
+[inst - pocket snare, hats only]
 
 [outro]
 brushes rest
@@ -1210,6 +1142,8 @@ n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
 
+[breakdown - hats only]
+
 [verse]
 Civic life needs the same tax, honestytax
 A budget forecast without a band is a hymn, nullband
@@ -1254,6 +1188,8 @@ n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
 
+[inst - pocket snare, hats only]
+
 [outro]
 brushes rest
 band sits
@@ -1270,10 +1206,10 @@ yeah
 | 2 | `571` |
 | 3 | `fixed` |
 | 4 | `90` |
-| 5 | `180.0` |
+| 5 | `176.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1334,6 +1270,8 @@ n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
 
+[breakdown - hats only]
+
 [verse]
 Civic life needs the same tax, honestytax
 A budget forecast without a band is a hymn, nullband
@@ -1377,6 +1315,8 @@ A point estimate without a range is a costume number
 n of many, not a sample of swagger
 A null is a result with a confidence band
 Your claim wears the interval it earned
+
+[inst - pocket snare, hats only]
 
 [outro]
 brushes rest
@@ -1446,7 +1386,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/04-scif-only`.
 
-US-safe rap 180s progress: Nill Bye scif-only compartment fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye scif-only compartment fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1465,14 +1405,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `80.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1503,14 +1443,6 @@ If it is moving, it is in a pouch that can be counted
 Counting is the science. Vibes are how a chandelier becomes a file room, compartment
 I install the door. The door is the whole thesis, pouchlog
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Industrial percussion on a vault that actually vaults
 Distorted bass under a courier with a receipt, cfr2001
@@ -1524,6 +1456,10 @@ Build the lock. Fund the lock. Inspect the lock
 Inspection is kindness to the next administration
 The next administration should inherit a compartment, not a pile, cfr2001
 Piles are how photos become the catalog, compartment
+
+[pre-chorus]
+Scif only
+Nill Bye on the compartment
 
 [chorus]
 Scif only
@@ -1547,14 +1483,6 @@ Audits are not persecution. Audits are how a republic keeps its paper
 Bring the compartment, lose the chandelier library
 The lock already knew the difference
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Keep the metal, print the 32 CFR
 A civic fix is a door with a standard, not a mind-power
@@ -1568,14 +1496,6 @@ Memberships are a business. Stacks are a duty
 Duty lives in a SCIF
 Install the SCIF. Date the first log, pouchlog
 Scif only is the whole install, cfr2001
-
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
 
 [outro]
 clamp set
@@ -1617,14 +1537,6 @@ If it is moving, it is in a pouch that can be counted
 Counting is the science. Vibes are how a chandelier becomes a file room, compartment
 I install the door. The door is the whole thesis, pouchlog
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Industrial percussion on a vault that actually vaults
 Distorted bass under a courier with a receipt, cfr2001
@@ -1638,6 +1550,10 @@ Build the lock. Fund the lock. Inspect the lock
 Inspection is kindness to the next administration
 The next administration should inherit a compartment, not a pile, cfr2001
 Piles are how photos become the catalog, compartment
+
+[pre-chorus]
+Scif only
+Nill Bye on the compartment
 
 [chorus]
 Scif only
@@ -1661,14 +1577,6 @@ Audits are not persecution. Audits are how a republic keeps its paper
 Bring the compartment, lose the chandelier library
 The lock already knew the difference
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Keep the metal, print the 32 CFR
 A civic fix is a door with a standard, not a mind-power
@@ -1682,14 +1590,6 @@ Memberships are a business. Stacks are a duty
 Duty lives in a SCIF
 Install the SCIF. Date the first log, pouchlog
 Scif only is the whole install, cfr2001
-
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
 
 [outro]
 clamp set
@@ -1706,10 +1606,10 @@ cut
 | 2 | `577` |
 | 3 | `fixed` |
 | 4 | `108` |
-| 5 | `180.0` |
-| 6 | `4` |
+| 5 | `80.0` |
+| 6 | `2` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `C major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -1740,14 +1640,6 @@ If it is moving, it is in a pouch that can be counted
 Counting is the science. Vibes are how a chandelier becomes a file room, compartment
 I install the door. The door is the whole thesis, pouchlog
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Industrial percussion on a vault that actually vaults
 Distorted bass under a courier with a receipt, cfr2001
@@ -1761,6 +1653,10 @@ Build the lock. Fund the lock. Inspect the lock
 Inspection is kindness to the next administration
 The next administration should inherit a compartment, not a pile, cfr2001
 Piles are how photos become the catalog, compartment
+
+[pre-chorus]
+Scif only
+Nill Bye on the compartment
 
 [chorus]
 Scif only
@@ -1784,14 +1680,6 @@ Audits are not persecution. Audits are how a republic keeps its paper
 Bring the compartment, lose the chandelier library
 The lock already knew the difference
 
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
-
 [verse]
 Keep the metal, print the 32 CFR
 A civic fix is a door with a standard, not a mind-power
@@ -1805,14 +1693,6 @@ Memberships are a business. Stacks are a duty
 Duty lives in a SCIF
 Install the SCIF. Date the first log, pouchlog
 Scif only is the whole install, cfr2001
-
-[chorus]
-Scif only
-Nill Bye on the compartment
-A bathroom is not a vault
-Markings, courier, log, a door that means it
-A mind is not a declassifier
-Your paper lives where the lock lives
 
 [outro]
 clamp set
@@ -1881,7 +1761,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/05-hearing-first`.
 
-US-safe rap 180s progress: Nill Bye hearing-first process fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye hearing-first process fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -1900,14 +1780,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `131.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -1915,15 +1795,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| 1 | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/winterize-wells/05-hearing-first` |
 
 ```text
-[intro]
-tuba swell
-Nill Bye docketing the hearing
-
 [verse]
 A withholding is a court-shaped shield already on the file, withholdflag
 You do not step over a shield because a parking lot is convenient
@@ -1968,6 +1844,8 @@ Facilitate means work, not a foreign-sovereign alibi
 The file that already won a shield keeps the shield
 Your process is the plane's permission slip
 
+[inst - pocket snare, hats only]
+
 [verse]
 A social post is not a holding. A holding is facilitate
 Obey the holding. Then try the case you actually have
@@ -1982,7 +1860,7 @@ I want the flowchart. I want the withheld name to light up red
 Red is a stop. Stop is the install, flowchartred
 The parking lot already needed that red light, withholdflag
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2004,7 +1882,7 @@ Glamour is optional. Process is not
 Bring the hearing, lose the shrug, withholdflag
 The shield already knew the order, tarmaclast
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2025,7 +1903,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, …` |
-| 2 | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| 2 | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/winterize-wells/05-hearing-first` |
@@ -2035,10 +1913,6 @@ brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, 1
 ```
 
 ```text
-[intro]
-tuba swell
-Nill Bye docketing the hearing
-
 [verse]
 A withholding is a court-shaped shield already on the file, withholdflag
 You do not step over a shield because a parking lot is convenient
@@ -2083,6 +1957,8 @@ Facilitate means work, not a foreign-sovereign alibi
 The file that already won a shield keeps the shield
 Your process is the plane's permission slip
 
+[inst - pocket snare, hats only]
+
 [verse]
 A social post is not a holding. A holding is facilitate
 Obey the holding. Then try the case you actually have
@@ -2097,7 +1973,7 @@ I want the flowchart. I want the withheld name to light up red
 Red is a stop. Stop is the install, flowchartred
 The parking lot already needed that red light, withholdflag
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2119,7 +1995,7 @@ Glamour is optional. Process is not
 Bring the hearing, lose the shrug, withholdflag
 The shield already knew the order, tarmaclast
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2139,14 +2015,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, …` |
-| 1 | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| 1 | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | 2 | `587` |
 | 3 | `fixed` |
 | 4 | `112` |
-| 5 | `180.0` |
+| 5 | `131.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2159,10 +2035,6 @@ brass band, tuba bass, snare cadence, male rap vocals, dry booth, no autotune, 1
 ```
 
 ```text
-[intro]
-tuba swell
-Nill Bye docketing the hearing
-
 [verse]
 A withholding is a court-shaped shield already on the file, withholdflag
 You do not step over a shield because a parking lot is convenient
@@ -2207,6 +2079,8 @@ Facilitate means work, not a foreign-sovereign alibi
 The file that already won a shield keeps the shield
 Your process is the plane's permission slip
 
+[inst - pocket snare, hats only]
+
 [verse]
 A social post is not a holding. A holding is facilitate
 Obey the holding. Then try the case you actually have
@@ -2221,7 +2095,7 @@ I want the flowchart. I want the withheld name to light up red
 Red is a stop. Stop is the install, flowchartred
 The parking lot already needed that red light, withholdflag
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2243,7 +2117,7 @@ Glamour is optional. Process is not
 Bring the hearing, lose the shrug, withholdflag
 The shield already knew the order, tarmaclast
 
-[chorus]
+[chorus - half-time drums]
 Hearing first
 Nill Bye on the withholding
 A plane is a last step, not a first shrug
@@ -2319,7 +2193,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/06-keep-the-match`.
 
-US-safe rap 180s progress: Nill Bye keep-the-match family-unity fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye keep-the-match family-unity fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2338,14 +2212,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `187.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2406,6 +2280,8 @@ One case-id, two humans, a bed that can be found
 Reunification is a database, not a scavenger hunt
 Your memo owes the match it moved
 
+[inst - pocket snare, hats only]
+
 [verse]
 I will not mock a child. I will mock a memo that treated a family as a poster, nightbed
 The fix is the memo, the id, the bed, the counsel
@@ -2420,14 +2296,6 @@ Bring the case-id, lose the deterrent poster, reunifydesk
 The family was never a talking point, nightbed
 The family is two humans the file must be able to rejoin
 
-[chorus]
-Keep the match
-Nill Bye on the family file
-A child is not a deterrent poster
-One case-id, two humans, a bed that can be found
-Reunification is a database, not a scavenger hunt
-Your memo owes the match it moved
-
 [verse]
 Keep the folk scrape, caseidrow, print the case-id
 Keep the match is a civic method you can ship as software
@@ -2439,6 +2307,8 @@ If it does not resolve, the bus waits
 Waiting is cheaper than a lost child, reunifydesk
 Cheaper is allowed to be the argument
 The argument still ends at the same install, nightbed
+
+[bridge]
 Install the row. Date the first resolve
 Keep the match is the whole install, caseidrow
 
@@ -2520,6 +2390,8 @@ One case-id, two humans, a bed that can be found
 Reunification is a database, not a scavenger hunt
 Your memo owes the match it moved
 
+[inst - pocket snare, hats only]
+
 [verse]
 I will not mock a child. I will mock a memo that treated a family as a poster, nightbed
 The fix is the memo, the id, the bed, the counsel
@@ -2534,14 +2406,6 @@ Bring the case-id, lose the deterrent poster, reunifydesk
 The family was never a talking point, nightbed
 The family is two humans the file must be able to rejoin
 
-[chorus]
-Keep the match
-Nill Bye on the family file
-A child is not a deterrent poster
-One case-id, two humans, a bed that can be found
-Reunification is a database, not a scavenger hunt
-Your memo owes the match it moved
-
 [verse]
 Keep the folk scrape, caseidrow, print the case-id
 Keep the match is a civic method you can ship as software
@@ -2553,6 +2417,8 @@ If it does not resolve, the bus waits
 Waiting is cheaper than a lost child, reunifydesk
 Cheaper is allowed to be the argument
 The argument still ends at the same install, nightbed
+
+[bridge]
 Install the row. Date the first resolve
 Keep the match is the whole install, caseidrow
 
@@ -2579,10 +2445,10 @@ cut
 | 2 | `593` |
 | 3 | `fixed` |
 | 4 | `82` |
-| 5 | `180.0` |
-| 6 | `4` |
+| 5 | `187.0` |
+| 6 | `3` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -2643,6 +2509,8 @@ One case-id, two humans, a bed that can be found
 Reunification is a database, not a scavenger hunt
 Your memo owes the match it moved
 
+[inst - pocket snare, hats only]
+
 [verse]
 I will not mock a child. I will mock a memo that treated a family as a poster, nightbed
 The fix is the memo, the id, the bed, the counsel
@@ -2657,14 +2525,6 @@ Bring the case-id, lose the deterrent poster, reunifydesk
 The family was never a talking point, nightbed
 The family is two humans the file must be able to rejoin
 
-[chorus]
-Keep the match
-Nill Bye on the family file
-A child is not a deterrent poster
-One case-id, two humans, a bed that can be found
-Reunification is a database, not a scavenger hunt
-Your memo owes the match it moved
-
 [verse]
 Keep the folk scrape, caseidrow, print the case-id
 Keep the match is a civic method you can ship as software
@@ -2676,6 +2536,8 @@ If it does not resolve, the bus waits
 Waiting is cheaper than a lost child, reunifydesk
 Cheaper is allowed to be the argument
 The argument still ends at the same install, nightbed
+
+[bridge]
 Install the row. Date the first resolve
 Keep the match is the whole install, caseidrow
 
@@ -2754,7 +2616,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/07-honest-census`.
 
-US-safe rap 180s progress: Nill Bye honest-census count fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye honest-census count fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -2773,14 +2635,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `89.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -2788,15 +2650,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
+| 1 | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/winterize-wells/07-honest-census` |
 
 ```text
-[intro]
-train beat
-Nill Bye counting households
-
 [verse]
 A census is a map of who is here
 Money and seats ride the map. So the map has to be boring
@@ -2810,14 +2668,6 @@ Obey it by not shopping a civil-rights costume for a scarecrow
 The VRA is a sword against dilution. It is not a scarecrow
 I want the sword used as a sword
 I want the count used as a count
-
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
 
 [verse]
 Country fiddle on a questionnaire that does not flinch a household
@@ -2833,14 +2683,6 @@ Dressing is not a method. Sequence is a method, apakitchentable
 Sequence the want after a true operational need, or drop the box, undercountplan
 Dropping the box is allowed. It is how the 2020 count survived
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Apportionment is too important to be a chill experiment
 Experiments belong in a lab with consent. A census is not that lab
@@ -2855,14 +2697,6 @@ Crooked money is a quiet raid
 Bring a boring form, lose the scarecrow
 The Court already sequenced the want and the why, apakitchentable
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Keep the train beat, print the APA order, undercountplan
 Honest census is a civic method: count, do not chill
@@ -2876,6 +2710,10 @@ Pause, then check the box that is actually about who lives there
 Who lives there is the whole job, undercountplan
 Do the job. Date the form. Publish the undercount plan, enumerator
 Honest census is the whole install, apakitchentable
+
+[pre-chorus]
+Honest census
+Nill Bye on the count, apakitchentable
 
 [chorus]
 Honest census
@@ -2898,7 +2736,7 @@ yeah
 | --- | --- |
 | 0 | `custom` |
 | 1 | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot…` |
-| 2 | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
+| 2 | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/winterize-wells/07-honest-census` |
@@ -2908,10 +2746,6 @@ country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autotu
 ```
 
 ```text
-[intro]
-train beat
-Nill Bye counting households
-
 [verse]
 A census is a map of who is here
 Money and seats ride the map. So the map has to be boring
@@ -2925,14 +2759,6 @@ Obey it by not shopping a civil-rights costume for a scarecrow
 The VRA is a sword against dilution. It is not a scarecrow
 I want the sword used as a sword
 I want the count used as a count
-
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
 
 [verse]
 Country fiddle on a questionnaire that does not flinch a household
@@ -2948,14 +2774,6 @@ Dressing is not a method. Sequence is a method, apakitchentable
 Sequence the want after a true operational need, or drop the box, undercountplan
 Dropping the box is allowed. It is how the 2020 count survived
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Apportionment is too important to be a chill experiment
 Experiments belong in a lab with consent. A census is not that lab
@@ -2970,14 +2788,6 @@ Crooked money is a quiet raid
 Bring a boring form, lose the scarecrow
 The Court already sequenced the want and the why, apakitchentable
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Keep the train beat, print the APA order, undercountplan
 Honest census is a civic method: count, do not chill
@@ -2991,6 +2801,10 @@ Pause, then check the box that is actually about who lives there
 Who lives there is the whole job, undercountplan
 Do the job. Date the form. Publish the undercount plan, enumerator
 Honest census is the whole install, apakitchentable
+
+[pre-chorus]
+Honest census
+Nill Bye on the count, apakitchentable
 
 [chorus]
 Honest census
@@ -3012,14 +2826,14 @@ yeah
 | Slot | Value |
 | --- | --- |
 | 0 | `country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autot…` |
-| 1 | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
+| 1 | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
 | 2 | `599` |
 | 3 | `fixed` |
 | 4 | `100` |
-| 5 | `180.0` |
+| 5 | `89.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3032,10 +2846,6 @@ country, steel guitar, fiddle, train beat, male rap vocals, dry booth, no autotu
 ```
 
 ```text
-[intro]
-train beat
-Nill Bye counting households
-
 [verse]
 A census is a map of who is here
 Money and seats ride the map. So the map has to be boring
@@ -3049,14 +2859,6 @@ Obey it by not shopping a civil-rights costume for a scarecrow
 The VRA is a sword against dilution. It is not a scarecrow
 I want the sword used as a sword
 I want the count used as a count
-
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
 
 [verse]
 Country fiddle on a questionnaire that does not flinch a household
@@ -3072,14 +2874,6 @@ Dressing is not a method. Sequence is a method, apakitchentable
 Sequence the want after a true operational need, or drop the box, undercountplan
 Dropping the box is allowed. It is how the 2020 count survived
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Apportionment is too important to be a chill experiment
 Experiments belong in a lab with consent. A census is not that lab
@@ -3094,14 +2888,6 @@ Crooked money is a quiet raid
 Bring a boring form, lose the scarecrow
 The Court already sequenced the want and the why, apakitchentable
 
-[chorus]
-Honest census
-Nill Bye on the count, apakitchentable
-A box that arrives after the want is a pretext
-APA wants a why that predates the want
-A scared household is a theft from a city
-Your questionnaire is a count, not a trapdoor
-
 [verse]
 Keep the train beat, print the APA order, undercountplan
 Honest census is a civic method: count, do not chill
@@ -3115,6 +2901,10 @@ Pause, then check the box that is actually about who lives there
 Who lives there is the whole job, undercountplan
 Do the job. Date the form. Publish the undercount plan, enumerator
 Honest census is the whole install, apakitchentable
+
+[pre-chorus]
+Honest census
+Nill Bye on the count, apakitchentable
 
 [chorus]
 Honest census
@@ -3192,7 +2982,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/08-paris-seat`.
 
-US-safe rap 180s progress: Nill Bye paris-seat NDC fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye paris-seat NDC fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3211,14 +3001,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `143.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3226,15 +3016,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| 1 | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/winterize-wells/08-paris-seat` |
 
 ```text
-[intro]
-harmonica air
-Nill Bye sitting the NDC
-
 [verse]
 An accord is a nationally determined contribution
 You can argue the contribution. You cannot argue the thermometer, articlefour
@@ -3312,6 +3098,16 @@ Loop: sit, count, tighten, sit again, gigaton
 Again is progress. Progress is not a walkout video
 Videos are easy. Slopes are work, articlefour
 Do the work. Date the inventory. Publish the next NDC
+
+[chorus]
+Paris seat
+Nill Bye on the Article Four pledge
+Celsius does not watch cable, ndcslope
+A contribution is a number you bring to the table
+Walking out is not a rewrite. Sitting is a rewrite
+Your empty chair is a policy. Fill it
+
+[bridge]
 The parties already know how to meet
 Fill the chair. That is the whole install, ndcslope
 
@@ -3335,7 +3131,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no …` |
-| 2 | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| 2 | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/winterize-wells/08-paris-seat` |
@@ -3345,10 +3141,6 @@ blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-harmonica air
-Nill Bye sitting the NDC
-
 [verse]
 An accord is a nationally determined contribution
 You can argue the contribution. You cannot argue the thermometer, articlefour
@@ -3426,6 +3218,16 @@ Loop: sit, count, tighten, sit again, gigaton
 Again is progress. Progress is not a walkout video
 Videos are easy. Slopes are work, articlefour
 Do the work. Date the inventory. Publish the next NDC
+
+[chorus]
+Paris seat
+Nill Bye on the Article Four pledge
+Celsius does not watch cable, ndcslope
+A contribution is a number you bring to the table
+Walking out is not a rewrite. Sitting is a rewrite
+Your empty chair is a policy. Fill it
+
+[bridge]
 The parties already know how to meet
 Fill the chair. That is the whole install, ndcslope
 
@@ -3448,14 +3250,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no …` |
-| 1 | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| 1 | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | 2 | `601` |
 | 3 | `fixed` |
 | 4 | `74` |
-| 5 | `180.0` |
+| 5 | `143.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `F major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3468,10 +3270,6 @@ blues, guitar sting, shuffled snare, harmonica, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-harmonica air
-Nill Bye sitting the NDC
-
 [verse]
 An accord is a nationally determined contribution
 You can argue the contribution. You cannot argue the thermometer, articlefour
@@ -3549,6 +3347,16 @@ Loop: sit, count, tighten, sit again, gigaton
 Again is progress. Progress is not a walkout video
 Videos are easy. Slopes are work, articlefour
 Do the work. Date the inventory. Publish the next NDC
+
+[chorus]
+Paris seat
+Nill Bye on the Article Four pledge
+Celsius does not watch cable, ndcslope
+A contribution is a number you bring to the table
+Walking out is not a rewrite. Sitting is a rewrite
+Your empty chair is a policy. Fill it
+
+[bridge]
 The parties already know how to meet
 Fill the chair. That is the whole install, ndcslope
 
@@ -3627,7 +3435,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/09-qualified-divest`.
 
-US-safe rap 180s progress: Nill Bye qualified-divest conflict fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye qualified-divest conflict fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -3646,14 +3454,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `198.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -3683,14 +3491,6 @@ Clean is gone. Gone is a sale, a trust, a wall the president cannot peek through
 Peeking is the market. The market opened last time on an awning
 I want the awning dark. I want the ticker gone
 I want the SKU un-launched
-
-[chorus]
-Qualified divest
-Nill Bye on the blind instrument
-The office is a conflict machine. Take the till off the desk
-No ticker, no canopy, no SKU-as-status
-A donation after the booking is not a blind anything
-Your duty starts when the asset leaves the room
 
 [verse]
 Lo-fi drums on an asset that left the room, usc208
@@ -3799,14 +3599,6 @@ Peeking is the market. The market opened last time on an awning
 I want the awning dark. I want the ticker gone
 I want the SKU un-launched
 
-[chorus]
-Qualified divest
-Nill Bye on the blind instrument
-The office is a conflict machine. Take the till off the desk
-No ticker, no canopy, no SKU-as-status
-A donation after the booking is not a blind anything
-Your duty starts when the asset leaves the room
-
 [verse]
 Lo-fi drums on an asset that left the room, usc208
 Vinyl under a trustee who does not need a social post, trustee
@@ -3889,10 +3681,10 @@ yeah
 | 2 | `607` |
 | 3 | `fixed` |
 | 4 | `86` |
-| 5 | `180.0` |
+| 5 | `198.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `Bb major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -3922,14 +3714,6 @@ Clean is gone. Gone is a sale, a trust, a wall the president cannot peek through
 Peeking is the market. The market opened last time on an awning
 I want the awning dark. I want the ticker gone
 I want the SKU un-launched
-
-[chorus]
-Qualified divest
-Nill Bye on the blind instrument
-The office is a conflict machine. Take the till off the desk
-No ticker, no canopy, no SKU-as-status
-A donation after the booking is not a blind anything
-Your duty starts when the asset leaves the room
 
 [verse]
 Lo-fi drums on an asset that left the room, usc208
@@ -4065,7 +3849,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/10-return-pdf`.
 
-US-safe rap 180s progress: Nill Bye return-pdf disclosure fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye return-pdf disclosure fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4084,14 +3868,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `100.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `100.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4325,10 +4109,10 @@ cut
 | 2 | `613` |
 | 3 | `fixed` |
 | 4 | `84` |
-| 5 | `180.0` |
+| 5 | `100.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `Eb major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4500,7 +4284,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/11-casework-screen`.
 
-US-safe rap 180s progress: Nill Bye casework-screen vetting fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye casework-screen vetting fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4519,14 +4303,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `156.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4556,14 +4340,6 @@ If the method were vetting, the memo would vet, visaappeal
 Vetting is slower. Slower is a feature when the cost of a miss is a life, personfile
 The cost of a blunt tool is a terminal full of people who were never the miss
 I install the file. The file is the method, visaappeal
-
-[chorus]
-Casework screen
-Nill Bye on the person-level file
-A roster is a map. A screen is a person, a visa, a fact
-Airports should not be the implementation desk of a blunt tool
-Precision is interviews, data, appeals
-Your method names a file, not a continent-color
 
 [verse]
 Chiptune square-lead on a visa that has a fact pattern
@@ -4672,14 +4448,6 @@ Vetting is slower. Slower is a feature when the cost of a miss is a life, person
 The cost of a blunt tool is a terminal full of people who were never the miss
 I install the file. The file is the method, visaappeal
 
-[chorus]
-Casework screen
-Nill Bye on the person-level file
-A roster is a map. A screen is a person, a visa, a fact
-Airports should not be the implementation desk of a blunt tool
-Precision is interviews, data, appeals
-Your method names a file, not a continent-color
-
 [verse]
 Chiptune square-lead on a visa that has a fact pattern
 Eight-bit drums under an appeal that can actually reverse a miss
@@ -4762,10 +4530,10 @@ yeah
 | 2 | `617` |
 | 3 | `fixed` |
 | 4 | `100` |
-| 5 | `180.0` |
+| 5 | `156.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A minor` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -4795,14 +4563,6 @@ If the method were vetting, the memo would vet, visaappeal
 Vetting is slower. Slower is a feature when the cost of a miss is a life, personfile
 The cost of a blunt tool is a terminal full of people who were never the miss
 I install the file. The file is the method, visaappeal
-
-[chorus]
-Casework screen
-Nill Bye on the person-level file
-A roster is a map. A screen is a person, a visa, a fact
-Airports should not be the implementation desk of a blunt tool
-Precision is interviews, data, appeals
-Your method names a file, not a continent-color
 
 [verse]
 Chiptune square-lead on a visa that has a fact pattern
@@ -4938,7 +4698,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/12-district-door`.
 
-US-safe rap 180s progress: Nill Bye district-door funding fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye district-door funding fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -4957,14 +4717,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `208.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -4972,15 +4732,11 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| 1 | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/winterize-wells/12-district-door` |
 
 ```text
-[intro]
-neon pad
-Nill Bye totaling unit funding
-
 [verse]
 A public door has to take every child who shows up
 That is the job. The job is expensive and it is the point, hardcase
@@ -5024,6 +4780,8 @@ A transfer to the already-private is not a market
 Unit funding follows the child who still needs the public door
 Choice that loots the campus is a raid with a brochure
 Your ESA can wait. The district cannot
+
+[inst - pocket snare, hats only]
 
 [verse]
 Local boards should not be gutted to pass a loyalty test, mondayopen
@@ -5081,7 +4839,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no …` |
-| 2 | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| 2 | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/winterize-wells/12-district-door` |
@@ -5091,10 +4849,6 @@ synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-neon pad
-Nill Bye totaling unit funding
-
 [verse]
 A public door has to take every child who shows up
 That is the job. The job is expensive and it is the point, hardcase
@@ -5138,6 +4892,8 @@ A transfer to the already-private is not a market
 Unit funding follows the child who still needs the public door
 Choice that loots the campus is a raid with a brochure
 Your ESA can wait. The district cannot
+
+[inst - pocket snare, hats only]
 
 [verse]
 Local boards should not be gutted to pass a loyalty test, mondayopen
@@ -5194,14 +4950,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no …` |
-| 1 | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| 1 | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | 2 | `619` |
 | 3 | `fixed` |
 | 4 | `104` |
-| 5 | `180.0` |
+| 5 | `208.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `C major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5214,10 +4970,6 @@ synthwave, analog bass, gated snare, neon pads, male rap vocals, dry booth, no a
 ```
 
 ```text
-[intro]
-neon pad
-Nill Bye totaling unit funding
-
 [verse]
 A public door has to take every child who shows up
 That is the job. The job is expensive and it is the point, hardcase
@@ -5261,6 +5013,8 @@ A transfer to the already-private is not a market
 Unit funding follows the child who still needs the public door
 Choice that loots the campus is a raid with a brochure
 Your ESA can wait. The district cannot
+
+[inst - pocket snare, hats only]
 
 [verse]
 Local boards should not be gutted to pass a loyalty test, mondayopen
@@ -5373,7 +5127,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/13-levy-in-code`.
 
-US-safe rap 180s progress: Nill Bye levy-in-code statute fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye levy-in-code statute fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5392,14 +5146,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `108.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5430,14 +5184,6 @@ Name those in the bill. Then pass the bill. Then show the new roll, rolldelta
 Showing the roll is the science, appraisaldistrict
 Science is a PDF of parcels, not a hymn, renterclause
 
-[chorus]
-Levy in code
-Nill Bye on the appraisal statute
-A cut you can campaign is not a cut you passed, rolldelta
-Until the roll actually moves, the hymn is a sticker
-No income tax is a bumper. The levy is the body of the song
-Your kitchen table wants a statute, not a choir
-
 [verse]
 Gospel organ on a statute that actually moves a number
 Hand claps under a kitchen table that can find the delta
@@ -5451,6 +5197,10 @@ January is a date. Dates are how hymns become laws
 Bring the date, lose the hymnal
 The renter is still in the song. Write the renter in
 Writing the renter in is the whole fairness test, appraisaldistrict
+
+[pre-chorus]
+Levy in code
+Nill Bye on the appraisal statute
 
 [chorus]
 Levy in code
@@ -5545,14 +5295,6 @@ Name those in the bill. Then pass the bill. Then show the new roll, rolldelta
 Showing the roll is the science, appraisaldistrict
 Science is a PDF of parcels, not a hymn, renterclause
 
-[chorus]
-Levy in code
-Nill Bye on the appraisal statute
-A cut you can campaign is not a cut you passed, rolldelta
-Until the roll actually moves, the hymn is a sticker
-No income tax is a bumper. The levy is the body of the song
-Your kitchen table wants a statute, not a choir
-
 [verse]
 Gospel organ on a statute that actually moves a number
 Hand claps under a kitchen table that can find the delta
@@ -5566,6 +5308,10 @@ January is a date. Dates are how hymns become laws
 Bring the date, lose the hymnal
 The renter is still in the song. Write the renter in
 Writing the renter in is the whole fairness test, appraisaldistrict
+
+[pre-chorus]
+Levy in code
+Nill Bye on the appraisal statute
 
 [chorus]
 Levy in code
@@ -5635,10 +5381,10 @@ yeah
 | 2 | `631` |
 | 3 | `fixed` |
 | 4 | `78` |
-| 5 | `180.0` |
+| 5 | `108.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `G major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -5669,14 +5415,6 @@ Name those in the bill. Then pass the bill. Then show the new roll, rolldelta
 Showing the roll is the science, appraisaldistrict
 Science is a PDF of parcels, not a hymn, renterclause
 
-[chorus]
-Levy in code
-Nill Bye on the appraisal statute
-A cut you can campaign is not a cut you passed, rolldelta
-Until the roll actually moves, the hymn is a sticker
-No income tax is a bumper. The levy is the body of the song
-Your kitchen table wants a statute, not a choir
-
 [verse]
 Gospel organ on a statute that actually moves a number
 Hand claps under a kitchen table that can find the delta
@@ -5690,6 +5428,10 @@ January is a date. Dates are how hymns become laws
 Bring the date, lose the hymnal
 The renter is still in the song. Write the renter in
 Writing the renter in is the whole fairness test, appraisaldistrict
+
+[pre-chorus]
+Levy in code
+Nill Bye on the appraisal statute
 
 [chorus]
 Levy in code
@@ -5811,7 +5553,7 @@ yeah
 
 Catalog id `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause`.
 
-US-safe rap 180s progress: Nill Bye fourteenth-clause citizenship fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye fourteenth-clause citizenship fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -5830,14 +5572,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `167.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -5845,14 +5587,18 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 | Slot | Value |
 | --- | --- |
 | 0 | `custom` |
-| 1 | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| 1 | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | 2 | `false` |
 | 3 | `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` |
 
 ```text
-[intro]
-timpani low
-Nill Bye reading the clause
+[chorus]
+Fourteenth clause
+Nill Bye on the citizenship sentence
+Subject to the jurisdiction is a sentence, not a vibe, slowdoor
+Wong Kim Ark already walked this ground
+A pen does not edit who counts. An amendment does
+Your clause survived. Keep it
 
 [verse]
 A clause older than the brand, written after a war about who counts, barbarahold
@@ -5868,14 +5614,6 @@ I want the convention process if the sentence is to move
 Until then the sentence stands, including the children a pen aimed at
 Aimed is a verb I keep on the pen, not the child, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 Cinematic strings on a clause that does not take a poll as a rewrite
 Low brass under Wong Kim Ark walking the same ground in the nineteenth century
@@ -5890,14 +5628,6 @@ The slow door is how a republic does not let a tenant rewrite the lease, slowdoo
 The lease is the people. The people include the children born here
 Include them. That is the install, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 I will not punch a child. I will keep the sentence that already included them, barbarahold
 Keeping is a civic act. Keeping is also a legal act, slowdoor
@@ -5911,14 +5641,6 @@ Bicameral is a pulse. A pulse is how who-counts questions stay adult
 Adult is progress. Progress is not a day-one surprise
 Bring an amendment if you want a change
 Until then keep the clause. Date the agency memo that obeys Barbara
-
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
 
 [verse]
 Keep the timpani, print the sentence, slowdoor
@@ -5954,7 +5676,7 @@ cut
 | --- | --- |
 | 0 | `custom` |
 | 1 | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune…` |
-| 2 | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| 2 | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | 3 | `false` |
 | 4 | `vocal` |
 | 5 | `audio/albums/nill-bye/winterize-wells/14-fourteenth-clause` |
@@ -5964,9 +5686,13 @@ cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune,
 ```
 
 ```text
-[intro]
-timpani low
-Nill Bye reading the clause
+[chorus]
+Fourteenth clause
+Nill Bye on the citizenship sentence
+Subject to the jurisdiction is a sentence, not a vibe, slowdoor
+Wong Kim Ark already walked this ground
+A pen does not edit who counts. An amendment does
+Your clause survived. Keep it
 
 [verse]
 A clause older than the brand, written after a war about who counts, barbarahold
@@ -5982,14 +5708,6 @@ I want the convention process if the sentence is to move
 Until then the sentence stands, including the children a pen aimed at
 Aimed is a verb I keep on the pen, not the child, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 Cinematic strings on a clause that does not take a poll as a rewrite
 Low brass under Wong Kim Ark walking the same ground in the nineteenth century
@@ -6004,14 +5722,6 @@ The slow door is how a republic does not let a tenant rewrite the lease, slowdoo
 The lease is the people. The people include the children born here
 Include them. That is the install, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 I will not punch a child. I will keep the sentence that already included them, barbarahold
 Keeping is a civic act. Keeping is also a legal act, slowdoor
@@ -6025,14 +5735,6 @@ Bicameral is a pulse. A pulse is how who-counts questions stay adult
 Adult is progress. Progress is not a day-one surprise
 Bring an amendment if you want a change
 Until then keep the clause. Date the agency memo that obeys Barbara
-
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
 
 [verse]
 Keep the timpani, print the sentence, slowdoor
@@ -6067,14 +5769,14 @@ cut
 | Slot | Value |
 | --- | --- |
 | 0 | `cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune…` |
-| 1 | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| 1 | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | 2 | `641` |
 | 3 | `fixed` |
 | 4 | `76` |
-| 5 | `180.0` |
+| 5 | `167.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `D major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6087,9 +5789,13 @@ cinematic, strings, timpani, low brass, male rap vocals, dry booth, no autotune,
 ```
 
 ```text
-[intro]
-timpani low
-Nill Bye reading the clause
+[chorus]
+Fourteenth clause
+Nill Bye on the citizenship sentence
+Subject to the jurisdiction is a sentence, not a vibe, slowdoor
+Wong Kim Ark already walked this ground
+A pen does not edit who counts. An amendment does
+Your clause survived. Keep it
 
 [verse]
 A clause older than the brand, written after a war about who counts, barbarahold
@@ -6105,14 +5811,6 @@ I want the convention process if the sentence is to move
 Until then the sentence stands, including the children a pen aimed at
 Aimed is a verb I keep on the pen, not the child, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 Cinematic strings on a clause that does not take a poll as a rewrite
 Low brass under Wong Kim Ark walking the same ground in the nineteenth century
@@ -6127,14 +5825,6 @@ The slow door is how a republic does not let a tenant rewrite the lease, slowdoo
 The lease is the people. The people include the children born here
 Include them. That is the install, wongkim
 
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
-
 [verse]
 I will not punch a child. I will keep the sentence that already included them, barbarahold
 Keeping is a civic act. Keeping is also a legal act, slowdoor
@@ -6148,14 +5838,6 @@ Bicameral is a pulse. A pulse is how who-counts questions stay adult
 Adult is progress. Progress is not a day-one surprise
 Bring an amendment if you want a change
 Until then keep the clause. Date the agency memo that obeys Barbara
-
-[chorus]
-Fourteenth clause
-Nill Bye on the citizenship sentence
-Subject to the jurisdiction is a sentence, not a vibe, slowdoor
-Wong Kim Ark already walked this ground
-A pen does not edit who counts. An amendment does
-Your clause survived. Keep it
 
 [verse]
 Keep the timpani, print the sentence, slowdoor
@@ -6246,7 +5928,7 @@ cut
 
 Catalog id `audio/albums/nill-bye/winterize-wells/15-one-college`.
 
-US-safe rap 180s progress: Nill Bye one-college canvass fix, ACE-Step 1.5 turbo AIO, invented vocal
+US-safe rap progress: Nill Bye one-college canvass fix, ACE-Step 1.5 turbo AIO, invented vocal
 Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.
 
 **ACE-Step 1.5 turbo AIO** (`CheckpointLoaderSimple`)
@@ -6265,14 +5947,14 @@ Prompt enhance is **off** so authored text (recipe, script labels, ACE tags, or 
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `fixed` |
 
 **Latent length (seconds)** (`EmptyAceStep1.5LatentAudio`)
 
 | Slot | Value |
 | --- | --- |
-| 0 | `180.0` |
+| 0 | `210.0` |
 | 1 | `1` |
 
 **Rap lyrics** (`EZRapLyrics`)
@@ -6333,6 +6015,8 @@ A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
 
+[breakdown - hats only]
+
 [verse]
 Pence was never a fork. The Act does not sell forks
 Do not ask a vice president to launder extras. Ask a governor to certify the winner
@@ -6376,6 +6060,8 @@ A governor's seal is the ascertainment
 A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
+
+[inst - pocket snare, hats only]
 
 [outro]
 kit halt
@@ -6448,6 +6134,8 @@ A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
 
+[breakdown - hats only]
+
 [verse]
 Pence was never a fork. The Act does not sell forks
 Do not ask a vice president to launder extras. Ask a governor to certify the winner
@@ -6492,6 +6180,8 @@ A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
 
+[inst - pocket snare, hats only]
+
 [outro]
 kit halt
 seal sits
@@ -6508,10 +6198,10 @@ yeah
 | 2 | `643` |
 | 3 | `fixed` |
 | 4 | `168` |
-| 5 | `180.0` |
+| 5 | `210.0` |
 | 6 | `4` |
 | 7 | `en` |
-| 8 | `C minor` |
+| 8 | `A major` |
 | 9 | `true` |
 | 10 | `2.0` |
 | 11 | `0.85` |
@@ -6572,6 +6262,8 @@ A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
 
+[breakdown - hats only]
+
 [verse]
 Pence was never a fork. The Act does not sell forks
 Do not ask a vice president to launder extras. Ask a governor to certify the winner
@@ -6615,6 +6307,8 @@ A governor's seal is the ascertainment
 A photocopy with a Sharpie energy is not a second college
 Electoral Count Reform Act already named the one file
 Your extras can sit down. The canvass already stood
+
+[inst - pocket snare, hats only]
 
 [outro]
 kit halt
@@ -6753,7 +6447,7 @@ square album cover, graphic print, wellhead jacket, frost, measurement clipboard
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
+**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -6790,16 +6484,20 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `custom` |
-| 1 | `square album cover, graphic print, wellhead jacket, frost, measurement clipboar…` |
+| 0 | `square album cover, graphic print, wellhead jacket, frost, measurement clipboar…` |
+| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `audio/albums/nill-bye/winterize-wells/cover` |
+| 6 | `stills/instagram-square` |
 
 ```text
 square album cover, graphic print, wellhead jacket, frost, measurement clipboard, dawn light, fictional act Nill Bye, album Winterize Wells, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
+
+```text
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -6819,6 +6517,29 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
+
+**Format / platform** (`EZImageFormat`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `Instagram · square (1024×1024)` |
+| 1 | `none` |
+| 2 | `1024` |
+| 3 | `1024` |
+| 4 | `1` |
+| 5 | `Match input` |
+
+**Upscale still** (`EZImageUpscale`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `none` |
+
+**Describe image** (`EZImageDescribe`)
+
+| Slot | Value |
+| --- | --- |
+| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -6897,7 +6618,23 @@ The constant.
 
 **How it affects generation:** FLOAT seconds drive ACE latent length. STRING context is bible/research for Enhance.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Song Duration | `71.0` |
+| Song Duration | `120.0` |
+| Song Duration | `176.0` |
+| Song Duration | `80.0` |
+| Song Duration | `131.0` |
+| Song Duration | `187.0` |
+| Song Duration | `89.0` |
+| Song Duration | `143.0` |
+| Song Duration | `198.0` |
+| Song Duration | `100.0` |
+| Song Duration | `156.0` |
+| Song Duration | `208.0` |
+| Song Duration | `108.0` |
+| Song Duration | `167.0` |
+| Song Duration | `210.0` |
 
 #### `control_after_generate`
 
@@ -6924,7 +6661,7 @@ Allocate an ACE-Step audio latent for N seconds.
 
 !!! warning "Lab notes"
 
-    Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
+    Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
@@ -6933,13 +6670,29 @@ Allocate an ACE-Step audio latent for N seconds.
 
 #### `seconds`
 
-Type `FLOAT`. Range / default: 32 / 96 / 180 lab.
+Type `FLOAT`. Range / default: draft / full / 64–210 album.
 
 Duration in seconds.
 
 **How it affects generation:** Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| Latent length (seconds) | `71.0` |
+| Latent length (seconds) | `120.0` |
+| Latent length (seconds) | `176.0` |
+| Latent length (seconds) | `80.0` |
+| Latent length (seconds) | `131.0` |
+| Latent length (seconds) | `187.0` |
+| Latent length (seconds) | `89.0` |
+| Latent length (seconds) | `143.0` |
+| Latent length (seconds) | `198.0` |
+| Latent length (seconds) | `100.0` |
+| Latent length (seconds) | `156.0` |
+| Latent length (seconds) | `208.0` |
+| Latent length (seconds) | `108.0` |
+| Latent length (seconds) | `167.0` |
+| Latent length (seconds) | `210.0` |
 
 #### `batch_size`
 
@@ -6984,16 +6737,16 @@ Sectioned lyrics.
 | Rap lyrics | `[spoken word] Preregister the plan Then run the plan Results cannot un-write th…` |
 | Rap lyrics | `[intro] brushed snare, intervalband Nill Bye intervaling [verse] A mean is a lo…` |
 | Rap lyrics | `[intro] metal clamp Nill Bye compartmenting [verse] Need-to-know is a geometry,…` |
-| Rap lyrics | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| Rap lyrics | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | Rap lyrics | `[intro] folk scrape, caseidrow Nill Bye matching files [verse] A prosecutorial …` |
-| Rap lyrics | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
-| Rap lyrics | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| Rap lyrics | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
+| Rap lyrics | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | Rap lyrics | `[intro] rhodes wash, usc208 Nill Bye boxing the till [verse] 18 U.S.C. 208 is a…` |
 | Rap lyrics | `[intro] soft keys Nill Bye stacking PDFs [verse] Candidates release so the publ…` |
 | Rap lyrics | `[intro] 8-bit tick Nill Bye casing the file [verse] A security method names a p…` |
-| Rap lyrics | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| Rap lyrics | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | Rap lyrics | `[intro] organ rise Nill Bye drafting the roll [verse] A homestead story that sk…` |
-| Rap lyrics | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| Rap lyrics | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | Rap lyrics | `[intro] live-kit stomp, governorseal Nill Bye certifying one slate [verse] Dec …` |
 
 #### `enhance`
@@ -7096,16 +6849,16 @@ Sectioned lyrics.
 | ez_rap_prompt | `[spoken word] Preregister the plan Then run the plan Results cannot un-write th…` |
 | ez_rap_prompt | `[intro] brushed snare, intervalband Nill Bye intervaling [verse] A mean is a lo…` |
 | ez_rap_prompt | `[intro] metal clamp Nill Bye compartmenting [verse] Need-to-know is a geometry,…` |
-| ez_rap_prompt | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| ez_rap_prompt | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | ez_rap_prompt | `[intro] folk scrape, caseidrow Nill Bye matching files [verse] A prosecutorial …` |
-| ez_rap_prompt | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
-| ez_rap_prompt | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| ez_rap_prompt | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
+| ez_rap_prompt | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | ez_rap_prompt | `[intro] rhodes wash, usc208 Nill Bye boxing the till [verse] 18 U.S.C. 208 is a…` |
 | ez_rap_prompt | `[intro] soft keys Nill Bye stacking PDFs [verse] Candidates release so the publ…` |
 | ez_rap_prompt | `[intro] 8-bit tick Nill Bye casing the file [verse] A security method names a p…` |
-| ez_rap_prompt | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| ez_rap_prompt | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | ez_rap_prompt | `[intro] organ rise Nill Bye drafting the roll [verse] A homestead story that sk…` |
-| ez_rap_prompt | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| ez_rap_prompt | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | ez_rap_prompt | `[intro] live-kit stomp, governorseal Nill Bye certifying one slate [verse] Dec …` |
 
 #### `enhance`
@@ -7217,16 +6970,16 @@ Sectioned lyrics or [inst] cues.
 | ACE tags + lyrics | `[spoken word] Preregister the plan Then run the plan Results cannot un-write th…` |
 | ACE tags + lyrics | `[intro] brushed snare, intervalband Nill Bye intervaling [verse] A mean is a lo…` |
 | ACE tags + lyrics | `[intro] metal clamp Nill Bye compartmenting [verse] Need-to-know is a geometry,…` |
-| ACE tags + lyrics | `[intro] tuba swell Nill Bye docketing the hearing [verse] A withholding is a co…` |
+| ACE tags + lyrics | `[verse] A withholding is a court-shaped shield already on the file, withholdfla…` |
 | ACE tags + lyrics | `[intro] folk scrape, caseidrow Nill Bye matching files [verse] A prosecutorial …` |
-| ACE tags + lyrics | `[intro] train beat Nill Bye counting households [verse] A census is a map of wh…` |
-| ACE tags + lyrics | `[intro] harmonica air Nill Bye sitting the NDC [verse] An accord is a nationall…` |
+| ACE tags + lyrics | `[verse] A census is a map of who is here Money and seats ride the map. So the m…` |
+| ACE tags + lyrics | `[verse] An accord is a nationally determined contribution You can argue the con…` |
 | ACE tags + lyrics | `[intro] rhodes wash, usc208 Nill Bye boxing the till [verse] 18 U.S.C. 208 is a…` |
 | ACE tags + lyrics | `[intro] soft keys Nill Bye stacking PDFs [verse] Candidates release so the publ…` |
 | ACE tags + lyrics | `[intro] 8-bit tick Nill Bye casing the file [verse] A security method names a p…` |
-| ACE tags + lyrics | `[intro] neon pad Nill Bye totaling unit funding [verse] A public door has to ta…` |
+| ACE tags + lyrics | `[verse] A public door has to take every child who shows up That is the job. The…` |
 | ACE tags + lyrics | `[intro] organ rise Nill Bye drafting the roll [verse] A homestead story that sk…` |
-| ACE tags + lyrics | `[intro] timpani low Nill Bye reading the clause [verse] A clause older than the…` |
+| ACE tags + lyrics | `[chorus] Fourteenth clause Nill Bye on the citizenship sentence Subject to the …` |
 | ACE tags + lyrics | `[intro] live-kit stomp, governorseal Nill Bye certifying one slate [verse] Dec …` |
 
 #### `seed`
@@ -7308,7 +7061,23 @@ Seconds (duplicated on the latent).
 
 **How it affects generation:** Keep in lockstep with EmptyAceStep1.5LatentAudio / Primitive.
 
-**This graph (all 15 instances):** `180.0`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `71.0` |
+| ACE tags + lyrics | `120.0` |
+| ACE tags + lyrics | `176.0` |
+| ACE tags + lyrics | `80.0` |
+| ACE tags + lyrics | `131.0` |
+| ACE tags + lyrics | `187.0` |
+| ACE tags + lyrics | `89.0` |
+| ACE tags + lyrics | `143.0` |
+| ACE tags + lyrics | `198.0` |
+| ACE tags + lyrics | `100.0` |
+| ACE tags + lyrics | `156.0` |
+| ACE tags + lyrics | `208.0` |
+| ACE tags + lyrics | `108.0` |
+| ACE tags + lyrics | `167.0` |
+| ACE tags + lyrics | `210.0` |
 
 #### `timesignature`
 
@@ -7316,9 +7085,25 @@ Type `COMBO`. Range / default: 4.
 
 Beats per bar.
 
-**How it affects generation:** 4 is lab 4/4. 3 is waltz; 6 is 6/8.
+**How it affects generation:** Rap Apps stay 4. Album takes may use 2, 3, or 6 when the bed is not a dance grid.
 
-**This graph (all 15 instances):** `4`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `2` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `3` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
+| ACE tags + lyrics | `4` |
 
 **Other choices**
 
@@ -7401,9 +7186,25 @@ Type `COMBO`. Range / default: C minor.
 
 Musical key.
 
-**How it affects generation:** Lab C minor. Changing key is a new arrangement, not a mix tweak.
+**How it affects generation:** Rap Apps stay C minor. Catalog takes set a key per song (Drive-through walks fifths).
 
-**This graph (all 15 instances):** `C minor`
+| Instance | Value |
+| --- | --- |
+| ACE tags + lyrics | `Bb major` |
+| ACE tags + lyrics | `Eb major` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `C major` |
+| ACE tags + lyrics | `G major` |
+| ACE tags + lyrics | `D major` |
+| ACE tags + lyrics | `A major` |
+| ACE tags + lyrics | `F major` |
+| ACE tags + lyrics | `Bb major` |
+| ACE tags + lyrics | `Eb major` |
+| ACE tags + lyrics | `A minor` |
+| ACE tags + lyrics | `C major` |
+| ACE tags + lyrics | `G major` |
+| ACE tags + lyrics | `D major` |
+| ACE tags + lyrics | `A major` |
 
 **Other choices**
 
@@ -7426,7 +7227,7 @@ Musical key.
 | `A# major` | Major key of A#. |
 | `Bb major` | Major key of Bb. |
 | `B major` | Major key of B. |
-| `C minor` | Lab ships C minor on ACE graphs. Changing key reshapes harmony; keep vocal graphs in one key per album unless you mean a new arrangement. |
+| `C minor` | Rap Apps stay C minor. Catalog takes set a key per song. Drive-through walks fifths so a live set still mixes. |
 | `C# minor` | Minor key of C#. |
 | `Db minor` | Minor key of Db. |
 | `D minor` | Minor key of D. |
@@ -7815,21 +7616,21 @@ Markdown-ish operator note.
 
 | Instance | Value |
 | --- | --- |
-| Operator note | `## 01-winterize-wells US-safe rap **180 s progress** take: **winterize wells**.…` |
-| Operator note | `## 02-registered-report US-safe rap **180 s progress** take: **registered repor…` |
-| Operator note | `## 03-named-uncertainty US-safe rap **180 s progress** take: **named uncertaint…` |
-| Operator note | `## 04-scif-only US-safe rap **180 s progress** take: **scif only**. Fictional M…` |
-| Operator note | `## 05-hearing-first US-safe rap **180 s progress** take: **hearing first**. Fic…` |
-| Operator note | `## 06-keep-the-match US-safe rap **180 s progress** take: **keep the match**. F…` |
-| Operator note | `## 07-honest-census US-safe rap **180 s progress** take: **honest census**. Fic…` |
-| Operator note | `## 08-paris-seat US-safe rap **180 s progress** take: **paris seat**. Fictional…` |
-| Operator note | `## 09-qualified-divest US-safe rap **180 s progress** take: **qualified divest*…` |
-| Operator note | `## 10-return-pdf US-safe rap **180 s progress** take: **return pdf**. Fictional…` |
-| Operator note | `## 11-casework-screen US-safe rap **180 s progress** take: **casework screen**.…` |
-| Operator note | `## 12-district-door US-safe rap **180 s progress** take: **district door**. Fic…` |
-| Operator note | `## 13-levy-in-code US-safe rap **180 s progress** take: **levy in code**. Ficti…` |
-| Operator note | `## 14-fourteenth-clause US-safe rap **180 s progress** take: **fourteenth claus…` |
-| Operator note | `## 15-one-college US-safe rap **180 s progress** take: **one college**. Fiction…` |
+| Operator note | `## 01-winterize-wells US-safe rap **71 s progress** take: **winterize wells**. …` |
+| Operator note | `## 02-registered-report US-safe rap **120 s progress** take: **registered repor…` |
+| Operator note | `## 03-named-uncertainty US-safe rap **176 s progress** take: **named uncertaint…` |
+| Operator note | `## 04-scif-only US-safe rap **80 s progress** take: **scif only**. Fictional MC…` |
+| Operator note | `## 05-hearing-first US-safe rap **131 s progress** take: **hearing first**. Fic…` |
+| Operator note | `## 06-keep-the-match US-safe rap **187 s progress** take: **keep the match**. F…` |
+| Operator note | `## 07-honest-census US-safe rap **89 s progress** take: **honest census**. Fict…` |
+| Operator note | `## 08-paris-seat US-safe rap **143 s progress** take: **paris seat**. Fictional…` |
+| Operator note | `## 09-qualified-divest US-safe rap **198 s progress** take: **qualified divest*…` |
+| Operator note | `## 10-return-pdf US-safe rap **100 s progress** take: **return pdf**. Fictional…` |
+| Operator note | `## 11-casework-screen US-safe rap **156 s progress** take: **casework screen**.…` |
+| Operator note | `## 12-district-door US-safe rap **208 s progress** take: **district door**. Fic…` |
+| Operator note | `## 13-levy-in-code US-safe rap **108 s progress** take: **levy in code**. Ficti…` |
+| Operator note | `## 14-fourteenth-clause US-safe rap **167 s progress** take: **fourteenth claus…` |
+| Operator note | `## 15-one-college US-safe rap **210 s progress** take: **one college**. Fiction…` |
 | Operator note | `## audio/albums/nill-bye/winterize-wells/album Album **Winterize Wells** by **N…` |
 | Operator note | `## audio/albums/nill-bye/winterize-wells/cover Album cover for **Nill Bye — Win…` |
 
@@ -8378,7 +8179,11 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `custom`
+**This graph:** `square album cover, graphic print, wellhead jacket, frost, measurement clipboard, dawn light, fictional act Nill Bye, album Winterize Wells, no text, no letters, no logos, no living person likeness, …`
+
+```text
+square album cover, graphic print, wellhead jacket, frost, measurement clipboard, dawn light, fictional act Nill Bye, album Winterize Wells, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+```
 
 #### `prompt`
 
@@ -8388,10 +8193,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `square album cover, graphic print, wellhead jacket, frost, measurement clipboard, dawn light, fictional act Nill Bye, album Winterize Wells, no text, no letters, no logos, no living person likeness, …`
+**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
 
 ```text
-square album cover, graphic print, wellhead jacket, frost, measurement clipboard, dawn light, fictional act Nill Bye, album Winterize Wells, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
+A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 #### `enhance`
@@ -8759,7 +8564,7 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `audio/albums/nill-bye/winterize-wells/cover`
+**This graph:** `stills/instagram-square`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
@@ -8815,3 +8620,252 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
+
+### `EZImageFormat` — Format / platform
+
+Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
+
+!!! warning "Lab notes"
+
+    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
+| `width` | out | `INT` | Latent width (÷16). |
+| `height` | out | `INT` | Latent height (÷16). |
+| `batch` | out | `INT` | Batch size. |
+| `hint` | out | `STRING` | Enhance duration / framing line. |
+| `prefix` | out | `STRING` | SaveImage filename prefix. |
+| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
+
+#### `format`
+
+Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
+
+Aspect or named platform job.
+
+**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
+
+**This graph:** `Instagram · square (1024×1024)`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `Custom` | Width × Height widgets, snapped to ÷16. |
+| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
+| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
+| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
+| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
+| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
+| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
+| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
+| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
+| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
+| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
+| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
+| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
+| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
+| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
+| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
+| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
+| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
+| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
+| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
+| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
+| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
+| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
+| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
+| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
+| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
+| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
+| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
+| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
+| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
+| `Instagram · profile (768×768)` | 768×768. ig_profile. |
+| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
+| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
+| `X · post (1280×720)` | 1280×720. x_post. |
+| `X · header (1536×512)` | 1536×512. x_header. |
+| `X · card (1216×640)` | 1216×640. x_card. |
+| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
+| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
+| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
+| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
+| `Pinterest · pin (768×1152)` | 768×1152. pin. |
+| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
+| `Facebook · post (1216×640)` | 1216×640. fb_post. |
+| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
+| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
+| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
+| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
+| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
+| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
+| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
+| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
+| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
+| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
+| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
+| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
+| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
+| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
+| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
+| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
+| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
+| `Open Graph / blog (1216×640)` | 1216×640. og. |
+| `Email · header (1216×640)` | 1216×640. email_header. |
+| `Substack · hero (1216×640)` | 1216×640. substack. |
+| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
+| `Channel · banner (1536×512)` | 1536×512. banner. |
+| `End-card / CTA (1280×720)` | 1280×720. endcard. |
+| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
+| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
+| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
+| `Shorts still (432×768)` | 432×768. shorts_still. |
+| `Hook still (432×768)` | 432×768. hook_still. |
+| `Product packshot (1024×1024)` | 1024×1024. packshot. |
+| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
+| `Desk setup (1280×720)` | 1280×720. desk_setup. |
+| `Coming soon (1280×720)` | 1280×720. coming_soon. |
+| `Slide title (1280×720)` | 1280×720. slide_title. |
+| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
+| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
+| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
+| `Print poster (768×1152)` | 768×1152. poster. |
+
+#### `look`
+
+Type `COMBO`. Range / default: none.
+
+Optional Cinema Rack starter.
+
+**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Off. Style + Prompt own look. |
+| `Noir interrogation` | rec_noir_push |
+| `Locked portrait` | rec_locked_portrait |
+| `Golden wide` | rec_golden_wide |
+| `Handheld documentary` | rec_handheld_doc |
+| `Vertical hook` | rec_vertical_hook |
+| `Rain track` | rec_rain_track |
+| `Product orbit` | rec_orbit_product |
+| `Drone reveal` | rec_drone_reveal |
+| `Night bible` | rec_identity_night |
+| `Western noon` | rec_western_noon |
+| `Slow push to eyes` | rec_slow_push_eyes |
+| `FPV dive` | rec_fpv_dive |
+| `Match-cut AV` | rec_match_cut_ltx |
+| `Fog push` | rec_fog_push |
+| `Body-cam sprint` | rec_bodycam_sprint |
+| `Bounce beauty` | rec_romcom_beauty |
+| `Overcast wide` | rec_overcast_wide |
+| `Macro pour` | rec_macro_pour |
+| `Crane reveal` | rec_crane_reveal |
+| `Split diopter two-plane` | rec_split_diopter |
+| `Night practical push` | rec_night_practical_push |
+| `Hyperlapse path` | rec_hyperlapse |
+| `Talking MCU` | rec_talking_mcu |
+| `Anamorphic-class night` | rec_anamorphic_night |
+
+#### `width`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom width.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `height`
+
+Type `INT`. Range / default: 16–2048, step 16.
+
+Custom height.
+
+**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
+
+**This graph:** `1024`
+
+#### `batch_size`
+
+Type `INT`. Range / default: 1–4.
+
+How many stills in one Run.
+
+**How it affects generation:** Large canvases stay at 1.
+
+**This graph:** `1`
+
+#### `size_mode`
+
+Type `COMBO`. Range / default: Match input / Force format.
+
+Match a loaded still's aspect, or keep Format / platform.
+
+**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
+
+**This graph:** `Match input`
+
+### `EZImageUpscale` — Upscale still
+
+Optional lanczos upscale after a still decode. none passes the tensor through.
+
+!!! warning "Lab notes"
+
+    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Decoded still. |
+| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
+| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
+
+#### `upscale`
+
+Type `COMBO`. Range / default: none / 2x / 4x / 4K.
+
+Upscale mode.
+
+**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
+
+**This graph:** `none`
+
+**Other choices**
+
+| Choice | What it does |
+| --- | --- |
+| `none` | Pass through. |
+| `2x` | Double pixels. |
+| `4x` | Quadruple pixels. |
+| `4K` | Fit in a 4K box. |
+
+### `EZImageDescribe` — Describe image
+
+Caption a source still so Prompt Enhance can name inventory and lettering.
+
+!!! warning "Lab notes"
+
+    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
+
+| Socket | Dir | Type | What it carries |
+| --- | --- | --- | --- |
+| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
+| `caption` | out | `STRING` | Short caption, or empty. |
+
+#### `enable`
+
+Type `BOOLEAN`. Range / default: off.
+
+Run the captioner.
+
+**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
+
+**This graph:** `false`

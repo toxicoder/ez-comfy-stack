@@ -4318,17 +4318,20 @@ def arrangement_form() -> list[dict[str, Any]]:
     for slug, label, tags, clause, meta in authored:
         cores.append((slug, label, tags, clause))
         extra[slug] = dict(meta) if isinstance(meta, dict) else {}
-    fillers: list[tuple[str, str, str]] = []
-    for i in range(90):
-        slug = f"fill_{i:02d}"
-        fillers.append((slug, f"Form color {i + 1}", ""))
-        extra[slug] = {
-            "lyrics_form": f"[verse]\n\n[chorus]\n\n[form-{i + 1}]",
-            "lyrics_form_inst": "[inst]",
-        }
     extra["drop_first"]["conflicts"] = ("frm_inst_bed",)
     extra["drop_shout"]["conflicts"] = ("frm_inst_bed",)
-    return _pad("frm", "form", cores, fillers, extra)
+    rows = _from_cores("frm", "form", cores, extra)
+    # Real skeletons, not frm_fill color pockets. Imported lazily so this
+    # builder stays runnable from the repo root without a prior path edit.
+    import sys
+
+    custom = ROOT / "custom_nodes"
+    if str(custom) not in sys.path:
+        sys.path.insert(0, str(custom))
+    from ez_music.song_plan import rack_form_entries
+
+    rows.extend(rack_form_entries())
+    return rows
 
 
 def _drive_recipe(

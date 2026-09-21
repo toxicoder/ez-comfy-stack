@@ -1,4 +1,4 @@
-"""Trap/EDM-pack 180s Nill Bye vs Rake diss takes.
+"""Trap/EDM-pack full-length Nill Bye vs Rake diss takes.
 
 Rap over club beds. Same dry-booth vocal as the lab catalog.
 Fictional MCs only. Original lyrics. No living-artist names. No autotune.

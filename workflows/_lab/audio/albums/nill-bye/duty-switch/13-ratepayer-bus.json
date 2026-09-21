@@ -1,6 +1,6 @@
 {
   "id": "13-ratepayer-bus",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 17,
   "last_link_id": 17,
   "nodes": [
@@ -125,7 +125,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        180.0,
+        107.0,
         "fixed"
       ],
       "title": "Song Duration"
@@ -134,8 +134,8 @@
       "id": 4,
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
-        40,
-        1214
+        2976,
+        728
       ],
       "size": [
         320,
@@ -168,7 +168,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        180.0,
+        107.0,
         1
       ],
       "title": "Latent length (seconds)"
@@ -203,7 +203,7 @@
       },
       "widgets_values": [
         "custom",
-        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
+        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[pre-chorus]\nRatepayer bus\nNill Bye on cost causation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
         false,
         "audio/albums/nill-bye/duty-switch/13-ratepayer-bus"
       ],
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        1564
+        1220
       ],
       "size": [
         400,
@@ -257,7 +257,7 @@
       "widgets_values": [
         "custom",
         "hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune, 150 bpm",
-        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
+        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[pre-chorus]\nRatepayer bus\nNill Bye on cost causation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
         false,
         "vocal",
         "audio/albums/nill-bye/duty-switch/13-ratepayer-bus"
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        2056
+        1712
       ],
       "size": [
         400,
@@ -325,14 +325,14 @@
       },
       "widgets_values": [
         "hardstyle, reverse bass, screech lead, male rap vocals, dry booth, no autotune, 150 bpm",
-        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
+        "[intro]\nhardstyle-reverse\nNill Bye watt-counting the barn\n\n[verse]\nFirst the tax break, then the towns learned the aquifer\nLearning is data. Data should have arrived before the red carpet\nNill Bye watt-counting the barn as a tenant on the bus\nTenants pay. Paying is cost causation. Causation is a civic science, barnbill\nIf the campus eats transmission, the campus funds transmission\nIf the campus drinks a well, the campus funds the well and the neighbor's remaining drop, costcausation\nRemaining drops are a common-pool. Common-pools need a meter and a price\nPrices are allowed to be high when the draw is 24-hour\n24-hour is a baseload. Baseloads do not get to wear a press-release halo\nHalos are for saints. Barns are for racks. Racks pay\nI install the meter. The meter is the thesis, watermeter\nMeters are how a boom does not become a rate-hike by surprise\n\n[verse]\nReverse bass on a bill that actually lands on the campus\nScreech lead under an interconnect that is not a free on-ramp\nNill Bye filing the ratepayer bus\nUri already taught the watt math. Adding a 24-hour tenant without a bill is a second quiz\nPass the quiz with a tariff the barn can see in advance\nAdvance is how towns stop revolting after the carpet\nRevolts are data that the sequence was backwards. Reverse the sequence\nSequence: meter, water study, bill, then the ribbon\nRibbons are last. Last is the method we keep using because it works\nBring the meter, lose the halo\nThe aquifer already knew the draw. Price the draw\nPricing is progress, barnbill\n\n[pre-chorus]\nRatepayer bus\nNill Bye on cost causation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep them off the community well if the study says the well cannot share\nSharing is a number, not a pitch. Numbers can say no\nNill Bye posting the ratepayer bus\nNo is a valid output. No is how a town keeps a tap\nTaps are a civic product. Do not sell the product as an AI epicenter story without a bill\nStories are allowed. Bills are required\nRequired is a statute: cost causation, a water study, a published tariff\nPublish it. Date it. Let the barn decide if the boom still pencils\nPenciling is a market. Markets that skip the bill are a transfer\nTransfers from households to racks are a quiet raid\nTurn the raid into a tariff. Tariffs are honest\nHonest barns can still boom. Booms that pay are the install, costcausation\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[verse]\nKeep the reverse, print the meter\nRatepayer bus is a civic method: cause, meter, bill, then ribbon\nNill Bye keeping the household on the bus without a hidden passenger\nHidden passengers are a PR team. PR teams are not a tariff\nI want the tariff. I want the study. I want the no if the no is the number\nNumbers are science. Science can still love a barn that pays\nPaying barns are progress, watermeter\nProgress is a tap that still works in August\nAugust is a test. Pass it with a well that was not promised to a rack for free\nFree was the halo. Retire the halo\nDate the first bill. Publish the first study\nRatepayer bus is the whole install, barnbill\n\n[chorus]\nRatepayer bus\nNill Bye on cost causation\nA server farm is a baseload with a PR team, costcausation\nAbatement is not a halo. Watts and water have a bill\nIf they generate more than they eat, show the meter\nYour boom is a rate-hike unless the barn pays the draw\n\n[outro]\nbass rest, watermeter\nmeter ticks\ncut\nyeah",
         733,
         "fixed",
         150,
-        180.0,
+        107.0,
         "4",
         "en",
-        "C minor",
+        "G major",
         true,
         2.0,
         0.85,
@@ -564,7 +564,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## 13-ratepayer-bus\n\nUS-safe rap **180 s progress** take: **ratepayer bus**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 733.\n7. Saves: `13 - Ratepayer Bus` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## 13-ratepayer-bus\n\nUS-safe rap **107 s progress** take: **ratepayer bus**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 107 s, bpm 150, language en, timesignature 4, key G major, form v_pre, generate_audio_codes true. Seed 733.\n7. Saves: `13 - Ratepayer Bus` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -895,8 +895,8 @@
       "bounding": [
         20,
         1004,
-        360,
-        336
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -909,7 +909,7 @@
         480,
         672,
         818,
-        1848
+        1504
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -940,13 +940,26 @@
       "color": "#a1309b",
       "font_size": 24,
       "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "SETTINGS",
+      "bounding": [
+        2956,
+        672,
+        360,
+        182
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
     }
   ],
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## 13-ratepayer-bus\n\nUS-safe rap **180 s progress** take: **ratepayer bus**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 180 s, bpm 150, language en, timesignature 4, generate_audio_codes true. Seed 733.\n7. Saves: `13 - Ratepayer Bus` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe rap 180s progress: Nill Bye ratepayer-bus cost-causation fix, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## 13-ratepayer-bus\n\nUS-safe rap **107 s progress** take: **ratepayer bus**. Fictional MC **Nill Bye** (science guy) on public-record **fixes**: methods, statutes, and measurement. No roast target. Native ACE-Step 1.5 turbo AIO. Queue this graph **on its own** \u2014 draft-first is the generic lane, not a prerequisite. Occupancy **audio** only; a longer Queue is expected.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. Tags vs lyrics: tags are genre/instrument/vocal hints; lyrics are the bars. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 107 s, bpm 150, language en, timesignature 4, key G major, form v_pre, generate_audio_codes true. Seed 733.\n7. Saves: `13 - Ratepayer Bus` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n10. Do not co-resident with LTX / Wan / Klein on this Spark.\n\nBeat-only pass: append instrumental, no vocals, and replace lyrics with [inst].\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe rap progress: Nill Bye ratepayer-bus cost-causation fix, ACE-Step 1.5 turbo AIO, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -968,6 +981,9 @@
     },
     "lab_rel": "audio/albums/nill-bye/duty-switch/13-ratepayer-bus",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1025,7 +1041,7 @@
           3,
           "seconds",
           {
-            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64\u2013210 s.",
             "label": "Duration (seconds)"
           }
         ],
@@ -1100,10 +1116,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

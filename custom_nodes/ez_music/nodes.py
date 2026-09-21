@@ -10,57 +10,15 @@ from typing import TYPE_CHECKING, Any, cast
 if TYPE_CHECKING:
     from ez_common import ComfyInputTypes
 
+from .song_plan import demo_draft_lyrics, demo_full_lyrics
+
 # Prompt path, flavor id, and canned lyrics widgets.
 PROMPTS_DIR = Path(__file__).resolve().parent / "prompts"
 FLAVOR_RAP = "rap_lyrics"
 
-DRAFT_LYRICS = """[intro]
-yeah
-local signal
-on the box
-
-[verse]
-Fan stays loud on a quiet street
-Weights on disk, no rented beat
-Card runs hot, the cut stays clean
-If it ships from here it stays unseen
-
-[chorus]
-Own the booth, own the stack
-No ghost in the hook, no borrowed track
-Spark in the rack, the master comes back"""
-
-FULL_LYRICS = """[intro]
-yeah
-local signal
-on the box
-
-[verse]
-Fan stays loud on a quiet street
-Weights on disk, no rented beat
-Card runs hot, the cut stays clean
-If it ships from here it stays unseen
-
-[chorus]
-Own the booth, own the stack
-No ghost in the hook, no borrowed track
-Spark in the rack, the master comes back
-
-[verse]
-Rack light blinks on a solo take
-No rented hook, no leased name
-Bars stay tight, the booth stays mine
-Stamp the master, keep the line
-
-[chorus]
-Own the booth, own the stack
-No ghost in the hook, no borrowed track
-Spark in the rack, the master comes back
-
-[outro]
-yeah
-local signal
-cut"""
+# Demo lyrics come from the song plan (cold open, then a pre-chorus full take).
+DRAFT_LYRICS = demo_draft_lyrics()
+FULL_LYRICS = demo_full_lyrics()
 
 
 def _log(message: str) -> None:

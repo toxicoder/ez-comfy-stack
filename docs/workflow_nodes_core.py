@@ -139,13 +139,13 @@ def core_nodes() -> dict[str, Any]:
         "EmptyAceStep1.5LatentAudio": _n(
             "Empty ACE-Step 1.5 Latent Audio",
             "Allocate an ACE-Step audio latent for N seconds.",
-            lab="Draft 32 s, full 96 s, album takes 180 s. seconds is also a socket from PrimitiveNode so App Duration stays in one place.",
+            lab="Draft is the cold-open bar length. Full is the pre-chorus bar length. Album takes are 64–210 s from the song plan. seconds is also a socket from PrimitiveNode so App Duration stays in one place.",
             sockets=[
                 _s("seconds", "FLOAT", "in", "Wired from Song Duration primitive on music graphs."),
                 _s("LATENT", "LATENT", "out", "Audio latent for KSampler."),
             ],
             widgets=[
-                _w("seconds", index=0, typ="FLOAT", rng="32 / 96 / 180 lab", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom."),
+                _w("seconds", index=0, typ="FLOAT", rng="draft / full / 64–210 album", desc="Duration in seconds.", gen="Longer latents cost RAM/time linearly. Stay at the seeded length unless you have headroom."),
                 _w("batch_size", index=1, typ="INT", rng="1", desc="Takes per Queue.", gen="Stay 1."),
             ],
         ),

@@ -1,6 +1,6 @@
 {
   "id": "rap-draft",
-  "revision": 3,
+  "revision": 2,
   "last_node_id": 17,
   "last_link_id": 17,
   "nodes": [
@@ -125,7 +125,7 @@
         "Run widget replace on values": false
       },
       "widgets_values": [
-        32.0,
+        49.0,
         "fixed"
       ],
       "title": "Song Duration"
@@ -134,8 +134,8 @@
       "id": 4,
       "type": "EmptyAceStep1.5LatentAudio",
       "pos": [
-        40,
-        1214
+        2976,
+        728
       ],
       "size": [
         320,
@@ -168,7 +168,7 @@
         "Node name for S&R": "EmptyAceStep1.5LatentAudio"
       },
       "widgets_values": [
-        32.0,
+        49.0,
         1
       ],
       "title": "Latent length (seconds)"
@@ -203,7 +203,7 @@
       },
       "widgets_values": [
         "custom",
-        "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
+        "[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[pre-chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
         false,
         "audio/music/rap-draft"
       ],
@@ -214,7 +214,7 @@
       "type": "EZAceStepPromptEnhance",
       "pos": [
         500,
-        1564
+        1220
       ],
       "size": [
         400,
@@ -257,7 +257,7 @@
       "widgets_values": [
         "custom",
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
-        "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
+        "[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[pre-chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
         false,
         "vocal",
         "audio/music/rap-draft"
@@ -269,7 +269,7 @@
       "type": "TextEncodeAceStepAudio1.5",
       "pos": [
         500,
-        2056
+        1712
       ],
       "size": [
         400,
@@ -325,11 +325,11 @@
       },
       "widgets_values": [
         "boom bap, hip-hop, dusty drums, vinyl crackle, dry snare, sampled piano stab, upright bass, male rap vocals, dry booth, no autotune, 88 bpm",
-        "[intro]\nyeah\nlocal signal\non the box\n\n[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
+        "[verse]\nFan stays loud on a quiet street\nWeights on disk, no rented beat\nCard runs hot, the cut stays clean\nIf it ships from here it stays unseen\n\n[pre-chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\n\n[chorus]\nOwn the booth, own the stack\nNo ghost in the hook, no borrowed track\nSpark in the rack, the master comes back",
         42,
         "fixed",
         88,
-        32.0,
+        49.0,
         "4",
         "en",
         "C minor",
@@ -564,7 +564,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "## audio/music/rap-draft\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
+        "## audio/music/rap-draft\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n"
       ],
       "title": "Operator note"
     },
@@ -895,8 +895,8 @@
       "bounding": [
         20,
         1004,
-        360,
-        336
+        320,
+        182
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -909,7 +909,7 @@
         480,
         672,
         818,
-        1848
+        1504
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -940,13 +940,26 @@
       "color": "#a1309b",
       "font_size": 24,
       "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "SETTINGS",
+      "bounding": [
+        2956,
+        672,
+        360,
+        182
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
     }
   ],
   "config": {},
   "extra": {
     "lab_profile": "us-safe-music",
-    "lab_note": "## audio/music/rap-draft\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 32 s, bpm 88, language en, timesignature 4, generate_audio_codes true.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
-    "lab_description": "US-safe rap draft: ACE-Step 1.5 turbo AIO, 32s boom-bap, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
+    "lab_note": "## audio/music/rap-draft\n\nUS-safe rap **draft** (first Queue, same role as klein-still-draft). Native ACE-Step 1.5 turbo AIO. Sequential Queue \u2014 do not load Klein + Wan + LTX + ACE-Step together.\n\n1. Weights: `./scripts/manage.sh download-music --tier turbo` (same AIO dest as `download-podcast --tier acestep`; ~10 GB, opt-in, not `download-models`).\n2. Prompt enhance is **off** so tags, BPM, language, and `[verse]`/`[chorus]` stay as written. Turn Enhance on only if you want the 4B rewriter.\n3. **Rap lyrics** owns the bars; ACE-Step Prompt Enhance owns tags. Lyrics are wired into ACE. Section tags `[verse]` / `[chorus]` / `[spoken word]` are vocal hints operators may add.\n4. Original lyrics only. No \u201cin the style of <living artist>\u201d. No living-MC names. No famous-hook paraphrases.\n5. ACE-Step vocal is an **invented** identity, not a cloned MC.\n6. Sampler: 8 steps, cfg 1, euler, simple. Duration 49 s, bpm 88, language en, timesignature 4, key C minor, generate_audio_codes true. Form is a cold open (verse, lift, hook). Album takes use the full form catalog.\n7. Saves: `ez_rap_draft` FLAC master + 320 kbps MP3 under `${COMFY_OUTPUT_DIR}`.\n8. Cover separately: Queue **stills/thumbnail.json** or **stills/podcast-cover.json**. Do not embed Klein here.\n9. Human rewrite the lyrics before any release. Prompts are not authorship (USCO Part 2 / Thaler).\n\nBeat-only pass: keep boom-bap tags, append instrumental, no vocals, and replace lyrics with [inst].\n\nCanned style swaps (tags widget only \u2014 not extra files):\n- trap: trap, 808 bass, rapid hi-hats, dark pads, male rap vocals, half-time, 140 bpm\n- lo-fi: lo-fi hip-hop, dusty drums, rhodes, vinyl crackle, laid-back male rap vocals, 86 bpm\n\nOccupancy: audio \u2014 stop Klein / Wan / LTX session. One GB10 job.\n",
+    "lab_description": "US-safe rap draft: ACE-Step 1.5 turbo AIO, cold-open boom-bap, invented vocal\nPrompt enhance is **off** so authored text (recipe, script labels, ACE tags, or film shots) is encoded as written. Turn Enhance on only if you want the 4B rewriter.\n",
     "lab_optional_unwired": [
       "LoadImage"
     ],
@@ -968,6 +981,9 @@
     },
     "lab_rel": "audio/music/rap-draft",
     "workflowRendererVersion": "Vue-corrected",
+    "lab_quality": {
+      "default": "lab"
+    },
     "lab_app_mode": {
       "enabled": true,
       "default_view": "app",
@@ -1041,7 +1057,7 @@
           3,
           "seconds",
           {
-            "description": "Length in seconds. Music draft stays ~32 s; full track is 96 s.",
+            "description": "Length in seconds. Rap draft is a cold open. Full track uses a pre-chorus form. Album takes are 64\u2013210 s.",
             "label": "Duration (seconds)"
           }
         ],
@@ -1116,10 +1132,7 @@
         14
       ]
     },
-    "linearMode": true,
-    "lab_quality": {
-      "default": "lab"
-    }
+    "linearMode": true
   },
   "version": 0.4
 }

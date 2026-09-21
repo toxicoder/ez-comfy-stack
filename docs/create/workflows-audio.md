@@ -29,8 +29,8 @@ Occupancy **audio**. Opt-in weights (`download-podcast` / `download-dub` / `down
 | **[audio/podcast/two-host-episode](../generated/workflows/audio/podcast/two-host-episode.md)** | Two-host episode. Kokoro stock voices + ACE-Step instrumental bed. Prefix `ez_podcast_ep` |
 | **[audio/podcast/radio-drama](../generated/workflows/audio/podcast/radio-drama.md)** | One-graph radio drama. Sting + bed stay instrumental. Prefix `ez_radio_ep` |
 | **[audio/podcast/learn-episode](../generated/workflows/audio/podcast/learn-episode.md)** | Learning episode. Paste notes/links, pick format + duration. Prefix `ez_learn_ep` |
-| **[audio/music/rap-draft](../generated/workflows/audio/music/rap-draft.md)** | ACE-Step rap draft **32 s** boom-bap 88 (`ez_rap_draft`) |
-| **[audio/music/rap-full](../generated/workflows/audio/music/rap-full.md)** | ACE-Step rap full **96 s** boom-bap 88 (`ez_rap_full`). Queue draft first |
+| **[audio/music/rap-draft](../generated/workflows/audio/music/rap-draft.md)** | ACE-Step rap cold-open boom-bap 88 (`ez_rap_draft`) |
+| **[audio/music/rap-full](../generated/workflows/audio/music/rap-full.md)** | ACE-Step rap pre-chorus boom-bap 88 (`ez_rap_full`). Queue draft first |
 
 Nine Nill Bye albums under `_lab/audio/albums/nill-bye/<album>/`. Queue a numbered track, or `album-render`. RAP-FIRST playbook: [Nill Bye albums](music-rap.md).
 
@@ -60,9 +60,9 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ---
 
-### 180s Nill Bye diss examples
+### Nill Bye diss examples
 
-One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** defaults to **180**. Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
+One hundred thirty-five extra full-track graphs under **`_lab/audio/albums/nill-bye/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64–210 s). Queue a numbered track **on its own**, or generate the album in one go with `./scripts/manage.sh album-render --album nill-bye/<album-slug>`. SaveAudio stem is **`NN - Song Title`**. FLAC/MP3 tags include artist, album, title, and optional cover.
 
 **Nill Bye** (science guy, mad) is a fictional MC with an invented ACE-Step vocal. Phases 0–2 roast fictional MC **Rake** (in his feels; club-talk and fake-cool as a brand). Phases 3–4 are civic satire of Texas Gov. **Greg Abbott** as a public-record target, not a vocal identity. Phases 5–6 are civic satire of **Donald Trump** as a public-record target, not a vocal identity. Phases 7–8 are **progress** takes: methods, statutes, and measurement with **no roast target** (winterize, preregister, hearings, NDCs, Article I, lead-line replacement). Original lyrics. No living-MC names. No famous-hook paraphrases. Punch **up** on diss phases; **build up** on progress phases. Do not roast disability, race, faith, children, or people at the river. Shipped bars stay short and SFW. Each take owns exclusive verses and punchlines — content bars are not reused across the one hundred thirty-five graphs; choruses stay unique hooks. Human rewrite required before any release.
 
@@ -272,9 +272,9 @@ Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 
 ---
 
-### 180s Drive-through EDM examples
+### Drive-through EDM examples
 
-Eighty-five extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** defaults to **180**. Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**.
+Eighty-five extra full-track graphs under **`_lab/audio/albums/drive-through/<album>/`**. Same AIO, sampler, occupancy **audio**. App **Duration (seconds)** is the song plan (64–210 s). Queue a numbered track **on its own**, or `album-render --album drive-through/<album-slug>`. SaveAudio stem is **`NN - Song Title`**.
 
 Fictional act only: **Drive-through** (hardcore, pure of heart) playing a **live bass DJ set**. Original **warped hybrid-trap EDM** spliced from [Audio Rack](audio-rack.md) catalogs (hybrid trap, riddim, tearout, brostep, wave bass, color bass, drumstep, dirty dubstep, neuro bass, chest/dirty bass, festival trap — not techno, not big room, not progressive house). Named recipes fill empty axes; each take overrides tempo and bass. No living-DJ names. No famous-hook paraphrases. Eighty-three takes lock `instrumental, no vocals, no singing, no choir, no vocal chops` via `mix_drive_lock` (App **Vocal / instrumental** = instrumental). Two takes are sparse DJ-shout treats (`wide open`, `second wave`): App mode **vocal**, `voc_dj_shout`, one 1–2 word `[chorus]` chop, no `[verse]`. Arrangement scores are production cues in `[inst]` blocks — drop first, hard warpy drops, trap drums, chest-sub / 808, no quiet dips, unique flow per take — not a Nill Bye verse/chorus loop and not a melody-drop-break-drop skeleton. Some takes add dual-action pedal bass under rolling hats. Phase2, phase3, and phase4 graphs keep that ACE topology but vary Comfy node placement across five layouts (`column`, `wide-stage`, `stacked-tower`, `prompt-left`, `output-rail`). ACE-Step timbre is invented. Human selection and edit required before any release.
 
@@ -288,21 +288,21 @@ Hour 1 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **[audio/albums/drive-through/hour-1/01-night-window](../generated/workflows/audio/albums/drive-through/hour-1.md)** | warped hybrid-trap **145**, seed **193** | `01 - Night Window` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/hour-1/02-open-lane](../generated/workflows/audio/albums/drive-through/hour-1.md)** | riddim **152**, seed **191** | `02 - Open Lane` | Drop-first riddim warp |
-| **[audio/albums/drive-through/hour-1/03-exit-seven](../generated/workflows/audio/albums/drive-through/hour-1.md)** | tearout **142**, seed **233** | `03 - Exit Seven` | Drop-first tearout warp |
-| **[audio/albums/drive-through/hour-1/04-skyline-pass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | brostep **145**, seed **199** | `04 - Skyline Pass` | Drop-first brostep warp |
-| **[audio/albums/drive-through/hour-1/05-on-ramp](../generated/workflows/audio/albums/drive-through/hour-1.md)** | wave bass **155**, seed **197** | `05 - On-Ramp` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/hour-1/06-tunnel-bass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | dirty bass **150**, seed **257** | `06 - Tunnel Bass` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/hour-1/07-wide-open](../generated/workflows/audio/albums/drive-through/hour-1.md)** | color bass **150**, seed **239** | `07 - Wide Open` | **DJ shout treat.** Drop-first color bass warp |
-| **[audio/albums/drive-through/hour-1/08-overpass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | dirty dubstep **150**, seed **227** | `08 - Overpass` | Drop-first dirty dubstep warp |
-| **[audio/albums/drive-through/hour-1/09-second-wave](../generated/workflows/audio/albums/drive-through/hour-1.md)** | warped hybrid-trap **150**, seed **241** | `09 - Second Wave` | **DJ shout treat.** Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/hour-1/10-freight-pulse](../generated/workflows/audio/albums/drive-through/hour-1.md)** | drumstep **176**, seed **211** | `10 - Freight Pulse` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/hour-1/11-keep-going](../generated/workflows/audio/albums/drive-through/hour-1.md)** | neuro bass **170**, seed **251** | `11 - Keep Going` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/hour-1/12-horizon-kick](../generated/workflows/audio/albums/drive-through/hour-1.md)** | tearout **165**, seed **263** | `12 - Horizon Kick` | Drop-first tearout warp |
-| **[audio/albums/drive-through/hour-1/13-clean-wreckage](../generated/workflows/audio/albums/drive-through/hour-1.md)** | brostep **150**, seed **269** | `13 - Clean Wreckage` | Drop-first brostep warp |
-| **[audio/albums/drive-through/hour-1/14-heart-lane](../generated/workflows/audio/albums/drive-through/hour-1.md)** | wave bass **145**, seed **223** | `14 - Heart Lane` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/hour-1/15-dawn-receipt](../generated/workflows/audio/albums/drive-through/hour-1.md)** | chest bass **140**, seed **229** | `15 - Dawn Receipt` | Drop-first chest bass warp |
+| **[audio/albums/drive-through/hour-1/01-night-window](../generated/workflows/audio/albums/drive-through/hour-1.md)** | warped hybrid-trap **145**, seed **193** | `01 - Night Window` | Hybrid trap warp |
+| **[audio/albums/drive-through/hour-1/02-open-lane](../generated/workflows/audio/albums/drive-through/hour-1.md)** | riddim **152**, seed **191** | `02 - Open Lane` | Riddim warp |
+| **[audio/albums/drive-through/hour-1/03-exit-seven](../generated/workflows/audio/albums/drive-through/hour-1.md)** | tearout **142**, seed **233** | `03 - Exit Seven` | Tearout warp |
+| **[audio/albums/drive-through/hour-1/04-skyline-pass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | brostep **145**, seed **199** | `04 - Skyline Pass` | Brostep warp |
+| **[audio/albums/drive-through/hour-1/05-on-ramp](../generated/workflows/audio/albums/drive-through/hour-1.md)** | wave bass **155**, seed **197** | `05 - On-Ramp` | Wave bass warp |
+| **[audio/albums/drive-through/hour-1/06-tunnel-bass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | dirty bass **150**, seed **257** | `06 - Tunnel Bass` | Dirty bass warp |
+| **[audio/albums/drive-through/hour-1/07-wide-open](../generated/workflows/audio/albums/drive-through/hour-1.md)** | color bass **150**, seed **239** | `07 - Wide Open` | **DJ shout treat.** Color bass warp |
+| **[audio/albums/drive-through/hour-1/08-overpass](../generated/workflows/audio/albums/drive-through/hour-1.md)** | dirty dubstep **150**, seed **227** | `08 - Overpass` | Dirty dubstep warp |
+| **[audio/albums/drive-through/hour-1/09-second-wave](../generated/workflows/audio/albums/drive-through/hour-1.md)** | warped hybrid-trap **150**, seed **241** | `09 - Second Wave` | **DJ shout treat.** Hybrid trap warp |
+| **[audio/albums/drive-through/hour-1/10-freight-pulse](../generated/workflows/audio/albums/drive-through/hour-1.md)** | drumstep **176**, seed **211** | `10 - Freight Pulse` | Drumstep warp |
+| **[audio/albums/drive-through/hour-1/11-keep-going](../generated/workflows/audio/albums/drive-through/hour-1.md)** | neuro bass **170**, seed **251** | `11 - Keep Going` | Neuro bass warp |
+| **[audio/albums/drive-through/hour-1/12-horizon-kick](../generated/workflows/audio/albums/drive-through/hour-1.md)** | tearout **165**, seed **263** | `12 - Horizon Kick` | Tearout warp |
+| **[audio/albums/drive-through/hour-1/13-clean-wreckage](../generated/workflows/audio/albums/drive-through/hour-1.md)** | brostep **150**, seed **269** | `13 - Clean Wreckage` | Brostep warp |
+| **[audio/albums/drive-through/hour-1/14-heart-lane](../generated/workflows/audio/albums/drive-through/hour-1.md)** | wave bass **145**, seed **223** | `14 - Heart Lane` | Wave bass warp |
+| **[audio/albums/drive-through/hour-1/15-dawn-receipt](../generated/workflows/audio/albums/drive-through/hour-1.md)** | chest bass **140**, seed **229** | `15 - Dawn Receipt` | Chest bass warp |
 
 #### Hour 2 (`audio/albums/drive-through/hour-2/`)
 
@@ -310,21 +310,21 @@ Hour 2 of the live bass set. Full album: `./scripts/manage.sh album-render --alb
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **[audio/albums/drive-through/hour-2/01-rumble-strip](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **140**, seed **271** | `01 - Rumble Strip` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/hour-2/02-low-lane](../generated/workflows/audio/albums/drive-through/hour-2.md)** | riddim **144**, seed **277** | `02 - Low Lane` | Drop-first riddim warp |
-| **[audio/albums/drive-through/hour-2/03-warm-merge](../generated/workflows/audio/albums/drive-through/hour-2.md)** | wave bass **148**, seed **281** | `03 - Warm Merge` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/hour-2/04-colour-span](../generated/workflows/audio/albums/drive-through/hour-2.md)** | color bass **150**, seed **283** | `04 - Colour Span` | Drop-first color bass warp |
-| **[audio/albums/drive-through/hour-2/05-garage-ticket](../generated/workflows/audio/albums/drive-through/hour-2.md)** | festival trap **140**, seed **293** | `05 - Garage Ticket` | Drop-first festival trap warp |
-| **[audio/albums/drive-through/hour-2/06-liquid-grade](../generated/workflows/audio/albums/drive-through/hour-2.md)** | drumstep **174**, seed **307** | `06 - Liquid Grade` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/hour-2/07-jump-bay](../generated/workflows/audio/albums/drive-through/hour-2.md)** | brostep **150**, seed **311** | `07 - Jump Bay` | Drop-first brostep warp |
-| **[audio/albums/drive-through/hour-2/08-psy-median](../generated/workflows/audio/albums/drive-through/hour-2.md)** | neuro bass **145**, seed **313** | `08 - Psy Median` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/hour-2/09-groove-mile](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **144**, seed **317** | `09 - Groove Mile` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/hour-2/10-donk-ramp](../generated/workflows/audio/albums/drive-through/hour-2.md)** | tearout **150**, seed **331** | `10 - Donk Ramp` | Drop-first tearout warp |
-| **[audio/albums/drive-through/hour-2/11-bounce-booth](../generated/workflows/audio/albums/drive-through/hour-2.md)** | chest bass **140**, seed **337** | `11 - Bounce Booth` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/hour-2/12-toll-growl](../generated/workflows/audio/albums/drive-through/hour-2.md)** | riddim **150**, seed **347** | `12 - Toll Growl` | Drop-first riddim warp |
-| **[audio/albums/drive-through/hour-2/13-night-oil](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **142**, seed **349** | `13 - Night Oil` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/hour-2/14-chest-pass](../generated/workflows/audio/albums/drive-through/hour-2.md)** | dirty bass **150**, seed **353** | `14 - Chest Pass` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/hour-2/15-sunrise-sub](../generated/workflows/audio/albums/drive-through/hour-2.md)** | wave bass **140**, seed **359** | `15 - Sunrise Sub` | Drop-first wave bass warp |
+| **[audio/albums/drive-through/hour-2/01-rumble-strip](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **140**, seed **271** | `01 - Rumble Strip` | Hybrid trap warp |
+| **[audio/albums/drive-through/hour-2/02-low-lane](../generated/workflows/audio/albums/drive-through/hour-2.md)** | riddim **144**, seed **277** | `02 - Low Lane` | Riddim warp |
+| **[audio/albums/drive-through/hour-2/03-warm-merge](../generated/workflows/audio/albums/drive-through/hour-2.md)** | wave bass **148**, seed **281** | `03 - Warm Merge` | Wave bass warp |
+| **[audio/albums/drive-through/hour-2/04-colour-span](../generated/workflows/audio/albums/drive-through/hour-2.md)** | color bass **150**, seed **283** | `04 - Colour Span` | Color bass warp |
+| **[audio/albums/drive-through/hour-2/05-garage-ticket](../generated/workflows/audio/albums/drive-through/hour-2.md)** | festival trap **140**, seed **293** | `05 - Garage Ticket` | Festival trap warp |
+| **[audio/albums/drive-through/hour-2/06-liquid-grade](../generated/workflows/audio/albums/drive-through/hour-2.md)** | drumstep **174**, seed **307** | `06 - Liquid Grade` | Drumstep warp |
+| **[audio/albums/drive-through/hour-2/07-jump-bay](../generated/workflows/audio/albums/drive-through/hour-2.md)** | brostep **150**, seed **311** | `07 - Jump Bay` | Brostep warp |
+| **[audio/albums/drive-through/hour-2/08-psy-median](../generated/workflows/audio/albums/drive-through/hour-2.md)** | neuro bass **145**, seed **313** | `08 - Psy Median` | Neuro bass warp |
+| **[audio/albums/drive-through/hour-2/09-groove-mile](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **144**, seed **317** | `09 - Groove Mile` | Hybrid trap warp |
+| **[audio/albums/drive-through/hour-2/10-donk-ramp](../generated/workflows/audio/albums/drive-through/hour-2.md)** | tearout **150**, seed **331** | `10 - Donk Ramp` | Tearout warp |
+| **[audio/albums/drive-through/hour-2/11-bounce-booth](../generated/workflows/audio/albums/drive-through/hour-2.md)** | chest bass **140**, seed **337** | `11 - Bounce Booth` | Chest bass warp |
+| **[audio/albums/drive-through/hour-2/12-toll-growl](../generated/workflows/audio/albums/drive-through/hour-2.md)** | riddim **150**, seed **347** | `12 - Toll Growl` | Riddim warp |
+| **[audio/albums/drive-through/hour-2/13-night-oil](../generated/workflows/audio/albums/drive-through/hour-2.md)** | warped hybrid-trap **142**, seed **349** | `13 - Night Oil` | Hybrid trap warp |
+| **[audio/albums/drive-through/hour-2/14-chest-pass](../generated/workflows/audio/albums/drive-through/hour-2.md)** | dirty bass **150**, seed **353** | `14 - Chest Pass` | Dirty bass warp |
+| **[audio/albums/drive-through/hour-2/15-sunrise-sub](../generated/workflows/audio/albums/drive-through/hour-2.md)** | wave bass **140**, seed **359** | `15 - Sunrise Sub` | Wave bass warp |
 
 #### Headliner (`audio/albums/drive-through/headliner/`)
 
@@ -332,21 +332,21 @@ Hour 3 headliner. Node placement varies across five layouts. Full album: `./scri
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **[audio/albums/drive-through/headliner/01-lantern-merge](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **150**, seed **367** | `01 - Lantern Merge` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/headliner/02-firefly-lane](../generated/workflows/audio/albums/drive-through/headliner.md)** | color bass **152**, seed **373** | `02 - Firefly Lane` | Drop-first color bass warp |
-| **[audio/albums/drive-through/headliner/03-canopy-bounce](../generated/workflows/audio/albums/drive-through/headliner.md)** | chest bass **148**, seed **379** | `03 - Canopy Bounce` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/headliner/04-grove-wreck](../generated/workflows/audio/albums/drive-through/headliner.md)** | riddim **150**, seed **383** | `04 - Grove Wreck` | Drop-first riddim warp |
-| **[audio/albums/drive-through/headliner/05-moss-sub](../generated/workflows/audio/albums/drive-through/headliner.md)** | dirty bass **150**, seed **389** | `05 - Moss Sub` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/headliner/06-fern-stack](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **155**, seed **397** | `06 - Fern Stack` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/headliner/07-pollen-kick](../generated/workflows/audio/albums/drive-through/headliner.md)** | drumstep **174**, seed **401** | `07 - Pollen Kick` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/headliner/08-cedar-growl](../generated/workflows/audio/albums/drive-through/headliner.md)** | tearout **150**, seed **409** | `08 - Cedar Growl` | Drop-first tearout warp |
-| **[audio/albums/drive-through/headliner/09-moon-ramp](../generated/workflows/audio/albums/drive-through/headliner.md)** | wave bass **148**, seed **419** | `09 - Moon Ramp` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/headliner/10-trail-bounce](../generated/workflows/audio/albums/drive-through/headliner.md)** | color bass **150**, seed **421** | `10 - Trail Bounce` | Drop-first color bass warp |
-| **[audio/albums/drive-through/headliner/11-dew-wreck](../generated/workflows/audio/albums/drive-through/headliner.md)** | neuro bass **172**, seed **431** | `11 - Dew Wreck` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/headliner/12-sap-stack](../generated/workflows/audio/albums/drive-through/headliner.md)** | brostep **165**, seed **433** | `12 - Sap Stack` | Drop-first brostep warp |
-| **[audio/albums/drive-through/headliner/13-glade-split](../generated/workflows/audio/albums/drive-through/headliner.md)** | dirty dubstep **150**, seed **439** | `13 - Glade Split` | Drop-first dirty dubstep warp |
-| **[audio/albums/drive-through/headliner/14-root-chest](../generated/workflows/audio/albums/drive-through/headliner.md)** | chest bass **148**, seed **443** | `14 - Root Chest` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/headliner/15-ember-crest](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **165**, seed **449** | `15 - Ember Crest` | Drop-first hybrid trap warp |
+| **[audio/albums/drive-through/headliner/01-lantern-merge](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **150**, seed **367** | `01 - Lantern Merge` | Hybrid trap warp |
+| **[audio/albums/drive-through/headliner/02-firefly-lane](../generated/workflows/audio/albums/drive-through/headliner.md)** | color bass **152**, seed **373** | `02 - Firefly Lane` | Color bass warp |
+| **[audio/albums/drive-through/headliner/03-canopy-bounce](../generated/workflows/audio/albums/drive-through/headliner.md)** | chest bass **148**, seed **379** | `03 - Canopy Bounce` | Chest bass warp |
+| **[audio/albums/drive-through/headliner/04-grove-wreck](../generated/workflows/audio/albums/drive-through/headliner.md)** | riddim **150**, seed **383** | `04 - Grove Wreck` | Riddim warp |
+| **[audio/albums/drive-through/headliner/05-moss-sub](../generated/workflows/audio/albums/drive-through/headliner.md)** | dirty bass **150**, seed **389** | `05 - Moss Sub` | Dirty bass warp |
+| **[audio/albums/drive-through/headliner/06-fern-stack](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **155**, seed **397** | `06 - Fern Stack` | Hybrid trap warp |
+| **[audio/albums/drive-through/headliner/07-pollen-kick](../generated/workflows/audio/albums/drive-through/headliner.md)** | drumstep **174**, seed **401** | `07 - Pollen Kick` | Drumstep warp |
+| **[audio/albums/drive-through/headliner/08-cedar-growl](../generated/workflows/audio/albums/drive-through/headliner.md)** | tearout **150**, seed **409** | `08 - Cedar Growl` | Tearout warp |
+| **[audio/albums/drive-through/headliner/09-moon-ramp](../generated/workflows/audio/albums/drive-through/headliner.md)** | wave bass **148**, seed **419** | `09 - Moon Ramp` | Wave bass warp |
+| **[audio/albums/drive-through/headliner/10-trail-bounce](../generated/workflows/audio/albums/drive-through/headliner.md)** | color bass **150**, seed **421** | `10 - Trail Bounce` | Color bass warp |
+| **[audio/albums/drive-through/headliner/11-dew-wreck](../generated/workflows/audio/albums/drive-through/headliner.md)** | neuro bass **172**, seed **431** | `11 - Dew Wreck` | Neuro bass warp |
+| **[audio/albums/drive-through/headliner/12-sap-stack](../generated/workflows/audio/albums/drive-through/headliner.md)** | brostep **165**, seed **433** | `12 - Sap Stack` | Brostep warp |
+| **[audio/albums/drive-through/headliner/13-glade-split](../generated/workflows/audio/albums/drive-through/headliner.md)** | dirty dubstep **150**, seed **439** | `13 - Glade Split` | Dirty dubstep warp |
+| **[audio/albums/drive-through/headliner/14-root-chest](../generated/workflows/audio/albums/drive-through/headliner.md)** | chest bass **148**, seed **443** | `14 - Root Chest` | Chest bass warp |
+| **[audio/albums/drive-through/headliner/15-ember-crest](../generated/workflows/audio/albums/drive-through/headliner.md)** | warped hybrid-trap **165**, seed **449** | `15 - Ember Crest` | Hybrid trap warp |
 
 #### Afterparty (`audio/albums/drive-through/afterparty/`)
 
@@ -354,26 +354,26 @@ Hour 4 afterparty. Node placement varies across five layouts. Full album: `./scr
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **[audio/albums/drive-through/afterparty/01-brake-fade](../generated/workflows/audio/albums/drive-through/afterparty.md)** | dirty bass **150**, seed **457** | `01 - Brake Fade` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/afterparty/02-diesel-hum](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **152**, seed **461** | `02 - Diesel Hum` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/afterparty/03-axle-grind](../generated/workflows/audio/albums/drive-through/afterparty.md)** | tearout **155**, seed **463** | `03 - Axle Grind` | Drop-first tearout warp |
-| **[audio/albums/drive-through/afterparty/04-weigh-station](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **158**, seed **467** | `04 - Weigh Station` | Drop-first brostep warp |
-| **[audio/albums/drive-through/afterparty/05-black-ice](../generated/workflows/audio/albums/drive-through/afterparty.md)** | riddim **160**, seed **479** | `05 - Black Ice` | Drop-first riddim warp |
-| **[audio/albums/drive-through/afterparty/06-high-beams](../generated/workflows/audio/albums/drive-through/afterparty.md)** | color bass **165**, seed **487** | `06 - High Beams` | Drop-first color bass warp |
-| **[audio/albums/drive-through/afterparty/07-chain-hook](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **168**, seed **491** | `07 - Chain Hook` | Drop-first brostep warp |
-| **[audio/albums/drive-through/afterparty/08-grit-plate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | wave bass **150**, seed **499** | `08 - Grit Plate` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/afterparty/09-steel-grate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | drumstep **172**, seed **503** | `09 - Steel Grate` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/afterparty/10-rest-bay](../generated/workflows/audio/albums/drive-through/afterparty.md)** | chest bass **155**, seed **509** | `10 - Rest Bay` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/afterparty/11-haul-crate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **170**, seed **521** | `11 - Haul Crate` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/afterparty/12-night-splice](../generated/workflows/audio/albums/drive-through/afterparty.md)** | wave bass **152**, seed **523** | `12 - Night Splice` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/afterparty/13-torque-bay](../generated/workflows/audio/albums/drive-through/afterparty.md)** | neuro bass **176**, seed **541** | `13 - Torque Bay` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/afterparty/14-spare-drum](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **165**, seed **547** | `14 - Spare Drum` | Drop-first brostep warp |
-| **[audio/albums/drive-through/afterparty/15-oil-pan](../generated/workflows/audio/albums/drive-through/afterparty.md)** | color bass **150**, seed **557** | `15 - Oil Pan` | Drop-first color bass warp |
-| **[audio/albums/drive-through/afterparty/16-curb-check](../generated/workflows/audio/albums/drive-through/afterparty.md)** | drumstep **174**, seed **563** | `16 - Curb Check` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/afterparty/17-last-exit](../generated/workflows/audio/albums/drive-through/afterparty.md)** | dirty bass **160**, seed **569** | `17 - Last Exit` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/afterparty/18-asphalt-heart](../generated/workflows/audio/albums/drive-through/afterparty.md)** | chest bass **155**, seed **571** | `18 - Asphalt Heart` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/afterparty/19-clutch-slam](../generated/workflows/audio/albums/drive-through/afterparty.md)** | tearout **168**, seed **577** | `19 - Clutch Slam` | Drop-first tearout warp |
-| **[audio/albums/drive-through/afterparty/20-trailer-hitch](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **165**, seed **587** | `20 - Trailer Hitch` | Drop-first hybrid trap warp |
+| **[audio/albums/drive-through/afterparty/01-brake-fade](../generated/workflows/audio/albums/drive-through/afterparty.md)** | dirty bass **150**, seed **457** | `01 - Brake Fade` | Dirty bass warp |
+| **[audio/albums/drive-through/afterparty/02-diesel-hum](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **152**, seed **461** | `02 - Diesel Hum` | Hybrid trap warp |
+| **[audio/albums/drive-through/afterparty/03-axle-grind](../generated/workflows/audio/albums/drive-through/afterparty.md)** | tearout **155**, seed **463** | `03 - Axle Grind` | Tearout warp |
+| **[audio/albums/drive-through/afterparty/04-weigh-station](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **158**, seed **467** | `04 - Weigh Station` | Brostep warp |
+| **[audio/albums/drive-through/afterparty/05-black-ice](../generated/workflows/audio/albums/drive-through/afterparty.md)** | riddim **160**, seed **479** | `05 - Black Ice` | Riddim warp |
+| **[audio/albums/drive-through/afterparty/06-high-beams](../generated/workflows/audio/albums/drive-through/afterparty.md)** | color bass **165**, seed **487** | `06 - High Beams` | Color bass warp |
+| **[audio/albums/drive-through/afterparty/07-chain-hook](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **168**, seed **491** | `07 - Chain Hook` | Brostep warp |
+| **[audio/albums/drive-through/afterparty/08-grit-plate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | wave bass **150**, seed **499** | `08 - Grit Plate` | Wave bass warp |
+| **[audio/albums/drive-through/afterparty/09-steel-grate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | drumstep **172**, seed **503** | `09 - Steel Grate` | Drumstep warp |
+| **[audio/albums/drive-through/afterparty/10-rest-bay](../generated/workflows/audio/albums/drive-through/afterparty.md)** | chest bass **155**, seed **509** | `10 - Rest Bay` | Chest bass warp |
+| **[audio/albums/drive-through/afterparty/11-haul-crate](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **170**, seed **521** | `11 - Haul Crate` | Hybrid trap warp |
+| **[audio/albums/drive-through/afterparty/12-night-splice](../generated/workflows/audio/albums/drive-through/afterparty.md)** | wave bass **152**, seed **523** | `12 - Night Splice` | Wave bass warp |
+| **[audio/albums/drive-through/afterparty/13-torque-bay](../generated/workflows/audio/albums/drive-through/afterparty.md)** | neuro bass **176**, seed **541** | `13 - Torque Bay` | Neuro bass warp |
+| **[audio/albums/drive-through/afterparty/14-spare-drum](../generated/workflows/audio/albums/drive-through/afterparty.md)** | brostep **165**, seed **547** | `14 - Spare Drum` | Brostep warp |
+| **[audio/albums/drive-through/afterparty/15-oil-pan](../generated/workflows/audio/albums/drive-through/afterparty.md)** | color bass **150**, seed **557** | `15 - Oil Pan` | Color bass warp |
+| **[audio/albums/drive-through/afterparty/16-curb-check](../generated/workflows/audio/albums/drive-through/afterparty.md)** | drumstep **174**, seed **563** | `16 - Curb Check` | Drumstep warp |
+| **[audio/albums/drive-through/afterparty/17-last-exit](../generated/workflows/audio/albums/drive-through/afterparty.md)** | dirty bass **160**, seed **569** | `17 - Last Exit` | Dirty bass warp |
+| **[audio/albums/drive-through/afterparty/18-asphalt-heart](../generated/workflows/audio/albums/drive-through/afterparty.md)** | chest bass **155**, seed **571** | `18 - Asphalt Heart` | Chest bass warp |
+| **[audio/albums/drive-through/afterparty/19-clutch-slam](../generated/workflows/audio/albums/drive-through/afterparty.md)** | tearout **168**, seed **577** | `19 - Clutch Slam` | Tearout warp |
+| **[audio/albums/drive-through/afterparty/20-trailer-hitch](../generated/workflows/audio/albums/drive-through/afterparty.md)** | warped hybrid-trap **165**, seed **587** | `20 - Trailer Hitch` | Hybrid trap warp |
 
 #### Secret Homage (`audio/albums/drive-through/secret-homage/`)
 
@@ -381,26 +381,26 @@ Secret Homage. Node placement varies across five layouts. Full album: `./scripts
 
 | Graph | Tags / bpm | Prefix | Take |
 | --- | --- | --- | --- |
-| **[audio/albums/drive-through/secret-homage/01-hush-lane](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **140**, seed **593** | `01 - Hush Lane` | Drop-first dirty dubstep warp |
-| **[audio/albums/drive-through/secret-homage/02-cipher-lock](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | brostep **140**, seed **599** | `02 - Cipher Lock` | Drop-first brostep warp |
-| **[audio/albums/drive-through/secret-homage/03-ghost-dock](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | riddim **140**, seed **601** | `03 - Ghost Dock` | Drop-first riddim warp |
-| **[audio/albums/drive-through/secret-homage/04-sealed-ramp](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | tearout **145**, seed **607** | `04 - Sealed Ramp` | Drop-first tearout warp |
-| **[audio/albums/drive-through/secret-homage/05-fog-vault](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | color bass **142**, seed **613** | `05 - Fog Vault` | Drop-first color bass warp |
-| **[audio/albums/drive-through/secret-homage/06-dummy-light](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **145**, seed **617** | `06 - Dummy Light` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/secret-homage/07-quiet-wreck](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty bass **140**, seed **619** | `07 - Quiet Wreck` | Drop-first dirty bass warp |
-| **[audio/albums/drive-through/secret-homage/08-off-ledger](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | drumstep **174**, seed **631** | `08 - Off Ledger` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/secret-homage/09-back-alley](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | neuro bass **172**, seed **641** | `09 - Back Alley` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/secret-homage/10-cellar-kick](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **148**, seed **643** | `10 - Cellar Kick` | Drop-first dirty dubstep warp |
-| **[audio/albums/drive-through/secret-homage/11-hidden-booth](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **140**, seed **647** | `11 - Hidden Booth` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/secret-homage/12-coded-sub](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | chest bass **140**, seed **653** | `12 - Coded Sub` | Drop-first chest bass warp |
-| **[audio/albums/drive-through/secret-homage/13-shadow-coil](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | neuro bass **150**, seed **659** | `13 - Shadow Coil` | Drop-first neuro bass warp |
-| **[audio/albums/drive-through/secret-homage/14-mute-pyro](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | wave bass **150**, seed **661** | `14 - Mute Pyro` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/secret-homage/15-unlisted-row](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | drumstep **176**, seed **673** | `15 - Unlisted Row` | Drop-first drumstep warp |
-| **[audio/albums/drive-through/secret-homage/16-night-cipher](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | wave bass **140**, seed **677** | `16 - Night Cipher` | Drop-first wave bass warp |
-| **[audio/albums/drive-through/secret-homage/17-blank-stencil](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | festival trap **140**, seed **683** | `17 - Blank Stencil` | Drop-first festival trap warp |
-| **[audio/albums/drive-through/secret-homage/18-blind-stamp](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | riddim **150**, seed **691** | `18 - Blind Stamp` | Drop-first riddim warp |
-| **[audio/albums/drive-through/secret-homage/19-cold-cache](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **142**, seed **701** | `19 - Cold Cache` | Drop-first hybrid trap warp |
-| **[audio/albums/drive-through/secret-homage/20-secret-homage](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **140**, seed **709** | `20 - Secret Homage` | Drop-first dirty dubstep warp |
+| **[audio/albums/drive-through/secret-homage/01-hush-lane](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **140**, seed **593** | `01 - Hush Lane` | Dirty dubstep warp |
+| **[audio/albums/drive-through/secret-homage/02-cipher-lock](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | brostep **140**, seed **599** | `02 - Cipher Lock` | Brostep warp |
+| **[audio/albums/drive-through/secret-homage/03-ghost-dock](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | riddim **140**, seed **601** | `03 - Ghost Dock` | Riddim warp |
+| **[audio/albums/drive-through/secret-homage/04-sealed-ramp](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | tearout **145**, seed **607** | `04 - Sealed Ramp` | Tearout warp |
+| **[audio/albums/drive-through/secret-homage/05-fog-vault](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | color bass **142**, seed **613** | `05 - Fog Vault` | Color bass warp |
+| **[audio/albums/drive-through/secret-homage/06-dummy-light](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **145**, seed **617** | `06 - Dummy Light` | Hybrid trap warp |
+| **[audio/albums/drive-through/secret-homage/07-quiet-wreck](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty bass **140**, seed **619** | `07 - Quiet Wreck` | Dirty bass warp |
+| **[audio/albums/drive-through/secret-homage/08-off-ledger](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | drumstep **174**, seed **631** | `08 - Off Ledger` | Drumstep warp |
+| **[audio/albums/drive-through/secret-homage/09-back-alley](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | neuro bass **172**, seed **641** | `09 - Back Alley` | Neuro bass warp |
+| **[audio/albums/drive-through/secret-homage/10-cellar-kick](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **148**, seed **643** | `10 - Cellar Kick` | Dirty dubstep warp |
+| **[audio/albums/drive-through/secret-homage/11-hidden-booth](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **140**, seed **647** | `11 - Hidden Booth` | Hybrid trap warp |
+| **[audio/albums/drive-through/secret-homage/12-coded-sub](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | chest bass **140**, seed **653** | `12 - Coded Sub` | Chest bass warp |
+| **[audio/albums/drive-through/secret-homage/13-shadow-coil](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | neuro bass **150**, seed **659** | `13 - Shadow Coil` | Neuro bass warp |
+| **[audio/albums/drive-through/secret-homage/14-mute-pyro](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | wave bass **150**, seed **661** | `14 - Mute Pyro` | Wave bass warp |
+| **[audio/albums/drive-through/secret-homage/15-unlisted-row](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | drumstep **176**, seed **673** | `15 - Unlisted Row` | Drumstep warp |
+| **[audio/albums/drive-through/secret-homage/16-night-cipher](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | wave bass **140**, seed **677** | `16 - Night Cipher` | Wave bass warp |
+| **[audio/albums/drive-through/secret-homage/17-blank-stencil](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | festival trap **140**, seed **683** | `17 - Blank Stencil` | Festival trap warp |
+| **[audio/albums/drive-through/secret-homage/18-blind-stamp](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | riddim **150**, seed **691** | `18 - Blind Stamp` | Riddim warp |
+| **[audio/albums/drive-through/secret-homage/19-cold-cache](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | warped hybrid-trap **142**, seed **701** | `19 - Cold Cache` | Hybrid trap warp |
+| **[audio/albums/drive-through/secret-homage/20-secret-homage](../generated/workflows/audio/albums/drive-through/secret-homage.md)** | dirty dubstep **140**, seed **709** | `20 - Secret Homage` | Dirty dubstep warp |
 
 Cover still in a later Klein session. Do not co-resident with LTX / Wan / Klein.
 

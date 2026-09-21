@@ -1,4 +1,4 @@
-"""Progress-club 180s Nill Bye takes (rap over club beds).
+"""Progress-club full-length Nill Bye takes (rap over club beds).
 
 Fictional MC Nill Bye on public-record fixes: methods, statutes, measurement.
 Original lyrics. No living-MC names. No roast target. No autotune.
