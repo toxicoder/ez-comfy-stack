@@ -1,4 +1,4 @@
-"""Native ACE-Step 1.5 encoder widgets_values stay aligned with v0.34.6."""
+"""Native ACE-Step 1.5 encoder widgets_values stay aligned with v0.37.0."""
 
 from __future__ import annotations
 

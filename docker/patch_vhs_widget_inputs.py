@@ -13,7 +13,7 @@ when a custom-node module statically imports that path. VideoHelperSuite
 
     import { setWidgetConfig } from '../../../extensions/core/widgetInputs.js'
 
-Lab ComfyUI v0.34.6 ships frontend 1.49.6, which exposes
+Lab ComfyUI v0.37.0 ships frontend 1.52.7, which exposes
 ``window.comfyAPI.widgetInputs.setWidgetConfig``. This rewrite replaces the
 legacy import with that API and a no-op fallback. Fail-soft: missing files or
 unknown revisions skip with a warning and exit 0.
