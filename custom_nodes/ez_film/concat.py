@@ -65,7 +65,6 @@ VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
 # Clip-chain stitch: 1–24 stems; cap is a ceiling, not pad-to-runtime.
 CLIP_COUNT_MAX = 24
-CLIP_CONCAT_MAX = CLIP_COUNT_MAX
 CLIP_CAP_DEFAULT_S = 600.0
 CLIP_CAP_MAX_S = 1800.0
 CLIP_PREFIX_DEFAULT = "ez_clip_chain"
