@@ -236,7 +236,7 @@ Category `ez-comfy`. One Quality combo and one isolated Check models node on eve
 | `film` | everything else on that Spark |
 | `audio` | Klein / Wan / LTX session |
 
-This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
+This is **not** [studio-ui](studio-ui.md) and not a second frontend. Widget catalog stays on [ComfyUI Apps](../studio-apps.md). Preview widgets on `ez_prompt_enhance`, `ez_research`, `ez_studio_forge`, and `ez_dub` set `widget.value` and treat `inputEl` as optional (Vue STRING widgets have no canvas textarea). `ez_prompt_enhance.js` also copies the CLIP string onto linked CLIPTextEncode **Positive** (and ACE tags/lyrics) when Prompt or Rewrite prompt changes, and after Queue. Dub **Upload media** is a native button widget — no LiteGraph `node_widget`.
 
 ---
 

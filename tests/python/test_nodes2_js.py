@@ -124,6 +124,30 @@ def test_sample_picker_js_freezes_to_custom_on_prompt_edits() -> None:
         assert f'"{name}"' in body
 
 
+def test_prompt_enhance_js_syncs_linked_clip_preview() -> None:
+    """CLIPTextEncode Positive follows Prompt / Rewrite prompt and Queue."""
+    body = (
+        CUSTOM / "ez_prompt_enhance" / "js" / "ez_prompt_enhance.js"
+    ).read_text(encoding="utf-8")
+    assert "function linkedDestinations" in body
+    assert "function setLinkedClipWidget" in body
+    assert "function pushClipPreview" in body
+    assert "function pushClipPreviewFromMessage" in body
+    assert "function syncLinkedClipFromWidgets" in body
+    assert "function bindClipPreview" in body
+    assert "function bindEnhanceWatcher" in body
+    assert "CLIPTextEncode" in body
+    assert "TextEncodeAceStepAudio1.5" in body
+    assert "widget.serialize = false" in body
+    assert "widgets_values[idx]" in body
+    assert "node.widgets.map((item) => item.value)" not in body
+    assert "syncLinkedClipFromWidgets(node)" in body
+    assert "pushClipPreviewFromMessage(this, message)" in body
+    assert "enhance off" in body
+    assert "bindClipPreview(this)" in body
+    assert "if (widget.inputEl)" in body
+
+
 def test_format_js_uses_vue_safe_widget_writes() -> None:
     for path in FORMAT_JS:
         body = path.read_text(encoding="utf-8")

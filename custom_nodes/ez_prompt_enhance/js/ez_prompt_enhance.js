@@ -6,6 +6,9 @@
  * so App Mode (Vue) and refreshComboInNodes cannot restore the Python union.
  * Typing prompt/tags/lyrics/sources selects Sample custom so Queue uses the box
  * at any Quality. Named samples still copy the recipe into the box.
+ * Linked CLIPTextEncode (Positive / Motion) and ACE encoder widgets are a
+ * preview: they follow Prompt / Rewrite prompt, then the rewritten string
+ * after Queue. Queue still uses the STRING link, not the preview widget.
  */
 import { app } from "../../scripts/app.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
@@ -32,6 +35,11 @@ const PREVIEW_SKIP = new Set([
   "EZCreativeResearch",
   "EZAppForge",
   "EZPodcastLearn",
+]);
+
+const CLIP_DEST_TYPES = new Set([
+  "CLIPTextEncode",
+  "TextEncodeAceStepAudio1.5",
 ]);
 
 const SAMPLE_CUSTOM = "custom";
@@ -388,6 +396,7 @@ function bindTextWatchers(node) {
         prior.apply(this, arguments);
       }
       freezeSampleToCustom(node);
+      syncLinkedClipFromWidgets(node);
     };
   }
 }
@@ -447,9 +456,11 @@ async function syncSample(node) {
     } finally {
       node._ezApplyingSample = false;
     }
+    syncLinkedClipFromWidgets(node);
     return;
   }
   unlockTextWidgets(node);
+  syncLinkedClipFromWidgets(node);
 }
 
 /**
@@ -564,6 +575,270 @@ function populate(node, text, status) {
   upsertWidget(node, STATUS, status, false);
 }
 
+/**
+ * Resolve a graph link by id (array, map, or object keyed by id).
+ * @param {object|undefined} graph
+ * @param {*} lid
+ * @returns {object|Array|null}
+ */
+function linkById(graph, lid) {
+  const links = graph?.links;
+  if (!links) {
+    return null;
+  }
+  if (typeof links.get === "function") {
+    return links.get(lid) || links.get(Number(lid)) || links.get(String(lid)) || null;
+  }
+  if (Array.isArray(links)) {
+    return (
+      links.find((item) => {
+        const id = Array.isArray(item) ? item[0] : item?.id;
+        return Number(id) === Number(lid);
+      }) || null
+    );
+  }
+  return links[lid] ?? links[Number(lid)] ?? links[String(lid)] ?? null;
+}
+
+/**
+ * Destination node id and slot from a serialized or live link.
+ * @param {object|Array|null} link
+ * @returns {{nodeId: *, slot: number}|null}
+ */
+function linkDest(link) {
+  if (!link) {
+    return null;
+  }
+  if (Array.isArray(link)) {
+    return { nodeId: link[3], slot: Number(link[4]) };
+  }
+  const nodeId = link.target_id ?? link.targetId;
+  const slot = link.target_slot ?? link.targetSlot;
+  if (nodeId == null) {
+    return null;
+  }
+  return { nodeId, slot: Number(slot) };
+}
+
+/**
+ * Live graph node by id.
+ * @param {object|undefined} graph
+ * @param {*} nid
+ * @returns {object|undefined}
+ */
+function nodeById(graph, nid) {
+  if (graph && typeof graph.getNodeById === "function") {
+    return graph.getNodeById(nid) || graph.getNodeById(Number(nid));
+  }
+  return (graph?.nodes || []).find((item) => Number(item.id) === Number(nid));
+}
+
+/**
+ * CLIP / ACE encoder nodes wired from one STRING output slot.
+ * @param {object} node
+ * @param {number} slot
+ * @returns {{node: object, widgetName: string}[]}
+ */
+function linkedDestinations(node, slot) {
+  const output = node.outputs?.[slot];
+  const ids = output?.links || [];
+  const graph = node.graph || app.graph;
+  const found = [];
+  for (const lid of ids) {
+    const destInfo = linkDest(linkById(graph, lid));
+    if (!destInfo) {
+      continue;
+    }
+    const dest = nodeById(graph, destInfo.nodeId);
+    if (!dest) {
+      continue;
+    }
+    const ntype = dest.comfyClass || dest.type;
+    if (!CLIP_DEST_TYPES.has(ntype)) {
+      continue;
+    }
+    const inp = dest.inputs?.[destInfo.slot];
+    const widgetName = inp?.widget?.name || inp?.name || "text";
+    found.push({ node: dest, widgetName });
+  }
+  return found;
+}
+
+/**
+ * Write a linked CLIP/ACE preview widget without serializing it at Queue.
+ * @param {object} dest
+ * @param {string} widgetName
+ * @param {string} text
+ * @returns {void}
+ */
+function setLinkedClipWidget(dest, widgetName, text) {
+  const widget = widgetByName(dest, widgetName);
+  if (!widget) {
+    if (Array.isArray(dest.widgets_values) && widgetName === "text") {
+      dest.widgets_values[0] = text;
+    }
+    return;
+  }
+  widget.serialize = false;
+  widget.serializeValue = async () => undefined;
+  setTextWidget(widget, text, true);
+  if (Array.isArray(dest.widgets_values) && dest.widgets) {
+    const idx = dest.widgets.indexOf(widget);
+    if (idx >= 0) {
+      dest.widgets_values[idx] = text;
+    }
+  }
+  const graph = dest.graph || app.graph;
+  if (graph && typeof graph.setDirtyCanvas === "function") {
+    graph.setDirtyCanvas(true, true);
+  }
+}
+
+/**
+ * Copy slot text onto linked CLIPTextEncode / ACE encoder widgets.
+ * @param {object} node
+ * @param {Object<number, string>} slotTexts
+ * @returns {void}
+ */
+function pushClipPreview(node, slotTexts) {
+  for (const [slot, text] of Object.entries(slotTexts || {})) {
+    if (text == null) {
+      continue;
+    }
+    for (const dest of linkedDestinations(node, Number(slot))) {
+      setLinkedClipWidget(dest.node, dest.widgetName, text);
+    }
+  }
+}
+
+/**
+ * After Queue, copy the rewritten CLIP string onto linked encoder widgets.
+ * @param {object} node
+ * @param {object} message
+ * @returns {void}
+ */
+function pushClipPreviewFromMessage(node, message) {
+  const blob = textFromMessage(message, "text");
+  const ntype = node?.comfyClass || node?.type || "";
+  if (ntype === "EZAceStepPromptEnhance") {
+    const parts = blob.split("\n---\n");
+    const slotTexts = { 0: parts[0] || "" };
+    if (parts.length > 1) {
+      slotTexts[1] = parts.slice(1).join("\n---\n");
+    }
+    pushClipPreview(node, slotTexts);
+    return;
+  }
+  pushClipPreview(node, { 0: blob });
+}
+
+/**
+ * True when the Enhance / Rewrite prompt widget is on.
+ * @param {object} node
+ * @returns {boolean}
+ */
+function enhanceIsOn(node) {
+  const widget = widgetByName(node, "enhance");
+  if (!widget) {
+    return true;
+  }
+  const value = widget.value;
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value === "number") {
+    return Boolean(value);
+  }
+  if (typeof value === "string") {
+    return ["1", "true", "yes", "on"].includes(value.trim().toLowerCase());
+  }
+  return Boolean(value);
+}
+
+/**
+ * Push current prompt/tags/lyrics onto linked CLIP widgets.
+ * @param {object} node
+ * @param {boolean} fromEnhanceToggle
+ * @returns {void}
+ */
+function syncLinkedClipFromWidgets(node, fromEnhanceToggle) {
+  const ntype = node?.comfyClass || node?.type || "";
+  if (PREVIEW_SKIP.has(ntype)) {
+    return;
+  }
+  const tags = widgetByName(node, "tags");
+  const lyrics = widgetByName(node, "lyrics");
+  const prompt = widgetByName(node, "prompt");
+  /** @type {Object<number, string>} */
+  const slotTexts = {};
+  if (tags) {
+    slotTexts[0] = String(tags.value ?? "");
+    if (lyrics) {
+      slotTexts[1] = String(lyrics.value ?? "");
+    }
+  } else if (lyrics && !prompt) {
+    slotTexts[0] = String(lyrics.value ?? "");
+  } else if (prompt) {
+    slotTexts[0] = String(prompt.value ?? "");
+  }
+  if (!Object.keys(slotTexts).length) {
+    return;
+  }
+  pushClipPreview(node, slotTexts);
+  if (!widgetByName(node, "enhance")) {
+    return;
+  }
+  const preview = slotTexts[1]
+    ? `${slotTexts[0]}\n---\n${slotTexts[1]}`
+    : slotTexts[0] || "";
+  if (!enhanceIsOn(node)) {
+    populate(node, preview, "enhance off");
+    return;
+  }
+  if (fromEnhanceToggle) {
+    populate(node, "", "Queue to rewrite");
+  }
+}
+
+/**
+ * Chain the Enhance / Rewrite prompt widget onto the CLIP preview.
+ * @param {object} node
+ * @returns {void}
+ */
+function bindEnhanceWatcher(node) {
+  const widget = widgetByName(node, "enhance");
+  if (!widget || widget._ezClipWatch) {
+    return;
+  }
+  widget._ezClipWatch = true;
+  const prior = widget.callback;
+  /**
+   * Chain the prior callback then refresh CLIP from the toggle.
+   * @returns {void}
+   */
+  widget.callback = function () {
+    if (typeof prior === "function") {
+      prior.apply(this, arguments);
+    }
+    syncLinkedClipFromWidgets(node, true);
+  };
+}
+
+/**
+ * Bind prompt/enhance watchers and seed the linked CLIP preview.
+ * @param {object} node
+ * @returns {void}
+ */
+function bindClipPreview(node) {
+  const ntype = node?.comfyClass || node?.type || "";
+  if (!NODE_CLASSES.has(ntype) || PREVIEW_SKIP.has(ntype)) {
+    return;
+  }
+  bindTextWatchers(node);
+  bindEnhanceWatcher(node);
+  syncLinkedClipFromWidgets(node);
+}
+
 app.registerExtension({
   name: "ez_prompt_enhance.preview",
   /**
@@ -587,6 +862,7 @@ app.registerExtension({
         populate(this, "", "Queue to rewrite");
       }
       bindSamplePicker(this);
+      bindClipPreview(this);
     };
     const onConfigure = nodeType.prototype.onConfigure;
     /**
@@ -596,6 +872,7 @@ app.registerExtension({
     nodeType.prototype.onConfigure = function () {
       onConfigure?.apply(this, arguments);
       bindSamplePicker(this);
+      bindClipPreview(this);
     };
     const onExecuted = nodeType.prototype.onExecuted;
     /**
@@ -613,6 +890,7 @@ app.registerExtension({
         textFromMessage(message, "text"),
         textFromMessage(message, "passthrough"),
       );
+      pushClipPreviewFromMessage(this, message);
     };
   },
   /**
@@ -624,6 +902,9 @@ app.registerExtension({
     if (graph?.addEventListener) {
       graph.addEventListener("configured", () => {
         syncAllSamplePickers();
+        for (const node of app.graph?.nodes || []) {
+          bindClipPreview(node);
+        }
       });
     }
   },
