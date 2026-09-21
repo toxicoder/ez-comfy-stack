@@ -79,6 +79,33 @@ lab_wf() {
   [ "${status}" -eq 0 ]
 }
 
+@test "gitignore tracks shared vscode files and ignores local vscode state" {
+  local gi="${REPO_ROOT}/.gitignore"
+  run grep -F '.vscode/*' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!.vscode/extensions.json' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!.vscode/settings.json' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!.vscode/tasks.json' "${gi}"
+  [ "${status}" -eq 0 ]
+  run grep -F '!.vscode/launch.json' "${gi}"
+  [ "${status}" -eq 0 ]
+  cd "${REPO_ROOT}"
+  run git check-ignore -q .vscode/extensions.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q .vscode/settings.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q .vscode/tasks.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q .vscode/launch.json
+  [ "${status}" -eq 1 ]
+  run git check-ignore -q .vscode/.env
+  [ "${status}" -eq 0 ]
+  run git check-ignore -q .vscode/foo.json
+  [ "${status}" -eq 0 ]
+}
+
 @test "lab workflows forbid MiniMax H3 nodes and filenames" {
   local dir="${REPO_ROOT}/workflows"
   run grep -R -E 'MiniMaxH3|minimax_h3|h3-go-see|h3-still-here|h3-switchyard|GO_SEE_90s_H3' "${dir}"

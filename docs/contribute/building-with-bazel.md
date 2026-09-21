@@ -10,6 +10,7 @@ tags: [bazel, testing, contributing, ci]
 
 - Why Bazelisk is the primary test/lint/docs launcher
 - Daily commands and Makefile shims
+- VS Code tasks wrap the same bazelisk commands
 - CI path filters
 - What this repo still refuses (K3s, dashboard, NCCL)
 
@@ -54,7 +55,7 @@ bazelisk run //docs:serve
 bazelisk run //scripts:run-utility -- download-limit status
 ```
 
-`make test`, `make lint`, `make coverage`, and `make docs` call Bazelisk when it is on `PATH`.
+`make test`, `make lint`, `make coverage`, and `make docs` call Bazelisk when it is on `PATH`. VS Code / Cursor **Run Task** labels in `.vscode/tasks.json` wrap the same commands (`validate`, `test-fast`, `pytest`, `typecheck`, `lint`, `fix`, `docs`).
 
 ## Target map
 

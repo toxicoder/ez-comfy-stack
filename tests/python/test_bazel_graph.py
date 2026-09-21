@@ -66,6 +66,8 @@ def test_root_build_exposes_first_party_srcs() -> None:
     assert "//schemas" in text
     assert "//tests:python_tests" in text
     assert "Makefile" in text
+    assert 'name = "vscode"' in text
+    assert ":vscode" in text
 
 
 def test_pytest_runner_uses_xdist_when_installed() -> None:
