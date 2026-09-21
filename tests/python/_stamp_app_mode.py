@@ -2067,68 +2067,6 @@ def _quality_input_specs(graph: dict, spec: Mapping[str, Any]) -> list[InputSpec
     return specs
 
 
-def _unique_type(graph: dict, ntype: str) -> dict:
-    """Return the single node of ``ntype``.
-
-    Args:
-        graph: Serialized lab graph.
-        ntype: Comfy class name.
-
-    Returns:
-        The matching node.
-
-    Raises:
-        ValueError: zero or multiple matches.
-    """
-    hits = [node for node in graph.get("nodes") or [] if node.get("type") == ntype]
-    if len(hits) != 1:
-        raise ValueError(f"expected one {ntype}, got {len(hits)}")
-    return hits[0]
-
-
-def _unique_title(graph: dict, title: str) -> dict:
-    """Return the single node with ``title``.
-
-    Args:
-        graph: Serialized lab graph.
-        title: Node title.
-
-    Returns:
-        The matching node.
-
-    Raises:
-        ValueError: zero or multiple matches.
-    """
-    hits = [node for node in graph.get("nodes") or [] if node.get("title") == title]
-    if len(hits) != 1:
-        raise ValueError(f"expected one node titled {title!r}, got {len(hits)}")
-    return hits[0]
-
-
-def _clip_chain_enhances(graph: dict) -> list[dict]:
-    """Return Beat 1–4 EZLTXPromptEnhance nodes in order.
-
-    Args:
-        graph: Serialized clip-chain graph.
-
-    Returns:
-        Four enhance nodes.
-
-    Raises:
-        ValueError: missing Beat titles.
-    """
-    wanted = [f"Beat {index}" for index in range(1, 5)]
-    by_title = {
-        str(node.get("title") or ""): node
-        for node in graph.get("nodes") or []
-        if node.get("type") == "EZLTXPromptEnhance"
-    }
-    missing = [title for title in wanted if title not in by_title]
-    if missing:
-        raise ValueError(f"clip-chain missing Enhance titles {missing}")
-    return [by_title[title] for title in wanted]
-
-
 def _clip_chain_input_specs(
     graph: dict, spec: Mapping[str, Any]
 ) -> list[InputSpec]:
@@ -2145,15 +2083,17 @@ def _clip_chain_input_specs(
     Returns:
         Linear input specs in App widget order.
     """
-    load = _unique_type(graph, "LoadImage")
-    quality = _unique_type(graph, "EZQuality")
-    enhances = _clip_chain_enhances(graph)
-    fmt = _unique_type(graph, "EZVideoFormat")
-    describe = _unique_type(graph, "EZImageDescribe")
-    rewrite = _unique_title(graph, "Rewrite prompt")
-    audio = _unique_title(graph, "Audio notes")
-    logline = _unique_title(graph, "Logline / context")
-    seed = _unique_title(graph, "Seed")
+    load = _resolve_node(graph, "LoadImage", kind="input")
+    quality = _resolve_node(graph, "EZQuality", kind="input")
+    enhances = [
+        _resolve_node(graph, f"Beat {index}", kind="input") for index in range(1, 5)
+    ]
+    fmt = _resolve_node(graph, "EZVideoFormat", kind="input")
+    describe = _resolve_node(graph, "EZImageDescribe", kind="input")
+    rewrite = _resolve_node(graph, "Rewrite prompt", kind="input")
+    audio = _resolve_node(graph, "Audio notes", kind="input")
+    logline = _resolve_node(graph, "Logline / context", kind="input")
+    seed = _resolve_node(graph, "Seed", kind="input")
     specs: list[InputSpec] = [
         _input_spec(load["id"], "image", spec, node=load),
         _input_spec(quality["id"], "quality", spec, node=quality),
@@ -2182,14 +2122,6 @@ def _clip_chain_input_specs(
     return specs
 
 
-def _vhs_prefix(node: Mapping[str, Any]) -> str:
-    """Return a VHS ``filename_prefix`` (dict widgets)."""
-    values = node.get("widgets_values") or {}
-    if isinstance(values, dict):
-        return str(values.get("filename_prefix") or "")
-    return ""
-
-
 def _clip_chain_output_ids(graph: dict) -> list[int]:
     """Four VHS stems, then EZClipConcat, then last-frame SaveImage.
 
@@ -2204,8 +2136,14 @@ def _clip_chain_output_ids(graph: dict) -> list[int]:
         for node in graph.get("nodes") or []
         if node.get("type") == "VHS_VideoCombine"
     ]
-    vhs.sort(key=_vhs_prefix)
-    concat = _unique_type(graph, "EZClipConcat")
+    vhs.sort(
+        key=lambda node: (
+            str((node.get("widgets_values") or {}).get("filename_prefix") or "")
+            if isinstance(node.get("widgets_values"), dict)
+            else ""
+        )
+    )
+    concat = _resolve_node(graph, "EZClipConcat", kind="output")
     saves = [
         node for node in graph.get("nodes") or [] if node.get("type") == "SaveImage"
     ]

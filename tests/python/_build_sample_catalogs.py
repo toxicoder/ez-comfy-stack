@@ -1372,6 +1372,7 @@ def main() -> None:
         "motion/silent/parallax-still-5s": "wan_parallax",
         "motion/av/text-to-video-8s": "ltx_t2v",
         "motion/av/still-to-video-8s": "ltx_i2v",
+        "motion/av/clip-chain": "ltx_i2v",
         "motion/av/still-to-shot": "ltx_i2v",
         "motion/av/shorts-still-8s": "ltx_i2v",
         "motion/av/broll-ambient": "ltx_broll",

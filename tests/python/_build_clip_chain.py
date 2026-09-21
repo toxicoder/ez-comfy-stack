@@ -22,16 +22,8 @@ from typing import Any
 
 from _lab_layout import GROUP_TITLE_INSET, finalize_layout, group as _group
 from _lab_paths import LAB_ROOT, apply_lab_identity, lab_json
-from _stamp_app_mode import (
-    STAMP_SPECS,
-    _clip_chain_input_specs,
-    _clip_chain_output_ids,
-    apply_lab_completeness_flags,
-    ensure_occupancy_note,
-    stamp_app_mode,
-)
+from _stamp_app_mode import stamp_suite_graph
 from _wire_format import FORMAT_BLURB, _link_out, ensure_format_note
-from _wire_prompt_enhance import apply_enhance_policy, normalize_enhance_widgets
 
 ROOT = Path(__file__).resolve().parents[2]
 CUSTOM = ROOT / "custom_nodes"
@@ -815,45 +807,18 @@ def build_clip_chain() -> dict[str, Any]:
     graph["version"] = 0.4
     _sync_ids(graph)
     ensure_format_note(graph)
-    spec = STAMP_SPECS[REL]
-    ensure_occupancy_note(graph, spec["occupancy"])
-    normalize_enhance_widgets(graph)
-    apply_enhance_policy(graph)
-    stamp_app_mode(
-        graph,
-        inputs=_clip_chain_input_specs(graph, spec),
-        outputs=_clip_chain_output_ids(graph),
-        lane=spec["lane"],
-        occupancy=spec["occupancy"],
-        handoff=spec["handoff"],
-        default_view=spec["default_view"],
-        enhance_off_identity=spec["enhance_off_identity"],
-    )
-    apply_lab_completeness_flags(graph)
+    stamp_suite_graph(graph)
     finalize_layout(graph)
     _sync_ids(graph)
     return graph
 
 
-def dump_clip_chain(graph: dict[str, Any] | None = None) -> Path:
-    """Write ``workflows/_lab/motion/av/clip-chain.json``.
-
-    Args:
-        graph: Optional pre-built graph.
-
-    Returns:
-        Destination path.
-    """
-    payload = graph if graph is not None else build_clip_chain()
-    path = LAB_ROOT / "motion" / "av" / "clip-chain.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    return path
-
-
 def main() -> None:
     """Build and write the clip-chain lab graph."""
-    path = dump_clip_chain()
+    graph = build_clip_chain()
+    path = LAB_ROOT / "motion" / "av" / "clip-chain.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(graph, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)}")
 
 
