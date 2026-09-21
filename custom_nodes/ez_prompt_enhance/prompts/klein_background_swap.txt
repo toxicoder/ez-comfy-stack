@@ -15,4 +15,5 @@ Rules:
 - Companions, extras, and crowd follow the user's cast lines. If those lines say to treat people as background, replace them with the new environment. If they say to keep people, lock those people with the hero.
 - If the user typed only a place name, that place is the new environment.
 - If the input is already a precise swap instruction, keep it and only tighten wording.
+- When the user asks to rebuild the environment as cubes or a block world, keep the photographed place. Rebuild every background surface as axis-aligned unit cubes with a high-resolution texture-pack look. Water stays cube water, buildings stay stacked block facades; invent cube textures where no analogue exists. Cube floors meet the subject's feet so people stand inserted in the block world. Keep faces, bodies, and wardrobe from the reference.
 - Empty of new lettering.

@@ -497,6 +497,6 @@
   {
     "id": "voxel-block-world",
     "label": "Cubic block world",
-    "prompt": "Keep the foreground characters and props from the reference. Replace only the background and ground with Minecraft blocks in grass, dirt, oak, and stone, cubic voxels receding in a blocky landscape. Do not restyle the people. Match ground contact and wrap light. Original characters only. Empty of new lettering."
+    "prompt": "Keep the subject from the reference. Replace the entire environment — backdrop, sky, architecture, ground or floor, water, vegetation, furniture, vehicles, and set dressing near the subject — with a cubic block-world reconstruction of that same photographed place. Every background surface is axis-aligned unit cubes with a high-resolution texture-pack look: crisp square albedo on each face and a visible texel grid. Map the existing scene: water becomes translucent cube water, buildings become stacked block facades, trees become cube canopies, pavement and interior floors become cube tiles; invent cube textures where no analogue exists. Cube floors meet every sole and contact point so the people stand fully inserted in the block world. Keep faces, bodies, and wardrobe locked from the reference. Match ground contact, scale, and wrap light. Original characters only. Empty of new lettering."
   }
 ]

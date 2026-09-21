@@ -34,6 +34,7 @@ from ez_prompt_enhance.nodes import (  # noqa: E402
     EZKleinPromptEnhance,
     KLEIN_MODE_COMBO,
 )
+from ez_prompt_enhance.samples import load_catalog  # noqa: E402
 
 
 def test_parse_and_format_background_cast() -> None:
@@ -85,6 +86,17 @@ def test_wrap_bare_place_and_passthrough_instructions() -> None:
     assert wrap_background_prompt(42, "background_swap").startswith(
         SWAP_BARE.format(place="42")
     )
+    cubic = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    assert is_background_instruction(cubic.prompt)
+    cubic_wrap = wrap_background_prompt(cubic.prompt, "background_swap")
+    assert cubic_wrap.startswith(cubic.prompt)
+    assert OTHER_ON in cubic_wrap
+    assert CROWD_ON in cubic_wrap
+    assert "with: Keep the subject" not in cubic_wrap
     assert is_background_instruction(targeted)
     assert is_background_instruction(
         "Edit only the environment as prompted: add lanterns."
@@ -163,6 +175,11 @@ def test_background_cast_node_and_mode_combo() -> None:
     assert "ground" in swap.lower()
     assert "cast" in swap.lower()
     assert "cinema rack" not in swap.lower()
+    swap_l = swap.lower()
+    assert "photographed place" in swap_l
+    assert "texture-pack" in swap_l
+    assert "cube water" in swap_l
+    assert "minecraft" not in swap_l
     edit = client.load_system_prompt("klein_background_edit")
     assert "cartoon" in edit.lower()
     assert "environment" in edit.lower()

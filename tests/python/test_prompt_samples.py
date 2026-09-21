@@ -169,6 +169,27 @@ def test_catalogs_stay_clean_of_banned_strings() -> None:
         assert needle not in blob, needle
 
 
+def test_cubic_block_world_rebuilds_the_photographed_place() -> None:
+    """stills/background-swap Cubic block world voxelizes the source scene in place."""
+    hit = next(
+        item
+        for item in load_catalog("klein_background_swap")
+        if item.id == "voxel-block-world"
+    )
+    assert hit.label == "Cubic block world"
+    folded = hit.prompt.casefold()
+    assert folded.startswith("keep the subject from the reference")
+    assert "same photographed place" in folded
+    assert "translucent cube water" in folded
+    assert "stacked block facades" in folded
+    assert "texture-pack" in folded
+    assert "sole" in folded
+    assert "contact point" in folded
+    assert "faces, bodies, and wardrobe" in folded
+    assert "minecraft" not in folded
+    assert "mojang" not in folded
+
+
 def test_klein_t2i_sample_one_matches_lab_canned() -> None:
     from _lab_theme import KLEIN_STILL
 
