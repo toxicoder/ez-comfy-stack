@@ -137,6 +137,12 @@ def test_prompt_enhance_js_syncs_linked_clip_preview() -> None:
     assert "CLIPTextEncode" in body
     assert "TextEncodeAceStepAudio1.5" in body
     assert "widget.serialize = false" in body
+    start = body.index("function setLinkedClipWidget")
+    linked = body[start : body.index("\nfunction pushClipPreview")]
+    assert "widget.options = widget.options || {}" in linked
+    assert "widget.options.serialize = false" in linked
+    assert "widget.serialize" not in linked
+    assert "serializeValue" not in linked
     assert "widgets_values[idx]" in body
     assert "node.widgets.map((item) => item.value)" not in body
     assert "syncLinkedClipFromWidgets(node)" in body
