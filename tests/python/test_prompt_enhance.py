@@ -2099,25 +2099,42 @@ def test_prompt_bundle_joins_nonempty_slots() -> None:
 def test_enhance_policy_keeps_negative_on_when_positive_is_off() -> None:
     from _wire_prompt_enhance import apply_enhance_policy
 
-    ltx_values: list[object] = [
-        "custom",
-        "shot",
-        True,
-        "i2v",
-        "5 seconds, 24 fps",
-        "",
-        "none",
-        "films/go-see",
-    ]
-    neg_values: list[object] = ["watermark", False, "ltx"]
     graph = {
         "id": "films/go-see",
-        "extra": {"lab_rel": "films/go-see", "lab_note": "Prompt enhance is on by default.\n"},
+        "extra": {
+            "lab_rel": "films/go-see",
+            "lab_note": "Prompt enhance is on by default.\n",
+        },
         "nodes": [
-            {"type": "EZLTXPromptEnhance", "widgets_values": ltx_values},
-            {"type": "EZNegativePromptEnhance", "widgets_values": neg_values},
+            {
+                "type": "EZLTXPromptEnhance",
+                "widgets_values": [
+                    "custom",
+                    "shot",
+                    True,
+                    "i2v",
+                    "5 seconds, 24 fps",
+                    "",
+                    "none",
+                    "films/go-see",
+                ],
+            },
+            {
+                "type": "EZNegativePromptEnhance",
+                "widgets_values": ["watermark", False, "ltx"],
+            },
         ],
     }
     apply_enhance_policy(graph)
+    nodes = graph["nodes"]
+    assert isinstance(nodes, list)
+    ltx_node = nodes[0]
+    neg_node = nodes[1]
+    assert isinstance(ltx_node, dict)
+    assert isinstance(neg_node, dict)
+    ltx_values = ltx_node["widgets_values"]
+    neg_values = neg_node["widgets_values"]
+    assert isinstance(ltx_values, list)
+    assert isinstance(neg_values, list)
     assert ltx_values[2] is False
     assert neg_values[1] is True
