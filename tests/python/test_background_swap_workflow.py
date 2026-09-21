@@ -181,6 +181,19 @@ def test_background_edit_identity_style_and_samples() -> None:
     assert "Other characters" in labels
 
 
+def test_background_apps_save_the_upscaled_still() -> None:
+    """Upscale sits between match-to-source and SaveImage on both apps."""
+    for rel in ("stills/background-swap.json", "stills/background-edit.json"):
+        graph = _load(rel)
+        save = next(node for node in graph["nodes"] if node.get("type") == "SaveImage")
+        upscale = _src(graph, save, "images")
+        assert upscale["type"] == "EZImageUpscale"
+        assert _src(graph, upscale, "image")["type"] == "EZMatchImageSize"
+        note = str(graph["extra"]["lab_note"])
+        assert "when Upscale is none" in note
+        assert "4K lanczos-resize the saved PNG" in note
+
+
 def test_background_swap_json_roundtrip() -> None:
     path = lab_json("stills/background-swap.json")
     raw = json.loads(path.read_text(encoding="utf-8"))

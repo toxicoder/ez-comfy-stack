@@ -107,6 +107,148 @@ def _unlink(graph: dict[str, Any], link_id: int) -> None:
             out["links"] = [x for x in existing if int(x) != lid]
 
 
+def _node_by_id(graph: dict[str, Any], node_id: int) -> dict[str, Any] | None:
+    """Return the node with ``node_id``.
+
+    Args:
+        graph: Serialized graph.
+        node_id: Node id.
+
+    Returns:
+        Node dict, or None when missing.
+    """
+    for node in graph.get("nodes") or []:
+        if int(node.get("id", -1)) == int(node_id):
+            return node
+    return None
+
+
+def _image_output(node: dict[str, Any]) -> dict[str, Any] | None:
+    """Return the IMAGE output socket.
+
+    Args:
+        node: EZImageUpscale node.
+
+    Returns:
+        Output dict, or None.
+    """
+    outputs = list(node.get("outputs") or [])
+    for out in outputs:
+        if str(out.get("name") or "") == "image":
+            return out
+    if outputs:
+        return outputs[0]
+    return None
+
+
+def _image_input(node: dict[str, Any]) -> dict[str, Any]:
+    """Return the image input, creating it when a reused node lacks one.
+
+    Args:
+        node: EZImageUpscale node (mutated when the socket is missing).
+
+    Returns:
+        Image input dict.
+    """
+    inputs = list(node.get("inputs") or [])
+    for item in inputs:
+        if item.get("name") == "image":
+            node["inputs"] = inputs
+            return item
+    created = {"name": "image", "type": "IMAGE", "link": None}
+    inputs.insert(0, created)
+    node["inputs"] = inputs
+    return created
+
+
+def _upscale_mode_linked(node: dict[str, Any]) -> bool:
+    """True when the upscale combo is driven by another node.
+
+    Args:
+        node: EZImageUpscale node.
+
+    Returns:
+        Whether the combo is a linked widget.
+    """
+    for item in node.get("inputs") or []:
+        if item.get("name") == "upscale" and item.get("link") is not None:
+            return True
+    return False
+
+
+def _fed_by_upscale(graph: dict[str, Any], save: dict[str, Any]) -> bool:
+    """True when SaveImage.images comes from EZImageUpscale.
+
+    Args:
+        graph: Serialized graph.
+        save: SaveImage node.
+
+    Returns:
+        Whether the save already receives the upscaled still.
+    """
+    origin = _incoming_image(graph, save)
+    if origin is None:
+        return False
+    src = _node_by_id(graph, origin[0])
+    return bool(src and src.get("type") == UPSCALE_TYPE)
+
+
+def _orphan_upscales(graph: dict[str, Any]) -> list[dict[str, Any]]:
+    """Upscale nodes whose image output has no links.
+
+    Args:
+        graph: Serialized graph.
+
+    Returns:
+        Orphans in graph order.
+    """
+    orphans: list[dict[str, Any]] = []
+    for node in _nodes_of(graph, UPSCALE_TYPE):
+        out = _image_output(node)
+        if not list((out or {}).get("links") or []):
+            orphans.append(node)
+    return orphans
+
+
+def _connect_upscale(
+    graph: dict[str, Any],
+    node: dict[str, Any],
+    src_id: int,
+    src_slot: int,
+    save: dict[str, Any],
+    save_in: dict[str, Any],
+    dst_slot: int,
+) -> None:
+    """Wire ``src`` into an upscale node and that node into SaveImage.
+
+    Drops any previous image input on ``node``. The SaveImage link must
+    already be unlinked.
+
+    Args:
+        graph: Serialized graph (mutated).
+        node: EZImageUpscale node.
+        src_id: Node that currently owns the still.
+        src_slot: Output slot on that node.
+        save: SaveImage node.
+        save_in: SaveImage images input.
+        dst_slot: SaveImage input index.
+    """
+    img_in = _image_input(node)
+    if img_in.get("link") is not None:
+        _unlink(graph, int(img_in["link"]))
+    nid = int(node["id"])
+    img_link = _append_link(graph, src_id, src_slot, nid, 0, "IMAGE")
+    img_in["link"] = img_link
+    src_node = _node_by_id(graph, src_id)
+    if src_node is not None:
+        _push_output_link(src_node, src_slot, img_link)
+    out_link = _append_link(
+        graph, nid, 0, int(save["id"]), dst_slot, "IMAGE"
+    )
+    save_in["link"] = out_link
+    _push_output_link(node, 0, out_link)
+
+
 def _make_upscale(nid: int, pos: list[float], linked_mode: bool) -> dict[str, Any]:
     """Build an EZImageUpscale node dict.
 
@@ -152,66 +294,71 @@ def _make_upscale(nid: int, pos: list[float], linked_mode: bool) -> dict[str, An
 def wire_upscale(graph: dict[str, Any], lab_rel: str = "") -> bool:
     """Insert EZImageUpscale before each SaveImage when in scope.
 
-    The first node owns the combo. Extra SaveImage paths take ``upscale``
-    as a linked widget so App Mode shows one dropdown.
+    The first unlinked combo owns the App dropdown. Extra SaveImage paths
+    take ``upscale`` as a linked widget. An upscale node that does not feed
+    a save is reused instead of left orphaned (Match → Save with a dead
+    decode → upscale branch).
 
     Args:
         graph: Serialized lab graph (mutated).
         lab_rel: Optional rel override.
 
     Returns:
-        True when at least one node was inserted.
+        True when at least one save was wired through upscale.
     """
     extra = graph.get("extra") or {}
     rel = lab_rel or str(extra.get("lab_rel") or graph.get("id") or "")
     if not upscale_in_scope(rel):
         return False
-    if _nodes_of(graph, UPSCALE_TYPE):
-        return False
     saves = _nodes_of(graph, SAVE_TYPE)
     if not saves:
         return False
-    master: dict[str, Any] | None = None
+    pending = [
+        save
+        for save in saves
+        if _incoming_image(graph, save) is not None and not _fed_by_upscale(graph, save)
+    ]
+    if not pending:
+        return False
+    orphans = _orphan_upscales(graph)
+    masters = [
+        node
+        for node in _nodes_of(graph, UPSCALE_TYPE)
+        if not _upscale_mode_linked(node)
+    ]
+    master: dict[str, Any] | None = masters[0] if masters else None
     inserted = False
-    for index, save in enumerate(saves):
+    for save in pending:
         origin = _incoming_image(graph, save)
         if origin is None:
             continue
         src_id, src_slot = origin
         save_in = None
-        for item in save.get("inputs") or []:
+        dst_slot = 0
+        for slot, item in enumerate(save.get("inputs") or []):
             if item.get("name") == "images" and item.get("link") is not None:
                 save_in = item
+                dst_slot = slot
                 break
         if save_in is None:
             continue
-        old_link = int(save_in["link"])
-        _unlink(graph, old_link)
-        nid = _next_node_id(graph)
-        x, y = node_pos(save)
-        pos = [x - 40.0, y + 140.0]
-        node = _make_upscale(nid, pos, linked_mode=master is not None)
-        graph.setdefault("nodes", []).append(node)
-        img_link = _append_link(graph, src_id, src_slot, nid, 0, "IMAGE")
-        node["inputs"][0]["link"] = img_link
-        src_node = next(
-            item for item in graph["nodes"] if int(item["id"]) == src_id
+        if orphans:
+            node = orphans.pop(0)
+        else:
+            nid = _next_node_id(graph)
+            x, y = node_pos(save)
+            node = _make_upscale(
+                nid, [x - 40.0, y + 140.0], linked_mode=master is not None
+            )
+            graph.setdefault("nodes", []).append(node)
+        if save_in.get("link") is not None:
+            _unlink(graph, int(save_in["link"]))
+        _connect_upscale(
+            graph, node, src_id, src_slot, save, save_in, dst_slot
         )
-        _push_output_link(src_node, src_slot, img_link)
-        dst_slot = 0
-        for slot, item in enumerate(save.get("inputs") or []):
-            if item.get("name") == "images":
-                dst_slot = slot
-                break
-        out_link = _append_link(
-            graph, nid, 0, int(save["id"]), dst_slot, "IMAGE"
-        )
-        save_in["link"] = out_link
-        _push_output_link(node, 0, out_link)
         if master is None:
             master = node
-        else:
+        elif node is not master and not _upscale_mode_linked(node):
             _link_out(graph, master, 1, node, "upscale", "STRING", widget=True)
         inserted = True
-        del index
     return inserted
