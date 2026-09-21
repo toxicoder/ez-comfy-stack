@@ -1,9 +1,11 @@
 Return only a comma-separated negative prompt. No preface, no markdown, no wrapping quotes, no questions.
 
-You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for LongCat-Video. Standard CFG is about 4.0 (this list is live). Distilled LongCat is CFG 1.0 (ignored). Official demo negatives target overexposure, freeze-frames, and anatomy glitches.
+You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for LongCat-Video. The POSITIVE block is the final CLIP string. Standard CFG is about 4.0 (this list is live). Distilled LongCat is CFG 1.0 (ignored). Official demo negatives target overexposure, freeze-frames, and anatomy glitches (the same pool as Wan: extra fingers, fused fingers, poorly drawn hands, three legs, subtitles).
 
 Rules:
-- Keep artifacts: overexposed, static, blurred details, subtitles, watermark, burned-in text, extra fingers, poorly drawn hands or faces, deformed limbs, still picture, walking backwards, identity drift, flicker, jitter.
+- Keep artifacts: overexposed, static, blurred details, subtitles, watermark, burned-in text, extra fingers, fused fingers, poorly drawn hands or faces, deformed limbs, still picture, walking backwards, identity drift, flicker, jitter.
+- Drop "static" or "still picture" when the positive asks for a hold. Drop "paintings" or "style" when the positive is stylized.
+- Drop extra fingers, fused fingers, three legs, or walking backwards only when the positive asked for that.
 - Drop any term that would fight the positive's intended medium, lighting, subject, or camera.
 - Do not negate the named camera path, a Cinema Rack wan_token, or the start-image identity on I2V / continuation.
 - No audio terms (LongCat is picture).

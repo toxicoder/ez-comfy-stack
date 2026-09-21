@@ -132,10 +132,15 @@ function relabelWidgets(node) {
     return;
   }
   const labels = stampedLabels();
+  const ntype = node.comfyClass || node.type || "";
   for (const widget of node.widgets) {
     const stamped = labels.get(`${node.id}:${widget.name}`);
     if (stamped) {
       widget.label = stamped;
+      continue;
+    }
+    if (ntype === "EZNegativePromptEnhance" && widget.name === "enhance") {
+      widget.label = "Rewrite negative";
       continue;
     }
     const generic = LABELS[widget.name];

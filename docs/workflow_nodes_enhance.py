@@ -103,16 +103,26 @@ def enhance_nodes() -> dict[str, Any]:
     )
     nodes["EZNegativePromptEnhance"] = _n(
         "Negative Prompt Enhance",
-        "Rewrite a negative CLIP seed so it does not fight the positive.",
+        "Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.",
         origin="ez_prompt_enhance",
         sockets=[
-            _s("positive", "STRING", "in", "Positive CLIP string as context."),
+            _s("positive", "STRING", "in", "Final positive CLIP string (enhance output, Prompt Join, or shot bundle)."),
             _s("prompt", "STRING", "out", "Negative string."),
         ],
         widgets=[
             _w("prompt", index=0, desc="Negative seed (artifacts, not style).", gen="FLUX-family models do not use negatives well. Keep this short; put constraints in the positive."),
-            _w("enhance", index=1, typ="BOOLEAN", desc="Rewrite using the positive as context.", gen="Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive."),
+            _w("enhance", index=1, typ="BOOLEAN", desc="Rewrite negative. App label: Rewrite negative.", gen="Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs."),
             _w("family", index=2, typ="COMBO", desc="Which negative family.", gen="Must match the UNET on the canvas.", choices=[("klein", "Klein stills."), ("wan", "Wan silent."), ("ltx", "LTX AV."), ("zimage", "Z-Image Turbo (CFG 1; list is documentation)."), ("longcat", "LongCat-Video."), ("dreamx", "DreamX-Creator AV."), ("s2v", "Wan S2V; wav owns speech.")]),
+        ],
+    )
+    nodes["EZPromptBundle"] = _n(
+        "Prompt Bundle",
+        "Join final shot prompts for one shared film negative. No LLM.",
+        origin="ez_prompt_enhance",
+        lab="Films only. One bundle feeds the shared LTX negative.",
+        sockets=[
+            _s("text_01", "STRING", "in", "Final prompt for shot 1. Slots through text_24."),
+            _s("prompt", "STRING", "out", "Paragraphs separated by a blank line."),
         ],
     )
     nodes["EZZimagePromptEnhance"] = _n(

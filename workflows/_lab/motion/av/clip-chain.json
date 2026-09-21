@@ -1,6 +1,6 @@
 {
   "id": "clip-chain",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 234,
   "last_link_id": 141,
   "nodes": [
@@ -5130,6 +5130,14 @@
           {
             "description": "Latent height in pixels. Used when Format is Custom; otherwise the preset wins.",
             "label": "Height"
+          }
+        ],
+        [
+          111,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ]
       ],

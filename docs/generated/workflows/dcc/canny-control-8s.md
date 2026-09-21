@@ -1294,11 +1294,11 @@ Optional extra line after the stock disclosure.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1319,11 +1319,11 @@ morphing, identity drift, warping objects, face melting, flicker, jitter, frame 
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph:** `false`
+**This graph:** `true`
 
 #### `family`
 

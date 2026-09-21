@@ -915,6 +915,10 @@ def cinema_language_addendum(system_name: str = "", mode: str = "") -> str:
             "Do not negate a named cinema technique that appears in the positive "
             "(Rembrandt, dolly in, bleach-bypass, match cut, and other catalog labels)."
         )
+        lines.append(
+            "Keep anatomy artifact terms (extra fingers, fused fingers, extra limbs) "
+            "unless the positive asked for that body plan."
+        )
     else:
         lines.append(
             "Stills: subject, then shot size, angle, lens, composition, lighting, "

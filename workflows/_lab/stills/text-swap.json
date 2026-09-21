@@ -1,6 +1,6 @@
 {
   "id": "text-swap",
-  "revision": 2,
+  "revision": 3,
   "last_node_id": 24,
   "last_link_id": 40,
   "nodes": [
@@ -1160,6 +1160,14 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          13,
+          "enhance",
+          {
+            "label": "Rewrite negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

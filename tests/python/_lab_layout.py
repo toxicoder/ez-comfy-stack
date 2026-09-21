@@ -105,6 +105,7 @@ _PROMPT_TYPES = frozenset(
         "EZCreativeResearch",
         "EZSamplePrompt",
         "EZPromptJoin",
+        "EZPromptBundle",
         "EZContextJoin",
         "EZAppForge",
         "TextEncodeAceStepAudio1.5",

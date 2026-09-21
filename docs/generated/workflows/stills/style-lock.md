@@ -102,6 +102,12 @@ flowchart TB
 | 38 | Upscale still | `EZImageUpscale` | SHOT TERRACE |
 | 39 | Upscale still | `EZImageUpscale` | SHOT RAIN |
 | 40 | Check models | `EZModelCheck` | QUALITY |
+| 41 | Negative SHOT LIVING | `EZNegativePromptEnhance` | Ungrouped |
+| 42 | Negative Negative SHOT LIVING | `CLIPTextEncode` | Ungrouped |
+| 43 | Negative SHOT TERRACE | `EZNegativePromptEnhance` | Ungrouped |
+| 44 | Negative Negative SHOT TERRACE | `CLIPTextEncode` | Ungrouped |
+| 45 | Negative SHOT RAIN | `EZNegativePromptEnhance` | Ungrouped |
+| 46 | Negative Negative SHOT RAIN | `CLIPTextEncode` | Ungrouped |
 
 ## Node parameter reference
 
@@ -688,6 +694,9 @@ Prompt encoded by CLIP.
 | Positive LIVING | `From the primary interior looking out the main opening, late-day sun, Instagram…` |
 | Positive TERRACE | `Outdoor living or threshold of this place at golden hour, Instagram 4:5. Same b…` |
 | Positive RAIN | `This same place at night or in weather. Lamps on if the bible has them. Massing…` |
+| Negative Negative SHOT LIVING | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT TERRACE | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT RAIN | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
 
 ### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
 
@@ -1007,11 +1016,11 @@ Save prefix.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1022,21 +1031,17 @@ Negative seed (artifacts, not style).
 
 **How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
 
-**This graph:** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
-
-```text
-game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
-```
+**This graph (all 4 instances):** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
 
 #### `enhance`
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph:** `true`
+**This graph (all 4 instances):** `true`
 
 #### `family`
 
@@ -1046,7 +1051,7 @@ Which negative family.
 
 **How it affects generation:** Must match the UNET on the canvas.
 
-**This graph:** `klein`
+**This graph (all 4 instances):** `klein`
 
 **Other choices**
 

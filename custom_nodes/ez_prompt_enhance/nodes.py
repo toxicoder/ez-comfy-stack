@@ -1274,10 +1274,12 @@ class EZNegativePromptEnhance:
     CATEGORY = "ez-comfy/prompt"
     OUTPUT_NODE = True
     DESCRIPTION = (
-        "Rewrites a negative CLIP seed against the enhanced positive so the "
-        "negative does not fight the intended medium, lighting, or subject. "
-        "Keeps watermarks and melt/flicker artifacts. Enhance defaults on. "
-        "Fail-soft without a GGUF; a deterministic complement still runs."
+        "Rewrites a negative CLIP seed against the final positive so the "
+        "negative does not fight the intended medium, lighting, subject, or "
+        "audio. Keeps anatomy and watermark artifacts unless the positive "
+        "asked for that body. Enhance defaults on and stays on when Rewrite "
+        "prompt is off. Fail-soft without a GGUF; a deterministic complement "
+        "still runs."
     )
 
     def run(
@@ -1328,6 +1330,57 @@ class EZNegativePromptEnhance:
             status = "enhance off"
         text = complement_negative(text, pos)
         return _pack(EnhanceResult(text, status))
+
+
+# Optional STRING inputs on EZPromptBundle. Films wire 18 shot prompts.
+BUNDLE_INPUTS = 24
+
+
+class EZPromptBundle:
+    """Concatenate final prompt strings for one shared negative."""
+
+    @classmethod
+    def INPUT_TYPES(cls) -> ComfyInputTypes:
+        """Return up to 24 forceInput STRING sockets.
+
+        Returns:
+            Optional widget map. Unconnected sockets are omitted at run time.
+        """
+        optional: dict[str, tuple[object, ...]] = {}
+        for index in range(1, BUNDLE_INPUTS + 1):
+            optional[f"text_{index:02d}"] = (
+                "STRING",
+                {"forceInput": True, "dynamicPrompts": False},
+            )
+        return {"required": {}, "optional": optional}
+
+    # Comfy node registration fields.
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("prompt",)
+    FUNCTION = "run"
+    CATEGORY = "ez-comfy/prompt"
+    DESCRIPTION = (
+        "Joins final prompt strings for one shared negative. No LLM. "
+        "Empty inputs are skipped. Wire each shot's CLIP source here."
+    )
+
+    def run(self, **texts: object) -> tuple[str]:
+        """Join non-empty prompt strings in slot order.
+
+        Args:
+            **texts: ``text_01`` … ``text_24`` STRING values.
+
+        Returns:
+            One string, paragraphs separated by a blank line.
+        """
+        parts: list[str] = []
+        for index in range(1, BUNDLE_INPUTS + 1):
+            raw = texts.get(f"text_{index:02d}", "")
+            text = raw if isinstance(raw, str) else str(raw or "")
+            cleaned = text.strip()
+            if cleaned:
+                parts.append(cleaned)
+        return ("\n\n".join(parts),)
 
 
 class EZCinemaRack:
@@ -1605,6 +1658,7 @@ NODE_CLASS_MAPPINGS: dict[str, type] = {
     "EZLongCatPromptEnhance": EZLongCatPromptEnhance,
     "EZDreamXPromptEnhance": EZDreamXPromptEnhance,
     "EZNegativePromptEnhance": EZNegativePromptEnhance,
+    "EZPromptBundle": EZPromptBundle,
     "EZPromptJoin": EZPromptJoin,
     "EZContextJoin": EZContextJoin,
     "EZAceStepPromptEnhance": EZAceStepPromptEnhance,
@@ -1623,6 +1677,7 @@ NODE_DISPLAY_NAME_MAPPINGS: dict[str, str] = {
     "EZLongCatPromptEnhance": "LongCat Prompt Enhance",
     "EZDreamXPromptEnhance": "DreamX Prompt Enhance",
     "EZNegativePromptEnhance": "Negative Prompt Enhance",
+    "EZPromptBundle": "Prompt Bundle",
     "EZPromptJoin": "Prompt Join",
     "EZContextJoin": "Context Join",
     "EZAceStepPromptEnhance": "ACE-Step Prompt Enhance",

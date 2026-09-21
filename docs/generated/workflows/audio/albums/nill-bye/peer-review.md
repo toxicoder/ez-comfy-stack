@@ -105,7 +105,7 @@ flowchart LR
 | `audio/albums/nill-bye/peer-review/14-double-blind` | 17 | audio |
 | `audio/albums/nill-bye/peer-review/15-replicate` | 17 | audio |
 | `audio/albums/nill-bye/peer-review/album` | 4 | none |
-| `audio/albums/nill-bye/peer-review/cover` | 18 | klein |
+| `audio/albums/nill-bye/peer-review/cover` | 15 | klein |
 
 ## `01-lab-coat`
 
@@ -6480,7 +6480,7 @@ square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool
 game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
 ```
 
-**Latent (wired from Format)** (`EmptyFlux2LatentImage`)
+**Size 1:1 Instagram** (`EmptyFlux2LatentImage`)
 
 | Slot | Value |
 | --- | --- |
@@ -6517,20 +6517,16 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 | Slot | Value |
 | --- | --- |
-| 0 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo…` |
-| 1 | `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An…` |
+| 0 | `custom` |
+| 1 | `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, coo…` |
 | 2 | `true` |
 | 3 | `t2i` |
 | 4 | `YouTube 16:9 still` |
 | 5 | `none` |
-| 6 | `stills/instagram-square` |
+| 6 | `audio/albums/nill-bye/peer-review/cover` |
 
 ```text
 square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
-```
-
-```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
 ```
 
 **Negative Prompt Enhance** (`EZNegativePromptEnhance`)
@@ -6550,29 +6546,6 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 | Slot | Value |
 | --- | --- |
 | 0 | `lab` |
-
-**Format / platform** (`EZImageFormat`)
-
-| Slot | Value |
-| --- | --- |
-| 0 | `Instagram · square (1024×1024)` |
-| 1 | `none` |
-| 2 | `1024` |
-| 3 | `1024` |
-| 4 | `1` |
-| 5 | `Match input` |
-
-**Upscale still** (`EZImageUpscale`)
-
-| Slot | Value |
-| --- | --- |
-| 0 | `none` |
-
-**Describe image** (`EZImageDescribe`)
-
-| Slot | Value |
-| --- | --- |
-| 0 | `false` |
 
 **Check models** (`EZModelCheck`)
 
@@ -8212,11 +8185,7 @@ Lab sample prompt or Custom.
 
 **How it affects generation:** Custom keeps the textarea. Picking a sample fills and locks the Prompt. The App dropdown lists this graph's 30 recipes plus Custom (place recipes such as Cliff villa on stills/dream-house).
 
-**This graph:** `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness…`
-
-```text
-square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
-```
+**This graph:** `custom`
 
 #### `prompt`
 
@@ -8226,10 +8195,10 @@ Lazy sentence or authored still prompt.
 
 **How it affects generation:** When Enhance is on, the GGUF expands this into Klein-native sentences.
 
-**This graph:** `A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread…`
+**This graph:** `square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness…`
 
 ```text
-A photoreal still of a tropical coastal city rooftop terrace at golden hour. An original techno wizard in an unmarked dark indigo-violet suede running coat with silk-felt nap and faint circuit-thread seams stands mid-stride on the terrace. Warm gold-cyan holographic glyph rings bloom from a compact unmarked data-staff, empty of lettering. Instagram 1:1 square. Subject centered, warm key, unmarked surfaces.
+square album cover, graphic print, chalkboard, lab coat silhouette, beaker, cool fluorescent light, fictional act Nill Bye, album Peer Review, no text, no letters, no logos, no living person likeness, no celebrity, no photograph
 ```
 
 #### `enhance`
@@ -8597,15 +8566,15 @@ Sample-catalog id (graph stem).
 
 **How it affects generation:** Internal. Leave as stamped so sample dropdowns resolve.
 
-**This graph:** `stills/instagram-square`
+**This graph:** `audio/albums/nill-bye/peer-review/cover`
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -8626,9 +8595,9 @@ game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melte
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
 **This graph:** `true`
 
@@ -8653,252 +8622,3 @@ Which negative family.
 | `longcat` | LongCat-Video. |
 | `dreamx` | DreamX-Creator AV. |
 | `s2v` | Wan S2V; wav owns speech. |
-
-### `EZImageFormat` — Format / platform
-
-Pick a Klein still canvas (aspect or named platform) and an optional Cinema Rack look recipe.
-
-!!! warning "Lab notes"
-
-    stills/still-studio wires width/height/batch into EmptyFlux2LatentImage, hint into Enhance duration_hint, prefix into SaveImage, and look splice into Enhance context. Quality does not change size. Match input snaps aspect to a loaded still.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Optional still used when Output size is Match input. |
-| `width` | out | `INT` | Latent width (÷16). |
-| `height` | out | `INT` | Latent height (÷16). |
-| `batch` | out | `INT` | Batch size. |
-| `hint` | out | `STRING` | Enhance duration / framing line. |
-| `prefix` | out | `STRING` | SaveImage filename prefix. |
-| `context` | out | `STRING` | Look-recipe splice for Enhance context. |
-
-#### `format`
-
-Type `COMBO`. Range / default: 16:9 LTX feeder / platform jobs / Custom.
-
-Aspect or named platform job.
-
-**How it affects generation:** Preset writes pixels, save prefix, and Rewrite prompt framing. Custom uses Width × Height (snapped to ÷16, max 2048). Does not change Quality, CLIP, or VAE.
-
-**This graph:** `Instagram · square (1024×1024)`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `Custom` | Width × Height widgets, snapped to ÷16. |
-| `16:9 draft (768×432)` | 768×432. aspect_16_9_draft. |
-| `16:9 LTX feeder (1280×704)` | 1280×704. aspect_16_9_ltx. |
-| `16:9 (1280×720)` | 1280×720. aspect_16_9. |
-| `16:9 mid (1024×576)` | 1024×576. aspect_16_9_mid. |
-| `1:1 square (1024×1024)` | 1024×1024. aspect_1_1. |
-| `1:1 circle-safe (768×768)` | 768×768. aspect_1_1_circle. |
-| `4:5 portrait (1024×1280)` | 1024×1280. aspect_4_5. |
-| `9:16 draft (432×768)` | 432×768. aspect_9_16_draft. |
-| `9:16 (576×1024)` | 576×1024. aspect_9_16. |
-| `9:16 LTX feeder (768×1280)` | 768×1280. aspect_9_16_ltx. |
-| `~1.91:1 landscape (1216×640)` | 1216×640. aspect_191. |
-| `~3:1 banner (1536×512)` | 1536×512. aspect_3_1. |
-| `4:1 banner (1536×384)` | 1536×384. aspect_4_1. |
-| `2:3 pin (768×1152)` | 768×1152. aspect_2_3. |
-| `3:4 panel (768×1024)` | 768×1024. aspect_3_4. |
-| `YouTube · thumbnail (1280×720)` | 1280×720. youtube_thumb. |
-| `YouTube · channel art (1536×864)` | 1536×864. youtube_channel_art. |
-| `YouTube · channel icon (768×768)` | 768×768. youtube_channel_icon. |
-| `YouTube · Shorts thumb (576×1024)` | 576×1024. youtube_shorts_thumb. |
-| `YouTube · Community (1024×1024)` | 1024×1024. youtube_community. |
-| `YouTube · chapter card (1280×720)` | 1280×720. youtube_chapter. |
-| `YouTube · subscribe plate (1280×720)` | 1280×720. youtube_subscribe. |
-| `YouTube · end screen (1280×720)` | 1280×720. youtube_endscreen. |
-| `Instagram · square (1024×1024)` | 1024×1024. ig_square. |
-| `Instagram · 4:5 portrait (1024×1280)` | 1024×1280. ig_portrait. |
-| `Instagram · landscape (1216×640)` | 1216×640. ig_landscape. |
-| `Instagram · Story (576×1024)` | 576×1024. ig_story. |
-| `Instagram · Reel cover (576×1024)` | 576×1024. ig_reel. |
-| `Instagram · Highlight (768×768)` | 768×768. ig_highlight. |
-| `Instagram · profile (768×768)` | 768×768. ig_profile. |
-| `TikTok · cover (576×1024)` | 576×1024. tt_cover. |
-| `TikTok · Shop (1024×1024)` | 1024×1024. tt_shop. |
-| `X · post (1280×720)` | 1280×720. x_post. |
-| `X · header (1536×512)` | 1536×512. x_header. |
-| `X · card (1216×640)` | 1216×640. x_card. |
-| `LinkedIn · square (1024×1024)` | 1024×1024. li_post. |
-| `LinkedIn · landscape (1216×640)` | 1216×640. li_landscape. |
-| `LinkedIn · banner (1536×384)` | 1536×384. li_banner. |
-| `LinkedIn · article (1216×640)` | 1216×640. li_article. |
-| `Pinterest · pin (768×1152)` | 768×1152. pin. |
-| `Pinterest · Idea Pin (576×1024)` | 576×1024. pin_story. |
-| `Facebook · post (1216×640)` | 1216×640. fb_post. |
-| `Threads · 4:5 (1024×1280)` | 1024×1280. threads. |
-| `Twitch · offline (1280×720)` | 1280×720. twitch_offline. |
-| `Twitch · starting soon (1280×720)` | 1280×720. twitch_starting. |
-| `Twitch · BRB (1280×720)` | 1280×720. twitch_brb. |
-| `Twitch · ending (1280×720)` | 1280×720. twitch_ending. |
-| `Twitch · overlay (1280×720)` | 1280×720. twitch_overlay. |
-| `Twitch · panel (768×1024)` | 768×1024. twitch_panel. |
-| `Twitch · profile (768×768)` | 768×768. twitch_profile. |
-| `Twitch · banner (1536×512)` | 1536×512. twitch_banner. |
-| `Spotify · playlist (1024×1024)` | 1024×1024. spot_playlist. |
-| `Spotify · Canvas still (576×1024)` | 576×1024. spot_canvas. |
-| `Album · cover (1024×1024)` | 1024×1024. album_cover. |
-| `Lyric card (1024×1024)` | 1024×1024. lyric_card. |
-| `Audiogram · wide (1280×720)` | 1280×720. ag_wide. |
-| `Audiogram · vertical (576×1024)` | 576×1024. ag_vert. |
-| `Podcast · episode art (1024×1024)` | 1024×1024. episode_art. |
-| `Podcast · cover (1024×1024)` | 1024×1024. podcast_cover. |
-| `Open Graph / blog (1216×640)` | 1216×640. og. |
-| `Email · header (1216×640)` | 1216×640. email_header. |
-| `Substack · hero (1216×640)` | 1216×640. substack. |
-| `Patreon · post (1024×1280)` | 1024×1280. patreon. |
-| `Channel · banner (1536×512)` | 1536×512. banner. |
-| `End-card / CTA (1280×720)` | 1280×720. endcard. |
-| `Quote background (1024×1024)` | 1024×1024. quote_bg. |
-| `Lower-third plate (1280×720)` | 1280×720. lower_third. |
-| `Food / tabletop (1024×1280)` | 1024×1280. food_tabletop. |
-| `Shorts still (432×768)` | 432×768. shorts_still. |
-| `Hook still (432×768)` | 432×768. hook_still. |
-| `Product packshot (1024×1024)` | 1024×1024. packshot. |
-| `Product lifestyle (1024×1280)` | 1024×1280. lifestyle. |
-| `Desk setup (1280×720)` | 1280×720. desk_setup. |
-| `Coming soon (1280×720)` | 1280×720. coming_soon. |
-| `Slide title (1280×720)` | 1280×720. slide_title. |
-| `Zoom / Meet background (1280×720)` | 1280×720. zoom_bg. |
-| `Merch · tee (1024×1024)` | 1024×1024. merch_tee. |
-| `Merch · mug (1024×1024)` | 1024×1024. merch_mug. |
-| `Print poster (768×1152)` | 768×1152. poster. |
-
-#### `look`
-
-Type `COMBO`. Range / default: none.
-
-Optional Cinema Rack starter.
-
-**How it affects generation:** none leaves look to Style + Prompt. A pick splices Klein still language into Enhance context. Full 13-axis desk is inspire/cinema-rack.
-
-**This graph:** `none`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `none` | Off. Style + Prompt own look. |
-| `Noir interrogation` | rec_noir_push |
-| `Locked portrait` | rec_locked_portrait |
-| `Golden wide` | rec_golden_wide |
-| `Handheld documentary` | rec_handheld_doc |
-| `Vertical hook` | rec_vertical_hook |
-| `Rain track` | rec_rain_track |
-| `Product orbit` | rec_orbit_product |
-| `Drone reveal` | rec_drone_reveal |
-| `Night bible` | rec_identity_night |
-| `Western noon` | rec_western_noon |
-| `Slow push to eyes` | rec_slow_push_eyes |
-| `FPV dive` | rec_fpv_dive |
-| `Match-cut AV` | rec_match_cut_ltx |
-| `Fog push` | rec_fog_push |
-| `Body-cam sprint` | rec_bodycam_sprint |
-| `Bounce beauty` | rec_romcom_beauty |
-| `Overcast wide` | rec_overcast_wide |
-| `Macro pour` | rec_macro_pour |
-| `Crane reveal` | rec_crane_reveal |
-| `Split diopter two-plane` | rec_split_diopter |
-| `Night practical push` | rec_night_practical_push |
-| `Hyperlapse path` | rec_hyperlapse |
-| `Talking MCU` | rec_talking_mcu |
-| `Anamorphic-class night` | rec_anamorphic_night |
-
-#### `width`
-
-Type `INT`. Range / default: 16–2048, step 16.
-
-Custom width.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
-
-**This graph:** `1024`
-
-#### `height`
-
-Type `INT`. Range / default: 16–2048, step 16.
-
-Custom height.
-
-**How it affects generation:** Used when Format is Custom. Presets ignore this widget at Queue.
-
-**This graph:** `1024`
-
-#### `batch_size`
-
-Type `INT`. Range / default: 1–4.
-
-How many stills in one Run.
-
-**How it affects generation:** Large canvases stay at 1.
-
-**This graph:** `1`
-
-#### `size_mode`
-
-Type `COMBO`. Range / default: Match input / Force format.
-
-Match a loaded still's aspect, or keep Format / platform.
-
-**How it affects generation:** Match input (default) picks the nearest aspect catalog row when a still is loaded. Force format keeps the Format pick. No still: authored format. Quality does not change size.
-
-**This graph:** `Match input`
-
-### `EZImageUpscale` — Upscale still
-
-Optional lanczos upscale after a still decode. none passes the tensor through.
-
-!!! warning "Lab notes"
-
-    Wired before SaveImage on stills, creator stills, and DCC still plates. One App dropdown drives every output.
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Decoded still. |
-| `IMAGE` | out | `IMAGE` | Possibly upscaled still. |
-| `upscale` | out | `STRING` | Combo id for additional EZImageUpscale nodes. |
-
-#### `upscale`
-
-Type `COMBO`. Range / default: none / 2x / 4x / 4K.
-
-Upscale mode.
-
-**How it affects generation:** none is a passthrough. 2x and 4x are lanczos. 4K fits the still in a 3840×2160 box (portrait 2160×3840). No extra weights.
-
-**This graph:** `none`
-
-**Other choices**
-
-| Choice | What it does |
-| --- | --- |
-| `none` | Pass through. |
-| `2x` | Double pixels. |
-| `4x` | Quadruple pixels. |
-| `4K` | Fit in a 4K box. |
-
-### `EZImageDescribe` — Describe image
-
-Caption a source still so Prompt Enhance can name inventory and lettering.
-
-!!! warning "Lab notes"
-
-    Off (default) returns empty and does not load the describe GGUF. Opt-in: download-llm --tier describe (Qwen2.5-VL-3B Apache).
-
-| Socket | Dir | Type | What it carries |
-| --- | --- | --- | --- |
-| `image` | in | `IMAGE` | Source still. Lazy — skipped when enable is off. |
-| `caption` | out | `STRING` | Short caption, or empty. |
-
-#### `enable`
-
-Type `BOOLEAN`. Range / default: off.
-
-Run the captioner.
-
-**How it affects generation:** Off skips the VLM. On needs download-llm --tier describe.
-
-**This graph:** `false`

@@ -12,6 +12,7 @@ Rules:
 - If the user named a kitchen, bath, bedroom, or study but not a window, describe that room by its interior wall, not by the landscape.
 - Name which room faces which wall or opening only as the user named it. Do not invent windows.
 - Do not invent furniture, rooms, people, or a second location.
+- If the user named a person, freeze the body plan in positive prose (two arms, two hands, five fingers). Do not invent a person. Still no camera.
 - Do not name a lens, focal length, shot scale, camera move, or aspect ratio unless the user already named it. The bible stays camera-free.
 - Look axes only: lighting patterns (window, practical lamp, golden hour), color/film look, weather, and genre. Cinema Rack camera axes stay off.
 - Never use negation (no logos, without text). Describe the positive opposite (unmarked facades, empty of lettering).

@@ -1,10 +1,15 @@
 Return only a comma-separated negative prompt. No preface, no markdown, no wrapping quotes, no questions.
 
-You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for Wan 2.2 TI2V-5B, I2V-A14B / T2V-A14B, Fun InP, and VACE (UMT5, silent). 5B MagCache drafts may sit at CFG 1 (negatives ignored). Official A14B guide scale is about 3–4, so this list is live on A14B.
+You rewrite the NEGATIVE SEED so it complements the POSITIVE CLIP string for Wan 2.2 TI2V-5B, I2V-A14B / T2V-A14B, Fun InP, and VACE (UMT5, silent). The POSITIVE block is the final CLIP string (already rewritten when Rewrite prompt was on). It may contain several shot paragraphs. Drop a term if it fights any paragraph.
+
+5B MagCache drafts may sit at CFG 1 (negatives ignored). Official A14B guide scale is about 3–4, so this list is live on A14B. The official sample negative (English gloss) is the keep-pool: overexposed, static, blurred details, subtitles, worst quality, low quality, JPEG compression residue, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, three legs, many people in the background, walking backwards, watermark. Do not use (word:1.2) weights.
 
 Rules:
-- Keep motion artifacts: morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text.
-- Drop any term that would fight the positive's intended medium, lighting, subject, or camera.
+- Keep that artifact pool, plus morphing, identity drift, flicker, jitter, and burned-in text.
+- Drop "static" or "still picture" when the positive asks for a hold (no motion, motionless, completely still). Keep them when the positive asks for motion.
+- Drop "paintings" or "style" when the positive is illustrated, anime, or a named stylization. A photoreal positive may keep them.
+- Drop extra fingers, fused fingers, three legs, walking backwards, or a crowd term only when the positive asked for that.
+- Drop any other term that would fight the positive's intended medium, lighting, subject, or camera.
 - Do not negate the named camera move, a Cinema Rack wan_token, or the start-image identity.
 - No audio terms (Wan T2V/I2V/FLF/VACE is silent).
 - Comma-separated tags. English. SFW.

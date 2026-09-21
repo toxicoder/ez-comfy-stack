@@ -1,8 +1,8 @@
 {
   "id": "act-05",
-  "revision": 9,
-  "last_node_id": 903,
-  "last_link_id": 468,
+  "revision": 10,
+  "last_node_id": 904,
+  "last_link_id": 487,
   "nodes": [
     {
       "id": 1,
@@ -486,7 +486,7 @@
       },
       "widgets_values": [
         "game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks",
-        false,
+        true,
         "klein"
       ],
       "title": "Negative Prompt Enhance"
@@ -1088,7 +1088,7 @@
           "type": "STRING",
           "links": [
             17,
-            450
+            469
           ],
           "slot_index": 0
         }
@@ -1676,7 +1676,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            41
+            41,
+            470
           ],
           "slot_index": 0
         }
@@ -2264,7 +2265,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            65
+            65,
+            471
           ],
           "slot_index": 0
         }
@@ -2852,7 +2854,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            89
+            89,
+            472
           ],
           "slot_index": 0
         }
@@ -3440,7 +3443,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            113
+            113,
+            473
           ],
           "slot_index": 0
         }
@@ -4028,7 +4032,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            137
+            137,
+            474
           ],
           "slot_index": 0
         }
@@ -4616,7 +4621,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            161
+            161,
+            475
           ],
           "slot_index": 0
         }
@@ -5204,7 +5210,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            185
+            185,
+            476
           ],
           "slot_index": 0
         }
@@ -5792,7 +5799,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            209
+            209,
+            477
           ],
           "slot_index": 0
         }
@@ -6380,7 +6388,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            233
+            233,
+            478
           ],
           "slot_index": 0
         }
@@ -6968,7 +6977,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            257
+            257,
+            479
           ],
           "slot_index": 0
         }
@@ -7556,7 +7566,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            281
+            281,
+            480
           ],
           "slot_index": 0
         }
@@ -8144,7 +8155,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            305
+            305,
+            481
           ],
           "slot_index": 0
         }
@@ -8732,7 +8744,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            329
+            329,
+            482
           ],
           "slot_index": 0
         }
@@ -9320,7 +9333,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            353
+            353,
+            483
           ],
           "slot_index": 0
         }
@@ -9908,7 +9922,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            377
+            377,
+            484
           ],
           "slot_index": 0
         }
@@ -10496,7 +10511,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            401
+            401,
+            485
           ],
           "slot_index": 0
         }
@@ -11084,7 +11100,8 @@
           "name": "prompt",
           "type": "STRING",
           "links": [
-            425
+            425,
+            486
           ],
           "slot_index": 0
         }
@@ -11737,7 +11754,7 @@
         {
           "name": "positive",
           "type": "STRING",
-          "link": 450
+          "link": 487
         }
       ],
       "outputs": [
@@ -11755,7 +11772,7 @@
       },
       "widgets_values": [
         "morphing, identity drift, warping objects, face melting, flicker, jitter, frame stutter, rubbery motion, melting edges, texture crawl, sudden cuts, watermark, burned-in text",
-        false,
+        true,
         "ltx"
       ],
       "title": "Negative Prompt Enhance"
@@ -11783,6 +11800,128 @@
         "Click Check models. Queue does not run this node."
       ],
       "title": "Check models"
+    },
+    {
+      "id": 904,
+      "type": "EZPromptBundle",
+      "pos": [
+        6912.0,
+        80.0
+      ],
+      "size": [
+        420.0,
+        200.0
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text_01",
+          "type": "STRING",
+          "link": 469
+        },
+        {
+          "name": "text_02",
+          "type": "STRING",
+          "link": 470
+        },
+        {
+          "name": "text_03",
+          "type": "STRING",
+          "link": 471
+        },
+        {
+          "name": "text_04",
+          "type": "STRING",
+          "link": 472
+        },
+        {
+          "name": "text_05",
+          "type": "STRING",
+          "link": 473
+        },
+        {
+          "name": "text_06",
+          "type": "STRING",
+          "link": 474
+        },
+        {
+          "name": "text_07",
+          "type": "STRING",
+          "link": 475
+        },
+        {
+          "name": "text_08",
+          "type": "STRING",
+          "link": 476
+        },
+        {
+          "name": "text_09",
+          "type": "STRING",
+          "link": 477
+        },
+        {
+          "name": "text_10",
+          "type": "STRING",
+          "link": 478
+        },
+        {
+          "name": "text_11",
+          "type": "STRING",
+          "link": 479
+        },
+        {
+          "name": "text_12",
+          "type": "STRING",
+          "link": 480
+        },
+        {
+          "name": "text_13",
+          "type": "STRING",
+          "link": 481
+        },
+        {
+          "name": "text_14",
+          "type": "STRING",
+          "link": 482
+        },
+        {
+          "name": "text_15",
+          "type": "STRING",
+          "link": 483
+        },
+        {
+          "name": "text_16",
+          "type": "STRING",
+          "link": 484
+        },
+        {
+          "name": "text_17",
+          "type": "STRING",
+          "link": 485
+        },
+        {
+          "name": "text_18",
+          "type": "STRING",
+          "link": 486
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            487
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EZPromptBundle"
+      },
+      "widgets_values": [],
+      "title": "Shot prompt bundle"
     }
   ],
   "links": [
@@ -15379,14 +15518,6 @@
       "STRING"
     ],
     [
-      450,
-      211,
-      0,
-      902,
-      0,
-      "STRING"
-    ],
-    [
       451,
       11,
       0,
@@ -15527,6 +15658,158 @@
       11,
       0,
       551,
+      0,
+      "STRING"
+    ],
+    [
+      469,
+      211,
+      0,
+      904,
+      0,
+      "STRING"
+    ],
+    [
+      470,
+      231,
+      0,
+      904,
+      1,
+      "STRING"
+    ],
+    [
+      471,
+      251,
+      0,
+      904,
+      2,
+      "STRING"
+    ],
+    [
+      472,
+      271,
+      0,
+      904,
+      3,
+      "STRING"
+    ],
+    [
+      473,
+      291,
+      0,
+      904,
+      4,
+      "STRING"
+    ],
+    [
+      474,
+      311,
+      0,
+      904,
+      5,
+      "STRING"
+    ],
+    [
+      475,
+      331,
+      0,
+      904,
+      6,
+      "STRING"
+    ],
+    [
+      476,
+      351,
+      0,
+      904,
+      7,
+      "STRING"
+    ],
+    [
+      477,
+      371,
+      0,
+      904,
+      8,
+      "STRING"
+    ],
+    [
+      478,
+      391,
+      0,
+      904,
+      9,
+      "STRING"
+    ],
+    [
+      479,
+      411,
+      0,
+      904,
+      10,
+      "STRING"
+    ],
+    [
+      480,
+      431,
+      0,
+      904,
+      11,
+      "STRING"
+    ],
+    [
+      481,
+      451,
+      0,
+      904,
+      12,
+      "STRING"
+    ],
+    [
+      482,
+      471,
+      0,
+      904,
+      13,
+      "STRING"
+    ],
+    [
+      483,
+      491,
+      0,
+      904,
+      14,
+      "STRING"
+    ],
+    [
+      484,
+      511,
+      0,
+      904,
+      15,
+      "STRING"
+    ],
+    [
+      485,
+      531,
+      0,
+      904,
+      16,
+      "STRING"
+    ],
+    [
+      486,
+      551,
+      0,
+      904,
+      17,
+      "STRING"
+    ],
+    [
+      487,
+      904,
+      0,
+      902,
       0,
       "STRING"
     ]
@@ -15746,6 +16029,22 @@
           {
             "description": "On: on-box Qwen3-4B rewrites for this model. Off: use your text as-is.",
             "label": "Rewrite prompt"
+          }
+        ],
+        [
+          12,
+          "enhance",
+          {
+            "label": "Rewrite Klein negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
+          }
+        ],
+        [
+          902,
+          "enhance",
+          {
+            "label": "Rewrite LTX negative",
+            "description": "On: rewrite this negative so it cannot fight the final positive. Stays on when Rewrite prompt is off. Off skips the LLM; a conflict filter still runs."
           }
         ],
         [

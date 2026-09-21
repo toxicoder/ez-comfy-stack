@@ -7,10 +7,16 @@ Not imported by pytest (leading underscore). Run from repo root:
 from __future__ import annotations
 
 import json
+from collections import defaultdict
 from pathlib import Path
 from typing import Any
 
-from _lab_layout import finalize_layout, node_overlap_hits
+from _lab_layout import (
+    NODE_GAP,
+    estimated_node_size,
+    finalize_layout,
+    node_overlap_hits,
+)
 from _lab_paths import lab_json
 
 from _lab_theme import (
@@ -1126,30 +1132,34 @@ def _set_node_enhance(node: dict[str, Any], on: bool) -> None:
 
 
 def apply_enhance_policy(graph: dict[str, Any]) -> None:
-    """Pin Enhance off on authored/structured graphs. Leave lazy printers alone."""
+    """Pin positive Enhance off on authored graphs. Negative rewrite stays on."""
     extra = graph.get("extra") or {}
     gid = str(extra.get("lab_rel") or graph.get("id") or "")
     if any(n.get("type") == "EZPodcastLearn" for n in graph.get("nodes") or []):
         for node in graph.get("nodes") or []:
             if node.get("type") == "EZAceStepPromptEnhance":
                 _set_node_enhance(node, False)
-        return
+    elif enhance_pin_off(gid):
+        for node in graph.get("nodes") or []:
+            ntype = node.get("type")
+            if ntype == "EZDubScript":
+                continue
+            if ntype in (
+                "EZKleinPromptEnhance",
+                "EZWanPromptEnhance",
+                "EZLTXPromptEnhance",
+                "EZAceStepPromptEnhance",
+                "EZRapLyrics",
+                "EZPodcastScript",
+            ):
+                _set_node_enhance(node, False)
+    for node in graph.get("nodes") or []:
+        if node.get("type") == "EZNegativePromptEnhance":
+            _set_node_enhance(node, True)
     if not enhance_pin_off(gid):
         return
-    for node in graph.get("nodes") or []:
-        ntype = node.get("type")
-        if ntype == "EZDubScript":
-            continue
-        if ntype in (
-            "EZKleinPromptEnhance",
-            "EZWanPromptEnhance",
-            "EZLTXPromptEnhance",
-            "EZNegativePromptEnhance",
-            "EZAceStepPromptEnhance",
-            "EZRapLyrics",
-            "EZPodcastScript",
-        ):
-            _set_node_enhance(node, False)
+    if any(n.get("type") == "EZPodcastLearn" for n in graph.get("nodes") or []):
+        return
     extra = graph.setdefault("extra", {})
     for key in ("lab_note", "lab_description"):
         raw = extra.get(key)
@@ -1282,6 +1292,599 @@ def wire_script_context_to_ace(graph: dict[str, Any]) -> None:
         if node.get("type") != "EZAceStepPromptEnhance":
             continue
         _link_string(graph, src, node, "context")
+
+
+def _graph_ids(graph: dict[str, Any]) -> dict[int, dict[str, Any]]:
+    return {int(node["id"]): node for node in graph.get("nodes") or []}
+
+
+def _graph_links(graph: dict[str, Any]) -> dict[int, list[Any]]:
+    return {int(link[0]): link for link in graph.get("links") or []}
+
+
+def _named_input(node: dict[str, Any], name: str) -> dict[str, Any] | None:
+    return next(
+        (item for item in node.get("inputs") or [] if item.get("name") == name),
+        None,
+    )
+
+
+def _linked_node(
+    graph: dict[str, Any], node: dict[str, Any], name: str
+) -> dict[str, Any] | None:
+    """Return the node wired into ``name``, if any."""
+    item = _named_input(node, name)
+    if item is None or item.get("link") is None:
+        return None
+    link = _graph_links(graph).get(int(item["link"]))
+    if link is None:
+        return None
+    return _graph_ids(graph).get(int(link[1]))
+
+
+def _unlink_named(graph: dict[str, Any], node: dict[str, Any], name: str) -> None:
+    """Drop the link currently wired into ``name``."""
+    item = _named_input(node, name)
+    if item is None or item.get("link") is None:
+        return
+    lid = int(item["link"])
+    item["link"] = None
+    kept: list[list[Any]] = []
+    old: list[Any] | None = None
+    for link in graph.get("links") or []:
+        if int(link[0]) == lid:
+            old = link
+            continue
+        kept.append(link)
+    graph["links"] = kept
+    if old is None:
+        return
+    src = _graph_ids(graph).get(int(old[1]))
+    if src is None:
+        return
+    slot = int(old[2])
+    outputs = src.get("outputs") or []
+    if slot >= len(outputs):
+        return
+    outputs[slot]["links"] = [
+        link_id
+        for link_id in (outputs[slot].get("links") or [])
+        if int(link_id) != lid
+    ]
+
+
+def _add_typed_link(
+    graph: dict[str, Any],
+    src: dict[str, Any],
+    src_slot: int,
+    dst: dict[str, Any],
+    dest_name: str,
+    ltype: str,
+    *,
+    widget: dict[str, Any] | None = None,
+    extra: dict[str, Any] | None = None,
+) -> int:
+    """Wire ``src`` slot into ``dst.dest_name``. Returns the new link id."""
+    lid = _next_link_id(graph)
+    inputs = dst.setdefault("inputs", [])
+    dest = _named_input(dst, dest_name)
+    if dest is None:
+        dest = {"name": dest_name, "type": ltype, "link": None}
+        inputs.append(dest)
+    dest["type"] = ltype
+    dest["link"] = lid
+    if widget is not None and "widget" not in dest:
+        dest["widget"] = widget
+    if extra:
+        for key, value in extra.items():
+            dest[key] = value
+    dest_slot = inputs.index(dest)
+    outputs = src.setdefault("outputs", [])
+    while len(outputs) <= src_slot:
+        outputs.append(
+            {
+                "name": ltype.lower(),
+                "type": ltype,
+                "links": [],
+                "slot_index": len(outputs),
+            }
+        )
+    slot_links = outputs[src_slot].setdefault("links", [])
+    if not isinstance(slot_links, list):
+        outputs[src_slot]["links"] = [lid]
+    else:
+        slot_links.append(lid)
+    graph.setdefault("links", []).append(
+        [lid, int(src["id"]), int(src_slot), int(dst["id"]), dest_slot, ltype]
+    )
+    graph["last_link_id"] = lid
+    return lid
+
+
+def _relink_named(
+    graph: dict[str, Any],
+    dst: dict[str, Any],
+    dest_name: str,
+    src: dict[str, Any],
+    src_slot: int,
+    ltype: str,
+) -> None:
+    _unlink_named(graph, dst, dest_name)
+    _add_typed_link(graph, src, src_slot, dst, dest_name, ltype)
+
+
+def _place_cursor(graph: dict[str, Any], skip: dict[str, Any] | None = None) -> list[float]:
+    """Right-hand column origin, stored on the graph until repair finishes."""
+    cursor = graph.get("_ez_cursor")
+    if isinstance(cursor, list) and len(cursor) == 2:
+        return cursor
+    max_right = 40.0
+    top = 80.0
+    for node in graph.get("nodes") or []:
+        if node is skip:
+            continue
+        pos = node.get("pos") or [0, 0]
+        width, _height = estimated_node_size(node)
+        max_right = max(max_right, float(pos[0]) + width)
+    for group in graph.get("groups") or []:
+        box = group.get("bounding") or [0, 0, 0, 0]
+        max_right = max(max_right, float(box[0]) + float(box[2]))
+    graph["_ez_cursor"] = [max_right + NODE_GAP, top]
+    return graph["_ez_cursor"]
+
+
+def _place_new(graph: dict[str, Any], node: dict[str, Any]) -> None:
+    cursor = _place_cursor(graph, skip=node)
+    node["pos"] = [cursor[0], cursor[1]]
+    _width, height = estimated_node_size(node)
+    cursor[1] = cursor[1] + height + NODE_GAP
+
+
+def _copy_size(node: dict[str, Any], default: list[float]) -> list[float]:
+    size = node.get("size") or default
+    if isinstance(size, dict):
+        return [float(size.get("0", default[0])), float(size.get("1", default[1]))]
+    return [float(size[0]), float(size[1])]
+
+
+def _walk_conditioning(
+    graph: dict[str, Any], start: dict[str, Any] | None, prefer: str
+) -> dict[str, Any] | None:
+    """Walk backward along ``prefer`` / conditioning to a CLIPTextEncode."""
+    seen: set[int] = set()
+    current = start
+    role = prefer
+    while current is not None and int(current["id"]) not in seen:
+        seen.add(int(current["id"]))
+        if current.get("type") == "CLIPTextEncode":
+            return current
+        inputs = current.get("inputs") or []
+        chosen: dict[str, Any] | None = None
+        for name in (role, "conditioning"):
+            chosen = next(
+                (
+                    item
+                    for item in inputs
+                    if item.get("name") == name and item.get("link") is not None
+                ),
+                None,
+            )
+            if chosen is not None:
+                break
+        if chosen is None:
+            cands = [
+                item
+                for item in inputs
+                if str(item.get("type") or "") == "CONDITIONING"
+                and item.get("link") is not None
+            ]
+            if len(cands) != 1:
+                return None
+            chosen = cands[0]
+        if chosen is None:
+            return None
+        link = _graph_links(graph).get(int(chosen["link"]))
+        if link is None:
+            return None
+        current = _graph_ids(graph).get(int(link[1]))
+        role = str(chosen.get("name") or role)
+    return None
+
+
+def _sampler_pairs(graph: dict[str, Any]) -> list[dict[str, Any]]:
+    """KSampler positive/negative CLIP pairs and their text sources."""
+    pairs: list[dict[str, Any]] = []
+    links = _graph_links(graph)
+    ids = _graph_ids(graph)
+    for sampler in graph.get("nodes") or []:
+        if sampler.get("type") not in ("KSampler", "KSamplerAdvanced"):
+            continue
+        pos_in = _named_input(sampler, "positive")
+        neg_in = _named_input(sampler, "negative")
+        if (
+            pos_in is None
+            or neg_in is None
+            or pos_in.get("link") is None
+            or neg_in.get("link") is None
+        ):
+            continue
+        pos_link = links.get(int(pos_in["link"]))
+        neg_link = links.get(int(neg_in["link"]))
+        if pos_link is None or neg_link is None:
+            continue
+        pos_clip = _walk_conditioning(
+            graph, ids.get(int(pos_link[1])), "positive"
+        )
+        neg_clip = _walk_conditioning(
+            graph, ids.get(int(neg_link[1])), "negative"
+        )
+        if pos_clip is None or neg_clip is None:
+            continue
+        pairs.append(
+            {
+                "sampler": sampler,
+                "pos_src": _linked_node(graph, pos_clip, "text"),
+                "neg_clip": neg_clip,
+                "neg_src": _linked_node(graph, neg_clip, "text"),
+                "direct": ids.get(int(neg_link[1])),
+            }
+        )
+    return pairs
+
+
+def _append_node(graph: dict[str, Any], node: dict[str, Any]) -> dict[str, Any]:
+    graph.setdefault("nodes", []).append(node)
+    graph["last_node_id"] = max(int(graph.get("last_node_id") or 0), int(node["id"]))
+    _place_new(graph, node)
+    return node
+
+
+def _clone_negative_enhance(
+    graph: dict[str, Any], template: dict[str, Any], pos_src: dict[str, Any]
+) -> dict[str, Any]:
+    nid, _lid = next_ids(graph)
+    values = list(template.get("widgets_values") or ["", True, "klein"])
+    while len(values) < 3:
+        values.append(True if len(values) == 1 else "klein")
+    values[1] = True
+    node = _append_node(
+        graph,
+        {
+            "id": nid,
+            "type": "EZNegativePromptEnhance",
+            "pos": [0, 0],
+            "size": _copy_size(template, [420.0, 280.0]),
+            "flags": {},
+            "order": int(template.get("order") or 0),
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "links": [],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZNegativePromptEnhance"},
+            "widgets_values": values,
+            "title": f"Negative {pos_src.get('title') or 'shot'}",
+        },
+    )
+    _relink_named(graph, node, "positive", pos_src, 0, "STRING")
+    return node
+
+
+def _clone_negative_clip(
+    graph: dict[str, Any], template: dict[str, Any], text_src: dict[str, Any]
+) -> dict[str, Any]:
+    nid, _lid = next_ids(graph)
+    node = _append_node(
+        graph,
+        {
+            "id": nid,
+            "type": "CLIPTextEncode",
+            "pos": [0, 0],
+            "size": _copy_size(template, [400.0, 200.0]),
+            "flags": {},
+            "order": int(template.get("order") or 0),
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": dict(
+                template.get("properties") or {"Node name for S&R": "CLIPTextEncode"}
+            ),
+            "widgets_values": list(template.get("widgets_values") or [""]),
+            "title": f"Negative {text_src.get('title') or 'shot'}",
+        },
+    )
+    links = _graph_links(graph)
+    ids = _graph_ids(graph)
+    for item in template.get("inputs") or []:
+        name = str(item.get("name") or "")
+        if name == "text":
+            _add_typed_link(
+                graph,
+                text_src,
+                0,
+                node,
+                "text",
+                "STRING",
+                widget={"name": "text"},
+            )
+            continue
+        if item.get("link") is None:
+            copied = {key: value for key, value in item.items() if key != "link"}
+            copied["link"] = None
+            node.setdefault("inputs", []).append(copied)
+            continue
+        old = links.get(int(item["link"]))
+        if old is None:
+            continue
+        src = ids.get(int(old[1]))
+        if src is None:
+            continue
+        extra = {"shape": item["shape"]} if "shape" in item else None
+        widget = item.get("widget") if isinstance(item.get("widget"), dict) else None
+        _add_typed_link(
+            graph,
+            src,
+            int(old[2]),
+            node,
+            name,
+            str(old[5]),
+            widget=widget,
+            extra=extra,
+        )
+    return node
+
+
+def _clone_reference_latent(
+    graph: dict[str, Any], template: dict[str, Any], cond_clip: dict[str, Any]
+) -> dict[str, Any]:
+    nid, _lid = next_ids(graph)
+    node = _append_node(
+        graph,
+        {
+            "id": nid,
+            "type": "ReferenceLatent",
+            "pos": [0, 0],
+            "size": _copy_size(template, [280.0, 80.0]),
+            "flags": {},
+            "order": int(template.get("order") or 0),
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": dict(
+                template.get("properties") or {"Node name for S&R": "ReferenceLatent"}
+            ),
+            "widgets_values": list(template.get("widgets_values") or []),
+            "title": str(template.get("title") or "Negative + identity plate"),
+        },
+    )
+    links = _graph_links(graph)
+    ids = _graph_ids(graph)
+    for item in template.get("inputs") or []:
+        name = str(item.get("name") or "")
+        if name == "conditioning":
+            _add_typed_link(graph, cond_clip, 0, node, "conditioning", "CONDITIONING")
+            continue
+        if item.get("link") is None:
+            continue
+        old = links.get(int(item["link"]))
+        if old is None:
+            continue
+        src = ids.get(int(old[1]))
+        if src is None:
+            continue
+        extra = {"shape": item["shape"]} if "shape" in item else None
+        _add_typed_link(
+            graph, src, int(old[2]), node, name, str(old[5]), extra=extra
+        )
+    return node
+
+
+def _split_shared_join_negatives(graph: dict[str, Any]) -> bool:
+    """Give each Prompt Join its own negative enhance and CLIP."""
+    changed = False
+    groups: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for pair in _sampler_pairs(graph):
+        groups[int(pair["neg_clip"]["id"])].append(pair)
+    for group in groups.values():
+        sources: list[dict[str, Any]] = []
+        joined = True
+        for pair in group:
+            src = pair["pos_src"]
+            if not isinstance(src, dict) or src.get("type") != "EZPromptJoin":
+                joined = False
+                break
+            sources.append(src)
+        if not joined or len({int(src["id"]) for src in sources}) < 2:
+            continue
+        template = group[0]["neg_src"]
+        if not isinstance(template, dict) or template.get("type") != "EZNegativePromptEnhance":
+            continue
+        ordered = sorted(group, key=lambda pair: int(pair["sampler"]["id"]))
+        keep = ordered[0]
+        keep_src = keep["pos_src"]
+        _relink_named(graph, template, "positive", keep_src, 0, "STRING")
+        _set_node_enhance(template, True)
+        built: dict[int, dict[str, Any]] = {
+            int(keep_src["id"]): {"clip": keep["neg_clip"]}
+        }
+        changed = True
+        for pair in ordered[1:]:
+            src = pair["pos_src"]
+            sid = int(src["id"])
+            if sid not in built:
+                enh = _clone_negative_enhance(graph, template, src)
+                clip = _clone_negative_clip(graph, keep["neg_clip"], enh)
+                built[sid] = {"clip": clip}
+            slot = built[sid]
+            direct = pair["direct"]
+            if isinstance(direct, dict) and direct.get("type") == "ReferenceLatent":
+                ref = slot.get("ref")
+                if not isinstance(ref, dict):
+                    ref = _clone_reference_latent(graph, direct, slot["clip"])
+                    slot["ref"] = ref
+                _relink_named(graph, pair["sampler"], "negative", ref, 0, "CONDITIONING")
+            else:
+                _relink_named(
+                    graph, pair["sampler"], "negative", slot["clip"], 0, "CONDITIONING"
+                )
+    return changed
+
+
+def _bundle_film_ltx(graph: dict[str, Any]) -> bool:
+    """Point the shared film LTX negative at every shot's final prompt."""
+    extra = graph.get("extra") or {}
+    gid = str(extra.get("lab_rel") or graph.get("id") or "")
+    if not gid.startswith("films/"):
+        return False
+    sources: list[dict[str, Any]] = []
+    seen: set[int] = set()
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "CLIPTextEncode":
+            continue
+        if "neg" in str(node.get("title") or "").lower():
+            continue
+        src = _linked_node(graph, node, "text")
+        if src is None or src.get("type") != "EZLTXPromptEnhance":
+            continue
+        if int(src["id"]) in seen:
+            continue
+        seen.add(int(src["id"]))
+        sources.append(src)
+    sources.sort(key=lambda node: int(node["id"]))
+    if len(sources) < 2:
+        return False
+    negative = None
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZNegativePromptEnhance":
+            continue
+        values = node.get("widgets_values") or []
+        family = str(values[2]) if len(values) > 2 else ""
+        if family == "ltx":
+            negative = node
+            break
+    if negative is None:
+        return False
+    current = _linked_node(graph, negative, "positive")
+    if current is not None and current.get("type") == "EZPromptBundle":
+        linked: list[int] = []
+        for item in current.get("inputs") or []:
+            if item.get("link") is None:
+                continue
+            origin = _graph_ids(graph).get(
+                int(_graph_links(graph)[int(item["link"])][1])
+            )
+            if origin is not None:
+                linked.append(int(origin["id"]))
+        if linked == [int(node["id"]) for node in sources]:
+            return False
+    nid, _lid = next_ids(graph)
+    bundle = _append_node(
+        graph,
+        {
+            "id": nid,
+            "type": "EZPromptBundle",
+            "pos": [0, 0],
+            "size": [420.0, 200.0],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "name": "prompt",
+                    "type": "STRING",
+                    "links": [],
+                    "slot_index": 0,
+                }
+            ],
+            "properties": {"Node name for S&R": "EZPromptBundle"},
+            "widgets_values": [],
+            "title": "Shot prompt bundle",
+        },
+    )
+    for index, src in enumerate(sources, start=1):
+        _add_typed_link(graph, src, 0, bundle, f"text_{index:02d}", "STRING")
+    _relink_named(graph, negative, "positive", bundle, 0, "STRING")
+    return True
+
+
+def _retarget_singleton_negatives(graph: dict[str, Any]) -> bool:
+    """Point a 1:1 negative at the positive CLIP's text source."""
+    changed = False
+    groups: dict[int, list[dict[str, Any]]] = defaultdict(list)
+    for pair in _sampler_pairs(graph):
+        groups[int(pair["neg_clip"]["id"])].append(pair)
+    for group in groups.values():
+        sources = [pair["pos_src"] for pair in group]
+        if any(not isinstance(src, dict) for src in sources):
+            continue
+        ids = {int(src["id"]) for src in sources if isinstance(src, dict)}
+        if len(ids) != 1:
+            continue
+        src = sources[0]
+        negative = group[0]["neg_src"]
+        if (
+            not isinstance(negative, dict)
+            or negative.get("type") != "EZNegativePromptEnhance"
+            or not isinstance(src, dict)
+        ):
+            continue
+        current = _linked_node(graph, negative, "positive")
+        if current is not None and current.get("type") == "EZPromptBundle":
+            continue
+        if current is not None and int(current["id"]) == int(src["id"]):
+            continue
+        _relink_named(graph, negative, "positive", src, 0, "STRING")
+        changed = True
+    return changed
+
+
+def repair_negative_sources(graph: dict[str, Any]) -> bool:
+    """Pin negative rewrite on and feed it each shot's final positive.
+
+    Args:
+        graph: Serialized lab graph. Mutated in place.
+
+    Returns:
+        True when nodes, links, or the negative enhance flag changed.
+    """
+    changed = _bundle_film_ltx(graph)
+    changed = _split_shared_join_negatives(graph) or changed
+    changed = _retarget_singleton_negatives(graph) or changed
+    from _stamp_app_mode import stamp_rewrite_negative
+
+    changed = stamp_rewrite_negative(graph) or changed
+    for node in graph.get("nodes") or []:
+        if node.get("type") != "EZNegativePromptEnhance":
+            continue
+        values = node.get("widgets_values") or []
+        if len(values) < 2 or values[1] is not True:
+            changed = True
+        _set_node_enhance(node, True)
+    graph.pop("_ez_cursor", None)
+    if changed:
+        repair_dest_input_links(graph)
+        graph["revision"] = int(graph.get("revision") or 0) + 1
+    return changed
 
 
 def enable_lab_graph(graph: dict[str, Any]) -> None:

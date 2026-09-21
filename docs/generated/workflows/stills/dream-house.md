@@ -146,6 +146,24 @@ flowchart TB
 | 71 | Upscale still | `EZImageUpscale` | SHOT 09 drone |
 | 72 | Upscale still | `EZImageUpscale` | SHOT 10 study |
 | 73 | Check models | `EZModelCheck` | QUALITY |
+| 74 | Negative SHOT 02 foyer | `EZNegativePromptEnhance` | Ungrouped |
+| 75 | Negative Negative SHOT 02 foyer | `CLIPTextEncode` | Ungrouped |
+| 76 | Negative SHOT 03 lounge | `EZNegativePromptEnhance` | Ungrouped |
+| 77 | Negative Negative SHOT 03 lounge | `CLIPTextEncode` | Ungrouped |
+| 78 | Negative SHOT 04 kitchen | `EZNegativePromptEnhance` | Ungrouped |
+| 79 | Negative Negative SHOT 04 kitchen | `CLIPTextEncode` | Ungrouped |
+| 80 | Negative SHOT 05 dining | `EZNegativePromptEnhance` | Ungrouped |
+| 81 | Negative Negative SHOT 05 dining | `CLIPTextEncode` | Ungrouped |
+| 82 | Negative SHOT 06 bedroom | `EZNegativePromptEnhance` | Ungrouped |
+| 83 | Negative Negative SHOT 06 bedroom | `CLIPTextEncode` | Ungrouped |
+| 84 | Negative SHOT 07 bath | `EZNegativePromptEnhance` | Ungrouped |
+| 85 | Negative Negative SHOT 07 bath | `CLIPTextEncode` | Ungrouped |
+| 86 | Negative SHOT 08 terrace | `EZNegativePromptEnhance` | Ungrouped |
+| 87 | Negative Negative SHOT 08 terrace | `CLIPTextEncode` | Ungrouped |
+| 88 | Negative SHOT 09 drone | `EZNegativePromptEnhance` | Ungrouped |
+| 89 | Negative Negative SHOT 09 drone | `CLIPTextEncode` | Ungrouped |
+| 90 | Negative SHOT 10 study | `EZNegativePromptEnhance` | Ungrouped |
+| 91 | Negative Negative SHOT 10 study | `CLIPTextEncode` | Ungrouped |
 
 ## Node parameter reference
 
@@ -738,6 +756,15 @@ Prompt encoded by CLIP.
 | Positive 08 | `An unoccupied open-air terrace from the outdoor living the bible named; if none…` |
 | Positive 09 | `Overhead looking down at this same place, 24mm, Instagram 4:5. Straight-down pl…` |
 | Positive 10 | `An unoccupied writing room from the study the bible named; if none, a small wri…` |
+| Negative Negative SHOT 02 foyer | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 03 lounge | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 04 kitchen | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 05 dining | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 06 bedroom | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 07 bath | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 08 terrace | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 09 drone | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
+| Negative Negative SHOT 10 study | `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melt…` |
 
 ### `EmptyFlux2LatentImage` — Empty Flux.2 Latent
 
@@ -1071,11 +1098,11 @@ Save prefix.
 
 ### `EZNegativePromptEnhance` — Negative Prompt Enhance
 
-Rewrite a negative CLIP seed so it does not fight the positive.
+Rewrite a negative CLIP seed against the final positive. Stays on when Rewrite prompt is off.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |
-| `positive` | in | `STRING` | Positive CLIP string as context. |
+| `positive` | in | `STRING` | Final positive CLIP string (enhance output, Prompt Join, or shot bundle). |
 | `prompt` | out | `STRING` | Negative string. |
 
 #### `prompt`
@@ -1086,21 +1113,17 @@ Negative seed (artifacts, not style).
 
 **How it affects generation:** FLUX-family models do not use negatives well. Keep this short; put constraints in the positive.
 
-**This graph:** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
-
-```text
-game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks
-```
+**This graph (all 10 instances):** `game-engine cutscene, Pixar rounded cartoon, illustration, muddy textures, melted geometry, duplicate limbs, watermarks, oversharpen halos, muddy blacks`
 
 #### `enhance`
 
 Type `BOOLEAN`.
 
-Rewrite using the positive as context.
+Rewrite negative. App label: Rewrite negative.
 
-**How it affects generation:** Stops canned 'illustration / Pixar' terms from fighting a cartoon-positive.
+**How it affects generation:** Stays on when Rewrite prompt is off. Off skips the LLM; the conflict filter still runs.
 
-**This graph:** `true`
+**This graph (all 10 instances):** `true`
 
 #### `family`
 
@@ -1110,7 +1133,7 @@ Which negative family.
 
 **How it affects generation:** Must match the UNET on the canvas.
 
-**This graph:** `klein`
+**This graph (all 10 instances):** `klein`
 
 **Other choices**
 

@@ -544,7 +544,7 @@ def test_bible_graphs_are_one_click_klein_plus_ltx() -> None:
         assert eflag is False
         neg_enh = [n for n in graph["nodes"] if n.get("type") == "EZNegativePromptEnhance"]
         assert len(neg_enh) >= 2
-        assert all(n["widgets_values"][1] is False for n in neg_enh)
+        assert all(n["widgets_values"][1] is True for n in neg_enh)
         if film == "go-see":
             assert emode == "t2i"
             assert "staff" not in str(ident).lower()
