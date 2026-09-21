@@ -112,6 +112,7 @@ VIDEO_GENERIC = frozenset(
         "motion/av/first-last-8s",
         "motion/silent/first-last-5s",
         "motion/av/audio-to-video-8s",
+        "motion/av/clip-chain",
         "stills/talking-head",
     }
 )
