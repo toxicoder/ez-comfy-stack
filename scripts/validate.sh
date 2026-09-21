@@ -125,6 +125,7 @@ path_matches_bazel_core() {
   [[ ${path} == tools/* ]] && return 0
   [[ ${path} == studio-ui/* ]] && return 0
   [[ ${path} == workflows/* ]] && return 0
+  [[ ${path} == schemas/* ]] && return 0
   [[ ${path} == docs/*.py ]] && return 0
   [[ ${path} == mypy.ini ]] && return 0
   [[ ${path} == pyrightconfig.json ]] && return 0
@@ -145,7 +146,6 @@ path_matches_bazel_core() {
 path_matches_docs() {
   local path="$1"
   [[ ${path} == docs/* ]] && return 0
-  [[ ${path} == mkdocs.yml ]] && return 0
   [[ ${path} == docs-site/* ]] && return 0
   [[ ${path} == includes/* ]] && return 0
   [[ ${path} == scripts/manage.sh ]] && return 0
@@ -170,6 +170,7 @@ path_matches_ci_graph() {
   [[ ${path} == MODULE.bazel.lock ]] && return 0
   [[ ${path} == .bazelrc ]] && return 0
   [[ ${path} == .bazelversion ]] && return 0
+  [[ ${path} == .bazelignore ]] && return 0
   [[ ${path} == fix.sh ]] && return 0
   [[ ${path} == scripts/validate.sh ]] && return 0
   return 1

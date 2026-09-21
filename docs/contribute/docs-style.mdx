@@ -11,7 +11,7 @@ tags: [docs, contributing, fumadocs, style]
 - **Required page chrome** — frontmatter, H1, What's on this page, What this enables
 - **ezcmd** — `id` must exist in `includes/command-builder.json`
 - **glossary.json** — do not inline a second glossary
-- **page-brief** (`.ez-page-brief` via leftover `docs/hooks.py` / Fumadocs remark) and session vars
+- **page-brief** (`.ez-page-brief` via Fumadocs remark / `docs/page_brief.py`) and session vars
 - **What not to do** — hide the header, paint indigo, hand-edit `docs/generated/`
 - **Code appearance** — Roboto Mono, fenced line-height from nvidia-dgx-spark-lab, inline terminal green
 
@@ -49,7 +49,7 @@ Every `docs/**/*.md` / `docs/**/*.mdx` page (including `docs/learn/`):
 3. **What's on this page** — bullet list (bold first phrase)
 4. **What this enables** — bullet list (bold first phrase)
 
-Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and leftover `docs/hooks.py` `on_post_page`) wraps the first pair after the page `h1` into `.ez-page-brief` via `docs/page_brief.py`. Titles stay `<p>`, not headings (they must not enter the TOC). Do not rewrite the pair as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon.
+Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin wraps the first pair after the page `h1` into `.ez-page-brief` (hermetic spec: `docs/page_brief.py`). Titles stay `<p>`, not headings (they must not enter the TOC). Do not rewrite the pair as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon.
 
 **Inverted pyramid:** outcome and commands first; theory later. Prefer relative links inside `docs/`.
 

@@ -1,5 +1,7 @@
 # Local env / secrets
 .env
+.env.*
+!.env.example
 .env.local
 *.pem
 *.key
@@ -11,10 +13,17 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .coverage
+.coverage.*
+coverage.xml
+nosetests.xml
 htmlcov/
 .venv/
 venv/
 *.egg-info/
+.tox/
+.nox/
+.hypothesis/
+.ipynb_checkpoints/
 
 # Shell coverage
 coverage/
@@ -43,7 +52,12 @@ comfy-state/
 
 # OS / IDE
 .DS_Store
+Thumbs.db
 .idea/
+*.log
+*.orig
+*.rej
+*.bak
 # Shared workspace files are tracked; keep local-only VS Code state ignored
 # (.env, history, task storage, unsaved extras).
 .vscode/*
@@ -65,7 +79,10 @@ docs-site/out-linux/
 docs-site/.deps-linux-stamp/
 docs-site/public/assets/
 docs-site/tsconfig.tsbuildinfo
+docs-site/tests/visual/actuals/
 .venv-docs/
+.turbo/
+.vercel/
 
 # Bazel build artifacts (never commit outputs)
 bazel-*
@@ -77,3 +94,9 @@ external/
 # Test temp
 /tmp/
 test-results/
+playwright-report/
+blob-report/
+
+# Accidental git clone of a URL as a directory name
+/https:/
+/http:/

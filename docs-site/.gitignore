@@ -7,3 +7,6 @@ out-linux/
 public/assets/
 __pycache__/
 tsconfig.tsbuildinfo
+tests/visual/actuals/
+playwright-report/
+blob-report/

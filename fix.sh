@@ -29,7 +29,7 @@ if command -v buildifier >/dev/null 2>&1; then
     ! -path '*/bazel-*/*' \
     ! -path './site/*' \
     ! -path './.venv*' \
-    ! -path './node_modules/*' \
+    ! -path '*/node_modules/*' \
     -exec buildifier -mode=fix {} +
 else
   echo "   (buildifier not in PATH - skipping)"
@@ -41,7 +41,7 @@ if command -v shfmt >/dev/null 2>&1; then
     ! -path '*/bazel-*/*' \
     ! -path './site/*' \
     ! -path './.venv*' \
-    ! -path './node_modules/*' \
+    ! -path '*/node_modules/*' \
     -exec shfmt -w -s -i 2 -ci {} +
 else
   echo "   (shfmt not in PATH - skipping)"

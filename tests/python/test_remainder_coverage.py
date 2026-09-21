@@ -1515,7 +1515,7 @@ def test_docs_shell_and_workflow_remainder(tmp_path: Path, monkeypatch: pytest.M
     assert exc.value.code == 0
 
 
-def test_docs_glossary_hooks_page_brief(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_docs_glossary_hooks_page_brief(tmp_path: Path) -> None:
     gloss = _load_docs("ez_gloss_rem", ROOT / "docs" / "glossary.py")
     assert gloss.relative_glossary_href("learn/comfyui/index.html", "klein").endswith("#klein")
     with pytest.raises(ValueError, match="object"):
@@ -1594,74 +1594,6 @@ def test_docs_glossary_hooks_page_brief(monkeypatch: pytest.MonkeyPatch, tmp_pat
     no_body = gloss.inject_glossary_assets("<html></html>", (term,))
     assert "ez-glossary-dialog" in no_body
     assert gloss._page_url(None) == ""
-
-    hooks = _load_docs("ez_hooks_rem", ROOT / "docs" / "hooks.py")
-    original_spec = hooks.importlib.util.spec_from_file_location
-    monkeypatch.setattr(
-        hooks.importlib.util,
-        "spec_from_file_location",
-        lambda *_a, **_k: None,
-    )
-    hooks._COMMANDS_MOD = None
-    with pytest.raises(ImportError):
-        hooks._commands_mod()
-    hooks._GLOSSARY_MOD = None
-    with pytest.raises(ImportError):
-        hooks._glossary_mod()
-    hooks._PAGE_BRIEF_MOD = None
-    with pytest.raises(ImportError):
-        hooks._page_brief_mod()
-    monkeypatch.setattr(hooks.importlib.util, "spec_from_file_location", original_spec)
-    hooks._COMMANDS_MOD = None
-    hooks._GLOSSARY_MOD = None
-    hooks._PAGE_BRIEF_MOD = None
-    assert hooks._parse_datetime("") is None
-    assert hooks._parse_datetime("999999999999999999999") is None
-    naive = hooks._parse_datetime("2020-01-01T00:00:00")
-    assert naive is not None and naive.tzinfo is not None
-    assert hooks._parse_datetime("not-a-date") is None
-    monkeypatch.setattr(
-        hooks.subprocess,
-        "run",
-        lambda *_a, **_k: (_ for _ in ()).throw(OSError("git")),
-    )
-    assert hooks._git_head_committer_date() is None
-    monkeypatch.setattr(
-        hooks.subprocess,
-        "run",
-        lambda *_a, **_k: (_ for _ in ()).throw(subprocess.TimeoutExpired(cmd="git", timeout=1)),
-    )
-    assert hooks._git_head_committer_date() is None
-    monkeypatch.setattr(
-        hooks.subprocess,
-        "run",
-        lambda *_a, **_k: types.SimpleNamespace(returncode=1, stdout=""),
-    )
-    assert hooks._git_head_committer_date() is None
-    hooks._published_cache = hooks._UNSET
-    monkeypatch.setenv("EZ_DOCS_PUBLISHED_AT", "2020-01-01T00:00:00Z")
-    first = hooks.published_at()
-    second = hooks.published_at()
-    assert first == second
-    monkeypatch.setattr(
-        hooks.importlib.util,
-        "spec_from_file_location",
-        lambda *_a, **_k: None,
-    )
-    with pytest.raises(ImportError):
-        hooks._workflow_docs_mod()
-    monkeypatch.setattr(hooks.importlib.util, "spec_from_file_location", original_spec)
-    monkeypatch.setattr(hooks, "docs_version", lambda: "development")
-    html = '<span class="ez-published-chip">x</span><h1>Hi</h1>'
-    out = hooks.on_post_page(html)
-    assert "ez-docs-dev-banner" in out
-    manifest = tmp_path / "manifest.json"
-    manifest.write_text("{", encoding="utf-8")
-    monkeypatch.setattr(hooks.Path, "is_file", lambda self: True)
-    monkeypatch.setattr(hooks.Path, "read_text", lambda self, encoding="utf-8": "{")
-    assert hooks.inject_workflow_nav({"nav": []})["nav"] == []
-    monkeypatch.setattr(hooks.Path, "read_text", lambda self, encoding="utf-8": '{"pages": 1}')
-    assert hooks.inject_workflow_nav({"nav": []})["nav"] == []
 
     brief = _load_docs("ez_brief_rem", ROOT / "docs" / "page_brief.py")
     assert brief._skip_ws("   ", 0) == 3
@@ -1838,17 +1770,6 @@ def test_remaining_one_liners(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
     assert any(item.startswith("### Orphan") for item in docs)
     gloss = _load_docs("ez_gloss_gap", ROOT / "docs" / "glossary.py")
     assert gloss._page_url(types.SimpleNamespace(url="learn/")) == "learn/"
-    hooks = _load_docs("ez_hooks_gap", ROOT / "docs" / "hooks.py")
-    monkeypatch.setattr(
-        hooks.subprocess,
-        "run",
-        lambda *_a, **_k: types.SimpleNamespace(returncode=2, stdout=""),
-    )
-    assert hooks._git_head_committer_date() is None
-    monkeypatch.setattr(hooks, "docs_version", lambda: "development")
-    html = '<article class="md-content__inner"><h1>Hi</h1></article>'
-    out_html = hooks.on_post_page(html)
-    assert "ez-docs-dev-banner" in out_html
     import importlib
     import sitecustomize as sc
 

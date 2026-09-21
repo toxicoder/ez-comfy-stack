@@ -39,6 +39,32 @@ teardown() {
   grep -qF '.devcontainer/**' "${REPO_ROOT}/.github/workflows/ci.yml"
 }
 
+@test "bazel-core path filters include schemas" {
+  grep -qF 'schemas/*' "${REPO_ROOT}/scripts/validate.sh"
+  grep -qF 'schemas/**' "${REPO_ROOT}/.github/workflows/ci.yml"
+}
+
+@test "ci-graph path filters include bazelignore" {
+  grep -qF '.bazelignore' "${REPO_ROOT}/scripts/validate.sh"
+  grep -qF '.bazelignore' "${REPO_ROOT}/.github/workflows/ci.yml"
+}
+
+@test "shellcheck and fix skip nested node_modules" {
+  grep -qF "*/node_modules/*" "${REPO_ROOT}/lints/run_shellcheck.sh"
+  grep -qF "*/node_modules/*" "${REPO_ROOT}/fix.sh"
+  grep -qF "*/node_modules/*" "${REPO_ROOT}/lints/buildifier_check.sh"
+  run grep -F "./node_modules/*" "${REPO_ROOT}/lints/run_shellcheck.sh"
+  [ "$status" -ne 0 ]
+}
+
+@test "shfmt allowlist includes docs-site and setup-docs shell" {
+  local shfmt="${REPO_ROOT}/lints/run_shfmt.sh"
+  grep -qF 'docs/setup-docs.sh' "${shfmt}"
+  grep -qF 'docs-site/run_npm.sh' "${shfmt}"
+  grep -qF 'docs-site/scripts/visual_linux.sh' "${shfmt}"
+  grep -qF 'docs-site/scripts/visual_linux_in_container.sh' "${shfmt}"
+}
+
 @test "MODULE.bazel is Bzlmod with rules_shell and hermetic bats-core" {
   local mod="${REPO_ROOT}/MODULE.bazel"
   [ -f "${mod}" ]

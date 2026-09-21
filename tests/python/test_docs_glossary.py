@@ -18,11 +18,9 @@ ROOT = Path(__file__).resolve().parents[2]
 GLOSSARY_PY = ROOT / "docs" / "glossary.py"
 GLOSSARY_JSON = ROOT / "includes" / "glossary.json"
 GLOSSARY_MD = ROOT / "docs" / "glossary.md"
-GLOSSARY_JS = ROOT / "docs" / "javascripts" / "glossary.js"
 EXTRA_CSS = ROOT / "docs-site" / "app" / "global.css"
 EZ_TERM_TSX = ROOT / "docs-site" / "components" / "ez-term.tsx"
 NAV_JSON = ROOT / "docs-site" / "lib" / "nav.json"
-HOOKS_PY = ROOT / "docs" / "hooks.py"
 REMARK_GLOSSARY = ROOT / "docs-site" / "lib" / "remark-glossary.ts"
 DOCS = ROOT / "docs"
 
@@ -318,6 +316,12 @@ def test_real_glossary_json_schema() -> None:
             assert ref in id_set, f"{term.id} see_also {ref!r}"
 
 
+def test_render_placeholder_noop_without_marker(gloss: ModuleType) -> None:
+    """Pages without the placeholder are unchanged."""
+    src = "# Glossary\n\nNo marker here.\n"
+    assert gloss.render_placeholder(src) == src
+
+
 def test_rendered_glossary_lists_every_title() -> None:
     """glossary.md placeholder expands to every shipped title."""
     gloss = _load_glossary_mod()
@@ -353,12 +357,12 @@ def test_mkdocs_wires_glossary_assets() -> None:
 
 
 def test_glossary_js_uses_native_dialog() -> None:
-    """Modal script uses showModal and keyboard activation."""
-    js = GLOSSARY_JS.read_text(encoding="utf-8")
-    assert "showModal" in js
-    assert "ez-term" in js
-    assert "ez-glossary-dialog" in js
-    assert "keydown" in js
+    """Modal uses showModal and keyboard activation."""
+    tsx = EZ_TERM_TSX.read_text(encoding="utf-8")
+    assert "showModal" in tsx
+    assert "ez-term" in tsx
+    assert "ez-glossary-dialog" in tsx
+    assert "onKeyDown" in tsx
 
 
 def test_ez_term_opens_centered_modal() -> None:
@@ -418,11 +422,11 @@ def test_wrap_new_operator_aliases(gloss: ModuleType) -> None:
 
 
 def test_glossary_js_fills_category() -> None:
-    """Modal script writes the category line from the JSON payload."""
-    js = GLOSSARY_JS.read_text(encoding="utf-8")
-    assert "ez-glossary-category" in js
-    assert "term.category" in js
-    assert "data-short" in js
+    """Modal writes the category line from the term payload."""
+    tsx = EZ_TERM_TSX.read_text(encoding="utf-8")
+    assert "ez-glossary-dialog__category" in tsx
+    assert "{category}" in tsx
+    assert "data-short" in tsx
 
 
 def test_extra_css_hover_tooltip_without_hiding() -> None:
@@ -433,13 +437,6 @@ def test_extra_css_hover_tooltip_without_hiding() -> None:
     assert "opacity" in css
     assert re.search(r"display\s*:\s*none", css) is None
     assert re.search(r"visibility\s*:\s*hidden", css) is None
-
-
-def test_hooks_source_calls_glossary() -> None:
-    """hooks.py stamps first, then glossary render/wrap."""
-    text = HOOKS_PY.read_text(encoding="utf-8")
-    assert "render_placeholder" in text
-    assert "apply_glossary" in text
 
 
 def test_docs_pages_have_required_chrome() -> None:

@@ -68,9 +68,11 @@ REQUIRED_UNWANTED = (
 EXPLORER_HIDE = (
     "coverage",
     "docs-site/.next",
+    "docs-site/.source",
     "docs-site/node_modules",
     "docs-site/out",
     "docs-site/out-linux",
+    ".venv-docs",
     "site",
 )
 WATCHER_HIDE = (

@@ -2,8 +2,8 @@
 
 Turns the first ``What's on this page`` / ``What this enables`` pair after
 the page ``h1`` into a two-column ``ez-page-brief`` card. Source markdown
-stays bold + bullets; this module runs on rendered HTML from
-``docs/hooks.py`` ``on_post_page``. Stdlib only (hermetic pytest).
+stays bold + bullets; this module is the hermetic HTML wrap spec
+mirrored by the Fumadocs remark plugin. Stdlib only (hermetic pytest).
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ _TAG_RE = re.compile(r"<(/?)([A-Za-z][A-Za-z0-9]*)([^>]*)>", re.DOTALL)
 _UL_OPEN_RE = re.compile(r"<ul\b[^>]*>", re.IGNORECASE)
 
 # Material outline-style list and check icons (24 viewBox), same SVG
-# contract as the last-published chip in docs/hooks.py.
+# contract as the last-published chip in docs-site/components/published-chip.tsx.
 _LIST_SVG = (
     '<svg class="ez-page-brief__icon" xmlns="http://www.w3.org/2000/svg" '
     'viewBox="0 0 24 24" aria-hidden="true" focusable="false">'

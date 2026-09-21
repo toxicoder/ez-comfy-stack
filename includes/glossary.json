@@ -1004,7 +1004,7 @@
     "aliases": ["ezcmd"],
     "category": "Studio",
     "short": "Interactive docs fence: body `id: <recipe>` matching includes/command-builder.json.",
-    "long": "Flagged operator examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. `docs/hooks.py` expands the fence into a copyable command with Your Spark chips. See [Project conventions](project-conventions.md) and [manage.sh reference](manage-cli.md).",
+    "long": "Flagged operator examples use a fenced `ezcmd` block whose body is `id: <recipe>` matching `includes/command-builder.json`. Fumadocs expands the fence into a copyable command with Your Spark chips. See [Project conventions](project-conventions.md) and [manage.sh reference](manage-cli.md).",
     "see_also": ["manage-sh"]
   },
   {

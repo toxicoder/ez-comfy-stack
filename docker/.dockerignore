@@ -10,6 +10,7 @@
 !patch_unified_memory_copy.py
 !patch_magcache_compat.py
 !patch_vhs_widget_inputs.py
+!patch_common.py
 !seed_clay_inputs.py
 !pythonpath/
 !pythonpath/**

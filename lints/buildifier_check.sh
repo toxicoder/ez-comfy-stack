@@ -26,6 +26,6 @@ find . -type f \( \
   ! -path '*/bazel-*/*' \
   ! -path './site/*' \
   ! -path './.venv*' \
-  ! -path './node_modules/*' \
+  ! -path '*/node_modules/*' \
   -exec buildifier -mode=check {} +
 echo "buildifier check passed."

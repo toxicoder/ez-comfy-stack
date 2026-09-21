@@ -174,7 +174,7 @@ def output_root(*, default: str | Path | None = _DEFAULT_OUTPUT) -> Path:
     """
 ```
 
-Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site widgets live in `docs-site/components/` (leftover Material JS in `docs/javascripts/` still follows that pattern until it is deleted).
+Custom-node frontends under `custom_nodes/*/js/` use a file `/**` banner and JSDoc `@param` / `@returns` on every `function` (`tests/python/test_jsdoc.py`). Docs site widgets live in `docs-site/components/`.
 
 ### Entry script skeleton
 
@@ -336,7 +336,7 @@ Contributor how-to (scan + voice): [Docs style](contribute/docs-style.md). How d
 - Code appearance matches [nvidia-dgx-spark-lab](https://github.com/toxicoder/nvidia-dgx-spark-lab) text styling, not their body type scale: **Roboto Mono** / `ui-monospace` stack; fenced `article pre > code` uses `line-height: 1.55` and extra padding; prose / table / list `code` is terminal green `rgb(134, 183, 55)`. Do **not** paint `pre > code` solid green. Do **not** copy spark-lab table `overflow: hidden` (breaks `.ez-table-pin`) or their `0.82rem` typeset.
 - Table headers: `docs-site/components/table-chrome.tsx` clones `table:not([class]) thead` into a `.ez-table-pin` overlay that sits under the navbar while scrolling, then releases so the last row and 25% (`0.25`) of the previous row stay visible. Hide the pin **and** the h-scroll bar once the table is fully above the navbar or below the viewport (`inStickyBand`) so a `position: fixed` clone cannot stay stuck after the table has scrolled past. The clone pans with wrap `scrollLeft` (`translateX`) so column labels stay aligned while the table scrolls horizontally. When the table is wider than the article **and** taller than the viewport, the native wrap bar sits off-screen at wrap bottom — the component mirrors it with a `position: fixed` `.ez-table-hscroll` bar at the viewport bottom (same `scrollLeft`). Do **not** use `position: sticky` on `th` or the h-scroll bar. Keep **`display: table`** and **overflow visible** on the table. Do not `position: fixed` the original thead (the overlay is the fixed clone).
 - Prefer **relative** links between pages and to in-repo paths so they stay correct on every git branch and under each published version prefix
-- Branch-stamped at build time via `docs-site/lib/site.ts` (same behaviour as leftover `docs/hooks.py` + `EZ_DOCS_VERSION` / `MIKE_DOCS_VERSION` / `DGX_DOCS_VERSION`; optional `EZ_DOCS_GIT_REF` override):
+- Branch-stamped at build time via `docs-site/lib/site.ts` (`EZ_DOCS_VERSION` / `DGX_DOCS_VERSION`; optional `EZ_DOCS_GIT_REF` override):
   - Edit links (`edit/<ref>/docs/`)
   - This-repo GitHub `blob` / `tree` URLs
   - Operator Setup git ref: write `__DOCS_GIT_REF__` in source (e.g. `git clone -b __DOCS_GIT_REF__`); the app stamps `main` or `development` to match the published alias
@@ -355,7 +355,7 @@ Readers **scan**. Prefer inverted pyramid: outcome and commands first, theory an
 2. **What's on this page** (bullet list)
 3. **What this enables** (bullet list)
 
-Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and leftover `docs/hooks.py` `wrap_page_brief` / `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe …: …"`).
+Author those two lists as **bold + bullets** in source. The Fumadocs remark plugin (and hermetic `docs/page_brief.py`) wraps the first pair after the page `h1` into `.ez-page-brief`: a two-column scan card (stacked under `44.99em`). Titles stay `<p>`, not headings, so they do not enter the TOC. Do not rewrite pages as a fence, admonition, or card grid. Trailing `**Who this is for:**` stays outside the card. Quote YAML scalars that contain a colon (`description: "US-safe …: …"`).
 
 **Nav (Diátaxis-shaped, task tabs):** Learn (explanation + [glossary](glossary.md)) → Start (tutorial) → Create (how-to) → Operate (how-to + reference) → Contribute. Do not mix a command catalog into Getting Started (`manage-cli.md`) or a workflow spreadsheet into the playbook (`studio-workflows.md`).
 
