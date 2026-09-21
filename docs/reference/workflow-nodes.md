@@ -1681,9 +1681,9 @@ Overlay a spoken bumper on the mix wav.
 
 Type `FLOAT`. Range / default: 0.5–1.5, 1.0.
 
-Clone speaking rate.
+Fit ceiling for duration lock.
 
-**How it affects generation:** Stay near 1.0 or the duration lock fights you.
+**How it affects generation:** 1.0 uses the lab 1.25× pitch-preserving lock, then spill, then fade-trim the end.
 
 #### `cfg_weight`
 

@@ -872,6 +872,14 @@ def test_sanitize_strips_think_and_translation_prefix() -> None:
         language="es",
     )
     assert cleaned == "Bienvenidos de nuevo a la cinta."
+    assert (
+        sanitize_target(
+            "hola equipo",
+            source_text="hello team",
+            language="es",
+        )
+        == "Hola equipo."
+    )
 
 
 def test_sanitize_drops_voice_model_tail() -> None:
@@ -1142,8 +1150,8 @@ def test_translate_turns_empty_model_is_passthrough_not_success(monkeypatch: pyt
     out, reason = pipeline.translate_turns(_two_en_turns(), "es", "en", enhance=True)
     assert reason
     assert "passthrough" in reason or "timeout" in reason
-    assert out[0]["text_target"] == "Welcome back to the tape."
-    assert out[1]["text_target"] == "Today we stay on the match."
+    assert out[0]["text_target"] == ""
+    assert out[1]["text_target"] == ""
 
 
 def test_translate_turns_same_language_skips_llm(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -1396,7 +1404,11 @@ def test_whisper_transcribe_extra_kwargs_typeerror_fallback(
 
     def _transcribe(_path: str, **kwargs: Any) -> Any:
         calls.append(dict(kwargs))
-        if "beam_size" in kwargs or "condition_on_previous_text" in kwargs:
+        if (
+            "beam_size" in kwargs
+            or "condition_on_previous_text" in kwargs
+            or kwargs.get("word_timestamps") is True
+        ):
             raise TypeError("unexpected kwargs")
         return [_Seg()], _Info()
 
@@ -1410,6 +1422,12 @@ def test_whisper_transcribe_extra_kwargs_typeerror_fallback(
     assert turns and turns[0]["text"] == "Hello"
     assert any(c.get("beam_size") == 5 for c in calls)
     assert any(c.get("condition_on_previous_text") is False for c in calls)
+    assert any(c.get("word_timestamps") is True for c in calls)
+    assert any(
+        c.get("hallucination_silence_threshold")
+        == pipeline.ASR_HALLUCINATION_SILENCE_S
+        for c in calls
+    )
     assert any(
         "beam_size" not in c and "condition_on_previous_text" not in c for c in calls
     )
@@ -2050,7 +2068,7 @@ def test_render_mix_skips_source_text_when_target_empty(
         pipeline.tts_hook = None
     assert mix == []
     assert seen == []
-    assert "spoken" in status.lower() or "clone" in status.lower()
+    assert pipeline.NO_TARGET_STATUS in status
     assert not (dest / "ez_dub_yt.wav").is_file()
 
 
@@ -3450,11 +3468,278 @@ def test_try_qwen3tts_passes_ref_audio_and_text(
 
 
 def test_translate_prompt_requires_grammar_not_length() -> None:
-    text = pipeline.load_translate_prompt().lower()
+    raw = pipeline.load_translate_prompt()
+    text = raw.lower()
     assert "spoken length" not in text
     assert "same length" not in text
     assert "clitic" in text or "grammatical" in text
-    assert "/no_think" in pipeline.load_translate_prompt()
+    assert "compact spoken line" in text
+    assert "/no_think" in raw
+
+
+def test_fit_speed_cap_default_uses_max_speed() -> None:
+    assert pipeline.fit_speed_cap(1.0) == align.MAX_SPEED
+    assert pipeline.fit_speed_cap(0.5) == align.MAX_SPEED
+    assert pipeline.fit_speed_cap(1.25) == align.MAX_SPEED
+    assert pipeline.fit_speed_cap(1.5) == align.MAX_SPEED
+    assert pipeline.fit_speed_cap(1.1) == pytest.approx(1.1)
+    assert pipeline.CLONE_REPETITION_PENALTY == 1.2
+
+
+def test_whisper_word_timestamps_tighten_turn_window(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    wav = tmp_path / "clip.wav"
+    dub_audio.write_wav(wav, [0.1] * 2400, 24000)
+
+    class _Word:
+        def __init__(self, start: float, end: float) -> None:
+            self.start = start
+            self.end = end
+
+    class _Seg:
+        text = "Hello"
+        start = 0.0
+        end = 1.0
+        words = [_Word(0.12, 0.18), _Word(0.20, 0.41)]
+
+    class _SegDict:
+        text = "There"
+        start = 1.0
+        end = 2.0
+        words = [{"start": 1.05, "end": 1.20}, {"start": 1.22, "end": 1.55}]
+
+    class _Info:
+        language = "en"
+
+    class _Model:
+        @staticmethod
+        def transcribe(_path: str, **kwargs: Any) -> Any:
+            del kwargs
+            return [_Seg(), _SegDict()], _Info()
+
+    monkeypatch.setattr(pipeline, "_get_whisper", lambda: (_Model(), ""))
+    turns, detected, reason = pipeline._whisper_segments(wav, "en")
+    assert reason == ""
+    assert detected == "en"
+    assert turns[0]["t0"] == pytest.approx(0.12)
+    assert turns[0]["t1"] == pytest.approx(0.41)
+    assert turns[1]["t0"] == pytest.approx(1.05)
+    assert turns[1]["t1"] == pytest.approx(1.55)
+
+
+def test_whisper_word_timestamps_ignore_unfloatable(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    wav = tmp_path / "clip.wav"
+    dub_audio.write_wav(wav, [0.1] * 2400, 24000)
+
+    class _Seg:
+        text = "Hello"
+        start = 0.2
+        end = 0.8
+        words = [{"start": object(), "end": object()}]
+
+    class _Info:
+        language = "en"
+
+    class _Model:
+        @staticmethod
+        def transcribe(_path: str, **kwargs: Any) -> Any:
+            del kwargs
+            return [_Seg()], _Info()
+
+    monkeypatch.setattr(pipeline, "_get_whisper", lambda: (_Model(), ""))
+    turns, _detected, reason = pipeline._whisper_segments(wav, "en")
+    assert reason == ""
+    assert turns[0]["t0"] == pytest.approx(0.2)
+    assert turns[0]["t1"] == pytest.approx(0.8)
+
+
+def test_synthesize_turn_crops_hush_per_chunk() -> None:
+    rate = 24000
+    hush = [0.0] * rate
+    speech = _am_speech(rate, 0.4)
+
+    def _tts(
+        text: str, language: str, ref_wav: str, engine: str
+    ) -> tuple[list[float], int]:
+        del text, language, ref_wav, engine
+        return hush + speech, rate
+
+    pipeline.tts_hook = _tts
+    try:
+        pcm, out_rate, err = pipeline.synthesize_turn(
+            ("palabra " * 80).strip(), "es", "", ENGINE_CHATTERBOX
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert err == ""
+    assert out_rate == rate
+    assert pcm
+    uncropped = 3 * (rate + int(0.4 * rate))
+    assert len(pcm) < uncropped // 2
+    assert pipeline.rms(pcm[: rate // 4]) > 0.01
+
+
+def test_render_mix_default_speed_uses_max_speed(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 8.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = dub_turns.parse_payload(EXAMPLE_SCRIPT)
+    seen_cap: list[float] = []
+    real_fit = pipeline.fit_turn
+
+    def _fit(
+        pcm: list[float],
+        rate_i: int,
+        window: float,
+        spill_s: float = 0.0,
+        max_speed: float = align.MAX_SPEED,
+        min_stretch: float = align.MIN_STRETCH,
+    ) -> Any:
+        seen_cap.append(float(max_speed))
+        return real_fit(
+            pcm,
+            rate_i,
+            window,
+            spill_s=spill_s,
+            max_speed=max_speed,
+            min_stretch=min_stretch,
+        )
+
+    monkeypatch.setattr(pipeline, "fit_turn", _fit)
+
+    def _tts(
+        text: str, language: str, ref_wav: str, engine: str
+    ) -> tuple[list[float], int]:
+        del language, ref_wav, engine
+        n = max(rate, len(text) * 80)
+        return _am_speech(rate, n / float(rate)), rate
+
+    pipeline.tts_hook = _tts
+    try:
+        mix, _out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+            speed=1.0,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert mix
+    assert "cloned" in status
+    assert seen_cap
+    assert all(abs(cap - align.MAX_SPEED) < 1e-9 for cap in seen_cap)
+
+
+def test_render_mix_empty_cross_lang_targets_do_not_clone_english(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 8.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    turns = [
+        {
+            "id": 1,
+            "speaker": "spk00",
+            "t0": 0.4,
+            "t1": 2.8,
+            "text": "Welcome back to the tape.",
+            "text_target": "",
+            "overlap": False,
+            "rms": 0.1,
+        }
+    ]
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": turns,
+    }
+
+    def _tts(
+        text: str, language: str, ref_wav: str, engine: str
+    ) -> tuple[list[float], int]:
+        del text, language, ref_wav, engine
+        raise AssertionError("must not clone empty cross-lang targets")
+
+    pipeline.tts_hook = _tts
+    monkeypatch.setattr(pipeline, "preflight_clone", lambda: "")
+    try:
+        mix, _out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert mix == []
+    assert pipeline.NO_TARGET_STATUS in status
+
+
+def test_render_mix_no_source_text_is_empty(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    _passthrough_ffmpeg(monkeypatch)
+    dest = tmp_path / "dubs" / "ep"
+    dest.mkdir(parents=True)
+    rate = 24000
+    samples = _am_speech(rate, 2.0)
+    dub_audio.write_wav(dest / "source.wav", samples, rate)
+    payload = {
+        "target_language": "es",
+        "source_language": "en",
+        "stage": "all",
+        "status": "",
+        "turns": [
+            {
+                "id": 1,
+                "speaker": "spk00",
+                "t0": 0.0,
+                "t1": 1.0,
+                "text": "",
+                "text_target": "",
+                "overlap": False,
+                "rms": 0.0,
+            }
+        ],
+    }
+    pipeline.tts_hook = lambda *a, **k: (_am_speech(rate, 0.4), rate)
+    try:
+        mix, _out_rate, status = pipeline.render_mix(
+            samples,
+            rate,
+            payload,
+            dest,
+            engine=ENGINE_CHATTERBOX,
+            keep_bed=True,
+            spoken_disclosure=False,
+        )
+    finally:
+        pipeline.tts_hook = None
+    assert mix == []
+    assert "no spoken text" in status
 
 
 def test_ezdub_render_clone_knob_widgets() -> None:

@@ -120,6 +120,13 @@ def test_dub_localize_graph() -> None:
     assert "320 kbps MP3 (duration-locked)" not in note
     assert "ez_dub_yt.wav" in note
     assert "empty mix" in note
+    assert "Kokoro default" not in blob
+    speed_help = ""
+    for entry in graph["extra"]["linearData"]["inputs"]:
+        if entry[1] == "speed":
+            speed_help = str((entry[2] or {}).get("description") or "")
+    assert "1.25" in speed_help
+    assert "Kokoro" not in speed_help
     outputs = graph["extra"]["linearData"]["outputs"]
     assert 3 in outputs
 

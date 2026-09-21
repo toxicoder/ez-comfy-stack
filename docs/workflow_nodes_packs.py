@@ -170,7 +170,7 @@ def pack_nodes() -> dict[str, Any]:
             _w("engine", index=0, typ="COMBO", rng="chatterbox-ml", desc="Clone engine.", gen="chatterbox-ml is the lab default. qwen3tts is opt-in.", choices=[("chatterbox-ml", "Lab default."), ("qwen3tts", "Opt-in Qwen3-TTS.")]),
             _w("keep_bed", index=1, typ="BOOLEAN", rng="true", desc="Keep source bed under the clone.", gen="true duration-locks to the source (YouTube Languages)."),
             _w("spoken_disclosure", index=2, typ="BOOLEAN", rng="false", desc="Overlay a spoken bumper on the mix wav.", gen="Off: mix starts on speech. YT wav stays source-timed either way."),
-            _w("speed", index=3, typ="FLOAT", rng="0.5–1.5, 1.0", desc="Clone speaking rate.", gen="Stay near 1.0 or the duration lock fights you."),
+            _w("speed", index=3, typ="FLOAT", rng="0.5–1.5, 1.0", desc="Fit ceiling for duration lock.", gen="1.0 uses the lab 1.25× pitch-preserving lock, then spill, then fade-trim the end."),
             _w("cfg_weight", index=4, typ="FLOAT", rng="−1.0 = auto", desc="Clone CFG.", gen="−1 auto. Lab auto 0.3 on EN→ES (retry 0.5)."),
             _w("exaggeration", index=5, typ="FLOAT", rng="0.25–2.0, 0.5", desc="Chatterbox exaggeration.", gen="0.5 is the lab default. Higher is cartoon-emotive."),
         ],

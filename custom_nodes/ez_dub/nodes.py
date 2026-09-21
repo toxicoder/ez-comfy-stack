@@ -337,7 +337,8 @@ class EZDubRender:
     OUTPUT_NODE = True
     DESCRIPTION = (
         "Zero-shot clone (Chatterbox Multilingual V3 or Qwen3-TTS) with "
-        "PerTh on. Cross-lang CFG auto is 0.3. Writes duration-locked YT WAV + "
+        "PerTh on. Cross-lang CFG auto is 0.3. Default speaking speed 1.0 uses "
+        "the 1.25× pitch-preserving lock. Writes duration-locked YT WAV + "
         "SRT + disclosure sidecars. Spoken bumper (off by default) overlays "
         "the mix wav only. Off: mix starts on speech; YT wav stays source-timed."
     )
@@ -360,7 +361,7 @@ class EZDubRender:
             engine: Clone engine id.
             keep_bed: Keep source in non-speech gaps.
             spoken_disclosure: Overlay a localized bumper on the mix wav.
-            speed: Time-compression ceiling (1.0 is unchanged).
+            speed: Fit ceiling. ``1.0`` uses the lab 1.25× lock.
             cfg_weight: Chatterbox CFG; ``< 0`` means auto.
             exaggeration: Chatterbox exaggeration.
             job_id: Optional ingest slug.

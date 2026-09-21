@@ -1085,7 +1085,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setattr("ez_prompt_enhance.client.complete", _pass)
     out_p, why_p = pipeline.translate_turns(_two_turns(), "es", "en", enhance=True)
     assert "passthrough" in why_p
-    assert out_p[0]["text_target"] == "Welcome back to the tape."
+    assert out_p[0]["text_target"] == ""
 
     def _suspect(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, user, kwargs
@@ -1094,7 +1094,7 @@ def test_translate_turns_remaining_reason_paths(monkeypatch: pytest.MonkeyPatch)
     monkeypatch.setattr("ez_prompt_enhance.client.complete", _suspect)
     out_s, why_s = pipeline.translate_turns(_two_turns(), "es", "en", enhance=True)
     assert "passthrough" in why_s or "suspect" in why_s
-    assert out_s[0]["text_target"]
+    assert out_s[0]["text_target"] == ""
 
     def _mix(system: str, user: str, **kwargs: Any) -> tuple[str, str | None]:
         del system, kwargs
