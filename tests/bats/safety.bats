@@ -108,10 +108,13 @@ teardown() {
   [ "$status" -eq 0 ]
   run grep -E '^!patch_vhs_widget_inputs\.py$' "${di}"
   [ "$status" -eq 0 ]
+  run grep -E '^!patch_common\.py$' "${di}"
+  [ "$status" -eq 0 ]
   run grep -E '^!seed_clay_inputs\.py$' "${di}"
   [ "$status" -eq 0 ]
   [[ -f ${REPO_ROOT}/docker/patch_magcache_compat.py ]]
   [[ -f ${REPO_ROOT}/docker/patch_vhs_widget_inputs.py ]]
+  [[ -f ${REPO_ROOT}/docker/patch_common.py ]]
   [[ -f ${REPO_ROOT}/docker/seed_clay_inputs.py ]]
   # Guard future COPY lines: every context source must have a `!` exception.
   run python3 -c '
@@ -167,6 +170,58 @@ if missing:
 ' "${df}" "${di}"
   [ "$status" -eq 0 ]
   [ -z "${output}" ]
+  # Shared helper imported by every Spark patch must ship in the image
+  # and on the compose bind, or python3 /opt/ez-comfy/patch_*.py ImportError
+  # is swallowed by entrypoint || true.
+  run python3 -c '
+import pathlib
+import re
+import sys
+
+root = pathlib.Path(sys.argv[1])
+docker = root / "docker"
+di = (docker / ".dockerignore").read_text()
+df = (docker / "Dockerfile").read_text()
+compose = (docker / "docker-compose.yml").read_text()
+joined = []
+buf = ""
+for raw in df.splitlines():
+    s = raw.rstrip()
+    if buf:
+        s = buf + " " + s.lstrip()
+        buf = ""
+    if s.endswith("\\"):
+        buf = s[:-1].rstrip()
+        continue
+    joined.append(s)
+copy_text = "\n".join(joined)
+missing = []
+if "!patch_common.py" not in di.splitlines():
+    missing.append("dockerignore")
+if not re.search(r"COPY\s+.*\bpatch_common\.py\b", copy_text):
+    missing.append("Dockerfile")
+if "patch_common.py:/opt/ez-comfy/patch_common.py" not in compose:
+    missing.append("compose")
+importers = []
+for path in sorted(docker.glob("patch_*.py")):
+    if path.name == "patch_common.py":
+        continue
+    text = path.read_text()
+    if re.search(r"^(from patch_common import|import patch_common)\b", text, re.M):
+        importers.append(path.name)
+        if not re.search(rf"COPY\s+.*\b{re.escape(path.name)}\b", copy_text):
+            missing.append(f"COPY {path.name}")
+        needle = f"{path.name}:/opt/ez-comfy/{path.name}"
+        if needle not in compose:
+            missing.append(f"compose {path.name}")
+if not importers:
+    missing.append("no patch_*.py imports patch_common")
+if missing:
+    sys.stdout.write("\n".join(missing))
+    sys.exit(1)
+' "${REPO_ROOT}"
+  [ "$status" -eq 0 ]
+  [ -z "${output}" ]
 }
 
 @test "Dockerfile layer order keeps multi-GB prebuild cache stable" {
@@ -211,6 +266,7 @@ if missing:
   [[ "${torch_copy}" != *patch_unified_memory_copy* ]]
   [[ "${torch_copy}" != *patch_magcache_compat* ]]
   [[ "${torch_copy}" != *patch_vhs_widget_inputs* ]]
+  [[ "${torch_copy}" != *patch_common* ]]
   [[ "${torch_copy}" != *seed_clay_inputs* ]]
   [[ "${torch_copy}" != *install-comfy.sh* ]]
   [[ "${torch_pins}" == *TORCH_VERSION* ]]
@@ -284,6 +340,8 @@ if missing:
   run grep -E 'patch_magcache_compat\.py:/opt/ez-comfy/patch_magcache_compat\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'patch_vhs_widget_inputs\.py:/opt/ez-comfy/patch_vhs_widget_inputs\.py' "${compose}"
+  [ "$status" -eq 0 ]
+  run grep -E 'patch_common\.py:/opt/ez-comfy/patch_common\.py' "${compose}"
   [ "$status" -eq 0 ]
   run grep -E 'seed_clay_inputs\.py:/opt/ez-comfy/seed_clay_inputs\.py' "${compose}"
   [ "$status" -eq 0 ]

@@ -194,7 +194,8 @@ COPY --link --from=nodes /opt/parts/app /opt/comfy-prebuilt
 COPY --chmod=755 install-comfy.sh entrypoint.sh /opt/ez-comfy/
 COPY --chmod=755 install-comfy/ /opt/ez-comfy/install-comfy/
 COPY --chmod=644 patch_get_free_memory.py patch_unified_memory_copy.py \
-    patch_magcache_compat.py patch_vhs_widget_inputs.py seed_clay_inputs.py \
+    patch_magcache_compat.py patch_vhs_widget_inputs.py patch_common.py \
+    seed_clay_inputs.py \
     /opt/ez-comfy/
 # PYTHONPATH sitecustomize: optional torch.backends.python_native.triton disable
 COPY --chmod=644 pythonpath/ /opt/ez-comfy/pythonpath/
