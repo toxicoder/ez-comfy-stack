@@ -1,6 +1,7 @@
 {
   "bazel.buildifierExecutable": "buildifier",
   "bazel.executable": "bazelisk",
+  "css.lint.unknownAtRules": "ignore",
   "editor.formatOnSave": false,
   "editor.insertSpaces": true,
   "editor.rulers": [80, 100],
@@ -12,7 +13,9 @@
     "BUILD.bazel": "starlark",
     "MODULE.bazel": "starlark",
     "WORKSPACE": "starlark",
-    "WORKSPACE.bazel": "starlark"
+    "WORKSPACE.bazel": "starlark",
+    "compose*.yml": "dockercompose",
+    "docker-compose*.yml": "dockercompose"
   },
   "files.encoding": "utf8",
   "files.eol": "\n",
@@ -20,16 +23,25 @@
     "**/.mypy_cache": true,
     "**/.pytest_cache": true,
     "**/.ruff_cache": true,
+    "**/.venv": true,
     "**/__pycache__": true,
     "bazel-bin": true,
     "bazel-ez-comfy-stack": true,
     "bazel-out": true,
-    "bazel-testlogs": true
+    "bazel-testlogs": true,
+    "coverage": true,
+    "docs-site/.next": true,
+    "docs-site/node_modules": true,
+    "docs-site/out": true,
+    "docs-site/out-linux": true,
+    "site": true
   },
   "files.insertFinalNewline": true,
   "files.readonlyInclude": {
+    "docs-site/out/**": true,
     "docs/generated/**": true,
-    "docs/reference/workflow-nodes.md": true
+    "docs/reference/workflow-nodes.md": true,
+    "site/**": true
   },
   "files.trimTrailingWhitespace": true,
   "files.watcherExclude": {
@@ -42,11 +54,14 @@
     "docs-site/.next/**": true,
     "docs-site/out-linux/**": true,
     "docs-site/out/**": true,
+    "docs-site/public/assets/**": true,
+    "docs/assets/**": true,
     "site/**": true
   },
   "git.branchProtection": ["development", "main"],
   "git.branchProtectionPrompt": "alwaysPrompt",
   "git.inputValidationSubjectLength": 72,
+  "mypy-type-checker.cwd": "${workspaceFolder}",
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "python.analysis.indexing": true,
   "python.languageServer": "Pylance",
@@ -79,10 +94,25 @@
   "shellcheck.useWorkspaceRootAsCwd": true,
   "shfmt.executableArgs": ["-s", "-i", "2", "-ci"],
   "shfmt.executablePath": "shfmt",
+  "tailwindCSS.experimental.configFile": "docs-site/app/global.css",
+  "tailwindCSS.includeLanguages": {
+    "mdx": "html"
+  },
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "docs-site/node_modules/typescript/lib",
   "[bazel]": {
     "editor.defaultFormatter": "bazelbuild.vscode-bazel",
     "editor.formatOnSave": true
+  },
+  "[css]": {
+    "editor.formatOnSave": false
+  },
+  "[github-actions-workflow]": {
+    "editor.formatOnSave": false
+  },
+  "[javascript]": {
+    "editor.formatOnSave": false,
+    "editor.tabSize": 2
   },
   "[json]": {
     "editor.formatOnSave": false
@@ -91,10 +121,12 @@
     "editor.formatOnSave": false
   },
   "[markdown]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    "files.trimTrailingWhitespace": false
   },
   "[mdx]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": false,
+    "files.trimTrailingWhitespace": false
   },
   "[python]": {
     "editor.formatOnSave": false,
@@ -116,6 +148,10 @@
     "editor.tabSize": 2
   },
   "[typescriptreact]": {
+    "editor.formatOnSave": false,
+    "editor.tabSize": 2
+  },
+  "[yaml]": {
     "editor.formatOnSave": false,
     "editor.tabSize": 2
   }

@@ -1,5 +1,12 @@
 {
   "version": "2.0.0",
+  "options": {
+    "env": {
+      "EZ_COMFY_PROGRESS": "0",
+      "HF_PROGRESS": "0",
+      "LAB_HERMETIC": "1"
+    }
+  },
   "tasks": [
     {
       "label": "validate",
@@ -95,9 +102,39 @@
       }
     },
     {
+      "label": "doctor",
+      "type": "shell",
+      "command": "bazelisk run //:manage -- doctor",
+      "group": "none",
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "echo": true,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "always",
+        "showReuseMessage": false
+      }
+    },
+    {
       "label": "docs",
       "type": "shell",
       "command": "bazelisk run //docs:docs",
+      "group": "build",
+      "problemMatcher": [],
+      "presentation": {
+        "clear": true,
+        "echo": true,
+        "focus": false,
+        "panel": "shared",
+        "reveal": "always",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "docs-serve",
+      "type": "shell",
+      "command": "bazelisk run //docs:serve",
       "group": "build",
       "problemMatcher": [],
       "presentation": {

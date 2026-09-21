@@ -55,7 +55,7 @@ bazelisk run //docs:serve
 bazelisk run //scripts:run-utility -- download-limit status
 ```
 
-`make test`, `make lint`, `make coverage`, and `make docs` call Bazelisk when it is on `PATH`. VS Code / Cursor **Run Task** labels in `.vscode/tasks.json` wrap the same commands (`validate`, `test-fast`, `pytest`, `typecheck`, `lint`, `fix`, `docs`).
+`make test`, `make lint`, `make coverage`, and `make docs` call Bazelisk when it is on `PATH`. VS Code / Cursor **Run Task** labels in `.vscode/tasks.json` wrap the same commands (`validate`, `test-fast`, `pytest`, `typecheck`, `lint`, `fix`, `doctor`, `docs`, `docs-serve`).
 
 ## Target map
 

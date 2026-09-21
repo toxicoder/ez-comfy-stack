@@ -129,6 +129,7 @@ path_matches_bazel_core() {
   [[ ${path} == mypy.ini ]] && return 0
   [[ ${path} == pyrightconfig.json ]] && return 0
   [[ ${path} == .devcontainer/tool-versions.env ]] && return 0
+  [[ ${path} == .vscode/* ]] && return 0
   return 1
 }
 

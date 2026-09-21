@@ -29,6 +29,11 @@ teardown() {
   done
 }
 
+@test "bazel-core path filters include vscode workspace files" {
+  grep -qF '.vscode/*' "${REPO_ROOT}/scripts/validate.sh"
+  grep -qF '.vscode/**' "${REPO_ROOT}/.github/workflows/ci.yml"
+}
+
 @test "MODULE.bazel is Bzlmod with rules_shell and hermetic bats-core" {
   local mod="${REPO_ROOT}/MODULE.bazel"
   [ -f "${mod}" ]
