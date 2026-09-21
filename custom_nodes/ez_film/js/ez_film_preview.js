@@ -42,15 +42,6 @@ function viewUrl(item) {
 }
 
 /**
- * Overlay heading / aria-label for a concat class.
- * @param {string} name
- * @returns {string}
- */
-function overlayHeading(name) {
-  return name === "EZClipConcat" ? "Clip chain ready" : "Film ready";
-}
-
-/**
  * Reuse or create the fixed play/download overlay element.
  * @returns {HTMLElement}
  */
@@ -131,7 +122,7 @@ app.registerExtension({
     if (!PREVIEW_TYPES.has(nodeData.name)) {
       return;
     }
-    const heading = overlayHeading(nodeData.name);
+    const heading = nodeData.name === "EZClipConcat" ? "Clip chain ready" : "Film ready";
     const onExecuted = nodeType.prototype.onExecuted;
     /**
      * Show the overlay when the concat node returns a gif payload.
