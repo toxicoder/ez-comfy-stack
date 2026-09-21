@@ -1,8 +1,9 @@
-"""ez-comfy film helpers (unload between Klein/LTX, stitch 18-shot acts).
+"""ez-comfy film helpers (unload between Klein/LTX, stitch 18-shot acts,
+variable-N clip concat).
 
 Import is hermetic: stdlib only at pack load. ffmpeg is resolved inside
-``EZFilmConcat.run``. Optional ``comfy.model_management`` is lazy in
-``EZUnloadModels``.
+``EZFilmConcat.run`` / ``EZClipConcat.run``. Optional
+``comfy.model_management`` is lazy in ``EZUnloadModels``.
 """
 
 from .nodes import NODE_CLASS_MAPPINGS, NODE_DISPLAY_NAME_MAPPINGS

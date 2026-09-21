@@ -33,15 +33,23 @@ from ez_film import overlay as ov  # noqa: E402
 from ez_film import shots as sh  # noqa: E402
 from ez_film import stems as st  # noqa: E402
 from ez_film.concat import (  # noqa: E402
+    assert_clip_master_duration,
     assert_master_duration,
     copy_publish_master,
     encoder_missing,
     probe_audio_seconds,
     probe_wh,
+    stitch_clips,
     stitch_film,
     validate_stitch_stems,
 )
-from ez_film.nodes import EZFilmConcat, EZFilmDisclosure, EZUnloadModels  # noqa: E402
+from ez_film.nodes import (  # noqa: E402
+    EZClipConcat,
+    EZClipLastFrame,
+    EZFilmConcat,
+    EZFilmDisclosure,
+    EZUnloadModels,
+)
 
 SHORTS = ROOT / "workflows" / "shorts"
 
@@ -293,6 +301,295 @@ def test_validate_stitch_stems_fail_closed(tmp_path: Path) -> None:
     ):
         with pytest.raises(RuntimeError, match="expected 18 valid"):
             validate_stitch_stems(short, ffprobe="ffprobe")
+
+
+def test_clip_concat_missing_unreadable_and_disclosure(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("COMFY_OUTPUT_DIR", str(tmp_path))
+    node = EZClipConcat()
+    with pytest.raises(RuntimeError, match="missing or unreadable clip_01"):
+        node.run("ez_clip_chain", 600.0, 0, clip_01=None)
+    with pytest.raises(RuntimeError, match="missing or unreadable clip_01"):
+        node.run("ez_clip_chain", 600.0, 0, clip_01="")
+    missing = tmp_path / "gone.mp4"
+    with pytest.raises(RuntimeError, match="missing or unreadable clip_01"):
+        node.run("ez_clip_chain", 600.0, 0, clip_01=str(missing))
+    empty = tmp_path / "empty.mp4"
+    empty.write_bytes(b"")
+    with pytest.raises(RuntimeError, match="missing or unreadable clip_01"):
+        node.run("ez_clip_chain", 600.0, 0, clip_01=str(empty))
+    with pytest.raises(RuntimeError, match="missing or unreadable clip_01"):
+        node.run("ez_clip_chain", 600.0, 0, clip_01={"x": "y"})
+
+    clip_01 = tmp_path / "c01.mp4"
+    clip_01.write_bytes(b"x")
+
+    def fake_stitch(
+        paths: list[str], out_mp4: str, cap: float, xfade_cs: int = 0
+    ) -> str:
+        Path(out_mp4).write_bytes(b"out")
+        return out_mp4
+
+    with patch.object(film_nodes, "stitch_clips", side_effect=fake_stitch):
+        with patch.object(film_nodes, "copy_publish_master") as copy_pub:
+            packed = node.run(
+                "ez_clip_chain",
+                600.0,
+                0,
+                clip_01=str(clip_01),
+                clip_02=[],
+                disclosure="LTX note",
+            )
+    copy_pub.assert_not_called()
+    assert packed["result"][0].endswith("ez_clip_chain.mp4")
+    sidecar = tmp_path / "ez_clip_chain.disclosure.txt"
+    assert sidecar.is_file()
+    assert "LTX note" in sidecar.read_text(encoding="utf-8")
+    last_spec = EZClipLastFrame.INPUT_TYPES()
+    assert last_spec["required"]["image"][0] == "IMAGE"
+
+
+def test_stitch_clips_count_image_audio_and_fallback(tmp_path: Path) -> None:
+    out = str(tmp_path / "ez_clip_chain.mp4")
+    with pytest.raises(ValueError, match="expected 1-24 clips, found 0"):
+        stitch_clips([], out, 600.0, ffmpeg="ffmpeg")
+    too_many = [str(tmp_path / f"x{i:02d}.mp4") for i in range(25)]
+    for path in too_many:
+        Path(path).write_bytes(b"mp4")
+    with pytest.raises(ValueError, match="expected 1-24 clips, found 25"):
+        stitch_clips(too_many, out, 600.0, ffmpeg="ffmpeg")
+
+    png = tmp_path / "still.png"
+    png.write_bytes(b"png")
+    with pytest.raises(RuntimeError, match="image, not an MP4"):
+        stitch_clips([str(png)], out, 600.0, ffmpeg="ffmpeg")
+
+    missing = tmp_path / "nope.mp4"
+    with pytest.raises(RuntimeError, match="unreadable clip"):
+        stitch_clips([str(missing)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe")
+
+    empty = tmp_path / "empty.mp4"
+    empty.write_bytes(b"")
+    with pytest.raises(RuntimeError, match="empty clip"):
+        stitch_clips([str(empty)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe")
+
+    stem = tmp_path / "c00.mp4"
+    stem.write_bytes(b"mp4")
+
+    def refuse_run(argv: list[str], **_k: object) -> SimpleNamespace:
+        raise AssertionError(f"ffmpeg should not run: {argv}")
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=False),
+    ):
+        with pytest.raises(RuntimeError, match="clip missing audio"):
+            stitch_clips(
+                [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe",
+                run=refuse_run,
+            )
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=None),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(RuntimeError, match="clip duration None"):
+            stitch_clips(
+                [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe",
+                run=refuse_run,
+            )
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=None),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(RuntimeError, match="clip size mismatch"):
+            stitch_clips(
+                [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe",
+                run=refuse_run,
+            )
+
+    captured: list[list[str]] = []
+
+    def fail_then_ok(argv: list[str], **_k: object) -> SimpleNamespace:
+        captured.append(list(argv))
+        if len(captured) == 1:
+            return _proc(stderr="Unknown encoder 'libx264'", rc=1)
+        Path(str(argv[-1])).write_bytes(b"out")
+        return _proc()
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=8.00),
+    ):
+        stitch_clips(
+            [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe",
+            run=fail_then_ok,
+        )
+    assert len(captured) == 2
+    assert captured[0][captured[0].index("-c:v") + 1] == "libx264"
+    assert captured[1][captured[1].index("-c:v") + 1] == "copy"
+    assert "-t" not in captured[1]
+
+
+def test_assert_clip_master_duration_gates(tmp_path: Path) -> None:
+    out = tmp_path / "master.mp4"
+    out.write_bytes(b"mp4")
+    with patch.object(film_concat, "find_ffprobe", return_value=None):
+        with pytest.raises(RuntimeError, match="ffprobe required"):
+            assert_clip_master_duration(str(out), 16.0, 600.0, 2)
+        assert not out.exists()
+    out.write_bytes(b"mp4")
+    with patch.object(film_concat, "probe_seconds", return_value=None):
+        with pytest.raises(RuntimeError, match="unreadable"):
+            assert_clip_master_duration(
+                str(out), 16.0, 600.0, 2, ffprobe="ffprobe", run=lambda *a, **k: _proc()
+            )
+        assert not out.exists()
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=16.5),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=16.5),
+    ):
+        with pytest.raises(RuntimeError, match="off sum"):
+            assert_clip_master_duration(str(out), 16.0, 600.0, 2, ffprobe="ffprobe")
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=15.5),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=15.5),
+    ):
+        with pytest.raises(RuntimeError, match="off sum"):
+            assert_clip_master_duration(str(out), 16.0, 600.0, 2, ffprobe="ffprobe")
+        assert not out.exists()
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=16.0),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=16.0),
+    ):
+        with pytest.raises(RuntimeError, match="exceeds cap"):
+            assert_clip_master_duration(str(out), 16.0, 15.8, 2, ffprobe="ffprobe")
+        assert not out.exists()
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=16.0),
+        patch.object(film_concat, "probe_has_audio", return_value=False),
+    ):
+        with pytest.raises(RuntimeError, match="missing audio"):
+            assert_clip_master_duration(str(out), 16.0, 600.0, 2, ffprobe="ffprobe")
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=16.0),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=15.0),
+    ):
+        with pytest.raises(RuntimeError, match="audio duration"):
+            assert_clip_master_duration(str(out), 16.0, 600.0, 2, ffprobe="ffprobe")
+        assert not out.exists()
+    out.write_bytes(b"mp4")
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=16.0),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=16.0),
+    ):
+        assert_clip_master_duration(str(out), 16.0, 600.0, 2, ffprobe="ffprobe")
+        assert out.exists()
+    with patch.object(film_concat, "find_ffprobe", return_value=None):
+
+        def _injected(argv: list[str], **_k: object) -> SimpleNamespace:
+            joined = " ".join(str(a) for a in argv)
+            if "codec_type" in joined:
+                return _proc(stdout="audio\n")
+            if "format=duration" in joined or "stream=duration" in joined:
+                return _proc(stdout="16.00\n")
+            return _proc()
+
+        assert_clip_master_duration(str(out), 16.0, 600.0, 2, run=_injected)
+
+
+def test_stitch_clips_ez_common_import_paths(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    stem = tmp_path / "c00.mp4"
+    stem.write_bytes(b"mp4")
+    out = str(tmp_path / "ez_clip_chain.mp4")
+
+    def fake_run(argv: list[str], **_k: object) -> SimpleNamespace:
+        Path(str(argv[-1])).write_bytes(b"out")
+        return _proc()
+
+    custom = os.path.abspath(str(CUSTOM))
+    monkeypatch.setattr(
+        sys,
+        "path",
+        [p for p in list(sys.path) if os.path.abspath(p) != custom],
+    )
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=8.00),
+    ):
+        stitch_clips(
+            [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=fake_run
+        )
+    assert any(os.path.abspath(p) == custom for p in sys.path)
+
+    monkeypatch.setitem(sys.modules, "ez_common", None)
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=8.00),
+        patch.object(film_concat, "find_ffmpeg", return_value="ffmpeg"),
+        patch.object(film_concat, "find_ffprobe", return_value=None),
+    ):
+        stitch_clips(
+            [str(stem)], out, 600.0, ffmpeg=None, ffprobe=None, run=fake_run
+        )
+
+    with pytest.raises(RuntimeError, match="missing clip file"):
+        stitch_clips(
+            ["  "], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe", run=fake_run
+        )
+    with patch.object(film_concat, "find_ffprobe", return_value=None):
+        with pytest.raises(RuntimeError, match="ffprobe required to validate clips"):
+            stitch_clips([str(stem)], out, 600.0, ffmpeg="ffmpeg")
+
+    def boom_run(argv: list[str], **_k: object) -> SimpleNamespace:
+        return _proc(stderr="boom", rc=1)
+
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+    ):
+        with pytest.raises(RuntimeError, match="ffmpeg stitch failed"):
+            stitch_clips(
+                [str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe",
+                run=boom_run,
+            )
+
+    def default_run(argv: list[str], **_k: object) -> SimpleNamespace:
+        Path(str(argv[-1])).write_bytes(b"out")
+        return _proc()
+
+    monkeypatch.setattr(film_concat.subprocess, "run", default_run)
+    with (
+        patch.object(film_concat, "probe_seconds", return_value=8.00),
+        patch.object(film_concat, "probe_wh", return_value=(1280, 704)),
+        patch.object(film_concat, "probe_has_audio", return_value=True),
+        patch.object(film_concat, "probe_audio_seconds", return_value=8.00),
+    ):
+        stitch_clips([str(stem)], out, 600.0, ffmpeg="ffmpeg", ffprobe="ffprobe")
 
 
 def test_assert_master_duration_unreadable_silent_skew(tmp_path: Path) -> None:

@@ -1,7 +1,10 @@
 """ffmpeg stitch for 18 × 5.00s LTX MP4s with a 90s publish cap.
 
+Clip-chain stitch (1–24 duration-head stems) lives beside the film path
+and does not pad the master to the cap.
+
 Illegal LTX ``length=120`` stems (113 frames / 4.708s) are padded to 5.00s
-before the duration gate.
+before the duration gate (film only).
 
 Hermetic at import: stdlib only. ffmpeg is resolved at call time.
 """
@@ -18,7 +21,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .jobstore import DURATION_S, DURATION_TOL
-from .ltx_timing import ltx_decoded_frames
+from .ltx_timing import DURATION_HEAD_S, ltx_decoded_frames
 from .probe import (  # noqa: F401 — coverage/monkeypatch façade
     FfprobeMediaProbe,
     _ffprobe_csv,
@@ -60,6 +63,12 @@ MASTER_TOL_S = 0.10
 AUDIO_SYNC_TOL_S = 0.050
 VIDEO_SUFFIXES = (".mp4", ".webm", ".mkv", ".mov", ".m4v")
 IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
+# Clip-chain stitch: 1–24 stems; cap is a ceiling, not pad-to-runtime.
+CLIP_COUNT_MAX = 24
+CLIP_CAP_DEFAULT_S = 600.0
+CLIP_CAP_MAX_S = 1800.0
+CLIP_PREFIX_DEFAULT = "ez_clip_chain"
+CLIP_DURATION_HEAD_LABEL = "(5.00, 8.00, 10.00, 12.00)±0.05"
 
 
 def log(message: str) -> None:
@@ -504,6 +513,110 @@ def ffmpeg_stitch_copy_argv(
     ]
 
 
+def _clip_concat_input_prefix(ffmpeg: str, list_path: str) -> list[str]:
+    """Concat-demuxer input prefix without a duration cap.
+
+    Args:
+        ffmpeg: ffmpeg executable.
+        list_path: Concat demuxer list file.
+
+    Returns:
+        Argument prefix including inputs (no ``-t``).
+    """
+    return [
+        ffmpeg,
+        "-y",
+        "-fflags",
+        "+genpts",
+        "-f",
+        "concat",
+        "-safe",
+        "0",
+        "-i",
+        list_path,
+        "-avoid_negative_ts",
+        "make_zero",
+    ]
+
+
+def ffmpeg_clip_stitch_argv(
+    list_path: str, out_mp4: str, ffmpeg: str
+) -> list[str]:
+    """Playable clip stitch (H.264 + AAC + faststart) without ``-t`` / ``apad``.
+
+    Same vector as :func:`ffmpeg_stitch_argv` except this does not call
+    :func:`_concat_input_prefix`, omits the duration cap, and uses
+    ``-af AUDIO_FILTER`` without ``,apad``. Cap is enforced by probing
+    stems before encode.
+
+    Args:
+        list_path: Concat demuxer list file.
+        out_mp4: Destination MP4.
+        ffmpeg: ffmpeg executable.
+    Returns:
+        Argument vector.
+    """
+    return [
+        *_clip_concat_input_prefix(ffmpeg, list_path),
+        "-r",
+        FPS,
+        "-c:v",
+        "libx264",
+        "-preset",
+        X264_PRESET,
+        "-crf",
+        X264_CRF,
+        "-pix_fmt",
+        PIX_FMT,
+        "-c:a",
+        "aac",
+        "-ar",
+        AAC_RATE,
+        "-ac",
+        "2",
+        "-b:a",
+        AAC_BITRATE,
+        "-af",
+        AUDIO_FILTER,
+        "-movflags",
+        MOVFLAGS,
+        out_mp4,
+    ]
+
+
+def ffmpeg_clip_stitch_copy_argv(
+    list_path: str, out_mp4: str, ffmpeg: str
+) -> list[str]:
+    """Clip stitch fallback: video copy, AAC + loudnorm + faststart, no ``-t``.
+
+    Args:
+        list_path: Concat demuxer list file.
+        out_mp4: Destination MP4.
+        ffmpeg: ffmpeg executable.
+
+    Returns:
+        Argument vector.
+    """
+    return [
+        *_clip_concat_input_prefix(ffmpeg, list_path),
+        "-c:v",
+        "copy",
+        "-c:a",
+        "aac",
+        "-ar",
+        AAC_RATE,
+        "-ac",
+        "2",
+        "-b:a",
+        AAC_BITRATE,
+        "-af",
+        AUDIO_FILTER,
+        "-movflags",
+        MOVFLAGS,
+        out_mp4,
+    ]
+
+
 def audio_acrossfade_filter(
     n_inputs: int,
     duration_s: float,
@@ -939,6 +1052,62 @@ def assert_master_duration(
         )
 
 
+def assert_clip_master_duration(
+    out_mp4: str,
+    probed_sum: float,
+    cap_seconds: float,
+    n_stems: int,
+    *,
+    ffprobe: str | None = None,
+    run: FfmpegRunner | None = None,
+) -> None:
+    """Fail closed if the clip master is not ``sum(stems)`` with synced audio.
+
+    Cap is a ceiling. Never requires the master to reach ``cap - 0.10``.
+
+    Args:
+        out_mp4: Stitched MP4 path.
+        probed_sum: Sum of stem durations.
+        cap_seconds: Publish ceiling.
+        n_stems: Stem count (widens the sum band).
+        ffprobe: Optional ffprobe executable.
+        run: Override ``subprocess.run``.
+    Raises:
+        RuntimeError: missing probe, duration off sum or over cap, or A/V skew.
+    """
+    exe = ffprobe if ffprobe is not None else find_ffprobe()
+    if not exe:
+        if run is None:
+            _unlink_master(out_mp4)
+            raise RuntimeError("ffprobe required to validate the stitched master")
+        exe = "ffprobe"
+    dur = probe_seconds(out_mp4, ffprobe=exe, run=run)
+    if dur is None:
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"concat duration unreadable ({out_mp4})")
+    clip_tol = max(MASTER_TOL_S, 0.05 * int(n_stems))
+    cap = float(cap_seconds)
+    if dur < probed_sum - clip_tol or dur > probed_sum + clip_tol:
+        _unlink_master(out_mp4)
+        raise RuntimeError(
+            f"clip concat duration {dur}s off sum {probed_sum}s "
+            f"(need ±{clip_tol})"
+        )
+    if dur > cap + MASTER_TOL_S:
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"clip concat duration {dur}s exceeds cap {cap}s")
+    if not probe_has_audio(out_mp4, ffprobe=exe, run=run):
+        _unlink_master(out_mp4)
+        raise RuntimeError(f"concat master missing audio ({out_mp4})")
+    audio_dur = probe_audio_seconds(out_mp4, ffprobe=exe, run=run)
+    if audio_dur is None or abs(audio_dur - dur) > AUDIO_SYNC_TOL_S:
+        _unlink_master(out_mp4)
+        raise RuntimeError(
+            f"concat audio duration {audio_dur!r}s vs video {dur}s "
+            f"(need within {AUDIO_SYNC_TOL_S * 1000:.0f} ms)"
+        )
+
+
 def _run_ffmpeg(argv: list[str], runner: FfmpegRunner) -> None:
     """Run one ffmpeg argv; raise RuntimeError on non-zero.
 
@@ -1334,6 +1503,274 @@ def stitch_film(
         run=run,
         xfade_cs=xfade_cs,
         expected_count=expected_count,
+    ).run()
+
+
+class ClipConcatPipeline:
+    """Stitch N clip MP4s behind the :func:`stitch_clips` façade."""
+
+    def __init__(
+        self,
+        clip_paths: list[str],
+        out_mp4: str,
+        cap_seconds: float,
+        *,
+        ffmpeg: str | None = None,
+        ffprobe: str | None = None,
+        run: FfmpegRunner | None = None,
+        xfade_cs: int = 0,
+    ) -> None:
+        """Store clip-stitch arguments.
+
+        Args:
+            clip_paths: MP4 paths in beat order.
+            out_mp4: Destination path.
+            cap_seconds: Publish ceiling (default 600).
+            ffmpeg: Override ffmpeg path.
+            ffprobe: Override ffprobe path.
+            run: Override ``subprocess.run`` (tests).
+            xfade_cs: Must be 0 in v1 (hard cut).
+        """
+        self._clips = clip_paths
+        self._out = out_mp4
+        self._cap = cap_seconds
+        self._ffmpeg_override = ffmpeg
+        self._ffprobe = ffprobe
+        self._run = run
+        self._xfade_cs = xfade_cs
+
+    def run(self) -> str:
+        """Validate stems, encode without ``-t`` / ``apad``, and gate the master.
+
+        Returns:
+            ``out_mp4``.
+        Raises:
+            ValueError: stem count outside 1–24.
+            RuntimeError: xfade, missing stems, duration-head miss, or ffmpeg.
+        """
+        self._require_count()
+        self._require_hardcut()
+        self._reject_images()
+        exe = self._ffmpeg()
+        probed_sum = self._validate()
+        self._encode(exe)
+        assert_clip_master_duration(
+            self._out,
+            probed_sum,
+            self._cap,
+            len(self._clips),
+            ffprobe=self._ffprobe,
+            run=self._run,
+        )
+        return self._out
+
+    def _require_count(self) -> None:
+        """Refuse an empty or over-long stem list.
+
+        Raises:
+            ValueError: ``len(clip_paths)`` is not in 1–24.
+        """
+        count = len(self._clips)
+        if count < 1 or count > CLIP_COUNT_MAX:
+            raise ValueError(f"expected 1-{CLIP_COUNT_MAX} clips, found {count}")
+
+    def _require_hardcut(self) -> None:
+        """Refuse clip audio acrossfade in v1.
+
+        Raises:
+            RuntimeError: ``xfade_cs`` is not 0.
+        """
+        if int(self._xfade_cs) != 0:
+            raise RuntimeError(
+                "clip xfade not in v1; use xfade_cs=0 (hard cut)"
+            )
+
+    def _reject_images(self) -> None:
+        """Refuse VHS metadata PNGs in the stem list.
+
+        Raises:
+            RuntimeError: a path has an image suffix.
+        """
+        for path in self._clips:
+            if _is_image_path(path):
+                raise RuntimeError(
+                    f"clip is an image, not an MP4 ({path}); "
+                    "VHS_FILENAMES first file is a metadata PNG — use the muxed *-audio.mp4"
+                )
+
+    def _ffmpeg(self) -> str:
+        """Resolve ffmpeg (override, else PATH / imageio).
+
+        Returns:
+            Executable path.
+        """
+        return self._ffmpeg_override or find_ffmpeg()
+
+    def _runner(self) -> FfmpegRunner:
+        """Injected runner, else ``subprocess.run``.
+
+        Returns:
+            Callable matching :class:`~ez_film.protocols.FfmpegRun`.
+        """
+        if self._run is not None:
+            return self._run
+        return subprocess.run
+
+    def _ffprobe_exe(self) -> str:
+        """Resolve ffprobe for stem probes.
+
+        Returns:
+            Executable path or a dummy when tests inject ``run``.
+        Raises:
+            RuntimeError: no ffprobe and no injected runner.
+        """
+        exe = self._ffprobe if self._ffprobe is not None else find_ffprobe()
+        if exe:
+            return exe
+        if self._run is None:
+            raise RuntimeError("ffprobe required to validate clips")
+        return "ffprobe"
+
+    def _validate(self) -> float:
+        """Probe duration, size, and audio; refuse over-cap before ffmpeg.
+
+        Returns:
+            Sum of probed stem durations.
+        Raises:
+            RuntimeError: missing, unreadable, off-contract, or over-cap stems.
+        """
+        exe = self._ffprobe_exe()
+        durations: list[float] = []
+        first_wh: tuple[int, int] | None = None
+        for path in self._clips:
+            if not path or not str(path).strip():
+                raise RuntimeError("missing clip file")
+            file_path = Path(path)
+            if not file_path.is_file():
+                raise RuntimeError(f"unreadable clip ({path})")
+            if file_path.stat().st_size < 1:
+                raise RuntimeError(f"empty clip ({path})")
+            dur = probe_seconds(path, ffprobe=exe, run=self._run)
+            if dur is None or not any(
+                abs(float(dur) - allowed) <= DURATION_TOL
+                for allowed in DURATION_HEAD_S
+            ):
+                raise RuntimeError(
+                    f"clip duration {dur}s is not in {CLIP_DURATION_HEAD_LABEL} ({path})"
+                )
+            durations.append(float(dur))
+            wh = probe_wh(path, ffprobe=exe, run=self._run)
+            if first_wh is None:
+                first_wh = wh
+            if first_wh is None or wh != first_wh:
+                raise RuntimeError(
+                    f"clip size mismatch {wh} vs first stem {first_wh} ({path})"
+                )
+            if not probe_has_audio(path, ffprobe=exe, run=self._run):
+                raise RuntimeError(f"clip missing audio ({path})")
+        probed_sum = sum(durations)
+        if probed_sum > float(self._cap) + MASTER_TOL_S:
+            raise RuntimeError(
+                f"clip concat duration {probed_sum}s exceeds cap {float(self._cap)}s"
+            )
+        return probed_sum
+
+    def _progress(self, n_clips: int) -> ProgressReporter | None:
+        """Log the stitch and return a two-step bar when ez_common loads.
+
+        Args:
+            n_clips: Stem count being stitched.
+
+        Returns:
+            Progress bar, or None in hermetic tests.
+        """
+        log(f"stitching {n_clips} clips → {self._out}")
+        try:
+            root = str(Path(__file__).resolve().parent.parent)
+            if root not in sys.path:
+                sys.path.insert(0, root)
+            from ez_common import node_log, node_progress
+
+            node_log("ez_film", f"stitching {n_clips} clips")
+            return node_progress(2)
+        except Exception:  # noqa: BLE001 — pytest / missing pack
+            return None
+
+    def _write_concat_list(self, work_paths: list[str]) -> str:
+        """Write a concat-demuxer list file.
+
+        Args:
+            work_paths: Clip MP4 paths.
+
+        Returns:
+            List-file path (caller unlinks).
+        """
+        list_file = tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", suffix=".txt", delete=False
+        )
+        for path in work_paths:
+            list_file.write(concat_list_line(path) + "\n")
+        list_file.close()
+        return list_file.name
+
+    def _encode(self, ffmpeg: str) -> None:
+        """Concat-demuxer H.264+AAC, with stream-copy fallback.
+
+        Args:
+            ffmpeg: ffmpeg executable.
+        """
+        bar = self._progress(len(self._clips))
+        runner = self._runner()
+        list_path = self._write_concat_list(self._clips)
+        try:
+            _run_with_x264_fallback(
+                ffmpeg_clip_stitch_argv(list_path, self._out, ffmpeg),
+                ffmpeg_clip_stitch_copy_argv(list_path, self._out, ffmpeg),
+                runner,
+            )
+            if bar is not None:
+                bar.update(2)
+        finally:
+            Path(list_path).unlink(missing_ok=True)
+
+
+def stitch_clips(
+    clip_paths: list[str],
+    out_mp4: str,
+    cap_seconds: float = CLIP_CAP_DEFAULT_S,
+    *,
+    ffmpeg: str | None = None,
+    ffprobe: str | None = None,
+    run: FfmpegRunner | None = None,
+    xfade_cs: int = 0,
+) -> str:
+    """Concat N clip MP4s. Cap is a ceiling. Master ≈ sum(stems).
+
+    Raises if ``xfade_cs != 0`` (v1 hard-cut). Does not call film stitch
+    helpers that pad or cut to cap.
+
+    Args:
+        clip_paths: MP4 paths in beat order (not VHS metadata PNGs).
+        out_mp4: Destination path.
+        cap_seconds: Publish ceiling (default 600).
+        ffmpeg: Override ffmpeg path.
+        ffprobe: Override ffprobe path.
+        run: Override ``subprocess.run`` (tests).
+        xfade_cs: Must be 0 in v1.
+    Returns:
+        ``out_mp4``.
+    Raises:
+        ValueError: stem count outside 1–24.
+        RuntimeError: ffmpeg missing/fails, missing stems, or duration off sum.
+    """
+    return ClipConcatPipeline(
+        clip_paths,
+        out_mp4,
+        cap_seconds,
+        ffmpeg=ffmpeg,
+        ffprobe=ffprobe,
+        run=run,
+        xfade_cs=xfade_cs,
     ).run()
 
 

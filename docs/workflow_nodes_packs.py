@@ -209,6 +209,33 @@ def pack_nodes() -> dict[str, Any]:
             _w("act", index=3, typ="INT", rng="0–5", desc="0 = 90s film master; 1–5 = act master for a 7.5 min film.", gen="Festival shorts Queue five act graphs, then concat-shots.sh writes ez_<slug>_450s.mp4."),
         ],
     )
+    nodes["EZClipLastFrame"] = _n(
+        "Last frame (IMAGE)",
+        "Return the last frame of an IMAGE batch (index -1) as the next clip's I2V start.",
+        origin="ez_film",
+        lab="Duration-safe. Do not hardcode ImageFromBatch 120 — legal last indices are 120 / 192 / 240 / 288.",
+        sockets=[
+            _s("image", "IMAGE", "in", "Decoded video batch."),
+            _s("last_frame", "IMAGE", "out", "Last frame (batch dim 1)."),
+        ],
+    )
+    nodes["EZClipConcat"] = _n(
+        "Save clip chain (MP4)",
+        "Concat 1–24 duration-head MP4s. Cap is a ceiling, not a pad-to-runtime.",
+        origin="ez_film",
+        lab="clip_01 required; clip_02…24 optional. Collect-until-gap (a hole refuses). v1 hard-cut only (xfade_cs=0). Master ≈ sum(stems); default cap 600 s, max 1800. No films/<slug>/publish copy.",
+        sockets=[
+            _s("clip_01", "VHS_FILENAMES", "in", "First clip MP4."),
+            *[_s(f"clip_{i:02d}", "VHS_FILENAMES", "in", f"Clip {i:02d} MP4 (optional).") for i in range(2, 25)],
+            _s("disclosure", "STRING", "in", "EZFilmDisclosure text."),
+            _s("path", "STRING", "out", "Published MP4 path."),
+        ],
+        widgets=[
+            _w("prefix", index=0, rng="ez_clip_chain", desc="Output filename stem.", gen="Writes ez_clip_chain.mp4 under Comfy output. Rename if you Queue more than one chain."),
+            _w("cap_seconds", index=1, typ="FLOAT", rng="600 default, 1800 max", desc="Fail-closed duration ceiling.", gen="Not a pad target. 4×8 s is ~32 s. Past 24 stems use concat-shots.sh --files … --cap-seconds."),
+            _w("xfade_cs", index=2, typ="INT", rng="0–50; v1 must be 0", desc="Audio acrossfade in centiseconds.", gen="v1 raises unless 0 (hard cut). Widget stays for a later overlap-off acrossfade."),
+        ],
+    )
     nodes["EZDCCLoadGuideStill"] = _n(
         "Load guide still",
         "Load clay/depth/canny/first/last from guides/<slug>/<shot_id>/. Fail-closed QC.",
