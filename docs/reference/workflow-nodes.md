@@ -1657,7 +1657,7 @@ Optional http(s) URL.
 
 ### `EZDubRender` — Dub clone + mix
 
-Zero-shot clone, duration-lock, mix, SRT, disclosure sidecar.
+Zero-shot clone from a scored reference window, duration-lock, mix, SRT, disclosure sidecar.
 
 | Socket | Dir | Type | What it carries |
 | --- | --- | --- | --- |

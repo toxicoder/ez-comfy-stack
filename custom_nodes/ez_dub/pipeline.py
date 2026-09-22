@@ -50,7 +50,10 @@ from .speech import (
     _turn_rms,
     _voiced_span,
     _zero_cross_indices,
+    ref_diagnostics,
+    tuned_float,
 )
+from . import speech as _speech
 
 from .align import (
     MAX_SPEED,
@@ -181,7 +184,7 @@ EXAGGERATION_DEFAULT = 0.5
 CLONE_TEMPERATURE = 0.8
 CLONE_REPETITION_PENALTY = 1.2
 CLONE_MIN_P = 0.05
-CLONE_TOP_P = 1.0
+CLONE_TOP_P = 0.95
 EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
 VOICED_MIN_FRAC = 0.20
@@ -201,16 +204,16 @@ CLONE_TOKEN_SLACK = 1.8
 CLONE_TOKEN_MIN = 200
 CLONE_TOKEN_MAX = 1000
 PCM_INT_RANGE = 1.5
-REF_MIN_TURN_S = 0.8
-REF_SINGLE_S = 6.0
-REF_TARGET_S = 8.0
-REF_MAX_S = 10.0
-REF_MIN_RMS = 0.008
-REF_SILENCE_RMS = 0.008
-REF_XFADE_MS = 30
-REF_PEAK = 0.89
-REF_PURITY_MIN_DIM = 8
-REF_PURITY_COSINE = 0.55
+REF_MIN_TURN_S = _speech.REF_MIN_TURN_S
+REF_SINGLE_S = _speech.REF_SINGLE_S
+REF_TARGET_S = _speech.REF_TARGET_S
+REF_MAX_S = _speech.REF_MAX_S
+REF_MIN_RMS = _speech.REF_MIN_RMS
+REF_SILENCE_RMS = _speech.REF_SILENCE_RMS
+REF_XFADE_MS = _speech.REF_XFADE_MS
+REF_PEAK = _speech.REF_PEAK
+REF_PURITY_MIN_DIM = _speech.REF_PURITY_MIN_DIM
+REF_PURITY_COSINE = _speech.REF_PURITY_COSINE
 CLONE_MISSING_STATUS = (
     "clone engine missing — pip install chatterbox-tts and "
     "./scripts/manage.sh download-dub --tier clone"
@@ -373,7 +376,7 @@ def clone_cfg_weight(
     tgt = language_code(target)
     if _same_language(src, tgt):
         return CFG_SAME_LANG
-    return CFG_CROSS_LANG
+    return tuned_float("CFG_CROSS", CFG_CROSS_LANG, 0.0, 1.0)
 
 
 def clone_cfg_retry(cfg: float) -> float | None:
@@ -1592,7 +1595,7 @@ def _get_chatterbox() -> tuple[Any | None, str]:
     Returns:
         ``(model, "")`` or ``(None, reason)``. Model is optional-dep ``Any``.
     """
-    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR
+    global _CHATTERBOX, _CHATTERBOX_CKPT, _CHATTERBOX_ERR, _CHATTERBOX_COND_KEY
     ckpt = clone_ckpt_dir()
     ckpt_s = str(ckpt) if ckpt is not None else ""
     if _CHATTERBOX is not None and _CHATTERBOX_CKPT == ckpt_s and ckpt_s:
@@ -1613,6 +1616,7 @@ def _get_chatterbox() -> tuple[Any | None, str]:
     _CHATTERBOX = model
     _CHATTERBOX_CKPT = ckpt_s
     _CHATTERBOX_ERR = ""
+    _CHATTERBOX_COND_KEY = ""
     return model, ""
 
 
@@ -1663,6 +1667,68 @@ def _cap_t3_tokens(model: Any, budget: int) -> Iterator[None]:
         t3.inference = infer
 
 
+def _run_prepare_conditionals(
+    prepare: Callable[..., Any],
+    ref: str,
+    exaggeration: float,
+    ckpt: Path | None,
+) -> None:
+    """Call ``prepare_conditionals``, tolerating a path-only signature.
+
+    Args:
+        prepare: Bound ``prepare_conditionals``.
+        ref: Speaker wav path.
+        exaggeration: Emotion scalar passed when the signature accepts it.
+        ckpt: Clone snapshot, or None when Hub lockdown is unnecessary.
+
+    Raises:
+        Exception: The wheel raised. The caller falls back to ``audio_prompt_path``.
+    """
+
+    def _call() -> None:
+        """Invoke ``prepare`` with exaggeration, then path-only on TypeError."""
+        try:
+            prepare(ref, exaggeration=exaggeration)
+        except TypeError:
+            prepare(ref)
+
+    if ckpt is not None:
+        with _chatterbox_local_only(ckpt):
+            _call()
+        return
+    _call()
+
+
+def _ensure_conditionals(model: Any, ref: str, exaggeration: float) -> bool:
+    """Prepare voice conditionals once per reference and exaggeration.
+
+    On a hit, ``generate`` must omit ``audio_prompt_path`` so the wheel
+    reuses ``model.conds`` instead of re-reading the wav.
+
+    Args:
+        model: Loaded Chatterbox handle (optional-dep ``Any``).
+        ref: Speaker wav path.
+        exaggeration: Emotion scalar baked into the conditionals.
+
+    Returns:
+        True when ``model.conds`` is ready and the path should be omitted.
+    """
+    global _CHATTERBOX_COND_KEY
+    prepare = getattr(model, "prepare_conditionals", None)
+    if not callable(prepare):
+        return False
+    key = f"{ref}|{float(exaggeration):.4f}"
+    if key == _CHATTERBOX_COND_KEY and getattr(model, "conds", None) is not None:
+        return True
+    try:
+        _run_prepare_conditionals(prepare, ref, float(exaggeration), clone_ckpt_dir())
+    except Exception as exc:  # noqa: BLE001 — fall back to audio_prompt_path
+        _log(f"prepare_conditionals failed: {exc}")
+        return False
+    _CHATTERBOX_COND_KEY = key
+    return True
+
+
 def _try_chatterbox(
     text: str,
     language_id: str,
@@ -1685,18 +1751,20 @@ def _try_chatterbox(
     Returns:
         ``(pcm, rate, error)``. ``error`` is empty on success.
     """
-    global _CHATTERBOX_COND_KEY
     model, err = _get_chatterbox()
     if model is None:
         return [], SAMPLE_RATE, err or CLONE_MISSING_STATUS
     generate = getattr(model, "generate", None)
     if not callable(generate):
         return [], SAMPLE_RATE, "chatterbox missing generate"
+    exag = float(exaggeration)
+    if exag == EXAGGERATION_DEFAULT:
+        exag = tuned_float("EXAGGERATION", EXAGGERATION_DEFAULT, 0.0, 2.0)
     kwargs: dict[str, Any] = {
         "language_id": language_id,
-        "exaggeration": float(exaggeration),
+        "exaggeration": exag,
         "cfg_weight": float(cfg_weight),
-        "temperature": float(temperature),
+        "temperature": tuned_float("TEMPERATURE", float(temperature), 0.05, 1.5),
     }
     try:
         params: Any = inspect.signature(generate).parameters
@@ -1709,16 +1777,17 @@ def _try_chatterbox(
         item.kind == inspect.Parameter.VAR_KEYWORD for item in params.values()
     )
     if has_rep or has_var:
-        kwargs["repetition_penalty"] = CLONE_REPETITION_PENALTY
+        kwargs["repetition_penalty"] = tuned_float(
+            "REPETITION_PENALTY", CLONE_REPETITION_PENALTY, 1.0, 2.0
+        )
     if has_min_p or has_var:
-        kwargs["min_p"] = CLONE_MIN_P
+        kwargs["min_p"] = tuned_float("MIN_P", CLONE_MIN_P, 0.0, 0.5)
     if has_top_p or has_var:
-        kwargs["top_p"] = CLONE_TOP_P
+        kwargs["top_p"] = tuned_float("CLONE_TOP_P", CLONE_TOP_P, 0.0, 1.0)
     ref = (ref_wav or "").strip()
-    cond_key = ""
     if ref and Path(ref).is_file():
-        cond_key = f"{ref}|{float(exaggeration):.4f}"
-        kwargs["audio_prompt_path"] = ref
+        if not _ensure_conditionals(model, ref, exag):
+            kwargs["audio_prompt_path"] = ref
     try:
         ckpt = clone_ckpt_dir()
         with _cap_t3_tokens(model, clone_token_budget(text)):
@@ -1733,8 +1802,6 @@ def _try_chatterbox(
         return [], SAMPLE_RATE, f"chatterbox failed: {exc}"
     if not pcm:
         return [], rate, "chatterbox returned empty audio"
-    if cond_key:
-        _CHATTERBOX_COND_KEY = cond_key
     return pcm, rate, ""
 
 
@@ -2109,6 +2176,24 @@ def _maybe_yt_mp3_48k(dest: Path) -> None:
     )
 
 
+def _reference_qc(folder: Path) -> tuple[dict[str, Any], list[str]]:
+    """Speaker-ref sidecars plus a ``ref_degraded`` check when a pick fell back.
+
+    Args:
+        folder: ``speakers/`` directory.
+
+    Returns:
+        ``(sidecars, extra qc ids)``.
+    """
+    info = ref_diagnostics(folder)
+    extra: list[str] = []
+    for item in info.values():
+        if isinstance(item, dict) and item.get("degraded"):
+            extra.append("ref_degraded")
+            break
+    return info, extra
+
+
 def _write_render_qc(
     dest: Path,
     mix: list[float],
@@ -2119,6 +2204,7 @@ def _write_render_qc(
     *,
     extra_qc: list[str],
     peak: float,
+    reference: dict[str, Any] | None = None,
 ) -> None:
     """Write qc.json and append ``qc:`` onto ``flags``. Never raises.
 
@@ -2131,6 +2217,7 @@ def _write_render_qc(
         flags: Mutable status flags (appended).
         extra_qc: Extra QC check ids.
         peak: Mix peak passed to evaluate_qc.
+        reference: Per-speaker reference-window sidecars.
     """
     try:
         report = evaluate_qc(
@@ -2140,6 +2227,7 @@ def _write_render_qc(
             target_language=lang,
             peak=peak,
             extra_flags=extra_qc,
+            reference=reference,
         )
         write_json(dest / "qc.json", report)
         qc_flags = [str(x) for x in (report.get("flags") or [])]
@@ -2289,6 +2377,7 @@ def render_mix(
             if qwen_miss:
                 return [], rate, qwen_miss
     refs = _extract_refs(samples, rate, turns, dest / "speakers")
+    ref_report, ref_extra = _reference_qc(dest / "speakers")
     lang = language_code(payload.get("target_language") or "es")
     src_lang = str(payload.get("source_language") or "en")
     tgt_lang = str(payload.get("target_language") or "es")
@@ -2297,6 +2386,8 @@ def render_mix(
     render_dir = dest / "render"
     render_dir.mkdir(parents=True, exist_ok=True)
     flags: list[str] = []
+    if "ref_degraded" in ref_extra:
+        flags.append("ref: degraded")
     had_spoken = False
     cloned = False
     cloned_n = 0
@@ -2428,8 +2519,9 @@ def render_mix(
             turns,
             lang,
             flags,
-            extra_qc=["clone_unvoiced", "mix_not_speech"],
+            extra_qc=["clone_unvoiced", "mix_not_speech", *ref_extra],
             peak=0.0,
+            reference=ref_report,
         )
         save_state(
             dest,
@@ -2448,12 +2540,20 @@ def render_mix(
     if not is_speech_like(mix, rate):
         status = CLONE_UNVOICED_STATUS
         flags.append(status)
-        extra_qc = ["mix_not_speech"]
+        extra_qc = ["mix_not_speech", *ref_extra]
         if any("unvoiced" in f for f in flags):
             extra_qc.append("clone_unvoiced")
         peak_raw = max((abs(float(x)) for x in mix), default=0.0)
         _write_render_qc(
-            dest, mix, rate, turns, lang, flags, extra_qc=extra_qc, peak=peak_raw
+            dest,
+            mix,
+            rate,
+            turns,
+            lang,
+            flags,
+            extra_qc=extra_qc,
+            peak=peak_raw,
+            reference=ref_report,
         )
         save_state(
             dest,
@@ -2497,13 +2597,21 @@ def render_mix(
     flags.append(f"peak={peak:.2f}")
     if peak < 0.25:
         flags.append("quiet mix")
-    qc_extra: list[str] = []
+    qc_extra: list[str] = list(ref_extra)
     if any(" trimmed" in f or f.endswith(" trimmed") for f in flags):
         qc_extra.append("trimmed_clone")
     if any("unvoiced" in f for f in flags):
         qc_extra.append("clone_unvoiced")
     _write_render_qc(
-        dest, mix, rate, turns, lang, flags, extra_qc=qc_extra, peak=peak
+        dest,
+        mix,
+        rate,
+        turns,
+        lang,
+        flags,
+        extra_qc=qc_extra,
+        peak=peak,
+        reference=ref_report,
     )
     status = f"{len(refs)} speakers, {cloned_n} turns cloned"
     if lock_flags.get("trimmed"):

@@ -159,7 +159,7 @@ def pack_nodes() -> dict[str, Any]:
     )
     nodes["EZDubRender"] = _n(
         "Dub clone + mix",
-        "Zero-shot clone, duration-lock, mix, SRT, disclosure sidecar.",
+        "Zero-shot clone from a scored reference window, duration-lock, mix, SRT, disclosure sidecar.",
         origin="ez_dub",
         sockets=[
             _s("script", "STRING", "in", "Translation JSON."),

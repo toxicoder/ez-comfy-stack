@@ -6,7 +6,9 @@ Constants that tests monkeypatch on :mod:`ez_dub.pipeline` (currently
 
 from __future__ import annotations
 
+import json
 import math
+import os
 from pathlib import Path
 from typing import Any
 
@@ -35,10 +37,36 @@ REF_XFADE_MS = 30
 REF_PEAK = 0.89
 REF_MIN_TURN_S = 0.8
 REF_SINGLE_S = 6.0
-REF_TARGET_S = 8.0
+REF_TARGET_S = 9.5
 REF_MAX_S = 10.0
 REF_PURITY_MIN_DIM = 8
 REF_PURITY_COSINE = 0.55
+
+# Reference-window selection: the clone prompt is the single biggest lever on
+# voice similarity, so candidate windows are scored across the whole take and
+# the best few are stitched. Chatterbox reads only the first 6 s for the
+# speech-token prompt and the first 10 s for the vocoder reference, hence the
+# ``REF_MAX_S`` cap and the ``REF_TARGET_S`` aim just under it.
+REF_MIN_S = 4.0
+REF_WINDOW_HOP_S = 1.0
+REF_CLIP_RATIO_MAX = 0.02
+REF_CLIP_FLOOR = 0.985
+REF_TONAL_FRAME_MAX = 0.35
+REF_SPEECH_BAND_MIN = 0.30
+REF_VOICED_MIN_FRAC = 0.28
+REF_NOISE_FLOOR_DB = -28.0
+REF_HEAD_S = 2.0
+REF_WEIGHT_VOICED = 0.18
+REF_WEIGHT_BAND = 0.18
+REF_WEIGHT_NOISE = 0.16
+REF_WEIGHT_TONAL = 0.14
+REF_WEIGHT_ENVELOPE = 0.10
+REF_WEIGHT_ZC = 0.10
+REF_WEIGHT_CLIP = 0.08
+REF_WEIGHT_PURITY = 0.06
+REF_ENVELOPE_CV_IDEAL = 0.60
+REF_ZC_INTERVAL_CV_IDEAL = 0.60
+REF_NOISE_DB_SPAN = 30.0
 PCM_INT_RANGE = 1.5
 EXPECTED_WORDS_PER_S = 2.7
 TAIL_SLACK = 1.6
@@ -346,10 +374,10 @@ def envelope_cv(pcm: list[float], rate: int, frame_ms: int = 20) -> float:
     return (acc / len(frames)) ** 0.5 / mean
 
 
-def _trim_silence(
+def _trim_bounds(
     pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
-) -> list[float]:
-    """Drop leading and trailing frames below ``thresh`` RMS.
+) -> tuple[int, int]:
+    """Sample span after dropping leading and trailing silent frames.
 
     Args:
         pcm: Mono PCM.
@@ -357,10 +385,11 @@ def _trim_silence(
         thresh: Frame RMS below which a frame is silence.
 
     Returns:
-        Trimmed PCM, or a copy when the whole clip is below thresh.
+        ``(start, end)`` exclusive-end indices. ``(0, 0)`` when ``pcm`` is
+        empty. The whole clip when every frame is below ``thresh``.
     """
     if not pcm:
-        return []
+        return 0, 0
     sr = int(rate) or SAMPLE_RATE
     frame = max(1, int(sr * 0.02))
     n = len(pcm)
@@ -384,7 +413,24 @@ def _trim_silence(
     while end - frame >= start and not _voiced(end - frame):
         end -= frame
     if end <= start:
-        return [float(x) for x in pcm]
+        return 0, n
+    return start, end
+
+
+def _trim_silence(
+    pcm: list[float], rate: int, thresh: float = REF_SILENCE_RMS
+) -> list[float]:
+    """Drop leading and trailing frames below ``thresh`` RMS.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+        thresh: Frame RMS below which a frame is silence.
+
+    Returns:
+        Trimmed PCM, or a copy when the whole clip is below thresh.
+    """
+    start, end = _trim_bounds(pcm, rate, thresh)
     return [float(x) for x in pcm[start:end]]
 
 
@@ -520,6 +566,551 @@ def _turn_rms(turn: dict[str, Any], pcm: list[float]) -> float:
     return rms(pcm)
 
 
+# Keys already logged for a rejected ``EZ_DUB_TUNE_*`` value.
+_TUNE_WARNED: set[str] = set()
+
+
+def tuned_float(suffix: str, default: float, low: float, high: float) -> float:
+    """Read ``EZ_DUB_TUNE_<suffix>`` or return ``default``.
+
+    Non-numeric and out-of-range values log once and fall back, so a bad
+    override on the Spark cannot change the shipped knob silently.
+
+    Args:
+        suffix: Name after ``EZ_DUB_TUNE_``.
+        default: Shipped value.
+        low: Inclusive lower bound.
+        high: Inclusive upper bound.
+
+    Returns:
+        Parsed value, or ``default``.
+    """
+    key = "EZ_DUB_TUNE_" + suffix
+    raw = (os.environ.get(key) or "").strip()
+    if not raw:
+        return float(default)
+    try:
+        value = float(raw)
+    except ValueError:
+        _warn_tune(key, raw, default)
+        return float(default)
+    if value < float(low) or value > float(high):
+        _warn_tune(key, raw, default)
+        return float(default)
+    return value
+
+
+def _warn_tune(key: str, raw: str, default: float) -> None:
+    """Log one ignored override per key.
+
+    Args:
+        key: Full environment variable name.
+        raw: Rejected text.
+        default: Value used instead.
+    """
+    if key in _TUNE_WARNED:
+        return
+    _TUNE_WARNED.add(key)
+    from . import pipeline as _pl
+
+    _pl._log(f"ignoring {key}={raw!r}; using {default}")
+
+
+def _percentile(values: list[float], quantile: float) -> float:
+    """Linear percentile of ``values``. 0 when ``values`` is empty.
+
+    Args:
+        values: Samples.
+        quantile: Fraction in ``[0, 1]``.
+
+    Returns:
+        Interpolated order statistic.
+    """
+    if not values:
+        return 0.0
+    ordered = sorted(float(v) for v in values)
+    if len(ordered) == 1:
+        return ordered[0]
+    pos = max(0.0, min(1.0, float(quantile))) * (len(ordered) - 1)
+    lo = int(pos)
+    hi = min(lo + 1, len(ordered) - 1)
+    frac = pos - lo
+    return ordered[lo] * (1.0 - frac) + ordered[hi] * frac
+
+
+def _clipping_fraction(pcm: list[float], floor: float = REF_CLIP_FLOOR) -> float:
+    """Fraction of samples at or above ``floor`` absolute amplitude.
+
+    Args:
+        pcm: Mono PCM.
+        floor: Absolute sample level treated as clipped.
+
+    Returns:
+        Fraction in ``[0, 1]``.
+    """
+    if not pcm:
+        return 0.0
+    limit = float(floor)
+    clipped = 0
+    for raw in pcm:
+        if abs(float(raw)) >= limit:
+            clipped += 1
+    return clipped / float(len(pcm))
+
+
+def _noise_score(pcm: list[float], rate: int) -> float:
+    """1 when the quiet frames sit under the noise-floor gate and peaks rise clear.
+
+    The floor is the 10th-percentile frame RMS in dBFS. The span is the 90th
+    minus that floor. A floor louder than ``REF_NOISE_FLOOR_DB`` scores 0.
+
+    Args:
+        pcm: Mono PCM.
+        rate: Sample rate.
+
+    Returns:
+        Score in ``[0, 1]``.
+    """
+    frames, _frame = _frame_rms(pcm, rate, 20)
+    if len(frames) < 4:
+        return 0.0
+    quiet = _percentile(frames, 0.10)
+    loud = _percentile(frames, 0.90)
+    if quiet <= 1e-8:
+        floor_db = -80.0
+        snr_db = 80.0 if loud > 1e-8 else 0.0
+    else:
+        floor_db = 20.0 * math.log10(quiet)
+        snr_db = 20.0 * math.log10(max(loud, 1e-8) / quiet)
+    gate = tuned_float("REF_NOISE_FLOOR_DB", REF_NOISE_FLOOR_DB, -80.0, 0.0)
+    if floor_db > gate:
+        return 0.0
+    if snr_db <= 0.0:
+        return 0.0
+    if snr_db >= REF_NOISE_DB_SPAN:
+        return 1.0
+    return snr_db / REF_NOISE_DB_SPAN
+
+
+def _unit_ratio(value: float, ideal: float) -> float:
+    """Map ``value`` onto ``[0, 1]`` with saturation at ``ideal``.
+
+    Args:
+        value: Raw measure.
+        ideal: Value that scores 1.
+
+    Returns:
+        Saturated ratio.
+    """
+    if value <= 0.0:
+        return 0.0
+    if value >= ideal:
+        return 1.0
+    return value / ideal
+
+
+def _remove_dc_offset(pcm: list[float]) -> list[float]:
+    """Subtract the mean when the clip actually crosses zero.
+
+    A constant block (the crossfade fixture, a DC-biased take that never
+    changes sign) is left alone so a later peak check still sees its level.
+
+    Args:
+        pcm: Mono PCM.
+
+    Returns:
+        DC-removed PCM, or a float copy when there is no zero crossing.
+    """
+    if not pcm:
+        return []
+    if not _zero_cross_indices(pcm):
+        return [float(x) for x in pcm]
+    mean = sum(float(x) for x in pcm) / float(len(pcm))
+    return [float(x) - mean for x in pcm]
+
+
+def _window_components(
+    pcm: list[float], rate: int, purity: float
+) -> dict[str, float]:
+    """Normalised measures for one reference window. Each is in ``[0, 1]``.
+
+    Args:
+        pcm: Window PCM.
+        rate: Sample rate.
+        purity: Cosine of this speaker's embedding to the robust centroid.
+
+    Returns:
+        Component scores. Higher is a better clone prompt.
+    """
+    return {
+        "voiced": max(0.0, min(1.0, voiced_fraction(pcm, rate))),
+        "band": max(0.0, min(1.0, speech_band_ratio(pcm, rate))),
+        "tonal": max(0.0, min(1.0, 1.0 - tonal_frame_fraction(pcm, rate))),
+        "noise": _noise_score(pcm, rate),
+        "envelope": _unit_ratio(envelope_cv(pcm, rate), REF_ENVELOPE_CV_IDEAL),
+        "zc": _unit_ratio(zc_interval_cv(pcm), REF_ZC_INTERVAL_CV_IDEAL),
+        "clip": max(0.0, min(1.0, 1.0 - _clipping_fraction(pcm))),
+        "purity": max(0.0, min(1.0, float(purity))),
+    }
+
+
+def _window_score(components: dict[str, float]) -> float:
+    """Weighted sum of :func:`_window_components`.
+
+    Args:
+        components: Normalised measures.
+
+    Returns:
+        Score in ``[0, 1]``.
+    """
+    return (
+        REF_WEIGHT_VOICED * components["voiced"]
+        + REF_WEIGHT_BAND * components["band"]
+        + REF_WEIGHT_NOISE * components["noise"]
+        + REF_WEIGHT_TONAL * components["tonal"]
+        + REF_WEIGHT_ENVELOPE * components["envelope"]
+        + REF_WEIGHT_ZC * components["zc"]
+        + REF_WEIGHT_CLIP * components["clip"]
+        + REF_WEIGHT_PURITY * components["purity"]
+    )
+
+
+def _reject_reason(components: dict[str, float]) -> str:
+    """Hard-reject id, or ``""`` when the window may be a clone prompt.
+
+    ``is_speech_like`` is applied by the caller; these gates are stricter
+    than that check because a bad reference is reused for every line.
+
+    Args:
+        components: Normalised measures from :func:`_window_components`.
+
+    Returns:
+        ``clip``, ``tonal``, ``band``, ``unvoiced``, or ``""``.
+    """
+    clip_max = tuned_float("REF_CLIP_RATIO_MAX", REF_CLIP_RATIO_MAX, 0.0, 1.0)
+    if (1.0 - components["clip"]) > clip_max:
+        return "clip"
+    tonal_max = tuned_float("REF_TONAL_FRAME_MAX", REF_TONAL_FRAME_MAX, 0.0, 1.0)
+    if (1.0 - components["tonal"]) > tonal_max:
+        return "tonal"
+    band_min = tuned_float("REF_SPEECH_BAND_MIN", REF_SPEECH_BAND_MIN, 0.0, 1.0)
+    if components["band"] < band_min:
+        return "band"
+    voiced_min = tuned_float("REF_VOICED_MIN_FRAC", REF_VOICED_MIN_FRAC, 0.0, 1.0)
+    if components["voiced"] < voiced_min:
+        return "unvoiced"
+    return ""
+
+
+def _assess_ref_window(
+    pcm: list[float], rate: int, purity: float
+) -> tuple[str, float, dict[str, float]]:
+    """Score one window and name the gate that rejected it.
+
+    Args:
+        pcm: Window PCM.
+        rate: Sample rate.
+        purity: Speaker-centroid cosine.
+
+    Returns:
+        ``(reason, score, components)``. ``reason`` is empty when accepted.
+        Rejected windows score 0.
+    """
+    components = _window_components(pcm, rate, purity)
+    reason = _reject_reason(components)
+    if not reason and not is_speech_like(pcm, rate):
+        reason = "not_speech"
+    score = 0.0 if reason else _window_score(components)
+    return reason, score, components
+
+
+def _iter_ref_spans(n: int, win: int, hop: int) -> list[tuple[int, int]]:
+    """Sliding ``[start, end)`` spans of ``win`` samples across ``n``.
+
+    A clip shorter than ``win`` is one span. The tail is included when the
+    hop does not land on it.
+
+    Args:
+        n: Clip length in samples.
+        win: Window length in samples.
+        hop: Hop in samples.
+
+    Returns:
+        Spans in time order.
+    """
+    if n <= 0:
+        return []
+    if win <= 0 or n <= win:
+        return [(0, n)]
+    spans: list[tuple[int, int]] = []
+    start = 0
+    step = max(1, hop)
+    while start + win <= n:
+        spans.append((start, start + win))
+        start += step
+    tail = n - win
+    if spans[-1][0] != tail:
+        spans.append((tail, n))
+    return spans
+
+
+def _prepare_window_pcm(
+    pcm: list[float], rate: int, start: int, end: int
+) -> tuple[list[float], int, int] | None:
+    """Drop a silent head, extending forward until ``REF_MIN_S`` when it fits.
+
+    Args:
+        pcm: Parent clip.
+        rate: Sample rate.
+        start: Window start index.
+        end: Window end index.
+
+    Returns:
+        ``(samples, start, end)`` into ``pcm``, or None when the voiced span
+        stays under ``REF_MIN_S``.
+    """
+    sr = int(rate) or SAMPLE_RATE
+    min_n = max(1, int(round(tuned_float("REF_MIN_S", REF_MIN_S, 0.3, 10.0) * sr)))
+    lo, hi = _trim_bounds(pcm[start:end], sr)
+    if hi - lo >= min_n:
+        abs_a = start + lo
+        abs_b = start + hi
+        return [float(x) for x in pcm[abs_a:abs_b]], abs_a, abs_b
+    base = start + lo
+    extra = min_n - (hi - lo)
+    extended = min(len(pcm), start + hi + extra)
+    if extended <= base:
+        return None
+    lo2, hi2 = _trim_bounds(pcm[base:extended], sr)
+    if hi2 - lo2 < min_n:
+        return None
+    abs_a = base + lo2
+    abs_b = base + hi2
+    return [float(x) for x in pcm[abs_a:abs_b]], abs_a, abs_b
+
+
+def _window_text(turn: dict[str, Any], t0: float, t1: float) -> str:
+    """Transcript for the samples actually kept.
+
+    Word timestamps (``words`` entries with ``t0``/``t1`` or ``start``/``end``)
+    limit the text to words whose midpoint sits in ``[t0, t1]``. Without
+    timestamps the whole turn text is kept.
+
+    Args:
+        turn: JSON turn mapping.
+        t0: Window start in seconds.
+        t1: Window end in seconds.
+
+    Returns:
+        Text that matches the window. Empty when every timestamped word
+        falls outside it.
+    """
+    words = turn.get("words")
+    if not isinstance(words, list) or not words:
+        return str(turn.get("text") or "").strip()
+    parts: list[str] = []
+    saw_word = False
+    for raw in words:
+        if not isinstance(raw, dict):
+            continue
+        saw_word = True
+        start_raw = raw.get("t0")
+        if start_raw is None:
+            start_raw = raw.get("start")
+        end_raw = raw.get("t1")
+        if end_raw is None:
+            end_raw = raw.get("end")
+        if start_raw is None or end_raw is None:
+            continue
+        try:
+            ws = float(start_raw)
+            we = float(end_raw)
+        except (TypeError, ValueError):
+            continue
+        mid = (ws + we) / 2.0
+        if mid < t0 or mid > t1:
+            continue
+        token = str(raw.get("text") or raw.get("word") or "").strip()
+        if token:
+            parts.append(token)
+    if not saw_word:
+        return str(turn.get("text") or "").strip()
+    return " ".join(parts)
+
+
+def _turn_purity(turn: dict[str, Any]) -> float:
+    """Cosine of this turn to the robust speaker centroid, or 1 when unknown.
+
+    Args:
+        turn: Filtered turn mapping (may carry ``_embed`` and ``_centroid``).
+
+    Returns:
+        Similarity in ``[0, 1]``.
+    """
+    embed = turn.get("_embed")
+    centroid = turn.get("_centroid")
+    if not isinstance(embed, list) or not isinstance(centroid, list):
+        return 1.0
+    if not embed or not centroid:
+        return 1.0
+    return max(0.0, cosine(embed, centroid))
+
+
+def _ref_windows(turn: dict[str, Any], rate: int) -> list[dict[str, Any]]:
+    """Scored windows across one kept turn.
+
+    Args:
+        turn: Filtered turn mapping with ``_pcm``.
+        rate: Sample rate.
+
+    Returns:
+        Window mappings (accepted and rejected).
+    """
+    pcm = list(turn.get("_pcm") or [])
+    sr = int(rate) or SAMPLE_RATE
+    n = len(pcm)
+    if n == 0:
+        return []
+    target_s = tuned_float("REF_TARGET_S", REF_TARGET_S, 1.0, float(REF_MAX_S))
+    hop_s = tuned_float("REF_WINDOW_HOP_S", REF_WINDOW_HOP_S, 0.05, 5.0)
+    win = max(1, int(round(min(target_s, float(REF_MAX_S)) * sr)))
+    hop = max(1, int(round(hop_s * sr)))
+    t_base = float(turn.get("t0") or 0.0)
+    purity = _turn_purity(turn)
+    windows: list[dict[str, Any]] = []
+    for start, end in _iter_ref_spans(n, win, hop):
+        prepared = _prepare_window_pcm(pcm, sr, start, end)
+        if prepared is None:
+            continue
+        piece, abs_a, abs_b = prepared
+        t0 = t_base + abs_a / float(sr)
+        t1 = t_base + abs_b / float(sr)
+        reason, score, components = _assess_ref_window(piece, sr, purity)
+        windows.append(
+            {
+                "pcm": piece,
+                "t0": t0,
+                "t1": t1,
+                "score": score,
+                "components": components,
+                "reason": reason,
+                "ok": reason == "",
+                "turn": turn,
+                "text": _window_text(turn, t0, t1),
+            }
+        )
+    return windows
+
+
+def _pick_ref_windows(
+    windows: list[dict[str, Any]], target_samples: int
+) -> list[dict[str, Any]]:
+    """Best accepted window, or a short-window stitch up to ``target_samples``.
+
+    A window of at least ``REF_SINGLE_S`` is used alone: that is long enough
+    for both the 6 s token prompt and a start on the 10 s vocoder reference.
+
+    Args:
+        windows: Scored windows from one speaker.
+        target_samples: Stitch budget.
+
+    Returns:
+        Chosen windows in score order. Empty when none were accepted.
+    """
+    accepted = [item for item in windows if item.get("ok")]
+    accepted.sort(key=lambda item: float(item["score"]), reverse=True)
+    if not accepted:
+        return []
+    best = accepted[0]
+    if float(best["t1"]) - float(best["t0"]) >= REF_SINGLE_S:
+        return [best]
+    chosen: list[dict[str, Any]] = []
+    total = 0
+    for item in accepted:
+        chosen.append(item)
+        total += len(item["pcm"])
+        if total >= target_samples:
+            break
+    return chosen
+
+
+def _dominant_reject(windows: list[dict[str, Any]]) -> str:
+    """Most common reject id, for the degraded sidecar.
+
+    Args:
+        windows: Scored windows.
+
+    Returns:
+        Reject id, or ``""`` when nothing was rejected.
+    """
+    counts: dict[str, int] = {}
+    for item in windows:
+        reason = str(item.get("reason") or "")
+        if not reason:
+            continue
+        counts[reason] = counts.get(reason, 0) + 1
+    if not counts:
+        return ""
+    ranked = sorted(counts.items(), key=lambda pair: (-pair[1], pair[0]))
+    return ranked[0][0]
+
+
+def _loudness_ref_chunks(
+    candidates: list[dict[str, Any]], target_samples: int
+) -> tuple[list[dict[str, Any]], list[list[float]]]:
+    """Previous loudness ranking, used when every scored window is rejected.
+
+    Args:
+        candidates: Filtered turns with ``_pcm``.
+        target_samples: Stitch budget for short turns.
+
+    Returns:
+        ``(turns used, pcm chunks)``.
+    """
+    ordered = sorted(
+        candidates,
+        key=lambda t: (
+            (float(t["t1"]) - float(t["t0"]))
+            * max(_turn_rms(t, list(t.get("_pcm") or [])), 1e-6)
+        ),
+        reverse=True,
+    )
+    best = ordered[0]
+    best_dur = float(best["t1"]) - float(best["t0"])
+    if best_dur >= REF_SINGLE_S:
+        return [best], [list(best.get("_pcm") or [])]
+    used: list[dict[str, Any]] = []
+    chunks: list[list[float]] = []
+    total = 0
+    for turn in ordered:
+        chunk = list(turn.get("_pcm") or [])
+        if not chunk:
+            continue
+        used.append(turn)
+        chunks.append(chunk)
+        total += len(chunk)
+        if total >= target_samples:
+            break
+    return used, chunks
+
+
+def _join_ref_text(parts: list[str]) -> str:
+    """Join window transcripts, dropping blanks and duplicates.
+
+    Args:
+        parts: Text fragments in pick order.
+
+    Returns:
+        Single line.
+    """
+    seen: list[str] = []
+    for part in parts:
+        text = str(part or "").strip()
+        if text and text not in seen:
+            seen.append(text)
+    return " ".join(seen)
+
+
 def _filter_ref_turns(
     group: list[dict[str, Any]],
     samples: list[float],
@@ -555,17 +1146,25 @@ def _filter_ref_turns(
         vectors.append(_pl.speaker_embed(chunk, sr))
     if len(kept) < 2:
         return kept
-    if not vectors or len(vectors[0]) < REF_PURITY_MIN_DIM:
+    if len(vectors[0]) < REF_PURITY_MIN_DIM:
         return kept
     dim = len(vectors[0])
+    order = sorted(
+        range(len(kept)),
+        key=lambda i: _turn_rms(kept[i], list(kept[i].get("_pcm") or [])),
+        reverse=True,
+    )
+    half = max(1, (len(order) + 1) // 2)
     centroid = [0.0] * dim
-    for vector in vectors:
-        for i, value in enumerate(vector[:dim]):
+    for index in order[:half]:
+        for i, value in enumerate(vectors[index][:dim]):
             centroid[i] += float(value)
-    scale = 1.0 / len(vectors)
+    scale = 1.0 / float(len(order[:half]))
     centroid = [c * scale for c in centroid]
     pure: list[dict[str, Any]] = []
     for item, vector in zip(kept, vectors):
+        item["_embed"] = [float(v) for v in vector]
+        item["_centroid"] = centroid
         if cosine(vector, centroid) >= REF_PURITY_COSINE:
             pure.append(item)
     return pure or kept
@@ -578,7 +1177,13 @@ def _extract_refs(
     dest: Path,
     max_s: float = REF_MAX_S,
 ) -> dict[str, Path]:
-    """Build a 3–10 s clean ref wav (and transcript sidecar) per speaker.
+    """Build a scored ref wav, transcript, and ``.ref.json`` per speaker.
+
+    Chatterbox reads the first 6 s as the speech-token prompt and the first
+    10 s as the vocoder reference, so each speaker's wav is the best window
+    (or a short-window stitch up to ``REF_TARGET_S``), not the loudest take.
+    When every window fails the gates, the loudness ranking is written and
+    the sidecar sets ``degraded``.
 
     Args:
         samples: Source PCM.
@@ -596,40 +1201,47 @@ def _extract_refs(
         by_spk.setdefault(str(turn["speaker"]), []).append(turn)
     refs: dict[str, Path] = {}
     sr = int(rate) or SAMPLE_RATE
-    cap = int((max_s if max_s > 0 else REF_MAX_S) * sr)
-    target = int(REF_TARGET_S * sr)
+    cap_s = max_s if max_s > 0 else REF_MAX_S
+    cap = int(cap_s * sr)
+    target = int(
+        tuned_float("REF_TARGET_S", REF_TARGET_S, 1.0, float(REF_MAX_S)) * sr
+    )
     for speaker, group in by_spk.items():
         candidates = _filter_ref_turns(group, samples, sr)
         if not candidates:
             continue
-        ordered = sorted(
-            candidates,
-            key=lambda t: (
-                (float(t["t1"]) - float(t["t0"]))
-                * max(_turn_rms(t, t.get("_pcm") or []), 1e-6)
-            ),
-            reverse=True,
-        )
-        used: list[dict[str, Any]] = []
-        chunks: list[list[float]] = []
-        best = ordered[0]
-        best_dur = float(best["t1"]) - float(best["t0"])
-        if best_dur >= REF_SINGLE_S:
-            used = [best]
-            chunks = [list(best.get("_pcm") or [])]
+        windows: list[dict[str, Any]] = []
+        for turn in candidates:
+            windows.extend(_ref_windows(turn, sr))
+        chosen = _pick_ref_windows(windows, target)
+        score: float | None
+        components: dict[str, Any]
+        if chosen:
+            chunks = [list(item["pcm"]) for item in chosen]
+            notes = [str(item.get("text") or "") for item in chosen]
+            best = chosen[0]
+            score = float(best["score"])
+            components = dict(best["components"])
+            reject = ""
+            degraded = False
+            span_t0 = min(float(item["t0"]) for item in chosen)
+            span_t1 = max(float(item["t1"]) for item in chosen)
         else:
-            total = 0
-            for turn in ordered:
-                chunk = list(turn.get("_pcm") or [])
-                if not chunk:
-                    continue
-                used.append(turn)
-                chunks.append(chunk)
-                total += len(chunk)
-                if total >= target:
-                    break
+            used, chunks = _loudness_ref_chunks(candidates, target)
+            notes = [str(turn.get("text") or "") for turn in used]
+            score = None
+            components = {}
+            reject = _dominant_reject(windows)
+            degraded = True
+            if used:
+                span_t0 = min(float(turn["t0"]) for turn in used)
+                span_t1 = max(float(turn["t1"]) for turn in used)
+            else:
+                span_t0 = 0.0
+                span_t1 = 0.0
         pcm = _concat_crossfade(chunks, sr)
         pcm = _trim_silence(pcm, sr)
+        pcm = _remove_dc_offset(pcm)
         if len(pcm) > cap:
             pcm = pcm[:cap]
         pcm = _peak_normalize(pcm)
@@ -637,12 +1249,49 @@ def _extract_refs(
             continue
         path = dest / f"{speaker}.wav"
         write_wav(path, pcm, sr)
-        lines = [str(t.get("text") or "").strip() for t in used]
-        note = " ".join(part for part in lines if part)
+        note = _join_ref_text(notes)
         if note:
             path.with_suffix(".txt").write_text(note + "\n", encoding="utf-8")
+        payload = {
+            "components": components,
+            "degraded": degraded,
+            "duration_s": round(len(pcm) / float(sr), 4),
+            "reject": reject,
+            "score": score,
+            "speaker": speaker,
+            "t0": span_t0,
+            "t1": span_t1,
+            "text": note,
+        }
+        path.with_suffix(".ref.json").write_text(
+            json.dumps(payload, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
         refs[speaker] = path
     return refs
+
+
+def ref_diagnostics(folder: Path) -> dict[str, Any]:
+    """Load ``*.ref.json`` sidecars written beside speaker refs.
+
+    Args:
+        folder: Speaker-ref directory.
+
+    Returns:
+        Speaker id to sidecar mapping. Unreadable files are skipped.
+    """
+    found: dict[str, Any] = {}
+    if not folder.is_dir():
+        return found
+    for path in sorted(folder.glob("*.ref.json")):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(payload, dict):
+            name = path.name[: -len(".ref.json")]
+            found[name] = payload
+    return found
 
 
 def expected_speech_s(text: str) -> float:

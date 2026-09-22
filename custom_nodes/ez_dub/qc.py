@@ -46,6 +46,7 @@ def evaluate_qc(
     target_language: str,
     peak: float,
     extra_flags: list[str] | None = None,
+    reference: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Return a JSON-able dict. Never raises.
 
@@ -56,6 +57,7 @@ def evaluate_qc(
         target_language: ISO target.
         peak: Unused (call-site compatibility).
         extra_flags: Optional extra check ids.
+        reference: Per-speaker reference-window sidecars.
 
     Returns:
         ``{ok, flags, checks, rate}`` mapping (JSON boundary).
@@ -159,4 +161,5 @@ def evaluate_qc(
         "flags": flags,
         "checks": checks,
         "rate": int(rate or 0),
+        "reference": dict(reference or {}),
     }
